@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.PlayGuideActivity"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_header"></include>
+
+
+    <com.nbhysj.coupon.widget.TabIndicator
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_15"
+        android:background="@color/white" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:background="@color/color_text_gray16"></View>
+
+    <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/line_bg"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableLoadMore="true"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#00000000">
+
+    <com.scwang.smartrefresh.header.MaterialHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_play_guide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+
+            ></android.support.v7.widget.RecyclerView>
+
+        <!--  <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:srlClassicsSpinnerStyle="Translate" />
+      </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+
+
+        <include
+            layout="@layout/layout_nodata"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"></include>
+    </RelativeLayout>
+</LinearLayout>

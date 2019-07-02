@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/bg_get_verifiycode_unenabled" android:color="@color/color_text_gray" android:state_enabled="false" />
+
+    <item android:drawable="@drawable/bg_get_verifiycode_enabled" android:color="@color/white" android:state_enabled="true" />
+</selector>

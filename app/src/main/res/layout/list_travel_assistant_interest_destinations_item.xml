@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_scenic_spot_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <com.nbhysj.coupon.view.RoundedImageView
+        android:id="@+id/image_scenic_spots"
+        android:layout_width="@dimen/dp_81"
+        android:layout_height="@dimen/dp_81"
+        app:riv_mutate_background="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:scaleType="fitXY"
+        app:riv_corner_radius="13dip"
+        app:riv_oval="false" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_destination_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="海洋世界大酒店"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_popularity_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_destination_name"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="人气榜第1名"
+            android:textColor="@color/color_text_gray20"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_scenic_spot_recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_popularity_list"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="推荐景点：海洋世界、天一广场"
+            android:textColor="@color/color_text_gray20"
+            android:textSize="@dimen/text_size_small" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginTop="@dimen/dp_23"
+            android:alpha="0.25"
+            android:layout_below="@+id/tv_scenic_spot_recommend"
+            android:background="@color/color_text_gray6"></View>
+
+        <TextView
+            android:id="@+id/tv_add_my_travel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_scenic_spots_name"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="添加"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_text_gray20"
+            android:textSize="@dimen/text_size_small"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_3"
+            android:paddingBottom="@dimen/dp_3"
+            android:background="@drawable/bg_stroke_radius_gray_shape" />
+    </RelativeLayout>
+
+
+</LinearLayout>

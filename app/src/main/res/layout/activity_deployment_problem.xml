@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.DeploymentProblemActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:text="海洋世界大酒店"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_large" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:src="@mipmap/icon_arrow_navigation_right" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:alpha="0.25"
+            android:background="@color/color_text_gray2"></View>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_11"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_question_tag"
+                android:layout_width="@dimen/dp_17"
+                android:layout_height="@dimen/dp_17"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:background="@drawable/bg_filleted_corner_blue_shape"
+                android:gravity="center"
+                android:text="问"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_small" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_6"
+                android:layout_toRightOf="@+id/tv_question_tag"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_question_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_6"
+                    android:singleLine="true"
+                    android:text="隔音如何，晚上安静吗，睡觉会不会被影响吗？"
+                    android:textColor="@color/txt_font_black2"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_26">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2019-03-20"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_answer"
+                        android:layout_width="@dimen/dp_55"
+                        android:layout_height="@dimen/dp_21"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:layout_toLeftOf="@+id/tv_same_question"
+                        android:background="@drawable/bg_light_gray_radius_shape"
+                        android:gravity="center"
+                        android:text="回答"
+                        android:textColor="@color/color_high_light_green"
+                        android:textSize="@dimen/text_size_xtiny" />
+
+                    <TextView
+                        android:id="@+id/tv_same_question"
+                        android:layout_width="@dimen/dp_55"
+                        android:layout_height="@dimen/dp_21"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:background="@drawable/bg_light_gray_radius_shape"
+                        android:gravity="center"
+                        android:text="同问"
+                        android:textColor="@color/color_high_light_green"
+                        android:textSize="@dimen/text_size_xtiny" />
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            style="@style/line"
+            android:layout_height="@dimen/dp_10"
+            android:background="@color/line_bg" />
+    </LinearLayout>
+</RelativeLayout>

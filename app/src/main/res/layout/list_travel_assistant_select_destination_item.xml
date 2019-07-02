@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_selected_destination"
+    android:layout_width="80dp"
+    android:layout_height="35dp"
+    android:background="@mipmap/icon_selected_destination"
+    android:text="余姚"
+    android:textSize="@dimen/text_size_xsmall"
+    android:layout_marginLeft="@dimen/dp_5"
+    android:gravity="center"
+    android:layout_marginRight="@dimen/dp_3"
+    android:textColor="@color/txt_font_black2"></TextView>
+

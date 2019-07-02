@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/img_combination_header"
+        android:layout_width="match_parent"
+        android:layout_height="161dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg_travel_assistant_detail" />
+
+    <com.nbhysj.coupon.widget.NearbyTabIndicator
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginLeft="2dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_25"
+        android:drawableRight="@mipmap/icon_right_combination_tag"
+        android:drawablePadding="@dimen/dp_7"
+        android:text="精选"
+        android:textColor="@color/txt_font_black2"
+        android:textSize="@dimen/text_size_xnormal"
+        android:drawableLeft="@mipmap/icon_left_combination_tag" />
+
+</LinearLayout>

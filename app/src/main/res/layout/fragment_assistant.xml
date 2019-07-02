@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_text_gray8"
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
+
+    <com.nbhysj.coupon.view.StickyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_text_gray8"
+        android:orientation="vertical"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/llyt_no_trip_assistant"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_113"
+                        android:background="@mipmap/icon_travel_assisant_recommend" />
+
+                    <RelativeLayout
+                        android:id="@+id/rlyt_add_trip"
+                        android:layout_width="@dimen/dp_179"
+                        android:layout_height="@dimen/dp_47"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_51"
+                        android:background="@drawable/btn_bg_add_my_trips_oprate">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/dp_22"
+                                android:layout_height="@dimen/dp_22"
+                                android:src="@mipmap/icon_add_my_trip" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_6"
+                                android:text="建立我的行程"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_medium" />
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_16"
+                        android:text="建立我的出现计划"
+                        android:textSize="@dimen/text_size_small" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="@dimen/dp_60"
+                    android:background="@drawable/bg_white_radius_thirteen_top_shape"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="31dp"
+                        android:layout_marginTop="@dimen/dp_22"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:text="@string/str_recommended_for_you"
+                        android:textColor="@color/txt_font_black2"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_recommended_for_you_travel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llyt_my_trip_assistant"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_17"
+                    android:tag="sticky"
+                    android:background="@color/color_text_gray8"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="31dp"
+                        android:layout_marginTop="@dimen/dp_43"
+                        android:text="@string/str_my_travel_assisant"
+                        android:textColor="@color/txt_font_black2"
+                        android:textSize="@dimen/text_size_nineteen_large"
+
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardview_add_my_travel"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_43"
+                        android:layout_marginLeft="31dp"
+                        android:layout_marginTop="@dimen/dp_18"
+                        android:layout_marginRight="@dimen/dp_32"
+                        android:elevation="@dimen/dp_2"
+                        app:cardCornerRadius="@dimen/dp_13">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true">
+
+                                <ImageView
+                                    android:layout_width="@dimen/dp_22"
+                                    android:layout_height="@dimen/dp_22"
+                                    android:layout_gravity="center_vertical"
+                                    android:src="@mipmap/icon_new_my_travel" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="@dimen/dp_6"
+                                    android:text="创建新的行程"
+                                    android:textColor="@color/color_green3"
+                                    android:textSize="@dimen/text_size_medium" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_60"
+                    android:orientation="vertical">
+
+                    <com.nbhysj.coupon.view.MyRecycleView
+                        android:id="@+id/rv_my_travel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/background_l_grey" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </com.nbhysj.coupon.view.StickyScrollView>
+
+</LinearLayout>

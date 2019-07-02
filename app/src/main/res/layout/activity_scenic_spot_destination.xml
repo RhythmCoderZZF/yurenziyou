@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableLoadMore="false"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlEnableRefresh="false"
+        app:srlPrimaryColor="#00000000">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlAccentColor="@android:color/white" />
+
+        <!--<android.support.v4.widget.NestedScrollView-->
+        <com.nbhysj.coupon.view.JudgeNestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/collapse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:contentScrim="?attr/colorPrimary"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                        app:titleEnabled="false">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="350dp"
+                                android:background="@color/white">
+
+                                <RelativeLayout
+                                    android:id="@+id/rlyt_header_bg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="265dp"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/img_destination"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/background_l_grey"
+                                        android:scaleType="fitXY" />
+
+                                    <RelativeLayout
+                                        android:id="@+id/rlyt_weather"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="100dp">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/dp_15"
+                                            android:text="20°c"
+                                            android:textColor="@color/white"
+                                            android:textSize="37sp" />
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_marginRight="@dimen/dp_15"
+                                            android:src="@mipmap/icon_destination_weather" />
+
+                                    </RelativeLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/llyt_welcome_to_location_tag"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/dp_15"
+                                        android:layout_below="@+id/rlyt_weather"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Hi!"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_xxlarge" />
+
+                                        <TextView
+                                            android:id="@+id/tv_welcome_to_location"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/dp_5"
+                                            android:text=""
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_large"
+
+                                            />
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/tv_location"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/dp_15"
+                                        android:layout_marginTop="@dimen/dp_5"
+                                        android:layout_below="@+id/llyt_welcome_to_location_tag"
+                                        android:drawableLeft="@mipmap/icon_location_distance"
+                                        android:drawablePadding="@dimen/dp_3"
+                                        android:text=""
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_size_xsmall" />
+
+                                </RelativeLayout>
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/rv_scenic_spot_banner"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/dp_120"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginBottom="@dimen/dp_15"></android.support.v7.widget.RecyclerView>
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_17"
+                                android:layout_marginTop="@dimen/dp_25">
+
+                                <TextView
+                                    android:layout_width="@dimen/dp_20"
+                                    android:layout_height="@dimen/dp_20"
+                                    android:alpha="0.4"
+                                    android:background="@drawable/shape_round_gradient" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_6"
+                                    android:layout_marginTop="@dimen/dp_3"
+                                    android:text="达人玩法"
+                                    android:textColor="@color/color_text_black4"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:textStyle="bold" />
+
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp_59"
+                                android:layout_marginLeft="@dimen/dp_16"
+                                android:layout_marginTop="@dimen/dp_27"
+                                android:layout_marginRight="@dimen/dp_20"
+                                android:weightSum="2">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/dp_15"
+                                    android:layout_weight="1">
+
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                android:id="@+id/tv_strategys_one_title"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="余姚一日游"
+                                                android:textColor="@color/color_text_black4"
+                                                android:textSize="@dimen/text_size_medium"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:id="@+id/tv_strategys_one_des"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/dp_8"
+                                                android:text="经典温泉线路"
+                                                android:textSize="@dimen/text_size_small" />
+
+                                        </LinearLayout>
+
+                                        <ImageView
+                                            android:id="@+id/img_strategys_one"
+                                            android:layout_width="@dimen/dp_59"
+                                            android:layout_height="@dimen/dp_59"
+                                            android:layout_alignParentRight="true"
+                                            android:background="@drawable/bg_light_gray_radius_two_shape" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                android:id="@+id/tv_strategys_two_title"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="城市串游"
+                                                android:textColor="@color/color_text_black4"
+                                                android:textSize="@dimen/text_size_medium"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:id="@+id/tv_strategys_two_des"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/dp_8"
+                                                android:text="经典温泉线路"
+                                                android:textSize="@dimen/text_size_small" />
+
+                                        </LinearLayout>
+
+                                        <ImageView
+                                            android:id="@+id/img_strategys_two"
+                                            android:layout_width="@dimen/dp_59"
+                                            android:layout_height="@dimen/dp_59"
+                                            android:layout_alignParentRight="true"
+                                            android:background="@drawable/bg_light_gray_radius_two_shape" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_17"
+                                android:layout_marginTop="@dimen/dp_48">
+
+                                <TextView
+                                    android:layout_width="@dimen/dp_3"
+                                    android:layout_height="@dimen/dp_19"
+                                    android:layout_centerVertical="true"
+                                    android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_8"
+                                    android:text="当地名宿"
+                                    android:textColor="@color/color_text_black4"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:textStyle="bold" />
+
+                            </RelativeLayout>
+
+                            <com.nbhysj.coupon.view.DestinationBannerView
+                                android:id="@+id/banner_homestay"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp_162"
+                                android:layout_marginLeft="@dimen/dp_15"
+                                android:layout_marginTop="@dimen/dp_18"
+                                android:layout_marginRight="@dimen/dp_15"
+                                android:background="@drawable/bg_home_search">
+
+                            </com.nbhysj.coupon.view.DestinationBannerView>
+
+                            <TextView
+                                android:id="@+id/tv_hotel_homestay_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_27"
+                                android:layout_marginTop="@dimen/dp_15"
+                                android:text="给来个文艺点的名字"
+                                android:textColor="@color/txt_font_black2"
+                                android:textSize="@dimen/text_size_xnormal"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_hotel_homestay_tag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_27"
+                                android:layout_marginTop="@dimen/dp_8"
+                                android:text="花园老洋房/花园景观/独立露台/超级彩光"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/text_size_small" />
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_17"
+                                android:layout_marginTop="@dimen/dp_44">
+
+                                <TextView
+                                    android:layout_width="@dimen/dp_3"
+                                    android:layout_height="@dimen/dp_19"
+                                    android:layout_centerVertical="true"
+                                    android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_8"
+                                    android:text="@string/str_interactive_selection"
+                                    android:textColor="@color/color_text_black4"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_view_more_interactive_selection"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="@dimen/dp_10"
+                                    android:drawablePadding="@dimen/dp_5"
+                                    android:drawableRight="@mipmap/icon_gray_right_arrow"
+                                    android:gravity="center"
+                                    android:text="@string/str_view_more"
+                                    android:textColor="@color/text_grey"
+                                    android:textSize="@dimen/text_size_normal" />
+                            </RelativeLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_interactive_selection"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_18"></android.support.v7.widget.RecyclerView>
+
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_17"
+                                android:layout_marginTop="@dimen/dp_14">
+
+                                <TextView
+                                    android:layout_width="@dimen/dp_3"
+                                    android:layout_height="@dimen/dp_19"
+                                    android:layout_centerVertical="true"
+                                    android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_8"
+                                    android:text="@string/str_delicious_food_recommendation"
+                                    android:textColor="@color/color_text_black4"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_view_more_delicious_food"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="@dimen/dp_10"
+                                    android:drawablePadding="@dimen/dp_5"
+                                    android:drawableRight="@mipmap/icon_gray_right_arrow"
+                                    android:gravity="center"
+                                    android:text="@string/str_view_more"
+                                    android:textColor="@color/text_grey"
+                                    android:textSize="@dimen/text_size_normal" />
+                            </RelativeLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_delicious_food_recommendation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
+
+                        </LinearLayout>
+
+
+                    </android.support.design.widget.CollapsingToolbarLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/magic_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_48"
+                        android:layout_gravity="bottom"
+                        android:background="@color/white" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_1"
+                        android:alpha="0.25"
+                        android:background="@color/color_text_gray25"></View>
+                </LinearLayout>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <!--</android.support.v4.widget.NestedScrollView>-->
+        </com.nbhysj.coupon.view.JudgeNestedScrollView>
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/llyt_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/toolbar_space"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"></View>
+
+            <RelativeLayout
+                android:id="@+id/rl_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@android:color/transparent">
+
+                <RelativeLayout
+                    android:id="@+id/rlyt_back"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_15">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="@dimen/dp_2"
+                        android:src="@mipmap/nav_ico_back_black" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginRight="@dimen/dp_17"
+                    android:layout_marginBottom="7dp"
+                    android:layout_toLeftOf="@+id/img_fine_food_forward"
+                    android:layout_toRightOf="@+id/rlyt_back"
+                    android:background="@drawable/bg_radius_gray_shape"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/img_bar_search"
+                        android:layout_width="@dimen/dp_13"
+                        android:layout_height="@dimen/dp_12"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:alpha="0.6"
+                        android:src="@mipmap/icon_search_bar_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_search_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_7"
+                        android:background="@null"
+                        android:drawablePadding="4dp"
+                        android:hint="搜索景点/酒店/游记等"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/color_text_gray17"
+                        android:textSize="@dimen/text_size_xnormal" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_fine_food_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:padding="@dimen/dp_10"
+                    android:src="@mipmap/icon_black_forward" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/magic_indicator_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_48"
+                android:layout_below="@+id/llyt_header"
+                android:background="@color/white"
+                app:layout_collapseMode="pin" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/color_text_gray25"
+                android:alpha="0.25"></View>
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

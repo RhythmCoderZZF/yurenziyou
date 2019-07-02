@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_l_grey"
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_mine_collection_travels"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/llyt_ticket_information"
+        android:background="@color/background_l_grey" />
+
+    <LinearLayout
+        android:id="@+id/llyt_ticket_information"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"></LinearLayout>
+
+</RelativeLayout>
+
+
+

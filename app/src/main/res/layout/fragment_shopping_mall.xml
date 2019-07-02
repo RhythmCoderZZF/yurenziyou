@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/toolbar_space"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"></View>
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <RelativeLayout
+            android:id="@+id/rlyt_my_answer"
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/tv_my_answer"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_2"
+                android:src="@mipmap/icon_weather" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_my_answer"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_1"
+                android:text="晴 6 ~12"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_nine" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_28"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginBottom="7dp"
+            android:layout_toLeftOf="@+id/rlyt_message_num"
+            android:layout_toRightOf="@+id/rlyt_my_answer"
+            android:background="@drawable/bg_radius_gray_shape"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/img_bar_search"
+                android:layout_width="@dimen/dp_13"
+                android:layout_height="@dimen/dp_12"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:alpha="0.6"
+                android:src="@mipmap/icon_search_bar_gray" />
+
+            <TextView
+                android:id="@+id/tv_search_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:drawablePadding="4dp"
+                android:lines="1"
+                android:singleLine="true"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlyt_message_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/dp_13">
+
+            <TextView
+                android:id="@+id/tv_message_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_21"
+
+                android:background="@mipmap/icon_order_message_bells" />
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_8"
+                android:background="@drawable/shape_round_red_small"
+                android:gravity="center"
+                android:text="6"
+                android:textColor="@color/white"
+                android:textSize="5sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/line_bg"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableLoadMore="false"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#00000000">
+
+
+        <com.scwang.smartrefresh.header.MaterialHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.nbhysj.coupon.view.RecyclerScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardview_add_my_travel"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_140"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_14"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/dp_15"
+                    app:cardCornerRadius="@dimen/dp_5">
+
+                    <com.nbhysj.coupon.view.BannerView
+                        android:id="@+id/banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/bg_home_search">
+
+
+                    </com.nbhysj.coupon.view.BannerView>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_shopping_mall_menu_classify"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                <View
+                    style="@style/line"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_19"
+                    android:background="@color/line_bg" />
+
+                <!--   <com.example.library.banner.BannerLayout
+                       android:id="@+id/banner_shopping_mall"
+                       android:layout_width="match_parent"
+                       android:layout_height="94dp"
+                       android:layout_marginTop="@dimen/dp_11"
+                       android:layout_marginBottom="@dimen/dp_7"
+                       app:autoPlaying="false"
+                       app:centerScale="1.0"
+                       app:itemSpace="26"
+                       app:moveSpeed="1.0"
+                       app:showIndicator="false" />-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_shopping_mall_small_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_interest_user_look_more"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_21"
+                    android:layout_marginBottom="@dimen/dp_12"></android.support.v7.widget.RecyclerView>
+
+                <View
+                    style="@style/line"
+                    android:layout_height="@dimen/dp_10"
+                    android:background="@color/line_bg" />
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_14">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:alpha="0.4"
+                        android:background="@drawable/shape_round_gradient" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_6"
+                        android:layout_marginTop="@dimen/dp_3"
+                        android:text="限时特卖"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="还剩"
+                            android:textColor="@color/color_text_gray20"
+                            android:textSize="@dimen/text_size_xsmall" />
+
+                        <TextView
+                            android:layout_width="@dimen/dp_27"
+                            android:layout_height="@dimen/dp_21"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_5"
+                            android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
+                            android:gravity="center"
+                            android:text="08"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_3"
+                            android:gravity="center"
+                            android:text=":"
+                            android:textColor="@color/color_text_gray17"
+                            android:textSize="@dimen/text_size_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="@dimen/dp_27"
+                            android:layout_height="@dimen/dp_21"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_3"
+                            android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
+                            android:gravity="center"
+                            android:text="08"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_3"
+                            android:gravity="center"
+                            android:text=":"
+                            android:textColor="@color/color_text_gray17"
+                            android:textSize="@dimen/text_size_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="@dimen/dp_27"
+                            android:layout_height="@dimen/dp_21"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_3"
+                            android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
+                            android:gravity="center"
+                            android:text="08"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="217dp"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_18"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RelativeLayout
+                        android:id="@+id/rlyt_flash_sale_one"
+                        android:layout_width="167dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:background="@color/background_l_grey">
+
+                        <ImageView
+                            android:id="@+id/image_flash_sale_one"
+                            android:layout_width="167dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"></ImageView>
+
+                        <TextView
+                            android:layout_width="@dimen/dp_56"
+                            android:layout_height="@dimen/dp_20"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/dp_18"
+                            android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
+                            android:gravity="center"
+                            android:text="￥156"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="@dimen/dp_56"
+                            android:layout_height="@dimen/dp_20"
+                            android:layout_above="@+id/rlyt_flash_sale_one_price"
+                            android:layout_marginLeft="@dimen/dp_4"
+                            android:gravity="center"
+                            android:text="宁波宁波宁波宁波"
+                            android:textColor="@color/txt_font_black2"
+                            android:textStyle="bold" />
+
+                        <RelativeLayout
+                            android:id="@+id/rlyt_flash_sale_one_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginTop="@dimen/dp_3"
+                            android:layout_marginBottom="@dimen/dp_4">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_3"
+                                android:gravity="center"
+                                android:text="[限时特卖]"
+                                android:textColor="@color/txt_font_black2"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/dp_7"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_flash_sale_one_rmb_symbol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="￥"
+                                    android:textColor="@color/color_text_orange2"
+                                    android:textSize="@dimen/text_size_xsmall"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_flash_sale_one_per_capita_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="156"
+                                    android:textColor="@color/color_text_orange2"
+                                    android:textSize="@dimen/text_size_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_flash_sale_one_rise"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="起"
+                                    android:textColor="@color/color_text_orange2"
+                                    android:textSize="@dimen/text_size_nine"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginRight="@dimen/dp_16"
+                        android:orientation="vertical"
+                        android:weightSum="2">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="103dp"
+                            android:layout_weight="1"
+                            android:background="@color/background_l_grey">
+
+                            <com.nbhysj.coupon.view.GlideImageView
+                                android:id="@+id/image_flash_sale_two"
+                                android:layout_width="match_parent"
+                                android:layout_height="103dp"
+
+                                />
+
+                            <TextView
+                                android:layout_width="@dimen/dp_56"
+                                android:layout_height="@dimen/dp_20"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginTop="@dimen/dp_18"
+                                android:layout_marginBottom="@dimen/dp_10"
+                                android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
+                                android:gravity="center"
+                                android:text="￥156"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:layout_width="@dimen/dp_56"
+                                android:layout_height="@dimen/dp_20"
+                                android:layout_above="@+id/rlyt_flash_sale_two_price"
+                                android:layout_marginLeft="@dimen/dp_4"
+                                android:gravity="center"
+                                android:text="宁波宁波宁波宁波"
+                                android:textColor="@color/txt_font_black2"
+                                android:textStyle="bold" />
+
+                            <RelativeLayout
+                                android:id="@+id/rlyt_flash_sale_two_price"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginTop="@dimen/dp_3"
+                                android:layout_marginBottom="@dimen/dp_4">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_3"
+                                    android:gravity="center"
+                                    android:text="[限时特卖]"
+                                    android:textColor="@color/txt_font_black2"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="@dimen/dp_7"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tv_flash_sale_two_rmb_symbol"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="￥"
+                                        android:textColor="@color/color_text_orange2"
+                                        android:textSize="@dimen/text_size_xsmall"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tv_flash_sale_two_per_capita_price"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="156"
+                                        android:textColor="@color/color_text_orange2"
+                                        android:textSize="@dimen/text_size_medium"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tv_flash_sale_two_rise"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="起"
+                                        android:textColor="@color/color_text_orange2"
+                                        android:textSize="@dimen/text_size_nine"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_104"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_weight="1"
+                            android:background="@color/background_l_grey">
+
+                            <com.nbhysj.coupon.view.GlideImageView
+                                android:id="@+id/image_flash_sale_three"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp_104" />
+
+                            <TextView
+                                android:layout_width="@dimen/dp_56"
+                                android:layout_height="@dimen/dp_20"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginTop="@dimen/dp_18"
+                                android:layout_marginBottom="@dimen/dp_10"
+                                android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
+                                android:gravity="center"
+                                android:text="￥156"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:layout_width="@dimen/dp_56"
+                                android:layout_height="@dimen/dp_20"
+                                android:layout_above="@+id/rlyt_flash_sale_three_price"
+                                android:layout_marginLeft="@dimen/dp_4"
+                                android:gravity="center"
+                                android:text="宁波宁波宁波宁波"
+                                android:textColor="@color/txt_font_black2"
+                                android:textStyle="bold" />
+
+                            <RelativeLayout
+                                android:id="@+id/rlyt_flash_sale_three_price"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginTop="@dimen/dp_3"
+                                android:layout_marginBottom="@dimen/dp_4">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_3"
+                                    android:gravity="center"
+                                    android:text="[限时特卖]"
+                                    android:textColor="@color/txt_font_black2"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="@dimen/dp_7"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tv_flash_sale_three_rmb_symbol"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="￥"
+                                        android:textColor="@color/color_text_orange2"
+                                        android:textSize="@dimen/text_size_xsmall"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tv_flash_sale_three_per_capita_price"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="156"
+                                        android:textColor="@color/color_text_orange2"
+                                        android:textSize="@dimen/text_size_medium"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tv_flash_sale_three_rise"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="起"
+                                        android:textColor="@color/color_text_orange2"
+                                        android:textSize="@dimen/text_size_nine"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    style="@style/line"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:background="@color/line_bg" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_14">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:alpha="0.4"
+                        android:background="@drawable/shape_round_gradient" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_6"
+                        android:layout_marginTop="@dimen/dp_3"
+                        android:text="热门景区"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_view_more_popular_scenic_spots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                        android:gravity="center"
+                        android:text="@string/str_view_more"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_normal" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_popular_scenic_spots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_18"></android.support.v7.widget.RecyclerView>
+
+                <View
+                    style="@style/line"
+                    android:layout_height="@dimen/dp_10"
+                    android:background="@color/line_bg" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_14">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_3"
+                        android:layout_height="@dimen/dp_19"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:text="@string/str_delicious_food_recommendation"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_view_more_delicious_food"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                        android:gravity="center"
+                        android:text="@string/str_view_more"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_normal" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_delicious_food_recommendation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_14">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_3"
+                        android:layout_height="@dimen/dp_19"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:text="@string/str_hotel_reputation"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_view_more_hotel_reputation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                        android:gravity="center"
+                        android:text="@string/str_view_more"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_normal" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_hotel_reputation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_19"></android.support.v7.widget.RecyclerView>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_scenic_spot_classification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_19"></android.support.v7.widget.RecyclerView>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_14">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_3"
+                        android:layout_height="@dimen/dp_19"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:text="@string/str_travel_theme"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_view_more_travel_theme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                        android:gravity="center"
+                        android:text="@string/str_view_more"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_normal" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_21"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/dp_8"
+                            android:orientation="vertical"
+                            android:weightSum="2">
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="151dp"
+                                android:layout_marginBottom="@dimen/dp_5"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/img_travel_theme_one"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentTop="true"
+                                    android:scaleType="fitXY">
+
+                                </ImageView>
+
+                                <TextView
+                                    android:id="@+id/tv_travel_theme_one_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_above="@+id/tv_travel_theme_one_des"
+                                    android:layout_marginLeft="@dimen/dp_12"
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:text="第一次来宁波"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xnormal"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_travel_theme_one_des"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginLeft="@dimen/dp_12"
+                                    android:layout_marginBottom="@dimen/dp_13"
+                                    android:text="第一次来宁波"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xtiny" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="151dp"
+                                android:layout_marginTop="@dimen/dp_5"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginRight="@dimen/dp_4"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/img_travel_theme_three"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:scaleType="fitXY">
+
+                                        </ImageView>
+
+                                        <TextView
+                                            android:id="@+id/tv_travel_theme_three_title"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_above="@+id/tv_travel_theme_three_des"
+                                            android:layout_marginLeft="@dimen/dp_12"
+                                            android:layout_marginBottom="@dimen/dp_10"
+                                            android:text="第一次来宁波"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_xnormal"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_travel_theme_three_des"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentBottom="true"
+                                            android:layout_marginLeft="@dimen/dp_12"
+                                            android:layout_marginBottom="@dimen/dp_13"
+                                            android:text="第一次来宁波"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_xtiny" />
+
+                                    </RelativeLayout>
+
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginLeft="@dimen/dp_4"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/img_travel_theme_four"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:scaleType="fitXY">
+
+                                        </ImageView>
+
+                                        <TextView
+                                            android:id="@+id/tv_travel_theme_four_title"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/dp_12"
+                                            android:layout_marginBottom="@dimen/dp_10"
+                                            android:text="第一次来宁波"
+                                            android:textColor="@color/white"
+                                            android:layout_above="@+id/tv_travel_theme_four_des"
+                                            android:textSize="@dimen/text_size_xnormal"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_travel_theme_four_des"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentBottom="true"
+                                            android:layout_marginLeft="@dimen/dp_12"
+                                            android:layout_marginBottom="@dimen/dp_13"
+                                            android:text="第一次来宁波"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_xtiny" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:weightSum="2">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="@dimen/dp_5"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/img_travel_theme_two"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="fitXY">
+
+                                </ImageView>
+
+                                <TextView
+                                    android:id="@+id/tv_travel_theme_two_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_above="@+id/tv_travel_theme_two_des"
+                                    android:layout_marginLeft="@dimen/dp_12"
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:text="第一次来宁波"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xnormal"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_travel_theme_two_des"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginLeft="@dimen/dp_12"
+                                    android:layout_marginBottom="@dimen/dp_13"
+                                    android:text="第一次来宁波"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xtiny" />
+
+                            </RelativeLayout>
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="@dimen/dp_5"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/img_travel_theme_five"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="fitXY">
+
+                                </ImageView>
+
+                                <TextView
+                                    android:id="@+id/tv_travel_theme_five_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_above="@id/tv_travel_theme_five_des"
+                                    android:layout_marginLeft="@dimen/dp_12"
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:text="第一次来宁波"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xnormal"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_travel_theme_five_des"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginLeft="@dimen/dp_12"
+                                    android:layout_marginBottom="@dimen/dp_14"
+                                    android:text="第一次来宁波"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xtiny" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_18"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="3">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="151dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY">
+
+                        </ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_12"
+                            android:layout_marginBottom="@dimen/dp_10"
+                            android:text="第一次来宁波"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_xnormal"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="@dimen/dp_12"
+                            android:layout_marginBottom="@dimen/dp_13"
+                            android:text="第一次来宁波"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_xtiny" />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="151dp"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="151dp"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:visibility="gone"
+                    android:weightSum="3">
+
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="151dp"
+                        android:layout_marginRight="@dimen/dp_4"
+                        android:layout_weight="1" />
+
+                    <ImageView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="151dp"
+                        android:layout_marginLeft="@dimen/dp_4"
+                        android:layout_marginRight="@dimen/dp_4"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="151dp"
+                        android:layout_marginLeft="@dimen/dp_4"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_45">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_3"
+                        android:layout_height="@dimen/dp_19"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:text="@string/str_independent_travel"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_view_more_independent_travel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                        android:gravity="center"
+                        android:text="@string/str_view_more"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_normal" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_independent_travel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_19"></android.support.v7.widget.RecyclerView>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_marginTop="@dimen/dp_35">
+
+                    <TextView
+                        android:layout_width="@dimen/dp_3"
+                        android:layout_height="@dimen/dp_19"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_blue_green_gradient_radius_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:text="@string/str_guess_you_like"
+                        android:textColor="@color/color_text_black4"
+                        android:textSize="@dimen/text_size_nineteen_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_view_more_guess_you_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                        android:gravity="center"
+                        android:text="@string/str_view_more"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_normal"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_guess_you_like"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_13"
+                    android:layout_marginTop="@dimen/dp_19"
+                    android:layout_marginRight="@dimen/dp_13"></android.support.v7.widget.RecyclerView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60" />
+
+
+            </LinearLayout>
+        </com.nbhysj.coupon.view.RecyclerScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+</LinearLayout>

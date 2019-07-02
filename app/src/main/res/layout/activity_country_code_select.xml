@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <me.yokeyword.indexablerv.IndexableLayout
+        android:id="@+id/layout_indexable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        app:indexBar_layout_width="36dp"
+        app:indexBar_selectedTextColor="@color/color_green2"
+        app:indexBar_textColor="@color/txt_font_black2"
+        app:indexBar_textSize="10sp"
+        app:indexBar_textSpace="3dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</LinearLayout>

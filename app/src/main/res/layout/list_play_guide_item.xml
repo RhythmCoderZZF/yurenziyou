@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llyt_recyclerview_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_9"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="109dp"
+            android:layout_height="73dp">
+
+            <ImageView
+                android:id="@+id/image_scenic_spots"
+                android:layout_width="109dp"
+                android:layout_height="73dp"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/tv_scenic_spots_type"
+                android:layout_width="@dimen/dp_56"
+                android:layout_height="@dimen/dp_20"
+                android:background="@drawable/bg_play_guide_tag_purplish_red_yellow_gradient"
+                android:gravity="center"
+                android:text="项目"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_small" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_scenic_spot_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:text="宁波海洋世界"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_xsmall" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_footer"
+        android:layout_width="@dimen/dp_15"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_51"
+    android:layout_marginRight="@dimen/dp_50"
+    android:background="@android:color/transparent"
+    android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/dialog_bg_round_white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_cancel_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_cancel"
+            android:layout_gravity="right"
+            android:layout_margin="@dimen/dp_16"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_xlarge"
+            android:textColor="@color/txt_font_black2"
+            android:layout_marginLeft="@dimen/dp_28"
+            android:layout_marginTop="@dimen/dp_30"
+            android:text="起一个好听的名字吧~" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_41">
+
+            <EditText
+                android:id="@+id/edt_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/color_text_gray20"
+                android:layout_marginLeft="@dimen/dp_29"
+                android:hint="请输入新的昵称"
+                android:textColorHint="@color/text_grey"
+                android:layout_toLeftOf="@+id/tv_input_limitation"
+                android:background="@null"
+                android:maxLength="15"
+                android:textSize="@dimen/text_size_medium" />
+
+            <TextView
+                android:id="@+id/tv_input_limitation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_45"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/color_text_gray" />
+
+        </RelativeLayout>
+
+        <View
+            style="@style/line"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_45"
+            android:layout_marginTop="@dimen/dp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="9sp"
+            android:drawablePadding="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:drawableRight="@mipmap/icon_edit_userinfo_smiling_face"
+            android:text="每月可修改一次用户名，请慎重修改" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_36"
+            android:layout_marginTop="@dimen/dp_42"
+            android:layout_marginRight="@dimen/dp_45"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_dissmiss"
+                android:layout_width="@dimen/dp_66"
+                android:layout_height="@dimen/dp_30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_xnormal"
+                android:background="@drawable/bg_cancel_black_border"
+                android:gravity="center"
+                android:text="取消" />
+
+            <TextView
+                android:id="@+id/sure_tv"
+                android:layout_width="@dimen/dp_66"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:gravity="center"
+                android:text="@string/str_save"
+                android:background="@drawable/bg_btn_save_oprate"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

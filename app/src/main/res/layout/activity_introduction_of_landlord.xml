@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableLoadMore="false"
+        app:srlEnableRefresh="false"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#00000000">
+
+        <!--  <com.scwang.smartrefresh.layout.header.ClassicsHeader
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:srlAccentColor="@android:color/white" />-->
+
+        <!--<android.support.v4.widget.NestedScrollView-->
+        <com.nbhysj.coupon.view.JudgeNestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/collapse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:contentScrim="?attr/colorPrimary"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                        app:titleEnabled="false">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="90dp"
+                                android:background="@drawable/bg_blue_and_green_gradient"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:weightSum="2">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="@dimen/dp_63"
+                                        android:background="@drawable/bg_blue_and_green_gradient"
+                                        android:gravity="center_horizontal"
+                                        android:orientation="vertical">
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="@dimen/dp_63"
+                                        android:background="@color/white"
+                                        android:gravity="center_horizontal"
+                                        android:orientation="vertical">
+
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+
+                                <android.support.v7.widget.CardView
+                                    android:id="@+id/cardview_add_my_travel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp_15"
+                                    android:layout_marginRight="@dimen/dp_15"
+                                    android:elevation="@dimen/dp_15"
+                                    app:cardCornerRadius="@dimen/dp_5">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:background="@color/white"
+                                        android:gravity="center_horizontal"
+                                        android:orientation="vertical">
+
+                                        <RelativeLayout
+                                            android:id="@+id/rlyt_user_info"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <RelativeLayout
+                                                android:id="@+id/rlyt_avatar"
+                                                android:layout_width="@dimen/dp_66"
+                                                android:layout_height="@dimen/dp_66"
+                                                android:layout_centerVertical="true"
+                                                android:layout_marginLeft="@dimen/dp_16">
+
+                                                <de.hdodenhof.circleimageview.CircleImageView
+                                                    android:id="@+id/image_avatar"
+                                                    android:layout_width="@dimen/dp_48"
+                                                    android:layout_height="@dimen/dp_48"
+                                                    android:layout_centerInParent="true"
+                                                    android:src="@mipmap/bg_main_top" />
+
+                                                <ImageView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_alignParentRight="true"
+                                                    android:layout_alignParentBottom="true"
+                                                    android:layout_marginRight="@dimen/dp_10"
+                                                    android:layout_marginBottom="@dimen/dp_10"
+                                                    android:src="@mipmap/icon_house_owner_crown" />
+                                            </RelativeLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_centerVertical="true"
+                                                android:layout_marginLeft="4dp"
+                                                android:layout_marginRight="10dp"
+                                                android:layout_toLeftOf="@+id/rlyt_my_business_card"
+                                                android:layout_toRightOf="@+id/rlyt_avatar"
+                                                android:orientation="vertical">
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal">
+
+                                                    <TextView
+                                                        android:id="@+id/tv_nickname"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_gravity="center_vertical"
+                                                        android:layout_marginRight="@dimen/dp_10"
+                                                        android:text="用户名"
+                                                        android:textColor="@color/txt_font_black2"
+                                                        android:textSize="@dimen/text_size_medium"
+                                                        android:textStyle="bold" />
+
+                                                    <TextView
+                                                        android:id="@+id/tv_role"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_gravity="bottom"
+                                                        android:layout_marginRight="@dimen/dp_10"
+                                                        android:text="个人房东"
+                                                        android:textColor="@color/color_text_gray20"
+                                                        android:textSize="@dimen/text_size_small" />
+
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginTop="@dimen/dp_5"
+                                                    android:background="@drawable/bg_stroke_radius_twenty_dark_orange_shape"
+                                                    android:orientation="horizontal">
+
+                                                    <ImageView
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_gravity="center_vertical"
+                                                        android:src="@mipmap/icon_real_name_authentication" />
+
+                                                    <TextView
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginLeft="@dimen/dp_6"
+                                                        android:layout_marginTop="@dimen/dp_2"
+                                                        android:layout_marginRight="@dimen/dp_8"
+                                                        android:layout_marginBottom="@dimen/dp_2"
+                                                        android:gravity="center_vertical"
+                                                        android:text="实名认证"
+                                                        android:textColor="@color/color_text_orange2"
+                                                        android:textSize="@dimen/text_size_tiny" />
+
+                                                </LinearLayout>
+
+                                            </LinearLayout>
+
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentRight="true"
+                                                android:layout_centerInParent="true"
+                                                android:layout_gravity="center_vertical|center_horizontal"
+                                                android:layout_marginRight="@dimen/dp_14"
+                                                android:src="@mipmap/icon_gray_right_arrow" />
+
+                                        </RelativeLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/llyt_data_statistics"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/dp_18"
+                                            android:layout_marginTop="@dimen/dp_5"
+                                            android:layout_marginRight="@dimen/dp_18"
+                                            android:layout_marginBottom="@dimen/dp_8"
+                                            android:orientation="horizontal"
+
+                                            android:weightSum="4">
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:id="@+id/tv_fans_num"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:text="100%"
+                                                    android:textColor="@color/txt_font_black2"
+                                                    android:textSize="@dimen/text_size_xmedium"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/tv_fans"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:layout_marginTop="@dimen/dp_6"
+                                                    android:text="预定成功率"
+                                                    android:textColor="@color/color_text_gray20"
+                                                    android:textSize="@dimen/text_size_small" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:text="1分钟"
+                                                    android:textColor="@color/txt_font_black2"
+                                                    android:textSize="@dimen/text_size_xmedium"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:layout_marginTop="@dimen/dp_6"
+                                                    android:text="平均确认时长"
+                                                    android:textColor="@color/color_text_gray20"
+                                                    android:textSize="@dimen/text_size_small" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:text="2"
+                                                    android:textColor="@color/txt_font_black2"
+                                                    android:textSize="@dimen/text_size_xmedium"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:layout_marginTop="@dimen/dp_6"
+                                                    android:text="房源"
+                                                    android:textColor="@color/color_text_gray20"
+                                                    android:textSize="@dimen/text_size_small" />
+
+                                            </LinearLayout>
+
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:text="5.0分"
+                                                    android:textColor="@color/txt_font_black2"
+                                                    android:textSize="@dimen/text_size_xmedium"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:layout_marginTop="@dimen/dp_6"
+                                                    android:text="整体评分"
+                                                    android:textColor="@color/color_text_gray20"
+                                                    android:textSize="@dimen/text_size_small" />
+                                            </LinearLayout>
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </android.support.v7.widget.CardView>
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+
+                    </android.support.design.widget.CollapsingToolbarLayout>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="房东语录"
+                    android:textColor="@color/txt_font_black2"
+                    android:textSize="@dimen/text_size_xmedium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:text="房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话。"
+                    android:textColor="@color/color_text_black7"
+                    android:textSize="@dimen/text_size_small" />
+
+
+                <net.lucode.hackware.magicindicator.MagicIndicator
+                    android:id="@+id/magic_indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="@dimen/dp_47"
+                    android:background="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:background="@color/color_text_gray26"></View>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <!--</android.support.v4.widget.NestedScrollView>-->
+        </com.nbhysj.coupon.view.JudgeNestedScrollView>
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/llyt_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/toolbar_space"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlyt_scenic_spots_detail_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/ibtn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:padding="@dimen/dp_18"
+                    android:src="@mipmap/icon_left_arrow_black" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_collection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:padding="@dimen/dp_10"
+                        android:src="@mipmap/icon_black_fine_food_collection" />
+
+                    <ImageView
+                        android:id="@+id/img_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:padding="@dimen/dp_10"
+                        android:src="@mipmap/icon_black_menu_more" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <net.lucode.hackware.magicindicator.MagicIndicator
+            android:id="@+id/magic_indicator_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_below="@+id/llyt_header"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_collapseMode="pin" />
+    </RelativeLayout>
+</FrameLayout>
+
+
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:zhy="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.ScenicSpotDetailActivity">
+
+        <com.nbhysj.coupon.view.RecyclerScrollView
+            android:id="@+id/scrollview_scenic_spot_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_blue_and_green_gradient"
+                android:orientation="vertical">
+
+
+            </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="124dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_62"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/bg_blue_and_green_gradient"
+                        android:orientation="vertical"
+                        >
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_62"
+                        android:gravity="center_horizontal"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        >
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:background="@color/color_red"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:orientation="vertical"
+                    >
+
+                </RelativeLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </com.nbhysj.coupon.view.RecyclerScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/toolbar_space"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlyt_scenic_spots_detail_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/ibtn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/dp_18"
+                    android:background="@null"
+                    android:src="@mipmap/icon_left_arrow_black" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_collection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:padding="@dimen/dp_10"
+                        android:src="@mipmap/icon_black_collection" />
+
+
+                    <ImageView
+                        android:id="@+id/img_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:padding="@dimen/dp_10"
+                        android:src="@mipmap/icon_black_menu_more" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+</FrameLayout> -->

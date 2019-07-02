@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlyt_new_tourists"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="349dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:clickable="true"
+        android:focusableInTouchMode="false"
+        android:background="@drawable/bg_white_radius_fifteen_top_shape"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:text="@string/str_choose_albums"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/tv_new_album"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:text="@string/str_new_albums"
+                android:drawablePadding="@dimen/dp_7"
+                android:gravity="center_vertical"
+                android:drawableLeft="@mipmap/icon_new_album"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_xnormal"
+                android:textStyle="normal" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_text_gray16"></View>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_collect_enter_albums"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llyt_confirm_payment"
+            android:background="@color/white"></android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

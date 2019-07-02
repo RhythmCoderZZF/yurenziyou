@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_merchant_album_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginLeft="@dimen/dp_6"
+        android:textColor="@color/txt_font_black2"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_xsmall" />
+
+    <com.nbhysj.coupon.view.MyRecycleView
+        android:id="@+id/rv_merchant_album"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_11"
+        android:layout_marginBottom="@dimen/dp_5"></com.nbhysj.coupon.view.MyRecycleView>
+
+</LinearLayout>

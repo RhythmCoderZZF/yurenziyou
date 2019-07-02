@@ -1,0 +1,250 @@
+<resources>
+    <string name="app_name">鱼人自游</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_city">宁波</string>
+    <string name="loading" translatable="false">正在加载数据</string>
+    <string name="str_pull_up_loading" translatable="false">上拉加载更多</string>
+    <string name="str_loading">正在加载...</string>
+    <string name="str_loading_no_more" translatable="false">已经到底啦～</string>
+    <string name="title_activity_user_console">UserConsole</string>
+    <string name="str_token_invalid">身份验证已失效,请重新登录</string>
+    <string name="str_no_net_connect">无网络连接,请检查网络</string>
+    <string name="str_login_token_invalid">您的账号在其他地点登录</string>
+    <string name="str_no_data" translatable="false">没有找到相关结果或数据</string>
+    <string name="transitional_image">the image of transition</string>
+    <string name="str_account">请输入登录的账号</string>
+    <string name="str_login_account">请输入登录账号</string>
+    <string name="str_password">请输入登录密码</string>
+    <string name="str_input_password">请输入密码(6-20位)</string>
+    <string name="str_salt_error">盐值为空</string>
+    <string name="str_input_username">请输入用户名</string>
+    <string name="txt_login" translatable="false">登    录</string>
+    <string name="txt_logout">退出登录</string>
+    <string name="txt_find_pwd">找   回</string>
+    <string name="txt_next" translatable="false">下  一  步</string>
+    <string name="str_login">登录</string>
+    <string name="str_logining" translatable="false">正在登录...</string>
+    <string name="str_onekey_login">一键登录</string>
+    <string name="str_register">注册</string>
+    <string name="str_find_pwd">找回密码</string>
+    <string name="str_bind_phone">绑定手机</string>
+    <string name="str_bind_email">绑定邮箱</string>
+    <string name="str_qq_account">QQ账号</string>
+    <string name="str_qq">QQ</string>
+    <string name="str_wechat">微信</string>
+    <string name="str_weibo">微博</string>
+    <string name="str_weibo_account">微博账号</string>
+    <string name="str_wechat_account">微信账号</string>
+    <string name="str_forget_password">忘记密码?</string>
+    <string name="str_password_login">密码登录</string>
+    <string name="str_get_verification_code">获取验证码</string>
+    <string name="str_input_phone_number">请输入手机号码</string>
+    <string name="str_input_email_number">请输入邮箱号</string>
+    <string name="str_verification_code">验证码</string>
+    <string name="str_verification_code_is_error">验证码不能为空</string>
+    <string name="str_short_msg_send_success">验证码发送成功</string>
+    <string name="str_account_bind_and_setting">账号绑定与设置</string>
+    <string name="str_edit_personal_data">编辑个人资料</string>
+    <string name="str_push_setting">推送设置</string>
+    <string name="str_privacy_setting">隐私设置</string>
+    <string name="str_set_to_default_address">设置为默认地址</string>
+    <string name="str_video_auto_play_settings">视频自动播放设置</string>
+    <string name="str_frequently_used_information">常用信息</string>
+    <string name="str_common_questions_and_feedback">常用问题及意见反馈</string>
+    <string name="str_evaluate_murloc_travel">评价鱼人自游</string>
+    <string name="str_clear_cache">清除缓存</string>
+    <string name="str_personal_setting">个人设置</string>
+    <string name="str_bind_immediately">立即绑定</string>
+    <string name="str_account_management">账号管理</string>
+    <string name="str_bound" translatable="false">已绑定</string>
+    <string name="str_update_pwd">修改密码</string>
+    <string name="str_go_to_update_pwd">去修改密码</string>
+    <string name="str_input_old_pwd">输入旧密码</string>
+    <string name="str_head_portrait">头像</string>
+    <string name="str_nickname">用户昵称</string>
+    <string name="str_gender">性别</string>
+    <string name="str_account_and_personal_data">账号与个人资料</string>
+    <string name="str_date_of_birth">出生日期</string>
+    <string name="str_birthday">生日</string>
+    <string name="str_constellation">星座</string>
+    <string name="str_long_lived_city">常居城市</string>
+    <string name="str_personal_profile">个人简介</string>
+    <string name="str_choose_the_date_of_birth">选择出生日期</string>
+    <string name="str_delete">删除</string>
+    <string name="str_cancel">取消</string>
+    <string name="str_save">保存</string>
+    <string name="str_edit" translatable="false">编辑</string>
+    <string name="str_saving">正在保存...</string>
+    <string name="str_save_success">保存成功</string>
+    <string name="str_update_success">修改成功</string>
+    <string name="str_edit_success">编辑成功</string>
+    <string name="str_updating_password">正在修改密码...</string>
+    <string name="str_edit_personal_profile">编辑个人简介</string>
+    <string name="str_mobile_4g_and_wifi_environment">移动4G和Wi-fi环境</string>
+    <string name="str_wifi_environment_only">仅限Wi-fi环境</string>
+    <string name="str_supported_users">赞过的用户</string>
+    <string name="str_common_passenger_information">常用旅客信息</string>
+    <string name="str_common_contact_information">常用联系人信息</string>
+    <string name="str_my_frequent_passengers">我的常用旅客</string>
+    <string name="str_common_contacts">常用联系人</string>
+    <string name="str_click_add_passenger">点击添加旅客</string>
+    <string name="str_click_add_recipients" translatable="false">点击添加收件人</string>
+    <string name="str_username" translatable="false">姓名</string>
+    <string name="str_wechat_number" translatable="false">微信号</string>
+    <string name="str_phone_number" translatable="false">手机号</string>
+    <string name="str_phone">手机号码</string>
+    <string name="str_email">邮箱</string>
+    <string name="str_fill_real_name">请填写真实姓名</string>
+    <string name="str_adding_passenger_information">添加旅客信息</string>
+    <string name="str_24_hour_service_abroad">用于境外24小时服务</string>
+    <string name="str_receive_confirmation_mail">用于接收确认邮件</string>
+    <string name="str_receive_confirmation_message">用于接收确认短信</string>
+    <string name="str_consignee">收货人</string>
+    <string name="str_location">所在地区</string>
+    <string name="str_recipient_information">收件人信息</string>
+    <string name="str_add_common_contacts">添加常用联系人</string>
+    <string name="str_getting_verification_code">正在获取...</string>
+    <string name="str_input_nickname">请输入需要修改的昵称</string>
+    <string name="str_input_personal_profile">请填写个人简介</string>
+    <string name="str_broadcast">广播</string>
+    <string name="str_stroke_dynamics">行程动态</string>
+    <string name="str_comments_received" translatable="false">收到的评论</string>
+    <string name="str_praise_and_collection" translatable="false">赞和收藏</string>
+    <string name="str_comments_list" translatable="false">评论列表</string>
+    <string name="str_passenger_name_telephone">旅客姓名电话</string>
+    <string name="str_chinese_name">中文名字</string>
+    <string name="str_documents_with_identical_names">与证件姓名一致</string>
+    <string name="str_input_phone">请填写手机号</string>
+    <string name="str_identification_card">身份证</string>
+    <string name="str_identification_number">证件号码</string>
+    <string name="str_input_chinese_name">请填写中文名字</string>
+    <string name="str_input_realname">请填写真实名字</string>
+    <string name="str_input_identification_number">请填写证件号码</string>
+    <string name="str_recipient_list">收件人信息列表</string>
+    <string name="str_input_wechat_number" translatable="false">请填写微信号</string>
+    <string name="str_input_email" translatable="false">请填写邮箱</string>
+    <string name="str_add_tag" translatable="false">添加标签</string>
+    <string name="str_input_location" translatable="false">输入位置</string>
+    <string name="select_address_pop_title" translatable="false">所在地区</string>
+    <string name="str_interactive_question_and_answer" translatable="false">互动问答</string>
+    <string name="str_customer_service_news" translatable="false">客服消息</string>
+    <string name="str_return_powder" translatable="false">回粉</string>
+    <string name="str_new_fans" translatable="false">新增粉丝</string>
+    <string name="str_complete" translatable="false">完成</string>
+    <string name="str_order_delete" translatable="false">删除订单</string>
+    <string name="str_order_comment" translatable="false">去评价</string>
+    <string name="str_renminbi_symbol" translatable="false">￥</string>
+    <string name="str_order_detail" translatable="false">订单详情</string>
+    <string name="str_transaction_success" translatable="false">交易成功</string>
+    <string name="str_evaluate" translatable="false">评价</string>
+    <string name="str_rebook" translatable="false">再次预定</string>
+    <string name="str_online_payment" translatable="false">在线支付</string>
+    <string name="str_more" translatable="false">更多</string>
+    <string name="str_create_topic" translatable="false">创建话题</string>
+    <string name="str_create_more_topic" translatable="false">搜索更多话题</string>
+    <string name="str_verification_code_info" translatable="false">验证码信息</string>
+    <string name="str_invoice_information" translatable="false">发票信息</string>
+    <string name="str_possible_problems" translatable="false">可能遇到的问题</string>
+    <string name="str_contact_merchant" translatable="false">联系商家</string>
+    <string name="str_hotel_questions_and_answers" translatable="false">酒店问答</string>
+    <string name="str_view_more" translatable="false">查看更多</string>
+    <string name="str_guess_you_like" translatable="false">猜你喜欢</string>
+    <string name="str_answer" translatable="false">回答</string>
+    <string name="str_publish" translatable="false">发布</string>
+    <string name="str_my_answer" translatable="false">我的回答</string>
+    <string name="str_common_problem" translatable="false">常见问答</string>
+    <string name="str_my_ask_question" translatable="false">我要提问</string>
+    <string name="str_ask_question_detail" translatable="false">问题详情</string>
+    <string name="str_delicious_food_recommendation" translatable="false">美食推荐</string>
+    <string name="str_hotel_reputation" translatable="false">酒店名宿</string>
+    <string name="str_travel_theme" translatable="false">旅行主题</string>
+    <string name="str_independent_travel" translatable="false">自由行</string>
+    <string name="str_historical_record" translatable="false">历史记录</string>
+    <string name="str_destination" translatable="false">目的地</string>
+    <string name="str_popular_nearby" translatable="false">附近热门</string>
+    <string name="str_comprehensive_sorting" translatable="false">综合排序</string>
+    <string name="str_super_value_reservation" translatable="false">超值预定</string>
+    <string name="str_distance_first" translatable="false">距离优先</string>
+    <string name="str_interactive_selection" translatable="false">互动精选</string>
+    <string name="str_view_all" translatable="false">查看全部</string>
+    <string name="str_play_guide" translatable="false">游玩指南</string>
+    <string name="str_admission_ticket" translatable="false">门票</string>
+    <string name="str_scenic_spot_information" translatable="false">景点信息</string>
+    <string name="str_order_submit" translatable="false">提交订单</string>
+    <string name="str_tourist_information" translatable="false">游客信息</string>
+    <string name="str_increase_ticket" translatable="false">增加门票</string>
+    <string name="str_merchant_album" translatable="false">商家相册</string>
+    <string name="str_net_friends_album" translatable="false">网友相册</string>
+    <string name="str_discount" translatable="false">优惠</string>
+    <string name="str_price_detail" translatable="false">价格明细</string>
+    <string name="str_confirm_payment" translatable="false">确认支付</string>
+    <string name="str_order_pay" translatable="false">支付订单</string>
+    <string name="str_sure" translatable="false">确定</string>
+    <string name="str_editing_visitors" translatable="false">编辑游客</string>
+    <string name="str_add_visitors" translatable="false">新增游客</string>
+    <string name="str_details_of_facilities" translatable="false">详情设施</string>
+    <string name="str_reservation_must_be_read" translatable="false">订房必读</string>
+    <string name="str_hotel_periphery" translatable="false">酒店周边</string>
+    <string name="str_immediate_payment" translatable="false">立即支付</string>
+    <string name="str_recommended_dishes" translatable="false">推荐菜</string>
+    <string name="str_tenant_name" translatable="false">选择住客姓名</string>
+    <string name="str_recommended_for_you" translatable="false">为您推荐</string>
+    <string name="str_my_travel_assisant" translatable="false">我的行程</string>
+    <string name="str_destination_find_interested" translatable="false">寻找你感兴趣的目的地</string>
+    <string name="str_travel_planning" translatable="false">行程规划</string>
+    <string name="str_help_me_plan" translatable="false">帮我规划</string>
+    <string name="str_self_planning" translatable="false">自己规划</string>
+    <string name="str_travel_priview" translatable="false">行程预览</string>
+    <string name="str_reaching_the_city" translatable="false">到达城市</string>
+    <string name="str_departure_the_city" translatable="false">出发城市</string>
+    <string name="str_join_the_itinerary" translatable="false">加入行程</string>
+    <string name="str_add_traffic" translatable="false">添加交通</string>
+    <string name="str_price" translatable="false">价格</string>
+    <string name="str_star_class" translatable="false">星级</string>
+    <string name="str_reset" translatable="false">重置</string>
+    <string name="str_choose_albums" translatable="false">选择专辑</string>
+    <string name="str_new_albums" translatable="false">新建专辑</string>
+    <string name="str_edit_albums" translatable="false">编辑专辑</string>
+    <string name="str_delete_albums" translatable="false">删除专辑</string>
+    <string name="str_title" translatable="false">标题</string>
+    <string name="str_profile" translatable="false">简介</string>
+    <string name="str_seen_only_by_oneself" translatable="false">仅自己可见</string>
+    <string name="str_apply_for_refund" translatable="false">申请退款</string>
+    <string name="to_expand_hint" translatable="false">展开</string>
+    <string name="to_shrink_hint" translatable="false">收起</string>
+    <string name="str_find_friends" translatable="false">发现好友</string>
+    <string name="str_eat_the_list" translatable="false">必吃榜单</string>
+    <string name="str_immediate_reservation" translatable="false">立即预定</string>
+    <string name="str_share" translatable="false">分享到</string>
+    <string name="str_conscience_recommendation" translatable="false">良心推荐</string>
+    <string name="str_calendar_select" translatable="false">选择日期</string>
+    <string name="str_scenic_spot" translatable="false">景点</string>
+    <string name="str_remarks" translatable="false">备注</string>
+
+    <string name="select" translatable="false">选择图片</string>
+    <string name="object_name">请输入OSS文件名</string>
+    <string name="normal">普通上传下载</string>
+    <string name="download">下载</string>
+    <string name="upload">上传</string>
+    <string name="multipart_upload"> 上传</string>
+    <string name="multipart_pause">暂停</string>
+    <string name="multipart">断点续传上传</string>
+    <string name="resize_width">缩略宽度</string>
+    <string name="resize_height">缩略高度</string>
+    <string name="resize">图片缩略</string>
+    <string name="watermark">文字水印</string>
+    <string name="watermark_hint">请输入水印文字</string>
+    <string name="watermark_size">文字大小</string>
+    <string name="stsserver">STS服务器地址</string>
+    <string name="listObjects">listObjects</string>
+    <string name="headObject">headObject</string>
+    <string name="manageBuckets">manage</string>
+    <string name="ossSign">ossSign</string>
+    <string name="resumableUpload">resumable</string>
+    <string name="multipartUpload">multipart</string>
+    <string name="cutomSign">cutomsign</string>
+    <string name="batch_upload">batch</string>
+    <string name="trigger_callback">callback</string>
+    <string name="image_persist">image persist</string>
+
+</resources>

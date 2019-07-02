@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_house_resources_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.nbhysj.coupon.view.RoundedImageView
+        android:id="@+id/image_hotel_reputation"
+        android:layout_width="match_parent"
+        android:layout_height="123dp"
+        app:riv_mutate_background="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:scaleType="fitXY"
+        app:riv_corner_radius="5dip"
+        app:riv_oval="false" />
+
+    <TextView
+        android:id="@+id/tv_merchant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="XXXXXXXX我是标题XX…"
+        android:singleLine="true"
+        android:textColor="@color/color_text_black7"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_3"
+        android:text="整套·3居室·可住6人"
+        android:textColor="@color/color_text_black7"
+        android:textSize="@dimen/text_size_tiny" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dp_19"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:text="￥"
+            android:textColor="@color/color_text_orange2"
+            android:textSize="@dimen/text_size_tiny" />
+
+        <TextView
+            android:id="@+id/tv_per_capita_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="156"
+            android:textColor="@color/color_text_orange2"
+            android:textSize="@dimen/text_size_xmedium" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:text="￥200"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_xtiny" />
+    </LinearLayout>
+
+
+</LinearLayout>

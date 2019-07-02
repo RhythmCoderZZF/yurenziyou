@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/line_bg"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableLoadMore="false"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#00000000">
+
+        <com.scwang.smartrefresh.header.MaterialHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/app_barlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:contentScrim="@android:color/transparent"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="191dp">
+
+                            <com.youth.banner.Banner
+                                android:id="@+id/banner_home"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:image_scale_type="fit_xy"
+                                app:indicator_drawable_selected="@mipmap/home_banner_carousel_1"
+                                app:indicator_drawable_unselected="@mipmap/icon_banner_indicator_unselect"
+                                app:indicator_height="@dimen/dp_3"
+                                app:indicator_width="@dimen/dp_10"></com.youth.banner.Banner>
+
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="65dp"
+                            android:elevation="6dp"
+                            app:contentInsetLeft="0dp"
+                            app:contentInsetStart="0dp"
+                            app:contentInsetStartWithNavigation="0dp"
+                            app:layout_collapseMode="pin"
+                            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                            app:title="">
+
+                            <RelativeLayout
+                                android:id="@+id/rl_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/transparent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="25dp">
+
+                                <LinearLayout
+                                    android:id="@+id/llyt_home_city"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerVertical="true"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tv_home_city"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginRight="@dimen/dp_2"
+                                        android:drawableRight="@mipmap/icon_arrow_down"
+                                        android:drawablePadding="@dimen/dp_3"
+                                        android:gravity="center"
+                                        android:paddingLeft="@dimen/dp_16"
+                                        android:text="@string/str_city"
+                                        android:textColor="@color/text_black"
+                                        android:textSize="@dimen/text_size_medium"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/ll_search"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="@dimen/dp_10"
+                                    android:layout_marginTop="7dp"
+                                    android:layout_marginRight="@dimen/dp_10"
+                                    android:layout_marginBottom="7dp"
+                                    android:layout_toLeftOf="@+id/rlyt_message_num"
+                                    android:layout_toRightOf="@+id/llyt_home_city"
+                                    android:background="@drawable/bg_home_search"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:id="@+id/img_bar_search"
+                                        android:layout_width="@dimen/dp_13"
+                                        android:layout_height="@dimen/dp_12"
+                                        android:layout_marginLeft="@dimen/dp_8"
+                                        android:src="@mipmap/icon_home_search" />
+
+                                    <TextView
+                                        android:id="@+id/tv_search_hint"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@null"
+                                        android:drawablePadding="4dp"
+                                        android:lines="1"
+                                        android:singleLine="true"
+                                        android:textColor="#999999"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rlyt_message_num"
+                                    android:layout_width="28dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginRight="@dimen/dp_8">
+
+                                    <TextView
+                                        android:id="@+id/tv_message_tag"
+                                        android:layout_width="22dp"
+                                        android:layout_height="22dp"
+                                        android:layout_marginTop="@dimen/dp_2"
+                                        android:background="@mipmap/icon_home_small_bell_message" />
+
+                                    <TextView
+                                        android:layout_width="8dp"
+                                        android:layout_height="8dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="@dimen/dp_8"
+                                        android:background="@drawable/shape_round_red_small"
+                                        android:gravity="center"
+                                        android:text="6"
+                                        android:textColor="@color/white"
+                                        android:textSize="5sp" />
+
+                                </RelativeLayout>
+
+                            </RelativeLayout>
+                        </android.support.v7.widget.Toolbar>
+                    </android.support.design.widget.CollapsingToolbarLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:background="@color/white">
+
+                        <com.flyco.tablayout.SlidingTabLayout
+                            android:id="@+id/tab_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@color/white"
+                            app:tl_indicator_color="@color/color_line_view"
+                            app:tl_indicator_corner_radius="30dp"
+                            app:tl_indicator_height="3dp"
+                            app:tl_indicator_margin_top="@dimen/dp_18"
+                            app:tl_indicator_width="@dimen/dp_20"
+                            app:tl_indicator_width_equal_title="false"
+                            app:tl_tab_padding="15dp"
+                            app:tl_textBold="SELECT"
+                            app:tl_textSelectColor="@color/color_text_black"
+                            app:tl_textUnselectColor="@color/color_text_gray"
+                            app:tl_textsize="18sp" />
+
+                    </RelativeLayout>
+
+                </android.support.design.widget.AppBarLayout>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+                    />
+
+                <!--   <com.nbhysj.coupon.view.RecyclerScrollView
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:background="@color/white"
+                       android:scrollbars="none"
+                       android:visibility="gone">
+
+                       <RelativeLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:descendantFocusability="blocksDescendants">
+
+                           <android.support.v7.widget.RecyclerView
+                               android:layout_width="match_parent"
+                               android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+                           <RelativeLayout
+                               android:layout_width="match_parent"
+                               android:layout_height="@dimen/dp_60" />
+                       </RelativeLayout>
+                   </com.nbhysj.coupon.view.RecyclerScrollView>-->
+
+
+            </android.support.design.widget.CoordinatorLayout>
+        </LinearLayout>
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+</LinearLayout>

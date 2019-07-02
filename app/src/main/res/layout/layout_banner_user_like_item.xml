@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="249dp"
+    android:layout_height="@dimen/dp_80"
+    android:layout_marginRight="@dimen/dp_9"
+    android:background="@drawable/bg_interest_user_shape">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_interest_user_avatar"
+        android:layout_width="@dimen/dp_53"
+        android:layout_height="@dimen/dp_53"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_gravity="center_vertical" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/image_interest_user_avatar"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试"
+            android:textSize="10sp"
+            android:layout_marginTop="@dimen/dp_5"
+            android:textColor="@color/color_text_gray3" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_follow"
+        android:layout_width="@dimen/dp_64"
+        android:layout_height="@dimen/dp_28"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="关注 Ta"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:padding="@dimen/dp_5"
+        android:textColor="@color/white"
+        android:layout_marginRight="@dimen/dp_10"
+        android:background="@drawable/bg_recommend_tablayout_select" />
+</RelativeLayout>

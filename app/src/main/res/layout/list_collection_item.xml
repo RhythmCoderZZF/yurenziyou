@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_collection_select_option"
+    android:layout_width="@dimen/dp_73"
+    android:layout_height="@dimen/dp_25"
+    android:background="@drawable/selector_hot_tag_bg"
+    android:text="必吃美食.45"
+    android:textSize="@dimen/text_size_xsmall"
+    android:gravity="center"
+    android:paddingLeft="@dimen/dp_6"
+    android:paddingRight="@dimen/dp_6"
+    android:paddingTop="@dimen/dp_4"
+    android:paddingBottom="@dimen/dp_4"
+    android:layout_marginRight="@dimen/dp_3"
+    android:layout_marginLeft="@dimen/dp_12"
+    android:button="@null"
+    android:checked="false"
+    android:textColor="@color/txt_font_black2"></TextView>
+

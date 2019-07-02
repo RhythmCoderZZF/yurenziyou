@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.nbhysj.coupon">
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.WRITE_VOICEMAIL" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- camera -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/> -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- <uses-permission android:name="android.permission.READ_SOCIAL_STREAM"/> -->
+    <!-- <uses-permission android:name="com.android.voicemail.permission.ADD_VOICEMAIL"/> -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_VIDEO" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" /> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <application
+        android:name=".BasicApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/icon_yrzy_app_logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:persistent="true"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".ui.TravelAssistantRoutePlanMapActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.TravelAssistantEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TravelAssistantRemarksActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TabScrollActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.EditScheduleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ScenicSpotsDetailLocationMapActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CalendarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.IntroductionOfLandlordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallFineFoodActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallHotelHomestayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallInteractionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.CombinationListActivity" />
+        <activity android:name=".ui.ShoppingMallSpecialSaleActivity" /> <!-- 设置key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="56f7db2ba1b3d63e8a7605a9567f45dc" /> <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity
+            android:name=".ui.FineGoodBangDanListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ScenicSpotBangDanListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ScenicSpotListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HomestayDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.NewAlbumActivity" />
+        <activity
+            android:name=".ui.ApplyForRefundActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.CommentsListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".ui.EditAlbumActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AlbumDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MyBusinessCardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.BezierViewDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallScreeningActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TravelAssisantScenicSpotAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TravelAssistantDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AddAccommodationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AddTrafficActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TripPreviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TravelPlanningActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TravelAssistanSelectCountyActivity"
+            android:screenOrientation="portrait" />
+        <!--
+             <activity android:name=".ui.SelectAttractionActivity"
+            android:screenOrientation="portrait">
+
+
+        </activity>
+        -->
+        <activity
+            android:name=".ui.SelectTenantNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RecommendFoodLookMoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FoodRecommendationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HotelOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HotelDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PaymentOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HotelListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ScenicSpotCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PlayGuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.ScenicSpotsAlbumActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SubmitOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ScenicSpotDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ScenicSpotDestinationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FineGoodListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallDestinationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallScenicSpotActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.DestinationSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MyQuestionsAndAnswersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.DeploymentProblemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MoreQuestionsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.AnswerQuestionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AskQuestionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.OrderEvaluateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MoreHotTagTopicActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MyOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MyOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PublishSoundRecordingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ReceivedPraiseAndCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oss.view.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.OthersHomePageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PublishLocationSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AssistantDateChoiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RecipientListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PublishNoteActivity"
+            android:screenOrientation="portrait">
+
+            <!--  -->
+
+        </activity>
+
+        <meta-data
+            android:name="android.vendor.full_screen"
+            android:value="true" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="ratio_float" />
+
+        <activity android:name=".ui.StrokeDynamicsActivity" />
+        <activity
+            android:name=".ui.PraiseAndCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.NewFansActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CommentsAndAnswersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.BroadcastActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.ShadowMainActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity> <!-- 名片 -->
+        <activity
+            android:name=".ui.BusinessCardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CityChooseListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FrequentContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AddFrequentContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RecipientInformationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.AddTravellerInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MyFrequentPassengersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SupportedUsersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FrequentlyUsedInformationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.VideoAutoPlaySettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.EditorPersonalProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ChooseTheDateOfBirthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AccountAndPersonalDataActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.UpdatePwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AccountManagementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PersonalSettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.OneKeyLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.NearbyCardDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FindPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CountryCodeSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.OneClickLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.UserRegistrationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PhoneQuickLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".TestActivity" />
+        <activity
+            android:name=".ui.MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FindFriendsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/customTheme" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".ui.ImagePreviewLoadingActivity"
+            android:screenOrientation="portrait" /> <!-- qq -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent100424468" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- wechat callback -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" /> <!-- 微博 -->
+        <activity
+            android:name="com.umeng.socialize.media.WBShareCallBackActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.CardMainActivity" /> <!-- required -->
+        <activity
+            android:name="com.cmic.sso.sdk.activity.OAuthActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" /> <!-- required -->
+        <activity
+            android:name="com.cmic.sso.sdk.activity.LoginAuthActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" /> <!-- Required -->
+        <activity
+            android:name="cn.jiguang.verifysdk.CtLoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" /> <!-- Required -->
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="${JPUSH_APPKEY}" /> <!-- </>值来自开发者平台取得的AppKey -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="${JPUSH_CHANNEL}" />
+    </application>
+
+</manifest>

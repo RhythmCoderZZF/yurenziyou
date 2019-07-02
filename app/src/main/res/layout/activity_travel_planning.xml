@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.TravelPlanningActivity"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_header" />
+
+
+    <ImageView
+        android:layout_width="@dimen/dp_216"
+        android:layout_height="@dimen/dp_139"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_85"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/txt_font_black2"
+        android:layout_marginTop="@dimen/dp_35"
+        android:gravity="center"
+        android:textSize="26sp"
+        android:text="只差最后一步美好行程等着你！" />
+
+
+    <TextView
+        android:id="@+id/tv_help_me_planning"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_below="@+id/llyt_login_input"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="107dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_15"
+        android:background="@drawable/btn_oprate_bg"
+        android:gravity="center"
+        android:text="@string/str_help_me_plan"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_large" />
+
+    <TextView
+        android:id="@+id/tv_self_planning"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_below="@+id/llyt_login_input"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_27"
+        android:layout_marginRight="@dimen/dp_15"
+        android:background="@drawable/bg_stroke_radius_twenty_three_black_shape"
+        android:gravity="center"
+        android:text="@string/str_self_planning"
+        android:textColor="@color/txt_font_black2"
+        android:textSize="@dimen/text_size_large" />
+
+</LinearLayout>

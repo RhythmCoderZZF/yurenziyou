@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_flowlayout"
+    android:layout_width="@dimen/dp_80"
+    android:layout_height="@dimen/dp_20"
+    android:background="@drawable/shape_flowlayout_stroke_light_gray"
+    android:text=""
+    android:textSize="@dimen/text_size_small"
+    android:layout_marginRight="@dimen/dp_7"
+    android:layout_marginTop="@dimen/dp_5"
+    android:gravity="center"
+    android:textColor="@color/color_text_gray17"></TextView>
+

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:id="@+id/llyt_recyclerview_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_l_grey"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_shape_round_gradient"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:background="@drawable/shape_round_gradient" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_shape_round_gradient"
+            android:layout_marginLeft="@dimen/dp_28"
+            android:background="@drawable/bg_blue_and_green_gradient"></View>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_19"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00KM"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_small" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview_add_my_travel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_14"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_21"
+            android:elevation="@dimen/dp_5"
+            android:paddingLeft="@dimen/dp_15"
+            app:cardCornerRadius="@dimen/dp_5">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_toLeftOf="@+id/image_scenic_spots"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_travel_assistant_remarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="@dimen/dp_14"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:src="@mipmap/icon_travel_assistant_self_driving" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_4"
+                        android:layout_toRightOf="@+id/img_travel_assistant_remarks"
+                        android:paddingTop="@dimen/dp_14"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:text="备注"
+                        android:textColor="@color/color_text_gray27"
+                        android:textSize="@dimen/text_size_xsmall"
+                        android:textStyle="bold" />
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_13"
+                    android:background="@drawable/bg_rect_light_gray_shape_radius_two"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_7"
+                            android:layout_marginTop="@dimen/dp_20"
+                            android:text="行程时间：9:00-10:00"
+                            android:textColor="@color/color_text_black7"
+                            android:textSize="@dimen/text_size_xsmall" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginTop="@dimen/dp_20"
+                            android:layout_marginRight="@dimen/dp_22"
+                            android:text="1小时"
+                            android:textColor="@color/color_text_gray28"
+                            android:textSize="@dimen/text_size_small" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="@dimen/dp_7"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:layout_marginRight="@dimen/dp_22"
+                        android:layout_marginBottom="@dimen/dp_16"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:text="宁波海洋世界 - 余姚四明山景区"
+                        android:textColor="@color/color_text_gray28"
+                        android:textSize="@dimen/text_size_small" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

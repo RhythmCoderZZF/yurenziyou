@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_position_distance_classify_type"
+        android:layout_width="96dp"
+        android:layout_height="match_parent"
+        android:scrollbars="none" />
+
+    <View
+        android:layout_width="0.2dip"
+        android:layout_height="match_parent"
+        android:background="@color/line_grey" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_position_distance_classify_two_level_linkage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scrollbars="none" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_position_distance_classify_sub_two_level_linkage"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/view_position_distance_classify_two_level_linkage"
+            android:layout_width="0.2dip"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/rv_position_distance_classify_sub_two_level_linkage"
+            android:background="@color/line_grey"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_position_distance_classify_three_level_linkage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/view_position_distance_classify_two_level_linkage"
+            android:scrollbars="none"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+</LinearLayout>
+
+

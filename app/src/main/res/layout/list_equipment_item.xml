@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:id="@+id/llyt_recyclerview_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginBottom="@dimen/dp_20"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_equipment_num"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_30"
+        android:layout_gravity="center_horizontal"
+        android:text="34+"
+        android:gravity="bottom"
+        android:textSize="@dimen/text_size_xmedium"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/img_equipment"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/icon_air_conditioner"
+        android:layout_above="@+id/tv_equipment_name"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_equipment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:text="空调"
+        android:textColor="@color/txt_font_black2"
+        android:textSize="@dimen/text_size_xnormal" />
+
+</LinearLayout>

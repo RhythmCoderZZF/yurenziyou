@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llyt_scenic_spot_item"
+    android:layout_width="@dimen/dp_70"
+    android:layout_height="@dimen/dp_57"
+    android:layout_marginLeft="@dimen/dp_9"
+    android:background="@mipmap/icon_bg_fillet_rectangle_order_time"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="04-13周六"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_xsmall" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日期"
+            android:textSize="@dimen/text_size_xsmall"
+            android:textColor="@color/txt_font_black2" />
+    </LinearLayout>
+</RelativeLayout>

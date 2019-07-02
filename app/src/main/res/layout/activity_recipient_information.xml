@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toggle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_l_grey"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:text="@string/str_consignee"
+                    android:textColor="@color/color_text_gray6"
+                    android:textSize="@dimen/text_size_xnormal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:drawableRight="@mipmap/icon_consignee_info"
+                    android:drawablePadding="@dimen/dp_16"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/text_grey"
+                    android:textSize="@dimen/text_size_xsmall" />
+            </RelativeLayout>
+
+            <View style="@style/line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:text="@string/str_phone"
+                    android:textColor="@color/color_text_gray6"
+                    android:textSize="@dimen/text_size_xnormal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:gravity="center"
+                    android:text="+86"
+                    android:textColor="@color/text_grey"
+                    android:textSize="@dimen/text_size_xsmall" />
+            </RelativeLayout>
+
+            <View style="@style/line" />
+
+            <RelativeLayout
+                android:id="@+id/rlyt_regional_choice"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:text="@string/str_location"
+                    android:textColor="@color/color_text_gray6"
+                    android:textSize="@dimen/text_size_xnormal" />
+
+                <TextView
+                    android:id="@+id/tv_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:drawableRight="@mipmap/icon_arrow_navigation_right"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/text_grey"
+                    android:textSize="@dimen/text_size_xsmall" />
+            </RelativeLayout>
+
+            <View style="@style/line" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_26"
+                android:layout_marginRight="@dimen/dp_16"
+                android:padding="@dimen/dp_10"
+                android:gravity="top"
+                android:hint="详细地址: 如道路、门牌号、小区、楼栋号、单元室等"
+                android:textColor="@color/color_text_gray6"
+                android:background="@null"
+                android:textSize="@dimen/text_size_xnormal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:text="地址标签"
+                android:textColor="@color/txt_font_black2"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textSize="@dimen/text_size_xnormal" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_delivery_address_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_16"
+                android:background="@color/white"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <View style="@style/line" />
+
+        <RelativeLayout
+            android:id="@+id/rlyt_privacy_setting"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:text="@string/str_set_to_default_address"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_xnormal" />
+
+            <com.nbhysj.coupon.widget.ToggleButton
+                android:id="@+id/btn_toggle_privacy_setting"
+                android:layout_width="48dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="@dimen/dp_14"
+                toggle:tbBorderWidth="1dp"
+                toggle:tbOffBorderColor="@color/line_grey"
+                toggle:tbOffColor="@color/white"
+                toggle:tbOnColor="@color/color_green2"
+                toggle:tbSpotColor="@color/white" />
+        </RelativeLayout>
+
+        <View
+            style="@style/line"
+            android:layout_marginLeft="@dimen/dp_15" />
+
+    </LinearLayout>
+</LinearLayout>

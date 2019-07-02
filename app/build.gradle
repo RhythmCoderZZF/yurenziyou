@@ -1,0 +1,188 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+//apply plugin: 'mtj-circle-plugin'
+greendao {
+    greendao {
+        schemaVersion 1
+        daoPackage 'com.nbhysj.coupon.greendao'//1
+        targetGenDir 'src/main/java'
+    }
+}
+android {
+    compileSdkVersion 27
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        applicationId "com.nbhysj.coupon"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                // 设置manifest.xml中的变量
+                JPUSH_APPKEY : "0f1d0c85c2159e8f4deea3d1",
+                //应用渠道
+                JPUSH_CHANNEL: "default_developer",
+        ]
+        // 指定要ndk需要兼容的架构(这样其他依赖包里arm64,arm64-v8a,arm-v8...之类的so会被过滤掉)
+        ndk {
+            //设置支持的SO库架构
+            //abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        multiDexEnabled true
+    }
+
+    Properties props = new Properties()
+    props.load(new FileInputStream(file("signing.properties")))
+    signingConfigs {
+        release {//发布版本的签名配置
+            storeFile file(props['KEYSTORE_FILE'])
+            keyAlias props['KEY_ALIAS']
+            storePassword props['KEYSTORE_PWD']
+            keyPassword props['KEY_PWD']
+        }
+        debug {//调试版本的签名配置
+            storeFile file(props['KEYSTORE_FILE'])
+            keyAlias props['KEY_ALIAS']
+            storePassword props['KEYSTORE_PWD']
+            keyPassword props['KEY_PWD']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false //启用Proguard
+            zipAlignEnabled true //是否启用zipAlign压缩
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        debug {
+            debuggable true
+            minifyEnabled false  //不启用Proguard
+            zipAlignEnabled false //是否启用zipAlign压缩
+            signingConfig signingConfigs.debug
+        }
+    }
+    // java版本,让IDE使用用JAVA8语法解析
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/rxjava.PROPERTIES'
+        exclude 'META-INF/RXJAVA.properties'
+        exclude 'META-INF/RXJAVA.PROPERTIES'
+        exclude 'META-INF/rxjava'
+        exclude 'META-INF/RXJAVA'
+    }
+
+    aaptOptions {
+        cruncherEnabled = false
+    }
+
+    lintOptions { abortOnError false }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v13'
+    }
+
+}
+def rxlifecycleVersion = '0.4.0'
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    implementation 'com.android.support:design:27.1.1'
+    //轮播
+    implementation 'com.youth.banner:banner:1.4.9'
+    //RxAndroid
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //Retrofit2
+    api 'io.reactivex.rxjava2:rxjava:2.0.7'
+    //Retrofit2的RxJava适配
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    api 'com.squareup.retrofit2:retrofit:2.2.0'
+    api 'com.squareup.retrofit2:converter-gson:2.2.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    api 'com.squareup.okhttp3:okhttp:3.7.0'
+    api 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    implementation 'com.jakewharton:butterknife:8.4.0'
+    // RxLifecycle管理Rx的生命周期
+    api "com.trello:rxlifecycle:$rxlifecycleVersion"
+    // RxLifecycle组件
+    api "com.trello:rxlifecycle-components:$rxlifecycleVersion"
+    api 'com.alibaba:fastjson:1.2.55'
+    /* implementation 'com.github.bumptech.glide:glide:3.7.0'*/
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    api 'com.github.bumptech.glide:glide:4.8.0'
+    api 'com.github.bumptech.glide:annotations:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    api 'com.github.bumptech.glide:okhttp3-integration:4.8.0'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    api 'com.android.support:percent:27.1.1'
+    implementation 'com.zhy:flowlayout-lib:1.0.3'
+    implementation project(':bannerlibrary')
+    implementation 'com.facebook.rebound:rebound:0.3.8'
+    implementation 'com.lijiankun24:shadowlayout:1.0.0'
+    implementation files('libs/open_sdk_r5990_lite.jar')
+    implementation files('libs/umeng-common-2.0.2.jar')
+    implementation files('libs/umeng-share-core-6.9.4.jar')
+    implementation files('libs/umeng-share-QQ-full-6.9.4.jar')
+    implementation files('libs/umeng-share-sina-full-6.9.4.jar')
+    implementation files('libs/umeng-share-wechat-full-6.9.4.jar')
+    implementation files('libs/umeng-shareboard-widget-6.9.4.jar')
+    implementation files('libs/umeng-sharetool-6.9.4.jar')
+    implementation files('libs/wechat-sdk-android-without-mta-5.1.4.jar')
+    implementation files('libs/weiboSDKCore.jar')
+    implementation 'me.yokeyword:indexablerecyclerview:1.3.0'
+    implementation files('libs/jcore-android-1.2.7.jar')
+    implementation files('libs/jverification-android-release-2.0.0.jar')
+    //底部导航栏
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.3'
+    //添加刷新控件
+    implementation project(':refresh-layout')
+    implementation project(':refresh-header')
+    implementation project(':refresh-layout')
+    implementation project(':cardlib')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.contrarywind:Android-PickerView:3.2.4'
+    implementation 'com.yanzhenjie:permission:1.1.0'
+    implementation project(':PhotoPicker')
+    implementation project(':oss-android-sdk')
+    //本地照片库
+    implementation 'com.library.tangxiaolv:telegramgallery:1.0.3'
+    //material dialog
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.4'
+    implementation 'com.github.adrielcafe:ffmpeg-android-java:2a627f6ecd@aar'
+    implementation 'org.greenrobot:greendao:3.2.2'
+    // 添加库
+    implementation files('libs/universal-image-loader-1.9.4-with-sources.jar')
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation files('libs/AMap_Location_V4.5.0_20190121.jar')
+    implementation files('libs/AMap_Search_V6.5.0_20180930.jar')
+    implementation files('libs/Android_Map3D_SDK_V6.8.0_20190401.jar')
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'jp.wasabeef:glide-transformations:3.0.1'
+    implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
+    //implementation 'com.amap.api:3dmap:latest.integration'
+    //implementation 'com.amap.api:search:latest.integration'
+}

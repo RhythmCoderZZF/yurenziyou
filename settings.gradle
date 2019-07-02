@@ -1,0 +1,1 @@
+include ':app', ':bannerlibrary', ':refresh-footer', ':refresh-layout', ':refresh-header', ':cardlib', ':PhotoPicker', ':oss-android-sdk'

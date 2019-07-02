@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.ShoppingMallScenicSpotActivity">
+
+    <include layout="@layout/layout_search_header" />
+
+    <!-- <com.nbhysj.coupon.view.RecyclerScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:background="@color/white"
+         android:scrollbars="none">-->
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:srlAccentColor="#00000000"
+        app:srlEnableLoadMore="false"
+        app:srlPrimaryColor="#00000000">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.nbhysj.coupon.view.StickyScrollView
+            android:id="@+id/sticky_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_popular_scenic_spots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"></android.support.v7.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_98"
+                    android:background="@color/background_l_grey">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_scenic_spot_classification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"></android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:background="@color/white"
+                    android:tag="sticky"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:id="@+id/tv_popular_nearby"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/str_popular_nearby"
+                        android:textColor="@color/txt_font_black2"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/dp_13"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:alpha="0.25"
+                        android:background="@color/color_text_gray6"></View>
+
+                    <TextView
+                        android:id="@+id/tv_comprehensive_sorting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/str_comprehensive_sorting"
+                        android:textColor="@color/color_text_gray20" />
+
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/dp_13"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:alpha="0.25"
+                        android:background="@color/color_text_gray6"></View>
+
+                    <TextView
+                        android:id="@+id/tv_super_value_reservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/str_super_value_reservation"
+                        android:textColor="@color/color_text_gray20" />
+
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/dp_13"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:alpha="0.25"
+                        android:background="@color/color_text_gray6"></View>
+
+                    <TextView
+                        android:id="@+id/tv_distance_first"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/str_distance_first"
+                        android:textColor="@color/color_text_gray20" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:alpha="0.25"
+                    android:background="@color/color_text_gray6"></View>
+
+                <!--  <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                      android:id="@+id/refresh_layout"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/white"
+                      app:srlAccentColor="#00000000"
+                      app:srlEnableLoadMore="true"
+                      app:srlPrimaryColor="#00000000">
+
+                      <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                          android:id="@+id/header"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content" />-->
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_hot_scenic_spot"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:scrollbars="vertical" />
+
+
+                <LinearLayout
+                    android:id="@+id/llyt_progress_bar_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progressbar_load_more"
+                        android:layout_marginRight="6dp"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
+
+                    <TextView
+                        android:id="@+id/tv_load_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/loading" />
+
+
+                </LinearLayout>
+
+
+                <!--   <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       app:srlClassicsSpinnerStyle="Translate" />
+
+               </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+            </LinearLayout>
+        </com.nbhysj.coupon.view.StickyScrollView>
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <!--  </com.nbhysj.coupon.view.RecyclerScrollView>-->
+</LinearLayout>

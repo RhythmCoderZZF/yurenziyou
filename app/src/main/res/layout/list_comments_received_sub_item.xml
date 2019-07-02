@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_text_gray8"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_comment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:text=""
+        android:textColor="@color/text_grey"
+        android:textSize="@dimen/text_size_xsmall" />
+
+    <View
+        android:id="@+id/view_line"
+        style="@style/line" />
+
+</LinearLayout>

@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_five_bottom_shape"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:text="@string/str_price"
+        android:textColor="@color/color_text_gray17"
+        android:textSize="@dimen/text_size_xnormal" />
+
+    <com.nbhysj.coupon.widget.DoubleSlideSeekBar
+        android:id="@+id/double_slide_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:equal="5"
+        custom:hasRule="false"
+        custom:imageBig="@mipmap/seek_ico_circle_price_section"
+        custom:imageLow="@mipmap/seek_ico_circle_price_section"
+        custom:imageheight="30dp"
+        custom:imagewidth="30dp"
+        custom:inColor="@color/color_green3"
+        custom:lineHeight="2dp"
+        custom:outColor="@color/background_grey"
+        custom:ruleColor="@color/end_color"
+        custom:ruleLineHeight="10dp"
+        custom:ruleTextColor="@color/color_text_gray17"
+        custom:ruleTextSize="8sp"
+        custom:ruleUnit="$"
+        custom:textColor="@color/color_text_gray17"
+        custom:textSize="12sp"
+        custom:unit="" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:text="@string/str_star_class"
+        android:textColor="@color/color_text_gray17"
+        android:textSize="@dimen/text_size_xnormal" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_star_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="10dp"
+        android:scrollbars="none" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dp_48"
+        android:background="@color/color_text_gray16"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_weight="1"
+            android:background="@drawable/bg_white_radius_thirteen_left_bottom_shape"
+            android:gravity="center"
+            android:text="@string/str_reset"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_medium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_weight="1"
+            android:background="@drawable/bg_blue_and_green_gradient_radius_five_right_bottom_shape"
+            android:gravity="center"
+            android:text="@string/str_sure"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+    </LinearLayout>
+</LinearLayout>
+
+

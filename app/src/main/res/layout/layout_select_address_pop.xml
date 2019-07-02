@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_home_search"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--  <RelativeLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp">
+
+
+              </RelativeLayout>-->
+            <!--<View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line"/>-->
+
+            <com.nbhysj.coupon.address.PagerSlidingTabStrip
+                android:id="@+id/pagerTab"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:pstsDividerColor="@color/white"
+                app:pstsIndicatorColor="@color/color_text_blue"
+                app:pstsIndicatorHeight="1.5dp"
+                app:pstsShouldExpand="false"
+                app:pstsTabPaddingLeftRight="10dp"
+                app:pstsUnderlineColor="@color/line"
+                android:layout_marginTop="@dimen/dp_16"
+                app:pstsUnderlineHeight="1px" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/pagerTab"
+                android:layout_height="300dip" />
+
+            <ImageView
+                android:id="@+id/ivClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_cancel"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/dp_16" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/popBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/contentView"
+        android:background="@color/transparentsmll_bg" />
+</RelativeLayout>

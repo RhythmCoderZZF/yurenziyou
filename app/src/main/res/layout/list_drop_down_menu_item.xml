@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:id="@+id/rlyt_drop_down_menu_item"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_sort_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="推荐排序"
+        android:textColor="@color/txt_font_black2"
+        android:textSize="@dimen/text_size_xsmall"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_gravity="center_vertical" />
+
+    <ImageView
+        android:id="@+id/image_item_select"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:src="@mipmap/icon_orange_tick"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dp_48"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dp_14"
+        android:layout_marginRight="@dimen/dp_15"
+        android:background="@color/color_text_gray16"></View>
+
+</RelativeLayout>
+

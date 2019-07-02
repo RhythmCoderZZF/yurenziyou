@@ -1,0 +1,234 @@
+package com.nbhysj.coupon.util;
+
+import android.text.TextUtils;
+import android.util.Log;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * @auther：hysj created on 2019/03/13
+ * description：日期工具类
+ */
+public class DateUtil {
+    private final static SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public final static String sDateYMDFormat = "yyyy-MM-dd";
+
+    public final static String sDateYMDHHMMSSFormat = "yyyy-MM-dd HH:mm:ss";
+    private static final long ONE_MINUTE = 60000L;
+    private static final long ONE_HOUR = 3600000L;
+    private static final long ONE_DAY = 86400000L;
+    private static final long ONE_WEEK = 604800000L;
+
+    private static final String ONE_SECOND_AGO = "秒前";
+    private static final String ONE_MINUTE_AGO = "分钟前";
+    private static final String ONE_HOUR_AGO = "小时前";
+    private static final String ONE_DAY_AGO = "天前";
+    private static final String ONE_MONTH_AGO = "月前";
+    private static final String ONE_YEAR_AGO = "年前";
+
+    /**
+     * 日期小于10的数字 添加首位添加0 保持两位数
+     *
+     * @param dateStr
+     */
+    public static String dateDeal(String dateStr) {
+        String dateNewStr = "";
+        if (!TextUtils.isEmpty(dateStr)) {
+            if (dateStr.length() == 1) {
+                dateNewStr = "0" + dateStr;
+            } else {
+                dateNewStr = dateStr;
+            }
+        }
+        return dateNewStr;
+    }
+
+
+    public static String getTheCurrentDayOfMonth() {
+        Date date = new Date();
+        String dateStr = sFormat.format(date);
+        return dateStr;
+    }
+
+
+    public static String getTheFirstDayOfMonth() {
+        //获取当前月第一天：
+        Calendar calstr = Calendar.getInstance();
+        //本月
+        calstr.add(Calendar.MONTH, 0);
+        //设置为1号为本月第一天 
+        calstr.set(Calendar.DAY_OF_MONTH, 1);
+        String first = sFormat.format(calstr.getTime());
+        System.out.println("当月第一天:" + first);
+        return first;
+    }
+
+    public static String getTheLastDayOfMonth() {
+        //获取当前月最后一天
+        Calendar calast = Calendar.getInstance();
+        //设置当月为最后一天
+        calast.set(Calendar.DAY_OF_MONTH, calast.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String last = sFormat.format(calast.getTime());
+        System.out.println("当月最后一天:" + last);
+        return last;
+    }
+
+
+    //String 转 Date
+    public static Date getDateStrToDate(String strTime, String formatType)
+            throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(formatType);
+        Date date = null;
+        date = formatter.parse(strTime);
+        return date;
+    }
+
+    //String 转 long
+    public static long getDateStrToLong(String strTime, String formatType)
+            throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(formatType);
+        Date date = null;
+        date = formatter.parse(strTime);
+        long time = date.getTime() / 1000;
+        return time;
+    }
+
+    //Date转String
+    public static String getTime(Date date, String dateFormat) {//可根据需要自行截取数据显示
+        Log.d("getTime()", "choice date millis: " + date.getTime());
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+        return format.format(date);
+    }
+
+    /**
+     * 把long 转换成 日期 再转换成String类型
+     */
+    public static String transferLongToDateStr(String dateFormat, Long millSec) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        Date date = new Date(millSec * 1000);
+        return sdf.format(date);
+    }
+
+    public static boolean timeMoreThan1day(long startDate, long endDate) {
+        try {
+
+            //判断是否大于1天
+            if (((endDate - startDate) / (24 * 60 * 60 * 1000)) >= 1) {
+                return true;
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean timeMoreThan1day(String startDate, String endDate) {
+        //格式化时间
+        SimpleDateFormat CurrentTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        try {
+
+            Date beginTime = CurrentTime.parse(startDate);
+            Date endTime = CurrentTime.parse(endDate);
+            //判断是否大于两天
+            if (((endTime.getTime() - beginTime.getTime()) / (24 * 60 * 60 * 1000)) >= 1) {
+                return true;
+            } else {
+                Log.v("hi", "小于两天");
+                return false;
+            }
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static String formatDateToYMD(String str) {
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String formatStr = "";
+        try {
+            formatStr = sf2.format(sf1.parse(str));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatStr;
+    }
+
+    public static String formatDateToMD(String str) {
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sf2 = new SimpleDateFormat("MM-dd");
+        String formatStr = "";
+        try {
+            formatStr = sf2.format(sf1.parse(str));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatStr;
+    }
+
+
+    public static String dateFormat(Date date) {
+        long delta = new Date().getTime() - date.getTime();
+        if (delta < 1L * ONE_MINUTE) {
+            long seconds = toSeconds(delta);
+            return (seconds <= 0 ? 1 : seconds) + ONE_SECOND_AGO;
+        }
+        if (delta < 45L * ONE_MINUTE) {
+            long minutes = toMinutes(delta);
+            return (minutes <= 0 ? 1 : minutes) + ONE_MINUTE_AGO;
+        }
+        if (delta < 24L * ONE_HOUR) {
+            long hours = toHours(delta);
+            return (hours <= 0 ? 1 : hours) + ONE_HOUR_AGO;
+        }
+        if (delta < 48L * ONE_HOUR) {
+            return "昨天";
+        }
+        if (delta < 30L * ONE_DAY) {
+            long days = toDays(delta);
+            return (days <= 0 ? 1 : days) + ONE_DAY_AGO;
+        }
+        if (delta < 12L * 4L * ONE_WEEK) {
+            long months = toMonths(delta);
+            return (months <= 0 ? 1 : months) + ONE_MONTH_AGO;
+        } else {
+            long years = toYears(delta);
+            return (years <= 0 ? 1 : years) + ONE_YEAR_AGO;
+        }
+    }
+
+    private static long toSeconds(long date) {
+        return date / 1000L;
+    }
+
+    private static long toMinutes(long date) {
+        return toSeconds(date) / 60L;
+    }
+
+    private static long toHours(long date) {
+        return toMinutes(date) / 60L;
+    }
+
+    private static long toDays(long date) {
+        return toHours(date) / 24L;
+    }
+
+    private static long toMonths(long date) {
+        return toDays(date) / 30L;
+    }
+
+    private static long toYears(long date) {
+        return toMonths(date) / 365L;
+    }
+
+}

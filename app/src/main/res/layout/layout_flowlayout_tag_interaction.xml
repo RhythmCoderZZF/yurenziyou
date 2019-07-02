@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_flowlayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_stroke_radius_two_blue_shape"
+    android:text="百年老字号"
+    android:textSize="@dimen/text_size_tiny"
+    android:paddingLeft="@dimen/dp_3"
+    android:paddingRight="@dimen/dp_3"
+    android:paddingTop="@dimen/dp_1"
+    android:paddingBottom="@dimen/dp_1"
+    android:layout_marginRight="@dimen/dp_3"
+    android:layout_marginBottom="@dimen/dp_2"
+    android:button="@null"
+    android:checked="false"
+    android:textColor="@color/color_text_blue8"></TextView>
+

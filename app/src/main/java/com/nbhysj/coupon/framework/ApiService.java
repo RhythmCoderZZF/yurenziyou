@@ -1,0 +1,369 @@
+package com.nbhysj.coupon.framework;
+
+import com.nbhysj.coupon.model.request.AddCountyRequest;
+import com.nbhysj.coupon.model.request.AddMchRequest;
+import com.nbhysj.coupon.model.request.AddRemarksRequest;
+import com.nbhysj.coupon.model.request.AddTrafficRequest;
+import com.nbhysj.coupon.model.request.ContactsInfoRequest;
+import com.nbhysj.coupon.model.request.CreateTripRequest;
+import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
+import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.DeleteTripRequest;
+import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
+import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
+import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
+import com.nbhysj.coupon.model.request.LoginRequest;
+import com.nbhysj.coupon.model.request.PublishPostRequest;
+import com.nbhysj.coupon.model.request.QueryByTopicRequest;
+import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
+import com.nbhysj.coupon.model.request.RegisterUserRequest;
+import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
+import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
+import com.nbhysj.coupon.model.request.TravellerInfoRequest;
+import com.nbhysj.coupon.model.request.TripintelligentRequest;
+import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
+import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.ContactsInfoResponse;
+import com.nbhysj.coupon.model.response.CountryBean;
+import com.nbhysj.coupon.model.response.CreateTripResponse;
+import com.nbhysj.coupon.model.response.DestinationResponse;
+import com.nbhysj.coupon.model.response.HomePageResponse;
+import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
+import com.nbhysj.coupon.model.response.HotTagsTopicBean;
+import com.nbhysj.coupon.model.response.LoginResponse;
+import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MerchantListResponse;
+import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
+import com.nbhysj.coupon.model.response.RecipientAddressResponse;
+import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
+import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
+import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
+import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
+import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
+import com.nbhysj.coupon.model.response.TourGuideBean;
+import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
+import com.nbhysj.coupon.model.response.TravellerInfoResponse;
+import com.nbhysj.coupon.model.response.TripDetailsResponse;
+import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.UserInfoResponse;
+
+import java.util.HashMap;
+import java.util.List;
+
+import io.reactivex.Observable;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.HTTP;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+
+/**
+ * created by hysj at 2019/02/23.
+ * description：接口访问url
+ */
+public interface ApiService {
+
+    //1.获取注册验证短信
+    @GET("api/user/mobile/message")
+    Observable<BackResult> getRegisterVerifyCode(@Query("mobile") String mobile);
+
+    //2.用户注册
+    @POST("api/user")
+    Observable<BackResult> registerUser(@Body RegisterUserRequest registerUserRequest);
+
+    //3.获取盐(登录除外)
+    @GET("api/user/getSalt")
+    Observable<BackResult<String>> getSalt(@Query("mobile") String mobile);
+
+    //4.获取盐(只有登录可用)
+    @GET("api/user/getLoginSalt")
+    Observable<BackResult<String>> getLoginSalt(@Query("username") String username);
+
+    //5.获取盐(通过邮箱修改密码)
+    @GET("api/user/getSalt")
+    Observable<BackResult<String>> updatePwdByEmailGetSalt(@Query("email") String email);
+
+    //6.获取登录验证短信
+    @GET("api/user/login/message")
+    Observable<BackResult> getLoginVerifyCode(@Query("mobile") String mobile);
+
+    //7.登录
+    @POST("api/user/login")
+    Observable<BackResult<LoginResponse>> login(@Body LoginRequest loginRequest);
+
+    //8.获取找回密码短信
+    @GET("api/user/password/message")
+    Observable<BackResult> getFindPwdVerifyCode(@Query("mobile") String mobile);
+
+    //9.修改密码
+    @POST("api/user/modifyPassword")
+    Observable<BackResult> modifyPasswordByMobile(@Body FindPwdByPhoneRequest findPwdRequest);
+
+    //10.发送邮箱
+    @GET("api/user/sendEmail")
+    Observable<BackResult> sendEmail(@Query("email") String email);
+
+    //11.发邮箱修改密码
+    @POST("api/user/email/modifyPassword")
+    Observable<BackResult> modifyPasswordByEmail(@Query("email") FindPwdByEmailRequest findPwdByEmailRequest);
+
+    //12.查询个人信息
+    @GET("api/user")
+    Observable<BackResult<UserInfoResponse>> getUserInfo(@Query("id") int id);
+
+    //13.个人信息修改
+    @PUT("api/user/updateInformation")
+    Observable<BackResult> updateInformation(@Body UpdateUserInfoRequest updateUserInfoRequest);
+
+    //14.登出
+    @GET("api/user/cancel")
+    Observable<BackResult> userLogout();
+
+    //获取第三方登录状态
+    @GET("api/user/accountManagement")
+    Observable<BackResult<ThirdPartyLoginStatusResponse>> getThirdPartyLoginStatus(@Query("userId") int userId);
+
+    //第三方登陆
+    @POST("api/thirdPartyLogin/login")
+    Observable<BackResult<LoginResponse>> thirdPartyLogin(@Body ThirdPartyLoginRequest thirdPartyLoginRequest);
+
+    //首次第三方登陆需注册
+    @POST("api/thirdPartyLogin/createUser")
+    Observable<BackResult<LoginResponse>> thirdPartyLoginCreateUser(@Body ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind);
+
+    /****************       1.旅客信息        *************/
+    //15.查询旅客信息列表
+    @GET("api/userTraveller")
+    Observable<BackResult<TravellerInfoResponse>> getUserTravellerList(@Query("userId") int userId, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //16.添加旅客信息
+    @POST("api/userTraveller/add")
+    Observable<BackResult> addTravellerInfo(@Body TravellerInfoRequest addTravellerRequest);
+
+    //17.修改旅客信息
+    @POST("api/userTraveller/update")
+    Observable<BackResult> updateTravellerInfo(@Body TravellerInfoRequest updateTravellerRequest);
+
+    //18.删除旅客信息
+    @POST("api/userTraveller/delete")
+    Observable<BackResult> deleteTravellerInfo(@Body DeleteTravellerInfoRequest deleteTravellerInfoRequest);
+
+    /****************      2. 联系人信息        *************/
+
+    //19.查询联系人列表
+    @GET("api/userContacts/findList")
+    Observable<BackResult<ContactsInfoResponse>> getUserContactsList(@Query("userId") int userId);
+
+    //20.添加联系人
+    @POST("api/userContacts")
+    Observable<BackResult> addUserContactsInfo(@Body ContactsInfoRequest addTravellerRequest);
+
+    //21.修改联系人
+    @PUT("api/userContacts")
+    Observable<BackResult> updateContactsInfo(@Body ContactsInfoRequest updateTravellerRequest);
+
+    //22.删除联系人
+    @HTTP(method = "DELETE", path = "api/userContacts", hasBody = true)
+    Observable<BackResult> deleteContactsInfo(@Body DeleteTravellerInfoRequest deleteTravellerInfoRequest);
+
+    /****************      3. 联系人信息       *************/
+    //查询收件人列表
+
+    /**
+     * @param id       用户id
+     * @param mobile
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GET("api/userAddress")
+    Observable<BackResult<RecipientsInfoResponse>> getRecipientsInfoList(@Query("id") int id, @Query("mobile") String mobile, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    // 添加收件人信息
+    @POST("api/userAddress/add")
+    Observable<BackResult<RecipientsInfoResponse>> addRecipientsInfo(@Body RecipientsInfoRequest recipientsInfoRequest);
+
+    // 修改收件人信息
+    @POST("api/userAddress/update")
+    Observable<BackResult> updateRecipientsInfo(@Body RecipientsInfoRequest recipientsInfoRequest);
+
+    // 删除收件人信息
+    @POST("api/userAddress/delete")
+    Observable<BackResult> deleteRecipientsInfo(@Body DeleteTravellerInfoRequest deleteTravellerInfoRequest);
+
+    //获取收件人省市区
+    @GET("api/city")
+    Observable<BackResult<List<RecipientAddressResponse>>> getRecipientsAddress();
+
+    //搜索商户(发布帖子)
+    @GET("api/mch")
+    Observable<BackResult<MerchantListResponse>> getMerchantList(@Query("cityId") String cityId, @Query("mchName") String mchName, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //主题搜索(热门标签)
+    @GET("api/topic/list")
+    Observable<BackResult<List<HotTagsTopicBean>>> getHotTagsTopicList(@Query("type") String type);
+
+    //主题搜索（标签查询）
+    @GET("api/topic/search")
+    Observable<BackResult<TagTopicSearchResponse>> topicSearch(@Query("type") String type, @Query("param") String param);
+
+    //创建主题(新增标签)
+    @GET("api/topic/create")
+    Observable<BackResult> topicCreate(@Query("title") String title, @Query("intro") String intro);
+
+    //发布帖子
+    @POST("api/posts/createPost")
+    Observable<BackResult> createPost(@Body PublishPostRequest publishPostRequest);
+
+    //常见问题分类与常见问题(文章分类与文章)
+    @GET("api/articleWithCate")
+    Observable<BackResult<ArticleWithCateResponse>> getArticleWithCate();
+
+    //首页
+    @GET("api/index")
+    Observable<BackResult<HomePageResponse>> getHomePageIndex();
+
+    @POST("api/index/queryByTopic")
+    Observable<BackResult<HomePageResponse>> queryByTopic(@Body QueryByTopicRequest queryByTopicRequest);
+
+    //获取首页关注
+    @GET("api/index/attention")
+    Observable<BackResult<HomePageResponse>> getHomeAttention(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //获取商城首页
+    @GET("api/store/index")
+    Observable<BackResult<ShopMallHomePageResponse>> getShopMallHomePageData();
+
+    //景点栏目首页
+    @GET("api/store/scenic")
+    Observable<BackResult<ScenicSpotHomePageResponse>> getScenicSpotHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
+
+    //景点栏目筛选
+    @GET("api/store/findScenicByCate")
+    Observable<BackResult<ScenicSpotResponse>> findScenicByCate(@QueryMap HashMap<String, String> map);
+    //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
+
+    //景点榜单
+    @GET("api/store/scenicRanking")
+    Observable<BackResult<ScenicBangDanRankingResponse>> getScenicBangDanRanking(@Query("cityId") int cityId);
+
+    //美食栏目首页
+    @GET("api/store/food")
+    Observable<BackResult<ScenicSpotHomePageResponse>> getFineFoodHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
+
+    //美食栏目筛选
+    @GET("api/store/findFoodByCate")
+    Observable<BackResult<ScenicSpotResponse>> findFoodByCate(@QueryMap HashMap<String, String> map);
+    //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
+
+    //酒店民宿栏目首页
+    @GET("api/store/hotel")
+    Observable<BackResult<ScenicSpotHomePageResponse>> getHotelHomestayHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
+
+    //酒店民宿栏目筛选
+    @GET("api/store/findHotelByCate")
+    Observable<BackResult<ScenicSpotResponse>> findHotelHomestayByCate(@QueryMap HashMap<String, String> map);
+    //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
+
+    //互动栏目首页
+    @GET("api/store/recreation")
+    Observable<BackResult<ScenicSpotHomePageResponse>> getRecreationHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
+
+    //互动栏目筛选
+    @GET("api/store/findRecreationByCate")
+    Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(@QueryMap HashMap<String, String> map);
+    //@Query("
+
+    //目的地首页
+    @GET("api/destination/findByCityName")
+    Observable<BackResult<DestinationResponse>> getDestinationHomePage(@Query("cityId") int cityId);
+
+    //目的地搜索
+    @GET("api/destination/findMchBycityName")
+    Observable<BackResult<HotScenicSpotResponse>> findMchBycityName(@Query("cityId") int cityId, @Query("mchType") int mchType, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //景点详情
+    @GET("api/mchDetails")
+    Observable<BackResult<MchDetailsResponse>> getMchDetails(@Query("mchId") int mchId);
+
+    //商家相册
+    @GET("api/mchPhoto/findByMchId")
+    Observable<BackResult<MchAlbumResponse>> getMchAlbumList(@Query("mchId") int mchId);
+
+    //网友相册
+    @GET("api/mchComment/albumListOfNetizens")
+    Observable<BackResult<NetFriendAlbumResponse>> getNetFriendsAlbumList(@Query("mchId") int mchId, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //游玩指南列表
+    @GET("api/playItem/findList")
+    Observable<BackResult<List<TourGuideBean>>> getTourGuideList(@QueryMap HashMap<String, String> map);
+
+    /*************     行程助手      ***************/
+    //行程助手列表
+    @GET("api/trip")
+    Observable<BackResult<TripHomePageResponse>> getTripHomePage();
+
+    //区县选择列表接口
+    @GET("api/trip/insertCountyWeb")
+    Observable<BackResult<List<TravelAssistantDetailCountryBean>>> getCountyWebList(@QueryMap HashMap<String, String> map);
+
+    //行程助手详情区县列表接口
+    @GET("api/trip/countyList")
+    Observable<BackResult<List<CountryBean>>> getCountyList(@Query("tripId") int tripId);
+
+    //创建行程
+    @POST("api/trip/createTrip")
+    Observable<BackResult<CreateTripResponse>> createTrip(@Body CreateTripRequest createTripRequest);
+
+    //行程助手详情
+    @GET("api/trip/tripDetails")
+    Observable<BackResult<TripDetailsResponse>> getTravelAssistantDetail(@Query("tripId") int tripId);
+
+    //行程助手商户列表
+    @GET("api/trip/mchList")
+    Observable<BackResult<TripScenicSpotAddCountryBean>> getTravelAssistantMchList(@Query("tripId") int tripId, @Query("countyId") String countyId, @Query("mchType") String mchType, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //添加区县
+    @POST("api/trip/insertCounty")
+    Observable<BackResult<CreateTripResponse>> insertCounty(@Body AddCountyRequest addCountyRequest);
+
+    //添加商户
+    @POST("api/trip/insertPlaceMch")
+    Observable<BackResult<CreateTripResponse>> insertPlaceMch(@Body AddMchRequest addMchRequest);
+
+    //添加交通
+    @POST("api/trip/insertTraffic")
+    Observable<BackResult<CreateTripResponse>> insertTraffic(@Body AddTrafficRequest addTrafficRequest);
+
+    //添加备注
+    @POST("api/trip/insertNote")
+    Observable<BackResult<CreateTripResponse>> insertNote(@Body AddRemarksRequest addRemarksRequest);
+
+    //编辑行程提交
+    @PUT("api/trip/createTrip")
+    Observable<BackResult> updateInformation(@Body EditTripSubmitRequest editTripSubmitRequest);
+
+    //行程删除接口
+    @HTTP(method = "DELETE", path = "api/trip/delTrip", hasBody = true)
+    Observable<BackResult> delTrip(@Body DeleteTripRequest DeleteTripRequest);
+
+    //行程点删除接口
+    @HTTP(method = "DELETE", path = "api/trip/delTripPlace", hasBody = true)
+    Observable<BackResult> delTripPlace(@Body DeleteTripPlaceRequest deleteTripPlaceRequest);
+
+    //行程地图预览接口
+    @GET("api/trip/tripMap")
+    Observable<BackResult<TripDetailsResponse>> getTripMap(@Query("tripId") int tripId);
+
+    //智能规划接口
+    @GET("api/trip/intelligentProject")
+    Observable<BackResult<TripDetailsResponse>> intelligentProject(@Body TripintelligentRequest tripintelligentRequest);
+}
+
