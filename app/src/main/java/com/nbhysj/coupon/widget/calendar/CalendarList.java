@@ -269,13 +269,13 @@ public class CalendarList extends FrameLayout {
                     vh.tv_day.setTextColor(Color.parseColor("#FF302F2F"));
                     vh.mLlytDayItem.setBackgroundColor(Color.parseColor("#FF21BEAE"));
                     vh.mLlytDayItem.getBackground().setAlpha(80);
-                    vh.mRlytDayItem.setBackgroundColor(Color.WHITE);
+                    vh.mRlytDayItem.setBackgroundColor(Color.TRANSPARENT);
                     // vh.itemView.setBackgroundColor(Color.parseColor("#ffa500"));
                     // vh.tv_day.setTextColor(Color.WHITE);
                 } else if (dateBean.getItemState() == DateBean.ITEM_STATE_NORMAL) {
                     //正常状态
-                    vh.mLlytDayItem.setBackgroundColor(Color.WHITE);
-                    vh.mRlytDayItem.setBackgroundColor(Color.WHITE);
+                    vh.mLlytDayItem.setBackgroundColor(Color.TRANSPARENT);
+                    vh.mRlytDayItem.setBackgroundColor(Color.TRANSPARENT);
                     vh.tv_day.setTextColor(Color.BLACK);
                 }
             }

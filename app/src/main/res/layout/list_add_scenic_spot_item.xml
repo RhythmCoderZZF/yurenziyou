@@ -28,11 +28,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_destination_name"
+            android:id="@+id/tv_scenic_spot_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_20"
-            android:text="海洋世界大酒店"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xnormal"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
             android:id="@+id/flowlayout_scenic_spot_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_destination_name"
+            android:layout_below="@+id/tv_scenic_spot_name"
             zhy:max_select="-1" />
 
         <TextView
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/flowlayout_scenic_spot_label"
             android:layout_marginTop="@dimen/dp_10"
-            android:text="宁波海洋世界是宁波什么什么宁波海洋世界是宁波什么...."
+            android:text=""
             android:textColor="@color/color_text_gray22"
             android:textSize="@dimen/text_size_tiny" />
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/starbar_store_fine_food"
-                android:text="4.6分"
+                android:text=""
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_xsmall" />
 
@@ -84,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="234条点评"
+                android:text=""
                 android:textSize="@dimen/text_size_xtiny"
                 android:textStyle="bold" />
         </LinearLayout>

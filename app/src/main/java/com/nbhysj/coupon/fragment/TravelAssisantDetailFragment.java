@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -62,6 +63,9 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     TextView mTvScenicSpotFlow;
     @BindView(R.id.tv_travel_assistant_detail_day)
     TextView mTvtravelAssistantDetailDay;
+    //行程详情
+    @BindView(R.id.llyt_travel_assistant_detail)
+    LinearLayout mLlytTravelAssistantDetail;
 
     TripDetailsResponse.DetailsEntity detailsEntity;
     private List<TripDetailsResponse.TripDetailsEntity> tripDetailsList;
@@ -178,8 +182,17 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
             }
         });
 
-        travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
-        mRvTravelAssistantDetail.setAdapter(travelAssistantDetailAdapter);
+        if(tripDetailsList.size() > 0)
+        {
+            mLlytTravelAssistantDetail.setVisibility(View.VISIBLE);
+            travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
+            mRvTravelAssistantDetail.setAdapter(travelAssistantDetailAdapter);
+
+        } else {
+
+            mLlytTravelAssistantDetail.setVisibility(View.GONE);
+
+        }
 
         String circuit = detailsEntity.getCircuit();
         int dayIndex = detailsEntity.getDayIndex();
@@ -201,9 +214,17 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     @Override
     public void lazyInitView(View view) {
         tripDetailsList = detailsEntity.getTripDetails();
+        if(tripDetailsList.size() > 0)
+        {
+            mLlytTravelAssistantDetail.setVisibility(View.VISIBLE);
+            travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
+            travelAssistantDetailAdapter.notifyDataSetChanged();
 
-        travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
-        travelAssistantDetailAdapter.notifyDataSetChanged();
+        } else {
+
+            mLlytTravelAssistantDetail.setVisibility(View.GONE);
+
+        }
     }
 
     @Override

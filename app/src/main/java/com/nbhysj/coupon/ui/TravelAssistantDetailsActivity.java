@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FmPagerAdapter;
@@ -35,6 +38,7 @@ import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.widget.MyIndicator;
 import com.nbhysj.coupon.widget.MyViewPager;
 import com.nbhysj.coupon.widget.TripAssistantIndicator;
@@ -49,7 +53,7 @@ import butterknife.OnClick;
  * @auther：hysj created on 2019/03/08
  * description：行程详情
  */
-public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View, TravelAssisantDetailFragment.DeleteTravelAssistantPlaceListener {
+public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View, TravelAssisantDetailFragment.DeleteTravelAssistantPlaceListener, RecyclerScrollView.OnScrollListener {
     @BindView(R.id.indicator)
     TripAssistantIndicator mIndicator;
     @BindView(R.id.pager)
@@ -58,18 +62,28 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     View mToolbarSpace;
     @BindView(R.id.img_my_travel_detail_header)
     ImageView mImgTravelDetailHeader;
+    @BindView(R.id.recyclerView_travel_assisant_detail)
+    RecyclerScrollView mRvTravelAssisantDetail;
+
+    //返回按钮
+    @BindView(R.id.iv_back)
+    ImageView mImgBack;
+    //地图入口图标
+    @BindView(R.id.img_map)
+    ImageView mImgMap;
+    //头部
+    @BindView(R.id.rlyt_scenic_spots_detail_header)
+    RelativeLayout mRlytScenicSpotDetailHeader;
+
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private TravelAssisantDetailFragment travelAssisantDetailFragment;
-    List<HomePageResponse.SmallTagEntity> labelList3;
     TravelAssistantDetailFmPagerAdapter fmPagerAdapter;
-    private boolean isTripInit = true;
-
     private String countyPhotoUrl;
     private int mTripId;
     private int mDayIndex;
     private int mCurrentItemPosition = 0;
     List<TripDetailsResponse.DetailsEntity> detailsList;
-
+    private int height;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -98,6 +112,20 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
             detailsList.clear();
         }
+
+        //获取顶部图片高度后，设置滚动监听
+        ViewTreeObserver vto = mImgTravelDetailHeader.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mImgTravelDetailHeader.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                height = mImgTravelDetailHeader.getHeight();
+                mImgTravelDetailHeader.getWidth();
+
+                mRvTravelAssisantDetail.setScrolListener(TravelAssistantDetailsActivity.this);
+            }
+        });
+
         fmPagerAdapter = new TravelAssistantDetailFmPagerAdapter(getSupportFragmentManager());
         fmPagerAdapter.setTravelAssistantDetailList(fragments, detailsList);
         pager.setAdapter(fmPagerAdapter);
@@ -385,5 +413,23 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
         if (childFragment == null)
             Log.e("", "MyBaseFragmentActivity1111");
 
+    }
+
+    @Override
+    public void onScroll(int y) {
+        if (y <= height && y >= 0) {
+            float scale = (float) y / height;
+            float alpha = (255 * scale);
+            mRlytScenicSpotDetailHeader.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+            mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+            mImgBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
+            mImgMap.setImageResource(R.mipmap.icon_black_map_label);
+            if (y <= 100) {
+                mRlytScenicSpotDetailHeader.setBackgroundColor(getResources().getColor(R.color.transparent));
+                mImgBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
+                mImgMap.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_map_label));
+                mToolbarSpace.getBackground().setAlpha(255);
+            }
+        }
     }
 }

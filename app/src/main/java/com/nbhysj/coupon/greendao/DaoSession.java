@@ -16,7 +16,7 @@ import com.nbhysj.coupon.greendao.SearchBeanDao;
 
 /**
  * {@inheritDoc}
- *
+ * 
  * @see org.greenrobot.greendao.AbstractDaoSession
  */
 public class DaoSession extends AbstractDaoSession {
@@ -36,7 +36,7 @@ public class DaoSession extends AbstractDaoSession {
 
         registerDao(SearchBean.class, searchBeanDao);
     }
-
+    
     public void clear() {
         searchBeanDaoConfig.clearIdentityScope();
     }

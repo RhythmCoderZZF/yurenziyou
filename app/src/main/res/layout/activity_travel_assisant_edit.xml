@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_my_travel_detail_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15">
+
+        <com.nbhysj.coupon.view.RoundedImageView
+            android:id="@+id/image_scenic_spots"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_120"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:background="@mipmap/icon_map"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="13dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="false" />
+
+        <ImageView
+            android:id="@+id/img_travel_assistant_edit_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_5"
+            android:padding="@dimen/dp_10"
+            android:src="@mipmap/icon_travel_assistant_edit_close" />
+
+        <TextView
+            android:id="@+id/tv_travel_assistant_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_13"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="4月20日即将去往宁波"
+            android:drawablePadding="@dimen/dp_1"
+            android:drawableRight="@mipmap/icon_travel_assistant_edit"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_twenty_one_large"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
+        android:background="@drawable/bg_white_radius_thirteen_bottom_shape"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+          >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:text="出游时间"
+                android:textColor="@color/color_text_gray30"
+                android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:id="@+id/tv_travel_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="25dp"
+                    android:gravity="center_vertical"
+                    android:text="2019-04-20"
+                    android:textColor="@color/color_text_black7"
+                    android:drawablePadding="@dimen/dp_5"
+                    android:drawableRight="@mipmap/icon_right_black_arrow"/>
+        </RelativeLayout>
+
+        <View
+            style="@style/line"
+            android:layout_marginLeft="@dimen/dp_14"
+            android:layout_marginRight="@dimen/dp_14"
+          />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:text="结束时间"
+                android:textColor="@color/color_text_gray30"
+                android:textSize="@dimen/text_size_normal" />
+
+            <TextView
+                android:id="@+id/tv_travel_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="25dp"
+                android:gravity="center_vertical"
+                android:text="2019-04-20"
+                android:textColor="@color/color_text_black7"
+                android:drawablePadding="@dimen/dp_5"
+                android:drawableRight="@mipmap/icon_right_black_arrow" />
+        </RelativeLayout>
+        <View
+            style="@style/line"
+            android:layout_marginLeft="@dimen/dp_14"
+            android:layout_marginRight="@dimen/dp_14"
+            />
+
+        <TextView
+            android:id="@+id/tv_follow"
+            android:layout_width="124dp"
+            android:layout_height="@dimen/dp_36"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/dp_65"
+            android:layout_marginBottom="@dimen/dp_23"
+            android:text="@string/str_save"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white"
+            android:layout_marginRight="@dimen/dp_16"
+            android:background="@drawable/btn_oprate_bg" />
+    </LinearLayout>
+
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_15"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_xlarge"
+        android:background="@drawable/bg_white_radius_thirteen_shape"
+        android:textColor="@color/color_text_gray31"
+        android:text="删除行程"/>
+    </LinearLayout>
+</RelativeLayout>

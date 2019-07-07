@@ -65,11 +65,14 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
             int level = travelAssistantAddScenicSpotEntity.getLevel();
             String scenicSpotTag = travelAssistantAddScenicSpotEntity.getTags();
             int mSelectedStatus = travelAssistantAddScenicSpotEntity.getSelectedStatus();
+            String mchName = travelAssistantAddScenicSpotEntity.getMchName();
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
+            holder.mTvScenicSpotName.setText(mchName);
 
             List<String> ScenicSpotTagList = new ArrayList<>();
             ScenicSpotTagList.add(level + "A级景区");
-            if (!TextUtils.isEmpty(scenicSpotTag)) {
+            if (!TextUtils.isEmpty(scenicSpotTag))
+            {
                 ScenicSpotTagList.add(scenicSpotTag);
             }
             holder.mTagFlowlayoutScenicSpot.setAdapter(new TagAdapter<String>(ScenicSpotTagList) {
@@ -125,6 +128,9 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
 
         ImageView mImgAddMyTravel;
 
+        //景点名称
+        TextView mTvScenicSpotName;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -132,6 +138,7 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
             mTagFlowlayoutScenicSpot = itemView.findViewById(R.id.flowlayout_scenic_spot_label);
             mLlytAddMyTravel = itemView.findViewById(R.id.llyt_add_my_travel);
             mImgAddMyTravel = itemView.findViewById(R.id.img_add_my_travel);
+            mTvScenicSpotName = itemView.findViewById(R.id.tv_scenic_spot_name);
         }
     }
 

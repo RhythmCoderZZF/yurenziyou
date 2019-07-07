@@ -51,7 +51,7 @@
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/dp_10"
                 android:layout_marginRight="@dimen/dp_5"
-                android:src="@mipmap/icon_travel_assisant_add_dialog_close" />
+                android:src="@mipmap/icon_travel_assistant_add_dialog_close" />
 
         </RelativeLayout>
 

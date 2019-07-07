@@ -1,12 +1,7 @@
 package com.nbhysj.coupon.ui;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.TravelPreviewAdapter;
 import com.nbhysj.coupon.model.response.TravelPreviewBean;

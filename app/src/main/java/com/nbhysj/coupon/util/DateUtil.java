@@ -231,4 +231,38 @@ public class DateUtil {
         return toMonths(date) / 365L;
     }
 
+    public static String toYYMMDD(String dateStr) throws java.text.ParseException {
+        try {
+            String date;
+            if (!TextUtils.isEmpty(dateStr)) {
+                String[] dateArray = dateStr.split("-");
+                String year = dateArray[0];
+                String month = dateArray[1];
+                String day = dateArray[2];
+                date = year + "年" + month + "月" + day + "日";
+                return date;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static String toMMDD(String dateStr) throws java.text.ParseException {
+        try {
+            String date;
+            if (!TextUtils.isEmpty(dateStr)) {
+                String[] dateArray = dateStr.split("-");
+                String month = dateArray[1];
+                String day = dateArray[2];
+                date = month + "月" + day + "日";
+                return date;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

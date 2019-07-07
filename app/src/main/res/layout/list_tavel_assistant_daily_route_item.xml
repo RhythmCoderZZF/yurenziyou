@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_day_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第1天"
+        android:padding="@dimen/dp_10"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/color_text_black7"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:textSize="@dimen/text_size_xnormal"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="@dimen/dp_1"
+        android:layout_height="@dimen/dp_23"
+        android:layout_gravity="center_vertical"
+        android:background="@color/color_text_gray29"
+        android:layout_marginLeft="@dimen/dp_10"
+        ></View>
+
+
+</LinearLayout>

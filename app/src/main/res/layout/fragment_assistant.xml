@@ -40,7 +40,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dp_113"
-                        android:background="@mipmap/icon_travel_assisant_recommend" />
+                        android:background="@mipmap/icon_travel_assistant_recommend" />
 
                     <RelativeLayout
                         android:id="@+id/rlyt_add_trip"

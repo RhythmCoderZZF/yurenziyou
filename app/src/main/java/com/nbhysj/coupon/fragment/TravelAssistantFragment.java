@@ -37,7 +37,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
+/**
+ * @auther：hysj created on 2019/03/08
+ * description：行程
+ */
 public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";

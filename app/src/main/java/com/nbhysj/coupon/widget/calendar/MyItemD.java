@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.nbhysj.coupon.util.DateUtil;
+
 public class MyItemD extends RecyclerView.ItemDecoration {
     Paint paint = new Paint();
     Paint colorPaint = new Paint();
@@ -24,6 +26,9 @@ public class MyItemD extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
+      try {
+
+
         if (parent.getChildCount() <= 0) {
             return;
         }
@@ -64,8 +69,12 @@ public class MyItemD extends RecyclerView.ItemDecoration {
         colorPaint.setTextAlign(Paint.Align.CENTER);
         colorPaint.setTextSize(15 * scale + 0.5f);
         //绘制头部月份文字
-        c.drawText(text, parent.getRight() / 2, (t + height) / 1.5f, colorPaint);
 
+        String mmddStr = DateUtil.toMMDD(text);
+        c.drawText(mmddStr, parent.getRight() / 2, (t + height) / 1.5f, colorPaint);
+      }catch (Exception e){
+          e.printStackTrace();
+      }
         //绘制分割线
 //        if(fistViewTop!=height) {
 //            linePaint.setStrokeWidth(scale * 0.5f + 0.5f);
