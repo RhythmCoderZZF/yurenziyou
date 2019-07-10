@@ -26,6 +26,7 @@ import com.nbhysj.coupon.framework.RxBus;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -80,10 +81,12 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     TravelAssistantDetailFmPagerAdapter fmPagerAdapter;
     private String countyPhotoUrl;
     private int mTripId;
-    private int mDayIndex;
+    private int mDayIndex = 1;
     private int mCurrentItemPosition = 0;
     List<TripDetailsResponse.DetailsEntity> detailsList;
     private int height;
+    private TravelAssistantAddDialog travelAssistantAddDialog;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -210,7 +213,8 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
                 mIndicator.notifyDataSetChanged();
 
-                mDayIndex = detailsList.get(0).getDayIndex();
+               // mDayIndex = detailsList.get(0).getDayIndex();
+
                 mIndicator.setMyOnPageChangeListener(new TripAssistantIndicator.MyOnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -224,7 +228,7 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                         TripDetailsResponse.DetailsEntity tripDetailsEntity = detailsList.get(position);
                         mDayIndex = tripDetailsEntity.getDayIndex();
 
-                        travelAssisantDetailFragment.setTravelAssisantDetailList(tripDetailsEntity);
+                       // travelAssisantDetailFragment.setTravelAssisantList(tripDetailsEntity);
                         // showToast(TravelAssistantDetailsActivity.this,dayIndex+"");
                     }
 
@@ -264,6 +268,27 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     }
 
     @Override
+    public void travelAssistantPlusADay(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    getTravelAssistantDetails();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(TravelAssistantDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -288,28 +313,47 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                 pager.getAdapter().notifyDataSetChanged();
 
                 mIndicator.setViewPager(pager,0);*/
+                if (travelAssistantAddDialog == null) {
+                    travelAssistantAddDialog = new TravelAssistantAddDialog();
+                    travelAssistantAddDialog.setTravelAssistantAddListener(new TravelAssistantAddDialog.TravelAssistantAddListener() {
+                        @Override
+                        public void travelAssistantAddListener(int position) {
+                            Intent intent = new Intent();
+                            if (position == 0) {
 
-                TravelAssistantAddDialog travelAssistantAddDialog = new TravelAssistantAddDialog();
-                travelAssistantAddDialog.setTravelAssistantAddListener(new TravelAssistantAddDialog.TravelAssistantAddListener() {
-                    @Override
-                    public void travelAssistantAddListener(int position) {
-                        Intent intent = new Intent();
-                        if (position == 0) {
+                                intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantScenicSpotAddActivity.class);
+                                intent.putExtra("tripId", mTripId);
+                                intent.putExtra("dayIndex", mDayIndex);
+                                startActivityForResult(intent, 0);
 
-                            intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantScenicSpotAddActivity.class);
-                            intent.putExtra("tripId", mTripId);
-                            intent.putExtra("dayIndex", mDayIndex);
-                        } else if (position == 6) {
+                            } if (position == 1) {
 
-                            intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantRemarksActivity.class);
-                            intent.putExtra("tripId", mTripId);
-                            intent.putExtra("dayIndex", mDayIndex);
-                            intent.putExtra("isAddRemarks", true); //编辑 false : 添加 true
+                                intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantFineFoodAddActivity.class);
+                                intent.putExtra("tripId", mTripId);
+                                intent.putExtra("dayIndex", mDayIndex);
+                                startActivityForResult(intent, 0);
+
+                            } else if (position == 4) {
+
+                                intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantAddTrafficActivity.class);
+                                intent.putExtra("tripId", mTripId);
+                                intent.putExtra("dayIndex", mDayIndex);
+                                startActivityForResult(intent, 0);
+                            } else if (position == 5) {
+
+                               travelAssistantPlusADay();
+
+                            } else if (position == 6) {
+
+                                intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantRemarksActivity.class);
+                                intent.putExtra("tripId", mTripId);
+                                intent.putExtra("dayIndex", mDayIndex);
+                                intent.putExtra("isAddRemarks", true); //编辑 false : 添加 true
+                                startActivityForResult(intent, 0);
+                            }
                         }
-
-                        startActivityForResult(intent, 0);
-                    }
-                });
+                    });
+                }
                 travelAssistantAddDialog.show(getFragmentManager(), "行程助手添加");
                 break;
             case R.id.iv_back:
@@ -340,7 +384,22 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
         if (validateInternet()) {
 
+            showProgressDialog(TravelAssistantDetailsActivity.this);
             mPresenter.getTripDetails(mTripId);
+
+        }
+    }
+
+    //行程助手增加一天
+    public void travelAssistantPlusADay() {
+
+        if (validateInternet()) {
+
+            showProgressDialog(TravelAssistantDetailsActivity.this);
+            mDialog.setTitle("正在新增......");
+            TravelAssistantAddOneDayRequest addOneDayRequest = new TravelAssistantAddOneDayRequest();
+            addOneDayRequest.setTripId(mTripId);
+            mPresenter.travelAssistantPlusADay(addOneDayRequest);
 
         }
     }

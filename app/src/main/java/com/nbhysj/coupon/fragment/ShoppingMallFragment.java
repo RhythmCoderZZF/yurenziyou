@@ -31,6 +31,7 @@ import com.nbhysj.coupon.model.response.GroupGoodsBean;
 import com.nbhysj.coupon.model.response.MchCitiesBean;
 import com.nbhysj.coupon.model.response.ScenicSpotBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
+import com.nbhysj.coupon.model.response.ShoppingMallMenuBean;
 import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.CombinationListActivity;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
@@ -181,6 +182,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
     private ShopMallIndexSmallBannerAdapter shopMallIndexSmallBannerAdapter;
 
+    List<ShoppingMallMenuBean> shoppingMallMenuList;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_shopping_mall;
@@ -236,6 +238,14 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     @Override
     public void initData() {
 
+        if(shoppingMallMenuList == null){
+
+            shoppingMallMenuList = new ArrayList<>();
+        } else {
+
+            shoppingMallMenuList.clear();
+        }
+
         if (shopMallIndexSmallList == null) {
 
             shopMallIndexSmallList = new ArrayList<>();
@@ -289,6 +299,10 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         } else {
             groupGoodsList.clear();
         }
+
+
+       // shoppingMallMenuList.add();
+
         GridLayoutManager mManagerLayout = new GridLayoutManager(getActivity(), 4);
         mRvShoppingMallMenuClassify.setLayoutManager(mManagerLayout);
 
@@ -603,5 +617,51 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     @Override
     public void lazyInitView(View view) {
 
+    }
+
+    public List<ShoppingMallMenuBean> getShopMallMenuList(){
+
+        ShoppingMallMenuBean shoppingMallFamousScenery = new ShoppingMallMenuBean();
+        shoppingMallFamousScenery.setTitle("风景名胜");
+        shoppingMallFamousScenery.setIcon(R.mipmap.icon_tab_famous_scenery);
+
+        ShoppingMallMenuBean shoppingMallFine = new ShoppingMallMenuBean();
+        shoppingMallFine.setTitle("宁波美食");
+        shoppingMallFine.setIcon(R.mipmap.icon_tab_fine_food);
+
+        ShoppingMallMenuBean shoppingMallHomestay = new ShoppingMallMenuBean();
+        shoppingMallHomestay.setTitle("酒店名宿");
+        shoppingMallHomestay.setIcon(R.mipmap.icon_tab_hotel);
+
+        ShoppingMallMenuBean shoppingMallStrategy = new ShoppingMallMenuBean();
+        shoppingMallStrategy.setTitle("攻略");
+        shoppingMallStrategy.setIcon(R.mipmap.icon_tab_famous_scenery);
+
+        ShoppingMallMenuBean shoppingMallParentChildTour = new ShoppingMallMenuBean();
+        shoppingMallParentChildTour.setTitle("亲子游");
+        shoppingMallParentChildTour.setIcon(R.mipmap.icon_tab_famous_scenery);
+
+        ShoppingMallMenuBean shoppingMallInteraction = new ShoppingMallMenuBean();
+        shoppingMallInteraction.setTitle("互动");
+        shoppingMallInteraction.setIcon(R.mipmap.icon_tab_famous_scenery);
+
+        ShoppingMallMenuBean shoppingMallIndependentTravel = new ShoppingMallMenuBean();
+        shoppingMallIndependentTravel.setTitle("自由行");
+        shoppingMallIndependentTravel.setIcon(R.mipmap.icon_tab_famous_scenery);
+
+        ShoppingMallMenuBean shoppingMallUseCar = new ShoppingMallMenuBean();
+        shoppingMallUseCar.setTitle("用车");
+        shoppingMallUseCar.setIcon(R.mipmap.icon_tab_famous_scenery);
+
+        shoppingMallMenuList.add(shoppingMallFamousScenery);
+        shoppingMallMenuList.add(shoppingMallFine);
+        shoppingMallMenuList.add(shoppingMallHomestay);
+        shoppingMallMenuList.add(shoppingMallStrategy);
+        shoppingMallMenuList.add(shoppingMallParentChildTour);
+        shoppingMallMenuList.add(shoppingMallInteraction);
+        shoppingMallMenuList.add(shoppingMallIndependentTravel);
+        shoppingMallMenuList.add(shoppingMallUseCar);
+
+        return shoppingMallMenuList;
     }
 }

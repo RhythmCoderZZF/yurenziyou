@@ -7,6 +7,7 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -70,5 +71,10 @@ public class TravelAssistantModel implements TravelAssistantContract.Model {
     @Override
     public Observable<BackResult<CreateTripResponse>> insertNote(AddRemarksRequest addRemarksRequest) {
         return Api.getInstance().apiService.insertNote(addRemarksRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest) {
+        return Api.getInstance().apiService.travelAssistantPlusADay(addOneDayRequest).compose(RxSchedulers.io_main());
     }
 }

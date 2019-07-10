@@ -273,6 +273,10 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
     public void getTravelAssistantMchListResult(BackResult<TripScenicSpotAddCountryBean> res) {
 
     }
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
+
+    }
 
     @Override
     public void showMsg(String msg) {

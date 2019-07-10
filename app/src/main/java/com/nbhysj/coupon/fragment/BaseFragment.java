@@ -107,7 +107,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
             return;
         }
         lazyInitView(view);
-        hasLoaded = true;//注：关键步骤，确保数据只加载一次
+       // hasLoaded = true;//注：关键步骤，确保数据只加载一次
     }
 
     public abstract void lazyInitView(View view);

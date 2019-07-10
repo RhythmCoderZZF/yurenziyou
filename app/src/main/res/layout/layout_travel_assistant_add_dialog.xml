@@ -98,6 +98,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llyt_fine_food_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -170,6 +171,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llyt_traffic_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -216,6 +218,7 @@
             android:weightSum="5">
 
             <LinearLayout
+                android:id="@+id/llyt_add_one_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

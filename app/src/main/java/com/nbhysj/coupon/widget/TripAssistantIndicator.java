@@ -180,7 +180,7 @@ public class TripAssistantIndicator extends HorizontalScrollView implements View
         }
         int mSelectedTabIndex = item;
         if (isIndicatorClick) {
-            mViewPager.setCurrentItem(mSelectedTabIndex);
+            mViewPager.setCurrentItem(mSelectedTabIndex,false);
         }
         final int tabCount = myLinearLayout.getChildCount();
         for (int i = 0; i < tabCount; i++) {//遍历标题，改变选中的背景

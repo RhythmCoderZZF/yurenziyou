@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
+import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.TripintelligentRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
@@ -333,6 +334,10 @@ public interface ApiService {
     //添加区县
     @POST("api/trip/insertCounty")
     Observable<BackResult<CreateTripResponse>> insertCounty(@Body AddCountyRequest addCountyRequest);
+
+    //添加一天
+    @POST("api/trip/plusADay")
+    Observable<BackResult> travelAssistantPlusADay(@Body TravelAssistantAddOneDayRequest addOneDayRequest);
 
     //添加商户
     @POST("api/trip/insertPlaceMch")

@@ -110,7 +110,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     holder1.mTvFineFoodSerialNum.setVisibility(View.GONE);
                 }
 
-                GlideUtil.loadImage(mContext, photoUrl, holder1.mImgScenicSpots);
+                GlideUtil.loadImage(mContext, photoUrl, holder1.mImgFineFood);
 
                 if (tagsEntityList != null) {
                     if (tagsEntityList.size() > 0) {
@@ -160,7 +160,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //景区名字
         TextView mTvPopularScenicSpotName;
         //美食图片
-        ImageView mImgScenicSpots;
+        ImageView mImgFineFood;
         //美食标签
         TagFlowLayout mTagFlowlayoutFineFood;
         //美食序列号
@@ -176,7 +176,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             mTvPopularScenicSpotName = itemView.findViewById(R.id.tv_scenic_spots_name);
-            mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
+            mImgFineFood = itemView.findViewById(R.id.image_fine_food);
             mTagFlowlayoutFineFood = itemView.findViewById(R.id.flowlayout_fine_food_label);
             mTvFineFoodSerialNum = itemView.findViewById(R.id.tv_fine_food_serial_number);
             mTvFineFoodDes = itemView.findViewById(R.id.tv_fine_food_des);

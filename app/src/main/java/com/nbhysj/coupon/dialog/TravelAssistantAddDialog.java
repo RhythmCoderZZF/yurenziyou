@@ -76,6 +76,9 @@ public class TravelAssistantAddDialog extends DialogFragment {
         view = LayoutInflater.from(context).inflate(R.layout.layout_travel_assistant_add_dialog, null);
         RelativeLayout mRlytview = view.findViewById(R.id.rlyt_travel_assistant_add);
         LinearLayout mLlytScenicSpotAdd = view.findViewById(R.id.llyt_scenic_spot_add);
+        LinearLayout mLlytOneDayAdd = view.findViewById(R.id.llyt_add_one_day);
+        LinearLayout mLlytFineFoodAdd = view.findViewById(R.id.llyt_fine_food_add);
+        LinearLayout mLlytTrafficAdd = view.findViewById(R.id.llyt_traffic_add);
         LinearLayout mLlytRemarks = view.findViewById(R.id.llyt_remarks_add);
 
         mRlytview.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +95,33 @@ public class TravelAssistantAddDialog extends DialogFragment {
             public void onClick(View view) {
 
                 travelAssistantAddListener.travelAssistantAddListener(0);
+                dismiss();
+            }
+        });
+
+        mLlytFineFoodAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                travelAssistantAddListener.travelAssistantAddListener(1);
+                dismiss();
+            }
+        });
+
+        mLlytTrafficAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                travelAssistantAddListener.travelAssistantAddListener(4);
+                dismiss();
+
+            }
+        });
+
+        mLlytOneDayAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                travelAssistantAddListener.travelAssistantAddListener(5);
                 dismiss();
             }
         });

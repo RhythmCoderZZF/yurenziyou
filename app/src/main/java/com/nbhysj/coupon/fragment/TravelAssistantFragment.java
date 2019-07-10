@@ -236,7 +236,10 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     public void insertNoteResult(BackResult<CreateTripResponse> res) {
 
     }
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
 
+    }
     @Override
     public void showMsg(String msg) {
 

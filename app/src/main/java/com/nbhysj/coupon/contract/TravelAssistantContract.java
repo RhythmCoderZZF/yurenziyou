@@ -7,6 +7,7 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -51,6 +52,9 @@ public interface TravelAssistantContract {
         //添加商户
         Observable<BackResult<CreateTripResponse>> insertPlaceMch(AddMchRequest addMchRequest);
 
+        //(行程助手)增加一天
+        Observable<BackResult> travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest);
+
         //添加备注
         Observable<BackResult<CreateTripResponse>> insertNote(AddRemarksRequest addRemarksRequest);
 
@@ -74,6 +78,10 @@ public interface TravelAssistantContract {
 
         void insertPlaceMchResult(BackResult<CreateTripResponse> res);
 
+        //增加一天
+        void travelAssistantPlusADay(BackResult res);
+
+        //添加备注
         void insertNoteResult(BackResult<CreateTripResponse> res);
 
         void delTripPlaceResult(BackResult res);
@@ -99,6 +107,10 @@ public interface TravelAssistantContract {
 
         public abstract void insertPlaceMch(AddMchRequest addMchRequest);
 
+        //增加一天
+        public abstract void travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest);
+
+        //添加备注
         public abstract void insertRemarks(AddRemarksRequest addRemarksRequest);
 
         public abstract void delTripPlace(DeleteTripPlaceRequest deleteTripPlaceRequest);

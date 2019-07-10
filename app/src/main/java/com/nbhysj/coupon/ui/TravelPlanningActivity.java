@@ -31,7 +31,6 @@ import butterknife.OnClick;
  */
 public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
 
-
     private List<Integer> countyIdList;
     private String startDate, endDate;
 
@@ -134,6 +133,11 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
 
     @Override
     public void insertNoteResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
 
     }
 

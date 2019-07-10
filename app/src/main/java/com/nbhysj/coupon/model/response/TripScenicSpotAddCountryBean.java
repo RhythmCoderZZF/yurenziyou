@@ -50,6 +50,8 @@ public class TripScenicSpotAddCountryBean {
 
         private int selectedStatus;
 
+        private double price;
+
         private String tags;
 
         public int getMchId() {
@@ -138,6 +140,15 @@ public class TripScenicSpotAddCountryBean {
 
         public void setTags(String tags) {
             this.tags = tags;
+        }
+
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
         }
     }
 }

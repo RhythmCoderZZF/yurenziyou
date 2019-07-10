@@ -148,13 +148,22 @@
             android:name=".ui.TravelAssisantScenicSpotAddActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.TravelAssisantFineFoodAddActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.TravelAssisantHotelHomestayAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.TravelAssistantDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.AddAccommodationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.AddTrafficActivity"
+            android:name=".ui.TravelAssistantAddTrafficActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TravelAssistantLocationCityActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TripPreviewActivity"

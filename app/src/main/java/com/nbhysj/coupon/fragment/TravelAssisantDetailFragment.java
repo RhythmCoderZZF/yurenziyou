@@ -32,6 +32,7 @@ import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.LoginActivity;
 import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.TravelAssistantRemarksActivity;
+import com.nbhysj.coupon.util.DateUtil;
 import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
@@ -66,6 +67,12 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     //行程详情
     @BindView(R.id.llyt_travel_assistant_detail)
     LinearLayout mLlytTravelAssistantDetail;
+    //行程日期
+    @BindView(R.id.tv_travel_date)
+    TextView mTvTravelDate;
+    //周几
+    @BindView(R.id.tv_travel_week)
+    TextView mTvTravelWeek;
 
     TripDetailsResponse.DetailsEntity detailsEntity;
     private List<TripDetailsResponse.TripDetailsEntity> tripDetailsList;
@@ -83,13 +90,6 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     public void setTravelAssisantDetailList(TripDetailsResponse.DetailsEntity detailsEntity) {
 
         this.detailsEntity = detailsEntity;
-        if (tripDetailsList == null) {
-
-            tripDetailsList = new ArrayList<>();
-        } else {
-            tripDetailsList.clear();
-        }
-
 
          /*RxBus.$().(this, "my tag", new RxBus.Callback<String>() {
              @Override
@@ -99,6 +99,7 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
          });*/
 
     }
+
 
     public static TravelAssisantDetailFragment newInstance(int mTripId, int dayIndex) {
         TravelAssisantDetailFragment fragment = new TravelAssisantDetailFragment();
@@ -182,28 +183,21 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
             }
         });
 
-        if(tripDetailsList.size() > 0)
+    /*    if(tripDetailsList.size() > 0)
         {
             mLlytTravelAssistantDetail.setVisibility(View.VISIBLE);
-            travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
-            mRvTravelAssistantDetail.setAdapter(travelAssistantDetailAdapter);
+
 
         } else {
 
             mLlytTravelAssistantDetail.setVisibility(View.GONE);
 
-        }
+        }*/
+        setTravelAssistantHeader();
 
-        String circuit = detailsEntity.getCircuit();
-        int dayIndex = detailsEntity.getDayIndex();
+        travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
+        mRvTravelAssistantDetail.setAdapter(travelAssistantDetailAdapter);
 
-        mTvtravelAssistantDetailDay.setText(String.valueOf("D" + dayIndex + "."));
-        if (!TextUtils.isEmpty(circuit)) {
-            mTvScenicSpotFlow.setVisibility(View.VISIBLE);
-            mTvScenicSpotFlow.setText(circuit);
-        } else {
-            mTvScenicSpotFlow.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -213,17 +207,15 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
 
     @Override
     public void lazyInitView(View view) {
-        tripDetailsList = detailsEntity.getTripDetails();
-        if(tripDetailsList.size() > 0)
-        {
-            mLlytTravelAssistantDetail.setVisibility(View.VISIBLE);
+        try {
+
+            setTravelAssistantHeader();
             travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
             travelAssistantDetailAdapter.notifyDataSetChanged();
 
-        } else {
 
-            mLlytTravelAssistantDetail.setVisibility(View.GONE);
-
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -261,7 +253,10 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
 
     }
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
 
+    }
     @Override
     public void delTripPlaceResult(BackResult res) {
 
@@ -273,6 +268,7 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
                 tripDetailsList.remove(tripDetailsEntity);
                 travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
                 travelAssistantDetailAdapter.notifyDataSetChanged();
+                setTravelAssistantHeader();
 
                 break;
             default:
@@ -359,6 +355,37 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
             mIndicator.setViewPager(pager,0);*/
 
             // showToast(TravelAssistantDetailsActivity.this,"2222");
+        }
+    }
+
+    public void setTravelAssistantHeader(){
+
+        try {
+            tripDetailsList = detailsEntity.getTripDetails();
+            if (tripDetailsList.size() > 0) {
+                mLlytTravelAssistantDetail.setVisibility(View.VISIBLE);
+
+            } else {
+
+                mLlytTravelAssistantDetail.setVisibility(View.GONE);
+
+            }
+            String circuit = detailsEntity.getCircuit();
+            int dayIndex = detailsEntity.getDayIndex();
+            String tripDate = detailsEntity.getTripDate();
+            mTvtravelAssistantDetailDay.setText(String.valueOf("D" + dayIndex + "."));
+            mTvTravelDate.setText(tripDate);
+            String week = DateUtil.dateToWeek(tripDate);
+            mTvTravelWeek.setText(week);
+            if (!TextUtils.isEmpty(circuit)) {
+                mTvScenicSpotFlow.setVisibility(View.VISIBLE);
+                mTvScenicSpotFlow.setText(circuit);
+            } else {
+                mTvScenicSpotFlow.setVisibility(View.GONE);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

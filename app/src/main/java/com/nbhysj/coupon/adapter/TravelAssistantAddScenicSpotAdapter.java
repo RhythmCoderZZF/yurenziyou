@@ -9,11 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -29,13 +25,13 @@ import java.util.List;
  * @author hysj created at 2019/05/17.
  * description: 添加景点适配器
  */
-public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdapter.ViewHolder> {
+public class TravelAssistantAddScenicSpotAdapter extends RecyclerView.Adapter<TravelAssistantAddScenicSpotAdapter.ViewHolder> {
 
     List<TripScenicSpotAddCountryBean.TravelAssistantAddScenicSpotEntity> scenicSpotList;
     private Context mContext;
     private ScenicSpotAddListener scenicSpotAddListener;
 
-    public AddScenicSpotAdapter(Context mContext, ScenicSpotAddListener scenicSpotAddListener) {
+    public TravelAssistantAddScenicSpotAdapter(Context mContext, ScenicSpotAddListener scenicSpotAddListener) {
 
         this.mContext = mContext;
         this.scenicSpotAddListener = scenicSpotAddListener;
@@ -66,16 +62,23 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
             String scenicSpotTag = travelAssistantAddScenicSpotEntity.getTags();
             int mSelectedStatus = travelAssistantAddScenicSpotEntity.getSelectedStatus();
             String mchName = travelAssistantAddScenicSpotEntity.getMchName();
+            String intro = travelAssistantAddScenicSpotEntity.getIntro();
+            int score = travelAssistantAddScenicSpotEntity.getScore();
+            int commentNum = travelAssistantAddScenicSpotEntity.getCommentNum();
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
             holder.mTvScenicSpotName.setText(mchName);
+            holder.mTvScore.setText(String.valueOf(score));
+            holder.mTvScenicSpotDes.setText(String.valueOf(intro));
+            holder.mTvCommentNum.setText(commentNum + "条点评");
 
-            List<String> ScenicSpotTagList = new ArrayList<>();
-            ScenicSpotTagList.add(level + "A级景区");
+            List<String> scenicSpotTagList = new ArrayList<>();
+            scenicSpotTagList.add(level + "A级景区");
             if (!TextUtils.isEmpty(scenicSpotTag))
             {
-                ScenicSpotTagList.add(scenicSpotTag);
+                scenicSpotTagList.add(scenicSpotTag);
             }
-            holder.mTagFlowlayoutScenicSpot.setAdapter(new TagAdapter<String>(ScenicSpotTagList) {
+
+            holder.mTagFlowlayoutScenicSpot.setAdapter(new TagAdapter<String>(scenicSpotTagList) {
 
                 @Override
                 public View getView(FlowLayout parent, int position, String fineFoodTag) {
@@ -103,10 +106,7 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
             } else {
                 holder.mImgAddMyTravel.setBackgroundResource(R.mipmap.icon_travel_assistant_add_tag);
                 holder.mImgAddMyTravel.setEnabled(true);
-
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,6 +131,12 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
         //景点名称
         TextView mTvScenicSpotName;
 
+        TextView mTvScore;
+
+        TextView mTvScenicSpotDes;
+
+        TextView mTvCommentNum;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -139,6 +145,9 @@ public class AddScenicSpotAdapter extends RecyclerView.Adapter<AddScenicSpotAdap
             mLlytAddMyTravel = itemView.findViewById(R.id.llyt_add_my_travel);
             mImgAddMyTravel = itemView.findViewById(R.id.img_add_my_travel);
             mTvScenicSpotName = itemView.findViewById(R.id.tv_scenic_spot_name);
+            mTvScore = itemView.findViewById(R.id.tv_score);
+            mTvScenicSpotDes = itemView.findViewById(R.id.tv_scenic_spot_des);
+            mTvCommentNum = itemView.findViewById(R.id.tv_comment_num);
         }
     }
 

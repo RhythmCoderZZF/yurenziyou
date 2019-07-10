@@ -15,6 +15,9 @@ public class AddMchRequest {
     //天数索引
     private int dayIndex;
 
+    //商户类型
+    private String tripPlaceType;
+
     public int getMchId() {
         return mchId;
     }
@@ -37,5 +40,13 @@ public class AddMchRequest {
 
     public void setDayIndex(int dayIndex) {
         this.dayIndex = dayIndex;
+    }
+
+    public String getTripPlaceType() {
+        return tripPlaceType;
+    }
+
+    public void setTripPlaceType(String tripPlaceType) {
+        this.tripPlaceType = tripPlaceType;
     }
 }

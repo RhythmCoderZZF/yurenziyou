@@ -197,6 +197,9 @@
     <string name="str_travel_priview" translatable="false">行程预览</string>
     <string name="str_reaching_the_city" translatable="false">到达城市</string>
     <string name="str_departure_the_city" translatable="false">出发城市</string>
+    <string name="str_place_of_departure" translatable="false">出发地点</string>
+    <string name="str_place_of_arrival" translatable="false">到达地点</string>
+
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
     <string name="str_price" translatable="false">价格</string>

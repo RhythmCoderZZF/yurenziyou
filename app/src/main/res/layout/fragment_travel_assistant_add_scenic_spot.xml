@@ -14,16 +14,16 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         app:srlAccentColor="#00000000"
-        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableHeaderTranslationContent="true"
         app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
 
-        <com.scwang.smartrefresh.header.MaterialHeader
-            android:id="@+id/header"
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+           />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_add_scenic_spot"

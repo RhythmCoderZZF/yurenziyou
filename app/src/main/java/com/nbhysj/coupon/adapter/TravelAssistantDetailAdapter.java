@@ -139,14 +139,30 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                 ((FineFoodViewHolder) holder).mTvStoreName.setText(title);
                 ((FineFoodViewHolder) holder).mTvLocationName.setText(address);
                 GlideUtil.loadImage(mContext, photoUrl, ((FineFoodViewHolder) holder).mImgFineFood);
+                ((FineFoodViewHolder) holder).mLlytFineFoodItem.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
 
+                        travelAssistantDetailItemListener.setItemDeleteListener(itemPosition, tripDetailsEntity);
+
+                        return false;
+                    }
+                });
             } else if (holder instanceof HotelViewHolder) {
 
                 ((HotelViewHolder) holder).mTvHotelName.setText(title);
                 ((HotelViewHolder) holder).mTvHotelDes.setText(intro);
                 ((HotelViewHolder) holder).mTvHotelSuggestedPlayTime.setText(playDurationTime);
                 GlideUtil.loadImage(mContext, photoUrl, ((HotelViewHolder) holder).mImgHotel);
+                ((HotelViewHolder) holder).mLlytHotelItem.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
 
+                        travelAssistantDetailItemListener.setItemDeleteListener(itemPosition, tripDetailsEntity);
+
+                        return false;
+                    }
+                });
             } else if (holder instanceof RemarksViewHolder) {
 
                 ((RemarksViewHolder) holder).mTvRemarksContent.setText(title);
@@ -157,17 +173,30 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                         travelAssistantDetailItemListener.setItemRemarksEditListener(itemPosition, tripDetailsEntity);
                     }
                 });
+
+                ((RemarksViewHolder) holder).mLlytRemarksItem.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+
+                        travelAssistantDetailItemListener.setItemDeleteListener(itemPosition, tripDetailsEntity);
+
+                        return false;
+                    }
+                });
             } else if (holder instanceof TrafficViewHolder) {
 
                 ((TrafficViewHolder) holder).mTvLocationDistance.setText(distance);
                 ((TrafficViewHolder) holder).mTvDuration.setText(playDurationTime);
                 ((TrafficViewHolder) holder).mTvTravelPath.setText(address);
                 ((TrafficViewHolder) holder).mTvTravelTime.setText("行程时间:" + time);
-                ((TrafficViewHolder) holder).mLlytTrafficItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-                        travelAssistantDetailItemListener.setItemRemarksEditListener(itemPosition, tripDetailsEntity);
+                ((TrafficViewHolder) holder).mLlytTrafficItem.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+
+                        travelAssistantDetailItemListener.setItemDeleteListener(itemPosition, tripDetailsEntity);
+
+                        return false;
                     }
                 });
             }

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:id="@+id/llyt_recyclerview_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_9"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/rlyt_fine_food_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_15">
+
+        <com.nbhysj.coupon.view.RoundedImageView
+            android:id="@+id/image_fine_food"
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="5dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_fine_food_serial_number"
+            android:layout_width="@dimen/dp_47"
+            android:layout_height="@dimen/dp_21"
+            android:background="@drawable/bg_tag_fine_food_red_purple_gradient"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlyt_fine_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_24"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_toLeftOf="@+id/llyt_add_fine_food"
+        android:layout_toRightOf="@+id/rlyt_fine_food_photo"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_fine_food_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_7"
+            android:text=""
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_xnormal"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/rlyt_price_and_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_fine_food_name"
+            android:layout_marginTop="@dimen/dp_8"
+            android:orientation="horizontal">
+
+            <com.nbhysj.coupon.view.StarBarView
+                android:id="@+id/starbar_store_fine_food"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_centerVertical="true"
+                android:clickable="false"
+                android:focusable="false"
+                ratingbar:starCount="5"
+                ratingbar:starDistance="5dp"
+                ratingbar:starEmpty="@mipmap/icon_flower_gray"
+                ratingbar:starFill="@mipmap/icon_flower_orange"
+                ratingbar:starSize="13dp" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:layout_toRightOf="@+id/starbar_store_fine_food"
+                android:text="¥ 0/人"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_small" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_fine_food_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlyt_price_and_score"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_15"
+            android:lines="1"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/color_text_gray20"
+            android:textSize="@dimen/text_size_small" />
+
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/flowlayout_fine_food_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_fine_food_des"
+            android:layout_marginBottom="@dimen/dp_17"
+            zhy:max_select="-1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_alignParentBottom="true"
+            android:alpha="0.25"
+            android:background="@color/color_text_gray6"></View>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llyt_add_fine_food"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_15"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_add_my_travel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_scenic_spots_name"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/icon_travel_assistant_add_tag" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_scenic_spots_name"
+            android:text="加入行程"
+            android:textColor="@color/color_text_gray22"
+            android:textSize="@dimen/text_size_tiny" />
+
+    </LinearLayout>
+
+</RelativeLayout>

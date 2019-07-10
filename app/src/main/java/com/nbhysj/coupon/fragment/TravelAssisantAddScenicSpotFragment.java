@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.AddScenicSpotAdapter;
+import com.nbhysj.coupon.adapter.TravelAssistantAddScenicSpotAdapter;
+import com.nbhysj.coupon.adapter.TravelAssistantAddScenicSpotAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.TravelAssistantDetailTypeEnum;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.AddMchRequest;
@@ -31,7 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-
+/**
+ * @auther：hysj created on 2019/03/08
+ * description：行程详情添加景点
+ */
 public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
     private static final String TRIPID = "tripId";
     private static final String COUNTYID = "countyId";
@@ -49,7 +54,7 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoData;
     private List<TripScenicSpotAddCountryBean.TravelAssistantAddScenicSpotEntity> travelAssistantAddScenicSpotList;
-    private AddScenicSpotAdapter addScenicSpotAdapter;
+    private TravelAssistantAddScenicSpotAdapter addScenicSpotAdapter;
     private boolean isOnLoadMore = false;
     private int mPage = 1;
     private int mPageSize = 10;
@@ -106,7 +111,7 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvAddScenicSpot.setLayoutManager(layoutManager);
-        addScenicSpotAdapter = new AddScenicSpotAdapter(getActivity(), new AddScenicSpotAdapter.ScenicSpotAddListener() {
+        addScenicSpotAdapter = new TravelAssistantAddScenicSpotAdapter(getActivity(), new TravelAssistantAddScenicSpotAdapter.ScenicSpotAddListener() {
             @Override
             public void setScenicSpotAddListener(TripScenicSpotAddCountryBean.TravelAssistantAddScenicSpotEntity travelAssistantAddScenicSpotEntity) {
 
@@ -177,7 +182,10 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
                 }
         }
     }
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
 
+    }
     @Override
     public void showMsg(String msg) {
 
@@ -275,7 +283,8 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
 
         if (validateInternet()) {
 
-            mPresenter.getTravelAssistantMchList(mTripId, mCountyId, "MCH_SCENIC", mPage, mPageSize);
+            String mchScenicType = TravelAssistantDetailTypeEnum.getEnumByKey(0);
+            mPresenter.getTravelAssistantMchList(mTripId, mCountyId, mchScenicType, mPage, mPageSize);
         }
     }
 
@@ -287,6 +296,8 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
             addMchRequest.setMchId(mchId);
             addMchRequest.setDayIndex(mDayIndex);
             addMchRequest.setTripId(mTripId);
+            String mchType = TravelAssistantDetailTypeEnum.getEnumByKey(0);
+            addMchRequest.setTripPlaceType(mchType);
             mPresenter.insertPlaceMch(addMchRequest);
         }
     }

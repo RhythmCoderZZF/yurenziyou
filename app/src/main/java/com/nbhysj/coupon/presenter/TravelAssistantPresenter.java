@@ -5,6 +5,7 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 
 import java.util.HashMap;
 
@@ -57,6 +58,11 @@ public class TravelAssistantPresenter extends TravelAssistantContract.Presenter 
     @Override
     public void insertRemarks(AddRemarksRequest addRemarksRequest) {
         mRxManager.add(mModel.insertNote(addRemarksRequest).subscribe(res -> mView.insertNoteResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest) {
+        mRxManager.add(mModel.travelAssistantPlusADay(addOneDayRequest).subscribe(res -> mView.travelAssistantPlusADay(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

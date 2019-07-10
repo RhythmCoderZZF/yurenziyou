@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
     android:id="@+id/llyt_recyclerview_item"
     android:layout_width="match_parent"
-    android:layout_height="143dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_9"
     android:background="@color/white"
     android:orientation="horizontal">
 
     <RelativeLayout
+        android:id="@+id/rlyt_fine_food"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/dp_15">
 
-        <ImageView
-            android:id="@+id/image_scenic_spots"
+        <com.nbhysj.coupon.view.RoundedImageView
+            android:id="@+id/image_fine_food"
             android:layout_width="104dp"
             android:layout_height="104dp"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            app:riv_corner_radius="5dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+
+            />
 
         <TextView
             android:id="@+id/tv_fine_food_serial_number"
@@ -38,43 +45,26 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_24"
+        android:layout_toRightOf="@+id/rlyt_fine_food"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/rlyt_scenic_spots_name"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_scenic_spots_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20">
-
-            <TextView
-                android:id="@+id/tv_scenic_spots_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="海洋世界大酒店"
-                android:textColor="@color/txt_font_black2"
-                android:textSize="@dimen/text_size_xnormal"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dp_16"
-                android:drawableLeft="@mipmap/icon_love_gray"
-                android:drawablePadding="@dimen/dp_4"
-                android:text="45"
-                android:textColor="@color/text_grey"
-                android:textSize="@dimen/text_size_xsmall" />
-
-        </RelativeLayout>
+            android:layout_marginTop="@dimen/dp_7"
+            android:text="海洋世界大酒店"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_xnormal"
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:id="@+id/rlyt_price_and_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rlyt_scenic_spots_name"
+            android:layout_below="@+id/tv_scenic_spots_name"
             android:layout_marginTop="@dimen/dp_8"
             android:orientation="horizontal">
 
@@ -122,8 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_fine_food_des"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_17"
             zhy:max_select="-1" />
 
         <View
@@ -135,4 +124,4 @@
     </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

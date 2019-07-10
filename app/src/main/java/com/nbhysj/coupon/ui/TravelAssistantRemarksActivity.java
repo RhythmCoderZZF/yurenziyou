@@ -175,6 +175,11 @@ public class TravelAssistantRemarksActivity extends BaseActivity<TravelAssistant
     }
 
     @Override
+    public void travelAssistantPlusADay(BackResult res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
