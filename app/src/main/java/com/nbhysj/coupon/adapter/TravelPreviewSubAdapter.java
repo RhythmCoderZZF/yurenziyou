@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.TravelPreviewBean;
+import com.nbhysj.coupon.model.response.TripDetailsResponse;
+import com.nbhysj.coupon.widget.RvSlideLayout;
 
 import java.util.List;
 
@@ -19,15 +22,16 @@ import java.util.List;
  */
 public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewSubAdapter.ViewHolder> {
 
-    List<TravelPreviewBean.TravelPreviewEntity> travelPreviewEntityList;
+    List<TripDetailsResponse.TripDetailsEntity> travelPreviewEntityList;
     private Context mContext;
-
+    private RvSlideLayout mOpenMenu;
+    private RvSlideLayout mScrollingMenu;
     public TravelPreviewSubAdapter(Context mContext) {
 
         this.mContext = mContext;
     }
 
-    public void setTravelPreviewList(List<TravelPreviewBean.TravelPreviewEntity> travelPreviewEntityList) {
+    public void setTravelPreviewList(List<TripDetailsResponse.TripDetailsEntity> travelPreviewEntityList) {
 
         this.travelPreviewEntityList = travelPreviewEntityList;
     }
@@ -45,12 +49,11 @@ public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewS
 
         try {
 
-            TravelPreviewBean.TravelPreviewEntity travelPreview = travelPreviewEntityList.get(itemPosition);
-            String destination = travelPreview.getDestination();
+            TripDetailsResponse.TripDetailsEntity travelPreview = travelPreviewEntityList.get(itemPosition);
+            String address = travelPreview.getAddress();
             String time = travelPreview.getTime();
-            holder.mTvDestinationName.setText(destination);
+            holder.mTvDestinationName.setText(address);
             holder.mTvTravelTime.setText(time);
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,11 +72,34 @@ public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewS
         //行程日期
         TextView mTvTravelTime;
 
+        //行程点类型
+        ImageView mImgTripPlaceType;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mTvDestinationName = itemView.findViewById(R.id.tv_destination_name);
+            mTvDestinationName = itemView.findViewById(R.id.tv_trip_place);
             mTvTravelTime = itemView.findViewById(R.id.tv_travel_time);
+            itemView.findViewById(R.id.img_trip_place_type);
         }
+    }
+
+    public void setScrollingMenu(RvSlideLayout scrollingMenu) {
+        mScrollingMenu = scrollingMenu;
+    }
+
+    public RvSlideLayout getScrollingMenu() {
+        return mScrollingMenu;
+    }
+
+    public void closeOpenMenu() {
+        if (mOpenMenu != null && mOpenMenu.isOpen()) {
+            mOpenMenu.closeMenu();
+            mOpenMenu = null;
+        }
+    }
+
+    public void holdOpenMenu(RvSlideLayout rvSlideLayout) {
+        mOpenMenu = rvSlideLayout;
     }
 }

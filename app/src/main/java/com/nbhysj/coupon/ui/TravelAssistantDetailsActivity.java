@@ -286,7 +286,19 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
         }
     }
 
+    @Override
+    public void delTripResult(BackResult res) {
 
+    }
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult res) {
+
+    }
 
     @Override
     public void showMsg(String msg) {
@@ -333,6 +345,13 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                                 intent.putExtra("dayIndex", mDayIndex);
                                 startActivityForResult(intent, 0);
 
+                            }if (position == 2) {
+
+                                intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantHotelHomestayAddActivity.class);
+                                intent.putExtra("tripId", mTripId);
+                                intent.putExtra("dayIndex", mDayIndex);
+                                startActivityForResult(intent, 0);
+
                             } else if (position == 4) {
 
                                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantAddTrafficActivity.class);
@@ -365,12 +384,14 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
 
                 intent.setClass(TravelAssistantDetailsActivity.this, TripPreviewActivity.class);
+                intent.putExtra("tripId",mTripId);
                 startActivity(intent);
 
                 break;
             case R.id.img_map:
 
                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantRoutePlanMapActivity.class);
+                intent.putExtra("tripId",mTripId);
                 startActivity(intent);
                 break;
             default:

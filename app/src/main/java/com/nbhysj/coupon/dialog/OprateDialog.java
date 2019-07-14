@@ -202,12 +202,13 @@ public class OprateDialog {
      * @param listener
      * @return
      */
-    public OprateDialog setNegativeButton(String text,
+    public OprateDialog setNegativeButton(String text,int color,
                                           final OnClickListener listener) {
         showNegBtn = true;
         if ("".equals(text)) {
             btnNeg.setText("取消");
         } else {
+            btnNeg.setTextColor(color);
             btnNeg.setText(text);
         }
         btnNeg.setOnClickListener(new OnClickListener() {

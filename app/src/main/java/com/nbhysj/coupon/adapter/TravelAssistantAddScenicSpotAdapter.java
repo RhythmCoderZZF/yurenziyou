@@ -63,7 +63,7 @@ public class TravelAssistantAddScenicSpotAdapter extends RecyclerView.Adapter<Tr
             int mSelectedStatus = travelAssistantAddScenicSpotEntity.getSelectedStatus();
             String mchName = travelAssistantAddScenicSpotEntity.getMchName();
             String intro = travelAssistantAddScenicSpotEntity.getIntro();
-            int score = travelAssistantAddScenicSpotEntity.getScore();
+            double score = travelAssistantAddScenicSpotEntity.getScore();
             int commentNum = travelAssistantAddScenicSpotEntity.getCommentNum();
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
             holder.mTvScenicSpotName.setText(mchName);

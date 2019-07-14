@@ -21,6 +21,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.CalendarActivity;
@@ -37,13 +38,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
+
 /**
  * @auther：hysj created on 2019/03/08
- * description：行程
+ * description：行程助手首页列表
  */
 public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    public static final int TRIP_EDIT_RESULT_CODE = 10000;
 
     //行程助手推荐
     @BindView(R.id.rv_recommended_for_you_travel)
@@ -68,6 +74,7 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
 
     private TravelAssisantRecommendAdapter travelAssisantRecommendAdapter;
 
+    private int mPosition;
     public TravelAssistantFragment() {
         // Required empty public constructor
     }
@@ -139,14 +146,17 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
 
             @Override
             public void setMyTravelEditListener(int position) {
+                mPosition = position;
                 BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
                     @Override
                     public void onBlurComplete() {
-
+                        Bundle bundle = new Bundle();
                         Intent intent = new Intent(getActivity(), TravelAssistantEditActivity.class);
+                        TripHomePageResponse.TripEntity tripEntity = tripEntityList.get(position);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                        startActivity(intent);
+                        bundle.putSerializable("tripEntity",tripEntity);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent,0);
                     }
                 });
             }
@@ -240,6 +250,22 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     public void travelAssistantPlusADay(BackResult res) {
 
     }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
     @Override
     public void showMsg(String msg) {
 
@@ -268,6 +294,35 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             default:
                 break;
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 0 && resultCode == RESULT_OK){
+            //tripEntityList.clear();
+            //getTravelAssistantList();
+            TripHomePageResponse.TripEntity tripEntity = tripEntityList.get(mPosition);
+
+            tripEntityList.remove(tripEntity);
+            myTravelListAdapter.setMyTravelList(tripEntityList);
+            myTravelListAdapter.notifyDataSetChanged();
+        } else if(requestCode == 0 && resultCode == TRIP_EDIT_RESULT_CODE){ //编辑保存成功
+            TripHomePageResponse.TripEntity tripEntity = (TripHomePageResponse.TripEntity)data.getSerializableExtra("tripEntity");
+            if(tripEntity != null && tripEntityList != null)
+            {
+                for (int i = 0; i < tripEntityList.size(); i++) {
+                    if (i == mPosition) {
+                        TripHomePageResponse.TripEntity entity = tripEntityList.get(i);
+                        entity.setTitle(tripEntity.getTitle());
+                        entity.setStartDate(tripEntity.getStartDate());
+                        entity.setEndDate(tripEntity.getEndDate());
+                    }
+                }
+            }
+            myTravelListAdapter.setMyTravelList(tripEntityList);
+            myTravelListAdapter.notifyDataSetChanged();
+        }
     }
 }

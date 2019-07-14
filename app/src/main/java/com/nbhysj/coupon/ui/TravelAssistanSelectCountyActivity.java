@@ -247,6 +247,20 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
     }
 
     @Override
+    public void delTripResult(BackResult res) {
+
+    }
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult res) {
+
+    }
+
+    @Override
     public void getCountyWebListResult(BackResult<List<TravelAssistantDetailCountryBean>> res) {
         dismissProgressDialog();
         switch (res.getCode()) {

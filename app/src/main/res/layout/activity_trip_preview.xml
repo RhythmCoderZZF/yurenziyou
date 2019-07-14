@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.TripPreviewActivity"
     android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/img_trip_preview_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
@@ -31,6 +33,7 @@
         android:id="@+id/rv_trip_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp_7"></android.support.v7.widget.RecyclerView>
+        android:layout_marginTop="@dimen/dp_7"
+      ></android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

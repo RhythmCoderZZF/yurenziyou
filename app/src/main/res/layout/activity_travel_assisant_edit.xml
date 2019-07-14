@@ -27,7 +27,7 @@
             android:layout_height="@dimen/dp_120"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:background="@mipmap/icon_map"
+            android:background="@drawable/bg_white_radius_thirteen_shape"
             android:scaleType="fitXY"
             app:riv_corner_radius="13dip"
             app:riv_mutate_background="true"
@@ -43,8 +43,8 @@
             android:padding="@dimen/dp_10"
             android:src="@mipmap/icon_travel_assistant_edit_close" />
 
-        <TextView
-            android:id="@+id/tv_travel_assistant_title"
+        <EditText
+            android:id="@+id/edt_travel_assistant_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -52,12 +52,12 @@
             android:layout_marginLeft="@dimen/dp_13"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="4月20日即将去往宁波"
             android:drawablePadding="@dimen/dp_1"
             android:drawableRight="@mipmap/icon_travel_assistant_edit"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_twenty_one_large"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:background="@null"/>
 
     </RelativeLayout>
 
@@ -87,14 +87,14 @@
                 android:textSize="@dimen/text_size_normal" />
 
                 <TextView
-                    android:id="@+id/tv_travel_start_time"
+                    android:id="@+id/tv_travel_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="25dp"
                     android:gravity="center_vertical"
-                    android:text="2019-04-20"
+                    android:text=""
                     android:textColor="@color/color_text_black7"
                     android:drawablePadding="@dimen/dp_5"
                     android:drawableRight="@mipmap/icon_right_black_arrow"/>
@@ -122,14 +122,14 @@
                 android:textSize="@dimen/text_size_normal" />
 
             <TextView
-                android:id="@+id/tv_travel_end_time"
+                android:id="@+id/tv_travel_end_date"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="25dp"
                 android:gravity="center_vertical"
-                android:text="2019-04-20"
+                android:text=""
                 android:textColor="@color/color_text_black7"
                 android:drawablePadding="@dimen/dp_5"
                 android:drawableRight="@mipmap/icon_right_black_arrow" />
@@ -141,7 +141,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_follow"
+            android:id="@+id/tv_save_travel_assistant"
             android:layout_width="124dp"
             android:layout_height="@dimen/dp_36"
             android:layout_gravity="center_horizontal"
@@ -160,6 +160,7 @@
 
     
     <TextView
+        android:id="@+id/tv_delete_trip"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_marginLeft="@dimen/dp_32"

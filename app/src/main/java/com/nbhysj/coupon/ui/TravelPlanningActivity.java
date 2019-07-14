@@ -16,6 +16,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
@@ -87,6 +88,11 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
     }
 
     @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
+    @Override
     public void getCreateTripResult(BackResult<CreateTripResponse> res) {
         try {
 
@@ -138,6 +144,16 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
 
     @Override
     public void travelAssistantPlusADay(BackResult res) {
+
+    }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
 
     }
 

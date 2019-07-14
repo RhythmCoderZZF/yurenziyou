@@ -1,12 +1,13 @@
 package com.nbhysj.coupon.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @auther：hysj created on 2019/6/13
  * description：行程助手首页
  */
-public class TripHomePageResponse {
+public class TripHomePageResponse implements Serializable {
 
     //行程列表
     private List<TripEntity> trip;
@@ -30,7 +31,7 @@ public class TripHomePageResponse {
         this.strategy = strategy;
     }
 
-    public class TripEntity {
+    public class TripEntity implements Serializable{
 
         private int id;
 
@@ -113,7 +114,7 @@ public class TripHomePageResponse {
         }
     }
 
-    public class StrategyEntity {
+    public class StrategyEntity implements Serializable{
 
         private int id;
 

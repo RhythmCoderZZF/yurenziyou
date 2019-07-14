@@ -180,6 +180,21 @@ public class TravelAssistantRemarksActivity extends BaseActivity<TravelAssistant
     }
 
     @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();

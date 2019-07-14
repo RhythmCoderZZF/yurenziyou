@@ -96,6 +96,16 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     }
 
     @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult res) {
+
+    }
+
+    @Override
     public void getCountyListResult(BackResult<List<CountryBean>> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -169,6 +179,12 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     public void travelAssistantPlusADay(BackResult res) {
 
     }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
     @Override
     public void showMsg(String msg) {
 

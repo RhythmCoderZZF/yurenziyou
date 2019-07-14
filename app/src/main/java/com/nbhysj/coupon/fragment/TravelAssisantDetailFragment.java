@@ -27,6 +27,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.LoginActivity;
@@ -144,14 +145,14 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
 
                 mPosition = position;
                 OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle("确认要删除该行程吗");
-                oprateDialog.setNegativeButton("取消", new View.OnClickListener() {
+                oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                     }
                 });
 
-                oprateDialog.setPositiveButton("确认", getResources().getColor(R.color.color_high_light_green), new View.OnClickListener() {
+                oprateDialog.setPositiveButton("确认", getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         int tripPlaceId = tripDetailsEntity.getTripPlaceId();
@@ -257,6 +258,22 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     public void travelAssistantPlusADay(BackResult res) {
 
     }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
     @Override
     public void delTripPlaceResult(BackResult res) {
 

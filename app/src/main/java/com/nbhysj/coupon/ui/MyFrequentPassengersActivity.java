@@ -284,7 +284,7 @@ public class MyFrequentPassengersActivity extends BaseActivity<FrequentlyUsedInf
     public void oprateTips(int travellerId) {
 
         OprateDialog oprateDialog = new OprateDialog(MyFrequentPassengersActivity.this).builder().setTitle("确认要删除旅客吗？");
-        oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), new View.OnClickListener() {
+        oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

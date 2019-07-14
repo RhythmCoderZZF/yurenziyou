@@ -37,6 +37,19 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.TravelAssistantDailyMapRouteAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.TravelAssistantContract;
+import com.nbhysj.coupon.model.TravelAssistantModel;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CountryBean;
+import com.nbhysj.coupon.model.response.CreateTripResponse;
+import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
+import com.nbhysj.coupon.model.response.TripDetailsResponse;
+import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripMapResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
+import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 
@@ -52,7 +65,7 @@ import butterknife.OnClick;
  * @auther：hysj created on 2019/05/09
  * description：行程助手地图路线规划
  */
-public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter,
+public class TravelAssistantRoutePlanMapActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View, AMap.OnMarkerClickListener, AMap.InfoWindowAdapter,
         PoiSearch.OnPoiSearchListener, LocationSource, AMap.OnMapClickListener {
 
     @BindView(R.id.toolbar_space)
@@ -65,8 +78,24 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
+    private double lat;
+    private double lon;
 
-    private List<LatLng> list;
+    private int tripId;
+
+    //标志点
+    private List<LatLonPoint> marketList;
+
+    //经纬度
+    List<LatLng> latLngList;
+
+    //每一天行程
+    List<List<TripMapResponse>> tripMapEntityList;
+
+    private TravelAssistantDailyMapRouteAdapter dailyMapRouteAdapter;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -93,6 +122,32 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
         } else {
             mToolbarSpace.setVisibility(View.GONE);
         }
+
+        tripId = getIntent().getIntExtra("tripId", 0);
+
+        if (marketList == null) {
+
+            marketList = new ArrayList<>();
+        } else {
+            marketList.clear();
+        }
+
+        if (latLngList == null) {
+
+            latLngList = new ArrayList<LatLng>();
+
+        } else {
+
+            latLngList.clear();
+        }
+
+        if (tripMapEntityList == null) {
+
+            tripMapEntityList = new ArrayList<>();
+        } else {
+            tripMapEntityList.clear();
+        }
+
         //初始化地图控件
         mapView = (MapView) findViewById(R.id.map);
         //必须要写
@@ -100,35 +155,47 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
 
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
+        mLocationOption = new AMapLocationClientOption();
         //设置定位回调监听
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        mLocationOption.setNeedAddress(true);
+        mLocationOption.setOnceLocation(true);
+        //设置是否强制刷新WIFI，默认为强制刷新
+        mLocationOption.setWifiActiveScan(true);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置
+        mLocationOption.setMockEnable(false);
+        //设置定位间隔
+        mLocationOption.setInterval(0);
+        mLocationClient.setLocationOption(mLocationOption);
         mLocationClient.setLocationListener(mLocationListener);
-
+        mLocationClient.startLocation();
         init();
-
     }
 
     @Override
     public void initData() {
-        // 设置当前地图显示为当前位置
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.853077,121.582652), 13));
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(29.853077, 121.582652));
-        markerOptions.title("当前位置");
-        markerOptions.visible(true);
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_travel_assistant_location));
-        markerOptions.icon(bitmapDescriptor);
-        aMap.addMarker(markerOptions);
+
+        getTripRouteMap();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TravelAssistantRoutePlanMapActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvDayNumber.setLayoutManager(linearLayoutManager);
-        TravelAssistantDailyMapRouteAdapter dailyMapRouteAdapter = new TravelAssistantDailyMapRouteAdapter(TravelAssistantRoutePlanMapActivity.this);
+        dailyMapRouteAdapter = new TravelAssistantDailyMapRouteAdapter(TravelAssistantRoutePlanMapActivity.this, new TravelAssistantDailyMapRouteAdapter.TravelAssistantDailyMapRouteListener() {
+            @Override
+            public void setTravelAssistantDailyMapRouteListener(List<TripMapResponse> tripMapResponseList) {
+
+                setUpMap(tripMapResponseList);
+            }
+        });
+        dailyMapRouteAdapter.setTravelAssistantDailyMapRouteList(tripMapEntityList);
         mRvDayNumber.setAdapter(dailyMapRouteAdapter);
+
     }
 
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
@@ -168,6 +235,7 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
     @Override
     public void deactivate() {
 
+        mLocationClient = null;
     }
 
     @Override
@@ -211,15 +279,27 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
                     Log.v("pcw", "lat : " + lat + " lon : " + lon);
                     Log.v("pcw", "Country : " + amapLocation.getCountry() + " province : " + amapLocation.getProvince() + " City : " + amapLocation.getCity() + " District : " + amapLocation.getDistrict());
 
+
                     // 设置当前地图显示为当前位置
                     aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 13));
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(new LatLng(lat, lon));
                     markerOptions.title("当前位置");
                     markerOptions.visible(true);
-                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_location_blue));
+                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_travel_assistant_location));
                     markerOptions.icon(bitmapDescriptor);
                     aMap.addMarker(markerOptions);
+
+                    // 设置当前地图显示为当前位置
+               /*     aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.853077,121.582652), 13));
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(new LatLng(29.853077, 121.582652));
+                    markerOptions.title("当前位置");
+                    markerOptions.visible(true);
+                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_travel_assistant_location));
+                    markerOptions.icon(bitmapDescriptor);
+                    aMap.addMarker(markerOptions);*/
+
 
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -231,10 +311,7 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
         }
     };
 
-    //声明mLocationOption对象
-    public AMapLocationClientOption mLocationOption = null;
-    private double lat;
-    private double lon;
+
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,126 +343,9 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
             aMap.addMarker(markerOptions);
             // Marker marker = aMap.getMapScreenMarkers().get(0);
             //marker.showInfoWindow();*/
-             setUpMap();
-      //  }
+        // setUpMap();
+        //  }
     }
-
-    /**
-     * 设置页面监听
-     */
-    private void setUpMap1() {
-        aMap.setOnMarkerClickListener(this);// 添加点击marker监听事件
-        aMap.setInfoWindowAdapter(this);// 添加显示infowindow监听事件
-        aMap.getUiSettings().setRotateGesturesEnabled(false);
-        aMap.setOnMapClickListener(this);
-        aMap.setLocationSource(this);// 设置定位监听
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
-        // 自定义系统定位蓝点
-        MyLocationStyle myLocationStyle = new MyLocationStyle();
-        // 自定义定位蓝点图标
-        myLocationStyle.myLocationIcon(
-                BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
-        // 自定义精度范围的圆形边框颜色
-        myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
-        // 自定义精度范围的圆形边框宽度
-        myLocationStyle.strokeWidth(0);
-        // 设置圆形的填充颜色
-        myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
-        // 将自定义的 myLocationStyle 对象添加到地图上
-        aMap.setMyLocationStyle(myLocationStyle);
-        aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
-        aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
-    }
-
-    /**
-     * 配置定位参数
-     */
-    private void setUpMap() {
-
-        List<LatLonPoint> marketList = new ArrayList<>();
-
-        LatLonPoint latLonPoint = new LatLonPoint( 29.853077,121.582652);
-
-        LatLonPoint latLonPoint1 = new LatLonPoint(  29.880989,121.582137);
-
-        LatLonPoint latLonPoint2 = new LatLonPoint(  29.84258,121.600333);
-        marketList.add(latLonPoint);
-        marketList.add(latLonPoint1);
-        marketList.add(latLonPoint2);
-        Marker marker = null;
-        for (int i = 0; i < marketList.size(); i++) {
-            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-                    marketList.get(i).getLatitude(),//设置纬度           
-                    marketList.get(i).getLongitude()),13));
-            marker = aMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(marketList.get(i).getLatitude(),//设置纬度       
-                            marketList.get(i).getLongitude()))//设置经度                 
-                    .title("宁波海洋世界")//设置标题   
-                    .setFlat(false) // 将Marker设置为贴地显示，可以双指下拉地图查看效果 
-                    .icon(BitmapDescriptorFactory.fromBitmap(getMyBitmap(String.valueOf(i))))
-                    .draggable(true));
-        }
-        marker.showInfoWindow();
-
-        list = showListLat();
-        //起点位置和  地图界面大小控制
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(list.get(0), 13));
-        aMap.setMapTextZIndex(2);
-        // 绘制一条带有纹理的直线
-        aMap.addPolyline((new PolylineOptions())
-                //手动数据测试
-                //.add(new LatLng(26.57, 106.71),new LatLng(26.14,105.55),new LatLng(26.58, 104.82), new LatLng(30.67, 104.06))
-                //集合数据
-                .addAll(list)
-                //线的宽度
-                .width(10).setDottedLine(false).geodesic(true)
-                //颜色
-                .color(Color.argb(255, 0,238,238)));
-
-      /*  //起点图标
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(AMapUtil.convertToLatLng(latLonPoint))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_));
-        aMap.addMarker(markerOptions);
-
-        //终点坐标
-        MarkerOptions markerOptionsEnd = new MarkerOptions()
-                .position(AMapUtil.convertToLatLng(latLonPoint1))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start));
-        aMap.addMarker(markerOptionsEnd);*/
-	/*	MarkerOptions markerOptions = new MarkerOptions();
-		markerOptions.position(new LatLng(29.89, 107.7));
-		markerOptions.title("我的位置");
-		markerOptions.snippet("i am here");
-		markerOptions.visible(true);
-		BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-		markerOptions.icon(bitmapDescriptor);
-		markerOptions.draggable(true);
-		Marker marker = aMap.addMarker(markerOptions);
-		marker.showInfoWindow();*/
-    }
-    /***
-     *经纬度集合
-     */
-    private List<LatLng> showListLat() {
-        List<LatLng> points = new ArrayList<LatLng>();
-        for (int i = 0; i < coords.length; i += 2) {
-            points.add(new LatLng(coords[i], coords[i + 1]));
-        }
-        return points;
-    }
-
-    private double[] coords = {
-            29.853077,121.582652,
-            29.853598,121.561881,
-            29.87697,121.560336,
-            29.880989,121.582137,
-            29.873695,121.60411,
-            29.865359,121.607886,
-            29.854342,121.595527,
-            29.84258,121.600333
-    };
 
     /**
      * 方法必须重写
@@ -408,7 +368,9 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        mLocationClient.stopLocation();//停止定位
+        if (mLocationClient != null) {
+            mLocationClient.stopLocation();//停止定位
+        }
     }
 
     /**
@@ -427,7 +389,9 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-        mLocationClient.onDestroy();//销毁定位客户端。
+        if (mLocationClient != null) {
+            mLocationClient.onDestroy();//销毁定位客户端。
+        }
     }
 
     @OnClick({R.id.img_back})
@@ -446,18 +410,178 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity implements
     protected Bitmap getMyBitmap(String pm_val) {
         Bitmap bitmap = BitmapDescriptorFactory.fromResource(
                 R.mipmap.icon_place_label).getBitmap();
-        bitmap = Bitmap.createBitmap(bitmap, 0 ,0, bitmap.getWidth(),
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight());
         Canvas canvas = new Canvas(bitmap);
         TextPaint textPaint = new TextPaint();
         textPaint.setAntiAlias(true);
         textPaint.setTextSize(35);
-        Typeface font = Typeface.create(Typeface.DEFAULT_BOLD,Typeface.BOLD);
+        Typeface font = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD);
         textPaint.setFakeBoldText(true);
         textPaint.setTypeface(font);
         textPaint.setColor(getResources().getColor(R.color.color_text_black7));
-        canvas.drawText(pm_val, 20, 38 ,textPaint);// 设置bitmap上面的文字位置
+        if (pm_val.length() == 1){
+            canvas.drawText(pm_val, 20, 38, textPaint);// 设置bitmap上面的文字位置
+        } else if (pm_val.length() == 2){
+
+            canvas.drawText(pm_val, 10, 38, textPaint);// 设置bitmap上面的文字位置
+        }
+
         return bitmap;
     }
 
+    @Override
+    public void getTravelAssistantHomePageResult(BackResult<TripHomePageResponse> res) {
+
+    }
+
+    @Override
+    public void getCountyListResult(BackResult<List<CountryBean>> res) {
+
+    }
+
+    @Override
+    public void getCountyWebListResult(BackResult<List<TravelAssistantDetailCountryBean>> res) {
+
+    }
+
+    @Override
+    public void getCreateTripResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void getTripDetailsResult(BackResult<TripDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void getTravelAssistantMchListResult(BackResult<TripScenicSpotAddCountryBean> res) {
+
+    }
+
+    @Override
+    public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
+
+    }
+
+    @Override
+    public void insertNoteResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void delTripPlaceResult(BackResult res) {
+
+    }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    TripRouteMapResponse tripRouteMapResponse = res.getData();
+
+                    //每一天的行程点
+                    tripMapEntityList = tripRouteMapResponse.getData();
+
+                    List<TripMapResponse> tripAllMapResponseList = tripRouteMapResponse.getTripList();
+
+                    for (TripMapResponse tripMapResponse : tripAllMapResponseList) {
+                        double latitude = Double.parseDouble(tripMapResponse.getLatitude());
+                        double longitude = Double.parseDouble(tripMapResponse.getLongitude());
+                        latLngList.add(new LatLng(latitude, longitude));
+                        marketList.add(new LatLonPoint(latitude, longitude));
+                    }
+
+                    dailyMapRouteAdapter.setTravelAssistantDailyMapRouteList(tripMapEntityList);
+                    dailyMapRouteAdapter.notifyDataSetChanged();
+                    setUpMap(tripAllMapResponseList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(TravelAssistantRoutePlanMapActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(TravelAssistantRoutePlanMapActivity.this, Constants.getResultMsg(msg));
+    }
+
+    public void getTripRouteMap() {
+
+        showProgressDialog(TravelAssistantRoutePlanMapActivity.this);
+        mPresenter.getTripRouteMap(tripId);
+    }
+
+    /**
+     * 配置定位参数
+     */
+    private void setUpMap(List<TripMapResponse> allTripMapList) {
+        aMap.clear();
+        Marker marker = null;
+        if (allTripMapList != null) {
+            if (allTripMapList.size() > 0) {
+                for (int i = 0; i < allTripMapList.size(); i++) {
+
+                    TripMapResponse tripMapResponse = allTripMapList.get(i);
+
+                    double latitude = Double.parseDouble(tripMapResponse.getLatitude());
+                    double longitude = Double.parseDouble(tripMapResponse.getLongitude());
+                    int position = i + 1;
+                    String title = tripMapResponse.getTitle();
+
+                    aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+                            latitude,//1.设置纬度 latitude  2./设置经度 longitude     
+                            longitude), 13));
+
+                    marker = aMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(latitude,//设置纬度       
+                                    longitude))//设置经度                 
+                            .title(title)//设置标题   
+                            .setFlat(false) // 将Marker设置为贴地显示，可以双指下拉地图查看效果 
+                            .icon(BitmapDescriptorFactory.fromBitmap(getMyBitmap(String.valueOf(position))))
+                            .draggable(true));
+                }
+                marker.showInfoWindow();
+
+                //起点位置和  地图界面大小控制
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngList.get(0), 13));
+                aMap.setMapTextZIndex(2);
+                // 绘制一条带有纹理的直线
+                aMap.addPolyline((new PolylineOptions())
+                        //手动数据测试
+                        //.add(new LatLng(26.57, 106.71),new LatLng(26.14,105.55),new LatLng(26.58, 104.82), new LatLng(30.67, 104.06))
+                        //集合数据
+                        .addAll(latLngList)
+                        //线的宽度
+                        .width(10).setDottedLine(false).geodesic(true)
+                        //颜色
+                        .color(Color.argb(255, 0, 238, 238)));
+            }
+        }
+    }
 }

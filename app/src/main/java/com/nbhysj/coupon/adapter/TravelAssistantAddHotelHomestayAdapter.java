@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.view.StarBarView;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -61,16 +62,18 @@ public class TravelAssistantAddHotelHomestayAdapter extends RecyclerView.Adapter
             TripScenicSpotAddCountryBean.TravelAssistantAddScenicSpotEntity travelAssistantAddScenicSpotEntity = scenicSpotList.get(itemPosition);
 
             String photoUrl = travelAssistantAddScenicSpotEntity.getPhoto();
-            int level = travelAssistantAddScenicSpotEntity.getLevel();
-            String fineFoodTag = travelAssistantAddScenicSpotEntity.getTags();
             int mSelectedStatus = travelAssistantAddScenicSpotEntity.getSelectedStatus();
             String mchName = travelAssistantAddScenicSpotEntity.getMchName();
             String intro = travelAssistantAddScenicSpotEntity.getIntro();
-            int commentScore = travelAssistantAddScenicSpotEntity.getScore();
+            double commentScore = travelAssistantAddScenicSpotEntity.getScore();
+            double price = travelAssistantAddScenicSpotEntity.getPrice();
+            int commentNum = travelAssistantAddScenicSpotEntity.getCommentNum();
 
-            GlideUtil.loadImage(mContext, photoUrl, holder.mImgHotelReputation);
+            GlideUtil.loadImage(mContext, photoUrl, holder.mImgHotelHomestay);
             holder.mTvHotelHomestayName.setText(mchName);
-            holder.mTvHotelReputationScore.setText(String.valueOf(commentScore));
+            holder.mTvHotelReputationScore.setText(String.valueOf(commentScore) + "分");
+            holder.mTvCommentNum.setText(commentNum + "条点评");
+
             if (intro != null) {
 
                 holder.mTvHotelHomestayDes.setText(intro);
@@ -78,14 +81,10 @@ public class TravelAssistantAddHotelHomestayAdapter extends RecyclerView.Adapter
 
                 holder.mTvHotelHomestayDes.setText("");
             }
-            if (level == 0) {
-                holder.mTvHotelStar.setVisibility(View.GONE);
-            } else {
-                holder.mTvHotelStar.setText(level + "星级");
-                holder.mTvHotelStar.setVisibility(View.VISIBLE);
-            }
 
-            holder.mLlytAddHotelHomestay.setOnClickListener(new View.OnClickListener() {
+            holder.mTvPerCapitaPrice.setText(String.valueOf(price));
+
+            holder.mTvAddHotelHomestay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -114,9 +113,9 @@ public class TravelAssistantAddHotelHomestayAdapter extends RecyclerView.Adapter
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //酒店民宿照片
-        RoundedImageView mImgHotelReputation;
+        RoundedImageView mImgHotelHomestay;
 
-        LinearLayout mLlytAddHotelHomestay;
+        TextView mTvAddHotelHomestay;
 
         ImageView mImgAddMyTravel;
 
@@ -126,22 +125,26 @@ public class TravelAssistantAddHotelHomestayAdapter extends RecyclerView.Adapter
         //酒店民宿评分
         TextView mTvHotelReputationScore;
 
-        //评分
-        TextView mTvHotelStar;
-
         //酒店民宿描述
         TextView mTvHotelHomestayDes;
+
+        //人均均价
+        TextView mTvPerCapitaPrice;
+
+        //评论数
+        TextView mTvCommentNum;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mImgHotelReputation = itemView.findViewById(R.id.image_hotel_reputation);
-            mLlytAddHotelHomestay = itemView.findViewById(R.id.llyt_add_hotel_homestay);
+            mImgHotelHomestay = itemView.findViewById(R.id.image_hotel_homestay);
+            mTvAddHotelHomestay = itemView.findViewById(R.id.tv_add_hotel_homestay);
             mImgAddMyTravel = itemView.findViewById(R.id.img_add_my_travel);
             mTvHotelHomestayName = itemView.findViewById(R.id.tv_hotel_homestay_name);
             mTvHotelReputationScore = itemView.findViewById(R.id.tv_hotel_reputation_score);
-            mTvHotelStar = itemView.findViewById(R.id.tv_hotel_star);
-            mTvHotelHomestayDes = itemView.findViewById(R.id.tv_hotel_description);
+            mTvHotelHomestayDes = itemView.findViewById(R.id.tv_hotel_homestay_des);
+            mTvPerCapitaPrice = itemView.findViewById(R.id.tv_per_capita_price);
+            mTvCommentNum = itemView.findViewById(R.id.tv_comment_num);
         }
     }
 

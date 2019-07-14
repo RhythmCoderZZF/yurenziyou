@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -277,6 +278,21 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
 
     @Override
     public void delTripPlaceResult(BackResult res) {
+
+    }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
 
     }
 

@@ -3,6 +3,7 @@ package com.nbhysj.coupon.util;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,31 +14,6 @@ import java.util.regex.Pattern;
  */
 
 public class Tools {
-
-
-    //获取星期几
-    public static String getWeek() {
-        Calendar cal = Calendar.getInstance();
-        int i = cal.get(Calendar.DAY_OF_WEEK);
-        switch (i) {
-            case 1:
-                return "星期日";
-            case 2:
-                return "星期一";
-            case 3:
-                return "星期二";
-            case 4:
-                return "星期三";
-            case 5:
-                return "星期四";
-            case 6:
-                return "星期五";
-            case 7:
-                return "星期六";
-            default:
-                return "";
-        }
-    }
 
     //dip 转 px
     public static int dip2px(Context context, double d) {
@@ -97,4 +73,12 @@ public class Tools {
         return phone;
     }
 
+
+    /**
+     * 获取格式化的保留一位数的数
+     */
+    public static String getFormatDecimalPoint(double dataValue) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.0");//构造方法的字符格式这里如果小数不足2位,会以0补足. .00
+        return decimalFormat.format(dataValue);
+    }
 }

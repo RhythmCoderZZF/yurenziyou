@@ -1,56 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nbhysj.coupon.widget.RvSlideLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
-    android:id="@+id/llyt_visitors_item"
+    android:id="@+id/slidlayout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_48"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    android:elevation="@dimen/dp_5"
-    ratingbar:cardCornerRadius="@dimen/dp_5"
-    android:layout_marginBottom="@dimen/dp_8"
-    android:layout_marginRight="@dimen/dp_16"
-    android:layout_marginTop="@dimen/dp_3"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_23"
+                android:layout_marginRight="@dimen/dp_19"
+                android:background="@drawable/bg_blue_and_green_gradient"></View>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_48"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:layout_marginRight="@dimen/dp_16"
+                android:background="@color/white"
+                android:elevation="@dimen/dp_5"
+                android:orientation="vertical"
+                ratingbar:cardCornerRadius="@dimen/dp_5">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/img_trip_place_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_18"
+                        android:background="@mipmap/icon_hotel" />
+
+                    <TextView
+                        android:id="@+id/tv_trip_place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dp_9"
+                        android:layout_toRightOf="@+id/img_trip_place_type"
+                        android:text=""
+                        android:textColor="@color/txt_font_black2"
+                        android:textSize="@dimen/text_size_xnormal" />
+
+                    <TextView
+                        android:id="@+id/tv_travel_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/txt_font_black2"
+                        android:textSize="@dimen/text_size_small" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/img_visitors_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_18"
-            android:background="@mipmap/icon_hotel" />
+            android:id="@+id/img_delete"
+            android:layout_width="41dp"
+            android:layout_height="41dp"
+            android:layout_gravity="center_vertical"
+            android:background="#FFFFFFFF"
+            android:gravity="center"
+            android:src="@mipmap/icon_travel_assistant_place_delete" />
 
-
-        <TextView
-            android:id="@+id/tv_destination_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_9"
-            android:layout_toRightOf="@+id/img_visitors_check"
-            android:text=""
-            android:textColor="@color/txt_font_black2"
-            android:textSize="@dimen/text_size_xnormal" />
-
-
-        <TextView
-            android:id="@+id/tv_travel_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_15"
-            android:gravity="center_vertical"
-            android:text="2小时"
-            android:textColor="@color/txt_font_black2"
-            android:textSize="@dimen/text_size_small" />
-
-    </RelativeLayout>
-
-
-</android.support.v7.widget.CardView>
+    </LinearLayout>
+</com.nbhysj.coupon.widget.RvSlideLayout>

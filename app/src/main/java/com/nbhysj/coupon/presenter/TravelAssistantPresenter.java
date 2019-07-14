@@ -5,6 +5,8 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.DeleteTripRequest;
+import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 
 import java.util.HashMap;
@@ -63,6 +65,21 @@ public class TravelAssistantPresenter extends TravelAssistantContract.Presenter 
     @Override
     public void travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest) {
         mRxManager.add(mModel.travelAssistantPlusADay(addOneDayRequest).subscribe(res -> mView.travelAssistantPlusADay(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void delTrip(DeleteTripRequest deleteTripRequest) {
+        mRxManager.add(mModel.delTrip(deleteTripRequest).subscribe(res -> mView.delTripResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void updateTripInformation(EditTripSubmitRequest editTripSubmitRequest) {
+        mRxManager.add(mModel.updateTripInformation(editTripSubmitRequest).subscribe(res -> mView.updateTripInformationResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getTripRouteMap(int tripId) {
+        mRxManager.add(mModel.getTripRouteMap(tripId).subscribe(res -> mView.getTripRouteMapResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

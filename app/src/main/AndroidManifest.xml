@@ -114,6 +114,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -157,9 +158,6 @@
             android:name=".ui.TravelAssistantDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.AddAccommodationActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.TravelAssistantAddTrafficActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -167,7 +165,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TripPreviewActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+
+
+        </activity>
         <activity
             android:name=".ui.TravelPlanningActivity"
             android:screenOrientation="portrait" />

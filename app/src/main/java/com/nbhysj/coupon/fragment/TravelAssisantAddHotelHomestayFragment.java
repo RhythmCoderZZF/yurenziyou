@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -55,7 +56,7 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoData;
     private List<TripScenicSpotAddCountryBean.TravelAssistantAddScenicSpotEntity> travelAssistantAddScenicSpotList;
-    private TravelAssistantAddHotelHomestayAdapter addScenicSpotAdapter;
+    private TravelAssistantAddHotelHomestayAdapter addHotelHomestayAdapter;
     private boolean isOnLoadMore = false;
     private int mPage = 1;
     private int mPageSize = 10;
@@ -112,17 +113,17 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvAddScenicSpot.setLayoutManager(layoutManager);
-        addScenicSpotAdapter = new TravelAssistantAddHotelHomestayAdapter(getActivity(), new TravelAssistantAddHotelHomestayAdapter.HotelHomestayAddListener() {
+        addHotelHomestayAdapter = new TravelAssistantAddHotelHomestayAdapter(getActivity(), new TravelAssistantAddHotelHomestayAdapter.HotelHomestayAddListener() {
             @Override
             public void setHotelHomestayAddListener(TripScenicSpotAddCountryBean.TravelAssistantAddScenicSpotEntity travelAssistantAddScenicSpotEntity) {
 
                 int mchId = travelAssistantAddScenicSpotEntity.getMchId();
-                addFineFoodRequest(mchId);
+                addHotelHomestayRequest(mchId);
                 //
             }
         });
-        addScenicSpotAdapter.setScenicSpotList(travelAssistantAddScenicSpotList);
-        mRvAddScenicSpot.setAdapter(addScenicSpotAdapter);
+        addHotelHomestayAdapter.setScenicSpotList(travelAssistantAddScenicSpotList);
+        mRvAddScenicSpot.setAdapter(addHotelHomestayAdapter);
     }
 
     @Override
@@ -161,7 +162,7 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
                     } else {
 
                         travelAssistantAddScenicSpotList.clear();
-                        addScenicSpotAdapter.notifyDataSetChanged();
+                        addHotelHomestayAdapter.notifyDataSetChanged();
                         mSmartRefreshLayout.finishRefresh();
                         mSmartRefreshLayout.setNoMoreData(false);
                     }
@@ -175,8 +176,8 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
                     if (scenicSpotList != null) {
                         travelAssistantAddScenicSpotList.addAll(scenicSpotList);
                     }
-                    addScenicSpotAdapter.setScenicSpotList(travelAssistantAddScenicSpotList);
-                    addScenicSpotAdapter.notifyDataSetChanged();
+                    addHotelHomestayAdapter.setScenicSpotList(travelAssistantAddScenicSpotList);
+                    addHotelHomestayAdapter.notifyDataSetChanged();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -247,14 +248,24 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
     }
 
     @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
     public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
 
-                    if (addScenicSpotAdapter != null) {
-                        addScenicSpotAdapter.notifyDataSetChanged();
+                    if (addHotelHomestayAdapter != null) {
+                        addHotelHomestayAdapter.notifyDataSetChanged();
                     }
 
                     if (addHomestayListener != null)
@@ -282,6 +293,11 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
 
     }
 
+    @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
     //根据城市获取酒店民宿
     public void getTravelAssisantAddHotelHomestay() {
 
@@ -297,7 +313,7 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
      * 添加美食
      * @param mchId
      */
-    public void addFineFoodRequest(int mchId) {
+    public void addHotelHomestayRequest(int mchId) {
 
         if (validateInternet()) {
 
@@ -305,7 +321,7 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
             addMchRequest.setMchId(mchId);
             addMchRequest.setDayIndex(mDayIndex);
             addMchRequest.setTripId(mTripId);
-            String mchType = TravelAssistantDetailTypeEnum.getEnumByKey(1);
+            String mchType = TravelAssistantDetailTypeEnum.getEnumByKey(2);
             addMchRequest.setTripPlaceType(mchType);
             mPresenter.insertPlaceMch(addMchRequest);
         }

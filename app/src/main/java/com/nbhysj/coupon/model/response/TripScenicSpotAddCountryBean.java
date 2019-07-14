@@ -40,7 +40,7 @@ public class TripScenicSpotAddCountryBean {
 
         private String intro;
 
-        private int score;
+        private double score;
 
         private int commentNum;
 
@@ -94,7 +94,7 @@ public class TripScenicSpotAddCountryBean {
             this.intro = intro;
         }
 
-        public int getScore() {
+        public double getScore() {
             return score;
         }
 

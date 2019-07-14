@@ -7,6 +7,8 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.DeleteTripRequest;
+import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
@@ -14,6 +16,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 
 import java.util.HashMap;
@@ -76,5 +79,20 @@ public class TravelAssistantModel implements TravelAssistantContract.Model {
     @Override
     public Observable<BackResult> travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest) {
         return Api.getInstance().apiService.travelAssistantPlusADay(addOneDayRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> delTrip(DeleteTripRequest deleteTripRequest) {
+        return Api.getInstance().apiService.delTrip(deleteTripRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> updateTripInformation(EditTripSubmitRequest editTripSubmitRequest) {
+        return Api.getInstance().apiService.updateTripInformation(editTripSubmitRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<TripRouteMapResponse>> getTripRouteMap(int tripId) {
+        return Api.getInstance().apiService.getTripMap(tripId).compose(RxSchedulers.io_main());
     }
 }

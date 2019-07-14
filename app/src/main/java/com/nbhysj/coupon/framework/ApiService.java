@@ -50,6 +50,7 @@ import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 
@@ -353,7 +354,7 @@ public interface ApiService {
 
     //编辑行程提交
     @PUT("api/trip/createTrip")
-    Observable<BackResult> updateInformation(@Body EditTripSubmitRequest editTripSubmitRequest);
+    Observable<BackResult> updateTripInformation(@Body EditTripSubmitRequest editTripSubmitRequest);
 
     //行程删除接口
     @HTTP(method = "DELETE", path = "api/trip/delTrip", hasBody = true)
@@ -365,7 +366,7 @@ public interface ApiService {
 
     //行程地图预览接口
     @GET("api/trip/tripMap")
-    Observable<BackResult<TripDetailsResponse>> getTripMap(@Query("tripId") int tripId);
+    Observable<BackResult<TripRouteMapResponse>> getTripMap(@Query("tripId") int tripId);
 
     //智能规划接口
     @GET("api/trip/intelligentProject")

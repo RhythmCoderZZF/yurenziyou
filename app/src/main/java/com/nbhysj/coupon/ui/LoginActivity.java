@@ -347,7 +347,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     public void oprateTips(String platform, SHARE_MEDIA share_media) {
 
         OprateDialog oprateDialog = new OprateDialog(LoginActivity.this).builder().setTitle("鱼人自游想要打开" + platform);
-        oprateDialog.setNegativeButton("取消", new View.OnClickListener() {
+        oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

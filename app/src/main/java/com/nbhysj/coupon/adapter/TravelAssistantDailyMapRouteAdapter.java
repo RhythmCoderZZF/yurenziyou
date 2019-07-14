@@ -23,17 +23,20 @@ import java.util.List;
  */
 public class TravelAssistantDailyMapRouteAdapter extends RecyclerView.Adapter<TravelAssistantDailyMapRouteAdapter.ViewHolder> {
 
-    List<TripMapResponse> mTripMapResponseList;
+    List<List<TripMapResponse>> mTripMapResponseList;
     private Context mContext;
+    private TravelAssistantDailyMapRouteListener tripDailyMapRouteListener;
+
     private int mPosition;
-    public TravelAssistantDailyMapRouteAdapter(Context mContext) {
+    public TravelAssistantDailyMapRouteAdapter(Context mContext,TravelAssistantDailyMapRouteListener tripDailyMapRouteListener) {
 
         this.mContext = mContext;
+        this.tripDailyMapRouteListener = tripDailyMapRouteListener;
     }
 
-    public void setTravelAssistantDailyMapRouteList(List<TripMapResponse> tripMapResponseList) {
+    public void setTravelAssistantDailyMapRouteList(List<List<TripMapResponse>> tripMapResponseList) {
 
-        this.mTripMapResponseList = mTripMapResponseList;
+        this.mTripMapResponseList = tripMapResponseList;
     }
 
     @Override
@@ -48,26 +51,33 @@ public class TravelAssistantDailyMapRouteAdapter extends RecyclerView.Adapter<Tr
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            int position = itemPosition + 1;
-            holder.mTvDayNumber.setText("第" + position + "天");
 
-            holder.mTvDayNumber.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            if(itemPosition == 0){
 
-                    mPosition = itemPosition;
-                    notifyDataSetChanged();
-                }
-            });
+                holder.mTvDayNumber.setText("全部");
 
-            if(itemPosition == mPosition){
+            } else {
+
+                holder.mTvDayNumber.setText("第" + itemPosition + "天");
+
+                holder.mTvDayNumber.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPosition = itemPosition;
+                        List<TripMapResponse> tripMapResponseList = mTripMapResponseList.get(mPosition - 1);
+                        tripDailyMapRouteListener.setTravelAssistantDailyMapRouteListener(tripMapResponseList);
+                    }
+                });
+            }
+
+            if (itemPosition == mPosition) {
 
                 holder.mTvDayNumber.setTextColor(mContext.getResources().getColor(R.color.color_high_light_green));
             } else {
                 holder.mTvDayNumber.setTextColor(mContext.getResources().getColor(R.color.color_text_black7));
             }
 
-            if(itemPosition == 5-1){
+            if(itemPosition == mTripMapResponseList.size()){
 
                 holder.mViewLine.setVisibility(View.GONE);
 
@@ -82,7 +92,7 @@ public class TravelAssistantDailyMapRouteAdapter extends RecyclerView.Adapter<Tr
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mTripMapResponseList.size() + 1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,5 +109,8 @@ public class TravelAssistantDailyMapRouteAdapter extends RecyclerView.Adapter<Tr
         }
     }
 
+    public interface TravelAssistantDailyMapRouteListener{
 
+        void setTravelAssistantDailyMapRouteListener(List<TripMapResponse> tripMapResponseList);
+    }
 }

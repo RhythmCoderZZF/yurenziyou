@@ -91,11 +91,9 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
             String mStartDate = DateUtil.toMMDD(startDate);
             String mEndDate = DateUtil.toMMDD(endDate);
 
-
-
             holder.mTvMyTravelDate.setText(mStartDate + "-" + mEndDate);
 
-            holder.mTvMyTravelAssistant.setText(title);
+            holder.mTvMyTravelAssistantTitle.setText(title);
 
             holder.mLlytMyTravelItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,7 +129,7 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
         TextView mTvTripPath;
 
         //行程日期
-        TextView mTvMyTravelDate,mTvMyTravelAssistant;
+        TextView mTvMyTravelDate,mTvMyTravelAssistantTitle;
 
         TextView mTvTravelAssistantTag;
 
@@ -142,7 +140,7 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
             mLlytMyTravelItem = itemView.findViewById(R.id.llyt_my_travel_item);
             mTvTripPath = itemView.findViewById(R.id.tv_trip_path);
             mTvMyTravelDate = itemView.findViewById(R.id.tv_my_travel_date);
-            mTvMyTravelAssistant = itemView.findViewById(R.id.tv_travel_assistant_title);
+            mTvMyTravelAssistantTitle = itemView.findViewById(R.id.tv_travel_assistant_title);
             mTvTravelAssistantTag = itemView.findViewById(R.id.tv_travel_assistant_tag);
 
         }

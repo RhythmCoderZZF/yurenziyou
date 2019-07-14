@@ -3,6 +3,7 @@ package com.nbhysj.coupon.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.TravelPreviewBean;
+import com.nbhysj.coupon.model.response.TripDetailsResponse;
+import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
+import com.nbhysj.coupon.widget.RvSlideLayout;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -25,7 +29,7 @@ import java.util.List;
  */
 public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdapter.ViewHolder> {
 
-    List<TravelPreviewBean> travelPreviewList;
+    List<TripDetailsResponse.DetailsEntity> travelPreviewList;
     private Context mContext;
 
     public TravelPreviewAdapter(Context mContext) {
@@ -33,7 +37,7 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
         this.mContext = mContext;
     }
 
-    public void setTravelPreviewList(List<TravelPreviewBean> travelPreviewList) {
+    public void setTravelPreviewList(List<TripDetailsResponse.DetailsEntity> travelPreviewList) {
 
         this.travelPreviewList = travelPreviewList;
     }
@@ -50,7 +54,6 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-
             if (itemPosition == 0) {
 
                 holder.mViewTop.setVisibility(View.GONE);
@@ -59,13 +62,24 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
                 holder.mViewTop.setVisibility(View.VISIBLE);
             }
 
+            TripDetailsResponse.DetailsEntity travelPreviewBean = travelPreviewList.get(itemPosition);
+            String date = travelPreviewBean.getTripDate();
 
-            TravelPreviewBean travelPreviewBean = travelPreviewList.get(itemPosition);
-            String date = travelPreviewBean.getDate();
-            holder.mTvTravelDate.setText(date);
+            String tripDate = null;
+            String week = null;
+            if(!TextUtils.isEmpty(date))
+            {
+                tripDate = date.replace("-", ".");
+                 week = DateUtil.dateToWeek(date);
+
+                holder.mTvTravelDate.setText(tripDate + " "+ week);
+            } else {
+
+                holder.mTvTravelDate.setText("");
+            }
             int day = itemPosition + 1;
             holder.mTvTravelDays.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("DAY." + day, 0xFF1DEB96, 0xFF0DDDF6));
-            List<TravelPreviewBean.TravelPreviewEntity> travelPreviewList = travelPreviewBean.getTravelPreviewEntityList();
+            List<TripDetailsResponse.TripDetailsEntity> travelPreviewList = travelPreviewBean.getTripDetails();
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
             layoutManager.setOrientation(layoutManager.VERTICAL);
             holder.mRvDestinationClassify.setLayoutManager(layoutManager);
@@ -102,4 +116,5 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
             mViewTop = itemView.findViewById(R.id.view_gradient_top);
         }
     }
+
 }

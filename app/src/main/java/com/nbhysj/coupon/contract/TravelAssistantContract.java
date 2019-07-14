@@ -7,6 +7,8 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.request.DeleteTripRequest;
+import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
@@ -14,6 +16,7 @@ import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 
 import java.util.HashMap;
@@ -60,6 +63,16 @@ public interface TravelAssistantContract {
 
         //行程点删除
         Observable<BackResult> delTripPlace(DeleteTripPlaceRequest deleteTripPlaceRequest);
+
+        //行程删除
+        Observable<BackResult> delTrip(DeleteTripRequest deleteTripRequest);
+
+        //行程编辑保存
+        Observable<BackResult> updateTripInformation(EditTripSubmitRequest editTripSubmitRequest);
+
+        //行程地图路线
+        Observable<BackResult<TripRouteMapResponse>> getTripRouteMap(int tripId);
+
     }
 
     interface View extends BaseView {
@@ -84,7 +97,17 @@ public interface TravelAssistantContract {
         //添加备注
         void insertNoteResult(BackResult<CreateTripResponse> res);
 
+        //行程详情行程点删除
         void delTripPlaceResult(BackResult res);
+
+        //行程删除
+        void delTripResult(BackResult res);
+
+        //行程编辑保存
+        void updateTripInformationResult(BackResult res);
+
+        //行程地图路线
+        void getTripRouteMapResult(BackResult<TripRouteMapResponse> res);
 
         void showMsg(String msg);
     }
@@ -113,6 +136,16 @@ public interface TravelAssistantContract {
         //添加备注
         public abstract void insertRemarks(AddRemarksRequest addRemarksRequest);
 
+        //行程点删除
         public abstract void delTripPlace(DeleteTripPlaceRequest deleteTripPlaceRequest);
+
+        //行程删除
+        public abstract void delTrip(DeleteTripRequest deleteTripRequest);
+
+        //行程编辑保存
+        public abstract void updateTripInformation(EditTripSubmitRequest editTripSubmitRequest);
+
+        //行程地图路线
+        public abstract void getTripRouteMap(int tripId);
     }
 }

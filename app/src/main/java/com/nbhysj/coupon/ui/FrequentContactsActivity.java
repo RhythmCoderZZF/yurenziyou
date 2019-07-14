@@ -231,7 +231,7 @@ public class FrequentContactsActivity extends BaseActivity<FrequentlyUsedInfoPre
     public void oprateTips(int travellerId) {
 
         OprateDialog oprateDialog = new OprateDialog(FrequentContactsActivity.this).builder().setTitle("确认要删除联系人吗？");
-        oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), new View.OnClickListener() {
+        oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

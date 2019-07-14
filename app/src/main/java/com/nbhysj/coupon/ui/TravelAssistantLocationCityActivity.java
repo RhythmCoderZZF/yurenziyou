@@ -37,6 +37,7 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.TravelAssistantDailyMapRouteAdapter;
+import com.nbhysj.coupon.model.response.TripMapResponse;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 
@@ -122,7 +123,12 @@ public class TravelAssistantLocationCityActivity extends BaseActivity implements
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TravelAssistantLocationCityActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvDayNumber.setLayoutManager(linearLayoutManager);
-        TravelAssistantDailyMapRouteAdapter dailyMapRouteAdapter = new TravelAssistantDailyMapRouteAdapter(TravelAssistantLocationCityActivity.this);
+        TravelAssistantDailyMapRouteAdapter dailyMapRouteAdapter = new TravelAssistantDailyMapRouteAdapter(TravelAssistantLocationCityActivity.this, new TravelAssistantDailyMapRouteAdapter.TravelAssistantDailyMapRouteListener() {
+            @Override
+            public void setTravelAssistantDailyMapRouteListener(List<TripMapResponse> tripMapResponseList) {
+
+            }
+        });
         mRvDayNumber.setAdapter(dailyMapRouteAdapter);
     }
 
