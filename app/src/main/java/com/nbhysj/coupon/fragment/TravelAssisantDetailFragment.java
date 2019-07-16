@@ -29,6 +29,7 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.LoginActivity;
 import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
@@ -271,6 +272,11 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
 
     @Override
     public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
+    @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res) {
 
     }
 

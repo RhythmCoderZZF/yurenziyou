@@ -24,6 +24,7 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -200,6 +201,11 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
 
     @Override
     public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
+    @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res) {
 
     }
 

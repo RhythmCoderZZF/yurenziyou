@@ -144,6 +144,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                 login();
                 break;
             default:
+                dismissProgressDialog();
                 showToast(LoginActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }

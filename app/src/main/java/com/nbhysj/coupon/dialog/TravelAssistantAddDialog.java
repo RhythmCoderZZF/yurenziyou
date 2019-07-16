@@ -75,12 +75,13 @@ public class TravelAssistantAddDialog extends DialogFragment {
 
         view = LayoutInflater.from(context).inflate(R.layout.layout_travel_assistant_add_dialog, null);
         RelativeLayout mRlytview = view.findViewById(R.id.rlyt_travel_assistant_add);
-        LinearLayout mLlytScenicSpotAdd = view.findViewById(R.id.llyt_scenic_spot_add); //添加景点
-        LinearLayout mLlytOneDayAdd = view.findViewById(R.id.llyt_add_one_day);         //增加一天
-        LinearLayout mLlytFineFoodAdd = view.findViewById(R.id.llyt_fine_food_add);     //添加美食
-        LinearLayout mLlytHotelHomestay = view.findViewById(R.id.llyt_hotel_homestay_add); //添加酒店民宿
-        LinearLayout mLlytTrafficAdd = view.findViewById(R.id.llyt_traffic_add);        //添加交通
-        LinearLayout mLlytRemarks = view.findViewById(R.id.llyt_remarks_add);           //添加备注
+        LinearLayout mLlytScenicSpotAdd = view.findViewById(R.id.llyt_scenic_spot_add);    //添加景点
+        LinearLayout mLlytOneDayAdd = view.findViewById(R.id.llyt_add_one_day);            //增加一天
+        LinearLayout mLlytFineFoodAdd = view.findViewById(R.id.llyt_fine_food_add);        //添加美食
+        LinearLayout mLlytHotelHomestayAdd = view.findViewById(R.id.llyt_hotel_homestay_add); //添加酒店民宿
+        LinearLayout mLlytInteractionAdd = view.findViewById(R.id.llyt_add_interaction);   //添加互动
+        LinearLayout mLlytTrafficAdd = view.findViewById(R.id.llyt_traffic_add);           //添加交通
+        LinearLayout mLlytRemarks = view.findViewById(R.id.llyt_remarks_add);              //添加备注
 
         mRlytview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,11 +110,20 @@ public class TravelAssistantAddDialog extends DialogFragment {
             }
         });
 
-        mLlytHotelHomestay.setOnClickListener(new View.OnClickListener() {
+        mLlytHotelHomestayAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 travelAssistantAddListener.travelAssistantAddListener(2);
+                dismiss();
+            }
+        });
+
+        mLlytInteractionAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                travelAssistantAddListener.travelAssistantAddListener(3);
                 dismiss();
             }
         });

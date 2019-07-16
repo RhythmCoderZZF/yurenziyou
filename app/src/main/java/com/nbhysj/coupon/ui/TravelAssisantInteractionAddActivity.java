@@ -11,7 +11,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.TravelAssistantCountryPagerAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
-import com.nbhysj.coupon.fragment.TravelAssisantAddFineFoodFragment;
+import com.nbhysj.coupon.fragment.TravelAssisantAddInteractionFragment;
 import com.nbhysj.coupon.fragment.TravelAssisantAddScenicSpotFragment;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -32,10 +32,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * @auther：hysj created on 2019/07/09
- * description：添加美食
+ * @auther：hysj created on 2019/03/08
+ * description：添加互动
  */
-public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View, TravelAssisantAddFineFoodFragment.AddFineFoodListener {
+public class TravelAssisantInteractionAddActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View, TravelAssisantAddScenicSpotFragment.AddScenicSpotListener {
 
     @BindView(R.id.tab_layout)
     SlidingTabLayout tabLayout;
@@ -97,16 +97,6 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     }
 
     @Override
-    public void updateTripInformationResult(BackResult res) {
-
-    }
-
-    @Override
-    public void getTripRouteMapResult(BackResult res) {
-
-    }
-
-    @Override
     public void getCountyListResult(BackResult<List<CountryBean>> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -119,7 +109,7 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
                         if (countyList.size() > 0) {
                             for (int i = 0; i < countyList.size(); i++) {
                                 String countyId = countyList.get(i).getCountyId();
-                                fragments.add(new TravelAssisantAddFineFoodFragment().newInstance(mTripId, countyId, mDayIndex));
+                                fragments.add(new TravelAssisantAddInteractionFragment().newInstance(mTripId, countyId, mDayIndex));
                             }
                             travelAssistantCountryPagerAdapter.setTravelAssistantCountryList(fragments, countyList);
                             travelAssistantCountryPagerAdapter.notifyDataSetChanged();
@@ -176,6 +166,7 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     public void insertNoteResult(BackResult<CreateTripResponse> res) {
 
     }
+
     @Override
     public void travelAssistantPlusADay(BackResult res) {
 
@@ -183,6 +174,16 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
 
     @Override
     public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult res) {
 
     }
 
@@ -195,7 +196,7 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     public void showMsg(String msg) {
 
         dismissProgressDialog();
-        showToast(TravelAssisantFineFoodAddActivity.this, Constants.getResultMsg(msg));
+        showToast(TravelAssisantInteractionAddActivity.this, Constants.getResultMsg(msg));
     }
 
     @OnClick({R.id.rlyt_back, R.id.img_add_scenic_spot})
@@ -203,13 +204,13 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
         switch (v.getId()) {
             case R.id.rlyt_back:
 
-                TravelAssisantFineFoodAddActivity.this.finish();
+                TravelAssisantInteractionAddActivity.this.finish();
 
                 break;
             case R.id.img_add_scenic_spot:
 
                 Intent intent = new Intent();
-                intent.setClass(TravelAssisantFineFoodAddActivity.this, TravelAssistanSelectCountyActivity.class);
+                intent.setClass(TravelAssisantInteractionAddActivity.this, TravelAssistanSelectCountyActivity.class);
                 intent.putExtra("tripId", mTripId);
                 startActivityForResult(intent, ADD_COUNTY_CODE);
 
@@ -220,10 +221,10 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     }
 
     @Override
-    public void setAddFineFoodListener() {
+    public void setAddScenicSpotListener() {
 
         setResult(RESULT_OK);
-        TravelAssisantFineFoodAddActivity.this.finish();
+        TravelAssisantInteractionAddActivity.this.finish();
 
     }
 

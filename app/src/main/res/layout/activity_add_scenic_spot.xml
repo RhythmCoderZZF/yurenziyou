@@ -120,7 +120,6 @@
             android:layout_marginRight="@dimen/dp_13"
             android:src="@mipmap/icon_travel_assistant_add_scenic_spot" />
 
-
     </RelativeLayout>
 
     <View

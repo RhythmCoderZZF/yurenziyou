@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FmPagerAdapter;
@@ -35,6 +36,7 @@ import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
@@ -76,6 +78,18 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     @BindView(R.id.rlyt_scenic_spots_detail_header)
     RelativeLayout mRlytScenicSpotDetailHeader;
 
+    //温度
+    @BindView(R.id.tv_temperature)
+    TextView mTvTemperature;
+
+    //天气状况
+    @BindView(R.id.tv_weather)
+    TextView mTvWeather;
+
+    //天气
+    @BindView(R.id.img_weather)
+    ImageView mImgWeather;
+
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private TravelAssisantDetailFragment travelAssisantDetailFragment;
     TravelAssistantDetailFmPagerAdapter fmPagerAdapter;
@@ -86,6 +100,7 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     List<TripDetailsResponse.DetailsEntity> detailsList;
     private int height;
     private TravelAssistantAddDialog travelAssistantAddDialog;
+    private boolean isFirstEntry = true;
 
     @Override
     public int getLayoutId() {
@@ -184,9 +199,16 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
             case Constants.SUCCESS_CODE:
                 // try {
 
+
                 fragments.clear();
                 TripDetailsResponse tripDetailsResponse = res.getData();
                 countyPhotoUrl = tripDetailsResponse.getCountyPhoto();
+                String countyId = tripDetailsResponse.getCountyId();
+                if(isFirstEntry){
+
+                    getWeather("330200");
+                    isFirstEntry = false;
+                }
 
                 GlideUtil.loadImage(mContext, countyPhotoUrl, mImgTravelDetailHeader);
 
@@ -301,6 +323,33 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     }
 
     @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res)
+    {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    WeatherResponse weatherResponse = res.getData();
+                    String weather = weatherResponse.getWeather();
+                    String temperature = weatherResponse.getTemperature();
+                    String photoUrl = weatherResponse.getPhoto();
+                    mTvTemperature.setText(temperature + "°");
+                    mTvWeather.setText(weather);
+                    GlideUtil.loadImage(TravelAssistantDetailsActivity.this,photoUrl,mImgWeather);
+
+                    System.out.print(weatherResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(TravelAssistantDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -331,32 +380,32 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                         @Override
                         public void travelAssistantAddListener(int position) {
                             Intent intent = new Intent();
+                            intent.putExtra("tripId", mTripId);
+                            intent.putExtra("dayIndex", mDayIndex);
                             if (position == 0) {
 
                                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantScenicSpotAddActivity.class);
-                                intent.putExtra("tripId", mTripId);
-                                intent.putExtra("dayIndex", mDayIndex);
                                 startActivityForResult(intent, 0);
 
                             } if (position == 1) {
 
                                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantFineFoodAddActivity.class);
-                                intent.putExtra("tripId", mTripId);
-                                intent.putExtra("dayIndex", mDayIndex);
                                 startActivityForResult(intent, 0);
 
                             }if (position == 2) {
 
                                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantHotelHomestayAddActivity.class);
-                                intent.putExtra("tripId", mTripId);
-                                intent.putExtra("dayIndex", mDayIndex);
+                                startActivityForResult(intent, 0);
+
+                            } if (position == 3) {
+
+                                intent.setClass(TravelAssistantDetailsActivity.this, TravelAssisantInteractionAddActivity.class);
                                 startActivityForResult(intent, 0);
 
                             } else if (position == 4) {
 
                                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantAddTrafficActivity.class);
-                                intent.putExtra("tripId", mTripId);
-                                intent.putExtra("dayIndex", mDayIndex);
+
                                 startActivityForResult(intent, 0);
                             } else if (position == 5) {
 
@@ -365,8 +414,6 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                             } else if (position == 6) {
 
                                 intent.setClass(TravelAssistantDetailsActivity.this, TravelAssistantRemarksActivity.class);
-                                intent.putExtra("tripId", mTripId);
-                                intent.putExtra("dayIndex", mDayIndex);
                                 intent.putExtra("isAddRemarks", true); //编辑 false : 添加 true
                                 startActivityForResult(intent, 0);
                             }
@@ -407,6 +454,17 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
             showProgressDialog(TravelAssistantDetailsActivity.this);
             mPresenter.getTripDetails(mTripId);
+
+        }
+    }
+
+    //获取行程助手详情
+    public void getWeather(String cityCode) {
+
+        if (validateInternet()) {
+
+            showProgressDialog(TravelAssistantDetailsActivity.this);
+            mPresenter.getWeather(cityCode);
 
         }
     }

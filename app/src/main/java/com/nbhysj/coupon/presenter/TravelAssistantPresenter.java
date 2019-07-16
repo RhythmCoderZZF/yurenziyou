@@ -83,6 +83,11 @@ public class TravelAssistantPresenter extends TravelAssistantContract.Presenter 
     }
 
     @Override
+    public void getWeather(String cityCode) {
+        mRxManager.add(mModel.getWeather(cityCode).subscribe(res -> mView.getWeatherResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

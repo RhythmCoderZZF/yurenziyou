@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,13 +24,16 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.CalendarActivity;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
+import com.nbhysj.coupon.ui.LoginActivity;
 import com.nbhysj.coupon.ui.MyBusinessCardActivity;
 import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.TravelAssistantEditActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
 
@@ -48,9 +52,10 @@ import static android.app.Activity.RESULT_OK;
 public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private boolean isFristCreate = true;
+    private boolean isLoginFristCreate = true;
     public static final int TRIP_EDIT_RESULT_CODE = 10000;
-
+    private int userId;
     //行程助手推荐
     @BindView(R.id.rv_recommended_for_you_travel)
     RecyclerView mRvTravelAssisantRecommend;
@@ -267,6 +272,11 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     }
 
     @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -325,4 +335,42 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             myTravelListAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+        if (!TextUtils.isEmpty(token)) {
+            if (isLoginFristCreate) {
+                userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
+                if (validateInternet()) {
+                    getTravelAssistantList();
+                    isLoginFristCreate = false;
+                }
+            } else {
+                isLoginFristCreate = false;
+            }
+        } else {
+            if (isFristCreate) {
+                toActivity(LoginActivity.class);
+                isFristCreate = false;
+
+            }
+        }
+       // isLoginFristCreate = false;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+
+            String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+            if (TextUtils.isEmpty(token)) {
+
+                toActivity(LoginActivity.class);
+            }
+        }
+    }
+
 }

@@ -1,43 +1,26 @@
 package com.nbhysj.coupon.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.FineFoodListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.model.DestinationModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
-import com.nbhysj.coupon.ui.TravelAssistantLocationCityActivity;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * @auther：hysj created on 2019/07/07
- * description：行程助手添加交通(火车)
+ * description：行程助手添加交通(客运)
  */
-public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<DestinationPresenter, DestinationModel> implements DestinationContract.View {
+public class TripTrafficAddPassengerTransportFragment extends BaseFragment<DestinationPresenter, DestinationModel> implements DestinationContract.View {
     private static final String ARG_PARAM_TRIPID = "tripId";
 
     //列车时间
@@ -57,13 +40,12 @@ public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<Destina
 
     //行程id
     private int tripId;
-
-    public TravelAssistantTrafficAddTrainFragment() {
+    public TripTrafficAddPassengerTransportFragment() {
         // Required empty public constructor
     }
 
-    public static TravelAssistantTrafficAddTrainFragment newInstance(int tripId) {
-        TravelAssistantTrafficAddTrainFragment fragment = new TravelAssistantTrafficAddTrainFragment();
+    public static TripTrafficAddPassengerTransportFragment newInstance(int tripId) {
+        TripTrafficAddPassengerTransportFragment fragment = new TripTrafficAddPassengerTransportFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM_TRIPID, tripId);
         fragment.setArguments(args);
@@ -88,17 +70,19 @@ public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<Destina
         mPresenter.setVM(this, mModel);
     }
 
+
     @Override
     protected void initView(View v) {
+
 
         trainTime = getActivity().getIntent().getStringExtra("trainTime");       //出行时间
         tripId = getActivity().getIntent().getIntExtra(ARG_PARAM_TRIPID,0); //行程id
         mTvTrainTime.setText(trainTime);
+
     }
 
     @Override
     public void initData() {
-
 
     }
 
@@ -124,28 +108,13 @@ public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<Destina
 
     }
 
-    @OnClick({R.id.tv_departure_the_city,R.id.tv_reaching_the_city})
+    @OnClick({R.id.tv_join_the_itinerary})
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.tv_departure_the_city:
-
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), TravelAssistantLocationCityActivity.class);
-                intent.putExtra("tripId",tripId);
-                startActivityForResult(intent,0);
-                break;
-            case R.id.tv_reaching_the_city:
+            case R.id.tv_join_the_itinerary:
 
                 break;
                 default:break;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0 && resultCode == RESULT_OK)
-        {
 
         }
     }

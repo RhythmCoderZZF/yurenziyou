@@ -6,9 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
-
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.TravelAssistantAddScenicSpotAdapter;
 import com.nbhysj.coupon.adapter.TravelAssistantAddFineFoodAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.TravelAssistantDetailTypeEnum;
@@ -24,6 +22,7 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -252,6 +251,11 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
     }
 
     @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res) {
+
+    }
+
+    @Override
     public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -295,6 +299,8 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
     public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
 
     }
+
+
 
     //根据城市获取美食
     public void getTravelAssisantAddFineFood() {

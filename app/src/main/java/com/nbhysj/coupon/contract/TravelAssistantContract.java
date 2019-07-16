@@ -18,6 +18,7 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +74,9 @@ public interface TravelAssistantContract {
         //行程地图路线
         Observable<BackResult<TripRouteMapResponse>> getTripRouteMap(int tripId);
 
+        //获取天气接口
+        Observable<BackResult<WeatherResponse>> getWeather(String cityCode);
+
     }
 
     interface View extends BaseView {
@@ -108,6 +112,9 @@ public interface TravelAssistantContract {
 
         //行程地图路线
         void getTripRouteMapResult(BackResult<TripRouteMapResponse> res);
+
+        //获取天气接口
+        void getWeatherResult(BackResult<WeatherResponse> res);
 
         void showMsg(String msg);
     }
@@ -147,5 +154,8 @@ public interface TravelAssistantContract {
 
         //行程地图路线
         public abstract void getTripRouteMap(int tripId);
+
+        //获取天气接口
+        public abstract void getWeather(String cityCode);
     }
 }

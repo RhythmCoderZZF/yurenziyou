@@ -145,15 +145,25 @@
         <activity
             android:name=".ui.ShoppingMallScreeningActivity"
             android:screenOrientation="portrait" />
+
+        <!-- 添加景点 -->
         <activity
             android:name=".ui.TravelAssisantScenicSpotAddActivity"
             android:screenOrientation="portrait" />
+
+        <!-- 添加美食 -->
         <activity
             android:name=".ui.TravelAssisantFineFoodAddActivity"
             android:screenOrientation="portrait" />
 
+        <!-- 添加民宿 -->
         <activity android:name=".ui.TravelAssisantHotelHomestayAddActivity"
             android:screenOrientation="portrait" />
+
+        <!-- 添加互动 -->
+        <activity android:name=".ui.TravelAssisantInteractionAddActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.TravelAssistantDetailsActivity"
             android:screenOrientation="portrait" />

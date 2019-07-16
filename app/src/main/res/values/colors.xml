@@ -126,6 +126,9 @@
     <color name="color_text_gray30">#FFC7C7CD</color>
     <color name="color_text_gray31">#FF595959</color>
     <color name="color_text_gray32">#FFF3F3F8</color>
+    <color name="color_text_gray33">#FF7B7C7D</color>
+    <color name="color_text_gray34">#FF7F7F7F</color>
+    <color name="color_text_gray35">#FFA8A9AB</color>
 
     <color name="color_text_orange">#FEB143</color>
     <color name="color_text_orange2">#FF7221</color>

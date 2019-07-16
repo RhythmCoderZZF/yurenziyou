@@ -13,6 +13,7 @@ import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
 import com.nbhysj.coupon.fragment.TravelAssistantTrafficAddDriveFragment;
 import com.nbhysj.coupon.fragment.TravelAssistantTrafficAddTrainFragment;
+import com.nbhysj.coupon.fragment.TripTrafficAddPassengerTransportFragment;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
@@ -43,9 +44,10 @@ public class TravelAssistantAddTrafficActivity extends BaseActivity {
     @BindView(R.id.view_pager_traffic_classify)
     ViewPager mViewPagerTrafficClassify;
 
-    private String[] mTitles = new String[]{"火车","客运","驾车"};
+    private String[] mTitles = new String[]{"火车","客运"};
     private List<String> mDataList = Arrays.asList(mTitles);
-
+    //行程id
+    private int tripId;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -75,6 +77,8 @@ public class TravelAssistantAddTrafficActivity extends BaseActivity {
     @Override
     public void initData() {
 
+        tripId = getIntent().getIntExtra("tripId",0);
+
         mViewPagerTrafficClassify.setAdapter(new ComFragmentAdapter(getSupportFragmentManager(), getFragments()));
         mViewPagerTrafficClassify.setOffscreenPageLimit(10);
         initMagicIndicator();
@@ -88,9 +92,8 @@ public class TravelAssistantAddTrafficActivity extends BaseActivity {
 
     private List<Fragment> getFragments() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new TravelAssistantTrafficAddTrainFragment());
-        fragments.add(new TravelAssistantTrafficAddTrainFragment());
-        fragments.add(new TravelAssistantTrafficAddDriveFragment());
+        fragments.add(new TravelAssistantTrafficAddTrainFragment().newInstance(tripId));
+        fragments.add(new TripTrafficAddPassengerTransportFragment().newInstance(tripId));
         return fragments;
     }
 

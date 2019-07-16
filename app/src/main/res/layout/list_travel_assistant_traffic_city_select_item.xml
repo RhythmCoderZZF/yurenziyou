@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_city_name"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_30"
+    android:gravity="center"
+    android:text="余姚"
+    android:textColor="@color/color_text_black7"
+    android:textSize="@dimen/text_size_xsmall"
+    android:layout_marginLeft="@dimen/dp_12"
+    android:layout_marginRight="@dimen/dp_12"
+    android:layout_marginBottom="@dimen/dp_12"
+    android:background="@drawable/bg_stroke_radius_fifteen_light_gray_shape">
+
+</TextView>
+

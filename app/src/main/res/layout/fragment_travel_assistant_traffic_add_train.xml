@@ -38,7 +38,7 @@
             android:layout_toRightOf="@id/tv_live_people"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="2019-04-30"
+            android:hint=""
             android:maxLength="20"
             android:textColor="@color/color_text_gray24"
             android:textSize="@dimen/text_size_normal" />

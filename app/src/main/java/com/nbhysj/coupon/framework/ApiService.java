@@ -53,6 +53,7 @@ import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -371,5 +372,9 @@ public interface ApiService {
     //智能规划接口
     @GET("api/trip/intelligentProject")
     Observable<BackResult<TripDetailsResponse>> intelligentProject(@Body TripintelligentRequest tripintelligentRequest);
+
+    //获取天气接口
+    @GET("api/weather")
+    Observable<BackResult<WeatherResponse>> getWeather(@Query("cityCode") String cityCode);
 }
 

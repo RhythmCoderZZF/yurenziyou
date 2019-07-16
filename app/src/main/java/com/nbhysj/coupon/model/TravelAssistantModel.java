@@ -18,6 +18,7 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -94,5 +95,10 @@ public class TravelAssistantModel implements TravelAssistantContract.Model {
     @Override
     public Observable<BackResult<TripRouteMapResponse>> getTripRouteMap(int tripId) {
         return Api.getInstance().apiService.getTripMap(tripId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<WeatherResponse>> getWeather(String cityCode) {
+        return Api.getInstance().apiService.getWeather(cityCode).compose(RxSchedulers.io_main());
     }
 }
