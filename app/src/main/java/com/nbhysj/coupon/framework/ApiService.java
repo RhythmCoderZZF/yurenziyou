@@ -233,12 +233,19 @@ public interface ApiService {
     @GET("api/index")
     Observable<BackResult<HomePageResponse>> getHomePageIndex();
 
+    //获取 附近&推荐
     @POST("api/index/queryByTopic")
     Observable<BackResult<HomePageResponse>> queryByTopic(@Body QueryByTopicRequest queryByTopicRequest);
 
     //获取首页关注
     @GET("api/index/attention")
     Observable<BackResult<HomePageResponse>> getHomeAttention(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //贴子详情
+    @GET("api/index/postInfo")
+    Observable<BackResult<HomePageResponse>> getPostInfo(@Query("id") int id,@Query("postKey") String postKey,@Query("longitude") String longitude,@Query("latitude") String latitude);
+
+    /***********************************   商城   ****************************************/
 
     //获取商城首页
     @GET("api/store/index")

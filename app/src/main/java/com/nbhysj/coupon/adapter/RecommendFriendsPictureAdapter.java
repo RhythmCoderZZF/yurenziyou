@@ -1,7 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,21 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
-import com.nbhysj.coupon.model.response.RecommendFriendsBean;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.util.Tools;
-import com.nbhysj.coupon.view.GlideImageView;
-import com.nbhysj.coupon.widget.glide.GlideApp;
-import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
-import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
-import com.nbhysj.coupon.widget.shadowlib.RadiusView;
 
 import java.util.List;
 
@@ -41,11 +29,12 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
      */
     List<HomePageSubTopicTagBean> mRecommendFriendsList;
     private Context mContext;
-    RequestOptions scenicSpotOptions;
+    private RecommendPostsDetailListener recommendPostsDetailListener;
 
-    public RecommendFriendsPictureAdapter(Context mContext) {
+    public RecommendFriendsPictureAdapter(Context mContext,RecommendPostsDetailListener recommendPostsDetailListener) {
 
         this.mContext = mContext;
+        this.recommendPostsDetailListener = recommendPostsDetailListener;
     }
 
     public void setRecommendFriendsPictureList(List<HomePageSubTopicTagBean> recommendFriendsPictureList) {
@@ -83,13 +72,29 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
 
             GlideUtil.loadImageWithProportion(mContext, imageUrl, photoWidth, photoHeight, holder.mImgRecommendFriends);
 
-
             if (recommendFriends.isLove()) {
 
-                holder.mImgIsLove.setBackgroundResource(R.mipmap.icon_has_love_red);
+                holder.mImgIsLove.setBackgroundResource(R.mipmap.icon_love_red_homepage_remmend);
             } else {
-                holder.mImgIsLove.setBackgroundResource(R.mipmap.icon_red_love_heart);
+                holder.mImgIsLove.setBackgroundResource(R.mipmap.icon_love_white_homepage_remmend);
             }
+
+            holder.mCardViewRecommendFriendsItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    recommendPostsDetailListener.lookRecommendPostDetailListener(itemPosition);
+
+                }
+            });
+
+            holder.mImgIsLove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    recommendPostsDetailListener.setPostIsCollectionListener(itemPosition);
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,6 +126,8 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
 
         TextView mTvDes;
 
+        CardView mCardViewRecommendFriendsItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -130,6 +137,16 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
             mImgRecommendFriends = itemView.findViewById(R.id.image_recommend_friends);
             mTvDes = itemView.findViewById(R.id.tv_description);
             mImgIsLove = itemView.findViewById(R.id.img_is_love);
+            mCardViewRecommendFriendsItem = itemView.findViewById(R.id.card_view_recommend_friends_item);
         }
+    }
+
+    public interface RecommendPostsDetailListener{
+
+        //查看推荐
+        void lookRecommendPostDetailListener(int mPosition);
+
+        //设置帖子是否收藏
+        void setPostIsCollectionListener(int mPosition);
     }
 }

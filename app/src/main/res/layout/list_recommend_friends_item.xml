@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view_recommend_friends_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,10 +28,11 @@
                 android:id="@+id/img_is_love"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_13"
-                android:layout_marginRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_1"
+                android:layout_marginRight="@dimen/dp_6"
                 android:layout_alignParentRight="true"
-                android:background="@mipmap/icon_red_love_heart" />
+                android:padding="@dimen/dp_10"
+                android:src="@mipmap/icon_love_white_homepage_remmend" />
 
             <ImageView
                 android:id="@+id/img_video_play"

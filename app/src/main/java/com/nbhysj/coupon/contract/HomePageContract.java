@@ -12,6 +12,7 @@ import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 
 import io.reactivex.Observable;
+import retrofit2.http.Query;
 
 /**
  * @auther：hysj created on 2019/04/03
@@ -33,6 +34,9 @@ public interface HomePageContract {
         //首页关注
         Observable<BackResult<HomePageResponse>> getHomeAttention(int page, int pageSize);
 
+        //帖子详情
+        Observable<BackResult<HomePageResponse>> getPostInfo(int id,String postKey,String longitude,String latitude);
+
     }
 
     interface View extends BaseView {
@@ -42,6 +46,8 @@ public interface HomePageContract {
         void queryByTopicResult(BackResult<HomePageResponse> res);
 
         void getHomeAttentionResult(BackResult<HomePageResponse> res);
+
+        void getPostInfoResult(BackResult<HomePageResponse> res);
 
         void showMsg(String msg);
     }
@@ -54,6 +60,9 @@ public interface HomePageContract {
 
         //首页关注
         public abstract void getHomeAttention(int page, int pageSize);
+
+        //帖子详情
+        public abstract void getPostInfo(int id,String postKey,String longitude,String latitude);
 
     }
 }

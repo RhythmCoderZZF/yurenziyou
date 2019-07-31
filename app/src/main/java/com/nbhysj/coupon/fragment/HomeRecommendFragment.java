@@ -28,6 +28,7 @@ import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagReponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
+import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
 import com.nbhysj.coupon.view.MyGridLayoutManager;
 import com.nbhysj.coupon.widget.glide.CacheImageLoader;
@@ -146,6 +147,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     }
 
     @Override
+    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -195,7 +201,20 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         mRvRecommendFriends.setDrawingCacheEnabled(true);
         mRvRecommendFriends.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         // linearLayoutManager.setAutoMeasureEnabled(true);
-        recommendFriendsAdapter = new RecommendFriendsPictureAdapter(getActivity());
+        recommendFriendsAdapter = new RecommendFriendsPictureAdapter(getActivity(), new RecommendFriendsPictureAdapter.RecommendPostsDetailListener() {
+            @Override
+            public void lookRecommendPostDetailListener(int mPosition) {
+
+                toActivity(PostRecommendDetailActivity.class);
+
+            }
+
+            @Override
+            public void setPostIsCollectionListener(int mPosition) {
+
+
+            }
+        });
         recommendFriendsAdapter.setRecommendFriendsPictureList(recommendFriendsList);
         mRvRecommendFriends.setAdapter(recommendFriendsAdapter);
 
@@ -444,4 +463,5 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     public void lazyInitView(View view) {
 
     }
+
 }

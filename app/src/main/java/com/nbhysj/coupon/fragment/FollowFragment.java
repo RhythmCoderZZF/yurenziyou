@@ -349,6 +349,13 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+
+    }
+
+
+
+    @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {

@@ -59,9 +59,10 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.PostRecommendDetailActivity"></activity>
         <activity
             android:name=".ui.TravelAssistantRoutePlanMapActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TravelAssistantEditActivity"
             android:screenOrientation="portrait" />
@@ -114,7 +115,6 @@
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -144,26 +144,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ShoppingMallScreeningActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- 添加景点 -->
+            android:screenOrientation="portrait" /> <!-- 添加景点 -->
         <activity
             android:name=".ui.TravelAssisantScenicSpotAddActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- 添加美食 -->
+            android:screenOrientation="portrait" /> <!-- 添加美食 -->
         <activity
             android:name=".ui.TravelAssisantFineFoodAddActivity"
+            android:screenOrientation="portrait" /> <!-- 添加民宿 -->
+        <activity
+            android:name=".ui.TravelAssisantHotelHomestayAddActivity"
+            android:screenOrientation="portrait" /> <!-- 添加互动 -->
+        <activity
+            android:name=".ui.TravelAssisantInteractionAddActivity"
             android:screenOrientation="portrait" />
-
-        <!-- 添加民宿 -->
-        <activity android:name=".ui.TravelAssisantHotelHomestayAddActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- 添加互动 -->
-        <activity android:name=".ui.TravelAssisantInteractionAddActivity"
-            android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.TravelAssistantDetailsActivity"
             android:screenOrientation="portrait" />
@@ -175,10 +168,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TripPreviewActivity"
-            android:screenOrientation="portrait" >
-
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.TravelPlanningActivity"
             android:screenOrientation="portrait" />
@@ -411,8 +401,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.LoginActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".TestActivity" />
         <activity
             android:name=".ui.MessageActivity"
             android:screenOrientation="portrait" />

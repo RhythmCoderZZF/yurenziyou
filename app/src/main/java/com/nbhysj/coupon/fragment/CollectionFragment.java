@@ -111,6 +111,11 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
     }
 
     @Override
+    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+
+    }
+
+    @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">鱼人自游</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_city">宁波</string>
@@ -93,7 +93,8 @@
     <string name="str_wechat_number" translatable="false">微信号</string>
     <string name="str_phone_number" translatable="false">手机号</string>
     <string name="str_phone">手机号码</string>
-    <string name="str_email">邮箱</string>
+    <string name="str_email" translatable="false">邮箱</string>
+    <string name="str_recommendation">推荐</string>
     <string name="str_fill_real_name">请填写真实姓名</string>
     <string name="str_adding_passenger_information">添加旅客信息</string>
     <string name="str_24_hour_service_abroad">用于境外24小时服务</string>
@@ -223,6 +224,7 @@
     <string name="str_calendar_select" translatable="false">选择日期</string>
     <string name="str_scenic_spot" translatable="false">景点</string>
     <string name="str_remarks" translatable="false">备注</string>
+
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

@@ -159,6 +159,11 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     }
 
     @Override
+    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         if (mSmartRefreshLayout != null) {
             mSmartRefreshLayout.finishRefresh();

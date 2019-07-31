@@ -3,6 +3,7 @@ package com.nbhysj.coupon.fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -38,8 +39,14 @@ import butterknife.BindView;
  */
 public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
 
+    //指示器
     @BindView(R.id.indicator)
     NearbyTabIndicator mTabIndicator;
+
+    //暂无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
+
     private List<HomePageResponse.SmallTagEntity> tagList;
     RecyclerView mRecyclerView;
     ReItemTouchHelper mReItemTouchHelper;
@@ -78,59 +85,36 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
         tagList = postsTagsBean.getSmallTagList();
         mTabIndicator.initTab(tagList, 13);
         mTabIndicator.setmTabSelector(0);
-        mTagId = tagList.get(0).getId();
+        if (tagList.size() > 0) {
+            mTagId = tagList.get(0).getId();
 
-        isInitView = true;
-        isCanLoadData();
+            isInitView = true;
+            isCanLoadData();
 
-        mTabIndicator.setMyOnPageChangeListener(new NearbyTabIndicator.MyOnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            mTabIndicator.setMyOnPageChangeListener(new NearbyTabIndicator.MyOnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
+                }
 
-            @Override
-            public void onPageSelected(int position) {
+                @Override
+                public void onPageSelected(int position) {
 
-                // showToast(getActivity(),position+"");
-                nearbyCardList.clear();
-                showProgressDialog(getActivity());
-                HomePageResponse.SmallTagEntity smallTagEntity = tagList.get(position);
-                mTagId = smallTagEntity.getId();
-                mPage = 1;
-                queryByTopic();
-            }
+                    // showToast(getActivity(),position+"");
+                    nearbyCardList.clear();
+                    showProgressDialog(getActivity());
+                    HomePageResponse.SmallTagEntity smallTagEntity = tagList.get(position);
+                    mTagId = smallTagEntity.getId();
+                    mPage = 1;
+                    queryByTopic();
+                }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-            }
-        });
-
-        //cardAdapter.se
-
-  /*      if (tagList == null) {
-
-            tagList = new ArrayList<HomePageResponse.SmallTagEntity>();
-        } else {
-            tagList.clear();
+                }
+            });
         }
-
-        List<HomePageResponse.SmallTagEntity> smallTagList = postsTagsBean.getSmallTagList();
-        ((NearbyFragmentManager) adapter).setData(smallTagList);
-        pager.setAdapter(adapter);
-        mIndicator.setViewPager(pager);
-        pager.setOffscreenPageLimit(0);*/
-   /*     //            创建一个 bundle 传递 数据
-        Bundle bundle = new Bundle();
-        //使用bundle合适的put方法传递数据
-        bundle.putSerializable("postsTagsBean", (Serializable) postsTagsBean);
-//             新建一个 fragment
-        RecommendFragment fragment = new RecommendFragment();
-
-        fragment.setArguments(bundle);
-
-        return fragment;*/
     }
 
     @Override
@@ -270,6 +254,13 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
                     HomePageResponse.ResultBean result = res.getData().getResult();
                     List<HomePageSubTopicTagBean> postsTagsBeanList = result.getList();
                     nearbyCardList.addAll(postsTagsBeanList);
+
+                    if (nearbyCardList.size() == 0) {
+                        mRlytNoData.setVisibility(View.VISIBLE);
+                    } else {
+
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
                     nearbyCardAdapter.setNearbyCardList(nearbyCardList);
                     nearbyCardAdapter.notifyDataSetChanged();
 
@@ -285,6 +276,12 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
+
+    }
+
+
+    @Override
+    public void getPostInfoResult(BackResult<HomePageResponse> res) {
 
     }
 
