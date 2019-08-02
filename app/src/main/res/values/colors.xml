@@ -129,6 +129,8 @@
     <color name="color_text_gray33">#FF7B7C7D</color>
     <color name="color_text_gray34">#FF7F7F7F</color>
     <color name="color_text_gray35">#FFA8A9AB</color>
+    <color name="color_text_gray36">#FF8B8B8B</color>
+    <color name="color_text_gray37">#FFF6F9FB</color>
 
     <color name="color_text_orange">#FEB143</color>
     <color name="color_text_orange2">#FF7221</color>
@@ -144,6 +146,8 @@
     <color name="color_text_blue9">#FFE9F5FE</color>
     <color name="color_text_blue10">#FF6AA9F8</color>
     <color name="color_text_blue11">#FF35A1D7</color>
+    <color name="color_text_blue12">#FF0552AB</color>
+
     <color name="transparentsmll_bg">#33000000</color>
     <color name="regis_account_exist">#222222</color>
     <color name="color_dark_red">#FF4970</color>

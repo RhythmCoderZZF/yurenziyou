@@ -168,26 +168,9 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
             recommendFriendsList.clear();
         }
 
-       /* mPosition = getArguments().getInt("position");
-        if (mPosition == 0) {
-            recommendFriendsList = (List<HomePageSubTopicTagBean>) getArguments().getSerializable("recommendList");
-            //  queryByTopic();
-        }*/
-        /*else {
-            //recommendFriendsList = (List<HomePageSubTopicTagBean>) getArguments().getSerializable("recommendList");
-            isCanLoadData();
-        }*/
         isInitView = true;
         isCanLoadData();
 
-        // getHomePageData();
-       /* if (recommendFriendsList == null) {
-
-            recommendFriendsList = new ArrayList<>();
-        }*/
-
-
-        // 创建一个线性布局管理器
       /* LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRvRecommendFriends.setLayoutManager(linearLayoutManager);*/
@@ -217,33 +200,6 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         });
         recommendFriendsAdapter.setRecommendFriendsPictureList(recommendFriendsList);
         mRvRecommendFriends.setAdapter(recommendFriendsAdapter);
-
-        // recommendFriendsAdapter.setHasStableIds(true);
-        // ((SimpleItemAnimator)mRvRecommendFriends.getItemAnimator()).setSupportsChangeAnimations(false);
-      /*  mRvRecommendFriends.setLayoutManager(new LinearLayoutManager(mContext) {
-            @Override
-            public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
-                int count = state.getItemCount();
-                if (count > 0) {
-                    int realHeight = 0;
-                    int realWidth = 0;
-                    for(int i = 0;i < count; i++){
-                        View view = recycler.getViewForPosition(0);
-                        if (view != null) {
-                            measureChild(view, widthSpec, heightSpec);
-                            int measuredWidth = View.MeasureSpec.getSize(widthSpec);
-                            int measuredHeight = view.getMeasuredHeight();
-                            realWidth = realWidth > measuredWidth ? realWidth : 10;
-                            realHeight += 10;
-                        }
-                        setMeasuredDimension(realWidth, realHeight);
-                    }
-                } else {
-                    super.onMeasure(recycler, state, widthSpec, heightSpec);
-                }
-            }
-        });*/
-
 
         setNeedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override

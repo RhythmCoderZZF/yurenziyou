@@ -37,7 +37,10 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
+/**
+ * created by hysj on 2018/07/31.
+ * description: 我的
+ */
 public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel> implements UserInfoContract.View {
     @BindView(R.id.image_avatar)
     GlideImageView mImgAvatar;
@@ -66,11 +69,6 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
     @BindView(R.id.toolbar_collapsing)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
-    private String[] titles = new String[]{"游记", "收藏"};
-    private ArrayList<Fragment> fragments;
-    private FollowFragment followFragment;
-    private RecommendFragment homeFragment2;
-    private FollowFragment nearbyFragment;
     private int userId;
     private boolean isFristCreate = true;
     private boolean isLoginFristCreate = true;

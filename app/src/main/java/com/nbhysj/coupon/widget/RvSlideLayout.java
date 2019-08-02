@@ -15,7 +15,6 @@ import com.nbhysj.coupon.util.ScreenUtil;
 
 public class RvSlideLayout extends HorizontalScrollView {
 
-
     //菜单占屏幕宽度比
     private static final float radio = 0.2f;
     private final int mScreenWidth;

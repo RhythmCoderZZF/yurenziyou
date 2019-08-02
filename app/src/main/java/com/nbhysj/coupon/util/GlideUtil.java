@@ -106,6 +106,13 @@ public class GlideUtil {
         loadImage(url,image,requestOptions);
     }*/
 
+    public static void loadBlurImage(Context mContext, String imageUrl, ImageView image) {
+
+        Glide.with(mContext).load(imageUrl).
+                apply(bitmapTransform(new BlurTransformation(0)))
+                .into(image);
+    }
+
     public static void loadRoundedCornersImage(String url, ImageView image, float radius,
                                                GlideRoundedCornersTransform.CornerType cornerType) {
         RequestOptions requestOptions = new RequestOptions();

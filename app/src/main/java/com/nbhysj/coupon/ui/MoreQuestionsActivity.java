@@ -47,13 +47,16 @@ public class MoreQuestionsActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.rlyt_my_ask_question})
+    @OnClick({R.id.rlyt_my_ask_question,R.id.rlyt_my_answer})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rlyt_my_ask_question:
 
                 toActivity(AskQuestionsActivity.class);
 
+                break;
+            case R.id.rlyt_my_answer:
+                toActivity(AskQuestionsActivity.class);
                 break;
             default:
                 break;

@@ -16,17 +16,21 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.fragment.LocalFoodFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
+
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
@@ -36,16 +40,19 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import butterknife.BindView;
 
 /**
- * @auther：hysj created on 2019/05/09
- * description：房东介绍
+ * @auther：hysj created on 2019/07/31
+ * description：个人主页
  */
-public class IntroductionOfLandlordActivity extends BaseActivity {
+public class UserPersonalHomePageActivity extends BaseActivity {
+
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     @BindView(R.id.llyt_header)
@@ -60,10 +67,11 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
     MagicIndicator magicIndicatorTitle;
     @BindView(R.id.collapse)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @BindView(R.id.img_bg_avatar_blur)
+    ImageView mImgBgAvatarBlur;
     int toolBarPositionY = 0;
-    private int mOffset = 0;
     private int mScrollY = 0;
-    private String[] mTitles = new String[]{"房源(20)", "评价(153)"};
+    private String[] mTitles = new String[]{"游记", "收藏", "赞过"};
     private List<String> mDataList = Arrays.asList(mTitles);
 
     @Override
@@ -72,7 +80,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
         StatusBarCompat.translucentStatusBar(this, false);
         //修改状态栏字体颜色
         StatusBarUtil.setImmersiveStatusBar(this, true);
-        return R.layout.activity_introduction_of_landlord;
+        return R.layout.activity_user_personal_home_page;
     }
 
     @Override
@@ -146,6 +154,8 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(10);
         initMagicIndicator();
         initMagicIndicatorTitle();
+
+        GlideUtil.loadBlurImage(UserPersonalHomePageActivity.this, "https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg", mImgBgAvatarBlur);
     }
 
     private void dealWithViewPager() {
@@ -164,6 +174,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new LocalFoodFragment());
         fragments.add(new ScenicSpotFragment());
+        fragments.add(new ScenicSpotFragment());
         return fragments;
     }
 
@@ -181,8 +192,8 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
             public IPagerTitleView getTitleView(Context context, final int index) {
                 SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
                 simplePagerTitleView.setText(mDataList.get(index));
-                simplePagerTitleView.setNormalColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.color_text_gray24));
-                simplePagerTitleView.setSelectedColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.black));
+                simplePagerTitleView.setNormalColor(ContextCompat.getColor(UserPersonalHomePageActivity.this, R.color.color_text_gray24));
+                simplePagerTitleView.setSelectedColor(ContextCompat.getColor(UserPersonalHomePageActivity.this, R.color.black));
                 simplePagerTitleView.setTextSize(16);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -203,7 +214,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
                 indicator.setRoundRadius(UIUtil.dip2px(context, 3));
                 indicator.setStartInterpolator(new AccelerateInterpolator());
                 indicator.setEndInterpolator(new DecelerateInterpolator(2.0f));
-                indicator.setColors(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.color_high_light_green));
+                indicator.setColors(ContextCompat.getColor(UserPersonalHomePageActivity.this, R.color.color_high_light_green));
                 return indicator;
             }
         });
@@ -225,8 +236,8 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
             public IPagerTitleView getTitleView(Context context, final int index) {
                 SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
                 simplePagerTitleView.setText(mDataList.get(index));
-                simplePagerTitleView.setNormalColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.color_text_gray24));
-                simplePagerTitleView.setSelectedColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.black));
+                simplePagerTitleView.setNormalColor(ContextCompat.getColor(UserPersonalHomePageActivity.this, R.color.color_text_gray24));
+                simplePagerTitleView.setSelectedColor(ContextCompat.getColor(UserPersonalHomePageActivity.this, R.color.black));
                 simplePagerTitleView.setTextSize(16);
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -251,7 +262,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
                 indicator.setRoundRadius(UIUtil.dip2px(context, 3));
                 indicator.setStartInterpolator(new AccelerateInterpolator());
                 indicator.setEndInterpolator(new DecelerateInterpolator(2.0f));
-                indicator.setColors(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.color_high_light_green));
+                indicator.setColors(ContextCompat.getColor(UserPersonalHomePageActivity.this, R.color.color_high_light_green));
                 return indicator;
             }
         });

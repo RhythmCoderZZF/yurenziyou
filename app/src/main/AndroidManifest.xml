@@ -59,7 +59,28 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.PostRecommendDetailActivity"></activity>
+        <activity android:name=".ui.QuestionsAndAnswersActivity"></activity>
+        <activity
+            android:name=".ui.PostCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AttentionAndFansActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.UserPersonalHomePageActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.HomePageSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PostRecommendDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TravelAssistantRoutePlanMapActivity"
             android:screenOrientation="portrait" />
@@ -114,13 +135,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.NewAlbumActivity" />
         <activity
             android:name=".ui.ApplyForRefundActivity"
@@ -168,7 +183,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TripPreviewActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TravelPlanningActivity"
             android:screenOrientation="portrait" />
@@ -237,7 +252,7 @@
             android:name=".ui.DestinationSearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.MyQuestionsAndAnswersActivity"
+            android:name=".ui.QuestionsAndAnswersDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.DeploymentProblemActivity"

@@ -736,7 +736,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         }
     }
 
-    @OnClick({R.id.ibtn_back, R.id.rlyt_scenic_spots_ranking_list, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.rlyt_view_more_tour_guide})
+    @OnClick({R.id.ibtn_back, R.id.rlyt_scenic_spots_ranking_list, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.rlyt_view_more_tour_guide,R.id.tv_question_num})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -786,6 +786,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 shareOprateDialog.show();
 
                 break;
+            case R.id.tv_question_num:
+
+                toActivity(MoreQuestionsActivity.class);
+
+            break;
             default:
                 break;
 

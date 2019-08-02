@@ -200,6 +200,11 @@
     <string name="str_departure_the_city" translatable="false">出发城市</string>
     <string name="str_place_of_departure" translatable="false">出发地点</string>
     <string name="str_place_of_arrival" translatable="false">到达地点</string>
+    <string name="str_attention">关注</string>
+    <string name="str_attention_and_fens">关注与粉丝</string>
+    <string name="str_collection" translatable="false">收藏</string>
+    <string name="str_question_and_answers">我的问答</string>
+    <string name="str_question_ignore">忽略</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -224,7 +229,7 @@
     <string name="str_calendar_select" translatable="false">选择日期</string>
     <string name="str_scenic_spot" translatable="false">景点</string>
     <string name="str_remarks" translatable="false">备注</string>
-
+    <string name="str_useful" translatable="false">有用</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>
