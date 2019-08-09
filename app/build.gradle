@@ -163,6 +163,7 @@ dependencies {
     implementation project(':refresh-header')
     implementation project(':refresh-layout')
     implementation project(':cardlib')
+    implementation project(':jiaozivideoplayer')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.contrarywind:Android-PickerView:3.2.4'
     implementation 'com.yanzhenjie:permission:1.1.0'

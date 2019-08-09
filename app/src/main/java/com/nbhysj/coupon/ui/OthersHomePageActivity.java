@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.nbhysj.coupon.R;
-
+//
 public class OthersHomePageActivity extends BaseActivity {
 
     @Override

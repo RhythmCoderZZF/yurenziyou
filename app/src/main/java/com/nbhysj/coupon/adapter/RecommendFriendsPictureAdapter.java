@@ -74,9 +74,10 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
 
             if (recommendFriends.isLove()) {
 
-                holder.mImgIsLove.setBackgroundResource(R.mipmap.icon_love_red_homepage_remmend);
+                holder.mImgIsLove.setImageResource(R.mipmap.icon_love_red_homepage_remmend);
             } else {
-                holder.mImgIsLove.setBackgroundResource(R.mipmap.icon_love_white_homepage_remmend);
+
+                holder.mImgIsLove.setImageResource(R.mipmap.icon_love_white_homepage_remmend);
             }
 
             holder.mCardViewRecommendFriendsItem.setOnClickListener(new View.OnClickListener() {

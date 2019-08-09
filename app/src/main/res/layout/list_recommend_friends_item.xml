@@ -32,7 +32,7 @@
                 android:layout_marginRight="@dimen/dp_6"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/dp_10"
-                android:src="@mipmap/icon_love_white_homepage_remmend" />
+                android:src="@mipmap/icon_love_red_homepage_remmend" />
 
             <ImageView
                 android:id="@+id/img_video_play"

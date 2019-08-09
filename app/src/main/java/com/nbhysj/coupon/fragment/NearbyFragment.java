@@ -24,6 +24,7 @@ import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.util.MapUtils;
 import com.nbhysj.coupon.widget.NearbyTabIndicator;
@@ -115,6 +116,11 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 }
             });
         }
+    }
+
+    @Override
+    public void postOprateResult(BackResult res) {
+
     }
 
     @Override
@@ -279,15 +285,16 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     }
 
-
     @Override
-    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
 
     }
 
     @Override
     public void showMsg(String msg) {
 
+        dismissProgressDialog();
+        showToast(getActivity(),Constants.getResultMsg(msg));
     }
 
     public void queryByTopic() {
@@ -333,9 +340,6 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     /**
      * 初始化定位
-     *
-     * @author hongming.wang
-     * @since 2.8.0
      */
     private void initLocation() {
         //初始化client
@@ -375,9 +379,6 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     /**
      * 开始定位
-     *
-     * @author hongming.wang
-     * @since 2.8.0
      */
     private void startLocation() {
         // 设置定位参数

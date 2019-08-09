@@ -8,12 +8,6 @@
     android:orientation="vertical"
     tools:context=".ui.PublishSoundRecordingActivity">
 
-    <View
-        android:id="@+id/toolbar_space"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"></View>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50">
@@ -61,6 +55,10 @@
         app:moveSpeed="1.0"
         app:showIndicator="false" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ProgressBar
         android:id="@+id/progress_bar_parent_audio"
         style="@style/SoundRecordingStyleProgressBar"
@@ -74,7 +72,19 @@
         android:layout_toRightOf="@+id/tv_scenic_spot_score_tag"
         android:layout_marginTop="@dimen/dp_47"
         android:max="30"
-        android:progress="5" />
+        android:progress="0" />
+
+        <com.nbhysj.coupon.widget.wavelineview.WaveLineView
+            android:id="@+id/wave_line_view_audio_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_83"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_25"
+            app:wlvBackgroundColor="@android:color/transparent"
+            />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlyt_sound_play_speed_progress"

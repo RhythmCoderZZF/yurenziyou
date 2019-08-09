@@ -240,6 +240,16 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     }
 
     /**
+     * turn to another activity with this activity
+     *
+     * @param cls the showing activity
+     */
+    protected void toActivityWithParameters(Class<?> cls, Intent intent) {
+        startActivity(intent);
+    }
+
+
+    /**
      * 隐藏输入法
      */
     public void hiddenIME() {

@@ -1,9 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.QuestionsAndAnswersActivity">
+    android:orientation="vertical"
+ >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/toolbar"></include>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableLoadMore="true"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#00000000"
+
+
+        >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_17"
+        android:layout_marginRight="@dimen/dp_15"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_question_tag"
+            android:layout_width="@dimen/dp_17"
+            android:layout_height="@dimen/dp_17"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:background="@drawable/bg_filleted_corner_blue_shape"
+            android:gravity="center"
+            android:text="问"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_6"
+            android:text="隔音如何，晚上安静吗，睡觉会不会被影响吗？"
+            android:textColor="@color/color_text_black7"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_question_publish_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/llyt_answerer_info"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_17"
+        android:layout_gravity="right"
+        android:text="2019-03-20"
+        android:textColor="@color/color_text_gray27" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/color_text_gray37"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp_17"
+            android:layout_height="@dimen/dp_17"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:background="@drawable/bg_filleted_corner_orange_shape"
+            android:gravity="center"
+            android:text="问"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:text="共2个回答"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/color_text_black7"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/color_text_gray34"
+        android:alpha="0.15"></View>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_questions_answers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></android.support.v7.widget.RecyclerView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_15"
+        android:background="@color/color_text_gray37"></View>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:text="其他相关问题"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/color_text_gray27"
+            android:textSize="@dimen/text_size_normal"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
+            />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/color_text_gray34"
+        android:alpha="0.25"></View>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_other_related_issues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/color_text_gray16"></View>
+
+    <RelativeLayout
+        android:id="@+id/layout_comment_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+
+        <ImageView
+            android:id="@+id/img_emojie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:padding="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_7"
+            android:src="@drawable/keyboard_selector" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="7dp"
+            android:layout_toLeftOf="@+id/enSure"
+            android:layout_toRightOf="@+id/img_emojie"
+            android:background="@drawable/bg_rect_light_gray_shape">
+
+            <EditText
+                android:id="@+id/edt_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:hint="添加你的评论..."
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/color_text_gray28"
+                android:textSize="@dimen/text_size_small" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:text="@string/str_publish"
+            android:padding="@dimen/dp_10"
+            android:textColor="@color/color_green3" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llyt_main_emoji"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viwepager_expression"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="#fff"
+            android:paddingTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_dot_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -145,7 +145,7 @@
             android:drawablePadding="@dimen/dp_4"
             android:drawableLeft="@mipmap/icon_answer_useful"
             android:text="@string/str_useful"
-            android:background="@drawable/bg_stroke_gray_radius_ten_shape"
+            android:background="@drawable/bg_stroke_radius_ten_gray_shape"
             android:textColor="@color/color_text_gray27" />
 
     </RelativeLayout>

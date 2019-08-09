@@ -27,6 +27,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.MessageActivity;
 import com.nbhysj.coupon.widget.glide.CacheImageLoader;
@@ -159,7 +160,12 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     }
 
     @Override
-    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
+
+    }
+
+    @Override
+    public void postOprateResult(BackResult res) {
 
     }
 

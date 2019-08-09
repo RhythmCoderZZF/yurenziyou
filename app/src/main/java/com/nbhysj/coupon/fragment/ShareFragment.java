@@ -14,6 +14,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.FollowDetailBean;
 import com.nbhysj.coupon.model.response.HomePageResponse;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.ShareResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 
@@ -121,7 +122,12 @@ public class ShareFragment extends BaseFragment<HomePagePresenter, HomePageModel
     }
 
     @Override
-    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
+
+    }
+
+    @Override
+    public void postOprateResult(BackResult res) {
 
     }
 

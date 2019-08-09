@@ -5,39 +5,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.RecommendFriendsPictureAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.model.HomePageModel;
+import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
-import com.nbhysj.coupon.model.response.HomePageSubTopicTagReponse;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
+import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
+import com.nbhysj.coupon.ui.ShoppingMallScenicSpotActivity;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
-import com.nbhysj.coupon.view.MyGridLayoutManager;
-import com.nbhysj.coupon.widget.glide.CacheImageLoader;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.youth.banner.BannerConfig;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +45,14 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     RecyclerView mRvRecommendFriends;
     @BindView(R.id.scroll_view)
     JudgeNestedScrollView setNeedScroll;
-    @BindView(R.id.rlyt_load_more)
-    RelativeLayout mRlytLoadMore;
+
+    //加载
+    @BindView(R.id.llyt_progress_bar_loading)
+    LinearLayout mLlytProgressBarLoading;
+    @BindView(R.id.progressbar_load_more)
+    ProgressBar mProgressBarLoadMore;
+    @BindView(R.id.tv_load_more)
+    TextView mTvLoadMore;
     private List<HomePageSubTopicTagBean> recommendFriendsList;
     private static int mTagId, mPosition;
     private int mPage = 1;
@@ -60,11 +60,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     private RecommendFriendsPictureAdapter recommendFriendsAdapter;
     private boolean isInitView = false;
     private boolean isVisible = false;
-    private boolean isOnLoadMore = false;
     public static int currentFragment = 0;
-    private HomePageResponse.PageBean pageBean;
     private int hasNext;
     MyBroadcastReceiver receiver;
+
+    public int mCollectPostPosition;
 
     public void setTagId(int tagId) {
         //mTagId = tagId;
@@ -147,7 +147,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     }
 
     @Override
-    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
 
     }
 
@@ -188,13 +188,22 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
             @Override
             public void lookRecommendPostDetailListener(int mPosition) {
 
-                toActivity(PostRecommendDetailActivity.class);
+                HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mPosition);
+                int postId = homePageSubTopicTagBean.getId();
+                Intent intent = new Intent();
+                intent.putExtra("postId",postId);
+                intent.setClass(getActivity(),PostRecommendDetailActivity.class);
+                startActivity(intent);
 
             }
 
             @Override
             public void setPostIsCollectionListener(int mPosition) {
 
+                HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mPosition);
+
+             //   showToast(getActivity(),mPosition + "");
+                postIsCollection(homePageSubTopicTagBean);
 
             }
         });
@@ -217,24 +226,79 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     Log.i("TAG", "BOTTOM SCROLL");
-                    if (hasNext == 1) {
+                   /* if (hasNext == 1) {
                         mPage++;
-                        isOnLoadMore = true;
+                        //isOnLoadMore = true;
                         showProgressDialog(getActivity());
                         queryByTopic();
                     } else {
-
+                        mProgressBarLoadMore.setVisibility(View.GONE);
+                        mTvLoadMore.setText(getResources().getString(R.string.str_pull_up_loading));
                         showToast(getActivity(), "已加载全部数据...");
-                    }
+                    }*/
+                    loadData();
                 }
             }
 
         });
     }
 
+    public void loadData() {
+        mLlytProgressBarLoading.setVisibility(View.VISIBLE);
+        if (hasNext == 1) {
+            mProgressBarLoadMore.setVisibility(View.VISIBLE);
+            mTvLoadMore.setText(getResources().getString(R.string.loading));
+            showProgressDialog(getActivity());
+            mPage++;
+            queryByTopic();
+        } else {
+            mProgressBarLoadMore.setVisibility(View.GONE);
+            mTvLoadMore.setText(getResources().getString(R.string.str_loading_no_more));
+        }
+    }
+
     @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
 
+    }
+
+    @Override
+    public void postOprateResult(BackResult<PraiseOrCollectResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                /*    if (isOnLoadMore) {
+
+                        // mSmartRefreshLayout.finishLoadMore();
+                    } else {
+
+                        recommendFriendsList.clear();
+                        recommendFriendsAdapter.notifyDataSetChanged();
+                    }*/
+
+                    PraiseOrCollectResponse praiseOrCollectResponse = res.getData();
+                    int zanStatus = praiseOrCollectResponse.getZanStatus();
+
+                    HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mCollectPostPosition);
+                    if(zanStatus == 0)
+                    {
+                        homePageSubTopicTagBean.setLove(false);
+                    } else if(zanStatus == 1)
+                    {
+                        homePageSubTopicTagBean.setLove(true);
+                    }
+                    recommendFriendsAdapter.setRecommendFriendsPictureList(recommendFriendsList);
+                    recommendFriendsAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     public class MyBroadcastReceiver extends BroadcastReceiver {
@@ -243,7 +307,6 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
             // TODO Auto-generated method stub
             String action = intent.getAction();
             if (Constants.BROCAST_ACTION_RECOMMEND.equals(action)) {
-                isOnLoadMore = false;
                 isInitView = true;
                 mPage = 1;
 
@@ -394,12 +457,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         }
     }
 
-    @OnClick({R.id.rlyt_load_more})
+  /*  @OnClick({R.id.rlyt_load_more})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rlyt_load_more:
                 mPage++;
-                isOnLoadMore = true;
                 showProgressDialog(getActivity());
                 queryByTopic();
 
@@ -407,7 +469,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
             default:
                 break;
         }
-    }
+    }*/
 
     @Override
     public void onDestroyView() {
@@ -420,4 +482,21 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
     }
 
+    public void postIsCollection(HomePageSubTopicTagBean homePageSubTopicTagBean)
+    {
+        if(validateInternet())
+        {
+            showProgressDialog(getActivity());
+            mDialog.setTitle("正在点赞...");
+            int authorId = homePageSubTopicTagBean.getUserId();
+            int userId = (int)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID,0);
+            int mPostId = homePageSubTopicTagBean.getId();
+            PostOprateRequest postOprateRequest = new PostOprateRequest();
+            postOprateRequest.setAuthorId(authorId);
+            postOprateRequest.setUserId(userId);
+            postOprateRequest.setPostsId(mPostId);
+            postOprateRequest.setPostsType(1);
+            mPresenter.postOprate(postOprateRequest);
+        }
+    }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
@@ -24,6 +25,7 @@ import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.CommentsListActivity;
 import com.nbhysj.coupon.ui.FindFriendsActivity;
@@ -43,6 +45,9 @@ import java.util.List;
 import butterknife.BindView;
 
 public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
+    //暂无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
 
     @BindView(R.id.rv_follow)
     RecyclerView mRvFollow;
@@ -349,11 +354,14 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
-    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
 
     }
 
+    @Override
+    public void postOprateResult(BackResult res) {
 
+    }
 
     @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
@@ -365,10 +373,16 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                     HomePageResponse attentionResponse = res.getData();
                     HomePageResponse.ResultBean resultBean = attentionResponse.getResult();
                     List<HomePageSubTopicTagBean> followList = resultBean.getList();
-                    followDetailList.addAll(followList);
-                    followListAdapter.setFollowDetailList(followDetailList);
-                    followListAdapter.notifyDataSetChanged();
+                    if (followList == null) {
 
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                    } else {
+                        mRlytNoData.setVisibility(View.GONE);
+                        followDetailList.addAll(followList);
+                        followListAdapter.setFollowDetailList(followDetailList);
+                        followListAdapter.notifyDataSetChanged();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

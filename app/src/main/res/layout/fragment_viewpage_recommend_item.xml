@@ -56,19 +56,30 @@
                 android:nestedScrollingEnabled="false" />
 
 
-            <RelativeLayout
-                android:id="@+id/rlyt_load_more"
+            <LinearLayout
+                android:id="@+id/llyt_progress_bar_loading"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_40"
-                android:visibility="gone">
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <TextView
+                <ProgressBar
+                    android:id="@+id/progressbar_load_more"
+                    android:layout_marginRight="6dp"
+                    style="?android:attr/progressBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="点击加载更多..." />
+                    android:layout_gravity="center" />
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_load_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/loading" />
+
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

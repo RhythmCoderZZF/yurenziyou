@@ -95,7 +95,6 @@ public class AskQuestionAdapter extends RecyclerView.Adapter<AskQuestionAdapter.
         TextView mTvAnswerContent;
         LinearLayout mLlytAskQuestion;
 
-
         public ViewHolder(View itemView) {
             super(itemView);
 

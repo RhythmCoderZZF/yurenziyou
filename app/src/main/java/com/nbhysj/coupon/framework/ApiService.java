@@ -13,6 +13,7 @@ import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
+import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
@@ -37,6 +38,8 @@ import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
+import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
 import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
 import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
@@ -243,7 +246,7 @@ public interface ApiService {
 
     //贴子详情
     @GET("api/index/postInfo")
-    Observable<BackResult<HomePageResponse>> getPostInfo(@Query("id") int id,@Query("postKey") String postKey,@Query("longitude") String longitude,@Query("latitude") String latitude);
+    Observable<BackResult<PostInfoDetailResponse>> getPostInfo(@Query("id") int id, @Query("postKey") String postKey, @Query("longitude") String longitude, @Query("latitude") String latitude);
 
     /***********************************   商城   ****************************************/
 
@@ -383,5 +386,10 @@ public interface ApiService {
     //获取天气接口
     @GET("api/weather")
     Observable<BackResult<WeatherResponse>> getWeather(@Query("cityCode") String cityCode);
+
+    //帖子点赞、收藏或者评论
+    //帖子类型：1帖子点赞，2帖子收藏，3.帖子评论 postsType
+    @PUT("api/PostsUserZanCollection/praiseOrCollect")
+    Observable<BackResult<PraiseOrCollectResponse>> postOprate(@Body PostOprateRequest postOprateRequest);
 }
 

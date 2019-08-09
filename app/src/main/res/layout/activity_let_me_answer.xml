@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_text_gray37"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"></include>
+
+    <TextView
+        android:id="@+id/tv_mch_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_46"
+        android:layout_centerVertical="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_16"
+        android:text="宁波海洋世界大酒店"
+        android:textColor="@color/color_text_black7"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:alpha="0.15"
+        android:background="@color/color_text_gray34"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_question_tag"
+            android:layout_width="@dimen/dp_17"
+            android:layout_height="@dimen/dp_17"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:background="@drawable/bg_filleted_corner_blue_shape"
+            android:gravity="center"
+            android:text="问"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_6"
+            android:text="隔音如何，晚上安静吗，睡觉会不会被影响吗？"
+            android:textColor="@color/color_text_black7"
+            android:textSize="@dimen/text_size_normal" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/color_text_gray37"></View>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edt_profile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_150"
+            android:alpha="0.5"
+            android:background="@color/white"
+            android:gravity="top"
+            android:hint="回答被采纳后可获得积分哦~"
+            android:maxLength="50"
+            android:padding="@dimen/dp_16"
+            android:textColorHint="@color/color_text_blue4"
+            android:textSize="@dimen/text_size_xnormal" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_16">
+
+            <TextView
+                android:id="@+id/tv_publish"
+                android:layout_width="73dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_16"
+                android:background="@drawable/bg_stroke_radius_light_gray_shape"
+                android:gravity="center"
+                android:text="@string/str_publish"
+                android:textColor="@color/txt_font_black2" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

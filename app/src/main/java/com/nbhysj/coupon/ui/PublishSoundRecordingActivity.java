@@ -25,7 +25,9 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.PublishPictureSoundRecordAdapter;
 import com.nbhysj.coupon.oss.audio.AudioRecorder;
 import com.nbhysj.coupon.oss.audio.FileUtils;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
+import com.nbhysj.coupon.widget.wavelineview.WaveLineView;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -42,8 +44,6 @@ import butterknife.OnClick;
  * description：发布图片录音(声音胶囊)
  */
 public class PublishSoundRecordingActivity extends BaseActivity {
-    @BindView(R.id.toolbar_space)
-    View mToolbarSpace;
     //需要发布的图片
     @BindView(R.id.banner_publish_picture)
     BannerLayout mBannerLayout;
@@ -58,7 +58,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     TextView mTvSoundRecordingTips;
     //音频录入||播放 进度
     @BindView(R.id.progress_bar_parent_audio)
-    ProgressBar mProgressAudio;
+    ProgressBar mProgressAudioParentBar;
     //音频播放按钮
     @BindView(R.id.ibtn_sound_media_play)
     ImageButton mIbtnSoundMediaPlay;
@@ -71,6 +71,10 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     //音频时长
     @BindView(R.id.tv_audio_duration)
     TextView mTvAudioDuration;
+
+    @BindView(R.id.wave_line_view_audio_frequency)
+    WaveLineView mWaveLineViewAudioFrequency;
+
     AudioRecorder audioRecorder;
     StringBuffer stringBuffer = new StringBuffer();
     private int delaytime = 60;
@@ -89,20 +93,21 @@ public class PublishSoundRecordingActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_publish_sound_recording;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
+  /*      ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
         layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
         mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mToolbarSpace.setVisibility(View.VISIBLE);
         } else {
             mToolbarSpace.setVisibility(View.GONE);
-        }
+        }*/
 
         publishPictureUrlList = getIntent().getStringArrayListExtra("publishPictureUrlList");
         PublishPictureSoundRecordAdapter soundRecordAdapter = new PublishPictureSoundRecordAdapter(PublishSoundRecordingActivity.this);
@@ -161,11 +166,12 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                         audioRecorder.release();
                         stopTimer();
                     }
-
                 }
                 return false;
             }
         });
+
+        mWaveLineViewAudioFrequency.startAnim();
 
     }
 

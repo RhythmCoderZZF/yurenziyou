@@ -2,6 +2,7 @@ package com.nbhysj.coupon.presenter;
 
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.contract.UserInfoContract;
+import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 
@@ -24,6 +25,16 @@ public class HomePagePresenter extends HomePageContract.Presenter {
     @Override
     public void getHomeAttention(int page, int pageSize) {
         mRxManager.add(mModel.getHomeAttention(page, pageSize).subscribe(res -> mView.getHomeAttentionResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getPostInfo(int id, String postKey, String latitude, String longitude) {
+        mRxManager.add(mModel.getPostInfo(id, postKey,latitude,longitude).subscribe(res -> mView.getPostInfoResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void postOprate(PostOprateRequest postOprateRequest) {
+        mRxManager.add(mModel.postOprate(postOprateRequest).subscribe(res -> mView.postOprateResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

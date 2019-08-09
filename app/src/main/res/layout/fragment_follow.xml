@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/white"
     android:focusableInTouchMode="true"
-    android:background="@color/white">
-    <!-- <com.nbhysj.coupon.view.RecyclerScrollView
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:background="@color/white"
-         android:scrollbars="none"
-        >-->
+    android:orientation="vertical">
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
@@ -30,24 +23,20 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:nestedScrollingEnabled="false" />
-            <!-- </com.nbhysj.coupon.view.RecyclerScrollView>-->
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_60" />
-        </LinearLayout>
+                android:layout_height="@dimen/dp_60"
+                android:layout_below="@+id/rv_follow"/>
+
+            <include
+                layout="@layout/layout_nodata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toolbar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_80"></include>
+        </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_60"></RelativeLayout>
-    </RelativeLayout>
 </LinearLayout>

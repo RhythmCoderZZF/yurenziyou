@@ -16,6 +16,7 @@ import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CollectionTagResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
+import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.ShareResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.widget.MyIndicator;
@@ -111,7 +112,12 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
     }
 
     @Override
-    public void getPostInfoResult(BackResult<HomePageResponse> res) {
+    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
+
+    }
+
+    @Override
+    public void postOprateResult(BackResult res) {
 
     }
 

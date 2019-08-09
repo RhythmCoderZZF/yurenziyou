@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.util.HashMap;
+
 /**
  * @auther：hysj created on 2019/03/13
  * description：图像处理工具类
@@ -120,4 +122,27 @@ public enum BitmapUtils {
         return bitmap;
     }
 
+
+
+    /**
+     * 获取网络视频第一帧
+     * @param videoUrl
+     * @return
+     */
+    public static Bitmap getNetVideoBitmap(String videoUrl) {
+        Bitmap bitmap = null;
+
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            //根据url获取缩略图
+            retriever.setDataSource(videoUrl, new HashMap());
+            //获得第一帧图片
+            bitmap = retriever.getFrameAtTime();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } finally {
+            retriever.release();
+        }
+        return bitmap;
+    }
 }

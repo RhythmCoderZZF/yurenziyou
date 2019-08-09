@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- SD卡读取权限，用户写入离线定位数据 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -30,14 +32,18 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"
+        tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" /> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"
+        tools:ignore="ProtectedPermissions"/> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 3.2.0版本增加 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 3.2.0版本增加 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -59,7 +65,13 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.QuestionsAndAnswersActivity"></activity>
+        <activity android:name=".ui.ActivityMain" android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".ui.LetMeAnswerActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ui.QuestionsAndAnswersDetailActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.PostCollectionActivity"
             android:screenOrientation="portrait" />
@@ -69,12 +81,9 @@
         <activity
             android:name=".ui.UserPersonalHomePageActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.HomePageSearchActivity"
             android:screenOrientation="portrait" />
@@ -135,7 +144,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.NewAlbumActivity" />
         <activity
             android:name=".ui.ApplyForRefundActivity"
@@ -251,9 +266,7 @@
         <activity
             android:name=".ui.DestinationSearchActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.QuestionsAndAnswersDetailActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.DeploymentProblemActivity"
             android:screenOrientation="portrait" />
