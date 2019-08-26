@@ -40,6 +40,7 @@ import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
+import com.nbhysj.coupon.model.response.NearbyTypeResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
@@ -174,9 +175,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     //评论列表
     List<MchDetailsResponse.SubCommentEntity> commentList;
     //景点列表
-    List<ScenicSpotBean> nearbyScenicSpotsList;
+    List<NearbyTypeResponse> nearbyScenicSpotsList;
     //组合
-    List<GroupGoodsBean> groupGoodsList;
+    List<NearbyTypeResponse> groupGoodsList;
     private UserCommentAdapter userCommentAdapter;
     //景点
     private NearbyScenicSpotAdapter nearbyScenicSpotAdapter;
@@ -259,192 +260,17 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         viewList = new ArrayList<ImageView>();
         bannerList = new ArrayList<>();
 
-       /* BannerUrlBO bannerUrl = new BannerUrlBO();
-        bannerUrl.setUrl("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg");
-
-        BannerUrlBO bannerUrl1 = new BannerUrlBO();
-        bannerUrl1.setUrl("https://img5.duitang.com/uploads/item/201409/20/20140920163237_myPVw.thumb.700_0.png");
-
-        BannerUrlBO bannerUrl2 = new BannerUrlBO();
-        bannerUrl2.setUrl("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        bannerList.add(bannerUrl);
-        bannerList.add(bannerUrl1);
-        bannerList.add(bannerUrl2);*/
-
-
-
-        /*mScrollViewScenicSpotDetail.setScrolListener(new RecyclerScrollView.OnScrollListener() {
-            @Override
-            public void onScroll(int scrollY) {
-
-            }
-        });*/
     }
 
     @Override
     public void initData() {
         getMchDetails();
-        List<PopularScenicSpotsResponse> popularScenicSpotsList = new ArrayList<>();
-
-       /* PopularScenicSpotsResponse popularScenicSpotsResponse = new PopularScenicSpotsResponse();
-        popularScenicSpotsResponse.setScenicSpotsPhoto("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1555639803&di=038b9646f3b207fcf7ed84a41c72a85b&src=http://b-ssl.duitang.com/uploads/item/20182/21/2018221142159_MZ33z.jpeg");
-        popularScenicSpotsResponse.setScenicSpotsLocation("鄞州区");
-        popularScenicSpotsResponse.setScenicSpotsName("宁波海洋世界");
-        popularScenicSpotsResponse.setScenicSpotsScore("8.5");
-        popularScenicSpotsResponse.setScenicSpotsTicketPrice("175");
-
-        PopularScenicSpotsResponse popularScenicSpotsResponse1 = new PopularScenicSpotsResponse();
-        popularScenicSpotsResponse1.setScenicSpotsPhoto("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555649888938&di=8febca29c5c2599d602544c655a413b6&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201504%2F03%2F20150403H1232_RJ2iV.jpeg");
-        popularScenicSpotsResponse1.setScenicSpotsLocation("鄞州区");
-        popularScenicSpotsResponse1.setScenicSpotsName("雅戈尔动物园");
-        popularScenicSpotsResponse1.setScenicSpotsScore("6.5");
-        popularScenicSpotsResponse1.setScenicSpotsTicketPrice("100");
-
-        PopularScenicSpotsResponse popularScenicSpotsResponse2 = new PopularScenicSpotsResponse();
-        popularScenicSpotsResponse2.setScenicSpotsPhoto("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555649888938&di=bff0c74f5bbe84ccaad2f34cb5cd3303&imgtype=0&src=http%3A%2F%2Fimg.bimg.126.net%2Fphoto%2FWgjcTIco7s4BN2OcRNAe_A%3D%3D%2F884675851802636535.jpg");
-        popularScenicSpotsResponse2.setScenicSpotsLocation("江北区");
-        popularScenicSpotsResponse2.setScenicSpotsName("宁波植物园");
-        popularScenicSpotsResponse2.setScenicSpotsScore("5.5");
-        popularScenicSpotsResponse2.setScenicSpotsTicketPrice("120");
-
-        PopularScenicSpotsResponse popularScenicSpotsResponse3 = new PopularScenicSpotsResponse();
-        popularScenicSpotsResponse3.setScenicSpotsPhoto("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1555639803&di=038b9646f3b207fcf7ed84a41c72a85b&src=http://b-ssl.duitang.com/uploads/item/20182/21/2018221142159_MZ33z.jpeg");
-        popularScenicSpotsResponse3.setScenicSpotsLocation("鄞州区");
-        popularScenicSpotsResponse3.setScenicSpotsName("宁波万达广场");
-        popularScenicSpotsResponse3.setScenicSpotsScore("4.5");
-        popularScenicSpotsResponse3.setScenicSpotsTicketPrice("50");
-
-        popularScenicSpotsList.add(popularScenicSpotsResponse);
-        popularScenicSpotsList.add(popularScenicSpotsResponse1);
-        popularScenicSpotsList.add(popularScenicSpotsResponse2);*/
-
-       /* for (int i = 0;i < 20;i++){
-            PopularScenicSpotsResponse popularScenicSpotsResponse3 = new PopularScenicSpotsResponse();
-            popularScenicSpotsResponse3.setScenicSpotsPhoto("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1555639803&di=038b9646f3b207fcf7ed84a41c72a85b&src=http://b-ssl.duitang.com/uploads/item/20182/21/2018221142159_MZ33z.jpeg");
-            popularScenicSpotsResponse3.setScenicSpotsLocation("鄞州区");
-            popularScenicSpotsResponse3.setScenicSpotsName("宁波万达广场");
-            popularScenicSpotsResponse3.setScenicSpotsScore("4.5");
-            popularScenicSpotsResponse3.setScenicSpotsTicketPrice("50");
-            popularScenicSpotsList.add(popularScenicSpotsResponse3);
-        }
-
-        LinearLayoutManager interactiveSelectionLinearLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
-        interactiveSelectionLinearLayoutManager.setOrientation(interactiveSelectionLinearLayoutManager.VERTICAL);
-        mRvPackageDetails.setLayoutManager(interactiveSelectionLinearLayoutManager);
-        InteractiveSelectionAdapter interactiveSelectionAdapter = new InteractiveSelectionAdapter(ScenicSpotDetailActivity.this);
-        interactiveSelectionAdapter.setInteractiveSelectionList(popularScenicSpotsList);
-        mRvPackageDetails.setAdapter(interactiveSelectionAdapter);*/
-
-
-    /*    List<String> fineFoodTagList = new ArrayList<>();
-        fineFoodTagList.add("探秘神奇动物世界");
-        fineFoodTagList.add("亲子首选");*/
-
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvPlayGuide.setLayoutManager(linearLayoutManager);
         playGuideAdapter = new PlayGuideAdapter(ScenicSpotDetailActivity.this);
         playGuideAdapter.setVisitGuideEntityList(visitGuideList);
         mRvPlayGuide.setAdapter(playGuideAdapter);
-
-        /*List<EntranceTicketResponse> entranceTicketList = new ArrayList<>();
-
-        EntranceTicketResponse entranceTicketResponse = new EntranceTicketResponse();
-        entranceTicketResponse.setTicketType("[成人票] 门票");
-        entranceTicketResponse.setOriginalPrice("180");
-        entranceTicketResponse.setTicketPrice("175");
-
-        List<EntranceTicketResponse.TicketEntity> ticketEntityList = new ArrayList<>();
-        EntranceTicketResponse.TicketEntity ticketEntity = new EntranceTicketResponse().new TicketEntity();
-        ticketEntity.setOriginalPrice("180");
-        ticketEntity.setTicketPrice("175");
-        ticketEntity.setBookTicketDes("最早可订明日 平均1秒出票");
-        ticketEntity.setTicketName("宁海洋世界成人票");
-        ticketEntity.setFavorablePrice("1000");
-        ticketEntity.setFavorablePrice("5");
-        ticketEntityList.add(ticketEntity);
-
-        List<String> labelList = new ArrayList<>();
-        labelList.add("官方");
-        labelList.add("随时退");
-        labelList.add("无需换票");
-        ticketEntity.setLabelList(labelList);
-        entranceTicketResponse.setTicketList(ticketEntityList);
-
-        EntranceTicketResponse entranceTicketResponse1 = new EntranceTicketResponse();
-        entranceTicketResponse1.setTicketType("[儿童票]门票");
-        entranceTicketResponse1.setOriginalPrice("130");
-        entranceTicketResponse1.setTicketPrice("125");
-
-        List<EntranceTicketResponse.TicketEntity> ticketEntityList1 = new ArrayList<>();
-        EntranceTicketResponse.TicketEntity ticketEntity1 = new EntranceTicketResponse().new TicketEntity();
-        ticketEntity1.setOriginalPrice("180");
-        ticketEntity1.setTicketPrice("175");
-        ticketEntity1.setBookTicketDes("最早可订明日 平均1秒出票");
-        ticketEntity1.setTicketName("宁海洋世界成人票");
-        ticketEntity1.setFavorablePrice("1000");
-        ticketEntity1.setFavorablePrice("5");
-        ticketEntityList1.add(ticketEntity1);
-
-        List<String> labelList1 = new ArrayList<>();
-        labelList1.add("官方");
-        labelList1.add("随时退");
-        labelList1.add("无需换票");
-        ticketEntity1.setLabelList(labelList1);
-        entranceTicketResponse1.setTicketList(ticketEntityList1);
-
-        EntranceTicketResponse entranceTicketResponse2 = new EntranceTicketResponse();
-        entranceTicketResponse2.setTicketType("[家庭票]门票");
-        entranceTicketResponse2.setOriginalPrice("180");
-        entranceTicketResponse2.setTicketPrice("175");
-
-        List<EntranceTicketResponse.TicketEntity> ticketEntityList2 = new ArrayList<>();
-
-        EntranceTicketResponse.TicketEntity ticketEntity2 = new EntranceTicketResponse().new TicketEntity();
-        ticketEntity2.setOriginalPrice("180");
-        ticketEntity2.setTicketPrice("175");
-        ticketEntity2.setBookTicketDes("最早可订明日 平均1秒出票");
-        ticketEntity2.setTicketName("宁海洋世界成人票");
-        ticketEntity2.setFavorablePrice("1000");
-        ticketEntity.setFavorablePrice("5");
-        ticketEntityList2.add(ticketEntity2);
-
-        List<String> labelList2 = new ArrayList<>();
-        labelList2.add("官方");
-        labelList2.add("随时退");
-        labelList2.add("无需换票");
-        ticketEntity2.setLabelList(labelList2);
-        entranceTicketResponse2.setTicketList(ticketEntityList2);
-
-        entranceTicketList.add(entranceTicketResponse);
-        entranceTicketList.add(entranceTicketResponse1);
-        entranceTicketList.add(entranceTicketResponse2);*/
-
-
-        // mExpandableListTicket.setChildDivider(getResources().getDrawable(R.drawable.diyline));
-
-
-      /*  List<LabelResponse> labelResponseList = new ArrayList<>();
-        LabelResponse labelResponse = new LabelResponse();
-        labelResponse.setName("家庭亲子77");
-        LabelResponse labelResponse1 = new LabelResponse();
-        labelResponse1.setName("价格高19");
-        LabelResponse labelResponse2 = new LabelResponse();
-        labelResponse2.setName("人气旺19");
-        LabelResponse labelResponse3 = new LabelResponse();
-        labelResponse3.setName("性价比低77");
-        LabelResponse labelResponse4 = new LabelResponse();
-        labelResponse4.setName("地方赞19");
-        LabelResponse labelResponse5 = new LabelResponse();
-        labelResponse5.setName("设施完善19");
-        labelResponseList.add(labelResponse);
-        labelResponseList.add(labelResponse1);
-        labelResponseList.add(labelResponse2);
-        labelResponseList.add(labelResponse3);
-        labelResponseList.add(labelResponse4);
-        labelResponseList.add(labelResponse5);
-*/
 
         GridLayoutManager linearLayoutManager1 = new GridLayoutManager(ScenicSpotDetailActivity.this, 3);
         linearLayoutManager1.setOrientation(linearLayoutManager1.VERTICAL);
@@ -483,10 +309,10 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             @Override
             public void onPageSelected(int position) {
                 MchDetailsResponse.NearbyEntity nearbyEntity = mchDetailsResponse.getNearby();
-                List<GroupGoodsBean> groupGoodsList = nearbyEntity.getGroup();
-                List<ScenicSpotBean> scenicSpotList = nearbyEntity.getScenic();
-                List<ScenicSpotBean> foodList = nearbyEntity.getFood();
-                List<ScenicSpotBean> hotelList = nearbyEntity.getHotel();
+                List<NearbyTypeResponse> groupGoodsList = nearbyEntity.getGroup();
+                List<NearbyTypeResponse> scenicSpotList = nearbyEntity.getScenic();
+                List<NearbyTypeResponse> foodList = nearbyEntity.getFood();
+                List<NearbyTypeResponse> hotelList = nearbyEntity.getHotel();
                 if (position == 0) {
                     nearbyScenicSpotAdapter.setNearbyScenicSpotsList(hotelList);
                     mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
@@ -535,7 +361,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         nearbyScenicSpotAdapter = new NearbyScenicSpotAdapter(ScenicSpotDetailActivity.this);
         nearbyScenicSpotAdapter.setNearbyScenicSpotsList(nearbyScenicSpotsList);
         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
-
 
         LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
         userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
@@ -587,7 +412,10 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     //longitude = mchDetailsEntity.getLongitude();
                     commentList = commentEntity.getComment();
                     mchName = mchDetailsEntity.getMchName();
+                    //A级
                     int level = mchDetailsEntity.getLevel();
+                    //评价
+                    int commentNum = mchDetailsEntity.getCommentNum();
                     int mConsumePrice = mchDetailsEntity.getConsumePrice();
                     float mCommentScore = mchDetailsEntity.getCommentScore();
                     List<MchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
@@ -595,7 +423,10 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvPerCapitaPrice.setText(String.valueOf(mConsumePrice));
                     mTvCommentScore.setText(String.valueOf(mCommentScore));
                     mStarBarView.setIntegerMark(false);
+
                     mStarBarView.setStarMark(mCommentScore);
+                    mTvEvaluateNum.setText(commentNum + "评价");
+
                     mTvIntro.setText(mchDetailsEntity.getIntro());
 
                     MchDetailsResponse.ScoreEntity scoreEntity = commentEntity.getScore();
@@ -606,8 +437,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     userCommentAdapter.setLabelList(labelEntityList);
                     userCommentAdapter.notifyDataSetChanged();
 
-                    scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
-                    scenicSpotDetailUserCommentAdapter.notifyDataSetChanged();
+                    if(commentList != null)
+                    {
+                        scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
+                        scenicSpotDetailUserCommentAdapter.notifyDataSetChanged();
+                    }
                     //banner
                     List<String> bannerList = mchDetailsEntity.getRecommendPhoto();
 
@@ -669,8 +503,10 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvQuestionNum.setText(String.valueOf(mchQuestionEntity.getQuestionCount()) + "个问题>");
                     mTvQuestionContent.setText(String.valueOf(mchQuestionEntity.getQuestionContent()));
                     mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
+
                     List<MchDetailsResponse.VisitGuideEntity> visitGuideList = mchDetailsResponse.getVisitGuide();
-                    if (visitGuideList != null) {
+                    if (visitGuideList != null)
+                    {
                         playGuideAdapter.setVisitGuideEntityList(visitGuideList);
                         playGuideAdapter.notifyDataSetChanged();
                     }
@@ -752,7 +588,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 showPopupWindow(mImageMenu);
                 break;
             case R.id.rlyt_scenic_spot_location:
-                // toActivity(ScenicSpotsDetailLocationMapActivity.class);
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable("mchDetailsEntity", mchDetailsEntity);

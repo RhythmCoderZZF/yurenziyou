@@ -6,7 +6,7 @@ package com.nbhysj.coupon.common.Enum;
  */
 public enum UploadFileTypeEnum {
 
-    IMAGE(1, "image"), AUDIO(2, "audio"), VIDEO(3, "video"), GIF(4, "gif");
+    IMAGE(1, "images"), AUDIO(2, "audio"), VIDEO(3, "video"), GIF(4, "gif");
 
     private final int key;
     private final String value;

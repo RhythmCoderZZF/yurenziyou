@@ -38,6 +38,8 @@
     <color name="color_orange2">#FE9F1C</color>
     <color name="color_orange3">#FFFF7221</color>
     <color name="color_orange4">#FFE68606</color>
+    <color name="color_orange5">#FFFF8C46</color>
+    <color name="color_orange6">#FFFE9F1C</color>
     <color name="btn_bg_press">#FF7103</color>
     <color name="txt_color_light_gray">#787878</color>
     <color name="bg_color_light_gray">#F0F0F0</color>
@@ -156,6 +158,7 @@
     <color name="color_dark_green">#15BD97</color>
     <color name="color_drak_green2">#39CBAA</color>
     <color name="color_drak_green3">#FF5FB186</color>
+    <color name="color_drak_green4">#FF36CDA7</color>
     <color name="mask_color">#88888888</color>
     <color name="check_bg">#f2f2f2</color>
     <color name="un_press_color">#9C27B0</color>

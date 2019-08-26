@@ -317,6 +317,8 @@ public class MchDetailsResponse implements Serializable {
 
     public class MchDetailsEntity implements Serializable {
 
+        private int id;
+        //商户id
         private int mchId;
 
         private String mchType;
@@ -324,6 +326,12 @@ public class MchDetailsResponse implements Serializable {
         private int supplierId;
 
         private String mchName;
+
+        private String cityID;
+
+        private int commentNum;
+
+        private int collectionNum;
 
         private String intro;
 
@@ -335,7 +343,7 @@ public class MchDetailsResponse implements Serializable {
 
         private String openTime;
 
-        private String serviceJson;
+        private List<ServiceEntity> serviceJson;
 
         private List<ContentEntity> content;
 
@@ -371,7 +379,17 @@ public class MchDetailsResponse implements Serializable {
 
         private List<TagsEntity> tags;
 
-        //   private List<MchTagsEntity> mchTags;
+        //是否允许携带宠物 Integer
+        private int petsStatus;
+
+        //膳食政策 String
+        private String dietInfo;
+
+        //是否携带宠物 String
+        private String petsInfo;
+
+        //地图 String
+        private String staticMap;
 
         public int getMchId() {
             return mchId;
@@ -453,11 +471,19 @@ public class MchDetailsResponse implements Serializable {
             this.openTime = openTime;
         }
 
-        public String getServiceJson() {
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public List<ServiceEntity> getServiceJson() {
             return serviceJson;
         }
 
-        public void setServiceJson(String serviceJson) {
+        public void setServiceJson(List<ServiceEntity> serviceJson) {
             this.serviceJson = serviceJson;
         }
 
@@ -589,13 +615,61 @@ public class MchDetailsResponse implements Serializable {
             this.tags = tags;
         }
 
-        /*  public List<MchTagsEntity> getMchTags() {
-            return mchTags;
+        public int getPetsStatus() {
+            return petsStatus;
         }
 
-        public void setMchTags(List<MchTagsEntity> mchTags) {
-            this.mchTags = mchTags;
-        }*/
+        public void setPetsStatus(int petsStatus) {
+            this.petsStatus = petsStatus;
+        }
+
+        public String getDietInfo() {
+            return dietInfo;
+        }
+
+        public void setDietInfo(String dietInfo) {
+            this.dietInfo = dietInfo;
+        }
+
+        public String getPetsInfo() {
+            return petsInfo;
+        }
+
+        public void setPetsInfo(String petsInfo) {
+            this.petsInfo = petsInfo;
+        }
+
+        public String getCityID() {
+            return cityID;
+        }
+
+        public void setCityID(String cityID) {
+            this.cityID = cityID;
+        }
+
+        public int getCommentNum() {
+            return commentNum;
+        }
+
+        public void setCommentNum(int commentNum) {
+            this.commentNum = commentNum;
+        }
+
+        public int getCollectionNum() {
+            return collectionNum;
+        }
+
+        public void setCollectionNum(int collectionNum) {
+            this.collectionNum = collectionNum;
+        }
+
+        public String getStaticMap() {
+            return staticMap;
+        }
+
+        public void setStaticMap(String staticMap) {
+            this.staticMap = staticMap;
+        }
     }
 
     public class ContentEntity implements Serializable {
@@ -978,6 +1052,12 @@ public class MchDetailsResponse implements Serializable {
 
         private String mchDetails;
 
+        private int goodsId;
+
+        private String goodsTitle;
+
+        private long payTime;
+
         private long ctime;
 
         public int getId() {
@@ -1067,6 +1147,30 @@ public class MchDetailsResponse implements Serializable {
         public void setCtime(long ctime) {
             this.ctime = ctime;
         }
+
+        public int getGoodsId() {
+            return goodsId;
+        }
+
+        public void setGoodsId(int goodsId) {
+            this.goodsId = goodsId;
+        }
+
+        public String getGoodsTitle() {
+            return goodsTitle;
+        }
+
+        public void setGoodsTitle(String goodsTitle) {
+            this.goodsTitle = goodsTitle;
+        }
+
+        public long getPayTime() {
+            return payTime;
+        }
+
+        public void setPayTime(long payTime) {
+            this.payTime = payTime;
+        }
     }
 
     public class UserEntity implements Serializable {
@@ -1122,7 +1226,7 @@ public class MchDetailsResponse implements Serializable {
         }
     }
 
-    public class LabelEntity {
+    public class LabelEntity implements Serializable{
 
         private String title;
 
@@ -1157,44 +1261,78 @@ public class MchDetailsResponse implements Serializable {
 
     public class NearbyEntity implements Serializable {
 
-        private List<ScenicSpotBean> hotel;
+        private List<NearbyTypeResponse> hotel;
 
-        private List<ScenicSpotBean> scenic;
+        private List<NearbyTypeResponse> scenic;
 
-        private List<ScenicSpotBean> food;
+        private List<NearbyTypeResponse> food;
 
-        private List<GroupGoodsBean> group;
+        private List<NearbyTypeResponse> group;
 
-        public List<ScenicSpotBean> getHotel() {
+        public List<NearbyTypeResponse> getHotel() {
             return hotel;
         }
 
-        public void setHotel(List<ScenicSpotBean> hotel) {
+        public void setHotel(List<NearbyTypeResponse> hotel) {
             this.hotel = hotel;
         }
 
-        public List<ScenicSpotBean> getScenic() {
+        public List<NearbyTypeResponse> getScenic() {
             return scenic;
         }
 
-        public void setScenic(List<ScenicSpotBean> scenic) {
+        public void setScenic(List<NearbyTypeResponse> scenic) {
             this.scenic = scenic;
         }
 
-        public List<ScenicSpotBean> getFood() {
+        public List<NearbyTypeResponse> getFood() {
             return food;
         }
 
-        public void setFood(List<ScenicSpotBean> food) {
+        public void setFood(List<NearbyTypeResponse> food) {
             this.food = food;
         }
 
-        public List<GroupGoodsBean> getGroup() {
+        public List<NearbyTypeResponse> getGroup() {
             return group;
         }
 
-        public void setGroup(List<GroupGoodsBean> group) {
+        public void setGroup(List<NearbyTypeResponse> group) {
             this.group = group;
+        }
+    }
+
+    public class ServiceEntity implements Serializable{
+
+        private String value;
+
+        private String title;
+
+        private String photo;
+
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getPhoto() {
+            return photo;
+        }
+
+        public void setPhoto(String photo) {
+            this.photo = photo;
         }
     }
 }

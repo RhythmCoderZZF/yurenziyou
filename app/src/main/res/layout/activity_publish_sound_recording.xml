@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="0:00 / 0:30"
+            android:text="00:00 / 0:30"
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xtiny" />
 

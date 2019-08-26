@@ -19,8 +19,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="@dimen/dp_20"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/dp_20">
 
         <ImageView
@@ -29,8 +29,7 @@
             android:layout_height="@dimen/dp_78"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:scaleType="fitCenter" />
+            android:layout_marginLeft="@dimen/dp_15" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -45,11 +44,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_scenic_spots_name"
+                    android:id="@+id/tv_ticket_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_15"
-                    android:text="宁波海洋世界【儿童票】"
+                    android:text=""
                     android:textColor="@color/txt_font_black2"
                     android:textSize="@dimen/text_size_xnormal"
                     android:textStyle="bold" />
@@ -60,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
                     zhy:max_select="-1" />
 
                 <RelativeLayout
@@ -67,11 +67,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_6">
 
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp_16"
+                        android:layout_centerVertical="true"
                         android:orientation="horizontal">
 
                         <TextView
@@ -82,19 +82,19 @@
                             android:textSize="@dimen/text_size_tiny" />
 
                         <TextView
-                            android:id="@+id/tv_scenic_spots_price"
+                            android:id="@+id/tv_market_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="125"
+                            android:text="0"
                             android:textColor="@color/color_text_orange2"
-                            android:textSize="@dimen/text_size_xmedium"
+                            android:textSize="@dimen/text_size_xlarge"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tv_original_price"
+                            android:id="@+id/tv_default_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="¥130"
+                            android:text="¥0"
                             android:textColor="@color/color_text_gray17"
                             android:textSize="@dimen/text_size_tiny" />
                     </LinearLayout>
@@ -102,33 +102,37 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dp_15">
 
-                        <ImageButton
+                        <ImageView
+                            android:id="@+id/img_purchase_num_reduce"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:background="@mipmap/icon_reduce_purchase_num" />
+                            android:src="@mipmap/icon_reduce_purchase_num" />
 
                         <TextView
+                            android:id="@+id/tv_purchase_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_18"
-                            android:layout_marginRight="@dimen/dp_18"
-                            android:text="1"
+                            android:layout_marginLeft="@dimen/dp_15"
+                            android:layout_marginRight="@dimen/dp_15"
+                            android:text="0"
                             android:textColor="@color/txt_font_black2"
                             android:textSize="@dimen/text_size_xmedium" />
 
-                        <ImageButton
+                        <ImageView
+                            android:id="@+id/img_purchase_num_add"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:background="@mipmap/icon_add_purchase_num" />
+                            android:src="@mipmap/icon_add_purchase_num" />
                     </LinearLayout>
+
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>

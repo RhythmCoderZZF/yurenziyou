@@ -12,9 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.RecommendFriendsPictureAdapter;
 import com.nbhysj.coupon.common.Constants;
@@ -29,14 +27,11 @@ import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
-import com.nbhysj.coupon.ui.ShoppingMallScenicSpotActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
     /*  @BindView(R.id.refresh_layout)
@@ -199,7 +194,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
             @Override
             public void setPostIsCollectionListener(int mPosition) {
-
+                mCollectPostPosition = mPosition;
                 HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mPosition);
 
              //   showToast(getActivity(),mPosition + "");
@@ -299,6 +294,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void postsCommentResult(BackResult res) {
+
     }
 
     public class MyBroadcastReceiver extends BroadcastReceiver {

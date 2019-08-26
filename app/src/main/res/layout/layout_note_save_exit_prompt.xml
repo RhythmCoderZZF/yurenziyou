@@ -30,7 +30,10 @@
             android:id="@+id/lLayout_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+
+        </LinearLayout>
     </ScrollView>
 
     <TextView
@@ -38,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/actionsheet_single_selector"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:background="@drawable/bg_white_radius_five_shape"
         android:gravity="center"
         android:text="取消"
         android:textColor="@color/color_text_blue"

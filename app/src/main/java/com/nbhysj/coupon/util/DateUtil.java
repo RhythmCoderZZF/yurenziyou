@@ -3,10 +3,15 @@ package com.nbhysj.coupon.util;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @auther：hysj created on 2019/03/13
@@ -231,6 +236,12 @@ public class DateUtil {
         return toMonths(date) / 365L;
     }
 
+    /**
+     * 年月日
+     * @param dateStr
+     * @return
+     * @throws java.text.ParseException
+     */
     public static String toYYMMDD(String dateStr) throws java.text.ParseException {
         try {
             String date;
@@ -242,13 +253,18 @@ public class DateUtil {
                 date = year + "年" + month + "月" + day + "日";
                 return date;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-
+    /**
+     * 月日
+     * @param dateStr
+     * @return
+     * @throws java.text.ParseException
+     */
     public static String toMMDD(String dateStr) throws java.text.ParseException {
         try {
             String date;
@@ -256,14 +272,15 @@ public class DateUtil {
                 String[] dateArray = dateStr.split("-");
                 String month = dateArray[1];
                 String day = dateArray[2];
-                date = month + "月" + day + "日";
+                date = month + "-" + day;
                 return date;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     public static String dateToWeek(String datetime) throws java.text.ParseException {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         String[] weekDays = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
@@ -300,5 +317,119 @@ public class DateUtil {
             default:
                 return "";
         }
+    }
+
+    /**
+     * 获取提交时间
+     *
+     * @return
+     */
+    public static List<GoodsPriceDatesResponse> getOrderSubmitDate(){
+        List<GoodsPriceDatesResponse> dateList = null;
+        try {
+            Date date = new Date();//取时间
+            String currentDate = getTime(date, sDateYMDFormat);
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTime(date); //需要将date数据转移到Calender对象中操作
+            calendar.add(calendar.DATE, 2);//把日期往后增加n天.正数往后推,负数往前移动
+            date = calendar.getTime();   //这个时间就是日期往后推一天的结果
+            String twoDaysLaterDate = getTime(date, sDateYMDFormat);
+
+            dateList = findDates(currentDate, twoDaysLaterDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateList;
+    }
+
+    /**
+     * 根据起始时间和结束时间 计算时间段
+     * @param dBegin
+     * @param dEnd
+     * @return
+     * @throws ParseException
+     */
+    public static List<GoodsPriceDatesResponse> findDates(String dBegin, String dEnd) throws ParseException {
+        List<GoodsPriceDatesResponse> datelist = null;
+
+        try {
+            //日期工具类准备
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+            //设置开始时间
+            Calendar calBegin = Calendar.getInstance();
+            calBegin.setTime(format.parse(dBegin));
+
+            //设置结束时间
+            Calendar calEnd = Calendar.getInstance();
+            calEnd.setTime(format.parse(dEnd));
+
+            //装返回的日期集合容器
+            datelist = new ArrayList<GoodsPriceDatesResponse>();
+            GoodsPriceDatesResponse goodsPriceDatesResponse = new GoodsPriceDatesResponse();
+            goodsPriceDatesResponse.setDate(dBegin);
+            datelist.add(goodsPriceDatesResponse);
+            // 每次循环给calBegin日期加一天，直到calBegin.getTime()时间等于dEnd
+            while (format.parse(dEnd).after(calBegin.getTime()))
+            {
+                // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+                GoodsPriceDatesResponse aftergoodsPriceDates = new GoodsPriceDatesResponse();
+                calBegin.add(Calendar.DAY_OF_MONTH, 1);
+
+                String time =  format.format(calBegin.getTime());
+                aftergoodsPriceDates.setDate(time);
+                datelist.add(aftergoodsPriceDates);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return datelist;
+    }
+
+
+
+    //判断选择的日期是否是今天
+    public static boolean isToday(long time) {
+        return isThisTime(time, sDateYMDFormat);
+    }
+
+    //判断选择的日期是否是本周
+    public static boolean isThisWeek(long time) {
+        Calendar calendar = Calendar.getInstance();
+        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        calendar.setTime(new Date(time));
+        int paramWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        if (paramWeek == currentWeek) {
+            return true;
+        }
+        return false;
+    }
+
+
+    //判断选择的日期是否是本月
+    public static boolean isThisMonth(long time) {
+        return isThisTime(time, "yyyy-MM");
+    }
+
+    public static boolean isThisTime(long time, String pattern) {
+        Date date = new Date(time);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String param = sdf.format(date);//参数时间
+        String now = sdf.format(new Date());//当前时间
+        if (param.equals(now)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isCurrentDate(String time, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String now = sdf.format(new Date());//当前时间
+        if (time.equals(now)) {
+            return true;
+        }
+        return false;
     }
 }

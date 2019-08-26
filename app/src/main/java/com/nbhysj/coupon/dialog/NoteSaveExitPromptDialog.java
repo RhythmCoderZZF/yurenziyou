@@ -42,6 +42,11 @@ public class NoteSaveExitPromptDialog {
         WindowManager windowManager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         display = windowManager.getDefaultDisplay();
+        if(sheetItemList != null)
+        {
+            sheetItemList.clear();
+        }
+
     }
 
     public NoteSaveExitPromptDialog builder() {
@@ -58,7 +63,8 @@ public class NoteSaveExitPromptDialog {
                 .findViewById(R.id.lLayout_content);
         txt_title = (TextView) view.findViewById(R.id.txt_title);
         txt_cancel = (TextView) view.findViewById(R.id.txt_cancel);
-        txt_cancel.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("取消", 0xFF0DDDF6, 0xFF1DEB96));
+       // txt_cancel.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("取消", 0xFF0DDDF6, 0xFF1DEB96));
+        txt_cancel.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("取消", 0xFF595959, 0xFF595959));
         txt_cancel.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -105,71 +111,81 @@ public class NoteSaveExitPromptDialog {
      */
     public NoteSaveExitPromptDialog addSheetItem(String strItem, SheetItemColor color,
                                                  OnSheetItemClickListener listener) {
-        if (sheetItemList == null) {
+        if (sheetItemList == null)
+        {
             sheetItemList = new ArrayList<SheetItem>();
         }
-        sheetItemList.add(new SheetItem(strItem, color, listener));
+            sheetItemList.add(new SheetItem(strItem, color, listener));
         return this;
     }
 
     /**
      * 设置条目布局
      */
-    private void setSheetItems() {
-        if (sheetItemList == null || sheetItemList.size() <= 0) {
+    public void setSheetItems()
+    {
+        if (sheetItemList == null || sheetItemList.size() <= 0)
+        {
             return;
         }
-
         int size = sheetItemList.size();
 
-        // 添加条目过多的时候控制高度
-        if (size >= 7) {
-            LayoutParams params = (LayoutParams) sLayout_content
-                    .getLayoutParams();
-            params.height = display.getHeight() / 2;
-            sLayout_content.setLayoutParams(params);
-        }
-
-        // 循环添加条目
-        for (int i = 1; i <= size; i++) {
-            final int index = i;
-            SheetItem sheetItem = sheetItemList.get(i - 1);
-            String strItem = sheetItem.name;
-            SheetItemColor color = sheetItem.color;
-            final OnSheetItemClickListener listener = (OnSheetItemClickListener) sheetItem.itemClickListener;
-
-            TextView textView = new TextView(context);
-            textView.setText(strItem);
-            textView.setTextSize(20);
-            textView.setGravity(Gravity.CENTER);
-
-            // 背景图片
-            if (size == 1) {
-                if (showTitle) {
-                    textView.setBackgroundResource(R.drawable.actionsheet_bottom_selector);
-                } else {
-                    textView.setBackgroundResource(R.drawable.actionsheet_single_selector);
-                }
-            } else {
-                if (showTitle) {
-                    if (i >= 1 && i < size) {
-                        textView.setBackgroundResource(R.drawable.actionsheet_middle_selector);
-                    } else {
-                        textView.setBackgroundResource(R.drawable.actionsheet_bottom_selector);
-                    }
-                } else {
-                    if (i == 1) {
-                        textView.setBackgroundResource(R.drawable.actionsheet_top_selector);
-                    } else if (i < size) {
-                        textView.setBackgroundResource(R.drawable.actionsheet_middle_selector);
-                    } else {
-                        textView.setBackgroundResource(R.drawable.actionsheet_bottom_selector);
-                    }
-                }
+            // 添加条目过多的时候控制高度
+            if (size >= 7) {
+                LayoutParams params = (LayoutParams) sLayout_content
+                        .getLayoutParams();
+                params.height = display.getHeight() / 2;
+                sLayout_content.setLayoutParams(params);
             }
 
-            // 字体颜色
-            if (color == null) {
+            // 循环添加条目
+            for (int i = 1; i <= size; i++) {
+                final int index = i;
+                SheetItem sheetItem = sheetItemList.get(i - 1);
+                String strItem = sheetItem.name;
+                SheetItemColor color = sheetItem.color;
+                final OnSheetItemClickListener listener = (OnSheetItemClickListener) sheetItem.itemClickListener;
+
+                TextView textView = new TextView(context);
+                textView.setText(strItem);
+                textView.setTextSize(20);
+                textView.setGravity(Gravity.CENTER);
+
+                // 背景图片
+                if (size == 1) {
+                    if (showTitle) {
+                        textView.setBackgroundResource(R.drawable.actionsheet_bottom_selector);
+                    } else {
+                        textView.setBackgroundResource(R.drawable.actionsheet_single_selector);
+                    }
+                } else {
+                    if (showTitle) {
+                        if (i >= 1 && i < size) {
+                            textView.setBackgroundResource(R.drawable.actionsheet_middle_selector);
+                        } else {
+                            textView.setBackgroundResource(R.drawable.bg_white_radius_five_bottom_shape);
+                        }
+                    } else {
+                        if (i == 1) {
+                            textView.setBackgroundResource(R.drawable.bg_white_radius_five_top_shape);
+                        } else if (i < size) {
+                            textView.setBackgroundResource(R.drawable.bg_white_shape);
+                        } else {
+                            textView.setBackgroundResource(R.drawable.bg_white_radius_five_bottom_shape);
+                        }
+                    }
+                }
+                int mColor = Color.parseColor(sheetItem.color.name);
+                textView.setTextColor(mColor);
+
+                View view = new View(context);
+                view.setLayoutParams(new LayoutParams(
+                        LayoutParams.MATCH_PARENT, 1));
+                int viewColor = Color.parseColor("#FFB1B8BC");
+                view.setBackgroundColor(viewColor);
+                view.setAlpha(0.25f);
+                // 字体颜色
+           /* if (color == null) {
                 textView.setTextColor(Color.parseColor(SheetItemColor.Blue
                         .getName()));
             } else {
@@ -182,28 +198,31 @@ public class NoteSaveExitPromptDialog {
                     textView.setTextColor(mColor);
                 }
             }
+*/
+                // 高度
+                float scale = context.getResources().getDisplayMetrics().density;
+                int height = (int) (45 * scale + 0.5f);
+                textView.setLayoutParams(new LayoutParams(
+                        LayoutParams.MATCH_PARENT, height));
 
-            // 高度
-            float scale = context.getResources().getDisplayMetrics().density;
-            int height = (int) (45 * scale + 0.5f);
-            textView.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, height));
+                // 点击事件
+                textView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onClick(index);
+                        dialog.dismiss();
+                    }
+                });
 
-            // 点击事件
-            textView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onClick(index);
-                    dialog.dismiss();
+                lLayout_content.addView(textView);
+                if (i != size) {
+                    lLayout_content.addView(view);
                 }
-            });
-
-            lLayout_content.addView(textView);
-        }
+            }
     }
 
     public void show() {
-        setSheetItems();
+
         dialog.show();
     }
 
@@ -225,7 +244,7 @@ public class NoteSaveExitPromptDialog {
     }
 
     public enum SheetItemColor {
-        Blue("#037BFF"), Red("#FD4A2E");
+        Blue("#037BFF"), Red("#FD4A2E"), Gray("#FF595959");
 
         private String name;
 

@@ -9,7 +9,6 @@
     android:orientation="vertical"
     tools:context=".ui.PublishNoteActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50">
@@ -93,7 +92,7 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/rlyt_location"
+        android:id="@+id/rlyt_my_location"
         android:layout_width="match_parent"
         android:layout_height="56dp">
 

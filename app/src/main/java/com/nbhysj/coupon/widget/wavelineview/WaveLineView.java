@@ -117,7 +117,7 @@ public class WaveLineView extends RenderView {
         TypedArray t = getContext().obtainStyledAttributes(attrs, R.styleable.WaveLineView);
         backGroundColor = t.getColor(R.styleable.WaveLineView_wlvBackgroundColor, Color.WHITE);
         samplingSize = t.getInt(R.styleable.WaveLineView_wlvSamplingSize, DEFAULT_SAMPLING_SIZE);
-        lineColor = t.getColor(R.styleable.WaveLineView_wlvLineColor, Color.parseColor("#FF1DEB96"));
+        lineColor = t.getColor(R.styleable.WaveLineView_wlvLineColor, Color.parseColor("#FFFFFFFF"));
         thickLineWidth = (int)t.getDimension(R.styleable.WaveLineView_wlvThickLineWidth, 2);
         fineLineWidth = (int)t.getDimension(R.styleable.WaveLineView_wlvFineLineWidth, 2);
         offsetSpeed = t.getFloat(R.styleable.WaveLineView_wlvMoveSpeed, DEFAULT_OFFSET_SPEED);

@@ -3,6 +3,7 @@ package com.nbhysj.coupon.presenter;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 
@@ -35,6 +36,11 @@ public class HomePagePresenter extends HomePageContract.Presenter {
     @Override
     public void postOprate(PostOprateRequest postOprateRequest) {
         mRxManager.add(mModel.postOprate(postOprateRequest).subscribe(res -> mView.postOprateResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void postsCommentRequest(PostsCommentRequest postsCommentRequest) {
+        mRxManager.add(mModel.postsCommentRequest(postsCommentRequest).subscribe(res -> mView.postsCommentResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

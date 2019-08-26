@@ -6,6 +6,7 @@ import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -48,5 +49,10 @@ public class HomePageModel implements HomePageContract.Model {
     @Override
     public Observable<BackResult<PraiseOrCollectResponse>> postOprate(PostOprateRequest postOprateRequest) {
         return Api.getInstance().apiService.postOprate(postOprateRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> postsCommentRequest(PostsCommentRequest postsCommentRequest) {
+        return Api.getInstance().apiService.postsCommentRequest(postsCommentRequest).compose(RxSchedulers.io_main());
     }
 }

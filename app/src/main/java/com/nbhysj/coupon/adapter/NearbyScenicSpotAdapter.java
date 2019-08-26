@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.DeliciousFoodRecommendResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.model.response.NearbyTypeResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.StarBarView;
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
 public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSpotAdapter.ViewHolder> {
 
 
-    List<ScenicSpotBean> nearbyScenicSpotsList;
+    List<NearbyTypeResponse> nearbyScenicSpotsList;
     private Context mContext;
 
     public NearbyScenicSpotAdapter(Context mContext) {
@@ -38,7 +39,7 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
         this.mContext = mContext;
     }
 
-    public void setNearbyScenicSpotsList(List<ScenicSpotBean> nearbyScenicSpotsList) {
+    public void setNearbyScenicSpotsList(List<NearbyTypeResponse> nearbyScenicSpotsList) {
 
         this.nearbyScenicSpotsList = nearbyScenicSpotsList;
     }
@@ -54,14 +55,14 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
     @Override
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
-        ScenicSpotBean nearbyScenicSpots = nearbyScenicSpotsList.get(itemPosition);
+        NearbyTypeResponse nearbyScenicSpots = nearbyScenicSpotsList.get(itemPosition);
         String photoUrl = nearbyScenicSpots.getPhoto();
-        holder.mTvPopularScenicSpotName.setText(nearbyScenicSpots.getMchName());
-        holder.mTvScore.setText(nearbyScenicSpots.getCommentScore() + "分");
+        holder.mTvPopularScenicSpotName.setText(nearbyScenicSpots.getTitle());
+        holder.mTvScore.setText(nearbyScenicSpots.getScore() + "分");
         holder.mStarBarScenicSpots.setIntegerMark(true);
         holder.mStarBarScenicSpots.setStarMark(nearbyScenicSpots.getLevel());
         holder.mTvScenicSpotsDistance.setText("距景点" + nearbyScenicSpots.getDistance());
-        holder.mTvPerCapitaPrice.setText(String.valueOf(nearbyScenicSpots.getConsumePrice()));
+        holder.mTvPerCapitaPrice.setText(String.valueOf(nearbyScenicSpots.getPrice()));
 
         if (photoUrl != null) {
             GlideUtil.loadCornersTransformImage(mContext, photoUrl, 5, holder.mImgScenicSpots);

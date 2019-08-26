@@ -8,6 +8,7 @@
         android:id="@+id/vp_photos"
         android:background="@color/__picker_pager_bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>

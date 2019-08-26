@@ -14,6 +14,7 @@ import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
@@ -38,6 +39,7 @@ import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
+import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
@@ -248,6 +250,15 @@ public interface ApiService {
     @GET("api/index/postInfo")
     Observable<BackResult<PostInfoDetailResponse>> getPostInfo(@Query("id") int id, @Query("postKey") String postKey, @Query("longitude") String longitude, @Query("latitude") String latitude);
 
+    //帖子点赞、收藏或者评论
+    //帖子类型：1帖子点赞，2帖子收藏，3.帖子评论 postsType
+    @PUT("api/PostsUserZanCollection/praiseOrCollect")
+    Observable<BackResult<PraiseOrCollectResponse>> postOprate(@Body PostOprateRequest postOprateRequest);
+
+    //帖子评论
+    @POST("api/postsComment")
+    Observable<BackResult> postsCommentRequest(@Body PostsCommentRequest postsCommentRequest);
+
     /***********************************   商城   ****************************************/
 
     //获取商城首页
@@ -318,6 +329,10 @@ public interface ApiService {
     @GET("api/playItem/findList")
     Observable<BackResult<List<TourGuideBean>>> getTourGuideList(@QueryMap HashMap<String, String> map);
 
+    //门票订单提交界面(景区日历价格)
+    @GET("api/goods/scenic")
+    Observable<BackResult<OrderSubmitInitResponse>> getOrderSubmitInit(@Query("goodsId") int goodsId);
+
     /*************     行程助手      ***************/
     //行程助手列表
     @GET("api/trip")
@@ -387,9 +402,5 @@ public interface ApiService {
     @GET("api/weather")
     Observable<BackResult<WeatherResponse>> getWeather(@Query("cityCode") String cityCode);
 
-    //帖子点赞、收藏或者评论
-    //帖子类型：1帖子点赞，2帖子收藏，3.帖子评论 postsType
-    @PUT("api/PostsUserZanCollection/praiseOrCollect")
-    Observable<BackResult<PraiseOrCollectResponse>> postOprate(@Body PostOprateRequest postOprateRequest);
 }
 

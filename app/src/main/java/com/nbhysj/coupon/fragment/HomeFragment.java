@@ -165,6 +165,11 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     }
 
     @Override
+    public void postsCommentResult(BackResult res) {
+
+    }
+
+    @Override
     public void postOprateResult(BackResult res) {
 
     }

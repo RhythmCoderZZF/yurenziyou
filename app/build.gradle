@@ -167,6 +167,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.contrarywind:Android-PickerView:3.2.4'
     implementation 'com.yanzhenjie:permission:1.1.0'
+    implementation project(':matisse')
     implementation project(':PhotoPicker')
     implementation project(':oss-android-sdk')
     //本地照片库
@@ -184,6 +185,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'jp.wasabeef:glide-transformations:3.0.1'
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
+    implementation 'com.commit451:PhotoView:1.2.4'
+    implementation 'it.sephiroth.android.library.imagezoom:library:1.0.4'
     //implementation 'com.amap.api:3dmap:latest.integration'
     //implementation 'com.amap.api:search:latest.integration'
+
+
 }

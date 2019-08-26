@@ -65,7 +65,7 @@ public class PublishLocationListAdapter extends RecyclerView.Adapter<PublishLoca
         try {
             MerchantListResponse.MerchantEntity merchantEntity = publishRecommendLocationList.get(position);
             holder.mTvLocationTitle.setText(merchantEntity.getMchName());
-            holder.mTvSpecificLocation.setText(merchantEntity.getAddress());
+           // holder.mTvSpecificLocation.setText(merchantEntity.getAddress());
             holder.mLlytMerchantItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

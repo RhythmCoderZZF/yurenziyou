@@ -94,6 +94,9 @@ public class CalendarList extends FrameLayout {
         if (startDate == null) {
             startDate = dateBean;
             dateBean.setItemState(DateBean.ITEM_STATE_BEGIN_DATE);
+            if (onDateSelected != null) {
+                onDateSelected.singleDateSelected(simpleDateFormat.format(startDate.getDate()));
+            }
         } else if (endDate == null) {
             //如果选中了开始日期但没有选中结束日期，本次操作选中结束日期
 
@@ -129,7 +132,9 @@ public class CalendarList extends FrameLayout {
             endDate.setItemState(DateBean.ITEM_STATE_NORMAL);
             endDate = null;
         }
-
+        if (onDateSelected != null) {
+            onDateSelected.singleDateSelected(simpleDateFormat.format(startDate.getDate()));
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -501,6 +506,8 @@ public class CalendarList extends FrameLayout {
 
     public interface OnDateSelected {
         void selected(String startDate, String endDate);
+
+        void singleDateSelected(String startDate);
     }
 
     public void setOnDateSelected(OnDateSelected onDateSelected) {

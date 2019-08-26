@@ -235,4 +235,6 @@
 
     <dimen name="actionBarSize">32dip</dimen>
     <dimen name="dimen_9dp">9dp</dimen>
+
+    <dimen name="grid_expected_size">120dp</dimen>
 </resources>

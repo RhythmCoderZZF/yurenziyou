@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@mipmap/icon_the_date_of_use_ticket_select" android:color="@color/white" android:state_checked="true" />
+
+    <item android:drawable="@mipmap/icon_appointment_call_car_check_false" android:color="@color/txt_font_black2" android:state_checked="false" />
+</selector>

@@ -364,6 +364,11 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void postsCommentResult(BackResult res) {
+
+    }
+
+    @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -387,6 +392,11 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                     e.printStackTrace();
                 }
                 break;
+                case Constants.USER_NOT_LOGIN_CODE:
+
+                    toActivity(LoginActivity.class);
+
+                    break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;

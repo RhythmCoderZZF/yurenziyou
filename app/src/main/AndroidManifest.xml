@@ -32,18 +32,22 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.READ_LOGS"
-        tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"
-        tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.WRITE_MEDIA_STORAGE"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"
-        tools:ignore="ProtectedPermissions"/> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission
+        android:name="android.permission.CHANGE_CONFIGURATION"
+        tools:ignore="ProtectedPermissions" /> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 3.2.0版本增加 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 3.2.0版本增加 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -65,13 +69,16 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.ActivityMain" android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".ui.LetMeAnswerActivity"
+        <activity android:name=".ui.VehicleAddressSelectionActivity"></activity>
+        <activity
+            android:name=".ui.ActivityMain"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.QuestionsAndAnswersDetailActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.LetMeAnswerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.QuestionsAndAnswersDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.PostCollectionActivity"
             android:screenOrientation="portrait" />
@@ -80,10 +87,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.UserPersonalHomePageActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.HomePageSearchActivity"
             android:screenOrientation="portrait" />
@@ -144,7 +148,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -246,7 +250,7 @@
             android:name=".ui.ScenicSpotsAlbumActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.SubmitOrderActivity"
+            android:name=".ui.OrderSubmitActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ScenicSpotDetailActivity"
@@ -266,7 +270,6 @@
         <activity
             android:name=".ui.DestinationSearchActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.DeploymentProblemActivity"
             android:screenOrientation="portrait" />
@@ -437,12 +440,14 @@
         <activity
             android:name=".ui.FindFriendsActivity"
             android:screenOrientation="portrait" />
-        <activity
+        <!--
+     <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"
             android:theme="@style/customTheme" />
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+        -->
         <activity
             android:name=".ui.ImagePreviewLoadingActivity"
             android:screenOrientation="portrait" /> <!-- qq -->
@@ -504,12 +509,31 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" /> <!-- Required -->
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/customTheme" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="${JPUSH_APPKEY}" /> <!-- </>值来自开发者平台取得的AppKey -->
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="${JPUSH_CHANNEL}" />
+
+        <service android:name=".service.RecordingService" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.nbhysj.coupon.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public" />
+        </provider>
     </application>
 
 </manifest>

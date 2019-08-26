@@ -11,9 +11,6 @@ public class PublishPostRequest {
     //贴子内容
     private String content;
 
-    //贴子简介
-    private String intro;
-
     //经度
     private String latitude;
 
@@ -34,14 +31,6 @@ public class PublishPostRequest {
 
     //主题的id,即标签id
     private List<Integer> topicIds;
-
-    public String getIntro() {
-        return intro;
-    }
-
-    public void setIntro(String intro) {
-        this.intro = intro;
-    }
 
     public String getLatitude() {
         return latitude;
@@ -124,6 +113,8 @@ public class PublishPostRequest {
         //资源url
         private String url;
 
+        private double duration;
+
         public int getHeight() {
             return height;
         }
@@ -162,6 +153,14 @@ public class PublishPostRequest {
 
         public void setWidth(int width) {
             this.width = width;
+        }
+
+        public double getDuration() {
+            return duration;
+        }
+
+        public void setDuration(double duration) {
+            this.duration = duration;
         }
     }
 }

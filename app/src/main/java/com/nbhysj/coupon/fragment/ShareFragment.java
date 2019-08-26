@@ -132,6 +132,11 @@ public class ShareFragment extends BaseFragment<HomePagePresenter, HomePageModel
     }
 
     @Override
+    public void postsCommentResult(BackResult res) {
+
+    }
+
+    @Override
     public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:

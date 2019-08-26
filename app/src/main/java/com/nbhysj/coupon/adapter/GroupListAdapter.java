@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.GroupGoodsBean;
+import com.nbhysj.coupon.model.response.NearbyTypeResponse;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -24,7 +25,7 @@ import java.util.List;
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.ViewHolder> {
 
 
-    List<GroupGoodsBean> groupGoodsBeanList;
+    List<NearbyTypeResponse> groupGoodsBeanList;
     private Context mContext;
 
     public GroupListAdapter(Context mContext) {
@@ -32,7 +33,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
         this.mContext = mContext;
     }
 
-    public void setGroupList(List<GroupGoodsBean> groupGoodsBeanList) {
+    public void setGroupList(List<NearbyTypeResponse> groupGoodsBeanList) {
 
         this.groupGoodsBeanList = groupGoodsBeanList;
     }
@@ -49,12 +50,12 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            GroupGoodsBean groupGoodsBean = groupGoodsBeanList.get(itemPosition);
+            NearbyTypeResponse groupGoodsBean = groupGoodsBeanList.get(itemPosition);
             String photoUrl = groupGoodsBean.getPhoto();
             holder.mTvPopularScenicSpotName.setText(groupGoodsBean.getTitle());
             //  holder.mTvScore.setText(groupGoodsBean.getMarketPrice() + "分");
             // holder.mTvScenicSpotsDistance.setText("距景点" + nearbyScenicSpots.getScenicSpotsDistance() + "m");
-            holder.mTvPerCapitaPrice.setText(String.valueOf(groupGoodsBean.getMarketPrice()));
+            holder.mTvPerCapitaPrice.setText(String.valueOf(groupGoodsBean.getPrice()));
             // holder.mTvHotelType.setText("品质客栈");
             // holder.mTvHotelType.getBackground().setAlpha(30);
 

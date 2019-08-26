@@ -248,6 +248,11 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void postsCommentResult(BackResult res) {
+
+    }
+
+    @Override
     public void queryByTopicResult(BackResult<HomePageResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -356,9 +361,6 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     /**
      * 默认的定位参数
-     *
-     * @author hongming.wang
-     * @since 2.8.0
      */
     private AMapLocationClientOption getDefaultOption() {
         AMapLocationClientOption mOption = new AMapLocationClientOption();

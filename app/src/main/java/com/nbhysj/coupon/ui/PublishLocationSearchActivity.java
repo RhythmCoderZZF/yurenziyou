@@ -29,6 +29,7 @@ import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.SearchBean;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.presenter.PublishPostPresenter;
+import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -98,6 +99,11 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
+        BlurBehind.getInstance()
+                .withAlpha(100)
+                .withFilterColor(Color.parseColor("#000000"))
+                .setBackground(PublishLocationSearchActivity.this);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -354,6 +360,7 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
 
         if (validateInternet()) {
 
+            showProgressDialog(PublishLocationSearchActivity.this);
             mPresenter.getMerchantList("330200", mchNameKey, mPage, mPageSize);
         }
     }
@@ -362,14 +369,14 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
         try {
             merchantAllList.clear();
             DaoSession daoSession = ((BasicApplication) getApplication()).getDaoSession();
+
             SearchBean searchBean = new SearchBean();
             searchBean.setSearch(merchant.getMchName());
-            searchBean.setMerchantId(merchant.getId());
-
+            searchBean.setMerchantId(merchant.getMchId());
             if (merchantList.size() > 0) {
                 for (int i = 0; i < merchantList.size(); i++) {
                     int id = merchantList.get(i).getMerchantId();
-                    int merchantId = searchBean.getMerchantId();
+                    int merchantId = merchant.getMchId();
                     if (id == merchantId) {
 
                         isContainSameMerchant = true;
@@ -382,6 +389,7 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
                         merchantList.remove(merchantList.get(merchantList.size() - 1));
 
                     }
+
                     merchantAllList.add(searchBean);
                     merchantAllList.addAll(merchantList);
                     deleteAll();

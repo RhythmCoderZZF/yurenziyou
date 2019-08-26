@@ -152,7 +152,7 @@ public class OssService {
     }
 
 
-    public void asyncPutImage(String object, String uploadFileType, String localFile) {
+    public void asyncPutFile(String object, String uploadFileType, String localFile) {
         final long upload_start = System.currentTimeMillis();
         PutObjectRequest put;
         OSSLog.logDebug("upload start");
@@ -256,7 +256,7 @@ public class OssService {
     }
 
 
-    public void asyncUploadFile(String object, String uploadFileType, byte[] imageByte) {
+    public void asyncUploadIamge(String object, String uploadFileType, byte[] imageByte) {
         final long upload_start = System.currentTimeMillis();
         PutObjectRequest put;
         OSSLog.logDebug("upload start");

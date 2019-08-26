@@ -3,21 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="${relativePackage}.${activityClass}">
+    tools:context="${relativePackage}.${activityClass}"
+    >
 
-    <include layout="@layout/__picker_toolbar" />
+  <include layout="@layout/__picker_toolbar"/>
 
-    <FrameLayout
-        android:id="@+id/container"
+  <FrameLayout
+      android:id="@+id/container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <fragment
+        android:id="@+id/photoPagerFragment"
+        android:name="me.iwf.photopicker.fragment.ImagePagerFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        />
 
-        <fragment
-            android:id="@+id/photoPagerFragment"
-            android:name="me.iwf.photopicker.fragment.ImagePagerFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
+  </FrameLayout>
 
 </LinearLayout>

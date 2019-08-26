@@ -2,6 +2,7 @@ package com.nbhysj.coupon.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -43,8 +45,16 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.dialog.UserInfoEditDialog;
+import com.nbhysj.coupon.widget.glide.GifSizeFilter;
+import com.nbhysj.coupon.widget.glide.Glide4Engine;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.filter.Filter;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
+import com.zhihu.matisse.listener.OnCheckedListener;
+import com.zhihu.matisse.listener.OnSelectedListener;
 
 import java.io.File;
 import java.util.Date;
@@ -52,8 +62,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.iwf.photopicker.PhotoPicker;
-import me.iwf.photopicker.PhotoPreview;
 
 import static com.nbhysj.coupon.oss.Config.STS_SERVER_URL;
 
@@ -94,9 +102,13 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
 
     //OSS的上传下载
     private OssService mService;
+
     StringBuffer stringBuffer = new StringBuffer();
+
     private String objectName;
 
+    //照片选取返回code
+    private int REQUEST_CODE_POST_PHOTO = 23;
     @Override
     public int getLayoutId() {
         return R.layout.activity_account_and_personal_data;
@@ -278,11 +290,42 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
                             @Override
                             public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
 
-                                PhotoPicker.builder()
-                                        .setPhotoCount(1)
-                                        .setShowCamera(true)
-                                        .setPreviewEnabled(false)
-                                        .start(AccountAndPersonalDataActivity.this);
+                                Matisse.from(AccountAndPersonalDataActivity.this)
+                                        .choose(MimeType.ofAll(), false)
+                                        .countable(true)
+                                        .capture(false)
+                                        .captureStrategy(
+                                                new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                                        .maxSelectable(1)
+
+                                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                        .gridExpectedSize(
+                                                getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                        .thumbnailScale(0.85f)
+                                        // for glide-V3
+//                                            .imageEngine(new GlideEngine())
+                                        // for glide-V4
+                                        .imageEngine(new Glide4Engine())
+                                        .setOnSelectedListener(new OnSelectedListener() {
+                                            @Override
+                                            public void onSelected(
+                                                    @NonNull List<Uri> uriList, @NonNull List<String> pathList) {
+                                                // DO SOMETHING IMMEDIATELY HERE
+                                                Log.e("onSelected", "onSelected: pathList=" + pathList);
+
+                                            }
+                                        })
+                                        .originalEnable(true)
+                                        .maxOriginalSize(10)
+                                        .setOnCheckedListener(new OnCheckedListener() {
+                                            @Override
+                                            public void onCheck(boolean isChecked) {
+                                                // DO SOMETHING IMMEDIATELY HERE
+                                                Log.e("isChecked", "onCheck: isChecked=" + isChecked);
+                                            }
+                                        })
+                                        .forResult(REQUEST_CODE_POST_PHOTO);
                             }
 
                             @Override
@@ -356,16 +399,16 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
                 birthday = data.getStringExtra("birthday");
                 mTvDateOfBirth.setText(birthday);
             } else if (resultCode == RESULT_OK &&
-                    (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE)) {
+                    requestCode == REQUEST_CODE_POST_PHOTO) {
                 List<String> photos = null;
                 if (data != null) {
-                    photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    photos = Matisse.obtainPathResult(data);
                     String selectPhoto = photos.get(0);
                     mImageUserAvatar.loadCircle(selectPhoto, R.mipmap.icon_placeholder_image);
                     showProgressDialog(AccountAndPersonalDataActivity.this);
                     mDialog.setTitle("");
                     objectName = getFileName(selectPhoto);
-                    mService.asyncPutImage(objectName, UploadFileTypeEnum.IMAGE.getValue(), selectPhoto);
+                    mService.asyncPutFile(objectName, UploadFileTypeEnum.IMAGE.getValue(), selectPhoto);
                 }
             }
         } catch (Exception e) {

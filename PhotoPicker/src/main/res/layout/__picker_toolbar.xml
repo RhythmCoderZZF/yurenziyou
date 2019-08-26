@@ -7,4 +7,4 @@
     android:theme="?attr/actionBarTheme"
     app:popupTheme="?attr/actionBarPopupTheme"
     android:background="?attr/colorPrimary"
-    android:id="@+id/toolbar" />
+    android:id="@+id/toolbar"/>

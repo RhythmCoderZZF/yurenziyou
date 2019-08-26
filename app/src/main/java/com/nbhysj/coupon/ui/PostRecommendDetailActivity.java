@@ -2,9 +2,13 @@ package com.nbhysj.coupon.ui;
 
 
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,10 +38,13 @@ import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.widget.customjzvd.MyJzvdStd;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.umeng.commonsdk.statistics.AnalyticsConstants.LOG_TAG;
 
 public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter, HomePageModel> implements HomePageContract.View {
 
@@ -148,6 +155,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     private int mPostId;
 
     Bitmap videoThumbnailBitmap;
+
+    private MediaPlayer mMediaPlayer = null;
     @Override
     public int getLayoutId() {
 
@@ -212,6 +221,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         List<String> resources = postInfoEntity.getResources(); //图片
                         String resourceUrl = postInfoEntity.getResourceUrl();  //mp4
                         String postPublishTime = DateUtil.transferLongToDateStr(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
+                        String userName = postInfoEntity.getNickname(); //用户名
 
                         //头像
                         if(avatarUrl != null)
@@ -219,22 +229,33 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                             GlideUtil.loadImage(PostRecommendDetailActivity.this,avatarUrl,mImgUserAvatar);
                         }
 
+                        if(TextUtils.isEmpty(userName))
+                        {
+                            mTvUserName.setText(userName);
+                        }
+
                         //帖子时间
                         mTvPostTime.setText(postPublishTime);
+                        mTvTime.setText(postPublishTime);
 
                         if(resources != null)
                         {
                             mBannerViewFriendDetailPicture.setVisibility(View.VISIBLE);
                             mJzvdPostVideo.setVisibility(View.GONE);
                             mBannerViewFriendDetailPicture.initUI(resources);
+
+                            if(TextUtils.isEmpty(resourceUrl))
+                            {
+                                getMediaPlayer(resourceUrl);
+                            }
+
                         } else {
 
                            //videoThumbnailBitmap = BitmapUtils.getNetVideoBitmap(resourceUrl);
                             //mImgPostVideGif.setImageBitmap(videoThumbnailBitmap);
                             mJzvdPostVideo.setVisibility(View.VISIBLE);
                             mBannerViewFriendDetailPicture.setVisibility(View.GONE);
-                            mJzvdPostVideo.setUp(resourceUrl
-                                    , "");
+                            mJzvdPostVideo.setUp(resourceUrl, "");
                             Glide.with(this).load(photoUrl).into(mJzvdPostVideo.thumbImageView);
 
                         }
@@ -368,7 +389,15 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     public void getPostInfo(){
 
-        mPresenter.getPostInfo(mPostId,mPostKey,mLatitude,mLongitude);
+        if(validateInternet())
+        {
+            mPresenter.getPostInfo(mPostId, mPostKey, mLatitude, mLongitude);
+        }
+
+    }
+
+    @Override
+    public void postsCommentResult(BackResult res) {
 
     }
 
@@ -378,6 +407,48 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         if(videoThumbnailBitmap != null){
 
             videoThumbnailBitmap = null;
+        }
+    }
+
+    public void getMediaPlayer(String audioFileUrl)
+    {
+        mMediaPlayer = new MediaPlayer();
+
+        try {
+            mMediaPlayer.setDataSource(audioFileUrl);
+            mMediaPlayer.prepare();
+
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mMediaPlayer.start();
+                }
+            });
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                stopPlaying();
+            }
+        });
+    }
+
+
+    private void stopPlaying() {
+
+        if(mMediaPlayer != null)
+        {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+
+            //allow the screen to turn off again once audio is finished playing
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 }

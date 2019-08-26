@@ -20,7 +20,7 @@ public class Constants {
 
     public static final int THIRD_PARTY_LOGIN_FOR_UNBOUND_CODE = 11001; //第三方未绑定
 
-    public static final int USER_NOT_LOGIN_CODE = 10100; //第三方未绑定
+    public static final int USER_NOT_LOGIN_CODE = 10100; //未登录
 
     public static final int NO_MORE_LOAD_CODE = -1;      //暂无数据
 

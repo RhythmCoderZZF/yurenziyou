@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llyt_scenic_spot_item"
-    android:layout_width="@dimen/dp_70"
+    android:id="@+id/rlyt_the_date_of_ticket_select_item"
+    android:layout_width="wrap_content"
     android:layout_height="@dimen/dp_57"
     android:layout_marginLeft="@dimen/dp_9"
-    android:background="@mipmap/icon_bg_fillet_rectangle_order_time"
+    android:background="@mipmap/icon_the_date_of_use_ticket_unselect"
     android:orientation="vertical">
 
     <LinearLayout
@@ -14,17 +14,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_order_use_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="04-13周六"
+            android:text="今天04-11"
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xsmall" />
 
         <TextView
+            android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="日期"
             android:textSize="@dimen/text_size_xsmall"
+
             android:textColor="@color/txt_font_black2" />
     </LinearLayout>
 </RelativeLayout>

@@ -4,6 +4,7 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -43,6 +44,9 @@ public interface HomePageContract {
         //帖子操作: 1帖子点赞，2帖子收藏，3.帖子评论 postsType
         Observable<BackResult<PraiseOrCollectResponse>> postOprate(PostOprateRequest postOprateRequest);
 
+        //帖子评论
+        Observable<BackResult> postsCommentRequest(PostsCommentRequest postsCommentRequest);
+
     }
 
     interface View extends BaseView {
@@ -56,6 +60,8 @@ public interface HomePageContract {
         void getPostInfoResult(BackResult<PostInfoDetailResponse> res);
 
         void postOprateResult(BackResult<PraiseOrCollectResponse> res);
+
+        void postsCommentResult(BackResult res);
 
         void showMsg(String msg);
     }
@@ -73,6 +79,9 @@ public interface HomePageContract {
         public abstract void getPostInfo(int id,String postKey,String latitude,String longitude);
 
         public abstract void postOprate(PostOprateRequest postOprateRequest);
+
+        //帖子评论
+        public abstract void postsCommentRequest(PostsCommentRequest postsCommentRequest);
 
     }
 }

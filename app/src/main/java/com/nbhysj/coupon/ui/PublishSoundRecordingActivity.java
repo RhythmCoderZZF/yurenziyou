@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -25,16 +26,20 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.PublishPictureSoundRecordAdapter;
 import com.nbhysj.coupon.oss.audio.AudioRecorder;
 import com.nbhysj.coupon.oss.audio.FileUtils;
+import com.nbhysj.coupon.service.RecordingService;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
 import com.nbhysj.coupon.widget.wavelineview.WaveLineView;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,6 +80,8 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     @BindView(R.id.wave_line_view_audio_frequency)
     WaveLineView mWaveLineViewAudioFrequency;
 
+    private MediaPlayer mediaPlayer;
+
     AudioRecorder audioRecorder;
     StringBuffer stringBuffer = new StringBuffer();
     private int delaytime = 60;
@@ -86,7 +93,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     private boolean isAudioDelete = false;
     private TimerTask mTimerTask = null;
     private Handler mHandler = null;
-    private static long count = 0;
+    private static long count = 1;
     private boolean isPause = false;
     private static int delay = 1000;  //1s
     private static int period = 1000;  //1s
@@ -131,6 +138,9 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                     long time = count * i;
                     CharSequence sysTimeStr = DateFormat.format("mm:ss", time);
                     mTvAudioDuration.setText(String.valueOf(sysTimeStr + "/" + "00:30"));
+
+                    int progressDurTime = (int)time / 1000;
+                    mProgressAudioParentBar.setProgress(progressDurTime);
                 }
             }
         };
@@ -138,6 +148,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
         mImgSoundRecording.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                Intent intent = new Intent(PublishSoundRecordingActivity.this, RecordingService.class);
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
                     //  showToast(PublishSoundRecordingActivity.this,"按下");
@@ -145,27 +156,36 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                         //初始化录音
                         // String fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
                         startTimer();
-                        mAudiofileName = getFileName();
-                        audioRecorder.createDefaultAudio(mAudiofileName);
-                        audioRecorder.startRecord(null);
+                        //   mAudiofileName = getFileName();
+                        // audioRecorder.createDefaultAudio(mAudiofileName);
+                        //audioRecorder.startRecord(null);
 
                         // showTimer();
+                        File folder = new File(Environment.getExternalStorageDirectory() + "/SoundRecorder");
+                        if (!folder.exists()) {
+                            //folder /SoundRecorder doesn't exist, create the folder
+                            folder.mkdir();
+                        }
+                        startService(intent);
                     } else if (audioRecorder.getStatus() == AudioRecorder.Status.STATUS_PAUSE) {
                         audioRecorder.startRecord(null);
                     }
-                    mTvSoundRecordingTips.setText("松开暂停");
+                    mTvSoundRecordingTips.setText("长按录音");
 
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     //showToast(PublishSoundRecordingActivity.this,"松开");
+                    stopTimer();
+                    stopService(intent);
                     mIbtnSoundMediaPlay.setVisibility(View.VISIBLE);
                     mIbtnDeleteSoundRecording.setVisibility(View.VISIBLE);
-                    if (audioRecorder.getStatus() == AudioRecorder.Status.STATUS_START) {
+                    mTvSoundRecordingTips.setText("长按录音");
+                  /*  if (audioRecorder.getStatus() == AudioRecorder.Status.STATUS_START) {
                         //暂停录音
                         audioRecorder.pauseRecord();
                         mTvSoundRecordingTips.setText("按住继续录音");
                         audioRecorder.release();
                         stopTimer();
-                    }
+                    }*/
                 }
                 return false;
             }
@@ -207,9 +227,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
 
         if (mTimer != null && mTimerTask != null)
             mTimer.schedule(mTimerTask, delay, period);
-
     }
-
 
     public void sendMessage(int id) {
         if (mHandler != null) {
@@ -217,7 +235,6 @@ public class PublishSoundRecordingActivity extends BaseActivity {
             mHandler.sendMessage(message);
         }
     }
-
 
     public void stopTimer() {
 
@@ -237,9 +254,9 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     public String getFileName() {
 
         stringBuffer.setLength(0);
-        //stringBuffer.append("audio/");
-        //String date = DateUtil.getTime(new Date(), DateUtil.sDateYMDFormat);
-        //stringBuffer.append(date + "/");
+        stringBuffer.append("audio/");
+        String date = DateUtil.getTime(new Date(), DateUtil.sDateYMDFormat);
+        stringBuffer.append(date + "/");
         String uuid = EncryptedSignatureUtil.getUUID();
         stringBuffer.append(uuid);
         return stringBuffer.toString();
@@ -272,18 +289,28 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                 break;
             case R.id.ibtn_sound_media_play:
                 try {
+                    mIbtnSoundMediaPlay.setBackgroundResource(R.mipmap.icon_audio_playing);
+                    mediaPlayer = new MediaPlayer();
+                    //    String fileBasePath = FileUtils.getWavFileAbsolutePath(mAudiofileName);
+                    SharedPreferences sharePreferences = getSharedPreferences("sp_name_audio", MODE_PRIVATE);
+                    final String filePath = sharePreferences.getString("audio_path", "");
+                    long duration = sharePreferences.getLong("duration", 0);
 
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    String fileBasePath = FileUtils.getWavFileAbsolutePath(mAudiofileName);
-                    mediaPlayer.setDataSource(PublishSoundRecordingActivity.this, Uri.fromFile(new File(fileBasePath)));
+                   // mProgressAudioParentBar
+                    System.out.print(filePath);
+                    System.out.print(duration);
+
+                    mediaPlayer.setDataSource(filePath);
                     mediaPlayer.prepare();
-                    int duration = mediaPlayer.getDuration();
 
-                    String ms = timeParse(duration);
+                    int mediaDuration = mediaPlayer.getDuration();
+
+                    String ms = timeParse(mediaDuration);
 
                     System.out.print(ms + "");
                     mediaPlayer.start();
-                    mIbtnSoundMediaPlay.setBackgroundResource(R.mipmap.icon_audio_playing);
+
+                    updateSeekBar();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -352,5 +379,30 @@ public class PublishSoundRecordingActivity extends BaseActivity {
         time += second;
         return time;
 
+    }
+
+    //updating mSeekBar
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(mediaPlayer != null)
+            {
+                int mCurrentPosition = mediaPlayer.getCurrentPosition();
+                mProgressAudioParentBar.setProgress(mCurrentPosition / 1000);
+
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(mCurrentPosition);
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(mCurrentPosition)
+                        - TimeUnit.MINUTES.toSeconds(minutes);
+
+                mTvAudioDuration.setText(String.format("%02d:%02d", minutes, seconds) + "/" +  "00:30");
+
+                updateSeekBar();
+            }
+        }
+    };
+
+    private void updateSeekBar()
+    {
+        mHandler.postDelayed(mRunnable, 1000);
     }
 }

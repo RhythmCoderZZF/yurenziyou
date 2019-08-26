@@ -19,8 +19,6 @@ import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
-import com.nbhysj.coupon.model.response.MerchantListResponse;
-import com.nbhysj.coupon.model.response.SearchBean;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;

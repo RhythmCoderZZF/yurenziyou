@@ -37,6 +37,8 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
     //音频文件
     private String audioFileName;
 
+    private int audioFileLength;
+
     private List<String> fileNotePictureList = new ArrayList();
 
     public NotePictureItemAdapter(Context mContext) {
@@ -44,21 +46,23 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
         this.mContext = mContext;
     }
 
-    public void setNotePictureList(List<String> fileBOList, boolean isPhotoSelect, String audioFileName) {
+    public void setNotePictureList(List<String> fileBOList, boolean isPhotoSelect, String audioFileName, int audioFileLength) {
 
         this.isPhotoSelect = isPhotoSelect;
         this.audioFileName = audioFileName;
+        this.audioFileLength = audioFileLength;
+
         fileNotePictureList.clear();
         if (isPhotoSelect) {
             fileNotePictureList.add("");
             fileNotePictureList.add("");
             fileNotePictureList.addAll(fileBOList);
         } else {
-            if (fileBOList.size() == 0) {
+            if (fileBOList.size() == 0)
+            {
                 fileNotePictureList.add("");
             }
             fileNotePictureList.addAll(fileBOList);
-
         }
     }
 
@@ -117,7 +121,6 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
 
                 } else {
 
-
                     if (position == 0) {
 
                         holder.mRlytVoiceCapusule.setVisibility(View.VISIBLE);
@@ -149,6 +152,8 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
                         notePictureListener.setNotePictureListener(position, false);
                     }
                 });
+
+                holder.mTvVoiceCapsulelength.setText(String.valueOf(audioFileLength));
             } else {
 
                 String localVideoPath = fileNotePictureList.get(position);
@@ -169,6 +174,8 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
                     notePictureListener.setNotePictureListener(position, false);
                 });
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,6 +196,8 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
 
         ImageView mImgVoiceCapsule;
 
+        TextView mTvVoiceCapsulelength;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -198,7 +207,7 @@ public class NotePictureItemAdapter extends RecyclerView.Adapter<NotePictureItem
             mRlytInnerCircleVoiceCapusule = itemView.findViewById(R.id.rlyt_inner_circle_voice_capsule);
             mTvVoiceCapsuleTip = itemView.findViewById(R.id.tv_voice_capsule_tip);
             mImgVoiceCapsule = itemView.findViewById(R.id.image_voice_capsule);
-
+            mTvVoiceCapsulelength = itemView.findViewById(R.id.tv_sound_recording_length);
 
         }
     }

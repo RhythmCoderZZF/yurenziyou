@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlyt_view_expand"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="1dp"
+    android:paddingTop="4dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="4dp">
+
+    <com.nbhysj.coupon.widget.wavelineview.MyLinearLayout
+        android:id="@+id/mLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rlyt_sub_view_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_audio_frequency"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:scaleType="fitXY"
+                android:layout_marginRight="12dp"
+                android:src="@mipmap/icon_audio_tag" />
+
+            <com.nbhysj.coupon.widget.wavelineview.WaveLineView
+                android:id="@+id/wave_line_view_audio_frequency"
+                android:layout_width="40dp"
+                android:layout_height="22dp"
+                app:wlvBackgroundColor="@android:color/transparent"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_sound_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30″"
+            android:textColor="#ffff"
+            android:textSize="14sp" />
+
+
+    </com.nbhysj.coupon.widget.wavelineview.MyLinearLayout>
+
+
+</RelativeLayout>

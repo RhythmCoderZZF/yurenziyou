@@ -2,23 +2,22 @@ package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.EntranceTicketResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
-import com.nbhysj.coupon.ui.SubmitOrderActivity;
+import com.nbhysj.coupon.ui.OrderSubmitActivity;
 
 import java.util.List;
 
 /**
- * @auther：hysj created on 2019/4/28
- * description：
+ * @auther：hysj created on 2019/8/18
+ * description：门票订票
  */
 public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter {
 
@@ -79,14 +78,22 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.layout_ticket_expandable_item, viewGroup, false);
             groupitem = new Groupitem();
-            groupitem.textView = (TextView) view.findViewById(R.id.group_item);
+            groupitem.mTvTicketType = view.findViewById(R.id.tv_ticket_type);
             groupitem.mImgTicketExpandable = view.findViewById(R.id.img_admission_ticket_status);
+            groupitem.mTvPerCapitaPrice = view.findViewById(R.id.tv_per_capita_price); //价格
+            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_default_price); //默认价格
+
             view.setTag(groupitem);
         } else {
             groupitem = (Groupitem) view.getTag();
         }
-        groupitem.textView.setText(entranceTicketList.get(groupPosition).getTitle());
-
+        MchGoodsBean mchGoodsBean = entranceTicketList.get(groupPosition);
+        String title = mchGoodsBean.getTitle();
+        int defaultPrice = mchGoodsBean.getDefaultPrice();
+        int marketPrice = mchGoodsBean.getMarketPrice();
+        groupitem.mTvTicketType.setText(title);
+        groupitem.mTvPerCapitaPrice.setText(String.valueOf(marketPrice));
+        groupitem.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
         if (isExpanded) {
             groupitem.mImgTicketExpandable.setImageResource(R.mipmap.icon_admission_ticket_expand);
         } else {
@@ -101,20 +108,45 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.layout_ticket_expandable_sub_item, viewGroup, false);
             chilItem = new chilItem();
-            chilItem.textView = (TextView) view.findViewById(R.id.item);
+            chilItem.mTvTicketTitle = view.findViewById(R.id.tv_ticket_title);
             chilItem.mTvBookTicket = view.findViewById(R.id.tv_book_ticket);
+            chilItem.mTvBookTicketInfo = view.findViewById(R.id.tv_book_info);
+            chilItem.mTvSellNum = view.findViewById(R.id.tv_sell_num);
+            chilItem.mTvDefaultPrice = view.findViewById(R.id.tv_default_price);
+            chilItem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //价格
+            chilItem.mTvAlreadyReduced = view.findViewById(R.id.tv_already_reduced); //已优惠
+
             view.setTag(chilItem);
         } else {
+
             chilItem = (chilItem) view.getTag();
         }
+
         MchGoodsBean ticketEntity = entranceTicketList.get(groupPosition);
-        chilItem.textView.setText(ticketEntity.getTitle());
+        String bookingInfo = ticketEntity.getBookingInfo();
+        int defaultPrice = ticketEntity.getDefaultPrice();
+        int marketPrice = ticketEntity.getMarketPrice();
+        int sellNum = ticketEntity.getSellNum();
+        String ticketIntoType = ticketEntity.getTicketIntoType();
+        String refundSettings = ticketEntity.getRefundSettings();
+        int goodsId = ticketEntity.getGoodsId();
+
+        chilItem.mTvTicketTitle.setText(ticketEntity.getTitle());
+        chilItem.mTvBookTicketInfo.setText(bookingInfo);
+        chilItem.mTvSellNum.setText("已售"+ sellNum + " | 购买须知 >");
+        chilItem.mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
+        int discountAmount = marketPrice - defaultPrice;
+        chilItem.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
+        chilItem.mTvAlreadyReduced.setText("已减" + String.valueOf(discountAmount) + "元");
+
+        chilItem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
         chilItem.mTvBookTicket.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View view)
+            {
                 Intent mIntent = new Intent();
-                mIntent.setClass(context, SubmitOrderActivity.class);
+                mIntent.setClass(context, OrderSubmitActivity.class);
+                mIntent.putExtra("goodsId",goodsId);
                 context.startActivity(mIntent);
             }
         });
@@ -128,12 +160,30 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
     }
 
     class Groupitem {
-        TextView textView;
+        //票类型
+        TextView mTvTicketType;
         ImageView mImgTicketExpandable;
+        //价格
+        TextView mTvPerCapitaPrice;
+        //默认价格
+        TextView mTvDefaultPrice;
     }
 
     class chilItem {
-        TextView textView;
+
+        //票标题
+        TextView mTvTicketTitle;
+        //预定票
         TextView mTvBookTicket;
+        //购票预定信息
+        TextView mTvBookTicketInfo;
+        //已售数量
+        TextView mTvSellNum;
+        //默认价格
+        TextView mTvDefaultPrice;
+        //市场价格
+        TextView mTvMarketPrice;
+        //已优惠
+        TextView mTvAlreadyReduced;
     }
 }
