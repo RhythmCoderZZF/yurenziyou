@@ -69,7 +69,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.VehicleAddressSelectionActivity"></activity>
+        <activity android:name=".ui.VehicleAddressSelectionActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.ActivityMain"
             android:screenOrientation="portrait"></activity>
@@ -515,6 +516,8 @@
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity android:name=".ui.WebActivity" android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="JPUSH_APPKEY"

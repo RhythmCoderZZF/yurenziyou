@@ -5,6 +5,7 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 
 import io.reactivex.Observable;
@@ -22,11 +23,16 @@ public interface ShopMallHomePageContract {
 
         //获取商城首页模块数据
         Observable<BackResult<ShopMallHomePageResponse>> getShopMallHomePageData();
+
+        //用车h5
+        Observable<BackResult<CarH5UrlResponse>> getCarH5Url(String startLg, String startLt);
     }
 
     interface View extends BaseView {
 
         void getShopMallHomePageDataResult(BackResult<ShopMallHomePageResponse> res);
+
+        void getCarH5UrlResult(BackResult<CarH5UrlResponse> res);
 
         void showMsg(String msg);
     }
@@ -34,6 +40,8 @@ public interface ShopMallHomePageContract {
     abstract class Presenter extends BasePresenter<Model, View> {
 
         public abstract void getShopMallHomePageData();
+
+        public abstract void getCarH5Url(String startLg, String startLt);
 
     }
 }

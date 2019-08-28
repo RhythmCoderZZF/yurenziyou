@@ -17,4 +17,9 @@ public class ShopMallHomePagePresenter extends ShopMallHomePageContract.Presente
     public void onStart() {
 
     }
+
+    @Override
+    public void getCarH5Url(String startLg, String startLt) {
+        mRxManager.add(mModel.getCarH5Url(startLg,startLt).subscribe(res -> mView.getCarH5UrlResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 }

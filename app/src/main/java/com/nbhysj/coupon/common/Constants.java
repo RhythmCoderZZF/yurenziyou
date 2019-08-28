@@ -34,6 +34,10 @@ public class Constants {
 
     public static final String BROCAST_ACTION_TRIP_ASSISANT = "android.intent.action.trip.assisant";
 
+    //高德POI搜索
+    public static final String EXTRA_TIP = "extraTip";
+    public static final String KEY_WORDS_NAME = "KeyWord";
+
     public static String DEFAULT_CITY = "宁波";
 
     public static String getResultMsg(String msg) {

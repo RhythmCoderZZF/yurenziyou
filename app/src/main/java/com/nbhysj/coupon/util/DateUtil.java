@@ -238,6 +238,7 @@ public class DateUtil {
 
     /**
      * 年月日
+     *
      * @param dateStr
      * @return
      * @throws java.text.ParseException
@@ -261,6 +262,7 @@ public class DateUtil {
 
     /**
      * 月日
+     *
      * @param dateStr
      * @return
      * @throws java.text.ParseException
@@ -324,7 +326,7 @@ public class DateUtil {
      *
      * @return
      */
-    public static List<GoodsPriceDatesResponse> getOrderSubmitDate(){
+    public static List<GoodsPriceDatesResponse> getOrderSubmitDate() {
         List<GoodsPriceDatesResponse> dateList = null;
         try {
             Date date = new Date();//取时间
@@ -346,6 +348,7 @@ public class DateUtil {
 
     /**
      * 根据起始时间和结束时间 计算时间段
+     *
      * @param dBegin
      * @param dEnd
      * @return
@@ -372,13 +375,12 @@ public class DateUtil {
             goodsPriceDatesResponse.setDate(dBegin);
             datelist.add(goodsPriceDatesResponse);
             // 每次循环给calBegin日期加一天，直到calBegin.getTime()时间等于dEnd
-            while (format.parse(dEnd).after(calBegin.getTime()))
-            {
+            while (format.parse(dEnd).after(calBegin.getTime())) {
                 // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
                 GoodsPriceDatesResponse aftergoodsPriceDates = new GoodsPriceDatesResponse();
                 calBegin.add(Calendar.DAY_OF_MONTH, 1);
 
-                String time =  format.format(calBegin.getTime());
+                String time = format.format(calBegin.getTime());
                 aftergoodsPriceDates.setDate(time);
                 datelist.add(aftergoodsPriceDates);
             }
@@ -388,6 +390,68 @@ public class DateUtil {
         return datelist;
     }
 
+    /**
+     * 获取用车时间
+     * @return
+     */
+    public static List<String> getVehicleUseTime(){
+        List<String> dateList = null;
+        try {
+            Date date = new Date();//取时间
+            String currentDate = getTime(date, sDateYMDFormat);
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTime(date); //需要将date数据转移到Calender对象中操作
+            calendar.add(calendar.DATE, 4);//把日期往后增加n天.正数往后推,负数往前移动
+            date = calendar.getTime();   //这个时间就是日期往后推一天的结果
+            String twoDaysLaterDate = getTime(date, sDateYMDFormat);
+
+            dateList = findVehicleUseDates(currentDate, twoDaysLaterDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateList;
+    }
+
+    /**
+     * 根据起始时间和结束时间 计算时间段
+     *
+     * @param dBegin
+     * @param dEnd
+     * @return
+     * @throws ParseException
+     */
+    public static List<String> findVehicleUseDates(String dBegin, String dEnd) throws ParseException {
+        List<String> datelist = null;
+
+        try {
+            //日期工具类准备
+            DateFormat format = new SimpleDateFormat("MM-dd");
+
+            //设置开始时间
+            Calendar calBegin = Calendar.getInstance();
+            calBegin.setTime(format.parse(dBegin));
+
+            //设置结束时间
+            Calendar calEnd = Calendar.getInstance();
+            calEnd.setTime(format.parse(dEnd));
+
+            //装返回的日期集合容器
+            datelist = new ArrayList<String>();
+            datelist.add(dBegin);
+            // 每次循环给calBegin日期加一天，直到calBegin.getTime()时间等于dEnd
+            while (format.parse(dEnd).after(calBegin.getTime())) {
+                // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+                calBegin.add(Calendar.DAY_OF_MONTH, 1);
+                String time = format.format(calBegin.getTime());
+                datelist.add(time);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return datelist;
+    }
 
 
     //判断选择的日期是否是今天

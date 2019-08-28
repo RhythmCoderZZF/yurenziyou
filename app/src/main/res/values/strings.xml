@@ -181,6 +181,7 @@
     <string name="str_confirm_payment" translatable="false">确认支付</string>
     <string name="str_order_pay" translatable="false">支付订单</string>
     <string name="str_sure" translatable="false">确定</string>
+    <string name="str_confirm" translatable="false">确认</string>
     <string name="str_editing_visitors" translatable="false">编辑游客</string>
     <string name="str_add_visitors" translatable="false">新增游客</string>
     <string name="str_details_of_facilities" translatable="false">详情设施</string>
@@ -212,6 +213,7 @@
     <string name="str_video_play">播放</string>
     <string name="str_address_select">地址选择</string>
     <string name="str_un_bookable">不可订</string>
+    <string name="str_fill_in_vehicle_info">填写用车信息</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -244,6 +246,12 @@
     <string name="str_select_local_video">选择本地视频</string>
     <string name="str_select_local_photo">选择本地照片</string>
     <string name="str_need_to_buy_at_least_one">至少需要购买一张</string>
+    <string name="str_my_position">我的位置</string>
+    <string name="str_where_are_you_going">您要去哪儿</string>
+    <string name="str_your_travel_time">您的出行时间</string>
+    <string name="str_selection_of_vehicle_model">选择车辆型号</string>
+    <string name="str_total_cost">费用合计:</string>
+    <string name="str_choose_the_time_to_use_the_car">选择用车时间</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

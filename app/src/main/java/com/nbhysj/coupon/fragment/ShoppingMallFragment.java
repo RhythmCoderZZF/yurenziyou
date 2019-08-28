@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
@@ -26,6 +27,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ShopMallHomePageContract;
 import com.nbhysj.coupon.model.ShopMallHomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.DeliciousFoodResponse;
 import com.nbhysj.coupon.model.response.GroupGoodsBean;
 import com.nbhysj.coupon.model.response.MchCitiesBean;
@@ -43,6 +45,7 @@ import com.nbhysj.coupon.ui.ShoppingMallInteractionActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScenicSpotActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScreeningActivity;
 import com.nbhysj.coupon.ui.ShoppingMallSpecialSaleActivity;
+import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
 import com.nbhysj.coupon.view.BannerView;
@@ -325,13 +328,13 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 } else if (position == 3) {
                     //  toActivity(MutiScrollDemoActivity.class);
                 } else if (position == 5) {
-                    toActivity(ShoppingMallInteractionActivity.class);
+                    toActivity(ShoppingMallInteractionActivity.class);  //互动
                 } else if (position == 6) {
                     toActivity(CombinationListActivity.class);
-                } else if (position == 7) {
+                } else if (position == 7) {                              //用车
 
-                    toActivity(IntroductionOfLandlordActivity.class);
-
+                   // toActivity(IntroductionOfLandlordActivity.class);
+                    getCarH5Url();
                 }
             }
         });
@@ -617,6 +620,39 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     @Override
     public void lazyInitView(View view) {
 
+    }
+
+    @Override
+    public void getCarH5UrlResult(BackResult<CarH5UrlResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    CarH5UrlResponse carH5UrlResponse = res.getData();
+                    String carH5Url = carH5UrlResponse.getUrl();
+
+                    Intent intent = new Intent();
+                    intent.putExtra("carH5Url",carH5Url);
+                    intent.setClass(getActivity(), WebActivity.class);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    public void getCarH5Url()
+    {
+        if(validateInternet())
+        {
+            showProgressDialog(getActivity());
+            mPresenter.getCarH5Url("121.583030","29.790590");
+        }
     }
 
     public List<ShoppingMallMenuBean> getShopMallMenuList(){

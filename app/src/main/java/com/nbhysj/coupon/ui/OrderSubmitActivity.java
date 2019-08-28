@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.services.help.Tip;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AddTouristInformationAdapter;
 import com.nbhysj.coupon.adapter.IncreaseTicketAdapter;
@@ -26,8 +28,10 @@ import com.nbhysj.coupon.adapter.TouristInformationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
+import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.TouristBean;
@@ -150,6 +154,17 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //增加门票
     private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceList;
 
+    //我的位置
+    private int REQUEST_CODE_MY_LOCATION_SELECT = 0;
+
+    //目的地
+    private int REQUEST_CODE_DESTINATION_SELECT = 1;
+
+    //0:我的位置 1:您要去的地方(目的地) 2:用车时间 3:选择车辆型号
+    private int mVehicleUseOprateFlag = 0;
+
+    //车辆使用弹框
+    private VehicleUseAddDialog vehicleUseAddDialog;
     @Override
     public int getLayoutId() {
 
@@ -389,7 +404,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @OnClick({R.id.tv_order_submit, R.id.llyt_shadow_bg, R.id.rlyt_new_tourists_bg_half, R.id.tv_added_frequently_used_tourists,
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
-            R.id.img_add_purchase_num})
+            R.id.img_add_purchase_num, R.id.img_need_use_car})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -485,7 +500,29 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 mPurchaseNum++;
                 mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
                 break;
+            case R.id.img_need_use_car:
 
+                vehicleUseAddDialog = new VehicleUseAddDialog();
+                vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
+                    @Override
+                    public void setVehicleUseCallBack(int vehicleUseOprateFlag) {
+                        mVehicleUseOprateFlag = vehicleUseOprateFlag;
+                        if(vehicleUseOprateFlag == 0)
+                        {
+                            Intent mIntent = new Intent();
+                            mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                            startActivityForResult(mIntent, REQUEST_CODE_MY_LOCATION_SELECT);
+                        } else if(vehicleUseOprateFlag == 1){
+
+                            Intent mIntent = new Intent();
+                            mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                            startActivityForResult(mIntent, REQUEST_CODE_DESTINATION_SELECT);
+                        }
+                    }
+
+                });
+                vehicleUseAddDialog.show(getFragmentManager(), "");
+                break;
             default:
                 break;
         }
@@ -568,6 +605,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     @Override
+    public void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -580,6 +622,21 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         if (validateInternet()) {
             showProgressDialog(OrderSubmitActivity.this);
             mPresenter.getOrderSubmitInit(goodsId);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_MY_LOCATION_SELECT && resultCode == RESULT_OK){  //车辆我的位置
+
+                Tip tip = data.getParcelableExtra("tip");
+                vehicleUseAddDialog.setVehicleUseAddressData(tip,REQUEST_CODE_MY_LOCATION_SELECT);
+
+        } else if(requestCode == REQUEST_CODE_DESTINATION_SELECT && resultCode == RESULT_OK){  //车辆目的地
+
+            Tip tip = data.getParcelableExtra("tip");
+            vehicleUseAddDialog.setVehicleUseAddressData(tip,REQUEST_CODE_DESTINATION_SELECT);
         }
     }
 }

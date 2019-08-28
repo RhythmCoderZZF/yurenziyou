@@ -10,6 +10,7 @@ import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
+import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
@@ -27,10 +28,12 @@ import com.nbhysj.coupon.model.request.TripintelligentRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.ContactsInfoResponse;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
+import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
@@ -402,5 +405,14 @@ public interface ApiService {
     @GET("api/weather")
     Observable<BackResult<WeatherResponse>> getWeather(@Query("cityCode") String cityCode);
 
+    /**********************************        用车          ****************************************/
+
+    //预估价格
+    @GET("car/prePrice")
+    Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(@QueryMap EstimatedPriceRequest estimatedPriceRequest);
+
+    //曹操叫车H5
+    @GET("car/carH5Url")
+    Observable<BackResult<CarH5UrlResponse>> getCarH5Url(@Query("startLg") String longitude, @Query("startLt") String latitude);
 }
 
