@@ -3,15 +3,20 @@ package com.nbhysj.coupon.contract;
 import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
+import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
+import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
+import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
+
+import java.util.Map;
 
 import io.reactivex.Observable;
 
@@ -30,7 +35,19 @@ public interface OrderSubmitContract {
         Observable<BackResult<OrderSubmitInitResponse>> getOrderSubmitInit(int goodsId);
 
         //门票订单提交界面(景区日历价格)
-        Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(EstimatedPriceRequest estimatedPriceRequest);
+        Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(Map<String, Object> map);
+
+        //获取旅客列表
+        Observable<BackResult<TravellerInfoResponse>> getUserTravellerList(int userId, int page, int pageSize);
+
+        //添加旅客
+        Observable<BackResult> addUserTraveller(TravellerInfoRequest addTravellerRequest);
+
+        //修改旅客
+        Observable<BackResult> updateUserTraveller(TravellerInfoRequest updateTravellerRequest);
+
+        //删除旅客
+        Observable<BackResult> deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
     }
 
     interface View extends BaseView {
@@ -39,6 +56,15 @@ public interface OrderSubmitContract {
 
         void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res);
 
+        //1.旅客
+        void getUserTravellerListResult(BackResult<TravellerInfoResponse> res);
+
+        void addUserTravellerResult(BackResult res);
+
+        void updateUserTravellerResult(BackResult res);
+
+        void deleteUserTravellerResult(BackResult res);
+
         void showMsg(String msg);
     }
 
@@ -46,6 +72,14 @@ public interface OrderSubmitContract {
 
         public abstract void getOrderSubmitInit(int goodsId);
 
-        public abstract void getEstimatedPrice(EstimatedPriceRequest estimatedPriceRequest);
+        public abstract void getEstimatedPrice(Map<String, Object> map);
+
+        public abstract void getUserTravellerList(int userId, int page, int pageSize);
+
+        public abstract void addUserTraveller(TravellerInfoRequest addTravellerRequest);
+
+        public abstract void updateUserTraveller(TravellerInfoRequest updateTravellerRequest);
+
+        public abstract void deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
     }
 }

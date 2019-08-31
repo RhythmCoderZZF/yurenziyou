@@ -252,6 +252,7 @@
     <string name="str_selection_of_vehicle_model">选择车辆型号</string>
     <string name="str_total_cost">费用合计:</string>
     <string name="str_choose_the_time_to_use_the_car">选择用车时间</string>
+    <string name="str_vehicle_selection_model">车辆选择型号</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

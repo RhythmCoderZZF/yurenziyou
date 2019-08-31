@@ -11,12 +11,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.services.help.Tip;
+import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
+import com.bigkoo.pickerview.adapter.NumericWheelAdapter;
 import com.bigkoo.pickerview.lib.WheelView;
+import com.bigkoo.pickerview.listener.OnItemSelectedListener;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.adapter.VehicleUseHoursWheelAdapter;
+import com.nbhysj.coupon.adapter.VehicleUseMinuteWheelAdapter;
+import com.nbhysj.coupon.adapter.VehicleUseWheelAdapter;
+import com.nbhysj.coupon.model.response.VehicleUseTimeResponse;
+import com.nbhysj.coupon.util.DateUtil;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @auther：hysj created on 2019/08/28
@@ -25,16 +37,16 @@ import com.nbhysj.coupon.R;
 public class VehicleUseTimeSelectDialog extends DialogFragment {
     private Context context;
     private View view;
-    //我的位置
-    TextView mTvMyLocation;
-    //目的地
-    TextView mTvDestination;
-    //用车时间
-    TextView mTvTravelTime;
-    //选择车辆型号
-    TextView mTvVehicleModel;
     private VehicleUseTimeSelectListener vehicleUseTimeSelectListener;
-
+    private String[] hoursArray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"};
+    private String[] minuteArray = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
+            "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51"
+            , "52", "53", "54", "55", "56", "57", "58", "59", "60"};
+    private String vehicleUseDate;
+    private String vehicleUseDateStr;
+    private String hourStr;
+    private String minuteStr;
+    private StringBuffer stringBuffer = new StringBuffer();
     public VehicleUseTimeSelectDialog() {
 
     }
@@ -73,13 +85,73 @@ public class VehicleUseTimeSelectDialog extends DialogFragment {
     private void initView() {
 
         view = LayoutInflater.from(context).inflate(R.layout.layout_vehicle_use_time_dialog, null);
-        TextView mTvVehicleUseCancel = view.findViewById(R.id.tv_vehicle_use_cancel);       //取消用车
-        TextView mTvVehicleUseConfirm = view.findViewById(R.id.tv_vehicle_use_confirm);     //确定用车
+        RelativeLayout mRlytVehicleUseTime = view.findViewById(R.id.rlyt_vehicle_use_time);
+        ImageView mImgVehicleUseCancel = view.findViewById(R.id.img_vehicle_use_cancel);       //取消用车
+        TextView mTvVehicleUseTimeConfirm = view.findViewById(R.id.tv_vehicle_use_time_confirm);     //确定用车时间
         WheelView mWheelViewDate = view.findViewById(R.id.wheel_view_date);
         WheelView mWheelViewHours = view.findViewById(R.id.wheel_view_hours);
         WheelView mWheelViewMinute = view.findViewById(R.id.wheel_view_minute);
+        List<VehicleUseTimeResponse> vehicleUseTimeList = DateUtil.getVehicleUseTime();
 
-        mTvVehicleUseCancel.setOnClickListener(new View.OnClickListener() {
+        VehicleUseWheelAdapter dateVehicleUseWheelAdapter = new VehicleUseWheelAdapter(vehicleUseTimeList);
+        mWheelViewDate.setAdapter(dateVehicleUseWheelAdapter);// 设置日期的显示数据
+        mWheelViewDate.setTextSize(16);//滚轮文字大小
+        mWheelViewDate.setCurrentItem(0);// 初始化时显示的数据
+        mWheelViewDate.setGravity(Gravity.CENTER);
+        mWheelViewDate.setCyclic(false);
+
+
+        VehicleUseHoursWheelAdapter hoursVehicleUseWheelAdapter = new VehicleUseHoursWheelAdapter(Arrays.asList(hoursArray));
+        mWheelViewHours.setAdapter(hoursVehicleUseWheelAdapter);// 设置月显示数据
+        mWheelViewHours.setTextSize(16);//滚轮文字大小
+        mWheelViewHours.setCurrentItem(0);// 初始化时显示的数据
+        mWheelViewHours.setGravity(Gravity.CENTER);
+        mWheelViewMinute.setCyclic(true);
+
+        VehicleUseMinuteWheelAdapter minuteVehicleUseWheelAdapter = new VehicleUseMinuteWheelAdapter(Arrays.asList(minuteArray));
+        mWheelViewMinute.setAdapter(minuteVehicleUseWheelAdapter);// 设置月显示数据
+        mWheelViewMinute.setTextSize(16);//滚轮文字大小
+        mWheelViewMinute.setCurrentItem(0);// 初始化时显示的数据
+        mWheelViewMinute.setGravity(Gravity.CENTER);
+        mWheelViewMinute.setCyclic(true);
+
+        vehicleUseDateStr = vehicleUseTimeList.get(0).getDate();
+        hourStr = hoursArray[0];
+        minuteStr = minuteArray[0];
+
+      /*  VehicleUseWheelAdapter minuteVehicleUseWheelAdapter = new VehicleUseWheelAdapter(vehicleUseTime);
+        mWheelViewDate.setAdapter(minuteVehicleUseWheelAdapter);// 设置月显示数据
+        mWheelViewDate.setTextSize(16);//滚轮文字大小
+        mWheelViewDate.setCurrentItem(0);// 初始化时显示的数据
+        mWheelViewDate.setGravity(Gravity.CENTER);
+        mWheelViewDate.setCyclic(true);
+*/
+
+        mWheelViewDate.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+
+                vehicleUseDateStr = vehicleUseTimeList.get(index).getDate();
+            }
+        });
+
+        mWheelViewHours.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+
+                hourStr = hoursArray[index];
+            }
+        });
+
+        mWheelViewMinute.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+
+                minuteStr = minuteArray[index];
+            }
+        });
+
+        mImgVehicleUseCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -89,13 +161,33 @@ public class VehicleUseTimeSelectDialog extends DialogFragment {
         });
 
         //确认车辆使用
-        mTvVehicleUseConfirm.setOnClickListener(new View.OnClickListener() {
+        mTvVehicleUseTimeConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stringBuffer.setLength(0);
+                stringBuffer.append(vehicleUseDateStr);
+                stringBuffer.append(" ");
+                if(hourStr.length() == 1)
+                {
+                    hourStr = "0" + hourStr;
+                }
+                stringBuffer.append(hourStr);
+                stringBuffer.append(":");
+                stringBuffer.append(minuteStr);
+                stringBuffer.append(":00");
+                vehicleUseTimeSelectListener.setVehicleUseConfirmCallBack(stringBuffer.toString());
+                dismiss();
+            }
+        });
+
+        mRlytVehicleUseTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                vehicleUseTimeSelectListener.setVehicleUseConfirmCallBack();
+                dismiss();
             }
         });
+
     }
 
     @Override
@@ -106,6 +198,6 @@ public class VehicleUseTimeSelectDialog extends DialogFragment {
 
     public interface VehicleUseTimeSelectListener {
 
-        void setVehicleUseConfirmCallBack();
+        void setVehicleUseConfirmCallBack(String vehicleUseDateStr);
     }
 }

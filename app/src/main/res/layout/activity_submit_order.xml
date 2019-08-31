@@ -725,7 +725,8 @@
                 android:text="已减5元"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_tiny"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"/>
         </LinearLayout>
 
 
@@ -849,7 +850,8 @@
         android:background="@drawable/bg_white_radius_fifteen_top_shape"
         android:clickable="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+      >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -910,21 +912,23 @@
                 android:textSize="@dimen/text_size_xnormal" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/tv_username_tag"
                 android:text="ddd"
+                android:gravity="center_vertical"
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xnormal" />
 
             <TextView
+                android:id="@+id/tv_name_input_"
                 android:layout_width="@dimen/dp_15"
                 android:layout_height="@dimen/dp_15"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_15"
-                android:background="@mipmap/icon_cancel"
+                android:background="@mipmap/icon_nearby_detail_cancel"
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xnormal" />
         </RelativeLayout>
@@ -966,7 +970,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_15"
-                android:src="@mipmap/icon_cancel"
+                android:src="@mipmap/icon_nearby_detail_cancel"
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xnormal" />
         </RelativeLayout>

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+import com.nbhysj.coupon.model.response.VehicleUseTimeResponse;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,6 +34,8 @@ public class DateUtil {
     private static final String ONE_DAY_AGO = "天前";
     private static final String ONE_MONTH_AGO = "月前";
     private static final String ONE_YEAR_AGO = "年前";
+
+    private static StringBuffer stringBuffer = new StringBuffer();
 
     /**
      * 日期小于10的数字 添加首位添加0 保持两位数
@@ -283,9 +286,45 @@ public class DateUtil {
         return null;
     }
 
+
+    /**
+     * 月日
+     * @param dateStr
+     * @return
+     * @throws java.text.ParseException
+     */
+    public static String toMMDDStr(String dateStr) throws java.text.ParseException {
+        try {
+            String date;
+            if (!TextUtils.isEmpty(dateStr)) {
+                String[] dateArray = dateStr.split("-");
+                String month = dateArray[1];
+                String day = dateArray[2];
+                date = month + "月" + day + "日";
+                return date;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public static String dateToWeek(String datetime) throws java.text.ParseException {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         String[] weekDays = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
+        Calendar cal = Calendar.getInstance(); // 获得一个日历
+        Date datet = null;
+        datet = (Date) f.parse(datetime);
+        cal.setTime(datet);
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
+        if (w < 0)
+            w = 0;
+        System.out.println(weekDays[w]);//星期二
+        return weekDays[w];
+    }
+
+    public static String dateToWeek2(String datetime) throws java.text.ParseException {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String[] weekDays = {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar cal = Calendar.getInstance(); // 获得一个日历
         Date datet = null;
         datet = (Date) f.parse(datetime);
@@ -394,8 +433,8 @@ public class DateUtil {
      * 获取用车时间
      * @return
      */
-    public static List<String> getVehicleUseTime(){
-        List<String> dateList = null;
+    public static List<VehicleUseTimeResponse> getVehicleUseTime(){
+        List<VehicleUseTimeResponse> dateList = null;
         try {
             Date date = new Date();//取时间
             String currentDate = getTime(date, sDateYMDFormat);
@@ -422,12 +461,12 @@ public class DateUtil {
      * @return
      * @throws ParseException
      */
-    public static List<String> findVehicleUseDates(String dBegin, String dEnd) throws ParseException {
-        List<String> datelist = null;
+    public static List<VehicleUseTimeResponse> findVehicleUseDates(String dBegin, String dEnd) throws ParseException {
+        List<VehicleUseTimeResponse> datelist = null;
 
         try {
             //日期工具类准备
-            DateFormat format = new SimpleDateFormat("MM-dd");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
             //设置开始时间
             Calendar calBegin = Calendar.getInstance();
@@ -438,14 +477,23 @@ public class DateUtil {
             calEnd.setTime(format.parse(dEnd));
 
             //装返回的日期集合容器
-            datelist = new ArrayList<String>();
-            datelist.add(dBegin);
+            datelist = new ArrayList<VehicleUseTimeResponse>();
+            VehicleUseTimeResponse vehicleUseTimeResponse = new VehicleUseTimeResponse();
+            vehicleUseTimeResponse.setDate(dBegin);
+            String vehicleUseTime = getVehicleUseDate(dBegin);
+            vehicleUseTimeResponse.setVehicleUseTime(vehicleUseTime);
+
+            datelist.add(vehicleUseTimeResponse);
             // 每次循环给calBegin日期加一天，直到calBegin.getTime()时间等于dEnd
             while (format.parse(dEnd).after(calBegin.getTime())) {
                 // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+                VehicleUseTimeResponse vehicleUseDate = new VehicleUseTimeResponse();
                 calBegin.add(Calendar.DAY_OF_MONTH, 1);
                 String time = format.format(calBegin.getTime());
-                datelist.add(time);
+                String date = getVehicleUseDate(time);
+                vehicleUseDate.setDate(time);
+                vehicleUseDate.setVehicleUseTime(date);
+                datelist.add(vehicleUseDate);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -495,5 +543,22 @@ public class DateUtil {
             return true;
         }
         return false;
+    }
+
+    public static String getVehicleUseDate(String vehicleUseTime){
+
+        try {
+
+            stringBuffer.setLength(0);
+            String date = toMMDDStr(vehicleUseTime);
+            String dateToWeek = dateToWeek2(vehicleUseTime);
+            stringBuffer.append(date);
+            stringBuffer.append(" ");
+            stringBuffer.append(dateToWeek);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return stringBuffer.toString();
     }
 }

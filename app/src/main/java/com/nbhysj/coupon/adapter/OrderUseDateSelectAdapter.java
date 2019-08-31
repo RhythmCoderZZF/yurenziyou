@@ -99,14 +99,12 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
                         holder.mTvOrderUseDate.setText(date);
                     }
 
-
                 } else if (itemPosition == 1) {
                     holder.mTvOrderUseDate.setText("明天" + mmdd);
                     holder.mTvPrice.setText("¥" + price);
                     holder.mTvPrice.setTextColor(mContext.getResources().getColor(R.color.color_orange3));
                     holder.mTvOrderUseDate.setTextColor(mContext.getResources().getColor(R.color.color_text_black7));
                     holder.mRlytOrderUseDate.setBackgroundResource(R.mipmap.icon_the_date_of_use_ticket_unselect);
-
                 }
                 if (itemPosition == 2) {
 

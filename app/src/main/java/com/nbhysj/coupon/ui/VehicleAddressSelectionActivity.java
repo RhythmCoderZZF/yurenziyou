@@ -59,7 +59,6 @@ public class VehicleAddressSelectionActivity extends BaseActivity implements Tex
     @Override
     public void initData() {
 
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(VehicleAddressSelectionActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         mRvVehicleUseAddress.setLayoutManager(linearLayoutManager);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -18,7 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.help.Tip;
+import com.amap.api.services.poisearch.PoiResult;
+import com.amap.api.services.poisearch.PoiSearch;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AddTouristInformationAdapter;
 import com.nbhysj.coupon.adapter.IncreaseTicketAdapter;
@@ -28,20 +34,29 @@ import com.nbhysj.coupon.adapter.TouristInformationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
+import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
+import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
+import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.TouristBean;
+import com.nbhysj.coupon.model.response.TravellerInfoResponse;
+import com.nbhysj.coupon.overlay.PoiOverlay;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.Tools;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,7 +65,7 @@ import butterknife.OnClick;
  * @auther：hysj created on 2019/08/20
  * description：订单提交
  */
-public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, OrderSubmitModel> implements OrderSubmitContract.View {
+public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, OrderSubmitModel> implements OrderSubmitContract.View, PoiSearch.OnPoiSearchListener {
 
     //订单使用日期选择
     @BindView(R.id.rv_use_ticket_date)
@@ -165,6 +180,22 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     //车辆使用弹框
     private VehicleUseAddDialog vehicleUseAddDialog;
+
+    //用车时间选择
+    private VehicleUseTimeSelectDialog vehicleUseTimeSelectDialog;
+
+    //选择车辆型号
+    private VehicleSelectionModelAddDialog vehicleSelectionModelAddDialog;
+
+    private AddTouristInformationAdapter addTouristInformationAdapter;
+
+    Map<String, Object> map = new HashMap<>();
+
+    private PoiSearch.Query query;// Poi查询条件类
+    private PoiSearch poiSearch;// POI搜索
+
+    private PoiResult poiResult; // poi返回的结果
+
     @Override
     public int getLayoutId() {
 
@@ -296,7 +327,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         mRvUseTicketDateSelect.setAdapter(orderUseDateSelectAdapter);
 
         /**
-         * 游客信息
+         * 游客信息列表
          */
         LinearLayoutManager touristInfoLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
         touristInfoLayoutManager.setOrientation(touristInfoLayoutManager.HORIZONTAL);
@@ -315,6 +346,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     mLlytAddAndUpdateTourists.setVisibility(View.VISIBLE);
                     mLlytAddAndUpdateTourists.startAnimation(inAnimation);
                     mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
+                    if (addTouristInformationAdapter != null) {
+                        addTouristInformationAdapter.notifyDataSetChanged();
+                    }
                 } else {
                     OrderSubmitInitResponse.TravellersEntity travellersEntity = travellersList.get(position);
                     String realname = travellersEntity.getRealname();
@@ -357,22 +391,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         OrderDetailTicketInfoAdapter orderDetailTicketInfoAdapter = new OrderDetailTicketInfoAdapter(OrderSubmitActivity.this);
         mRvOrderDeatilTicketInfo.setAdapter(orderDetailTicketInfoAdapter);
 
-        List<TouristBean> touristBeanList = new ArrayList<>();
-
-        TouristBean touristBean = new TouristBean();
-        touristBean.setName("唐哈哈");
-        touristBean.setIdNumber("33062419930307827x");
-
-        TouristBean touristBean1 = new TouristBean();
-        touristBean1.setName("陈对对");
-        touristBean1.setIdNumber("330624199303073547");
-        touristBeanList.add(touristBean);
-        touristBeanList.add(touristBean1);
-
+        //新增游客信息弹框
         LinearLayoutManager newTouristsLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
         mRvNewTourists.setLayoutManager(newTouristsLayoutManager);
         newTouristsLayoutManager.setOrientation(newTouristsLayoutManager.VERTICAL);
-        AddTouristInformationAdapter addTouristInformationAdapter = new AddTouristInformationAdapter(OrderSubmitActivity.this, new AddTouristInformationAdapter.TouristInformationListener() {
+        addTouristInformationAdapter = new AddTouristInformationAdapter(OrderSubmitActivity.this, new AddTouristInformationAdapter.TouristInformationListener() {
             @Override
             public void setEditTouristInfoListener(int position) {
 
@@ -382,7 +405,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
             }
         });
-        addTouristInformationAdapter.setTouristInfoList(touristBeanList);
+        addTouristInformationAdapter.setTouristInfoList(travellersList);
         mRvNewTourists.setAdapter(addTouristInformationAdapter);
 
         mLlytAddAndUpdateTourists.setEnabled(false);
@@ -501,31 +524,98 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
                 break;
             case R.id.img_need_use_car:
+                if (vehicleUseAddDialog == null) {
+                    vehicleUseAddDialog = new VehicleUseAddDialog();
+                    vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
+                        @Override
+                        public void setVehicleUseCallBack(int vehicleUseOprateFlag) {
+                            mVehicleUseOprateFlag = vehicleUseOprateFlag;
+                            if (vehicleUseOprateFlag == 0) {
+                                Intent mIntent = new Intent();
+                                mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                                startActivityForResult(mIntent, REQUEST_CODE_MY_LOCATION_SELECT);
+                            } else if (vehicleUseOprateFlag == 1) {
 
-                vehicleUseAddDialog = new VehicleUseAddDialog();
-                vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
-                    @Override
-                    public void setVehicleUseCallBack(int vehicleUseOprateFlag) {
-                        mVehicleUseOprateFlag = vehicleUseOprateFlag;
-                        if(vehicleUseOprateFlag == 0)
-                        {
-                            Intent mIntent = new Intent();
-                            mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
-                            startActivityForResult(mIntent, REQUEST_CODE_MY_LOCATION_SELECT);
-                        } else if(vehicleUseOprateFlag == 1){
+                                Intent mIntent = new Intent();
+                                mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                                startActivityForResult(mIntent, REQUEST_CODE_DESTINATION_SELECT);
+                            } else if (vehicleUseOprateFlag == 2) {  //用车时间
 
-                            Intent mIntent = new Intent();
-                            mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
-                            startActivityForResult(mIntent, REQUEST_CODE_DESTINATION_SELECT);
+                                if (vehicleUseTimeSelectDialog == null) {
+                                    vehicleUseTimeSelectDialog = new VehicleUseTimeSelectDialog();
+                                    vehicleUseTimeSelectDialog.setVehicleUseTimeSelectListener(new VehicleUseTimeSelectDialog.VehicleUseTimeSelectListener() {
+                                        @Override
+                                        public void setVehicleUseConfirmCallBack(String vehicleUseDateStr) {
+
+                                            vehicleUseAddDialog.setVehicleUseTravelTime(vehicleUseDateStr);
+
+                                        }
+                                    });
+                                    vehicleUseTimeSelectDialog.show(getFragmentManager(), "");
+                                } else {
+
+                                    vehicleUseTimeSelectDialog.show(getFragmentManager(), "");
+                                }
+                            } else if (vehicleUseOprateFlag == 3) {  //选择车辆类型
+
+                                if (vehicleSelectionModelAddDialog == null) {
+                                    vehicleSelectionModelAddDialog = new VehicleSelectionModelAddDialog();
+                                    vehicleSelectionModelAddDialog.setVehicleUseSelectListener(new VehicleSelectionModelAddDialog.VehicleUseSelectModelListener() {
+                                        @Override
+                                        public void setVehicleUseSelectModelCallBack(CarTypeBean carType) {
+
+                                            vehicleUseAddDialog.setVehicleModelSelect(carType);
+
+                                        }
+                                    });
+                                }
+                                vehicleSelectionModelAddDialog.show(getFragmentManager(), "");
+                            }
                         }
-                    }
 
-                });
+                        @Override
+                        public void setEvaluateVehicleUsageFeeCallBack(String departureTime, String startLg, String startLt, String endLg, String endLt, int carType) {
+
+                            getEvaluateVehicleUsageFee(departureTime, startLg, startLt, endLg, endLt, carType);
+
+                        }
+
+                        @Override
+                        public void setAddressPOISearchCallBack(String addressName, int vehicleUseOprateFlag) {
+                            mVehicleUseOprateFlag = vehicleUseOprateFlag;
+                            if (!TextUtils.isEmpty(addressName)) {
+                                doSearchQuery(addressName);
+                            }
+                        }
+                    });
+
+
+                }
                 vehicleUseAddDialog.show(getFragmentManager(), "");
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void getUserTravellerListResult(BackResult<TravellerInfoResponse> res) {
+
+    }
+
+    @Override
+    public void addUserTravellerResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateUserTravellerResult(BackResult res) {
+
+    }
+
+    @Override
+    public void deleteUserTravellerResult(BackResult res) {
+
     }
 
     @Override
@@ -583,15 +673,23 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         increaseTicketAdapter.notifyDataSetChanged();
                     }
 
-                    OrderSubmitInitResponse.TravellersEntity travellersEntity = travellersList.get(0);
-                    String realname = travellersEntity.getRealname();
-                    String mobile = travellersEntity.getMobile();
-                    mTvTouristName.setText(realname);
-                    mTvTouristMobile.setText(mobile);
+                    if (travellersList != null) {
+                        OrderSubmitInitResponse.TravellersEntity travellersEntity = travellersList.get(0);
+                        if (travellersEntity != null) {
+                            travellersEntity.setTravellerSelect(true);
+                            String realname = travellersEntity.getRealname();
+                            String mobile = travellersEntity.getMobile();
+                            mTvTouristName.setText(realname);
+                            mTvTouristMobile.setText(mobile);
+                        }
 
-                    touristInformationAdapter.setTouristInfoList(travellersList);
-                    touristInformationAdapter.notifyDataSetChanged();
+                        touristInformationAdapter.setTouristInfoList(travellersList);
+                        touristInformationAdapter.notifyDataSetChanged();
 
+                        //新增游客编辑
+                        addTouristInformationAdapter.setTouristInfoList(travellersList);
+                        touristInformationAdapter.notifyDataSetChanged();
+                    }
                     mTvTicketTitle.setText(title);
 
                 } catch (Exception e) {
@@ -606,7 +704,20 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @Override
     public void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res) {
-
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    EstimatedPriceResponse estimatedPrice = res.getData();
+                    vehicleUseAddDialog.setTotalVehicleExpenses(estimatedPrice);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -625,18 +736,115 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
     }
 
+    //获取订单初始化
+    public void getEvaluateVehicleUsageFee(String departureTime, String startLg, String startLt, String endLg, String endLt, int carType) {
+
+        if (validateInternet()) {
+            if (!TextUtils.isEmpty(departureTime)) {
+                map.put("departureTime", departureTime);
+            } else {
+                showToast(OrderSubmitActivity.this, "请选择出行时间");
+                return;
+            }
+
+            if (!TextUtils.isEmpty(startLg)) {
+                map.put("startLg", startLg);
+            } else {
+                showToast(OrderSubmitActivity.this, "请选择所在位置");
+                return;
+            }
+
+            if (!TextUtils.isEmpty(startLt)) {
+                map.put("startLt", startLt);
+            } else {
+                showToast(OrderSubmitActivity.this, "请选择所在位置");
+                return;
+            }
+
+            if (!TextUtils.isEmpty(endLg)) {
+                map.put("endLg", endLg);
+            } else {
+                showToast(OrderSubmitActivity.this, "请选择目的地");
+                return;
+            }
+
+            if (!TextUtils.isEmpty(endLt)) {
+                map.put("endLt", endLt);
+            } else {
+                showToast(OrderSubmitActivity.this, "请选择目的地");
+                return;
+            }
+
+            if (carType != 0) {
+
+                map.put("carType", carType);
+            } else {
+                showToast(OrderSubmitActivity.this, "请选择车辆类型");
+                return;
+            }
+            showProgressDialog(OrderSubmitActivity.this);
+            mPresenter.getEstimatedPrice(map);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_MY_LOCATION_SELECT && resultCode == RESULT_OK){  //车辆我的位置
+        Tip tip = data.getParcelableExtra("tip");
+        LatLonPoint latLonPoint = tip.getPoint();
+        String addressName = tip.getName();
+        if (requestCode == REQUEST_CODE_MY_LOCATION_SELECT && resultCode == RESULT_OK) {  //车辆我的位置
 
-                Tip tip = data.getParcelableExtra("tip");
-                vehicleUseAddDialog.setVehicleUseAddressData(tip,REQUEST_CODE_MY_LOCATION_SELECT);
+            vehicleUseAddDialog.setVehicleUseAddressData(latLonPoint, addressName, REQUEST_CODE_MY_LOCATION_SELECT);
 
-        } else if(requestCode == REQUEST_CODE_DESTINATION_SELECT && resultCode == RESULT_OK){  //车辆目的地
+        } else if (requestCode == REQUEST_CODE_DESTINATION_SELECT && resultCode == RESULT_OK) {  //车辆目的地
 
-            Tip tip = data.getParcelableExtra("tip");
-            vehicleUseAddDialog.setVehicleUseAddressData(tip,REQUEST_CODE_DESTINATION_SELECT);
+            vehicleUseAddDialog.setVehicleUseAddressData(latLonPoint, addressName, REQUEST_CODE_DESTINATION_SELECT);
         }
+    }
+
+    /**
+     * 开始进行poi搜索
+     */
+    protected void doSearchQuery(String keywords) {
+        showProgressDialog(OrderSubmitActivity.this);
+        // 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
+        query = new PoiSearch.Query(keywords, "", Constants.DEFAULT_CITY);
+        // 设置每页最多返回多少条poiitem
+        query.setPageSize(1);
+        // 设置查第一页
+        query.setPageNum(1);
+        poiSearch = new PoiSearch(this, query);
+        poiSearch.setOnPoiSearchListener(this);
+        poiSearch.searchPOIAsyn();
+    }
+
+    @Override
+    public void onPoiSearched(PoiResult result, int rCode) {
+        dismissProgressDialog();// 隐藏对话框
+        if (rCode == 1000) {
+            if (result != null && result.getQuery() != null) {// 搜索poi的结果
+                if (result.getQuery().equals(query)) {// 是否是同一条
+                    poiResult = result;
+                    // 取得搜索到的poiitems有多少页
+                    List<PoiItem> poiItems = poiResult.getPois();// 取得第一页的poiitem数据，页数从数字0开始
+                    PoiItem poiItem = poiItems.get(0);
+                    LatLonPoint latLonPoint = poiItem.getLatLonPoint();
+                    String addressName = poiItem.getCityName();
+
+                    if (vehicleUseAddDialog != null) {
+
+                        vehicleUseAddDialog.setVehicleUseAddressData(latLonPoint, addressName, mVehicleUseOprateFlag);
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onPoiItemSearched(PoiItem poiItem, int i) {
+
     }
 }

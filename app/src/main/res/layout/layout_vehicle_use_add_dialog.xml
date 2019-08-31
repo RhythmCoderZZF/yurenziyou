@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rlyt_travel_assistant_add"
+    android:id="@+id/rlyt_vehicle_use_add"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +12,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/dp_100"
         android:layout_marginBottom="0dp"
-        android:background="@drawable/bg_white_radius_thirteen_top_shape"
+        android:background="@drawable/bg_white_radius_five_top_shape"
         android:clickable="true"
         android:focusableInTouchMode="false"
         android:orientation="vertical">
@@ -260,9 +260,10 @@
                 android:textSize="@dimen/text_size_tiny" />
 
             <TextView
+                android:id="@+id/tv_vehicle_use_expenses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="156.00"
+                android:text="0.00"
                 android:textColor="@color/color_orange3"
                 android:textSize="@dimen/text_size_xmedium" />
 

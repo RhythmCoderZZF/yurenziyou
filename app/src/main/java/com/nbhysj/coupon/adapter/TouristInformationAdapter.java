@@ -77,6 +77,11 @@ public class TouristInformationAdapter extends RecyclerView.Adapter<TouristInfor
                         touristInformationListener.setTouristInformationListener(itemPosition, true);
 
                     } else {
+                        for (int i = 0; i < touristInfoList.size();i++){
+
+                            touristInfoList.get(i).setTravellerSelect(false);
+                        }
+                        touristInfoList.get(itemPosition).setTravellerSelect(true);
                         mTouristSelectPosition = itemPosition;
                         touristInformationListener.setTouristInformationListener(itemPosition, false);
                         notifyDataSetChanged();
@@ -89,7 +94,7 @@ public class TouristInformationAdapter extends RecyclerView.Adapter<TouristInfor
 
                 holder.mTvTouristName.setTextColor(mContext.getResources().getColor(R.color.white));
                 holder.mTvTouristName.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_two);
-
+                touristInfoList.get(itemPosition).setTravellerSelect(true);
             } else {
 
                 holder.mTvTouristName.setTextColor(mContext.getResources().getColor(R.color.txt_font_black2));

@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,13 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.help.Tip;
+import com.amap.api.services.poisearch.PoiSearch;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.CarTypeBean;
+import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
+import com.nbhysj.coupon.util.Tools;
 
 /**
  * @auther：hysj created on 2019/08/26
@@ -32,7 +38,24 @@ public class VehicleUseAddDialog extends DialogFragment {
     TextView mTvTravelTime;
     //选择车辆型号
     TextView mTvVehicleModel;
+    //用车费用合计
+    TextView mTvVehicleUseExpenses;
+
     private VehicleUseSelectListener vehicleUseSelectListener;
+    //约车时间
+    private String mDepartureTime;
+
+    //起点经度
+    private String mStartLg;
+    //起点纬度
+    private String mStartLt;
+    //终点经度
+    private String mEndLg;
+    //终点纬度
+    private String mEndLt;
+
+    //车类型
+    private int mCarType;
 
     public VehicleUseAddDialog() {
 
@@ -72,6 +95,7 @@ public class VehicleUseAddDialog extends DialogFragment {
     private void initView() {
 
         view = LayoutInflater.from(context).inflate(R.layout.layout_vehicle_use_add_dialog, null);
+        RelativeLayout mRlytVehicleUseAdd = view.findViewById(R.id.rlyt_vehicle_use_add);
         TextView mTvVehicleUseCancel = view.findViewById(R.id.tv_vehicle_use_cancel);       //取消用车
         RelativeLayout mRlytMyLocation = view.findViewById(R.id.rlyt_my_location);          //我的位置
         mTvMyLocation = view.findViewById(R.id.tv_my_location);                    //我的位置
@@ -81,6 +105,7 @@ public class VehicleUseAddDialog extends DialogFragment {
         mTvTravelTime = view.findViewById(R.id.tv_your_travel_time);               //出行时间
         RelativeLayout mRlytVehicleModel = view.findViewById(R.id.rlyt_vehicle_model);      //车辆型号
         mTvVehicleModel = view.findViewById(R.id.tv_vehicle_model);                //车辆型号
+        TextView mTvVehicleUseExpenses = view.findViewById(R.id.tv_vehicle_use_expenses); //用车费用
 
 
         mTvVehicleUseCancel.setOnClickListener(new View.OnClickListener() {
@@ -120,72 +145,17 @@ public class VehicleUseAddDialog extends DialogFragment {
             public void onClick(View view) {
 
                 vehicleUseSelectListener.setVehicleUseCallBack(3);
-            }
-        });
-
-      /*  mLlytScenicSpotAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                travelAssistantAddListener.travelAssistantAddListener(0);
-                dismiss();
-            }
-        });
-
-        mLlytFineFoodAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                travelAssistantAddListener.travelAssistantAddListener(1);
-                dismiss();
-            }
-        });
-
-        mLlytHotelHomestayAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                travelAssistantAddListener.travelAssistantAddListener(2);
-                dismiss();
-            }
-        });
-
-        mLlytInteractionAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                travelAssistantAddListener.travelAssistantAddListener(3);
-                dismiss();
-            }
-        });
-
-        mLlytTrafficAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                travelAssistantAddListener.travelAssistantAddListener(4);
-                dismiss();
 
             }
         });
 
-        mLlytOneDayAdd.setOnClickListener(new View.OnClickListener() {
+        mRlytVehicleUseAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                travelAssistantAddListener.travelAssistantAddListener(5);
                 dismiss();
             }
         });
-
-        mLlytRemarks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                travelAssistantAddListener.travelAssistantAddListener(6);
-                dismiss();
-            }
-        });*/
-
     }
 
     @Override
@@ -194,19 +164,90 @@ public class VehicleUseAddDialog extends DialogFragment {
         super.show(manager, tag);
     }
 
+    //设置用车1.开始位置和2.结束位置
+    public void setVehicleUseAddressData(LatLonPoint latLonPoint, String addressName,int mVehicleUseOprateFlag) {
+        if (mVehicleUseOprateFlag == 0) {
+
+            mTvMyLocation.setText(addressName);
+
+            if (latLonPoint != null) {
+                double startLongitude = latLonPoint.getLongitude();
+                double startLatitude = latLonPoint.getLatitude();
+                mStartLg = String.valueOf(startLongitude);
+                mStartLt = String.valueOf(startLatitude);
+            } else {
+
+                vehicleUseSelectListener.setAddressPOISearchCallBack(addressName,mVehicleUseOprateFlag);
+            }
+
+        } else if (mVehicleUseOprateFlag == 1) {
+            mTvDestination.setText(addressName);
+
+            if (latLonPoint != null)
+            {
+                double endLongitude = latLonPoint.getLongitude();
+                double endLatitude = latLonPoint.getLatitude();
+                mEndLg = String.valueOf(endLongitude);
+                mEndLt = String.valueOf(endLatitude);
+            } else {
+
+                vehicleUseSelectListener.setAddressPOISearchCallBack(addressName,mVehicleUseOprateFlag);
+            }
+        }
+        evaluateVehicleUsageFee();
+    }
+
+    //3.设置用车开出行时间
+    public void setVehicleUseTravelTime(String travelTime) {
+        if (!TextUtils.isEmpty(travelTime)) {
+            mDepartureTime = travelTime;
+            mTvTravelTime.setText(travelTime);
+            evaluateVehicleUsageFee();
+        }
+    }
+
+    //设置车辆型号
+    public void setVehicleModelSelect(CarTypeBean carTypeBean) {
+        String carTypeName = carTypeBean.getCarTypeName();
+        if (!TextUtils.isEmpty(carTypeName)) {
+            mTvVehicleModel.setText(carTypeName);
+            mCarType = carTypeBean.getCarTypeCode();
+            evaluateVehicleUsageFee();
+        }
+    }
+
+
+    //设置用车费用合计
+    public void setTotalVehicleExpenses(EstimatedPriceResponse estimatedPrice) {
+        String price = estimatedPrice.getPrice();
+
+        if (!TextUtils.isEmpty(price)) {
+            mTvVehicleUseExpenses.setText(Tools.getTwoDecimalPoint(price));
+        }
+    }
+
+    //评估用车价格
+    public void evaluateVehicleUsageFee() {
+        String location = mTvMyLocation.getText().toString();
+        String destination = mTvDestination.getText().toString();
+        String travelTime = mTvTravelTime.getText().toString();
+        String vehicleModel = mTvVehicleModel.getText().toString();
+
+        if (!TextUtils.isEmpty(location) && !TextUtils.isEmpty(destination) && !TextUtils.isEmpty(travelTime) && !TextUtils.isEmpty(vehicleModel) && mCarType != 0) {
+
+            vehicleUseSelectListener.setEvaluateVehicleUsageFeeCallBack(mDepartureTime, mStartLg, mStartLt, mEndLg, mEndLt, mCarType);
+        }
+    }
+
+
     public interface VehicleUseSelectListener {
+
+        void setAddressPOISearchCallBack(String addressName,int vehicleUseOprateFlag);
+
+        void setEvaluateVehicleUsageFeeCallBack(String departureTime, String startLg, String startLt, String endLg, String endLt, int carTyp);
 
         void setVehicleUseCallBack(int vehicleUseOprateFlag);
     }
 
-    public void setVehicleUseAddressData(Tip tip, int mVehicleUseOprateFlag){
-        if(mVehicleUseOprateFlag == 0)
-        {
-            String name = tip.getName();
-            mTvMyLocation.setText(name);
-        } else if(mVehicleUseOprateFlag == 1){
-            String name = tip.getName();
-            mTvDestination.setText(name);
-        }
-    }
+
 }

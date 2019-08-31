@@ -5,21 +5,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.TouristBean;
 
 import java.util.List;
 
 /**
- * @author hysj created at 2019/5/10.
- * description:新增游客信息适配器
+ * @author hysj created at 2019/08/29.
+ * description:游客信息适配器
  */
 public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouristInformationAdapter.ViewHolder> {
 
 
-    List<TouristBean> touristInfoList;
+    List<OrderSubmitInitResponse.TravellersEntity> touristInfoList;
     private Context mContext;
     private TouristInformationListener touristInformationListener;
 
@@ -29,7 +31,7 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
         this.touristInformationListener = touristInformationListener;
     }
 
-    public void setTouristInfoList(List<TouristBean> touristInfoList) {
+    public void setTouristInfoList(List<OrderSubmitInitResponse.TravellersEntity> touristInfoList) {
 
         this.touristInfoList = touristInfoList;
     }
@@ -48,9 +50,10 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
 
         try {
 
-            TouristBean touristBean = touristInfoList.get(itemPosition);
-            holder.mTvTouristName.setText(touristBean.getName());
-            holder.mTvPhone.setText(touristBean.getIdNumber());
+            OrderSubmitInitResponse.TravellersEntity touristBean = touristInfoList.get(itemPosition);
+            holder.mTvTouristName.setText(touristBean.getRealname());
+            holder.mTvPhone.setText(touristBean.getIdentityNo());
+            boolean isTravellerSelect = touristBean.isTravellerSelect();
             holder.mTvEditVisitors.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -58,6 +61,14 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
                     touristInformationListener.setEditTouristInfoListener(itemPosition);
                 }
             });
+
+            if(isTravellerSelect)
+            {
+              holder.mImgVisitorsCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_true);
+            } else {
+
+                holder.mImgVisitorsCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_false);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,12 +89,15 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
         //编辑游客
         TextView mTvEditVisitors;
 
+        ImageView mImgVisitorsCheck;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
             mTvTouristName = itemView.findViewById(R.id.tv_tourist_name);
             mTvPhone = itemView.findViewById(R.id.tv_phone);
             mTvEditVisitors = itemView.findViewById(R.id.tv_edit_visitors);
+            mImgVisitorsCheck = itemView.findViewById(R.id.img_visitors_check);
         }
     }
 

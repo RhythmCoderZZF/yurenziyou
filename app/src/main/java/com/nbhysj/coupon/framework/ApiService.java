@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
+import com.nbhysj.coupon.model.request.TicketOrderRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.TripintelligentRequest;
@@ -65,6 +66,7 @@ import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -409,10 +411,15 @@ public interface ApiService {
 
     //预估价格
     @GET("car/prePrice")
-    Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(@QueryMap EstimatedPriceRequest estimatedPriceRequest);
+    Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(@QueryMap Map<String, Object> map);
 
     //曹操叫车H5
     @GET("car/carH5Url")
     Observable<BackResult<CarH5UrlResponse>> getCarH5Url(@Query("startLg") String longitude, @Query("startLt") String latitude);
+
+    //门票订单生成接口(门票下单接口)
+    @POST("api/ticketOrder")
+    Observable<BackResult<TripDetailsResponse>> ticketOrder(@Body TicketOrderRequest ticketOrderRequest);
+
 }
 
