@@ -80,8 +80,8 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
             groupitem = new Groupitem();
             groupitem.mTvTicketType = view.findViewById(R.id.tv_ticket_type);
             groupitem.mImgTicketExpandable = view.findViewById(R.id.img_admission_ticket_status);
-            groupitem.mTvPerCapitaPrice = view.findViewById(R.id.tv_per_capita_price); //价格
-            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_default_price); //默认价格
+            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_per_capita_price); //价格
+            groupitem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //默认价格
 
             view.setTag(groupitem);
         } else {
@@ -92,8 +92,9 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         int defaultPrice = mchGoodsBean.getDefaultPrice();
         int marketPrice = mchGoodsBean.getMarketPrice();
         groupitem.mTvTicketType.setText(title);
-        groupitem.mTvPerCapitaPrice.setText(String.valueOf(marketPrice));
-        groupitem.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
+        groupitem.mTvDefaultPrice.setText(String.valueOf(defaultPrice));
+        groupitem.mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
+        groupitem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
         if (isExpanded) {
             groupitem.mImgTicketExpandable.setImageResource(R.mipmap.icon_admission_ticket_expand);
         } else {
@@ -163,10 +164,10 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         //票类型
         TextView mTvTicketType;
         ImageView mImgTicketExpandable;
-        //价格
-        TextView mTvPerCapitaPrice;
         //默认价格
         TextView mTvDefaultPrice;
+        //市场价格
+        TextView mTvMarketPrice;
     }
 
     class chilItem {

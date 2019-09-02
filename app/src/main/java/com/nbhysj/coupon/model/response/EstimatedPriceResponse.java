@@ -8,13 +8,13 @@ public class EstimatedPriceResponse {
 
     private String name;
 
-    private String price;
+    private double price;
 
-    private String originPrice;
+    private double originPrice;
 
-    private String distance;
+    private int distance;
 
-    private String duration;
+    private int duration;
 
     private String priceKey;
 
@@ -32,38 +32,6 @@ public class EstimatedPriceResponse {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getOriginPrice() {
-        return originPrice;
-    }
-
-    public void setOriginPrice(String originPrice) {
-        this.originPrice = originPrice;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
     }
 
     public String getPriceKey() {
@@ -104,5 +72,37 @@ public class EstimatedPriceResponse {
 
     public void setLineType(int lineType) {
         this.lineType = lineType;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getOriginPrice() {
+        return originPrice;
+    }
+
+    public void setOriginPrice(double originPrice) {
+        this.originPrice = originPrice;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

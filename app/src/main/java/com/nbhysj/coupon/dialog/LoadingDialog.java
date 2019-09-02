@@ -39,7 +39,7 @@ public class LoadingDialog extends ProgressDialog {
     public LoadingDialog setTitle(String title) {
 
         if (title.equals("")) {
-            mTvLoadDialogTitle.setVisibility(View.GONE);
+            mTvLoadDialogTitle.setVisibility(View.INVISIBLE);
         } else {
             mTvLoadDialogTitle.setVisibility(View.VISIBLE);
             mTvLoadDialogTitle.setText(title);

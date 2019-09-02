@@ -16,6 +16,7 @@ import com.amap.api.services.help.Tip;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.InputTipsAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class VehicleAddressSelectionActivity extends BaseActivity implements Tex
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_vehicle_use_address_selection;
     }
 
@@ -58,6 +60,17 @@ public class VehicleAddressSelectionActivity extends BaseActivity implements Tex
 
     @Override
     public void initData() {
+
+        int vehicleUseOprateFlag = getIntent().getIntExtra("vehicleUseOprateFlag",0);
+
+        //vehicleUseOprateFlag:0 我的位置
+        if(vehicleUseOprateFlag == 0)
+        {
+            mEdtVehicleAddress.setHint(getResources().getString(R.string.str_my_position));
+        } else if(vehicleUseOprateFlag == 1)  //vehicleUseOprateFlag:0 您要去哪儿
+        {
+            mEdtVehicleAddress.setHint(getResources().getString(R.string.str_where_are_you_going));
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(VehicleAddressSelectionActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);

@@ -10,7 +10,6 @@ import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
-import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
@@ -22,7 +21,7 @@ import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
-import com.nbhysj.coupon.model.request.TicketOrderRequest;
+import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.TripintelligentRequest;
@@ -54,6 +53,7 @@ import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
+import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
@@ -419,7 +419,7 @@ public interface ApiService {
 
     //门票订单生成接口(门票下单接口)
     @POST("api/ticketOrder")
-    Observable<BackResult<TripDetailsResponse>> ticketOrder(@Body TicketOrderRequest ticketOrderRequest);
+    Observable<BackResult<TicketOrderSubmitResponse>> ticketOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
 
 }
 

@@ -270,6 +270,8 @@ public class OrderSubmitInitResponse {
 
         private int otherId;
 
+        private int ticketPurchaseNum;
+
         public int getSellStatus() {
             return sellStatus;
         }
@@ -524,6 +526,14 @@ public class OrderSubmitInitResponse {
 
         public void setGoodsPriceDates(List<GoodsPriceDatesResponse> goodsPriceDates) {
             this.goodsPriceDates = goodsPriceDates;
+        }
+
+        public int getTicketPurchaseNum() {
+            return ticketPurchaseNum;
+        }
+
+        public void setTicketPurchaseNum(int ticketPurchaseNum) {
+            this.ticketPurchaseNum = ticketPurchaseNum;
         }
     }
 }

@@ -109,6 +109,8 @@ public class VehicleSelectionModelAddDialog extends DialogFragment {
         carTypeList.add(LuxuryCarType);
         carTypeList.add(businessCarType);
 
+        carTypeBean = carTypeList.get(0);
+
         view = LayoutInflater.from(context).inflate(R.layout.layout_vehicle_selection_model_dialog, null);
         RelativeLayout mRlytVehicleUseSelectionModel = view.findViewById(R.id.rlyt_vehicle_use_selection_model);
         ImageView mImgVehicleUseCancel = view.findViewById(R.id.img_vehicle_use_cancel);       //取消用车

@@ -7,12 +7,14 @@ import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
+import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
+import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 
@@ -37,6 +39,9 @@ public interface OrderSubmitContract {
         //门票订单提交界面(景区日历价格)
         Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(Map<String, Object> map);
 
+        //门票订单提交
+        Observable<BackResult<TicketOrderSubmitResponse>> ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
         //获取旅客列表
         Observable<BackResult<TravellerInfoResponse>> getUserTravellerList(int userId, int page, int pageSize);
 
@@ -48,6 +53,7 @@ public interface OrderSubmitContract {
 
         //删除旅客
         Observable<BackResult> deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
+
     }
 
     interface View extends BaseView {
@@ -56,7 +62,10 @@ public interface OrderSubmitContract {
 
         void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res);
 
-        //1.旅客
+        //订单提交返回
+        void ticketOrderSubmitResult(BackResult<TicketOrderSubmitResponse> res);
+
+        //获取旅客列表
         void getUserTravellerListResult(BackResult<TravellerInfoResponse> res);
 
         void addUserTravellerResult(BackResult res);
@@ -73,6 +82,8 @@ public interface OrderSubmitContract {
         public abstract void getOrderSubmitInit(int goodsId);
 
         public abstract void getEstimatedPrice(Map<String, Object> map);
+
+        public abstract void ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest);
 
         public abstract void getUserTravellerList(int userId, int page, int pageSize);
 

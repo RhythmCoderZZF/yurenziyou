@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
@@ -31,6 +30,7 @@ import com.nbhysj.coupon.adapter.IncreaseTicketAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailTicketInfoAdapter;
 import com.nbhysj.coupon.adapter.OrderUseDateSelectAdapter;
 import com.nbhysj.coupon.adapter.TouristInformationAdapter;
+import com.nbhysj.coupon.adapter.VehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
@@ -38,20 +38,20 @@ import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
-import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
+import com.nbhysj.coupon.model.request.CarsBean;
+import com.nbhysj.coupon.model.request.GoodsBean;
+import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
-import com.nbhysj.coupon.model.response.TouristBean;
+import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
-import com.nbhysj.coupon.overlay.PoiOverlay;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
-import com.nbhysj.coupon.util.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,15 +129,28 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //市场票价
     @BindView(R.id.tv_market_ticket_price)
     TextView mTvMarketTicketPrice;
-    //默认票价
-    @BindView(R.id.tv_default_ticket_price)
-    TextView mTvDefaultTicketPrice;
     //票标题
     @BindView(R.id.tv_ticket_title)
     TextView mTvTicketTitle;
 
     @BindView(R.id.llyt_increase_ticket)
     LinearLayout mLlytIncreaseTicket;
+
+    //添加更多用车
+    @BindView(R.id.tv_add_vehicle_more)
+    TextView mTvAddVehicleMore;
+
+    //是否需要用车
+    @BindView(R.id.ckb_is_need_use_car)
+    CheckBox mCkbIsNeedUseCar;
+
+    //用车列表
+    @BindView(R.id.rv_travel_by_car)
+    RecyclerView mRvTravelByCar;
+
+    //车辆使用
+    @BindView(R.id.llyt_vehicle_use)
+    LinearLayout mLlytVehicleUse;
 
     //购买数量
     private int mPurchaseNum = 1;
@@ -153,6 +166,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     private List<OrderSubmitInitResponse.TravellersEntity> travellersList;
 
+    //游客信息适配器
     private TouristInformationAdapter touristInformationAdapter;
 
     //更多日期选择弹框
@@ -161,13 +175,22 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //时间价格订单适配器
     private OrderUseDateSelectAdapter orderUseDateSelectAdapter;
 
+    //增加门票适配器
     private IncreaseTicketAdapter increaseTicketAdapter;
+
+    //价格明细
+    OrderDetailTicketInfoAdapter orderDetailTicketInfoAdapter;
 
     //日历价格
     private List<GoodsPriceDatesResponse> orderSubmitDateList;
 
-    //增加门票
     private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceList;
+
+    //增加门票
+    private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceTicketAddList;
+
+    //价格明细
+    private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceDetailList;
 
     //我的位置
     private int REQUEST_CODE_MY_LOCATION_SELECT = 0;
@@ -187,7 +210,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //选择车辆型号
     private VehicleSelectionModelAddDialog vehicleSelectionModelAddDialog;
 
+    //增加游客信息
     private AddTouristInformationAdapter addTouristInformationAdapter;
+
+    //用车适配器
+    private VehicleUseAdapter vehicleUseAdapter;
 
     Map<String, Object> map = new HashMap<>();
 
@@ -196,6 +223,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     private PoiResult poiResult; // poi返回的结果
 
+    //商品列表
+    private List<GoodsBean> goodsList;
+
+    private List<CarsBean> carsBeanList;
+
+    //旅客id
+    private int userTravelerId;
+
+    //商品价格日历选择
+    private String goodsPriceDateSelect;
     @Override
     public int getLayoutId() {
 
@@ -251,6 +288,35 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             goodsPriceList.clear();
         }
 
+        if (goodsPriceTicketAddList == null) {
+
+            goodsPriceTicketAddList = new ArrayList<>();
+        } else {
+            goodsPriceTicketAddList.clear();
+        }
+
+        //价格明细
+        if (goodsPriceDetailList == null) {
+
+            goodsPriceDetailList = new ArrayList<>();
+        } else {
+            goodsPriceDetailList.clear();
+        }
+
+        //商品列表 组装订单提交使用
+        if(goodsList != null){
+
+            goodsList = new ArrayList<>();
+        } else {
+            goodsList.clear();
+        }
+
+        if (carsBeanList == null) {
+            carsBeanList = new ArrayList<>();
+        } else {
+            carsBeanList.clear();
+        }
+
         inAnimation = new TranslateAnimation(
                 TranslateAnimation.RELATIVE_TO_SELF, 0, TranslateAnimation.RELATIVE_TO_SELF, 0,
                 TranslateAnimation.RELATIVE_TO_SELF, 1, TranslateAnimation.RELATIVE_TO_SELF, 0);
@@ -272,16 +338,45 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     mLlytOrderDetailItem.startAnimation(inAnimation);
                     mLlytShadowBg.setVisibility(View.VISIBLE);
 
-                    Drawable nav_up = getResources().getDrawable(R.mipmap.icon_order_detail_up_arrow);
+                    Drawable nav_up = getResources().getDrawable(R.mipmap.icon_order_detail_down_arrow);
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
-                    mTvOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
+                    mCkbOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
+
+                    if (goodsPriceDetailList != null) {
+                        goodsPriceDetailList.clear();
+                    }
+
+                    if (goodsPriceList != null) {
+
+                        //对增加门票进行遍历
+
+                        OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+                        int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
+                        if (ticketPurchaseNum > 0) {
+                            goodsPriceDetailList.add(goodsPriceEntity);
+                        }
+                    }
+
+                    if (goodsPriceTicketAddList != null) {
+
+                        //对增加门票进行遍历
+                        for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
+                            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceTicketAddList.get(i);
+                            int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
+                            if (ticketPurchaseNum > 0) {
+                                goodsPriceDetailList.add(goodsPriceEntity);
+                            }
+                        }
+                        orderDetailTicketInfoAdapter.setOrderDetailTicketList(goodsPriceDetailList);
+                        orderDetailTicketInfoAdapter.notifyDataSetChanged();
+                    }
                 } else {
                     mLlytOrderDetailItem.setVisibility(View.GONE);
                     mLlytOrderDetailItem.startAnimation(outAnimation);
                     mLlytShadowBg.setVisibility(View.GONE);
-                    Drawable nav_up = getResources().getDrawable(R.mipmap.icon_order_detail_down_arrow);
+                    Drawable nav_up = getResources().getDrawable(R.mipmap.icon_order_detail_up_arrow);
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
-                    mTvOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
+                    mCkbOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
                 }
             }
         });
@@ -315,10 +410,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
             @Override
             public void datePriceSelectCallBack(int position) {
-
-                datePrice = orderSubmitDateList.get(position).getPrice();
+                GoodsPriceDatesResponse goodsPriceDatesResponse = orderSubmitDateList.get(position);
+                datePrice = goodsPriceDatesResponse.getPrice();
+                goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
                 int totalPrice = increaseTicketPrice + datePrice;
                 mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+
             }
         });
         //订单提交日期
@@ -353,6 +450,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     OrderSubmitInitResponse.TravellersEntity travellersEntity = travellersList.get(position);
                     String realname = travellersEntity.getRealname();
                     String mobile = travellersEntity.getMobile();
+                    userTravelerId = travellersEntity.getUserId();
                     mTvTouristName.setText(realname);
                     mTvTouristMobile.setText(mobile);
                 }
@@ -361,25 +459,19 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         touristInformationAdapter.setTouristInfoList(travellersList);
         mRvTouristInformation.setAdapter(touristInformationAdapter);
 
-
         //增加票价
         LinearLayoutManager increaseTicketLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
         mRvIncreaseTicket.setLayoutManager(increaseTicketLayoutManager);
         increaseTicketLayoutManager.setOrientation(increaseTicketLayoutManager.VERTICAL);
         increaseTicketAdapter = new IncreaseTicketAdapter(OrderSubmitActivity.this, new IncreaseTicketAdapter.IncreaseTicketListener() {
             @Override
-            public void setPurchaseNumReduceListener(int position, int purchasePrice) {
+            public void setPurchaseNumListener(int position, int purchasePrice, int mAddTicketPurchaseNum) { //mAddTicketPurchaseNum 增加门票数量
                 increaseTicketPrice = purchasePrice;
-                int totalPrice = increaseTicketPrice + datePrice;
+                int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;  //mPurchaseNum
                 mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
-
-            }
-
-            @Override
-            public void setPurchaseNumAddListener(int position, int purchasePrice) {
-                increaseTicketPrice = purchasePrice;
-                int totalPrice = increaseTicketPrice + datePrice;
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                if (goodsPriceTicketAddList.size() > 0) {
+                    goodsPriceTicketAddList.get(position).setTicketPurchaseNum(mAddTicketPurchaseNum);
+                }
             }
         });
         increaseTicketAdapter.setIncreaseTicketList(goodsPriceList);
@@ -388,7 +480,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         LinearLayoutManager orderDeatilTicketInfoLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
         mRvOrderDeatilTicketInfo.setLayoutManager(orderDeatilTicketInfoLayoutManager);
         orderDeatilTicketInfoLayoutManager.setOrientation(orderDeatilTicketInfoLayoutManager.VERTICAL);
-        OrderDetailTicketInfoAdapter orderDetailTicketInfoAdapter = new OrderDetailTicketInfoAdapter(OrderSubmitActivity.this);
+        orderDetailTicketInfoAdapter = new OrderDetailTicketInfoAdapter(OrderSubmitActivity.this);
+        orderDetailTicketInfoAdapter.setOrderDetailTicketList(goodsPriceDetailList);
         mRvOrderDeatilTicketInfo.setAdapter(orderDetailTicketInfoAdapter);
 
         //新增游客信息弹框
@@ -399,7 +492,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             @Override
             public void setEditTouristInfoListener(int position) {
 
-
                 mLlytEditTourists.setVisibility(View.VISIBLE);
                 mLlytEditTourists.startAnimation(inAnimation);
 
@@ -409,13 +501,38 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         mRvNewTourists.setAdapter(addTouristInformationAdapter);
 
         mLlytAddAndUpdateTourists.setEnabled(false);
+
+        //新增游客信息弹框
+        LinearLayoutManager travelByCarLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
+        travelByCarLayoutManager.setOrientation(travelByCarLayoutManager.VERTICAL);
+        mRvTravelByCar.setLayoutManager(travelByCarLayoutManager);
+        vehicleUseAdapter = new VehicleUseAdapter();
+        vehicleUseAdapter.setVehicleUseList(carsBeanList);
+        mRvTravelByCar.setAdapter(vehicleUseAdapter);
+
     }
 
     @Override
     public void initData() {
-       /* OrderDetailBottomDialog bottomDialogFr = new OrderDetailBottomDialog();
-        bottomDialogFr.show(getFragmentManager(), "DF");*/
+
         getOrderSubmitInit();
+
+        mCkbIsNeedUseCar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
+
+                if (isCheck) {
+
+                    showVehicleUseAddDialog();
+
+                } else {
+                    mLlytVehicleUse.setVisibility(View.GONE);
+                    carsBeanList.clear();
+                    vehicleUseAdapter.setVehicleUseList(carsBeanList);
+                    vehicleUseAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
     }
 
@@ -427,13 +544,14 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @OnClick({R.id.tv_order_submit, R.id.llyt_shadow_bg, R.id.rlyt_new_tourists_bg_half, R.id.tv_added_frequently_used_tourists,
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
-            R.id.img_add_purchase_num, R.id.img_need_use_car})
+            R.id.img_add_purchase_num, R.id.tv_add_vehicle_more})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
 
                 // showToast(OrderSubmitActivity.this, "订单提交");
-                toActivity(PaymentOrderActivity.class);
+              //  toActivity(PaymentOrderActivity.class);
+                ticketOrderSubmit();
                 break;
             case R.id.llyt_shadow_bg:
 
@@ -496,7 +614,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 break;
             case R.id.rlyt_ticket:
 
-
+           //     ticketOrderSubmit();
                 break;
             case R.id.tv_confirm:
                 showToast(OrderSubmitActivity.this, mLlytAddAndUpdateTourists.getVisibility() + "");
@@ -514,84 +632,32 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 if (mPurchaseNum > 1) {
                     mPurchaseNum--;
                     mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
+                    if (goodsPriceList.size() > 0) {
+                        OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+                        goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
+                        int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                        mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                    }
                 } else {
 
                     showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_need_to_buy_at_least_one));
+                    return;
                 }
+
                 break;
             case R.id.img_add_purchase_num:
                 mPurchaseNum++;
                 mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
-                break;
-            case R.id.img_need_use_car:
-                if (vehicleUseAddDialog == null) {
-                    vehicleUseAddDialog = new VehicleUseAddDialog();
-                    vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
-                        @Override
-                        public void setVehicleUseCallBack(int vehicleUseOprateFlag) {
-                            mVehicleUseOprateFlag = vehicleUseOprateFlag;
-                            if (vehicleUseOprateFlag == 0) {
-                                Intent mIntent = new Intent();
-                                mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
-                                startActivityForResult(mIntent, REQUEST_CODE_MY_LOCATION_SELECT);
-                            } else if (vehicleUseOprateFlag == 1) {
-
-                                Intent mIntent = new Intent();
-                                mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
-                                startActivityForResult(mIntent, REQUEST_CODE_DESTINATION_SELECT);
-                            } else if (vehicleUseOprateFlag == 2) {  //用车时间
-
-                                if (vehicleUseTimeSelectDialog == null) {
-                                    vehicleUseTimeSelectDialog = new VehicleUseTimeSelectDialog();
-                                    vehicleUseTimeSelectDialog.setVehicleUseTimeSelectListener(new VehicleUseTimeSelectDialog.VehicleUseTimeSelectListener() {
-                                        @Override
-                                        public void setVehicleUseConfirmCallBack(String vehicleUseDateStr) {
-
-                                            vehicleUseAddDialog.setVehicleUseTravelTime(vehicleUseDateStr);
-
-                                        }
-                                    });
-                                    vehicleUseTimeSelectDialog.show(getFragmentManager(), "");
-                                } else {
-
-                                    vehicleUseTimeSelectDialog.show(getFragmentManager(), "");
-                                }
-                            } else if (vehicleUseOprateFlag == 3) {  //选择车辆类型
-
-                                if (vehicleSelectionModelAddDialog == null) {
-                                    vehicleSelectionModelAddDialog = new VehicleSelectionModelAddDialog();
-                                    vehicleSelectionModelAddDialog.setVehicleUseSelectListener(new VehicleSelectionModelAddDialog.VehicleUseSelectModelListener() {
-                                        @Override
-                                        public void setVehicleUseSelectModelCallBack(CarTypeBean carType) {
-
-                                            vehicleUseAddDialog.setVehicleModelSelect(carType);
-
-                                        }
-                                    });
-                                }
-                                vehicleSelectionModelAddDialog.show(getFragmentManager(), "");
-                            }
-                        }
-
-                        @Override
-                        public void setEvaluateVehicleUsageFeeCallBack(String departureTime, String startLg, String startLt, String endLg, String endLt, int carType) {
-
-                            getEvaluateVehicleUsageFee(departureTime, startLg, startLt, endLg, endLt, carType);
-
-                        }
-
-                        @Override
-                        public void setAddressPOISearchCallBack(String addressName, int vehicleUseOprateFlag) {
-                            mVehicleUseOprateFlag = vehicleUseOprateFlag;
-                            if (!TextUtils.isEmpty(addressName)) {
-                                doSearchQuery(addressName);
-                            }
-                        }
-                    });
-
-
+                if (goodsPriceList.size() > 0) {
+                    OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+                    goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
-                vehicleUseAddDialog.show(getFragmentManager(), "");
+                int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                break;
+            case R.id.tv_add_vehicle_more:
+
+                showVehicleUseAddDialog();
                 break;
             default:
                 break;
@@ -619,6 +685,30 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     @Override
+    public void ticketOrderSubmitResult(BackResult<TicketOrderSubmitResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    TicketOrderSubmitResponse ticketOrderSubmitResponse = res.getData();
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("ticketOrderSubmit",ticketOrderSubmitResponse);
+                    intent.putExtras(bundle);
+                    intent.setClass(OrderSubmitActivity.this,PaymentOrderActivity.class);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void getOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -627,8 +717,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                     OrderSubmitInitResponse orderSubmitInitResponse = res.getData();
                     travellersList = orderSubmitInitResponse.getTravellers();
+                    userTravelerId = travellersList.get(0).getUserId();
+
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+                    goodsPriceEntity.setTicketPurchaseNum(1);
                     String title = goodsPriceEntity.getTitle();
                     //商品价格日期
                     List<GoodsPriceDatesResponse> goodsPriceDatesList = goodsPriceEntity.getGoodsPriceDates();
@@ -658,18 +751,23 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     //增加门票
                     if (goodsPriceList != null) {
                         if (goodsPriceList.size() > 0) {
-                            OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceList.get(0);
-                            goodsPriceList.remove(goodsPrice);
+
+                            for (int i = 0; i < goodsPriceList.size(); i++) {
+                                if (i > 0) {
+                                    OrderSubmitInitResponse.GoodsPriceEntity goodsPriceBean = goodsPriceList.get(i);
+                                    goodsPriceTicketAddList.add(goodsPriceBean);
+                                }
+                            }
                         }
                     }
 
-                    if (goodsPriceList.size() == 0) {
+                    if (goodsPriceTicketAddList.size() == 0) {
                         mLlytIncreaseTicket.setVisibility(View.GONE);
 
                     } else {
 
                         mLlytIncreaseTicket.setVisibility(View.VISIBLE);
-                        increaseTicketAdapter.setIncreaseTicketList(goodsPriceList);
+                        increaseTicketAdapter.setIncreaseTicketList(goodsPriceTicketAddList);
                         increaseTicketAdapter.notifyDataSetChanged();
                     }
 
@@ -783,6 +881,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 return;
             }
             showProgressDialog(OrderSubmitActivity.this);
+            mDialog.setTitle("正在计算,请稍等...");
             mPresenter.getEstimatedPrice(map);
         }
     }
@@ -790,16 +889,62 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Tip tip = data.getParcelableExtra("tip");
-        LatLonPoint latLonPoint = tip.getPoint();
-        String addressName = tip.getName();
-        if (requestCode == REQUEST_CODE_MY_LOCATION_SELECT && resultCode == RESULT_OK) {  //车辆我的位置
 
+        if (requestCode == REQUEST_CODE_MY_LOCATION_SELECT && resultCode == RESULT_OK) {  //车辆我的位置
+            Tip tip = data.getParcelableExtra("tip");
+            LatLonPoint latLonPoint = tip.getPoint();
+            String addressName = tip.getName();
             vehicleUseAddDialog.setVehicleUseAddressData(latLonPoint, addressName, REQUEST_CODE_MY_LOCATION_SELECT);
 
         } else if (requestCode == REQUEST_CODE_DESTINATION_SELECT && resultCode == RESULT_OK) {  //车辆目的地
-
+            Tip tip = data.getParcelableExtra("tip");
+            LatLonPoint latLonPoint = tip.getPoint();
+            String addressName = tip.getName();
             vehicleUseAddDialog.setVehicleUseAddressData(latLonPoint, addressName, REQUEST_CODE_DESTINATION_SELECT);
+        }
+    }
+
+    /**
+     * 订单提交
+     */
+    public void ticketOrderSubmit(){
+
+        if(validateInternet()){
+
+            goodsList.clear();
+            TicketOrderSubmitRequest ticketOrderSubmitRequest = new TicketOrderSubmitRequest();
+            ticketOrderSubmitRequest.setUserTravelerId(userTravelerId);
+
+            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+            int goodsId = goodsPriceEntity.getGoodsId();
+            GoodsBean goodsBean = new GoodsBean();
+            goodsBean.setGoodsId(goodsId);
+            goodsBean.setNum(mPurchaseNum);
+            goodsBean.setPriceDate(goodsPriceDateSelect);
+            goodsList.add(goodsBean);
+
+            for(int i = 0;i < goodsPriceTicketAddList.size();i++)
+            {
+
+                OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
+                GoodsBean goodsAddTicket = new GoodsBean();
+                goodsAddTicket.setGoodsId(goodsId);
+                goodsAddTicket.setNum(goodsPrice.getTicketPurchaseNum());    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
+                goodsAddTicket.setPriceDate(goodsPriceDateSelect);
+                goodsList.add(goodsAddTicket);
+            }
+
+            ticketOrderSubmitRequest.setGoods(goodsList);
+            ticketOrderSubmitRequest.setCars(carsBeanList);
+
+            //是否用车 1:用 || 0:不用
+            if(mCkbIsNeedUseCar.isChecked())
+            {
+                ticketOrderSubmitRequest.setCarStatus(1);
+            } else {
+                ticketOrderSubmitRequest.setCarStatus(0);
+            }
+            mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
         }
     }
 
@@ -846,5 +991,97 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @Override
     public void onPoiItemSearched(PoiItem poiItem, int i) {
 
+    }
+
+    public void showVehicleUseAddDialog() {
+        if (vehicleUseAddDialog == null) {
+            vehicleUseAddDialog = new VehicleUseAddDialog();
+            vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
+                @Override
+                public void setVehicleUseSelectFlagCallBack(int vehicleUseOprateFlag) {
+                    mVehicleUseOprateFlag = vehicleUseOprateFlag;
+                    if (vehicleUseOprateFlag == 0) {
+                        Intent mIntent = new Intent();
+                        mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                        mIntent.putExtra("vehicleUseOprateFlag", vehicleUseOprateFlag);
+                        startActivityForResult(mIntent, REQUEST_CODE_MY_LOCATION_SELECT);
+                    } else if (vehicleUseOprateFlag == 1) {
+
+                        Intent mIntent = new Intent();
+                        mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                        mIntent.putExtra("vehicleUseOprateFlag", vehicleUseOprateFlag);
+                        startActivityForResult(mIntent, REQUEST_CODE_DESTINATION_SELECT);
+                    } else if (vehicleUseOprateFlag == 2) {  //用车时间
+
+                        if (vehicleUseTimeSelectDialog == null) {
+                            vehicleUseTimeSelectDialog = new VehicleUseTimeSelectDialog();
+                            vehicleUseTimeSelectDialog.setVehicleUseTimeSelectListener(new VehicleUseTimeSelectDialog.VehicleUseTimeSelectListener() {
+                                @Override
+                                public void setVehicleUseConfirmCallBack(String vehicleUseDateStr) {
+
+                                    vehicleUseAddDialog.setVehicleUseTravelTime(vehicleUseDateStr);
+
+                                }
+                            });
+                            vehicleUseTimeSelectDialog.show(getFragmentManager(), "");
+                        } else {
+
+                            vehicleUseTimeSelectDialog.show(getFragmentManager(), "");
+                        }
+                    } else if (vehicleUseOprateFlag == 3) {  //选择车辆类型
+
+                        if (vehicleSelectionModelAddDialog == null) {
+                            vehicleSelectionModelAddDialog = new VehicleSelectionModelAddDialog();
+                            vehicleSelectionModelAddDialog.setVehicleUseSelectListener(new VehicleSelectionModelAddDialog.VehicleUseSelectModelListener() {
+                                @Override
+                                public void setVehicleUseSelectModelCallBack(CarTypeBean carType) {
+
+                                    vehicleUseAddDialog.setVehicleModelSelect(carType);
+
+                                }
+                            });
+                        }
+                        vehicleSelectionModelAddDialog.show(getFragmentManager(), "");
+                    }
+                }
+
+                @Override
+                public void setEvaluateVehicleUsageFeeCallBack(String departureTime, String startLg, String startLt, String endLg, String endLt, int carType) {
+
+                    getEvaluateVehicleUsageFee(departureTime, startLg, startLt, endLg, endLt, carType);
+
+                }
+
+                @Override
+                public void setAddressPOISearchCallBack(String addressName, int vehicleUseOprateFlag) {
+                    mVehicleUseOprateFlag = vehicleUseOprateFlag;
+                    if (!TextUtils.isEmpty(addressName)) {
+                        doSearchQuery(addressName);
+                    }
+                }
+
+                @Override
+                public void setVehicleUseConfirmCallBack(CarsBean carsBean) {
+                    mLlytVehicleUse.setVisibility(View.VISIBLE);
+                    carsBeanList.add(carsBean);
+                    vehicleUseAdapter.setVehicleUseList(carsBeanList);
+                    vehicleUseAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void setVehicleUseParamEmptyCallBack(String message) {
+
+                    showToast(OrderSubmitActivity.this, message);
+                }
+
+                @Override
+                public void setVehicleUseCancelCallBack() {   //取消选择用车
+
+                    mCkbIsNeedUseCar.setChecked(false);
+                }
+            });
+        }
+        vehicleUseAddDialog.show(getFragmentManager(), "");
     }
 }

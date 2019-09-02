@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class OrderDetailTicketInfoAdapter extends RecyclerView.Adapter<OrderDetailTicketInfoAdapter.ViewHolder> {
 
-    List<PopularScenicSpotsResponse> popularScenicSpotsList;
+    List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceList;
     private Context mContext;
 
     public OrderDetailTicketInfoAdapter(Context mContext) {
@@ -35,9 +36,9 @@ public class OrderDetailTicketInfoAdapter extends RecyclerView.Adapter<OrderDeta
         this.mContext = mContext;
     }
 
-    public void setInteractiveSelectionList(List<PopularScenicSpotsResponse> popularScenicSpotsList) {
+    public void setOrderDetailTicketList(List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceList) {
 
-        this.popularScenicSpotsList = popularScenicSpotsList;
+        this.goodsPriceList = goodsPriceList;
     }
 
     @Override
@@ -52,10 +53,14 @@ public class OrderDetailTicketInfoAdapter extends RecyclerView.Adapter<OrderDeta
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            /*PopularScenicSpotsResponse popularScenicSpots = popularScenicSpotsList.get(itemPosition);
-            holder.mTvPopularScenicSpotPrice.setText(popularScenicSpots.getScenicSpotsTicketPrice());
-            holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getScenicSpotsName());*/
 
+            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(itemPosition);
+            int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
+            String title = goodsPriceEntity.getTitle();
+            int defaultPrice = goodsPriceEntity.getDefaultPrice();
+            holder.mTvTicketTitle.setText(title + "X" + ticketPurchaseNum);
+            int mTotalTicketPrice = defaultPrice * ticketPurchaseNum;
+            holder.mTvTicketPrice.setText("¥" + String.valueOf(mTotalTicketPrice));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,10 +69,18 @@ public class OrderDetailTicketInfoAdapter extends RecyclerView.Adapter<OrderDeta
 
     @Override
     public int getItemCount() {
-        return 2;
+        return goodsPriceList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        //票标题
+        @BindView(R.id.tv_ticket_title)
+        TextView mTvTicketTitle;
+
+        //票价格
+        @BindView(R.id.tv_ticket_price)
+        TextView mTvTicketPrice;
 
         public ViewHolder(View itemView) {
             super(itemView);

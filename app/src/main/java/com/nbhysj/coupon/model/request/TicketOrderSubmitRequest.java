@@ -6,7 +6,7 @@ import java.util.List;
  * @auther：hysj created on 2019/8/30
  * description：下单接口
  */
-public class TicketOrderRequest {
+public class TicketOrderSubmitRequest {
 
     //旅客Id
     private int userTravelerId;

@@ -1,6 +1,5 @@
 package com.nbhysj.coupon.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.TouristBean;
+import com.nbhysj.coupon.model.request.CarsBean;
+import com.nbhysj.coupon.util.Tools;
 
 import java.util.List;
 /**
@@ -17,20 +17,15 @@ import java.util.List;
  */
 public class VehicleUseAdapter extends RecyclerView.Adapter<VehicleUseAdapter.ViewHolder> {
 
+    List<CarsBean> carList;
 
-    List<TouristBean> touristInfoList;
-    private Context mContext;
-    private TouristInformationListener touristInformationListener;
+    public VehicleUseAdapter() {
 
-    public VehicleUseAdapter(Context mContext, TouristInformationListener touristInformationListener) {
-
-        this.mContext = mContext;
-        this.touristInformationListener = touristInformationListener;
     }
 
-    public void setTouristInfoList(List<TouristBean> touristInfoList) {
+    public void setVehicleUseList(List<CarsBean> carList) {
 
-        this.touristInfoList = touristInfoList;
+        this.carList = carList;
     }
 
 
@@ -46,17 +41,17 @@ public class VehicleUseAdapter extends RecyclerView.Adapter<VehicleUseAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
+            CarsBean carsBean = carList.get(itemPosition);
+            String departureTime = carsBean.getDepartureTime();
+            double price = (double)carsBean.getPrice();
+            double priceDouble = price / 100;
+            String startAddressName = carsBean.getStartName();
+            String endAddressName = carsBean.getEndName();
 
-          /*  TouristBean touristBean = touristInfoList.get(itemPosition);
-            holder.mTvTouristName.setText(touristBean.getName());
-            holder.mTvPhone.setText(touristBean.getIdNumber());
-            holder.mTvEditVisitors.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    touristInformationListener.setEditTouristInfoListener(itemPosition);
-                }
-            });*/
+            holder.mTvVehicleExpenses.setText(Tools.getTwoDecimalPoint(priceDouble));
+            holder.mTvStartingPoint.setText(startAddressName);
+            holder.mTvDestination.setText(endAddressName);
+            holder.mTvVehicleUseTime.setText(departureTime);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,7 +60,7 @@ public class VehicleUseAdapter extends RecyclerView.Adapter<VehicleUseAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return touristInfoList.size();
+        return carList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,12 +81,6 @@ public class VehicleUseAdapter extends RecyclerView.Adapter<VehicleUseAdapter.Vi
             mTvVehicleExpenses = itemView.findViewById(R.id.tv_vehicle_expenses);
             mTvStartingPoint = itemView.findViewById(R.id.tv_starting_point);
             mTvDestination = itemView.findViewById(R.id.tv_destination);
-
         }
-    }
-
-    public interface TouristInformationListener {
-
-        void setEditTouristInfoListener(int position);
     }
 }

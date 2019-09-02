@@ -107,9 +107,9 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
             holder.mTvTicketTitle.setText(title);
 
             holder.mTvDefaultPrice.setText(String.valueOf(mDefaultPrice));
-            holder.mTvDefaultPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
 
             holder.mTvMarketPrice.setText("¥" + String.valueOf(mMarketPrice));
+            holder.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
 
             goodsPriceTagList.add("官方");
             goodsPriceTagList.add(refundSettingsValue);
@@ -147,8 +147,8 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
                     if (mPurchaseNum > 0) {
                         mPurchaseNum--;
                         holder.mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
-                        mPurchasePrice = mPurchaseNum * mMarketPrice;
-                        increaseTicketListener.setPurchaseNumReduceListener(itemPosition,mPurchasePrice);
+                        mPurchasePrice = mPurchaseNum * mDefaultPrice;
+                        increaseTicketListener.setPurchaseNumListener(itemPosition,mPurchasePrice,mPurchaseNum);
                     }
                 }
             });
@@ -159,8 +159,8 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
 
                     mPurchaseNum++;
                     holder.mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
-                    mPurchasePrice = mPurchaseNum * mMarketPrice;
-                    increaseTicketListener.setPurchaseNumAddListener(itemPosition,mPurchasePrice);
+                    mPurchasePrice = mPurchaseNum * mDefaultPrice;
+                    increaseTicketListener.setPurchaseNumListener(itemPosition,mPurchasePrice,mPurchaseNum);
 
                 }
             });
@@ -215,8 +215,7 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
 
     public interface IncreaseTicketListener {
 
-        void setPurchaseNumReduceListener(int position,int price);
+        void setPurchaseNumListener(int position,int price,int mPurchaseNum);
 
-        void setPurchaseNumAddListener(int position,int price);
     }
 }

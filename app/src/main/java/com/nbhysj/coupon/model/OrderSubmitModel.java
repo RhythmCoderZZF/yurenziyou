@@ -4,10 +4,12 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
+import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
+import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 
 import java.util.Map;
@@ -49,5 +51,10 @@ public class OrderSubmitModel implements OrderSubmitContract.Model {
     @Override
     public Observable<BackResult> deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest) {
         return Api.getInstance().apiService.deleteTravellerInfo(deleteTravellerInfoRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<TicketOrderSubmitResponse>> ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
+        return Api.getInstance().apiService.ticketOrderSubmit(ticketOrderSubmitRequest).compose(RxSchedulers.io_main());
     }
 }

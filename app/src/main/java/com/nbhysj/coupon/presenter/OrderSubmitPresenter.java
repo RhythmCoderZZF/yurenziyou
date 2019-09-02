@@ -4,6 +4,7 @@ import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
+import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 
@@ -43,6 +44,11 @@ public class OrderSubmitPresenter extends OrderSubmitContract.Presenter {
     @Override
     public void deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest) {
         mRxManager.add(mModel.deleteUserTraveller(deleteTravellerInfoRequest).subscribe(res -> mView.deleteUserTravellerResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
+        mRxManager.add(mModel.ticketOrderSubmit(ticketOrderSubmitRequest).subscribe(res -> mView.deleteUserTravellerResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
- >
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/toolbar_space"
@@ -348,17 +347,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_xsmall"
+                            android:text="游客"
                             android:textColor="@color/color_text_gray17"
-                            android:text="游客" />
+                            android:textSize="@dimen/text_size_xsmall" />
 
                         <ImageButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_13"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/dp_13"
                             android:background="@mipmap/icon_tourist_information_delete"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -366,40 +365,40 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_42"
                         android:layout_marginTop="@dimen/dp_20"
-                        android:layout_toRightOf="@+id/llyt_tourist_info_delete"
                         android:layout_marginBottom="@dimen/dp_20"
+                        android:layout_toRightOf="@+id/llyt_tourist_info_delete"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tv_tourist_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_xsmall"
+                            android:text=""
                             android:textColor="@color/txt_font_black2"
-                            android:text="" />
+                            android:textSize="@dimen/text_size_xsmall" />
 
                         <TextView
                             android:id="@+id/tv_tourist_mobile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_xsmall"
-                            android:textColor="@color/txt_font_black2"
                             android:layout_marginTop="@dimen/dp_13"
-                            android:text="" />
+                            android:text=""
+                            android:textColor="@color/txt_font_black2"
+                            android:textSize="@dimen/text_size_xsmall" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_tourists_info_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_small"
-                        android:textColor="@color/color_text_blue5"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dp_2"
                         android:padding="@dimen/dp_10"
                         android:text="编辑"
-                        android:visibility="gone"/>
+                        android:textColor="@color/color_text_blue5"
+                        android:textSize="@dimen/text_size_small"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
 
@@ -416,8 +415,8 @@
                         android:layout_height="@dimen/dp_56"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/dp_16"
-                        android:text="@string/str_increase_ticket"
                         android:gravity="center_vertical"
+                        android:text="@string/str_increase_ticket"
                         android:textColor="@color/txt_font_black2"
                         android:textSize="@dimen/text_size_xmedium"
                         android:textStyle="bold" />
@@ -444,17 +443,17 @@
                         android:textSize="@dimen/text_size_xmedium"
                         android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/img_need_use_car"
+                    <CheckBox
+                        android:id="@+id/ckb_is_need_use_car"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/dp_10"
-                        android:src="@mipmap/icon_payment_method_check_false"
+                        android:checked="false"
                         android:textColor="@color/color_text_blue5"
+                        android:drawableLeft="@drawable/selector_vehicle_use_check"
+                        android:padding="15dp"
+                        android:button="@null"
                         android:textSize="@dimen/text_size_small" />
 
                 </RelativeLayout>
@@ -468,37 +467,30 @@
                     android:background="@color/color_text_gray25"></View>
 
                 <LinearLayout
+                    android:id="@+id/llyt_vehicle_use"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_travel_by_car"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_1"
-                        android:layout_marginLeft="@dimen/dp_15"
-                        android:layout_marginRight="@dimen/dp_14"
-                        android:alpha="0.25"
-                        android:background="@color/color_text_gray25"></View>
-
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_add_vehicle_more"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_16"
-                        android:layout_marginBottom="@dimen/dp_16"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="@dimen/text_size_xsmall"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/dp_16"
+                        android:text="+添加更多用车"
                         android:textColor="@color/color_text_blue8"
-                        android:text="+添加更多用车"/>
-
+                        android:textSize="@dimen/text_size_xsmall" />
 
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -594,7 +586,8 @@
             android:gravity="center"
             android:text="@string/str_price_detail"
             android:textColor="@color/txt_font_black2"
-            android:textSize="@dimen/text_size_xsmall" />
+            android:textSize="@dimen/text_size_xsmall"
+            android:textStyle="bold"/>
 
         <View
             android:layout_width="match_parent"
@@ -602,7 +595,6 @@
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginRight="@dimen/dp_15"
             android:background="@color/color_text_gray16" />
-
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_order_deatil_ticket_info"
@@ -615,7 +607,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_14">
+            android:layout_marginBottom="@dimen/dp_14"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -652,12 +645,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white">
 
-        <CheckBox
-            android:id="@+id/ckb_order_detail_look"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:button="@null" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -681,10 +668,6 @@
                     android:textColor="@color/txt_font_black2"
                     android:textSize="@dimen/text_size_xsmall" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -694,8 +677,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="￥"
+                            android:text="¥"
                             android:textColor="@color/color_text_orange2"
+                            android:layout_marginRight="@dimen/dp_2"
                             android:textSize="@dimen/text_size_tiny" />
 
                         <TextView
@@ -707,15 +691,7 @@
                             android:textSize="@dimen/text_size_xlarge"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_default_ticket_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="¥0"
-                            android:textColor="@color/color_text_gray17"
-                            android:textSize="@dimen/text_size_tiny" />
                     </LinearLayout>
-                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -726,24 +702,40 @@
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_tiny"
                 android:textStyle="bold"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
+
+
+        <CheckBox
+            android:id="@+id/ckb_order_detail_look"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_toLeftOf="@+id/tv_order_submit"
+            android:gravity="center_vertical"
+            android:drawableRight="@mipmap/icon_order_detail_up_arrow"
+            android:drawablePadding="@dimen/dp_2"
+            android:layout_marginRight="@dimen/dp_18"
+            android:text="明细"
+            android:button="@null" />
 
 
         <TextView
             android:id="@+id/tv_order_detail_look"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_57"
             android:layout_marginRight="@dimen/dp_18"
             android:layout_toLeftOf="@+id/tv_order_submit"
-            android:drawableRight="@mipmap/icon_order_detail_down_arrow"
+            android:gravity="center_vertical"
+            android:drawableRight="@mipmap/icon_order_detail_up_arrow"
             android:drawablePadding="@dimen/dp_2"
             android:text="明细"
             android:textColor="@color/color_text_gray20"
             android:textSize="@dimen/text_size_small"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_order_submit"
@@ -780,17 +772,6 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <!--  <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-
-        </RelativeLayout>-->
-        <!--<View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/line"/>-->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_56">
@@ -803,7 +784,6 @@
                 android:text="@string/str_cancel"
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xnormal" />
-
 
             <TextView
                 android:id="@+id/tv_confirm"
@@ -850,8 +830,7 @@
         android:background="@drawable/bg_white_radius_fifteen_top_shape"
         android:clickable="true"
         android:orientation="vertical"
-        android:visibility="gone"
-      >
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -916,8 +895,8 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/tv_username_tag"
-                android:text="ddd"
                 android:gravity="center_vertical"
+                android:text="ddd"
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xnormal" />
 
