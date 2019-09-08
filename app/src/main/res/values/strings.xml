@@ -11,6 +11,7 @@
     <string name="str_no_net_connect">无网络连接,请检查网络</string>
     <string name="str_login_token_invalid">您的账号在其他地点登录</string>
     <string name="str_no_data" translatable="false">没有找到相关结果或数据</string>
+    <string name="str_no_order_data">暂无交易记录</string>
     <string name="transitional_image">the image of transition</string>
     <string name="str_account">请输入登录的账号</string>
     <string name="str_login_account">请输入登录账号</string>
@@ -133,8 +134,11 @@
     <string name="str_new_fans" translatable="false">新增粉丝</string>
     <string name="str_complete" translatable="false">完成</string>
     <string name="str_order_delete" translatable="false">删除订单</string>
+    <string name="str_order_deleting" translatable="false">正在删除...</string>
+    <string name="str_order_cancel">取消订单</string>
     <string name="str_order_comment" translatable="false">去评价</string>
-    <string name="str_renminbi_symbol" translatable="false">￥</string>
+    <string name="str_order_payment" translatable="false">去付款</string>
+    <string name="str_renminbi_symbol" translatable="false">¥</string>
     <string name="str_order_detail" translatable="false">订单详情</string>
     <string name="str_transaction_success" translatable="false">交易成功</string>
     <string name="str_evaluate" translatable="false">评价</string>
@@ -214,6 +218,7 @@
     <string name="str_address_select">地址选择</string>
     <string name="str_un_bookable">不可订</string>
     <string name="str_fill_in_vehicle_info">填写用车信息</string>
+    <string name="str_sure_to_delete_the_order">确认删除该订单吗</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>

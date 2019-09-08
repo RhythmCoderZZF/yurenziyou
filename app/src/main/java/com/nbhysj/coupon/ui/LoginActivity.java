@@ -187,6 +187,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                     String collectionNum = String.valueOf(userInfoResponse.getCollectionNum()); //收藏数
                     String zanNum = String.valueOf(userInfoResponse.getZanNum()); //点赞数
                     SharedPreferencesUtils.saveUserInfoData(avatar, sex, birthday, profile, fansNum, followNum, collectionNum, zanNum);
+
+                    String currentVersionName = getCurrentVersionName();
+                    SharedPreferencesUtils.putData("version",currentVersionName);
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();

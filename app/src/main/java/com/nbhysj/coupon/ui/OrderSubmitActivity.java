@@ -304,7 +304,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
 
         //商品列表 组装订单提交使用
-        if(goodsList != null){
+        if(goodsList == null){
 
             goodsList = new ArrayList<>();
         } else {
@@ -502,7 +502,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
         mLlytAddAndUpdateTourists.setEnabled(false);
 
-        //新增游客信息弹框
+        //车辆 路径信息
         LinearLayoutManager travelByCarLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
         travelByCarLayoutManager.setOrientation(travelByCarLayoutManager.VERTICAL);
         mRvTravelByCar.setLayoutManager(travelByCarLayoutManager);
@@ -717,7 +717,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                     OrderSubmitInitResponse orderSubmitInitResponse = res.getData();
                     travellersList = orderSubmitInitResponse.getTravellers();
-                    userTravelerId = travellersList.get(0).getUserId();
+                    userTravelerId = travellersList.get(0).getId();
 
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
@@ -926,12 +926,17 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             for(int i = 0;i < goodsPriceTicketAddList.size();i++)
             {
 
+
                 OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
-                GoodsBean goodsAddTicket = new GoodsBean();
-                goodsAddTicket.setGoodsId(goodsId);
-                goodsAddTicket.setNum(goodsPrice.getTicketPurchaseNum());    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
-                goodsAddTicket.setPriceDate(goodsPriceDateSelect);
-                goodsList.add(goodsAddTicket);
+                int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
+                int goodId = goodsPrice.getGoodsId();
+                if(tcketPurchaseNum > 0) {
+                    GoodsBean goodsAddTicket = new GoodsBean();
+                    goodsAddTicket.setGoodsId(goodId);
+                    goodsAddTicket.setNum(tcketPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
+                    goodsAddTicket.setPriceDate(goodsPriceDateSelect);
+                    goodsList.add(goodsAddTicket);
+                }
             }
 
             ticketOrderSubmitRequest.setGoods(goodsList);
@@ -944,6 +949,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             } else {
                 ticketOrderSubmitRequest.setCarStatus(0);
             }
+            showProgressDialog(OrderSubmitActivity.this);
+            mDialog.setTitle("正在提交订单...");
             mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
         }
     }

@@ -19,7 +19,7 @@
             android:layout_marginLeft="@dimen/dp_17"
             android:drawableLeft="@mipmap/icon_use_the_car"
             android:drawablePadding="@dimen/dp_5"
-            android:text="2019-03-21 16:11"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xsmall"
             />
@@ -63,7 +63,7 @@
             android:layout_marginLeft="@dimen/dp_13"
             android:drawableLeft="@drawable/shape_round_green_small"
             android:drawablePadding="@dimen/dp_8"
-            android:text="鄞州区潘火路东方丽都北4门"
+            android:text=""
             android:textColor="@color/text_grey"
             android:textSize="@dimen/text_size_small" />
 
@@ -73,10 +73,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dp_13"
-            android:layout_marginTop="@dimen/dp_9"
+            android:layout_marginTop="@dimen/dp_3"
             android:drawableLeft="@drawable/shape_round_orange_small"
             android:drawablePadding="@dimen/dp_8"
-            android:text="鄞州区桑田路936号宁波海洋世界"
+            android:text=""
             android:textColor="@color/text_grey"
             android:textSize="@dimen/text_size_small" />
     </LinearLayout>

@@ -186,7 +186,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
      *
      * @return 当前应用的版本号
      */
-    public String getCourrentVersionName() {
+    public String getCurrentVersionName() {
         try {
             PackageManager manager = mContext.getPackageManager();
             PackageInfo info = manager.getPackageInfo(

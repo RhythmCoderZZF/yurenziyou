@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tv_order_detail_problem"
-    android:layout_width="@dimen/dp_110"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/dp_30"
     android:layout_marginTop="@dimen/dp_6"
     android:background="@drawable/bg_stroke_radius_light_gray_shape"
@@ -9,6 +9,9 @@
     android:gravity="center"
     android:textSize="@dimen/text_size_normal"
     android:textColor="@color/txt_font_black2"
+    android:layout_marginRight="@dimen/dp_9"
+    android:lines="1"
+    android:ellipsize="end"
     android:orientation="vertical">
 
 </TextView>

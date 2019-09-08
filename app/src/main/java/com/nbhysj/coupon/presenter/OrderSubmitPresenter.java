@@ -48,7 +48,7 @@ public class OrderSubmitPresenter extends OrderSubmitContract.Presenter {
 
     @Override
     public void ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
-        mRxManager.add(mModel.ticketOrderSubmit(ticketOrderSubmitRequest).subscribe(res -> mView.deleteUserTravellerResult(res), e -> mView.showMsg(e.getMessage())));
+        mRxManager.add(mModel.ticketOrderSubmit(ticketOrderSubmitRequest).subscribe(res -> mView.ticketOrderSubmitResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

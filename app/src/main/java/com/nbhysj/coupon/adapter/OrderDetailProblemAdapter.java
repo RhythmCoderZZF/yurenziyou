@@ -9,19 +9,20 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
+import com.nbhysj.coupon.model.response.OrderDetailResponse;
 
 import java.util.List;
 
 public class OrderDetailProblemAdapter extends RecyclerView.Adapter<OrderDetailProblemAdapter.CardHolder> {
 
-    private List<String> orderDetailProblemList;
+    private List<OrderDetailResponse.AnswerEntity> orderDetailProblemList;
     private Context mContent;
 
     public OrderDetailProblemAdapter(Context mContent) {
         this.mContent = mContent;
     }
 
-    public void setOrderDetailProblemList(List<String> orderDetailProblemList) {
+    public void setOrderDetailProblemList(List<OrderDetailResponse.AnswerEntity> orderDetailProblemList) {
 
         this.orderDetailProblemList = orderDetailProblemList;
     }
@@ -34,8 +35,9 @@ public class OrderDetailProblemAdapter extends RecyclerView.Adapter<OrderDetailP
 
     @Override
     public void onBindViewHolder(final CardHolder holder, final int position) {
-        String orderDetailProblem = orderDetailProblemList.get(position);
-        holder.mTvOrderDetailProblem.setText(orderDetailProblem);
+        OrderDetailResponse.AnswerEntity orderDetailProblem = orderDetailProblemList.get(position);
+        String content = orderDetailProblem.getContent();
+        holder.mTvOrderDetailProblem.setText(content);
     }
 
     @Override

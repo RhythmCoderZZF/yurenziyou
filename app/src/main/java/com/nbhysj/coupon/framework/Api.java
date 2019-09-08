@@ -210,6 +210,8 @@ public class Api {
             String nonce = MD5Util.md5(timestamp + uuid);
             String mStringSignTemp = timestamp + token + nonce;
 
+            String curVer = (String)SharedPreferencesUtils.getData("version","");
+
             if (parameters.size() > 0) {
 
                 //stringA = EncryptedSignatureUtil.createSign(parameters);
@@ -222,13 +224,12 @@ public class Api {
                     //.addHeader("sign", sign)
                     .addHeader("timestamp", timestamp + "")
                     .addHeader("nonce", nonce)
-                    .addHeader("curVer", "1.0.0")
+                    .addHeader("curVer", curVer)
                     .addHeader("os", "android")
                     .build();
 
             return chain.proceed(request);
         }
-
     };
 
     class HttpCacheInterceptor implements Interceptor {

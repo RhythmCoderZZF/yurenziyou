@@ -23,6 +23,7 @@ public class DateUtil {
     public final static String sDateYMDFormat = "yyyy-MM-dd";
 
     public final static String sDateYMDHHMMSSFormat = "yyyy-MM-dd HH:mm:ss";
+    public final static String sDateHHMMSSFormat = "HH:mm:ss";
     private static final long ONE_MINUTE = 60000L;
     private static final long ONE_HOUR = 3600000L;
     private static final long ONE_DAY = 86400000L;
@@ -560,5 +561,39 @@ public class DateUtil {
             e.printStackTrace();
         }
         return stringBuffer.toString();
+    }
+
+    public static String getTheRemainingTime(long time, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String remainingTime = sdf.format(time);//当前时间
+        return remainingTime;
+    }
+
+
+    /**
+     * 把毫秒数转换成时分秒
+     * @param millis
+     * @return
+     */
+    public static String millisToStringShort(long millis) {
+        StringBuffer strBuilder = new StringBuffer();
+        long temp = millis;
+        long hper = 60 * 60 * 1000;
+        long mper = 60 * 1000;
+        long sper = 1000;
+      /*  if (temp / hper > 0) {
+            strBuilder.append(temp / hper).append("小时");
+        }*/
+        temp = temp % hper;
+
+        if (temp / mper > 0) {
+            strBuilder.append(temp / mper).append("分");
+        }
+        strBuilder.append(":");
+        temp = temp % mper;
+        if (temp / sper > 0) {
+            strBuilder.append(temp / sper).append("秒");
+        }
+        return strBuilder.toString();
     }
 }

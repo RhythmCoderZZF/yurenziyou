@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llyt_my_order_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_18"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_ticket_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_small"
+         />
+
+        <TextView
+            android:id="@+id/tv_ticket_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_ammount"
+            android:textColor="@color/color_text_gray28"
+            android:textSize="@dimen/text_size_small" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_18"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:text="¥"
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_small"
+               />
+
+            <TextView
+                android:id="@+id/tv_ticket_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/txt_font_black2"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/text_size_xnormal"
+              />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_ticket_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_ammount"
+            android:layout_gravity="right"
+            android:layout_marginLeft="@dimen/dp_13"
+            android:gravity="right"
+            android:text="x0"
+            android:textColor="@color/color_text_gray28"
+            android:textSize="@dimen/text_size_small" />
+
+    </LinearLayout>
+
+</RelativeLayout>

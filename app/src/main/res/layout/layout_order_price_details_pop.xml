@@ -27,12 +27,12 @@
 
             <ImageView
                 android:id="@+id/image_cancel_dialog"
-                android:layout_width="@dimen/dp_15"
-                android:layout_height="@dimen/dp_15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/dp_16"
                 android:layout_marginRight="@dimen/dp_15"
-                android:src="@mipmap/icon_cancel" />
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_trip_preview_close" />
         </RelativeLayout>
 
         <View
@@ -43,99 +43,18 @@
             android:alpha="0.25"
             android:background="@color/color_text_gray6"></View>
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_user_ticket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/dp_9"></android.support.v7.widget.RecyclerView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_16">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_vehicle_use"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_9"></android.support.v7.widget.RecyclerView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_15"
-                    android:text="在线支付"
-                    android:textColor="@color/txt_font_black2" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_15"
-                    android:layout_toLeftOf="@+id/tv_price_tag"
-                    android:text="1晚、1间共 "
-                    android:textSize="@dimen/text_size_xtiny" />
-
-                <TextView
-                    android:id="@+id/tv_price_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_15"
-                    android:layout_toLeftOf="@+id/tv_price"
-                    android:text="￥"
-                    android:textSize="@dimen/text_size_small" />
-
-                <TextView
-                    android:id="@+id/tv_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="@dimen/dp_3"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:text="156"
-                    android:textColor="@color/txt_font_black2"
-                    android:textSize="@dimen/text_size_large" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_16"
-                android:layout_marginBottom="@dimen/dp_13">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_15"
-                        android:text="03-20" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_15"
-                        android:text="含早餐"
-                        android:textSize="@dimen/text_size_xtiny" />
-                </LinearLayout>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="@dimen/dp_3"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:text="1 x ￥156"
-                    android:textColor="@color/text_grey"
-                    android:textSize="@dimen/text_size_small" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_1"
-                android:layout_marginLeft="@dimen/dp_14"
-                android:layout_marginRight="@dimen/dp_15"
-                android:alpha="0.25"
-                android:background="@color/color_text_gray6"></View>
-        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

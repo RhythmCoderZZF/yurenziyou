@@ -13,6 +13,8 @@ import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
+import com.nbhysj.coupon.model.request.OrderCancelRequest;
+import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
@@ -42,6 +44,7 @@ import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
+import com.nbhysj.coupon.model.response.OrderDetailResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
@@ -62,6 +65,7 @@ import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
+import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import java.util.HashMap;
@@ -70,6 +74,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
@@ -421,5 +426,36 @@ public interface ApiService {
     @POST("api/ticketOrder")
     Observable<BackResult<TicketOrderSubmitResponse>> ticketOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
 
+    //获取订单列表
+    @GET("api/order/userOrderList")
+    Observable<BackResult<UserOrderListResponse>> getUserOrderList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //用户待付款订单
+    @GET("api/order/queryCreateOrder")
+    Observable<BackResult<UserOrderListResponse>> getPendingOrdersList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //用户待出行订单
+    @GET("api/order/queryAwaitGoing")
+    Observable<BackResult<UserOrderListResponse>> getQueryAwaitGoingList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+      //用户待评论订单
+    @GET("api/order/queryAwaitComment")
+    Observable<BackResult<UserOrderListResponse>> getQueryAwaitCommentList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //退换/售后订单列表
+    @GET("api/order/queryAwaitRefund")
+    Observable<BackResult<UserOrderListResponse>> getQueryAwaitRefundList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //删除订单
+    @HTTP(method = "DELETE", path = "api/order/deleteOrder", hasBody = true)
+    Observable<BackResult> deleteOrder(@Body OrderDeleteRequest deleteOrderRequest);
+
+    //订单详情
+    @GET("api/order/detail")
+    Observable<BackResult<OrderDetailResponse>> getOrderDetail(@Query("orderNo") String orderNo);
+
+    //订单取消
+    @GET("api/order/pay/cancelOrder")
+    Observable<BackResult<OrderDetailResponse>> cancelOrder(@Body OrderCancelRequest cancelOrderRequest);
 }
 

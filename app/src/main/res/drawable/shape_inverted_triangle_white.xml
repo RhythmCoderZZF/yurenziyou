@@ -5,7 +5,7 @@
         <rotate
             android:fromDegrees="45"
             android:pivotX="135%"
-            android:pivotY="15%"
+            android:pivotY="5%"
             android:toDegrees="45">
             <shape android:shape="rectangle">
                 <solid android:color="@color/color_high_light_green" />
