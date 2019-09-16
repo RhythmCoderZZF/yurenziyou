@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class HotScenicSpotsListAdapter extends RecyclerView.Adapter<HotScenicSpotsListAdapter.ViewHolder> {
 
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
     public HotScenicSpotsListAdapter(Context mContext) {
@@ -36,7 +36,7 @@ public class HotScenicSpotsListAdapter extends RecyclerView.Adapter<HotScenicSpo
         this.mContext = mContext;
     }
 
-    public void setPopularScenicSpotsList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setPopularScenicSpotsList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -54,15 +54,15 @@ public class HotScenicSpotsListAdapter extends RecyclerView.Adapter<HotScenicSpo
 
         try {
             // PopularScenicSpotsResponse popularScenicSpots = popularScenicSpotsList.get(itemPosition);
-            ScenicSpotBean hotScenicSpotBean = popularScenicSpotsList.get(itemPosition);
-            int mConsumePrice = hotScenicSpotBean.getConsumePrice();
-            int mCommentScore = hotScenicSpotBean.getCommentScore();
-            String photoUrl = hotScenicSpotBean.getPhoto();
-            String intro = hotScenicSpotBean.getIntro();
+            MchTypeBean hotMchTypeBean = popularScenicSpotsList.get(itemPosition);
+            int mConsumePrice = hotMchTypeBean.getConsumePrice();
+            int mCommentScore = hotMchTypeBean.getCommentScore();
+            String photoUrl = hotMchTypeBean.getPhoto();
+            String intro = hotMchTypeBean.getIntro();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(mConsumePrice));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(mCommentScore) + "分");
             holder.mTvScenicSpotCommentNum.setText("23条点评数");
-            holder.mTvPopularScenicSpotName.setText(hotScenicSpotBean.getMchName());
+            holder.mTvPopularScenicSpotName.setText(hotMchTypeBean.getMchName());
             if (intro != null) {
                 holder.mTvScenicSpotsDes.setText(intro);
             } else {

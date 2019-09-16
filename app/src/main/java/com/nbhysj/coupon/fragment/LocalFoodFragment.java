@@ -20,7 +20,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -40,7 +40,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class LocalFoodFragment extends BaseFragment<DestinationPresenter, DestinationModel> implements DestinationContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    List<ScenicSpotBean> mHotScenicSpotList;
+    List<MchTypeBean> mHotScenicSpotList;
     private int mPage = 1;
     private int mPageSize = 10;
     private FineFoodListAdapter fineFoodListAdapter;
@@ -94,7 +94,7 @@ public class LocalFoodFragment extends BaseFragment<DestinationPresenter, Destin
     protected void initView(View v) {
 
         if (mHotScenicSpotList == null) {
-            mHotScenicSpotList = new ArrayList<>();
+            mHotScenicSpotList = new ArrayList<MchTypeBean>();
         } else {
             mHotScenicSpotList.clear();
         }
@@ -148,7 +148,7 @@ public class LocalFoodFragment extends BaseFragment<DestinationPresenter, Destin
         BasePaginationResult pageBean = res.getData().getPage();
         hasNext = pageBean.getHasNext();
         mTotalPageCount = pageBean.getPageCount();
-        List<ScenicSpotBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
+        List<MchTypeBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
         if (mTotalPageCount == 0) {
             mHotScenicSpotList.clear();
             mRlytNoData.setVisibility(View.VISIBLE);

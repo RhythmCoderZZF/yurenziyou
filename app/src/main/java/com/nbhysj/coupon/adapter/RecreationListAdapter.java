@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -33,7 +33,7 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
     /**
      * 酒店问答内容
      */
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
     public RecreationListAdapter(Context mContext) {
@@ -41,7 +41,7 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
         this.mContext = mContext;
     }
 
-    public void setRecreationListList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setRecreationListList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -59,7 +59,7 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
 
         try {
 
-            ScenicSpotBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
+            MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             String photoUrl = popularScenicSpots.getPhoto();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()) + "分");
@@ -69,16 +69,16 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
             String city = popularScenicSpots.getCity();
             String country = popularScenicSpots.getCounty();
             holder.mTvLocation.setText(city + "." + country);
-            List<ScenicSpotBean.TagsEntity> tagsEntityList = popularScenicSpots.getTags();
+            List<MchTypeBean.TagsEntity> tagsEntityList = popularScenicSpots.getTags();
 
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
 
             if (tagsEntityList != null) {
                 if (tagsEntityList.size() > 0) {
-                    holder.mTagFlowlayoutFineFood.setAdapter(new TagAdapter<ScenicSpotBean.TagsEntity>(tagsEntityList) {
+                    holder.mTagFlowlayoutFineFood.setAdapter(new TagAdapter<MchTypeBean.TagsEntity>(tagsEntityList) {
 
                         @Override
-                        public View getView(FlowLayout parent, int position, ScenicSpotBean.TagsEntity tagsEntity) {
+                        public View getView(FlowLayout parent, int position, MchTypeBean.TagsEntity tagsEntity) {
                             LayoutInflater mInflater = LayoutInflater.from(mContext);
                             TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_interaction,
                                     holder.mTagFlowlayoutFineFood, false);

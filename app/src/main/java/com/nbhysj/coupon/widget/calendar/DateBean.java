@@ -18,7 +18,14 @@ public class DateBean {
     Date date;//具体日期
     String day;//一个月的某天
     String monthStr;//月份
+    private String dateStr; //年月日
+
     public boolean isBeginTimeSelect = false;
+
+    //是否可订票
+    private int sellStatus = 0;
+
+    private int ticketPrice = 0;
 
     public int getItemState() {
         return itemState;
@@ -84,4 +91,59 @@ public class DateBean {
         isBeginTimeSelect = beginTimeSelect;
     }
 
+    public static int getItemStateBeginDate() {
+        return ITEM_STATE_BEGIN_DATE;
+    }
+
+    public static void setItemStateBeginDate(int itemStateBeginDate) {
+        ITEM_STATE_BEGIN_DATE = itemStateBeginDate;
+    }
+
+    public static int getItemStateEndDate() {
+        return ITEM_STATE_END_DATE;
+    }
+
+    public static void setItemStateEndDate(int itemStateEndDate) {
+        ITEM_STATE_END_DATE = itemStateEndDate;
+    }
+
+    public static int getItemStateSelected() {
+        return ITEM_STATE_SELECTED;
+    }
+
+    public static void setItemStateSelected(int itemStateSelected) {
+        ITEM_STATE_SELECTED = itemStateSelected;
+    }
+
+    public static int getItemStateNormal() {
+        return ITEM_STATE_NORMAL;
+    }
+
+    public static void setItemStateNormal(int itemStateNormal) {
+        ITEM_STATE_NORMAL = itemStateNormal;
+    }
+
+    public String getDateStr() {
+        return dateStr;
+    }
+
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
+    }
+
+    public int getSellStatus() {
+        return sellStatus;
+    }
+
+    public void setSellStatus(int sellStatus) {
+        this.sellStatus = sellStatus;
+    }
+
+    public int getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(int ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
 }

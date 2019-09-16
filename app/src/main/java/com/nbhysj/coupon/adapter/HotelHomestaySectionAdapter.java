@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.FoodRecommendationActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  */
 public class HotelHomestaySectionAdapter extends RecyclerView.Adapter<HotelHomestaySectionAdapter.ViewHolder> {
 
-    List<ScenicSpotBean> hotelHomestayList;
+    List<MchTypeBean> hotelHomestayList;
     private Context mContext;
 
     public HotelHomestaySectionAdapter(Context mContext) {
@@ -34,7 +34,7 @@ public class HotelHomestaySectionAdapter extends RecyclerView.Adapter<HotelHomes
         this.mContext = mContext;
     }
 
-    public void setHotelHomestaySectionList(List<ScenicSpotBean> hotelHomestayList) {
+    public void setHotelHomestaySectionList(List<MchTypeBean> hotelHomestayList) {
 
         this.hotelHomestayList = hotelHomestayList;
     }
@@ -51,7 +51,7 @@ public class HotelHomestaySectionAdapter extends RecyclerView.Adapter<HotelHomes
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            ScenicSpotBean scenicSpotBean = hotelHomestayList.get(itemPosition);
+            MchTypeBean scenicSpotBean = hotelHomestayList.get(itemPosition);
             String photo = scenicSpotBean.getPhoto();
             //holder.mTvFoodCuisine.setText(scenicSpotBean.getIntro());
             holder.mTvHotelHomestayName.setText(scenicSpotBean.getMchName());

@@ -34,6 +34,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.fragment.CameraFragment;
 import com.nbhysj.coupon.fragment.HomeFragment;
@@ -71,7 +75,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private String userId;
     private String itemTitle = "";
     private BottomNavigationView navigation;
-
+    private AMapLocationClient locationClient = null;
+    private AMapLocationClientOption locationOption = null;
+    private String mLatitude = "";
+    private String mLongitude = "";
     private enum TabFragment {
         main(R.id.navigation_main, HomeFragment.class),
         house(R.id.navigation_house, ShoppingMallFragment.class),
@@ -130,7 +137,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     @Override
     public void initData() {
-
+        initLocation();
     }
 
     @Override
@@ -165,47 +172,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         navigation.setSelectedItemId(TabFragment.values()[0].menuId);
         setBottomNavigationItem(navigation, 8, 8, 8);
         adjustNavigationIcoSize(navigation);
-        //navigation.setSelectedItemId(TabFragment.values()[0].menuId);
-    /*    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4到5.0
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }*/
-
-
-       /* fragments = new ArrayList<>();
-        fragments.add(new HomeFragment());
-        fragments.add(new BuyHouseFragment());
-        //   fragments.add(new HouseFragment());
-        fragments.add(new EyeFragment());
-        fragments.add(new MineFragment());*/
-
-      /* // notSetStatusBarColor();
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-*/
-
-        //获取整个的NavigationView
-     /*   BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
-
-        //这里就是获取所添加的每一个Tab(或者叫menu)，
-        View tab = menuView.getChildAt(3);
-        BottomNavigationItemView itemView = (BottomNavigationItemView) tab;
-
-        //加载我们的角标View，新创建的一个布局
-        View badge = LayoutInflater.from(this).inflate(R.layout.layout_menu_badge, menuView, false);
-
-        //添加到Tab上
-        itemView.addView(badge);
-        mTvCount = (TextView) badge.findViewById(R.id.tv_msg_count);*/
 
         if (Build.VERSION.SDK_INT >= 23) {
             String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -555,6 +521,113 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         final float scale = getApplication().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+    /**
+     * 初始化定位
+     */
+    private void initLocation() {
 
+        //初始化client
+        locationClient = new AMapLocationClient(MainActivity.this);
+        locationOption = getDefaultOption();
+        //设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 设置定位监听
+        locationClient.setLocationListener(locationListener);
+
+        startLocation();
+    }
+
+
+    /**
+     * 默认的定位参数
+     *
+     * @since 2.8.0
+     */
+    private AMapLocationClientOption getDefaultOption() {
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        mOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.DEFAULT);//可选，设置逆地理信息的语言，默认值为默认语言（根据所在地区选择语言）
+        return mOption;
+    }
+
+    /**
+     * 开始定位
+     */
+    private void startLocation() {
+        // 设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 启动定位
+        locationClient.startLocation();
+    }
+
+
+    /**
+     * 定位监听
+     */
+    AMapLocationListener locationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation location) {
+            if (null != location) {
+                mLongitude = String.valueOf(location.getLongitude());
+                mLatitude = String.valueOf(location.getLatitude());
+
+                SharedPreferencesUtils.saveLongitudeAndLatitudeData(mLatitude,mLongitude);
+             /*   StringBuffer sb = new StringBuffer();
+                //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+                if(location.getErrorCode() == 0){
+                    sb.append("定位成功" + "\n");
+                    sb.append("定位类型: " + location.getLocationType() + "\n");
+                    sb.append("经    度    : " + location.getLongitude() + "\n");
+                    sb.append("纬    度    : " + location.getLatitude() + "\n");
+                    sb.append("精    度    : " + location.getAccuracy() + "米" + "\n");
+                    sb.append("提供者    : " + location.getProvider() + "\n");
+
+                    sb.append("速    度    : " + location.getSpeed() + "米/秒" + "\n");
+                    sb.append("角    度    : " + location.getBearing() + "\n");
+                    // 获取当前提供定位服务的卫星个数
+                    sb.append("星    数    : " + location.getSatellites() + "\n");
+                    sb.append("国    家    : " + location.getCountry() + "\n");
+                    sb.append("省            : " + location.getProvince() + "\n");
+                    sb.append("市            : " + location.getCity() + "\n");
+                    sb.append("城市编码 : " + location.getCityCode() + "\n");
+                    sb.append("区            : " + location.getDistrict() + "\n");
+                    sb.append("区域 码   : " + location.getAdCode() + "\n");
+                    sb.append("地    址    : " + location.getAddress() + "\n");
+                    sb.append("兴趣点    : " + location.getPoiName() + "\n");
+                    //定位完成的时间
+                    sb.append("定位时间: " + MapUtils.formatUTC(location.getTime(), "yyyy-MM-dd HH:mm:ss") + "\n");
+                } else {
+                    //定位失败
+                    sb.append("定位失败" + "\n");
+                    sb.append("错误码:" + location.getErrorCode() + "\n");
+                    sb.append("错误信息:" + location.getErrorInfo() + "\n");
+                    sb.append("错误描述:" + location.getLocationDetail() + "\n");
+                }
+                sb.append("***定位质量报告***").append("\n");
+                sb.append("* WIFI开关：").append(location.getLocationQualityReport().isWifiAble() ? "开启":"关闭").append("\n");
+                sb.append("* GPS状态：").append(getGPSStatusString(location.getLocationQualityReport().getGPSStatus())).append("\n");
+                sb.append("* GPS星数：").append(location.getLocationQualityReport().getGPSSatellites()).append("\n");
+                sb.append("* 网络类型：" + location.getLocationQualityReport().getNetworkType()).append("\n");
+                sb.append("* 网络耗时：" + location.getLocationQualityReport().getNetUseTime()).append("\n");
+                sb.append("****************").append("\n");
+                //定位之后的回调时间
+                sb.append("回调时间: " + MapUtils.formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n");
+
+                //解析定位结果，
+                String result = sb.toString();*/
+            } else {
+            }
+        }
+    };
 
 }

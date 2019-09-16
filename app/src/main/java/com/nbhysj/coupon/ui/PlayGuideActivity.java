@@ -1,13 +1,10 @@
 package com.nbhysj.coupon.ui;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
@@ -17,18 +14,16 @@ import com.nbhysj.coupon.common.Enum.TourProjectTypeEnum;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
 import com.nbhysj.coupon.presenter.ScenicSpotPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
-import com.nbhysj.coupon.widget.NearbyTabIndicator;
 import com.nbhysj.coupon.widget.TabIndicator;
 
 import java.util.ArrayList;
@@ -135,7 +130,7 @@ public class PlayGuideActivity extends BaseActivity<ScenicSpotPresenter, ScenicS
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res) {
+    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
 

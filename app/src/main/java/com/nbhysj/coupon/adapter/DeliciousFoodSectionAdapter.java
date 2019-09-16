@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.DeliciousFoodResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.FoodRecommendationActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  */
 public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousFoodSectionAdapter.ViewHolder> {
 
-    List<ScenicSpotBean> deliciousFoodRecommendList;
+    List<MchTypeBean> deliciousFoodRecommendList;
     private Context mContext;
 
     public DeliciousFoodSectionAdapter(Context mContext) {
@@ -37,7 +37,7 @@ public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousF
         this.mContext = mContext;
     }
 
-    public void setDeliciousFoodRecommendList(List<ScenicSpotBean> deliciousFoodRecommendList) {
+    public void setDeliciousFoodRecommendList(List<MchTypeBean> deliciousFoodRecommendList) {
 
         this.deliciousFoodRecommendList = deliciousFoodRecommendList;
     }
@@ -54,7 +54,7 @@ public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousF
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            ScenicSpotBean scenicSpotBean = deliciousFoodRecommendList.get(itemPosition);
+            MchTypeBean scenicSpotBean = deliciousFoodRecommendList.get(itemPosition);
             String photo = scenicSpotBean.getPhoto();
             //holder.mTvFoodCuisine.setText(scenicSpotBean.getIntro());
             String mchName = scenicSpotBean.getMchName();

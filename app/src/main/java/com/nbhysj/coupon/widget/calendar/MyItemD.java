@@ -34,7 +34,7 @@ public class MyItemD extends RecyclerView.ItemDecoration {
         }
 
         //头部的高度
-        int height = 32;
+        int height = 0;
         final float scale = parent.getContext().getResources().getDisplayMetrics().density;
         height = (int) (height * scale + 0.5f);
 

@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,14 +40,17 @@ import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
 import com.nbhysj.coupon.model.request.CarsBean;
+import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.GoodsBean;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
+import com.nbhysj.coupon.model.response.TravellerBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
@@ -121,6 +125,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     RelativeLayout mRlytTicket;
     @BindView(R.id.llyt_edit_tourists)
     LinearLayout mLlytEditTourists;
+    //增加游客
     @BindView(R.id.llyt_add_tourists)
     LinearLayout mLlytAddTourists;
     //购买数量
@@ -152,6 +157,34 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @BindView(R.id.llyt_vehicle_use)
     LinearLayout mLlytVehicleUse;
 
+    //旅客编辑取消
+    @BindView(R.id.tv_tourist_edit_cancel)
+    TextView getmTvTouristEditCancel;
+
+    //旅客名字编辑
+    @BindView(R.id.edt_tourist_username)
+    EditText mEdtTouristName;
+
+    //旅客手机号编辑
+    @BindView(R.id.edt_tourist_mobile)
+    EditText mEdtTouristMobile;
+
+    //旅客增加(名字填写)
+    @BindView(R.id.edt_tourist_add_username)
+    EditText mEdtTouristAddName;
+
+    //旅客增加(手机号填写)
+    @BindView(R.id.edt_tourist_add_mobile)
+    EditText mEdtTouristAddMobile;
+
+    //游客信息
+    @BindView(R.id.rlyt_tourist_info_item)
+    RelativeLayout mRlytTouristInfoItem;
+
+    //游客删除
+    @BindView(R.id.tv_delete_frequently_used_tourists)
+    TextView mTvTouristDelete;
+
     //购买数量
     private int mPurchaseNum = 1;
 
@@ -164,7 +197,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //商品id
     private int goodsId;
 
-    private List<OrderSubmitInitResponse.TravellersEntity> travellersList;
+    private List<TravellerBean> travellersList;
 
     //游客信息适配器
     private TouristInformationAdapter touristInformationAdapter;
@@ -184,6 +217,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //日历价格
     private List<GoodsPriceDatesResponse> orderSubmitDateList;
 
+    //日历价格
     private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceList;
 
     //增加门票
@@ -233,6 +267,21 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     //商品价格日历选择
     private String goodsPriceDateSelect;
+
+    private int mPosition;
+
+    //游客名字
+    private String realname;
+
+    //游客号码
+    private String mobile;
+
+    //页数
+    private int mPage = 1;
+
+    //每页条数
+    private int mPageSize = 10000;
+
     @Override
     public int getLayoutId() {
 
@@ -304,7 +353,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
 
         //商品列表 组装订单提交使用
-        if(goodsList == null){
+        if (goodsList == null) {
 
             goodsList = new ArrayList<>();
         } else {
@@ -396,10 +445,24 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         }
 
                         @Override
-                        public void setNoDatePickerSelectListener() {
+                        public void setTickeDatePickerSelectListener(String ticketDateSelect) {
 
+                            for(int i = 0; i < orderSubmitDateList.size();i++)
+                            {
+                                orderSubmitDateList.get(i).setSelectDatePrice(false);
+                                String date = orderSubmitDateList.get(i).getDate();
+
+                                if(date.equals(ticketDateSelect))
+                                {
+                                    orderSubmitDateList.get(i).setSelectDatePrice(true);
+                                }
+                            }
+
+                            orderUseDateSelectAdapter.setOrderUseDateSelectList(orderSubmitDateList);
+                            orderUseDateSelectAdapter.notifyDataSetChanged();
+                         //   showToast(OrderSubmitActivity.this,ticketDateSelect);
                         }
-                    });
+                    },orderSubmitDateList);
                     orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
                 } else {
                     orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
@@ -435,11 +498,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 if (isAddTourists) {
 
-                    //   NewTouristsDialog newTouristsDialog = new NewTouristsDialog();
-                    //newTouristsDialog.getDialog().setCancelable(true);
-                    //newTouristsDialog.getDialog().setCanceledOnTouchOutside(true);
-                    // newTouristsDialog.show(getFragmentManager(),"newTourist");
-
                     mLlytAddAndUpdateTourists.setVisibility(View.VISIBLE);
                     mLlytAddAndUpdateTourists.startAnimation(inAnimation);
                     mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
@@ -447,12 +505,14 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         addTouristInformationAdapter.notifyDataSetChanged();
                     }
                 } else {
-                    OrderSubmitInitResponse.TravellersEntity travellersEntity = travellersList.get(position);
-                    String realname = travellersEntity.getRealname();
-                    String mobile = travellersEntity.getMobile();
-                    userTravelerId = travellersEntity.getUserId();
+
+                    TravellerBean travellersEntity = travellersList.get(position);
+                    realname = travellersEntity.getRealname();
+                    mobile = travellersEntity.getMobile();
+
                     mTvTouristName.setText(realname);
                     mTvTouristMobile.setText(mobile);
+
                 }
             }
         });
@@ -492,6 +552,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             @Override
             public void setEditTouristInfoListener(int position) {
 
+                mPosition = position;
+                TravellerBean travellersEntity = travellersList.get(position);
+                String touristRealname = travellersEntity.getRealname();
+                String touristMobile = travellersEntity.getMobile();
+                userTravelerId = travellersEntity.getId();
+                mEdtTouristName.setText(touristRealname);
+                mEdtTouristMobile.setText(touristMobile);
                 mLlytEditTourists.setVisibility(View.VISIBLE);
                 mLlytEditTourists.startAnimation(inAnimation);
 
@@ -544,22 +611,17 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @OnClick({R.id.tv_order_submit, R.id.llyt_shadow_bg, R.id.rlyt_new_tourists_bg_half, R.id.tv_added_frequently_used_tourists,
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
-            R.id.img_add_purchase_num, R.id.tv_add_vehicle_more})
+            R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
+            R.id.img_tourist_mobile_input_cancel,
+            R.id.tv_tourist_edit_confirm,R.id.tv_tourists_info_edit,R.id.tv_delete_frequently_used_tourists,R.id.img_tourist_add_username_input_cancel,R.id.img_tourist_add_mobile_input_cancel,R.id.tv_add_tourists_confirm})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
 
-                // showToast(OrderSubmitActivity.this, "订单提交");
-              //  toActivity(PaymentOrderActivity.class);
                 ticketOrderSubmit();
                 break;
             case R.id.llyt_shadow_bg:
 
-              /*  mLlytOrderDetailItem.setVisibility(View.GONE);
-                mLlytOrderDetailItem.startAnimation(ctrlOutAnimation);
-                Drawable nav_up = getResources().getDrawable(R.mipmap.icon_order_detail_down_arrow);
-                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
-                mTvOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);*/
                 mCkbOrderDetailLook.setChecked(false);
                 break;
             case R.id.rlyt_new_tourists_bg_half:
@@ -587,34 +649,22 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                     mLlytEditTourists.setVisibility(View.GONE);
                     mLlytEditTourists.startAnimation(outAnimation);
+
                 }
-
-                //    mRlytNewTouristsBgHalf.setVisibility(View.GONE);
-                //  mLlytNewTourists.setVisibility(View.GONE);
-                //mLlytNewTourists.startAnimation(outAnimation);
-
 
                 break;
             case R.id.tv_added_frequently_used_tourists:
-
                 mLlytAddTourists.setVisibility(View.VISIBLE);
                 mLlytAddTourists.startAnimation(inAnimation);
-                int visibility = mLlytAddAndUpdateTourists.getVisibility();
-                if (visibility == 8) {
+                int visibility = mLlytAddTourists.getVisibility();
+                if (visibility == 8)
+                {
                     mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
                 }
-
-                //  mRlytNewTouristsBgHalf.setVisibility(View.GONE);
-               /* NewTouristsDialog newTouristsDialog = new NewTouristsDialog();
-                //newTouristsDialog.getDialog().setCancelable(true);
-                //newTouristsDialog.getDialog().setCanceledOnTouchOutside(true);
-                 newTouristsDialog.show(getFragmentManager(),"newTourist");*/
-
 
                 break;
             case R.id.rlyt_ticket:
 
-           //     ticketOrderSubmit();
                 break;
             case R.id.tv_confirm:
                 showToast(OrderSubmitActivity.this, mLlytAddAndUpdateTourists.getVisibility() + "");
@@ -659,6 +709,54 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 showVehicleUseAddDialog();
                 break;
+            case R.id.tv_tourist_edit_cancel:
+
+                mLlytEditTourists.setVisibility(View.GONE);
+
+                break;
+            case R.id.img_tourist_username_input_cancel: //旅客用户名输入取消
+
+                mEdtTouristName.setText("");
+
+                break;
+            case R.id.img_tourist_mobile_input_cancel:   //旅客手机号输入取消
+
+                mEdtTouristMobile.setText("");
+                break;
+            case R.id.tv_tourist_edit_confirm:
+
+                updateTravellerInfo();
+
+                break;
+            case R.id.tv_tourists_info_edit:
+
+                mLlytAddAndUpdateTourists.setVisibility(View.VISIBLE);
+                mLlytAddAndUpdateTourists.startAnimation(inAnimation);
+                mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
+                mEdtTouristName.setText(realname);
+                mEdtTouristMobile.setText(mobile);
+
+                break;
+            case R.id.tv_delete_frequently_used_tourists:
+
+                deleteTravellerInfo();
+
+                break;
+            case R.id.img_tourist_add_username_input_cancel:
+
+                mEdtTouristAddName.setText("");
+
+                break;
+            case R.id.img_tourist_add_mobile_input_cancel:
+
+                mEdtTouristAddMobile.setText("");
+
+                break;
+            case R.id.tv_add_tourists_confirm:
+
+                addTraveller();
+
+                break;
             default:
                 break;
         }
@@ -666,22 +764,119 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @Override
     public void getUserTravellerListResult(BackResult<TravellerInfoResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    mPosition++;
+                    TravellerInfoResponse travellerInfoResponse = res.getData();
+                    travellersList = travellerInfoResponse.getResult();
+                    travellersList.get(mPosition).setTravellerSelect(true);
 
+                    addTouristInformationAdapter.setTouristInfoList(travellersList);
+                    addTouristInformationAdapter.notifyDataSetChanged();
+
+                    touristInformationAdapter.setTouristInfoList(travellersList);
+                    touristInformationAdapter.notifyDataSetChanged();
+
+                    mLlytAddTourists.setVisibility(View.GONE);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
     public void addUserTravellerResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                    getTravellerList();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
     public void updateUserTravellerResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                    realname = mEdtTouristName.getText().toString();
+                    mobile = mEdtTouristMobile.getText().toString();
+                    TravellerBean travellersEntity = travellersList.get(mPosition);
+                    travellersEntity.setRealname(mEdtTouristName.getText().toString());
+                    travellersEntity.setMobile(mEdtTouristMobile.getText().toString());
+
+                    addTouristInformationAdapter.setTouristInfoList(travellersList);
+                    addTouristInformationAdapter.notifyDataSetChanged();
+
+                    touristInformationAdapter.setTouristInfoList(travellersList);
+                    touristInformationAdapter.notifyDataSetChanged();
+
+                    mLlytEditTourists.setVisibility(View.GONE);
+                    mTvTouristName.setText(realname);
+                    mTvTouristMobile.setText(mobile);
+                    mEdtTouristName.setText("");
+                    mEdtTouristMobile.setText("");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
     public void deleteUserTravellerResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                    TravellerBean travellersEntity = travellersList.get(mPosition);
+
+                    travellersList.remove(travellersEntity);
+                    if(travellersList != null) {
+                        if(travellersList.size() > 0) {
+                            TravellerBean travellers = travellersList.get(0);
+                            travellers.setTravellerSelect(true);
+                            addTouristInformationAdapter.setTouristInfoList(travellersList);
+                            addTouristInformationAdapter.notifyDataSetChanged();
+
+                            touristInformationAdapter.setTouristInfoList(travellersList);
+                            touristInformationAdapter.notifyDataSetChanged();
+                            realname = travellers.getRealname();
+                            mobile = travellers.getMobile();
+
+                            mLlytEditTourists.setVisibility(View.GONE);
+                            mTvTouristName.setText(realname);
+                            mTvTouristMobile.setText(mobile);
+                            mEdtTouristName.setText("");
+                            mEdtTouristMobile.setText("");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
     @Override
@@ -693,9 +888,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     TicketOrderSubmitResponse ticketOrderSubmitResponse = res.getData();
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("ticketOrderSubmit",ticketOrderSubmitResponse);
+                    bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
                     intent.putExtras(bundle);
-                    intent.setClass(OrderSubmitActivity.this,PaymentOrderActivity.class);
+                    intent.setClass(OrderSubmitActivity.this, PaymentOrderActivity.class);
                     startActivity(intent);
 
                 } catch (Exception e) {
@@ -772,11 +967,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     }
 
                     if (travellersList != null) {
-                        OrderSubmitInitResponse.TravellersEntity travellersEntity = travellersList.get(0);
+                        mRlytTouristInfoItem.setVisibility(View.VISIBLE);
+                        TravellerBean travellersEntity = travellersList.get(0);
                         if (travellersEntity != null) {
                             travellersEntity.setTravellerSelect(true);
-                            String realname = travellersEntity.getRealname();
-                            String mobile = travellersEntity.getMobile();
+                            realname = travellersEntity.getRealname();
+                            mobile = travellersEntity.getMobile();
                             mTvTouristName.setText(realname);
                             mTvTouristMobile.setText(mobile);
                         }
@@ -787,6 +983,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         //新增游客编辑
                         addTouristInformationAdapter.setTouristInfoList(travellersList);
                         touristInformationAdapter.notifyDataSetChanged();
+                    } else {
+
+                        mRlytTouristInfoItem.setVisibility(View.GONE);
                     }
                     mTvTicketTitle.setText(title);
 
@@ -907,9 +1106,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     /**
      * 订单提交
      */
-    public void ticketOrderSubmit(){
+    public void ticketOrderSubmit() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
             goodsList.clear();
             TicketOrderSubmitRequest ticketOrderSubmitRequest = new TicketOrderSubmitRequest();
@@ -923,14 +1122,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             goodsBean.setPriceDate(goodsPriceDateSelect);
             goodsList.add(goodsBean);
 
-            for(int i = 0;i < goodsPriceTicketAddList.size();i++)
-            {
-
+            for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
 
                 OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
                 int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
                 int goodId = goodsPrice.getGoodsId();
-                if(tcketPurchaseNum > 0) {
+                if (tcketPurchaseNum > 0) {
                     GoodsBean goodsAddTicket = new GoodsBean();
                     goodsAddTicket.setGoodsId(goodId);
                     goodsAddTicket.setNum(tcketPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
@@ -943,8 +1140,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             ticketOrderSubmitRequest.setCars(carsBeanList);
 
             //是否用车 1:用 || 0:不用
-            if(mCkbIsNeedUseCar.isChecked())
-            {
+            if (mCkbIsNeedUseCar.isChecked()) {
                 ticketOrderSubmitRequest.setCarStatus(1);
             } else {
                 ticketOrderSubmitRequest.setCarStatus(0);
@@ -953,6 +1149,106 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             mDialog.setTitle("正在提交订单...");
             mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
         }
+    }
+
+
+    //修改游客信息
+    public void updateTravellerInfo() {
+
+        if (validateInternet()) {
+
+            String touristName = mEdtTouristName.getText().toString().trim();
+            String touristMobile = mEdtTouristMobile.getText().toString().trim();
+
+            //请填写中文名
+            if (TextUtils.isEmpty(touristName)) {
+
+                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_chinese_name));
+                return;
+            }
+            //请填写手机号
+            if (TextUtils.isEmpty(touristMobile)) {
+
+                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
+                return;
+            }
+
+            //请填写证件号码
+         /*   if (TextUtils.isEmpty(identityCardNumber)) {
+
+                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_identification_number));
+                return;
+            }*/
+
+            TravellerInfoRequest updateTravellerRequest = new TravellerInfoRequest();
+            updateTravellerRequest.setUserId(getSharedPreferencesUserId());
+            updateTravellerRequest.setRealname(touristName);
+            updateTravellerRequest.setMobile(touristMobile);
+            updateTravellerRequest.setId(userTravelerId);
+            showProgressDialog(OrderSubmitActivity.this);
+            mDialog.setTitle(getResources().getString(R.string.str_saving));
+
+            mPresenter.updateUserTraveller(updateTravellerRequest);
+        }
+    }
+
+    //增加游客
+    public void addTraveller(){
+
+        if (validateInternet()) {
+
+            String touristName = mEdtTouristAddName.getText().toString().trim();
+            String touristMobile = mEdtTouristAddMobile.getText().toString().trim();
+
+            //请填写中文名
+            if (TextUtils.isEmpty(touristName)) {
+
+                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_chinese_name));
+                return;
+            }
+            //请填写手机号
+            if (TextUtils.isEmpty(touristMobile)) {
+
+                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
+                return;
+            }
+
+            //请填写证件号码
+         /*   if (TextUtils.isEmpty(identityCardNumber)) {
+
+                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_identification_number));
+                return;
+            }*/
+
+            TravellerInfoRequest addTravellerRequest = new TravellerInfoRequest();
+            addTravellerRequest.setUserId(getSharedPreferencesUserId());
+            addTravellerRequest.setRealname(touristName);
+            addTravellerRequest.setMobile(touristMobile);
+            addTravellerRequest.setId(userTravelerId);
+            showProgressDialog(OrderSubmitActivity.this);
+            mDialog.setTitle(getResources().getString(R.string.str_saving));
+
+            mPresenter.addUserTraveller(addTravellerRequest);
+        }
+    }
+
+    //删除游客信息
+    public void deleteTravellerInfo(){
+
+        if(validateInternet())
+        {
+            showProgressDialog(OrderSubmitActivity.this);
+            mDialog.setTitle("正在删除...");
+            DeleteTravellerInfoRequest deleteTravellerInfoRequest = new DeleteTravellerInfoRequest();
+            deleteTravellerInfoRequest.setId(userTravelerId);
+            mPresenter.deleteUserTraveller(deleteTravellerInfoRequest);
+        }
+    }
+
+    public void getTravellerList(){
+
+        showProgressDialog(OrderSubmitActivity.this);
+        mPresenter.getUserTravellerList(getSharedPreferencesUserId(),mPage,mPageSize);
     }
 
     /**
@@ -988,11 +1284,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                         vehicleUseAddDialog.setVehicleUseAddressData(latLonPoint, addressName, mVehicleUseOprateFlag);
                     }
-
                 }
             }
         }
-
     }
 
     @Override

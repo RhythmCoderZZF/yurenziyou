@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularScenicSpotsAdapter.ViewHolder> {
 
 
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
     public PopularScenicSpotsAdapter(Context mContext) {
@@ -38,7 +38,7 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
         this.mContext = mContext;
     }
 
-    public void setPopularScenicSpotsList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setPopularScenicSpotsList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -55,7 +55,7 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            ScenicSpotBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
+            MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             int scenicSpotSequence = itemPosition + 1;
             holder.mTvPopularScenicSpotSequence.setText("No." + scenicSpotSequence);
             int consumePrice = popularScenicSpots.getConsumePrice();

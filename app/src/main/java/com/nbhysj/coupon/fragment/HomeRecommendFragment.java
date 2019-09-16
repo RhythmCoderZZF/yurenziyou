@@ -176,7 +176,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         mRvRecommendFriends.setLayoutManager(staggeredGridLayoutManager);
         mRvRecommendFriends.setHasFixedSize(true);
         mRvRecommendFriends.setItemViewCacheSize(10);
-        mRvRecommendFriends.setDrawingCacheEnabled(true);
+      //  mRvRecommendFriends.setDrawingCacheEnabled(true);
         mRvRecommendFriends.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         // linearLayoutManager.setAutoMeasureEnabled(true);
         recommendFriendsAdapter = new RecommendFriendsPictureAdapter(getActivity(), new RecommendFriendsPictureAdapter.RecommendPostsDetailListener() {

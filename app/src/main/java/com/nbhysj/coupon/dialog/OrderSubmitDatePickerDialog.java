@@ -13,11 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.widget.calendar.CalendarList;
+import com.nbhysj.coupon.widget.calendar.ticketcalendar.TicketSelectCalendarList;
+
+import java.util.List;
 
 /**
  * @auther：hysj created on 2019/08/21
@@ -32,14 +38,17 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
     //结束时间
     private String mEndDate;
 
+    private List<GoodsPriceDatesResponse> goodsPriceList;
+
     public OrderSubmitDatePickerDialog() {
 
     }
 
     @SuppressLint("ValidFragment")
-    public void setDataStatisticsDatePickerDialog(OrderSubmitDatePickerListener orderSubmitDatePickerListener) {
+    public void setDataStatisticsDatePickerDialog(OrderSubmitDatePickerListener orderSubmitDatePickerListener, List<GoodsPriceDatesResponse> goodsPriceList) {
 
         this.orderSubmitDatePickerListener = orderSubmitDatePickerListener;
+        this.goodsPriceList = goodsPriceList;
     }
 
     @Override
@@ -58,9 +67,7 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
         wlp.gravity = Gravity.BOTTOM;
         wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(wlp);
-      /*  window.setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
 
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);*/
         return dialog;
     }
 
@@ -72,10 +79,9 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
     private void initView() {
 
         view = LayoutInflater.from(context).inflate(R.layout.layout_data_statistics_date_picker_dialog, null);
-        RelativeLayout mRlytCalendarSelect = (RelativeLayout) view.findViewById(R.id.rlyt_calendar_select);
-        TextView mTvCalendarDateSelectComplete = (TextView) view.findViewById(R.id.tv_calendar_date_select_complete);
-        TextView mTvCalendarDateSelect = (TextView) view.findViewById(R.id.tv_calendar_date_select);
+        RelativeLayout mRlytCalendarSelect = view.findViewById(R.id.rlyt_calendar_select);
 
+        ImageView mImgTicketDateSelectCancel = view.findViewById(R.id.img_ticket_date_select_cancel);
 
         mRlytCalendarSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,57 +91,39 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
             }
         });
 
-        mTvCalendarDateSelectComplete.setOnClickListener(new View.OnClickListener() {
+        mImgTicketDateSelectCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(mStartDate)) {
 
-                    orderSubmitDatePickerListener.setDataStatisticsDatePickerListener(mStartDate, mEndDate);
-                    dismiss();
-                } else {
-
-                    orderSubmitDatePickerListener.setNoDatePickerSelectListener();
-                }
+                dismiss();
             }
         });
-
-        CalendarList calendarList = view.findViewById(R.id.calendar_list);
-        calendarList.setOnDateSelected(new CalendarList.OnDateSelected() {
+        TicketSelectCalendarList calendarList = view.findViewById(R.id.calendar_list);
+        calendarList.setGoodsPriceList(goodsPriceList);
+        calendarList.setOnDateSelected(new TicketSelectCalendarList.OnDateSelected() {
             @Override
             public void selected(String startDate, String endDate) {
                 try {
-                    //  mStartDate = startDate;
-                    // mEndDate = endDate;
-                    String[] startDateArray = startDate.split("-");
-                    String[] endDateArray = endDate.split("-");
 
-                    String startDateForYear = startDateArray[0];
-                    String startDateForMonth = startDateArray[1];
-                    String startDateForDay = startDateArray[2];
-
-                    String endDateForYear = endDateArray[0];
-                    String endDateForMonth = endDateArray[1];
-                    String endDateForDay = endDateArray[2];
-
-                    mTvCalendarDateSelect.setText(startDateForYear + "年" + startDateForMonth + "月" + startDateForDay + "日" + " - " + endDateForYear + "年" + endDateForMonth + "月" + endDateForDay + "日");
+               //     mTvCalendarDateSelect.setText(startDateForYear + "年" + startDateForMonth + "月" + startDateForDay + "日" + " - " + endDateForYear + "年" + endDateForMonth + "月" + endDateForDay + "日");
                     mStartDate = startDate;
                     mEndDate = endDate;
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void singleDateSelected(String startDate) {
-                mStartDate = startDate;
+            public void singleDateSelected(String ticketSelectDate) {
+                mStartDate = ticketSelectDate;
                 mEndDate = "";
-                String[] startDateArray = startDate.split("-");
-                String startDateForYear = startDateArray[0];
-                String startDateForMonth = startDateArray[1];
-                String startDateForDay = startDateArray[2];
-                mTvCalendarDateSelect.setText(startDateForYear + "年" + startDateForMonth + "月" + startDateForDay + "日");
+                orderSubmitDatePickerListener.setTickeDatePickerSelectListener(ticketSelectDate);
+                dismiss();
             }
         });
+
+
 
     }
 
@@ -149,7 +137,7 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
 
         void setDataStatisticsDatePickerListener(String startDate, String endDate);
 
-        void setNoDatePickerSelectListener();
+        void setTickeDatePickerSelectListener(String ticketDateSelect);
     }
 
     public void setDatePickerClear() {

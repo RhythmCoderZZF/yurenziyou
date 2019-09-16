@@ -19,19 +19,19 @@ public class DestinationResponse {
     private String county;
 
     //攻略
-    private List<ScenicSpotBean> Strategys;
+    private List<MchTypeBean> Strategys;
 
     //互动
-    private List<ScenicSpotBean> Interaction;
+    private List<MchTypeBean> Interaction;
 
 
     private List<BannerBean> banner;
 
     private int cityId;
 
-    private List<ScenicSpotBean> mches;
+    private List<MchTypeBean> mches;
 
-    private List<ScenicSpotBean> Food;
+    private List<MchTypeBean> Food;
 
     public List<HomestaysEntity> getHomestays() {
         return homestays;
@@ -65,19 +65,19 @@ public class DestinationResponse {
         this.county = county;
     }
 
-    public List<ScenicSpotBean> getStrategys() {
+    public List<MchTypeBean> getStrategys() {
         return Strategys;
     }
 
-    public void setStrategys(List<ScenicSpotBean> strategys) {
+    public void setStrategys(List<MchTypeBean> strategys) {
         Strategys = strategys;
     }
 
-    public List<ScenicSpotBean> getInteraction() {
+    public List<MchTypeBean> getInteraction() {
         return Interaction;
     }
 
-    public void setInteraction(List<ScenicSpotBean> interaction) {
+    public void setInteraction(List<MchTypeBean> interaction) {
         Interaction = interaction;
     }
 
@@ -97,19 +97,19 @@ public class DestinationResponse {
         this.cityId = cityId;
     }
 
-    public List<ScenicSpotBean> getMches() {
+    public List<MchTypeBean> getMches() {
         return mches;
     }
 
-    public void setMches(List<ScenicSpotBean> mches) {
+    public void setMches(List<MchTypeBean> mches) {
         this.mches = mches;
     }
 
-    public List<ScenicSpotBean> getFood() {
+    public List<MchTypeBean> getFood() {
         return Food;
     }
 
-    public void setFood(List<ScenicSpotBean> food) {
+    public void setFood(List<MchTypeBean> food) {
         Food = food;
     }
 

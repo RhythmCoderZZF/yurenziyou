@@ -2,11 +2,10 @@ package com.nbhysj.coupon.model;
 
 
 import com.nbhysj.coupon.contract.RecreationContract;
-import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 
@@ -28,11 +27,11 @@ public class RecreationModel implements RecreationContract.Model {
 
     @Override
     public Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(HashMap<String, String> map) {
-        return Api.getInstance().apiService.findHotelHomestayByCate(map).compose(RxSchedulers.io_main());
+        return Api.getInstance().apiService.findRecreationByCate(map).compose(RxSchedulers.io_main());
     }
 
     @Override
-    public Observable<BackResult<ScenicBangDanRankingResponse>> getRecreationDanRanking(int cityId) {
+    public Observable<BackResult<MchBangDanRankingResponse>> getRecreationDanRanking(int cityId) {
         return Api.getInstance().apiService.getScenicBangDanRanking(cityId).compose(RxSchedulers.io_main());
     }
 }

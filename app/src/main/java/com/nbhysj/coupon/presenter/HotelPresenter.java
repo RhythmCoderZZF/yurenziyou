@@ -12,18 +12,18 @@ public class HotelPresenter extends HotelContract.Presenter {
 
 
     @Override
-    public void getHotelHomestayHomePage(String longitude, String latitude) {
-        mRxManager.add(mModel.getHotelHomestayHomePage(longitude, latitude).subscribe(res -> mView.getHotelHomestayHomePageResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getHotelHomePage(String longitude, String latitude) {
+        mRxManager.add(mModel.getHotelHomePage(longitude, latitude).subscribe(res -> mView.getHotelHomePageResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override
-    public void findHotelHomestayByCate(HashMap<String, String> map) {
-        mRxManager.add(mModel.findHotelHomestayByCate(map).subscribe(res -> mView.findHotelHomestayByCateResult(res), e -> mView.showMsg(e.getMessage())));
+    public void findHotelByCate(HashMap<String, String> map) {
+        mRxManager.add(mModel.findHotelByCate(map).subscribe(res -> mView.findHotelByCateResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override
-    public void getHotelHomestayBangDanRanking(int cityId) {
-        mRxManager.add(mModel.getHotelHomestayBangDanRanking(cityId).subscribe(res -> mView.getHotelHomestayBangDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getHotelBangDanRanking(int cityId) {
+        mRxManager.add(mModel.getHotelBangDanRanking(cityId).subscribe(res -> mView.getHotelBangDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

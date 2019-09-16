@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  */
 public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<DestinationScenicSpotsBannerAdapter.ViewHolder> {
 
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
     public DestinationScenicSpotsBannerAdapter(Context mContext) {
@@ -38,7 +38,7 @@ public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<De
         this.mContext = mContext;
     }
 
-    public void setPopularScenicSpotsList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setPopularScenicSpotsList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -56,16 +56,16 @@ public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<De
 
         try {
 
-            ScenicSpotBean scenicSpotBean = popularScenicSpotsList.get(itemPosition);
+            MchTypeBean scenicSpotBean = popularScenicSpotsList.get(itemPosition);
             holder.mTvPopularScenicSpotName.setText(scenicSpotBean.getDataName());
-            List<ScenicSpotBean.TagsEntity> tagsEntityList = scenicSpotBean.getTags();
+            List<MchTypeBean.TagsEntity> tagsEntityList = scenicSpotBean.getTags();
             String photoUrl = scenicSpotBean.getPhoto();
             GlideUtil.loadCornersTransformImage(mContext, photoUrl, 5, holder.mImgScenicSpots);
 
             if (tagsEntityList != null) {
-                TagAdapter tagAdapter = new TagAdapter<ScenicSpotBean.TagsEntity>(tagsEntityList) {
+                TagAdapter tagAdapter = new TagAdapter<MchTypeBean.TagsEntity>(tagsEntityList) {
                     @Override
-                    public View getView(FlowLayout parent, int position, ScenicSpotBean.TagsEntity tagsEntity) {
+                    public View getView(FlowLayout parent, int position, MchTypeBean.TagsEntity tagsEntity) {
                         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_independent_travel,
                                 holder.mTagFlowLayoutScenicSpotLabel, false);
                         if (position == 0) {

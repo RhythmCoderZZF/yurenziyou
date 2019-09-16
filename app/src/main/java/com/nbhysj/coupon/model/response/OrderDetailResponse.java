@@ -26,7 +26,7 @@ public class OrderDetailResponse implements Serializable{
     private OrderInvoiceEntity orderInvoice;
 
     //猜你喜欢
-    private List<GuessEntity> guess;
+    private List<MchTypeBean> guess;
 
     private OrderEntity order;
 
@@ -103,11 +103,11 @@ public class OrderDetailResponse implements Serializable{
         this.orderInvoice = orderInvoice;
     }
 
-    public List<GuessEntity> getGuess() {
+    public List<MchTypeBean> getGuess() {
         return guess;
     }
 
-    public void setGuess(List<GuessEntity> guess) {
+    public void setGuess(List<MchTypeBean> guess) {
         this.guess = guess;
     }
 
@@ -578,7 +578,7 @@ public class OrderDetailResponse implements Serializable{
 
         private String cancelNote;
 
-        private int isRefund;
+        private String isRefund;
 
         public int getOrderId() {
             return orderId;
@@ -652,11 +652,11 @@ public class OrderDetailResponse implements Serializable{
             this.cancelNote = cancelNote;
         }
 
-        public int getIsRefund() {
+        public String getIsRefund() {
             return isRefund;
         }
 
-        public void setIsRefund(int isRefund) {
+        public void setIsRefund(String isRefund) {
             this.isRefund = isRefund;
         }
     }

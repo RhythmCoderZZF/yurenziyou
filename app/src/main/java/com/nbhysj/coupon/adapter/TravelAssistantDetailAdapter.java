@@ -9,20 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.common.Enum.TravelAssistantDetailTypeEnum;
-import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
-
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * @author hysj created at 2019/05/17.
@@ -219,18 +211,18 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         TripDetailsResponse.TripDetailsEntity detailsEntity = getItem(position);
         String tripPlaceType = detailsEntity.getTripPlaceType();
-        if (tripPlaceType.equals(TravelAssistantDetailTypeEnum.MCH_SCENIC.getValue())) {
+        if (tripPlaceType.equals(MchTypeEnum.MCH_SCENIC.getValue())) {
             return MCH_SCENIC;
-        } else if (tripPlaceType.equals(TravelAssistantDetailTypeEnum.MCH_FOOD.getValue())) {
+        } else if (tripPlaceType.equals(MchTypeEnum.MCH_FOOD.getValue())) {
             return MCH_FOOD;
         }
-        if (tripPlaceType.equals(TravelAssistantDetailTypeEnum.MCH_HOTEL.getValue())) {
+        if (tripPlaceType.equals(MchTypeEnum.MCH_HOTEL.getValue())) {
             return MCH_HOTEL;
-        } else if (tripPlaceType.equals(TravelAssistantDetailTypeEnum.MCH_RECREATION.getValue())) {
+        } else if (tripPlaceType.equals(MchTypeEnum.MCH_RECREATION.getValue())) {
             return MCH_RECREATION;
-        } else if (tripPlaceType.equals(TravelAssistantDetailTypeEnum.TRAFFIC.getValue())) {
+        } else if (tripPlaceType.equals(MchTypeEnum.TRAFFIC.getValue())) {
             return TRAFFIC;
-        } else if (tripPlaceType.equals(TravelAssistantDetailTypeEnum.NOTE.getValue())) {
+        } else if (tripPlaceType.equals(MchTypeEnum.NOTE.getValue())) {
             return NOTE;
         }
         return 0;

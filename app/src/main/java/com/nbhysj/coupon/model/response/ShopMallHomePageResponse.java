@@ -15,13 +15,13 @@ public class ShopMallHomePageResponse {
     private List<String> smallBanners;
 
     //景点列表
-    private List<ScenicSpotBean> scenicList;
+    private List<MchTypeBean> scenicList;
 
     //美食
     private List<DeliciousFoodResponse> foodList;
 
     //酒店列表
-    private List<ScenicSpotBean> hotelList;
+    private List<MchTypeBean> hotelList;
 
     //商户目的地
     private List<MchCitiesBean> mchCities;
@@ -52,11 +52,11 @@ public class ShopMallHomePageResponse {
         this.smallBanners = smallBanners;
     }
 
-    public List<ScenicSpotBean> getScenicList() {
+    public List<MchTypeBean> getScenicList() {
         return scenicList;
     }
 
-    public void setScenicList(List<ScenicSpotBean> scenicList) {
+    public void setScenicList(List<MchTypeBean> scenicList) {
         this.scenicList = scenicList;
     }
 
@@ -68,11 +68,11 @@ public class ShopMallHomePageResponse {
         this.foodList = foodList;
     }
 
-    public List<ScenicSpotBean> getHotelList() {
+    public List<MchTypeBean> getHotelList() {
         return hotelList;
     }
 
-    public void setHotelList(List<ScenicSpotBean> hotelList) {
+    public void setHotelList(List<MchTypeBean> hotelList) {
         this.hotelList = hotelList;
     }
 
@@ -133,7 +133,7 @@ public class ShopMallHomePageResponse {
     private List<String> bigBanners;
 
     //景点列表
-    private List<ScenicSpotBean> scenicList;
+    private List<MchTypeBean> scenicList;
 
     private List<LimitedSaleBean> limitedSale;
 
@@ -209,11 +209,11 @@ public class ShopMallHomePageResponse {
         this.bigBanners = bigBanners;
     }
 
-    public List<ScenicSpotBean> getScenicList() {
+    public List<MchTypeBean> getScenicList() {
         return scenicList;
     }
 
-    public void setScenicList(List<ScenicSpotBean> scenicList) {
+    public void setScenicList(List<MchTypeBean> scenicList) {
         this.scenicList = scenicList;
     }
 

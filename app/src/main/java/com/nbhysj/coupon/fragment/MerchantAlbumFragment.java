@@ -7,23 +7,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.FineFoodListAdapter;
 import com.nbhysj.coupon.adapter.MerchentAlbumItemAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
@@ -144,7 +140,7 @@ public class MerchantAlbumFragment extends BaseFragment<ScenicSpotPresenter, Sce
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res) {
+    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
 

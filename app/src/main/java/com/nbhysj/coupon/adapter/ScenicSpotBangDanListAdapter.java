@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -36,7 +36,7 @@ import butterknife.ButterKnife;
  */
 public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
     private View mHeaderView;
     public static final int TYPE_HEADER = 0;
@@ -55,7 +55,7 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
         this.mContext = mContext;
     }
 
-    public void setPopularScenicSpotsList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setPopularScenicSpotsList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -76,12 +76,12 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
             final int pos = getRealPosition(holder);
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
-                ScenicSpotBean popularScenicSpots = popularScenicSpotsList.get(position - 1);
+                MchTypeBean popularScenicSpots = popularScenicSpotsList.get(position - 1);
                 String photoUrl = popularScenicSpots.getPhoto();
                 holder1.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
-                holder1.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()) + "分");
+                holder1.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()));
                 holder1.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
-                holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
+                holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getDataName());
                 holder1.mTvScenicSpotsDes.setText(popularScenicSpots.getIntro());
                 int level = popularScenicSpots.getLevel();
                 if (level == 0) {
@@ -91,13 +91,13 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
                     holder1.mTvScenicSpotsLevel.setVisibility(View.VISIBLE);
                 }
 
-                List<ScenicSpotBean.TagsEntity> scenicSpotTagsList = popularScenicSpots.getTags();
+                List<MchTypeBean.TagsEntity> scenicSpotTagsList = popularScenicSpots.getTags();
                 if (scenicSpotTagsList != null) {
 
                     if (scenicSpotTagsList.size() > 0) {
 
                         holder1.mTvScenicSpotsType.setVisibility(View.VISIBLE);
-                        ScenicSpotBean.TagsEntity tagsEntity = popularScenicSpots.getTags().get(0);
+                        MchTypeBean.TagsEntity tagsEntity = popularScenicSpots.getTags().get(0);
                         holder1.mTvScenicSpotsType.setText(tagsEntity.getTitle());
                     } else {
 

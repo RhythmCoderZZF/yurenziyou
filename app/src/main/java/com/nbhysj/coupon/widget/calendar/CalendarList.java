@@ -12,11 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+import com.nbhysj.coupon.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,15 +27,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.nbhysj.coupon.ui.ScenicSpotDestinationActivity.TAG;
+import static com.nbhysj.coupon.view.RoundedImageView.TAG;
 
 public class CalendarList extends FrameLayout {
-    RecyclerView recyclerView;
+    RecyclerView mRvTicketDateSelect;
     CalendarAdapter adapter;
-    private DateBean startDate;//开始时间
+    DateBean startDate;//开始时间
     private DateBean endDate;//结束时间
     OnDateSelected onDateSelected;//选中监听
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    List<GoodsPriceDatesResponse> goodsPriceList;
 
     public CalendarList(Context context) {
         super(context);
@@ -52,7 +56,7 @@ public class CalendarList extends FrameLayout {
     private void init(Context context) {
         addView(LayoutInflater.from(context).inflate(R.layout.item_calendar, this, false));
 
-        recyclerView = findViewById(R.id.recyclerView);
+        mRvTicketDateSelect = findViewById(R.id.rv_ticket_date_select);
         adapter = new CalendarAdapter();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 7);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -65,8 +69,8 @@ public class CalendarList extends FrameLayout {
                 }
             }
         });
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(adapter);
+        mRvTicketDateSelect.setLayoutManager(gridLayoutManager);
+        mRvTicketDateSelect.setAdapter(adapter);
         adapter.data.addAll(days("", ""));
 
 //        DividerItemDecoration dividerItemDecoration=new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
@@ -74,9 +78,9 @@ public class CalendarList extends FrameLayout {
 //        recyclerView.addItemDecoration(dividerItemDecoration);
 
         MyItemD myItemD = new MyItemD();
-        recyclerView.addItemDecoration(myItemD);
+        mRvTicketDateSelect.addItemDecoration(myItemD);
 
-        adapter.setOnRecyclerviewItemClick(new CalendarAdapter.OnRecyclerviewItemClick() {
+        adapter.setOnRecyclerviewItemClick(new OnRecyclerviewItemClick() {
             @Override
             public void onItemClick(View v, int position) {
                 onClick(adapter.data.get(position));
@@ -177,15 +181,37 @@ public class CalendarList extends FrameLayout {
     }
 
     //日历adapter
-    public static class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        ArrayList<DateBean> data = new ArrayList<>();
-        private CalendarAdapter.OnRecyclerviewItemClick onRecyclerviewItemClick;
+    public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        public CalendarAdapter.OnRecyclerviewItemClick getOnRecyclerviewItemClick() {
+        ArrayList<DateBean> data = new ArrayList<DateBean>();
+        OnRecyclerviewItemClick onRecyclerviewItemClick;
+        List<GoodsPriceDatesResponse> goodsPriceList;
+
+      /*  public void setGoodPrice(List<GoodsPriceDatesResponse> goodsPriceList) {
+
+            this.goodsPriceList = goodsPriceList;
+
+            for (int i = 0; i < data.size(); i++) {
+                DateBean dateBean = data.get(i);
+                String dateStr = dateBean.getDateStr();
+                for (int j = 0; j < goodsPriceList.size(); j++) {
+                    String goodPriceDate = goodsPriceList.get(j).getDate();
+                    int mTicketPrice = goodsPriceList.get(j).getPrice();
+                    if (dateStr != null) {
+                        if (dateStr.equals(goodPriceDate)) {
+                            data.get(i).setSellStatus(1);
+                            data.get(i).setTicketPrice(mTicketPrice);
+                        }
+                    }
+                }
+            }
+        }*/
+
+        public OnRecyclerviewItemClick getOnRecyclerviewItemClick() {
             return onRecyclerviewItemClick;
         }
 
-        public void setOnRecyclerviewItemClick(CalendarAdapter.OnRecyclerviewItemClick onRecyclerviewItemClick) {
+        public void setOnRecyclerviewItemClick(OnRecyclerviewItemClick onRecyclerviewItemClick) {
             this.onRecyclerviewItemClick = onRecyclerviewItemClick;
         }
 
@@ -229,26 +255,22 @@ public class CalendarList extends FrameLayout {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
             if (viewHolder instanceof CalendarAdapter.MonthViewHolder) {
-                ((CalendarAdapter.MonthViewHolder) viewHolder).tv_month.setText(data.get(i).getMonthStr());
+                try {
+                    String month = data.get(i).getMonthStr();
+                    String yymm = DateUtil.toYYMM(month);
+                    ((CalendarAdapter.MonthViewHolder) viewHolder).tv_month.setText(yymm);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
+
                 CalendarAdapter.DayViewHolder vh = ((CalendarAdapter.DayViewHolder) viewHolder);
                 vh.tv_day.setText(data.get(i).getDay());
-                vh.tv_check_in_check_out.setVisibility(View.GONE);
                 DateBean dateBean = data.get(i);
 
                 //设置item状态
                 if (dateBean.getItemState() == DateBean.ITEM_STATE_BEGIN_DATE || dateBean.getItemState() == DateBean.ITEM_STATE_END_DATE) {
                     //开始日期或结束日期
-                    //  vh.itemView.setBackgroundColor(Color.parseColor("#ff6600"));
-
-                   /* if(dateBean.ITEM_STATE_BEGIN_DATE()){
-
-                        vh.mLlytDayItem.setBackgroundResource(R.drawable.bg_rectangle_left_blue_and_green_gradient);
-                        vh.mLlytDayItem.getBackground().setAlpha(80);
-                    }*/
-
-
-                    //  vh.tv_check_in_check_out.setVisibility(View.VISIBLE);
                     if (dateBean.isBeginTimeSelect == true && dateBean.getItemState() == DateBean.ITEM_STATE_BEGIN_DATE) {
                         //  vh.tv_check_in_check_out.setText("离店");
                         vh.mLlytDayItem.setBackgroundResource(R.drawable.bg_rectangle_left_blue_and_green_gradient);
@@ -292,16 +314,19 @@ public class CalendarList extends FrameLayout {
         }
 
         public class DayViewHolder extends RecyclerView.ViewHolder {
-            public TextView tv_day;
-            public TextView tv_check_in_check_out;
-            public RelativeLayout mRlytDayItem;
-            public LinearLayout mLlytDayItem;
+            TextView tv_day;
+            TextView mTvTicketPrice;
+            RelativeLayout mRlytDayItem;
+            LinearLayout mLlytDayItem;
+            //购票日期选择弹框取消
+            ImageView mImgTicketDateSelectCancel;
+
 
             public DayViewHolder(@NonNull View itemView) {
                 super(itemView);
 
                 tv_day = itemView.findViewById(R.id.tv_day);
-                tv_check_in_check_out = itemView.findViewById(R.id.tv_check_in_check_out);
+                mTvTicketPrice = itemView.findViewById(R.id.tv_ticket_price);
                 mRlytDayItem = itemView.findViewById(R.id.rlyt_day_item);
                 mLlytDayItem = itemView.findViewById(R.id.llyt_day_item);
 
@@ -317,9 +342,10 @@ public class CalendarList extends FrameLayout {
             }
         }
 
-        public interface OnRecyclerviewItemClick {
-            void onItemClick(View v, int position);
-        }
+    }
+
+    public interface OnRecyclerviewItemClick {
+        void onItemClick(View v, int position);
     }
 
     /**
@@ -338,7 +364,7 @@ public class CalendarList extends FrameLayout {
             calendar.setTime(startDate);
 
             //结束日期
-            calendar.add(Calendar.MONTH, 5);
+            calendar.add(Calendar.MONTH, 1);
             Date endDate = new Date(calendar.getTimeInMillis());
 
             Log.d(TAG, "startDate:" + format.format(startDate) + "----------endDate:" + format.format(endDate));
@@ -426,6 +452,8 @@ public class CalendarList extends FrameLayout {
                     dateBean.setDate(monthCalendar.getTime());
                     dateBean.setDay(monthCalendar.get(Calendar.DAY_OF_MONTH) + "");
                     dateBean.setMonthStr(monthDateBean.getMonthStr());
+                    String dateStr = DateUtil.getTime(monthCalendar.getTime(), DateUtil.sDateYMDFormat);
+                    dateBean.setDateStr(dateStr);
                     dateBeans.add(dateBean);
 
                     //处理一个月的最后一天
@@ -513,4 +541,12 @@ public class CalendarList extends FrameLayout {
     public void setOnDateSelected(OnDateSelected onDateSelected) {
         this.onDateSelected = onDateSelected;
     }
+
+   /* public void setGoodsPriceList(List<GoodsPriceDatesResponse> goodsPriceList) {
+
+        this.goodsPriceList = goodsPriceList;
+        adapter.setGoodPrice(goodsPriceList);
+        adapter.notifyDataSetChanged();
+
+    }*/
 }

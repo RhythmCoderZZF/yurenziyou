@@ -47,7 +47,7 @@ import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.BaseTagsBean;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
@@ -153,14 +153,14 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
     private int mScrollY = 0;
     private String[] mTitles = new String[]{"热门景点", "当地美食", "酒店精选", "互动精选"};
     private List<String> mDataList = Arrays.asList(mTitles);
-    List<ScenicSpotBean> scenicSpotBeanList;
+    List<MchTypeBean> scenicSpotBeanList;
     private List<ImageView> viewList;
     //酒店民宿
     private List<DestinationResponse.HomestaysEntity> homestaysEntityList;
     //精选互动
-    private List<ScenicSpotBean> interactiveSelectionList;
+    private List<MchTypeBean> interactiveSelectionList;
     //美食精选
-    private List<ScenicSpotBean> fineFoodList;
+    private List<MchTypeBean> fineFoodList;
     DestinationScenicSpotsBannerAdapter destinationScenicSpotsBannerAdapter;
     //酒店精选
     InteractiveSelectionAdapter interactiveSelectionAdapter;
@@ -523,10 +523,10 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
             mTvWelcomeToLocation.setText("欢迎来到" + city);
             mTvLocation.setText(province + county + city);
             scenicSpotBeanList = destinationResponse.getMches();//景点
-            List<ScenicSpotBean> strategysList = destinationResponse.getStrategys();
+            List<MchTypeBean> strategysList = destinationResponse.getStrategys();
             if (strategysList != null) {
-                ScenicSpotBean strategysOne = strategysList.get(0);
-                ScenicSpotBean strategysTwo = strategysList.get(1);
+                MchTypeBean strategysOne = strategysList.get(0);
+                MchTypeBean strategysTwo = strategysList.get(1);
                 String strategysOneTitle = strategysOne.getDataName();
                 String strategysOneIntro = strategysOne.getIntro();
                 String strategysOnePhotoUrl = strategysOne.getPhoto();

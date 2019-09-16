@@ -63,7 +63,8 @@ public class WebActivity extends BaseActivity<LoginPresenter, LoginModel> implem
             ToolbarHelper.setBar(this, "用车", R.mipmap.icon_left_arrow_black);
             String carH5Url = getIntent().getStringExtra("carH5Url");
             String encodedURL = URLEncoder.encode("https://sandbox-mobile.caocaokeji.cn/pay-travel/home", "UTF-8");
-            setWebView("https://sandbox-mobile.caocaokeji.cn/pay-travel/home?client_id=d40e8cab04052bc1&timestamp=1566904554718&ext_user_id=49&sign=dfdc7d2e747dcea4f46b203fe1aa6be04ef94990&startLg=121.583030&startLt=121.583030&startType=0&callback_info=%7B%22userId%22:49%7D");
+          //  setWebView("https://sandbox-mobile.caocaokeji.cn/pay-travel/home?client_id=d40e8cab04052bc1&timestamp=1566904554718&ext_user_id=49&sign=dfdc7d2e747dcea4f46b203fe1aa6be04ef94990&startLg=121.583030&startLt=121.583030&startType=0&callback_info=%7B%22userId%22:49%7D");
+            setWebView("file:///android_asset/fas/index.html");
         }catch (Exception e){
             e.printStackTrace();
         }

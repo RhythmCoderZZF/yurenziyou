@@ -37,7 +37,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/llyt_hotel_reputation_score"
+            android:id="@+id/llyt_scenic_spot_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_scenic_spots_name"
@@ -81,7 +81,7 @@
             android:id="@+id/tv_scenic_spots_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/llyt_hotel_reputation_score"
+            android:layout_below="@+id/llyt_scenic_spot_score"
             android:layout_marginTop="@dimen/dp_9"
             android:layout_marginRight="@dimen/dp_74"
             android:ellipsize="end"

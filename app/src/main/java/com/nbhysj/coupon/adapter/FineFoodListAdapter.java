@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
  */
 public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<ScenicSpotBean> mFineFoodList;
+    List<MchTypeBean> mFineFoodList;
     private Context mContext;
     private View mHeaderView;
     public static final int TYPE_HEADER = 0;
@@ -54,7 +54,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mContext = mContext;
     }
 
-    public void setFineFoodList(List<ScenicSpotBean> mFineFoodList) {
+    public void setFineFoodList(List<MchTypeBean> mFineFoodList) {
 
         this.mFineFoodList = mFineFoodList;
     }
@@ -76,14 +76,14 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             final int pos = getRealPosition(holder);
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
-                ScenicSpotBean fineFoodBean = mFineFoodList.get(pos);
+                MchTypeBean fineFoodBean = mFineFoodList.get(pos);
                 String photoUrl = fineFoodBean.getPhoto();
                 String mchName = fineFoodBean.getMchName();
                 String dataName = fineFoodBean.getDataName();
                 String mIntro = fineFoodBean.getIntro();
                 int level = fineFoodBean.getLevel();
                 String mConsumePrice = String.valueOf(fineFoodBean.getConsumePrice());
-                List<ScenicSpotBean.TagsEntity> tagsEntityList = fineFoodBean.getTags();
+                List<MchTypeBean.TagsEntity> tagsEntityList = fineFoodBean.getTags();
                 if (!TextUtils.isEmpty(mchName)) {
 
                     holder1.mTvPopularScenicSpotName.setText(mchName);
@@ -114,10 +114,10 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 if (tagsEntityList != null) {
                     if (tagsEntityList.size() > 0) {
-                        holder1.mTagFlowlayoutFineFood.setAdapter(new TagAdapter<ScenicSpotBean.TagsEntity>(tagsEntityList) {
+                        holder1.mTagFlowlayoutFineFood.setAdapter(new TagAdapter<MchTypeBean.TagsEntity>(tagsEntityList) {
 
                             @Override
-                            public View getView(FlowLayout parent, int position, ScenicSpotBean.TagsEntity tagsEntity) {
+                            public View getView(FlowLayout parent, int position, MchTypeBean.TagsEntity tagsEntity) {
                                 mInflater = LayoutInflater.from(mContext);
                                 TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_orange_frame,
                                         holder1.mTagFlowlayoutFineFood, false);

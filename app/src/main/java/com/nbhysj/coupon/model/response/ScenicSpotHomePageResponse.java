@@ -16,7 +16,7 @@ public class ScenicSpotHomePageResponse implements Serializable {
     private Overflow mch;
 
     //附近热门
-    private List<ScenicSpotBean> hot;
+    private List<MchTypeBean> hot;
 
     public Overflow getMch() {
         return mch;
@@ -26,11 +26,11 @@ public class ScenicSpotHomePageResponse implements Serializable {
         this.mch = mch;
     }
 
-    public List<ScenicSpotBean> getHot() {
+    public List<MchTypeBean> getHot() {
         return hot;
     }
 
-    public void setHot(List<ScenicSpotBean> hot) {
+    public void setHot(List<MchTypeBean> hot) {
         this.hot = hot;
     }
 
@@ -109,6 +109,12 @@ public class ScenicSpotHomePageResponse implements Serializable {
 
         ScenicSpotResult overflow;
 
+        ScenicSpotResult distance;
+
+        ScenicSpotResult ranking;
+
+        ScenicSpotResult nearby;
+
         public ScenicSpotResult getOverflow() {
             return overflow;
         }
@@ -116,13 +122,37 @@ public class ScenicSpotHomePageResponse implements Serializable {
         public void setOverflow(ScenicSpotResult overflow) {
             this.overflow = overflow;
         }
+
+        public ScenicSpotResult getDistance() {
+            return distance;
+        }
+
+        public void setDistance(ScenicSpotResult distance) {
+            this.distance = distance;
+        }
+
+        public ScenicSpotResult getRanking() {
+            return ranking;
+        }
+
+        public void setRanking(ScenicSpotResult ranking) {
+            this.ranking = ranking;
+        }
+
+        public ScenicSpotResult getNearby() {
+            return nearby;
+        }
+
+        public void setNearby(ScenicSpotResult nearby) {
+            this.nearby = nearby;
+        }
     }
 
     public class ScenicSpotResult {
 
         BasePaginationResult page;
 
-        private List<ScenicSpotBean> result;
+        private List<MchTypeBean> result;
 
         public BasePaginationResult getPage() {
             return page;
@@ -132,11 +162,11 @@ public class ScenicSpotHomePageResponse implements Serializable {
             this.page = page;
         }
 
-        public List<ScenicSpotBean> getResult() {
+        public List<MchTypeBean> getResult() {
             return result;
         }
 
-        public void setResult(List<ScenicSpotBean> result) {
+        public void setResult(List<MchTypeBean> result) {
             this.result = result;
         }
     }

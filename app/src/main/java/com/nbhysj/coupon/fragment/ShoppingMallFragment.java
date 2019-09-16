@@ -16,7 +16,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DeliciousFoodRecommendAdapter;
-import com.nbhysj.coupon.adapter.HotelHomestayAdapter;
+import com.nbhysj.coupon.adapter.HomestayAdapter;
+import com.nbhysj.coupon.adapter.HotelAdapter;
 import com.nbhysj.coupon.adapter.IndependentTravelAdapter;
 import com.nbhysj.coupon.adapter.PopularScenicSpotsAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotMchDestinationAdapter;
@@ -31,16 +32,16 @@ import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.DeliciousFoodResponse;
 import com.nbhysj.coupon.model.response.GroupGoodsBean;
 import com.nbhysj.coupon.model.response.MchCitiesBean;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.ShoppingMallMenuBean;
 import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.CombinationListActivity;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
 import com.nbhysj.coupon.ui.FineGoodListActivity;
-import com.nbhysj.coupon.ui.IntroductionOfLandlordActivity;
 import com.nbhysj.coupon.ui.ShoppingMallFineFoodActivity;
-import com.nbhysj.coupon.ui.ShoppingMallHotelHomestayActivity;
+import com.nbhysj.coupon.ui.ShoppingMallHomestayActivity;
+import com.nbhysj.coupon.ui.ShoppingMallHotelActivity;
 import com.nbhysj.coupon.ui.ShoppingMallInteractionActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScenicSpotActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScreeningActivity;
@@ -51,12 +52,9 @@ import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
 import com.nbhysj.coupon.view.BannerView;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
-import com.nbhysj.coupon.widget.glide.RoundedCornersTransform;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,7 +156,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     //美食
     private DeliciousFoodRecommendAdapter deliciousFoodRecommendAdapter;
     //酒店民宿
-    private HotelHomestayAdapter mHotelHomestayAdapter;
+    private HotelAdapter mHotelAdapter;
     //目的地分类
     private ScenicSpotMchDestinationAdapter scenicSpotClassificationAdapter;
 
@@ -171,13 +169,13 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     //横条小banner
     private List<String> shopMallIndexSmallList;
     //热门景区
-    private List<ScenicSpotBean> popularScenicSpotsList;
+    private List<MchTypeBean> popularScenicSpotsList;
     //美食列表
     private List<DeliciousFoodResponse> deliciousFoodList;
     //目的地
     private List<MchCitiesBean> mchCities;
     //酒店
-    List<ScenicSpotBean> hotelList;
+    List<MchTypeBean> hotelList;
     //自由行
     List<GroupGoodsBean> groupGoodsList;
     //猜你喜欢
@@ -303,8 +301,8 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
             groupGoodsList.clear();
         }
 
-
-       // shoppingMallMenuList.add();
+        //获取商城首页分类
+        List<ShoppingMallMenuBean> shoppingMallMenuList = getShopMallMenuList();
 
         GridLayoutManager mManagerLayout = new GridLayoutManager(getActivity(), 4);
         mRvShoppingMallMenuClassify.setLayoutManager(mManagerLayout);
@@ -324,9 +322,11 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 } else if (position == 1) {
                     toActivity(ShoppingMallFineFoodActivity.class);  //美食
                 } else if (position == 2) {
-                    toActivity(ShoppingMallHotelHomestayActivity.class); //酒店民宿
+                    toActivity(ShoppingMallHotelActivity.class); //酒店
                 } else if (position == 3) {
                     //  toActivity(MutiScrollDemoActivity.class);
+                } else if (position == 4) {
+                    toActivity(ShoppingMallHomestayActivity.class); //民宿
                 } else if (position == 5) {
                     toActivity(ShoppingMallInteractionActivity.class);  //互动
                 } else if (position == 6) {
@@ -338,6 +338,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 }
             }
         });
+        shoppingMallMenuAdapter.setShoppingMallMenuList(shoppingMallMenuList);
         mRvShoppingMallMenuClassify.setAdapter(shoppingMallMenuAdapter);
 
 
@@ -347,34 +348,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         shopMallIndexSmallBannerAdapter = new ShopMallIndexSmallBannerAdapter(getActivity());
         shopMallIndexSmallBannerAdapter.setShopMallIndexSmallBannerList(shopMallIndexSmallList);
         mRvShoppingMallSmallBanner.setAdapter(shopMallIndexSmallBannerAdapter);
-
-
-      /*  List<String> mBannerShoppingMallList = new ArrayList<>();
-        mBannerShoppingMallList.add("https://img5.duitang.com/uploads/item/201409/20/20140920163237_myPVw.thumb.700_0.png");
-        mBannerShoppingMallList.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        ShoppingMallBannerLayoutAdapter shoppingMallBannerLayoutAdapter = new ShoppingMallBannerLayoutAdapter(getActivity(), new BannerLayout.OnBannerItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-
-            }
-        });
-        shoppingMallBannerLayoutAdapter.setShoppingMallBannerLayoutList(mBannerShoppingMallList);
-        mBannerLayoutShoppingMall.setAdapter(shoppingMallBannerLayoutAdapter);*/
-
-        // mImageFlashSaleOne.load("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg", R.mipmap.icon_placeholder_image,5);
-        //  mImageFlashSaleTwo.load("http://pic36.nipic.com/20131129/3822951_093923294000_2.jpg", R.mipmap.icon_placeholder_image,5);
-        // mImageFlashSaleThree.load("http://pic75.nipic.com/file/20150821/9448607_145742365000_2.jpg", R.mipmap.icon_placeholder_image,5);
-        // GlideUtil.getRoundCornersImage(getActivity(),"http://pic75.nipic.com/file/20150821/9448607_145742365000_2.jpg",mImageFlashSaleOne,15, GlideRoundCornersTransUtils.CornerType.ALL);
-        //GlideUtil.getRoundCornersImage(getActivity(),"http://pic75.nipic.com/file/20150821/9448607_145742365000_2.jpg",mImageFlashSaleTwo,15, GlideRoundCornersTransUtils.CornerType.ALL);
-        // GlideUtil.getRoundCornersImage(getActivity(),"http://pic75.nipic.com/file/20150821/9448607_145742365000_2.jpg",mImageFlashSaleThree,15, GlideRoundCornersTransUtils.CornerType.ALL);
-
-      /*  GlideUtil.loadRoundedCornersImage("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg", mImageFlashSaleOne, 20, GlideRoundedCornersTransform
-                .CornerType.ALL);*/
-
-        RoundedCornersTransform transform = new RoundedCornersTransform(mContext, DensityUtil.dip2px(15));
-        transform.setNeedCorner(true, true, true, true);
-        RequestOptions options = new RequestOptions().placeholder(R.color.white).transform(transform);
-
 
         //第一个是上下文，第二个是圆角的弧度
         RequestOptions myOptions = new RequestOptions()
@@ -418,9 +391,9 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         LinearLayoutManager hotelReputationLinearLayout = new LinearLayoutManager(getActivity());
         hotelReputationLinearLayout.setOrientation(hotelReputationLinearLayout.VERTICAL);
         mRvHotelReputation.setLayoutManager(hotelReputationLinearLayout);
-        mHotelHomestayAdapter = new HotelHomestayAdapter(getActivity());
-        mHotelHomestayAdapter.setHotelReputationList(hotelList);
-        mRvHotelReputation.setAdapter(mHotelHomestayAdapter);
+        mHotelAdapter = new HotelAdapter(getActivity());
+        mHotelAdapter.setHotelList(hotelList);
+        mRvHotelReputation.setAdapter(mHotelAdapter);
 
 
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(getActivity());
@@ -504,10 +477,10 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     deliciousFoodRecommendAdapter.setDeliciousFoodRecommendList(deliciousFoodList);
                     deliciousFoodRecommendAdapter.notifyDataSetChanged();
 
-                    //酒店民宿
+                    //民宿
                     hotelList = res.getData().getHotelList();
-                    mHotelHomestayAdapter.setHotelReputationList(hotelList);
-                    mHotelHomestayAdapter.notifyDataSetChanged();
+                    mHotelAdapter.setHotelList(hotelList);
+                    mHotelAdapter.notifyDataSetChanged();
 
                     //目的地
                     mchCities = res.getData().getMchCities();
@@ -550,7 +523,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     GlideUtil.loadCornersTransformImage(getActivity(), travelThemeFivePhotoUrl, 5, mImgTravelThemeFive);
                     mTvTravelThemeFiveTitle.setText(travelThemeFive.getTitle());
                     mTvTravelThemeFiveDes.setText(travelThemeFive.getIntro());
-
 
                     //自由行
                     groupGoodsList = res.getData().getGroupGoodsVO();
@@ -662,32 +634,32 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         shoppingMallFamousScenery.setIcon(R.mipmap.icon_tab_famous_scenery);
 
         ShoppingMallMenuBean shoppingMallFine = new ShoppingMallMenuBean();
-        shoppingMallFine.setTitle("宁波美食");
+        shoppingMallFine.setTitle("美食");
         shoppingMallFine.setIcon(R.mipmap.icon_tab_fine_food);
 
         ShoppingMallMenuBean shoppingMallHomestay = new ShoppingMallMenuBean();
-        shoppingMallHomestay.setTitle("酒店名宿");
+        shoppingMallHomestay.setTitle("酒店");
         shoppingMallHomestay.setIcon(R.mipmap.icon_tab_hotel);
 
         ShoppingMallMenuBean shoppingMallStrategy = new ShoppingMallMenuBean();
         shoppingMallStrategy.setTitle("攻略");
-        shoppingMallStrategy.setIcon(R.mipmap.icon_tab_famous_scenery);
+        shoppingMallStrategy.setIcon(R.mipmap.icon_tab_strategy);
 
         ShoppingMallMenuBean shoppingMallParentChildTour = new ShoppingMallMenuBean();
-        shoppingMallParentChildTour.setTitle("亲子游");
-        shoppingMallParentChildTour.setIcon(R.mipmap.icon_tab_famous_scenery);
+        shoppingMallParentChildTour.setTitle("民宿");
+        shoppingMallParentChildTour.setIcon(R.mipmap.icon_tab_homestay);
 
         ShoppingMallMenuBean shoppingMallInteraction = new ShoppingMallMenuBean();
         shoppingMallInteraction.setTitle("互动");
-        shoppingMallInteraction.setIcon(R.mipmap.icon_tab_famous_scenery);
+        shoppingMallInteraction.setIcon(R.mipmap.icon_tab_interaction);
 
         ShoppingMallMenuBean shoppingMallIndependentTravel = new ShoppingMallMenuBean();
         shoppingMallIndependentTravel.setTitle("自由行");
-        shoppingMallIndependentTravel.setIcon(R.mipmap.icon_tab_famous_scenery);
+        shoppingMallIndependentTravel.setIcon(R.mipmap.icon_tab_combination_independent_travel);
 
         ShoppingMallMenuBean shoppingMallUseCar = new ShoppingMallMenuBean();
         shoppingMallUseCar.setTitle("用车");
-        shoppingMallUseCar.setIcon(R.mipmap.icon_tab_famous_scenery);
+        shoppingMallUseCar.setIcon(R.mipmap.icon_tab_vehicle_use);
 
         shoppingMallMenuList.add(shoppingMallFamousScenery);
         shoppingMallMenuList.add(shoppingMallFine);

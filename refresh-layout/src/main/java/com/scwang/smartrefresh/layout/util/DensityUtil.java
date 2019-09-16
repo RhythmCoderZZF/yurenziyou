@@ -1,5 +1,6 @@
 package com.scwang.smartrefresh.layout.util;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 /**
@@ -53,4 +54,9 @@ public class DensityUtil {
     public float px2dip(int pxValue) {
         return (pxValue / density);
     }
+
+    public static float getDensity(Context context) {
+        return  context.getResources().getDisplayMetrics().density;
+    }
+
 }  

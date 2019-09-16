@@ -13,30 +13,23 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DeliciousFoodSectionAdapter;
-import com.nbhysj.coupon.adapter.DestinationScenicSpotsAdapter;
 import com.nbhysj.coupon.adapter.FineFoodClassificationAdapter;
 import com.nbhysj.coupon.adapter.FineFoodListAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotClassificationAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotsListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.FineFoodContract;
-import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.FineFoodModel;
-import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.FineFoodPresenter;
-import com.nbhysj.coupon.presenter.ScenicSpotPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.view.StickyScrollView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,9 +77,9 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
     //美食中间分类
     List<ScenicSpotHomePageResponse.CateEntity> mCateEntityList;
     //景点栏目
-    List<ScenicSpotBean> mScenicSpotHotList;
+    List<MchTypeBean> mScenicSpotHotList;
     //景点列表
-    List<ScenicSpotBean> mScenicSpotList;
+    List<MchTypeBean> mScenicSpotList;
     //加载
     @BindView(R.id.llyt_progress_bar_loading)
     LinearLayout mLlytProgressBarLoading;
@@ -243,7 +236,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
                     fineFoodClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
                     fineFoodClassificationAdapter.notifyDataSetChanged();
 
-                    List<ScenicSpotBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
+                    List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
                     mScenicSpotList.addAll(scenicSpotList);
                     fineFoodListAdapter.setFineFoodList(mScenicSpotList);
                     fineFoodListAdapter.notifyDataSetChanged();
@@ -274,7 +267,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
                             mTvLoadMore.setText(getResources().getString(R.string.str_pull_up_loading));
                         }
                     }
-                    List<ScenicSpotBean> scenicSpotList = res.getData().getResult();
+                    List<MchTypeBean> scenicSpotList = res.getData().getResult();
                     BasePaginationResult pageBean = res.getData().getPage();
                     mTotalPageCount = pageBean.getPageCount();
                     mScenicSpotList.addAll(scenicSpotList);
@@ -291,7 +284,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res) {
+    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
 

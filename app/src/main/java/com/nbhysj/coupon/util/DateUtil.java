@@ -265,6 +265,29 @@ public class DateUtil {
     }
 
     /**
+     * 年月日
+     *
+     * @param dateStr
+     * @return
+     * @throws java.text.ParseException
+     */
+    public static String toYYMM(String dateStr) throws java.text.ParseException {
+        try {
+            String date;
+            if (!TextUtils.isEmpty(dateStr)) {
+                String[] dateArray = dateStr.split("-");
+                String year = dateArray[0];
+                String month = dateArray[1];
+                date = year + "年" + month + "月";
+                return date;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 月日
      *
      * @param dateStr

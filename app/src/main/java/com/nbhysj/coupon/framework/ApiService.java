@@ -13,6 +13,7 @@ import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.request.OrderCancelRequest;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
@@ -41,6 +42,7 @@ import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
@@ -50,7 +52,6 @@ import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
 import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
@@ -67,7 +68,6 @@ import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.model.response.WeatherResponse;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -286,7 +286,7 @@ public interface ApiService {
 
     //景点榜单
     @GET("api/store/scenicRanking")
-    Observable<BackResult<ScenicBangDanRankingResponse>> getScenicBangDanRanking(@Query("cityId") int cityId);
+    Observable<BackResult<MchBangDanRankingResponse>> getScenicBangDanRanking(@Query("cityId") int cityId);
 
     //美食栏目首页
     @GET("api/store/food")
@@ -297,14 +297,29 @@ public interface ApiService {
     Observable<BackResult<ScenicSpotResponse>> findFoodByCate(@QueryMap HashMap<String, String> map);
     //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
 
-    //酒店民宿栏目首页
+    //酒店栏目首页
     @GET("api/store/hotel")
-    Observable<BackResult<ScenicSpotHomePageResponse>> getHotelHomestayHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
+    Observable<BackResult<ScenicSpotHomePageResponse>> getHotelHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
 
-    //酒店民宿栏目筛选
+    //酒店栏目筛选
     @GET("api/store/findHotelByCate")
-    Observable<BackResult<ScenicSpotResponse>> findHotelHomestayByCate(@QueryMap HashMap<String, String> map);
-    //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
+    Observable<BackResult<ScenicSpotResponse>> findHotelByCate(@QueryMap HashMap<String, String> map);
+
+    //酒店榜单
+    @GET("api/mchRank/wineshop")
+    Observable<BackResult<MchBangDanRankingResponse>> getHotelBangDanRank(@Query("cityId") int cityId);
+
+    //民宿栏目首页
+    @GET("api/store/homeStay")
+    Observable<BackResult<ScenicSpotHomePageResponse>> getHomestayHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
+
+    //民宿栏目筛选
+    @GET("api/store/findHomeStayByCate")
+    Observable<BackResult<ScenicSpotResponse>> findHomestayByCate(@QueryMap HashMap<String, String> map);
+
+    //民宿榜单（仅民宿)
+    @GET("api/mchRank/homestayRank")
+    Observable<BackResult<MchBangDanRankingResponse>> getHomestayBangDanRank(@Query("cityId") int cityId);
 
     //互动栏目首页
     @GET("api/store/recreation")
@@ -313,7 +328,10 @@ public interface ApiService {
     //互动栏目筛选
     @GET("api/store/findRecreationByCate")
     Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(@QueryMap HashMap<String, String> map);
-    //@Query("
+
+    //商户类型收藏
+    @POST("api/mch/mchCollection")
+    Observable<BackResult> mchCollection(@Body MchCollectionRequest mchCollectionRequest);
 
     //目的地首页
     @GET("api/destination/findByCityName")
@@ -457,5 +475,11 @@ public interface ApiService {
     //订单取消
     @GET("api/order/pay/cancelOrder")
     Observable<BackResult<OrderDetailResponse>> cancelOrder(@Body OrderCancelRequest cancelOrderRequest);
+
+    //推荐酒店评分
+    @GET("api/order/score")
+    Observable<BackResult> willingToRecommendScore(@Query("orderNo") String orderNo,@Query("score") int score);
+
+
 }
 

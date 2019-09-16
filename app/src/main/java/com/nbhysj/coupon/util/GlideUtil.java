@@ -62,6 +62,13 @@ public class GlideUtil {
                 .into(image);
     }
 
+    public static void loadNativeImage(Context mContext, int imageFile, ImageView image) {
+        GlideApp.with(mContext)
+                .load(imageFile)
+                .placeholder(mContext.getResources().getDrawable(R.mipmap.icon_placeholder_image))
+                .into(image);
+    }
+
 
     public static void loadCircleImage(Context context, String imageUrl, CircleImageView image) {
         Glide.with(context)

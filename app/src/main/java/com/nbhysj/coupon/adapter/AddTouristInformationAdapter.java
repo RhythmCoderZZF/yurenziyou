@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.TouristBean;
+import com.nbhysj.coupon.model.response.TravellerBean;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouristInformationAdapter.ViewHolder> {
 
 
-    List<OrderSubmitInitResponse.TravellersEntity> touristInfoList;
+    List<TravellerBean> touristInfoList;
     private Context mContext;
     private TouristInformationListener touristInformationListener;
 
@@ -31,7 +32,7 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
         this.touristInformationListener = touristInformationListener;
     }
 
-    public void setTouristInfoList(List<OrderSubmitInitResponse.TravellersEntity> touristInfoList) {
+    public void setTouristInfoList(List<TravellerBean> touristInfoList) {
 
         this.touristInfoList = touristInfoList;
     }
@@ -50,15 +51,24 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
 
         try {
 
-            OrderSubmitInitResponse.TravellersEntity touristBean = touristInfoList.get(itemPosition);
+            TravellerBean touristBean = touristInfoList.get(itemPosition);
             holder.mTvTouristName.setText(touristBean.getRealname());
-            holder.mTvPhone.setText(touristBean.getIdentityNo());
+            holder.mTvPhone.setText(touristBean.getMobile());
             boolean isTravellerSelect = touristBean.isTravellerSelect();
             holder.mTvEditVisitors.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     touristInformationListener.setEditTouristInfoListener(itemPosition);
+                    for (int i = 0;i < touristInfoList.size();i++)
+                    {
+
+                        touristInfoList.get(i).setTravellerSelect(false);
+                    }
+                    touristInfoList.get(itemPosition).setTravellerSelect(true);
+
+                    notifyDataSetChanged();
+
                 }
             });
 

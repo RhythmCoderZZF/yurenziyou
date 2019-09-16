@@ -70,7 +70,7 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
             int browseNum = recommendFriends.getHits();
             holder.mTvLookNum.setText(String.valueOf(browseNum));
 
-            GlideUtil.loadImageWithProportion(mContext, imageUrl, photoWidth, photoHeight, holder.mImgRecommendFriends);
+            GlideUtil.loadImage(mContext, imageUrl,holder.mImgRecommendFriends);
 
             if (recommendFriends.isLove()) {
 

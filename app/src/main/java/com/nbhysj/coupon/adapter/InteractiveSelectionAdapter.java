@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  */
 public class InteractiveSelectionAdapter extends RecyclerView.Adapter<InteractiveSelectionAdapter.ViewHolder> {
 
-    List<ScenicSpotBean> interactiveSelectionList;
+    List<MchTypeBean> interactiveSelectionList;
     private Context mContext;
 
     public InteractiveSelectionAdapter(Context mContext) {
@@ -35,7 +35,7 @@ public class InteractiveSelectionAdapter extends RecyclerView.Adapter<Interactiv
         this.mContext = mContext;
     }
 
-    public void setInteractiveSelectionList(List<ScenicSpotBean> interactiveSelectionList) {
+    public void setInteractiveSelectionList(List<MchTypeBean> interactiveSelectionList) {
 
         this.interactiveSelectionList = interactiveSelectionList;
     }
@@ -52,7 +52,7 @@ public class InteractiveSelectionAdapter extends RecyclerView.Adapter<Interactiv
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            ScenicSpotBean popularScenicSpots = interactiveSelectionList.get(itemPosition);
+            MchTypeBean popularScenicSpots = interactiveSelectionList.get(itemPosition);
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
             holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getDataName());
             String photoUrl = popularScenicSpots.getPhoto();

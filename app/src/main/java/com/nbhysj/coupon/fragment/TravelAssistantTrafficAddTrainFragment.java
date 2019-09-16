@@ -18,7 +18,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.nbhysj.coupon.ui.TravelAssistantLocationCityActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;

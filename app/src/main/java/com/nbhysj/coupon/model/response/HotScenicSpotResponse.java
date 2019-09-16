@@ -9,14 +9,14 @@ import java.util.List;
  */
 public class HotScenicSpotResponse {
 
-    private List<ScenicSpotBean> result;
+    private List<MchTypeBean> result;
     private BasePaginationResult page;
 
-    public List<ScenicSpotBean> getResult() {
+    public List<MchTypeBean> getResult() {
         return result;
     }
 
-    public void setResult(List<ScenicSpotBean> result) {
+    public void setResult(List<MchTypeBean> result) {
         this.result = result;
     }
 

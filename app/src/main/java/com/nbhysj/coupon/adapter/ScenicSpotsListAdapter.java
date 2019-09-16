@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -31,10 +31,7 @@ import butterknife.ButterKnife;
  */
 public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsListAdapter.ViewHolder> {
 
-    /**
-     * 酒店问答内容
-     */
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
     public ScenicSpotsListAdapter(Context mContext) {
@@ -42,7 +39,7 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
         this.mContext = mContext;
     }
 
-    public void setPopularScenicSpotsList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setPopularScenicSpotsList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -60,7 +57,7 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
 
         try {
 
-            ScenicSpotBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
+            MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             String photoUrl = popularScenicSpots.getPhoto();
             int mchtId = popularScenicSpots.getId();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
@@ -83,13 +80,13 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
                 holder.mTvScenicSpotsLevel.setVisibility(View.VISIBLE);
             }
 
-            List<ScenicSpotBean.TagsEntity> scenicSpotTagsList = popularScenicSpots.getTags();
+            List<MchTypeBean.TagsEntity> scenicSpotTagsList = popularScenicSpots.getTags();
             if (scenicSpotTagsList != null) {
 
                 if (scenicSpotTagsList.size() > 0) {
 
                     holder.mTvScenicSpotsType.setVisibility(View.VISIBLE);
-                    ScenicSpotBean.TagsEntity tagsEntity = popularScenicSpots.getTags().get(0);
+                    MchTypeBean.TagsEntity tagsEntity = popularScenicSpots.getTags().get(0);
                     holder.mTvScenicSpotsType.setText(tagsEntity.getTitle());
                 } else {
 

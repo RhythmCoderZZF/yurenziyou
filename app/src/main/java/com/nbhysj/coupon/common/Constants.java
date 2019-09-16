@@ -14,6 +14,8 @@ public class Constants {
     //请求pwd加盐
     public static final String saltEncryptKey = "nbhysj_";
 
+    public static final int CITY_CODE = 330200;  //token过期
+
     public static final int UNAUTHORIZED_401 = 401;  //token过期
 
     public static final int SUCCESS_CODE = 10000;      // http访问成功
@@ -23,6 +25,8 @@ public class Constants {
     public static final int USER_NOT_LOGIN_CODE = 10100; //未登录
 
     public static final int NO_MORE_LOAD_CODE = -1;      //暂无数据
+
+
 
     public static final String CONNECT_TIMED_OUT = "timeout";
 

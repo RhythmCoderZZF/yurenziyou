@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.TravelAssistantAddFineFoodAdapter;
 import com.nbhysj.coupon.common.Constants;
-import com.nbhysj.coupon.common.Enum.TravelAssistantDetailTypeEnum;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.AddMchRequest;
@@ -308,7 +308,7 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
         if (validateInternet())
         {
             showProgressDialog(getActivity());
-            String mchScenicType = TravelAssistantDetailTypeEnum.getEnumByKey(1);
+            String mchScenicType = MchTypeEnum.getEnumByKey(1);
             mPresenter.getTravelAssistantMchList(mTripId, mCountyId, mchScenicType, mPage, mPageSize);
         }
     }
@@ -325,7 +325,7 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
             addMchRequest.setMchId(mchId);
             addMchRequest.setDayIndex(mDayIndex);
             addMchRequest.setTripId(mTripId);
-            String mchType = TravelAssistantDetailTypeEnum.getEnumByKey(1);
+            String mchType = MchTypeEnum.getEnumByKey(1);
             addMchRequest.setTripPlaceType(mchType);
             mPresenter.insertPlaceMch(addMchRequest);
         }

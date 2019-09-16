@@ -16,7 +16,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -37,7 +37,7 @@ public class ScenicSpotFragment extends BaseFragment<DestinationPresenter, Desti
     private int mPage = 1;
     private int mPageSize = 10;
     private ScenicSpotsListAdapter scenicSpotsListAdapter;
-    List<ScenicSpotBean> mHotScenicSpotList;
+    List<MchTypeBean> mHotScenicSpotList;
     @BindView(R.id.rv_hot_scenic_spot)
     RecyclerView mRvHotScenicSpot;
     @BindView(R.id.refresh_layout)
@@ -146,7 +146,7 @@ public class ScenicSpotFragment extends BaseFragment<DestinationPresenter, Desti
                     BasePaginationResult pageBean = res.getData().getPage();
                     hasNext = pageBean.getHasNext();
                     mTotalPageCount = pageBean.getPageCount();
-                    List<ScenicSpotBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
+                    List<MchTypeBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
                     if (mTotalPageCount == 0) {
                         mHotScenicSpotList.clear();
                         mRlytNoData.setVisibility(View.VISIBLE);

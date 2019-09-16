@@ -11,14 +11,13 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
-        <com.nbhysj.coupon.view.GlideImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_shopping_mall_item"
             android:layout_width="@dimen/dp_48"
-            android:layout_height="@dimen/dp_49"
+            android:layout_height="@dimen/dp_48"
             android:layout_marginTop="@dimen/dp_4"
-            android:background="@drawable/shape_round_gradient"
             android:layout_gravity="center"
-            android:scaleType="centerCrop" />
+           />
 
         <TextView
             android:id="@+id/tv_shopping_mall_item"

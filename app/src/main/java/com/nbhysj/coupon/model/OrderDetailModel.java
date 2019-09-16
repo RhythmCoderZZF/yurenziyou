@@ -17,4 +17,10 @@ public class OrderDetailModel implements OrderDetailContract.Model
     public Observable<BackResult<OrderDetailResponse>> getOrderDetail(String orderNo) {
         return Api.getInstance().apiService.getOrderDetail(orderNo).compose(RxSchedulers.io_main());
     }
+
+
+    @Override
+    public Observable<BackResult> willingToRecommendScore(String orderNo, int score) {
+        return Api.getInstance().apiService.willingToRecommendScore(orderNo,score).compose(RxSchedulers.io_main());
+    }
 }

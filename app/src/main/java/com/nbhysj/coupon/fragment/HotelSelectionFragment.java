@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.HotelHomestayAdapter;
+import com.nbhysj.coupon.adapter.HotelAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.model.DestinationModel;
@@ -16,7 +16,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -34,10 +34,10 @@ import butterknife.BindView;
 public class HotelSelectionFragment extends BaseFragment<DestinationPresenter, DestinationModel> implements DestinationContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    List<ScenicSpotBean> mHotScenicSpotList;
+    List<MchTypeBean> mHotScenicSpotList;
     private int mPage = 1;
     private int mPageSize = 10;
-    private HotelHomestayAdapter hotelHomestayAdapter;
+    private HotelAdapter hotelAdapter;
     @BindView(R.id.rv_fine_food)
     RecyclerView mRvFineFood;
     @BindView(R.id.rlyt_no_data)
@@ -96,9 +96,9 @@ public class HotelSelectionFragment extends BaseFragment<DestinationPresenter, D
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         mRvFineFood.setLayoutManager(linearLayoutManager);
-        hotelHomestayAdapter = new HotelHomestayAdapter(getActivity());
-        hotelHomestayAdapter.setHotelReputationList(mHotScenicSpotList);
-        mRvFineFood.setAdapter(hotelHomestayAdapter);
+        hotelAdapter = new HotelAdapter(getActivity());
+        hotelAdapter.setHotelList(mHotScenicSpotList);
+        mRvFineFood.setAdapter(hotelAdapter);
 
     }
 
@@ -139,7 +139,7 @@ public class HotelSelectionFragment extends BaseFragment<DestinationPresenter, D
             BasePaginationResult pageBean = res.getData().getPage();
             hasNext = pageBean.getHasNext();
             mTotalPageCount = pageBean.getPageCount();
-            List<ScenicSpotBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
+            List<MchTypeBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
             if (mTotalPageCount == 0) {
                 mHotScenicSpotList.clear();
                 mRlytNoData.setVisibility(View.VISIBLE);
@@ -147,8 +147,8 @@ public class HotelSelectionFragment extends BaseFragment<DestinationPresenter, D
             if (hotScenicSpotList != null) {
                 mHotScenicSpotList.addAll(hotScenicSpotList);
             }
-            hotelHomestayAdapter.setHotelReputationList(mHotScenicSpotList);
-            hotelHomestayAdapter.notifyDataSetChanged();
+            hotelAdapter.setHotelList(mHotScenicSpotList);
+            hotelAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }

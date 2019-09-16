@@ -10,12 +10,14 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.ShoppingMallMenuBean;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -25,7 +27,6 @@ import butterknife.ButterKnife;
 
 public class ShoppingMallMenuAdapter extends RecyclerView.Adapter<ShoppingMallMenuAdapter.ViewHolder> {
 
-    private String[] titles = {"风景名胜", "美食", "酒店名宿", "攻略", "亲子游", "互动", "自由行", "用车"};
     private Context mContext;
     private List<ShoppingMallMenuBean> shoppingMallMenuList;
     private ShoppingMallMenuListener shoppingMallMenuListener;
@@ -52,8 +53,12 @@ public class ShoppingMallMenuAdapter extends RecyclerView.Adapter<ShoppingMallMe
     public void onBindViewHolder(ShoppingMallMenuAdapter.ViewHolder holder, int position) {
 
         try {
+            ShoppingMallMenuBean shoppingMallMenuBean = shoppingMallMenuList.get(position);
+            int shopMallTabIcon = shoppingMallMenuBean.getIcon();
+            String title = shoppingMallMenuBean.getTitle();
+            holder.mTvShoppingMallItem.setText(title);
+            GlideUtil.loadNativeImage(mContext,shopMallTabIcon, holder.mImgShoppingMallItem);
 
-            holder.mTvShoppingMallItem.setText(titles[position]);
             holder.mLlytShoppingMallItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -68,14 +73,14 @@ public class ShoppingMallMenuAdapter extends RecyclerView.Adapter<ShoppingMallMe
 
     @Override
     public int getItemCount() {
-        return 8;
+        return shoppingMallMenuList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.llyt_shopping_mall_item)
         LinearLayout mLlytShoppingMallItem;
         @BindView(R.id.img_shopping_mall_item)
-        GlideImageView mImgShoppingMallItem;
+        CircleImageView mImgShoppingMallItem;
         @BindView(R.id.tv_shopping_mall_item)
         TextView mTvShoppingMallItem;
 

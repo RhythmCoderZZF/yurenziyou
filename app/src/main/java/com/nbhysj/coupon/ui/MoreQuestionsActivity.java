@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MoreQuestionListAdapter;
-import com.nbhysj.coupon.dialog.OrderPriceDetailsDialog;
-import com.nbhysj.coupon.dialog.PurchaseSuccessDialog;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -23,8 +23,12 @@ public class MoreQuestionsActivity extends BaseActivity {
     @BindView(R.id.rv_more_question)
     RecyclerView mRvMoreQuestion;
 
+    @BindView(R.id.tv_back)
+    TextView mTvBack;
+
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_more_questions;
     }
 
@@ -47,7 +51,7 @@ public class MoreQuestionsActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.rlyt_my_ask_question,R.id.rlyt_my_answer})
+    @OnClick({R.id.rlyt_my_ask_question,R.id.rlyt_my_answer,R.id.tv_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rlyt_my_ask_question:
@@ -57,6 +61,11 @@ public class MoreQuestionsActivity extends BaseActivity {
                 break;
             case R.id.rlyt_my_answer:
                 toActivity(AskQuestionsActivity.class);
+                break;
+            case R.id.tv_back:
+
+                MoreQuestionsActivity.this.finish();
+
                 break;
             default:
                 break;

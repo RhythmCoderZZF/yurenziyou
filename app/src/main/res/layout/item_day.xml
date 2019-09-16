@@ -5,9 +5,7 @@
     android:background="#ffffff"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:layout_height="50dp"
-
-    >
+    android:layout_height="50dp">
 
     <LinearLayout
         android:id="@+id/llyt_day_item"
@@ -27,22 +25,24 @@
             <TextView
                 android:id="@+id/tv_day"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:text="1"
-                android:textSize="15dp" />
+                android:text=""
+                android:textColor="@color/color_text_black6"
+                android:textSize="@dimen/text_size_xnormal"
+            />
 
             <TextView
-                android:id="@+id/tv_check_in_check_out"
+                android:id="@+id/tv_ticket_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
-                android:text="入住"
-                android:textColor="#fff"
-                android:textSize="12dp"
-                android:visibility="gone" />
+                android:textColor="@color/color_text_black6"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+               />
 
         </LinearLayout>
 

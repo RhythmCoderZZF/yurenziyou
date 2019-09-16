@@ -92,8 +92,10 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
                 String mmdd = DateUtil.toMMDD(date);
                 if (itemPosition == 0) {
 
-                    if (isCurrentDate) {
+                    if (isCurrentDate)
+                    {
                         holder.mTvOrderUseDate.setText("今天" + mmdd);
+
                     } else {
 
                         holder.mTvOrderUseDate.setText(date);

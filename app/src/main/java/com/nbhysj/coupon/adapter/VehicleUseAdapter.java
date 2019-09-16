@@ -28,7 +28,6 @@ public class VehicleUseAdapter extends RecyclerView.Adapter<VehicleUseAdapter.Vi
         this.carList = carList;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 

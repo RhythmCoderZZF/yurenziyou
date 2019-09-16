@@ -125,7 +125,10 @@
             android:name=".ui.ShoppingMallFineFoodActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.ShoppingMallHotelHomestayActivity"
+            android:name=".ui.ShoppingMallHotelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShoppingMallHomestayActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ShoppingMallInteractionActivity"
@@ -143,6 +146,10 @@
         <activity
             android:name=".ui.ScenicSpotBangDanListActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.HomestayBangDanListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.HotelBangDanListActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.ScenicSpotListActivity"
             android:screenOrientation="portrait" />

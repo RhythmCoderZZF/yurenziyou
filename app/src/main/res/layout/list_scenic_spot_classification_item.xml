@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llyt_scenic_spots_classification_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -11,12 +12,18 @@
         android:layout_width="@dimen/dp_55"
         android:layout_height="@dimen/dp_55">
 
-        <ImageView
+        <com.nbhysj.coupon.view.RoundedImageView
             android:id="@+id/image_scenic_spots"
             android:layout_width="@dimen/dp_55"
             android:layout_height="@dimen/dp_55"
             android:layout_centerVertical="true"
-            android:scaleType="fitCenter" />
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="20dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+
+            />
 
         <TextView
             android:id="@+id/tv_scenic_spot_name"

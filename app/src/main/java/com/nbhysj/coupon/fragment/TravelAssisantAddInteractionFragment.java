@@ -11,7 +11,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.TravelAssistantAddInteractionAdapter;
 import com.nbhysj.coupon.adapter.TravelAssistantAddScenicSpotAdapter;
 import com.nbhysj.coupon.common.Constants;
-import com.nbhysj.coupon.common.Enum.TravelAssistantDetailTypeEnum;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.AddMchRequest;
@@ -308,7 +308,7 @@ public class TravelAssisantAddInteractionFragment extends BaseFragment<TravelAss
 
         if (validateInternet()) {
 
-            String mchScenicType = TravelAssistantDetailTypeEnum.getEnumByKey(0);
+            String mchScenicType = MchTypeEnum.getEnumByKey(0);
             mPresenter.getTravelAssistantMchList(mTripId, mCountyId, mchScenicType, mPage, mPageSize);
         }
     }
@@ -321,7 +321,7 @@ public class TravelAssisantAddInteractionFragment extends BaseFragment<TravelAss
             addMchRequest.setMchId(mchId);
             addMchRequest.setDayIndex(mDayIndex);
             addMchRequest.setTripId(mTripId);
-            String mchType = TravelAssistantDetailTypeEnum.getEnumByKey(3);
+            String mchType = MchTypeEnum.getEnumByKey(3);
             addMchRequest.setTripPlaceType(mchType);
             mPresenter.insertPlaceMch(addMchRequest);
         }

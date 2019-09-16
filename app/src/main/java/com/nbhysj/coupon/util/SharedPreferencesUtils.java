@@ -43,6 +43,9 @@ public class SharedPreferencesUtils {
     public static final String COLLECTION_NUM = "collectionNum";     //收藏数
     public static final String ZAN_NUM = "zanNum";            //获赞数
 
+    public static final String LATITUDE = "latitude";        //纬度
+    public static final String LONGITUDE = "longitude";      //经度
+
     private SharedPreferencesUtils(Context context, String name) {
         sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
@@ -88,6 +91,28 @@ public class SharedPreferencesUtils {
         return result;
     }
 
+    /**
+     * 保存登录数据
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    public static boolean saveLongitudeAndLatitudeData(String latitude, String longitude) {
+
+        boolean result;
+        SharedPreferences.Editor editor = sp.edit();
+        try {
+            editor.putString(LATITUDE, latitude);
+            editor.putString(LONGITUDE, longitude);
+            result = true;
+        } catch (Exception e) {
+            result = false;
+            e.printStackTrace();
+        }
+        editor.apply();
+        return result;
+    }
 
     /**
      * 保存用户信息数据

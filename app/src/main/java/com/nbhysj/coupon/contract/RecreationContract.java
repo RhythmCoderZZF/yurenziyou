@@ -4,7 +4,7 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 
@@ -30,7 +30,7 @@ public interface RecreationContract {
         Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(HashMap<String, String> map);
 
         //榜单
-        Observable<BackResult<ScenicBangDanRankingResponse>> getRecreationDanRanking(int cityId);
+        Observable<BackResult<MchBangDanRankingResponse>> getRecreationDanRanking(int cityId);
     }
 
     interface View extends BaseView {
@@ -39,7 +39,7 @@ public interface RecreationContract {
 
         void findRecreationByCateResult(BackResult<ScenicSpotResponse> res);
 
-        void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res);
+        void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
         void showMsg(String msg);
     }

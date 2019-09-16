@@ -6,7 +6,7 @@ package com.nbhysj.coupon.framework;
  */
 public interface Net {
     //String BASE_URL = "http://192.168.1.223:8085/";   //测试
-    String BASE_URL = "http://192.168.1.189:8085/";   //测试
+     String BASE_URL = "http://192.168.1.189:8085/";   //测试
     // String BASE_URL = "http://fx.nbhysj.com/";   //测试
     // String BASE_URL = "http://192.168.1.225:8085/";   //测试
 

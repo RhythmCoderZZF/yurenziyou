@@ -19,7 +19,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -40,7 +40,7 @@ public class InteractiveSelectionFragment extends BaseFragment<DestinationPresen
     private int mPage = 1;
     private int mPageSize = 10;
     private RecreationListAdapter recreationListAdapter;
-    List<ScenicSpotBean> mHotScenicSpotList;
+    List<MchTypeBean> mHotScenicSpotList;
     @BindView(R.id.rv_interactive_selection)
     RecyclerView mRvInteractiveSelection;
     @BindView(R.id.refresh_layout)
@@ -147,7 +147,7 @@ public class InteractiveSelectionFragment extends BaseFragment<DestinationPresen
         BasePaginationResult pageBean = res.getData().getPage();
         hasNext = pageBean.getHasNext();
         mTotalPageCount = pageBean.getPageCount();
-        List<ScenicSpotBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
+        List<MchTypeBean> hotScenicSpotList = hotScenicSpotResponse.getResult();
         if (mTotalPageCount == 0) {
             mHotScenicSpotList.clear();
             mRlytNoData.setVisibility(View.VISIBLE);

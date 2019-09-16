@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  */
 public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<DestinationScenicSpotsAdapter.ViewHolder> {
 
-    List<ScenicSpotBean> popularScenicSpotsList;
+    List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
     public DestinationScenicSpotsAdapter(Context mContext) {
@@ -39,7 +39,7 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
         this.mContext = mContext;
     }
 
-    public void setPopularScenicSpotsList(List<ScenicSpotBean> popularScenicSpotsList) {
+    public void setPopularScenicSpotsList(List<MchTypeBean> popularScenicSpotsList) {
 
         this.popularScenicSpotsList = popularScenicSpotsList;
     }
@@ -56,7 +56,7 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            ScenicSpotBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
+            MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             String photo = popularScenicSpots.getPhoto();
             int scenicSpotSequence = itemPosition + 1;
             holder.mTvPopularScenicSpotSequence.setText("TOP." + scenicSpotSequence);

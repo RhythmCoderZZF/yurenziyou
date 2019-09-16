@@ -5,18 +5,15 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
-
 import java.util.HashMap;
 import java.util.List;
-
 import io.reactivex.Observable;
-import retrofit2.http.Query;
 
 /**
  * @auther：hysj created on 2019/06/06
@@ -36,7 +33,7 @@ public interface ScenicSpotContract {
         Observable<BackResult<ScenicSpotResponse>> findScenicByCate(HashMap<String, String> map);
 
         //景点榜单
-        Observable<BackResult<ScenicBangDanRankingResponse>> getScenicBangDanRanking(int cityId);
+        Observable<BackResult<MchBangDanRankingResponse>> getScenicBangDanRanking(int cityId);
 
         //景点详情
         Observable<BackResult<MchDetailsResponse>> getMchDetails(int mchId);
@@ -57,7 +54,7 @@ public interface ScenicSpotContract {
 
         void findScenicByCateResult(BackResult<ScenicSpotResponse> res);
 
-        void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res);
+        void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
         void getMchDetailsResult(BackResult<MchDetailsResponse> res);
 

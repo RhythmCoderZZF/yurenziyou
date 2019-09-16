@@ -42,6 +42,9 @@ public class TravellerBean implements Serializable {
 
     private String loginMobile;
 
+    //是否选中游客
+    private boolean isTravellerSelect;
+
     public int getId() {
         return id;
     }
@@ -176,5 +179,14 @@ public class TravellerBean implements Serializable {
 
     public void setLoginMobile(String loginMobile) {
         this.loginMobile = loginMobile;
+    }
+
+
+    public boolean isTravellerSelect() {
+        return isTravellerSelect;
+    }
+
+    public void setTravellerSelect(boolean travellerSelect) {
+        isTravellerSelect = travellerSelect;
     }
 }

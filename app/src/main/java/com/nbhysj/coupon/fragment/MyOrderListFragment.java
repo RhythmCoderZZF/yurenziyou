@@ -5,13 +5,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
-
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MyOrderListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderListContract;
 import com.nbhysj.coupon.dialog.OprateDialog;
 import com.nbhysj.coupon.model.OrderListModel;
+import com.nbhysj.coupon.model.request.OrderCancelRequest;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
@@ -21,8 +21,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -45,6 +47,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     private boolean isOnLoadMore = false;
     private MyOrderListAdapter myOrderListAdapter;
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
+
     public static MyOrderListFragment newInstance(String content) {
         MyOrderListFragment fragment = new MyOrderListFragment();
 
@@ -181,7 +184,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     public void showMsg(String msg) {
 
         dismissProgressDialog();
-        showToast(getActivity(),Constants.getResultMsg(msg));
+        showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
@@ -275,8 +278,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
                 try {
 
                     orderTypeList.remove(mOrderTypeEntity);
-                    if(orderTypeList.size() > 0)
-                    {
+                    if (orderTypeList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
 
                     } else {
@@ -310,15 +312,28 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     /**
      * 删除订单
      */
-    public void orderDelete(){
+    public void orderDelete() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
             mDialog.setTitle(getResources().getString(R.string.str_order_deleting));
             String orderNo = mOrderTypeEntity.getOrderNo();
             OrderDeleteRequest deleteOrderRequest = new OrderDeleteRequest();
             deleteOrderRequest.setOrderNo(orderNo);
             mPresenter.deleteOrder(deleteOrderRequest);
         }
+    }
 
+
+    /**
+     * 取消订单
+     */
+    public void cancelOrder() {
+        if (validateInternet()) {
+            mDialog.setTitle(getResources().getString(R.string.str_order_deleting));
+            String orderNo = mOrderTypeEntity.getOrderNo();
+            OrderCancelRequest cancelOrderRequest = new OrderCancelRequest();
+            cancelOrderRequest.setOrderNo(orderNo);
+            mPresenter.cancelOrder(cancelOrderRequest);
+        }
     }
 }

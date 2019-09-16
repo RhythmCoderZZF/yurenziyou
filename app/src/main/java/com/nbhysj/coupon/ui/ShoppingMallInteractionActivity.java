@@ -12,20 +12,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.DestinationScenicSpotsAdapter;
 import com.nbhysj.coupon.adapter.InteractionSectionAdapter;
 import com.nbhysj.coupon.adapter.RecreationListAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotClassificationAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotsListAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.RecreationContract;
-import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.RecreationModel;
-import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.RecreationPresenter;
@@ -83,9 +80,9 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
     //景点中间分类
     List<ScenicSpotHomePageResponse.CateEntity> mCateEntityList;
     //景点栏目
-    List<ScenicSpotBean> mScenicSpotHotList;
+    List<MchTypeBean> mScenicSpotHotList;
     //景点列表
-    List<ScenicSpotBean> mScenicSpotList;
+    List<MchTypeBean> mScenicSpotList;
     //加载
     @BindView(R.id.llyt_progress_bar_loading)
     LinearLayout mLlytProgressBarLoading;
@@ -141,7 +138,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallInteractionActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        scenicSpotClassificationAdapter = new ScenicSpotClassificationAdapter(ShoppingMallInteractionActivity.this);
+        scenicSpotClassificationAdapter = new ScenicSpotClassificationAdapter(ShoppingMallInteractionActivity.this,MchTypeEnum.MCH_SCENIC.getValue());
         scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(scenicSpotClassificationAdapter);
 
@@ -242,7 +239,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
                     scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
                     scenicSpotClassificationAdapter.notifyDataSetChanged();
 
-                    List<ScenicSpotBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
+                    List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
                     mScenicSpotList.addAll(scenicSpotList);
                     recreationListAdapter.setRecreationListList(mScenicSpotList);
                     recreationListAdapter.notifyDataSetChanged();
@@ -273,7 +270,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
                             mTvLoadMore.setText(getResources().getString(R.string.str_pull_up_loading));
                         }
                     }
-                    List<ScenicSpotBean> scenicSpotList = res.getData().getResult();
+                    List<MchTypeBean> scenicSpotList = res.getData().getResult();
                     BasePaginationResult pageBean = res.getData().getPage();
                     mTotalPageCount = pageBean.getPageCount();
                     mScenicSpotList.addAll(scenicSpotList);
@@ -290,7 +287,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res) {
+    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
 

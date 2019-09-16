@@ -11,7 +11,7 @@ import com.nbhysj.coupon.adapter.MyOrderListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderListContract;
 import com.nbhysj.coupon.model.OrderListModel;
-import com.nbhysj.coupon.model.request.DeleteOrderRequest;
+import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.presenter.OrderListPresenter;
@@ -255,6 +255,11 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
         }
     }
 
+    @Override
+    public void cancelOrderResult(BackResult res) {
+
+    }
+
     /**
      * 获取订单列表
      */
@@ -275,7 +280,7 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
             showProgressDialog(getActivity());
             mDialog.setTitle(getResources().getString(R.string.str_order_deleting));
             String orderNo = mOrderTypeEntity.getOrderNo();
-            DeleteOrderRequest deleteOrderRequest = new DeleteOrderRequest();
+            OrderDeleteRequest deleteOrderRequest = new OrderDeleteRequest();
             deleteOrderRequest.setOrderNo(orderNo);
             mPresenter.deleteOrder(deleteOrderRequest);
         }

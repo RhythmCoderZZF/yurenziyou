@@ -6,16 +6,14 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
-
 import java.util.HashMap;
 import java.util.List;
-
 import io.reactivex.Observable;
 
 /**
@@ -36,7 +34,7 @@ public class ScenicSpotModel implements ScenicSpotContract.Model {
     }
 
     @Override
-    public Observable<BackResult<ScenicBangDanRankingResponse>> getScenicBangDanRanking(int cityId) {
+    public Observable<BackResult<MchBangDanRankingResponse>> getScenicBangDanRanking(int cityId) {
         return Api.getInstance().apiService.getScenicBangDanRanking(cityId).compose(RxSchedulers.io_main());
     }
 

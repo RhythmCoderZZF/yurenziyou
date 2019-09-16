@@ -13,14 +13,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.HotelReputationResponse;
 import com.nbhysj.coupon.model.response.MchCitiesBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
+import com.nbhysj.coupon.ui.HomestayBangDanListActivity;
+import com.nbhysj.coupon.ui.HotelBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotListActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -36,10 +40,12 @@ public class ScenicSpotClassificationAdapter extends RecyclerView.Adapter<Scenic
 
     List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList;
     private Context mContext;
+    private String mchType;
 
-    public ScenicSpotClassificationAdapter(Context mContext) {
+    public ScenicSpotClassificationAdapter(Context mContext,String mchType) {
 
         this.mContext = mContext;
+        this.mchType = mchType;
     }
 
     public void setScenicSpotClassificationList(List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList) {
@@ -64,7 +70,7 @@ public class ScenicSpotClassificationAdapter extends RecyclerView.Adapter<Scenic
             String photo = cateEntity.getPhoto();
             holder.mTvScenicSpotName.setText(mchtName);
 
-            GlideUtil.loadCornersTransformImage(mContext, photo, 20, holder.mImgScenicSpotPhoto);
+            GlideUtil.loadImage(mContext, photo, holder.mImgScenicSpotPhoto);
 
             if (itemPosition == scenicSpotClassifiyList.size() - 1) {
 
@@ -76,11 +82,19 @@ public class ScenicSpotClassificationAdapter extends RecyclerView.Adapter<Scenic
             holder.mLlytScenicSpotsClassificationItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent intent = new Intent();
-                    intent.setClass(mContext, ScenicSpotBangDanListActivity.class);
-                    mContext.startActivity(intent);
+                    if(mchType.equals(MchTypeEnum.MCH_SCENIC.getValue()))
+                    {
+                        intent.setClass(mContext, ScenicSpotBangDanListActivity.class);
 
+                    } else if(mchType.equals(MchTypeEnum.MCH_HOTEL.getValue())){
+
+                        intent.setClass(mContext, HotelBangDanListActivity.class);
+                    } else if(mchType.equals(MchTypeEnum.MCH_HOMESTAY.getValue())){
+
+                        intent.setClass(mContext, HomestayBangDanListActivity.class);
+                    }
+                    mContext.startActivity(intent);
                 }
             });
         } catch (Exception e) {
@@ -100,7 +114,7 @@ public class ScenicSpotClassificationAdapter extends RecyclerView.Adapter<Scenic
 
         //景点图片
         @BindView(R.id.image_scenic_spots)
-        ImageView mImgScenicSpotPhoto;
+        RoundedImageView mImgScenicSpotPhoto;
 
         @BindView(R.id.llyt_scenic_spots_classification_item)
         LinearLayout mLlytScenicSpotsClassificationItem;

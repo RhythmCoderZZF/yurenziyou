@@ -2,19 +2,12 @@ package com.nbhysj.coupon.fragment;
 
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.MerchentAlbumItemAdapter;
-import com.nbhysj.coupon.adapter.MerchentAlbumSubItemAdapter;
 import com.nbhysj.coupon.adapter.NetFriendAlbumAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
@@ -22,10 +15,9 @@ import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
-import com.nbhysj.coupon.model.response.MerchantAlbumResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
@@ -34,14 +26,8 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.zhy.view.flowlayout.FlowLayout;
-import com.zhy.view.flowlayout.TagAdapter;
-import com.zhy.view.flowlayout.TagFlowLayout;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 
@@ -163,7 +149,7 @@ public class FriendsNetAlbumFragment extends BaseFragment<ScenicSpotPresenter, S
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res) {
+    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
 

@@ -8,15 +8,15 @@ import java.util.List;
  */
 public class OrderSubmitInitResponse {
 
-    private List<TravellersEntity> travellers;
+    private List<TravellerBean> travellers;
 
     private List<GoodsPriceEntity> goodsPrice;
 
-    public List<TravellersEntity> getTravellers() {
+    public List<TravellerBean> getTravellers() {
         return travellers;
     }
 
-    public void setTravellers(List<TravellersEntity> travellers) {
+    public void setTravellers(List<TravellerBean> travellers) {
         this.travellers = travellers;
     }
 
@@ -62,8 +62,7 @@ public class OrderSubmitInitResponse {
 
         private int selfStatus;
 
-        //是否选中游客
-        private boolean isTravellerSelect;
+
 
         public int getId() {
             return id;
@@ -192,14 +191,6 @@ public class OrderSubmitInitResponse {
         public void setSelfStatus(int selfStatus) {
             this.selfStatus = selfStatus;
         }
-
-        public boolean isTravellerSelect() {
-            return isTravellerSelect;
-        }
-
-        public void setTravellerSelect(boolean travellerSelect) {
-            isTravellerSelect = travellerSelect;
-        }
     }
 
     public class GoodsPriceEntity{
@@ -260,8 +251,6 @@ public class OrderSubmitInitResponse {
 
         private List<GoodsPriceDatesResponse> goodsPriceDates;
 
-        private int sellStatus;
-
         private String ticketIntoType;
 
         private int otherPrice;
@@ -271,14 +260,6 @@ public class OrderSubmitInitResponse {
         private int otherId;
 
         private int ticketPurchaseNum;
-
-        public int getSellStatus() {
-            return sellStatus;
-        }
-
-        public void setSellStatus(int sellStatus) {
-            this.sellStatus = sellStatus;
-        }
 
         public String getTicketIntoType() {
             return ticketIntoType;

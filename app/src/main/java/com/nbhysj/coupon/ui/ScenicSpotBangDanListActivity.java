@@ -11,20 +11,17 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import com.bumptech.glide.Glide;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.FineFoodListAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotBangDanListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.ScenicBangDanRankingResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
@@ -67,7 +64,7 @@ public class ScenicSpotBangDanListActivity extends BaseActivity<ScenicSpotPresen
     private ScenicSpotBangDanListAdapter scenicSpotsListAdapter;
     private LinearLayoutManager scenicSpotsLinearLayoutManager;
     //景点列表
-    List<ScenicSpotBean> mScenicSpotList;
+    List<MchTypeBean> mScenicSpotList;
     View header;
     private ImageView mImgFineFoodHeader;
 
@@ -224,18 +221,18 @@ public class ScenicSpotBangDanListActivity extends BaseActivity<ScenicSpotPresen
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<ScenicBangDanRankingResponse> res) {
+    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
 
-                    List<ScenicSpotBean> scenicSpotList = res.getData().getMchs();
+                    List<MchTypeBean> scenicSpotList = res.getData().getMchs();
                     mScenicSpotList.addAll(scenicSpotList);
                     scenicSpotsListAdapter.setPopularScenicSpotsList(mScenicSpotList);
                     scenicSpotsListAdapter.notifyDataSetChanged();
 
-                    ScenicBangDanRankingResponse.BannerEntity banner = res.getData().getBanner();
+                    MchBangDanRankingResponse.BannerEntity banner = res.getData().getBanner();
                     if (banner != null) {
                         String photoUrl = banner.getPhoto();
                         GlideUtil.loadImage(mContext, photoUrl, mImgFineFoodHeader);

@@ -20,25 +20,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.HotelAdapter;
+import com.nbhysj.coupon.adapter.GoodMealDetailAdapter;
 import com.nbhysj.coupon.adapter.HotelQuestionAndAnswerAdapter;
+import com.nbhysj.coupon.adapter.MchTypeAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailProblemAdapter;
-import com.nbhysj.coupon.adapter.SetMealDetailAdapter;
+import com.nbhysj.coupon.adapter.OrderDetailVehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.OrderTypeEnum;
 import com.nbhysj.coupon.contract.OrderDetailContract;
 import com.nbhysj.coupon.dialog.OrderPriceDetailsDialog;
-import com.nbhysj.coupon.dialog.PurchaseSuccessDialog;
-import com.nbhysj.coupon.fragment.MyOrderFragmentManager;
+import com.nbhysj.coupon.dialog.OrderVerificationCodeDialog;
 import com.nbhysj.coupon.fragment.OrderDetailScenicFragmentManager;
 import com.nbhysj.coupon.model.OrderDetailModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
+import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
 import com.nbhysj.coupon.model.response.OrderDetailScenicSpotReponse;
 import com.nbhysj.coupon.presenter.OrderDetailPresenter;
-import com.nbhysj.coupon.view.SlideShowView;
-import com.nbhysj.coupon.widget.ContentViewPager;
 import com.nbhysj.coupon.widget.MyViewPager;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -137,13 +136,17 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
     //联系商家
     @BindView(R.id.tv_contact_businessmen)
     TextView mTvContactBusinessmen;
+    //用车
+    @BindView(R.id.rv_vehicle_use)
+    RecyclerView mRvVehicleUse;
+
     /**
      * 放圆点的View的list
      **/
     private List<View> dotViewsList;
 
     // private List<OrderDetailScenicSpotReponse> mOrderDetailScenicSpotList;
-    String[] options = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    String[] hotelRecommendScoreOptions = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
     //订单编号
     private String orderNo;
@@ -151,11 +154,31 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
     //商品列表
     private List<OrderDetailResponse.OrderGoodsEntity> orderGoodsList;
 
+    //用车列表
+    private List<OrderDetailResponse.OrderCarEntity> orderCarList;
+
     //可能会遇到的问题
     private List<OrderDetailResponse.AnswerEntity> problemList;
 
+    private List<MchTypeBean> guessYouLikeList;
+
     private OrderDetailProblemAdapter orderDetailProblemAdapter;
 
+    //套餐|| 单个商品信息
+    private GoodMealDetailAdapter goodMealDetailAdapter;
+
+    //订单详情用车
+    OrderDetailVehicleUseAdapter orderDetailVehicleUseAdapter;
+
+    //猜你喜欢
+    MchTypeAdapter gussYouLikeAdapter;
+
+    OrderPriceDetailsDialog orderPriceDetailsDialog;
+
+    OrderVerificationCodeDialog verificationCodeDialog;
+
+    //酒店推荐评分
+    int hotelRecommendScore = 0;
     @Override
     public int getLayoutId() {
         return R.layout.activity_order_detail;
@@ -193,12 +216,28 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
             orderGoodsList.clear();
         }
 
+        if(orderCarList == null){
+
+            orderCarList = new ArrayList<>();
+        } else {
+
+            orderCarList.clear();
+        }
+
         if (problemList == null) {
 
             problemList = new ArrayList<>();
         } else {
 
             problemList.clear();
+        }
+
+        if(guessYouLikeList == null){
+
+            guessYouLikeList = new ArrayList<>();
+        } else {
+
+            guessYouLikeList.clear();
         }
         mTvEvaluate.getBackground().setAlpha(20);
         mTvRebook.getBackground().setAlpha(20);
@@ -215,52 +254,28 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
         List<String> questionList = new ArrayList<>();
         questionList.add("隔音如何，晚上安静吗，睡觉会不会被影...");
         questionList.add("基础设施如何?");
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyOrderDetailActivity.this);
         //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRvHotelQuestionAndAnswers.setLayoutManager(linearLayoutManager);
         HotelQuestionAndAnswerAdapter hotelQuestionAndAnswerAdapter = new HotelQuestionAndAnswerAdapter(MyOrderDetailActivity.this);
         hotelQuestionAndAnswerAdapter.setQuestionContentList(questionList);
         mRvHotelQuestionAndAnswers.setAdapter(hotelQuestionAndAnswerAdapter);
 
-        LinearLayoutManager linearLayout = new LinearLayoutManager(mContext);
+        LinearLayoutManager linearLayout = new LinearLayoutManager(MyOrderDetailActivity.this);
         //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRvGuessYouLike.setLayoutManager(linearLayout);
-        HotelAdapter hotelAdapter = new HotelAdapter(MyOrderDetailActivity.this);
-        hotelAdapter.setHotelContentList(questionList);
-        mRvGuessYouLike.setAdapter(hotelAdapter);
+        gussYouLikeAdapter = new MchTypeAdapter(MyOrderDetailActivity.this);
+        gussYouLikeAdapter.setMchTypeDetailList(guessYouLikeList);
+        mRvGuessYouLike.setAdapter(gussYouLikeAdapter);
+
     }
 
     @Override
     public void initData() {
+
         getOrderDetail();
 
-
-
-        /*  OrderDetailScenicSpotReponse orderDetailScenicSpotReponse = new OrderDetailScenicSpotReponse();
-        orderDetailScenicSpotReponse.setScenicSpotAddress("宁波市 鄞州区 桑田路936号");
-        orderDetailScenicSpotReponse.setScenicSpotName("宁波海洋世界");
-        orderDetailScenicSpotReponse.setTicketType("家庭票A(两大一小)");
-        orderDetailScenicSpotReponse.setUseTime("3月20日");
-
-        OrderDetailScenicSpotReponse orderDetailScenicSpotReponse1 = new OrderDetailScenicSpotReponse();
-        orderDetailScenicSpotReponse1.setScenicSpotAddress("宁波东钱湖野生动物园");
-        orderDetailScenicSpotReponse1.setScenicSpotName("宁波雅戈尔动物园");
-        orderDetailScenicSpotReponse1.setTicketType("家庭票A(两大一小)");
-        orderDetailScenicSpotReponse1.setUseTime("4月10日");
-
-        OrderDetailScenicSpotReponse orderDetailScenicSpotReponse2 = new OrderDetailScenicSpotReponse();
-        orderDetailScenicSpotReponse2.setScenicSpotAddress("浙江省宁波市镇海新城");
-        orderDetailScenicSpotReponse2.setScenicSpotName("宁波植物园");
-        orderDetailScenicSpotReponse2.setTicketType("家庭票A(两大一小)");
-        orderDetailScenicSpotReponse2.setUseTime("3月10日");
-
-        mOrderDetailScenicSpotList.add(orderDetailScenicSpotReponse);
-        mOrderDetailScenicSpotList.add(orderDetailScenicSpotReponse1);
-        mOrderDetailScenicSpotList.add(orderDetailScenicSpotReponse2);
-*/
-
-
-        List<String> optionList = Arrays.asList(options);
+        List<String> optionList = Arrays.asList(hotelRecommendScoreOptions);
         TagAdapter tagAdapter = new TagAdapter<String>(optionList) {
             @Override
             public View getView(FlowLayout parent, int position, String option) {
@@ -278,24 +293,36 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
         mTagRecommendedScore.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                String content = "";
+
                 Set<Integer> selectPosSet = mTagRecommendedScore.getSelectedList();
                 Iterator it = selectPosSet.iterator();
                 while (it.hasNext()) {
                     int index = (int) it.next();
-                    content = options[index];
+                    hotelRecommendScore = Integer.parseInt(hotelRecommendScoreOptions[index]);
+
+                    willingToRecommendScore();
                 }
-                Toast.makeText(MyOrderDetailActivity.this, content + "", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-        tagAdapter.setSelectedList(4);
+       // tagAdapter.setSelectedList(0);
 
+        //订单详情商品模块
         LinearLayoutManager linearLayout = new LinearLayoutManager(mContext);
         linearLayout.setOrientation(linearLayout.VERTICAL);
         mRvPackageDetails.setLayoutManager(linearLayout);
-        SetMealDetailAdapter setMealDetailAdapter = new SetMealDetailAdapter(MyOrderDetailActivity.this);
-        mRvPackageDetails.setAdapter(setMealDetailAdapter);
+        goodMealDetailAdapter = new GoodMealDetailAdapter(MyOrderDetailActivity.this);
+        goodMealDetailAdapter.setOrderMealList(orderGoodsList);
+        mRvPackageDetails.setAdapter(goodMealDetailAdapter);
+
+
+        //订单详情用车模块
+        LinearLayoutManager orderDetailVehicleLinearLayout = new LinearLayoutManager(mContext);
+        orderDetailVehicleLinearLayout.setOrientation(LinearLayoutManager.VERTICAL);
+        mRvVehicleUse.setLayoutManager(orderDetailVehicleLinearLayout);
+        orderDetailVehicleUseAdapter = new OrderDetailVehicleUseAdapter();
+        orderDetailVehicleUseAdapter.setVehicleUseList(orderCarList);
+        mRvVehicleUse.setAdapter(orderDetailVehicleUseAdapter);
 
     }
 
@@ -338,7 +365,7 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
         @Override
         public void onPageSelected(int pos) {
             //  currentItem = pos;
-            a = pos % 3;
+            a = pos % orderGoodsList.size();
             for (int i = 0; i < orderGoodsList.size(); i++) {
                 if (i == a) {
                     ((View) dotViewsList.get(a))
@@ -356,8 +383,13 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
         switch (view.getId()) {
             case R.id.image_qr_code:
 
-                PurchaseSuccessDialog purchaseSuccessDialog = new PurchaseSuccessDialog(MyOrderDetailActivity.this).builder();
-                purchaseSuccessDialog.show();
+                if(verificationCodeDialog == null) {
+
+                    verificationCodeDialog = new OrderVerificationCodeDialog(MyOrderDetailActivity.this).builder();
+                    verificationCodeDialog.setContent("http://www.baidu.com");
+                }
+
+                verificationCodeDialog.show();
 
                 break;
             case R.id.tv_price_details:
@@ -391,6 +423,11 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
 }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void getOrderDetailResult(BackResult<OrderDetailResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -400,7 +437,6 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
                     OrderDetailResponse orderDetailResponse = res.getData();
                     String orderStatus = orderDetailResponse.getOrderStatus();
                     OrderDetailResponse.OrderEntity orderEntity = orderDetailResponse.getOrder();
-                    orderGoodsList = orderDetailResponse.getOrderGoods();
 
                     FragmentPagerAdapter adapter = new OrderDetailScenicFragmentManager(getSupportFragmentManager(), orderGoodsList);
                     mViewPagerScenicSpot.setAdapter(adapter);
@@ -492,6 +528,41 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
                     orderDetailProblemAdapter.setOrderDetailProblemList(answerList);
                     orderDetailProblemAdapter.notifyDataSetChanged();
 
+                    //商品列表
+                    orderGoodsList = orderDetailResponse.getOrderGoods();
+                    goodMealDetailAdapter.setOrderMealList(orderGoodsList);
+                    goodMealDetailAdapter.notifyDataSetChanged();
+
+                    //用车列表
+                    orderCarList = orderDetailResponse.getOrderCar();
+                    orderDetailVehicleUseAdapter.setVehicleUseList(orderCarList);
+                    orderDetailVehicleUseAdapter.notifyDataSetChanged();
+
+                    //猜你喜欢
+                    guessYouLikeList = orderDetailResponse.getGuess();
+                    gussYouLikeAdapter.setMchTypeDetailList(guessYouLikeList);
+                    gussYouLikeAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(MyOrderDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void willingToRecommendScoreResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                  System.out.print(res.getMsg());
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -508,11 +579,22 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
         showToast(MyOrderDetailActivity.this, Constants.getResultMsg(msg));
     }
 
+    //获取订单详情
     public void getOrderDetail() {
 
         if (validateInternet()) {
             showProgressDialog(MyOrderDetailActivity.this);
             mPresenter.getOrderDetail(orderNo);
+        }
+    }
+
+    //酒店推荐评分
+    public void willingToRecommendScore()
+    {
+        if (validateInternet()) {
+
+            showProgressDialog(MyOrderDetailActivity.this);
+            mPresenter.willingToRecommendScore(orderNo,hotelRecommendScore);
         }
     }
 }
