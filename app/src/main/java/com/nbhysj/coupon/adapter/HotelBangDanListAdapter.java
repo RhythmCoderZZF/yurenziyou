@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,8 +17,6 @@ import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * @author hysj created at 2019/09/16.
@@ -55,7 +51,7 @@ public class HotelBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mHeaderView != null && viewType == TYPE_HEADER) return new ViewHolder(mHeaderView);
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_hotel_reputation_item, parent, false);//解决宽度不能铺满
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_hotel_item, parent, false);//解决宽度不能铺满
         ViewHolder hold = new ViewHolder(view);
         return hold;
     }
@@ -69,7 +65,7 @@ public class HotelBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 try {
-                    MchTypeBean hotelResponse = hotelList.get(position - 1);
+                    MchTypeBean hotelResponse = hotelList.get(pos);
                     int commentScore = hotelResponse.getCommentScore();
                     String intro = hotelResponse.getIntro();
                     int level = hotelResponse.getLevel();
@@ -140,7 +136,8 @@ public class HotelBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        return mHeaderView != null ? hotelList.size() : 0;
+        return mHeaderView != null ? hotelList.size() + 1: hotelList.size();
+
     }
 
     @Override

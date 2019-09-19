@@ -12,7 +12,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
 public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoomAdapter.ViewHolder> {
 
 
-    List<NearbyScenicSpotsResponse> nearbyScenicSpotsList;
+    List<MchGoodsBean> mchHotelGoodsList;
     private Context mContext;
     private HotelRoomItemListener hotelRoomItemListener;
 
@@ -34,9 +37,9 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
         this.hotelRoomItemListener = hotelRoomItemListener;
     }
 
-    public void setNearbyScenicSpotsList(List<NearbyScenicSpotsResponse> nearbyScenicSpotsList) {
+    public void setMchHotelGoodsList(List<MchGoodsBean> mchHotelGoodsList) {
 
-        this.nearbyScenicSpotsList = nearbyScenicSpotsList;
+        this.mchHotelGoodsList = mchHotelGoodsList;
     }
 
     @Override
@@ -51,13 +54,38 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            RequestOptions myOptions = new RequestOptions()
-                    .transform(new GlideRoundTransform(mContext, 5));
+            StringBuffer stringBuffer = new StringBuffer();
+            MchGoodsBean mchGoodsBean = mchHotelGoodsList.get(itemPosition);
+            String photoUrl = mchGoodsBean.getPhoto();
+            String title = mchGoodsBean.getTitle();
+            int marketPrice = mchGoodsBean.getMarketPrice();
+            int breakfastStatus = mchGoodsBean.getBreakfastStatus();
+            int windowStatus = mchGoodsBean.getWindowStatus();
+            String bedInfo = mchGoodsBean.getBedInfo();
 
-            Glide.with(mContext)
-                    .load("https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1557554460&di=587cccfcf79487fa86575a004a4785fd&src=http://seopic.699pic.com/photo/50014/4961.jpg_wh1200.jpg")
-                    .apply(myOptions)
-                    .into(holder.mImgHotelRoom);
+
+            holder.mTvHotelRoomTilte.setText(title);
+            holder.mTvHotelRoomPrice.setText(String.valueOf(marketPrice));
+            if(breakfastStatus == 0){
+
+                stringBuffer.append("不含早餐 ");
+
+            } else if(breakfastStatus == 1){
+
+                stringBuffer.append("含早餐 ");
+            }
+
+            if(windowStatus == 0){
+
+                stringBuffer.append("有窗");
+
+            } else if(windowStatus == 1){
+
+                stringBuffer.append("无窗");
+            }
+
+            holder.mTvHotelRoomDes.setText(stringBuffer.toString());
+            GlideUtil.loadImage(mContext,photoUrl,holder.mImgHotelRoom);
 
             holder.mLlytHotelRoomItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -67,7 +95,7 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
 
                 }
             });
-
+            stringBuffer.setLength(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,15 +103,15 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
 
     @Override
     public int getItemCount() {
-        return 3;
+        return mchHotelGoodsList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //酒店房间类型
-        TextView mTvHotelRoomType;
+        TextView mTvHotelRoomTilte;
         //酒店房间图片
-        ImageView mImgHotelRoom;
+        RoundedImageView mImgHotelRoom;
         //酒店房间描述
         TextView mTvHotelRoomDes;
         //酒店可取消时间
@@ -95,7 +123,7 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mTvHotelRoomType = itemView.findViewById(R.id.tv_hotel_room_type);
+            mTvHotelRoomTilte = itemView.findViewById(R.id.tv_hotel_room_title);
             mImgHotelRoom = itemView.findViewById(R.id.image_hotel_room);
             mTvHotelRoomDes = itemView.findViewById(R.id.tv_hotel_room_des);
             mTvHotelBookCancelTimeLimit = itemView.findViewById(R.id.tv_hotel_book_cancel_time_limits);

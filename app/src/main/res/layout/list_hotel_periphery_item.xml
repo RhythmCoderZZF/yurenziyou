@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llyt_recyclerview_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_hotel_nearby_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp_10"
@@ -17,21 +18,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <ImageView
+        <com.nbhysj.coupon.view.RoundedImageView
             android:id="@+id/image_delicious_food"
             android:layout_width="125dp"
             android:layout_height="84dp"
             android:layout_centerVertical="true"
-            android:scaleType="fitXY" />
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            app:riv_mutate_background="true"
+            app:riv_corner_radius="@dimen/dp_5"
+            />
 
         <TextView
-            android:id="@+id/tv_delicious_food_store"
+            android:id="@+id/tv_food_mch_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:layout_marginTop="@dimen/dp_7"
-            android:text="我是一家甜品店"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_normal"
             android:textStyle="bold" />
@@ -51,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_4"
-                android:text="￥"
+                android:text="¥"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_normal" />
 
@@ -59,7 +63,7 @@
                 android:id="@+id/tv_per_capita_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="156"
+                android:text="0"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_normal" />
 

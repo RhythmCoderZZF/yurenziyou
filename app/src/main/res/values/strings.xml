@@ -260,6 +260,9 @@
     <string name="str_vehicle_selection_model">车辆选择型号</string>
     <string name="str_enter_the_name_on_the_certificate">必填，输入证件上的姓名</string>
     <string name="str_fill_in_contact_phone_number">必填，输入联系人手机号</string>
+    <string name="str_room_num_select">房间数量选择</string>
+    <string name="str_checkin_username">请填写入住人姓名</string>
+    <string name="str_checkin_user_phone">请填写入住人手机号</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

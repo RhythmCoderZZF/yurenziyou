@@ -28,7 +28,7 @@ public interface LoginContract {
 
         Observable<BackResult> getLoginVerifyCode(String mobile);
 
-        Observable<BackResult<String>> getLoginSalt(String username);
+        Observable<BackResult> getLoginSalt(String username);
 
         Observable<BackResult<LoginResponse>> login(LoginRequest loginRequest);
 
@@ -47,7 +47,7 @@ public interface LoginContract {
 
         void getLoginVerifyCodeResult(BackResult res);
 
-        void getLoginSaltResult(BackResult<String> res);
+        void getLoginSaltResult(BackResult res);
 
         void loginResult(BackResult<LoginResponse> res);
 

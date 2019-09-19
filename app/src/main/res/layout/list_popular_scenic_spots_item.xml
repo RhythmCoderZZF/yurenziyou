@@ -92,7 +92,7 @@
                     android:id="@+id/tv_scenic_spots_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="156"
+                    android:text="0"
                     android:textColor="@color/color_text_orange2"
                     android:textSize="@dimen/text_size_small" />
             </LinearLayout>
@@ -102,11 +102,11 @@
             android:id="@+id/tv_scenic_spots_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_marginBottom="@dimen/dp_16"
-            android:text="宁波海洋世界"
-            android:textColor="@color/txt_font_black2"
+            android:text=""
+            android:textColor="@color/color_text_black7"
             android:textSize="@dimen/text_size_normal"
             android:textStyle="bold"
 

@@ -636,7 +636,8 @@
                         ratingbar:starDistance="5dp"
                         ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
                         ratingbar:starFill="@mipmap/icon_solid_orange_star"
-                        ratingbar:starSize="14dp" />
+                        ratingbar:starSize="14dp"
+                      />
 
                 </LinearLayout>
 
@@ -1058,7 +1059,6 @@
 
                     </LinearLayout>
 
-
                     <com.nbhysj.coupon.view.StarBarView
                         android:layout_width="5dp"
                         android:layout_height="5dp"
@@ -1070,7 +1070,8 @@
                         ratingbar:starDistance="5dp"
                         ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
                         ratingbar:starFill="@mipmap/icon_solid_orange_star"
-                        ratingbar:starSize="13dp" />
+                        ratingbar:starSize="13dp"
+                       />
 
                 </LinearLayout>
 

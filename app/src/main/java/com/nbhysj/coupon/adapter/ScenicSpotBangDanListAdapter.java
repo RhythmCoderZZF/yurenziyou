@@ -132,7 +132,7 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
-        return mHeaderView != null ? popularScenicSpotsList.size() : 0;
+        return mHeaderView != null ? popularScenicSpotsList.size() + 1:popularScenicSpotsList.size();
     }
 
     @Override

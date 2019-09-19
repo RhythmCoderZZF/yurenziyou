@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @auther：hysj created on 2019/9/2
  * description：订单提交返回
  */
-public class TicketOrderSubmitResponse implements Serializable {
+public class OrderSubmitResponse implements Serializable {
 
     //订单号
     private String orderNo;

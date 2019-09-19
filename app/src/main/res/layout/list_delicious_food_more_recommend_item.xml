@@ -52,8 +52,8 @@
                 ratingbar:starCount="5"
                 ratingbar:starDistance="5dp"
                 android:layout_gravity="center_vertical"
-                ratingbar:starEmpty="@mipmap/icon_hollow_orange_star_delicious_food"
-                ratingbar:starFill="@mipmap/icon_solid_orange_star_delicious_food"
+                ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
+                ratingbar:starFill="@mipmap/icon_solid_orange_star"
                 ratingbar:starSize="12dp" />
 
             <TextView

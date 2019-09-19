@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HomestayAdapter;
 import com.nbhysj.coupon.adapter.HotelHomestaySectionAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotClassificationAdapter;
+import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchSearchConditionEnum;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
@@ -24,6 +24,7 @@ import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
@@ -73,13 +74,13 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
     @BindView(R.id.rv_hot_scenic_spot)
     RecyclerView mRvHotelHomestay;
     LinearLayoutManager scenicSpotsLinearLayoutManager;
-    //景点栏目
+    //民宿栏目
     private HotelHomestaySectionAdapter hotelHomestaySectionAdapter;
-    //景点分类
-    private ScenicSpotClassificationAdapter scenicSpotClassificationAdapter;
+    //民宿分类
+    private MchRankingClassificationAdapter mchRankingClassificationAdapter;
     //民宿适配器
     private HomestayAdapter homestayAdapter;
-    //景点中间分类
+    //民宿中间分类
     List<ScenicSpotHomePageResponse.CateEntity> mCateEntityList;
     //民宿栏目
     List<MchTypeBean> mHomestayHotList;
@@ -144,9 +145,9 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallHomestayActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        scenicSpotClassificationAdapter = new ScenicSpotClassificationAdapter(ShoppingMallHomestayActivity.this,MchTypeEnum.MCH_HOMESTAY.getValue());
-        scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
-        mRvScenicSpotClassification.setAdapter(scenicSpotClassificationAdapter);
+        mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHomestayActivity.this,MchTypeEnum.MCH_HOMESTAY.getValue());
+        mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
+        mRvScenicSpotClassification.setAdapter(mchRankingClassificationAdapter);
 
         scenicSpotsLinearLayoutManager = new LinearLayoutManager(ShoppingMallHomestayActivity.this);
         scenicSpotsLinearLayoutManager.setOrientation(scenicSpotsLinearLayoutManager.VERTICAL);
@@ -242,8 +243,8 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
 
                     //景点分类
                     mCateEntityList = res.getData().getCate();
-                    scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
-                    scenicSpotClassificationAdapter.notifyDataSetChanged();
+                    mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
+                    mchRankingClassificationAdapter.notifyDataSetChanged();
 
                     List<MchTypeBean> scenicSpotList = res.getData().getMch().getNearby().getResult();
                     mHomestayList.addAll(scenicSpotList);
@@ -296,6 +297,11 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
 
     @Override
     public void getHomestayBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res) {
 
     }
 

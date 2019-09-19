@@ -51,11 +51,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_scenic_spots_name"
+            android:id="@+id/tv_mch_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_7"
-            android:text="海洋世界大酒店"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xnormal"
             android:textStyle="bold" />
@@ -64,7 +64,7 @@
             android:id="@+id/rlyt_price_and_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_scenic_spots_name"
+            android:layout_below="@+id/tv_mch_name"
             android:layout_marginTop="@dimen/dp_8"
             android:orientation="horizontal">
 

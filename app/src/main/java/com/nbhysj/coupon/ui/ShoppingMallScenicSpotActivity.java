@@ -17,7 +17,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DestinationScenicSpotsAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotClassificationAdapter;
+import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotsListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
@@ -48,7 +48,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * @auther：hysj created on 2019/0/02
+ * @auther：hysj created on 2019/09/16
  * description：风景名胜
  */
 public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPresenter, ScenicSpotModel> implements ScenicSpotContract.View {
@@ -81,7 +81,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
     //景点栏目
     private DestinationScenicSpotsAdapter destinationScenicSpotsAdapter;
     //景点分类
-    private ScenicSpotClassificationAdapter scenicSpotClassificationAdapter;
+    private MchRankingClassificationAdapter scenicSpotClassificationAdapter;
     //景点适配器
     private ScenicSpotsListAdapter scenicSpotsListAdapter;
     //景点中间分类
@@ -149,8 +149,8 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallScenicSpotActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        scenicSpotClassificationAdapter = new ScenicSpotClassificationAdapter(ShoppingMallScenicSpotActivity.this, MchTypeEnum.MCH_SCENIC.getValue());
-        scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
+        scenicSpotClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallScenicSpotActivity.this, MchTypeEnum.MCH_SCENIC.getValue());
+        scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(scenicSpotClassificationAdapter);
 
         LinearLayoutManager scenicSpotsLinearLayoutManager = new LinearLayoutManager(ShoppingMallScenicSpotActivity.this);
@@ -247,7 +247,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
 
                     //景点分类
                     mCateEntityList = res.getData().getCate();
-                    scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
+                    scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
                     scenicSpotClassificationAdapter.notifyDataSetChanged();
 
                     List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();

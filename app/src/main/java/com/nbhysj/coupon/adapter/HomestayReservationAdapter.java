@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
  */
 public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayReservationAdapter.ViewHolder> {
 
-    List<NearbyScenicSpotsResponse> nearbyScenicSpotsList;
+    List<MchGoodsBean> mchHomestayGoodsList;
     private Context mContext;
     private HotelRoomItemListener hotelRoomItemListener;
 
@@ -34,9 +36,9 @@ public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayRes
         this.hotelRoomItemListener = hotelRoomItemListener;
     }
 
-    public void setNearbyScenicSpotsList(List<NearbyScenicSpotsResponse> nearbyScenicSpotsList) {
+    public void setHomestayReservationList(List<MchGoodsBean> mchHomestayGoodsList) {
 
-        this.nearbyScenicSpotsList = nearbyScenicSpotsList;
+        this.mchHomestayGoodsList = mchHomestayGoodsList;
     }
 
     @Override
@@ -51,15 +53,40 @@ public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayRes
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            RequestOptions myOptions = new RequestOptions()
-                    .transform(new GlideRoundTransform(mContext, 5));
+            StringBuffer stringBuffer = new StringBuffer();
+            MchGoodsBean mchGoodsBean = mchHomestayGoodsList.get(itemPosition);
+            String photoUrl = mchGoodsBean.getPhoto();
+            String title = mchGoodsBean.getTitle();
+            int marketPrice = mchGoodsBean.getMarketPrice();
+            int breakfastStatus = mchGoodsBean.getBreakfastStatus();
+            int windowStatus = mchGoodsBean.getWindowStatus();
+            String bedInfo = mchGoodsBean.getBedInfo();
 
-            Glide.with(mContext)
-                    .load("https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1557554460&di=587cccfcf79487fa86575a004a4785fd&src=http://seopic.699pic.com/photo/50014/4961.jpg_wh1200.jpg")
-                    .apply(myOptions)
-                    .into(holder.mImgHotelRoom);
 
-            holder.mLlytHotelRoomItem.setOnClickListener(new View.OnClickListener() {
+            holder.mTvHomestayTitle.setText(title);
+            holder.mTvHomestayRoomPrice.setText("¥ " + String.valueOf(marketPrice));
+            if(breakfastStatus == 0){
+
+                stringBuffer.append("不含早餐 ");
+
+            } else if(breakfastStatus == 1){
+
+                stringBuffer.append("含早餐 ");
+            }
+
+            if(windowStatus == 0){
+
+                stringBuffer.append("有窗");
+
+            } else if(windowStatus == 1){
+
+                stringBuffer.append("无窗");
+            }
+
+            holder.mTvHotelRoomDes.setText(stringBuffer.toString());
+            GlideUtil.loadImage(mContext,photoUrl,holder.mImgHotelRoom);
+
+            holder.mRlytHomestayRoomItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -67,7 +94,7 @@ public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayRes
 
                 }
             });
-
+            stringBuffer.setLength(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,32 +102,32 @@ public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayRes
 
     @Override
     public int getItemCount() {
-        return 3;
+        return mchHomestayGoodsList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        //酒店房间类型
-        TextView mTvHotelRoomType;
+        //民宿标题
+        TextView mTvHomestayTitle;
         //酒店房间图片
         ImageView mImgHotelRoom;
         //酒店房间描述
         TextView mTvHotelRoomDes;
         //酒店可取消时间
         TextView mTvHotelBookCancelTimeLimit;
-        //人均价格
-        TextView mTvHotelRoomPrice;
-        RelativeLayout mLlytHotelRoomItem;
+        //民宿价格
+        TextView mTvHomestayRoomPrice;
+        RelativeLayout mRlytHomestayRoomItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mTvHotelRoomType = itemView.findViewById(R.id.tv_hotel_room_type);
+            mTvHomestayTitle = itemView.findViewById(R.id.tv_homestay_title);
             mImgHotelRoom = itemView.findViewById(R.id.image_hotel_room);
             mTvHotelRoomDes = itemView.findViewById(R.id.tv_hotel_room_des);
             mTvHotelBookCancelTimeLimit = itemView.findViewById(R.id.tv_hotel_book_cancel_time_limits);
-            mTvHotelRoomPrice = itemView.findViewById(R.id.tv_hotel_room_price);
-            mLlytHotelRoomItem = itemView.findViewById(R.id.llyt_hotel_room_item);
+            mTvHomestayRoomPrice = itemView.findViewById(R.id.tv_homestay_room_price);
+            mRlytHomestayRoomItem = itemView.findViewById(R.id.rlyt_homestay_room_item);
         }
     }
 

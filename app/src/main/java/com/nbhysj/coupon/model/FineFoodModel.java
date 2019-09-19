@@ -14,7 +14,7 @@ import java.util.HashMap;
 import io.reactivex.Observable;
 
 /**
- * created by hysj at 2019/06/01.
+ * created by hysj at 2019/09/16.
  * description :美食 Model层
  */
 
@@ -31,7 +31,7 @@ public class FineFoodModel implements FineFoodContract.Model {
     }
 
     @Override
-    public Observable<BackResult<MchBangDanRankingResponse>> getScenicBangDanRanking(int cityId) {
-        return Api.getInstance().apiService.getScenicBangDanRanking(cityId).compose(RxSchedulers.io_main());
+    public Observable<BackResult<MchBangDanRankingResponse>> getFoodBangDanRanking(int cityId) {
+        return Api.getInstance().apiService.getFoodBangDanRank(cityId).compose(RxSchedulers.io_main());
     }
 }

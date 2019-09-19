@@ -64,7 +64,7 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()) + "分");
             holder.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
-            holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
+            holder.mTvMchName.setText(popularScenicSpots.getMchName());
             holder.mTvScenicSpotsDistance.setText("距您" + popularScenicSpots.getDistance() + "公里");
             String city = popularScenicSpots.getCity();
             String country = popularScenicSpots.getCounty();
@@ -117,9 +117,9 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
         //景区门票
         @BindView(R.id.tv_per_capita_price)
         TextView mTvPopularScenicSpotPrice;
-        //景区名字
-        @BindView(R.id.tv_scenic_spots_name)
-        TextView mTvPopularScenicSpotName;
+        //商户名字
+        @BindView(R.id.tv_mch_name)
+        TextView mTvMchName;
         //景区照片
         @BindView(R.id.image_scenic_spots)
         RoundedImageView mImgScenicSpots;

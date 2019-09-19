@@ -18,6 +18,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.R.dimen;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailBannerAdapter;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
+import com.nbhysj.coupon.widget.MyViewPager;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -30,7 +31,7 @@ public class HotelDetailBannerView extends FrameLayout {
     private static final int MSG_LOOP = 1000;
     private static long LOOP_INTERVAL = 5000L;
     private LinearLayout mLinearPosition = null;
-    private ViewPager mViewPager = null;
+    private MyScrollViewPager mViewPager = null;
     private HotelDetailBannerView.BannerHandler mBannerHandler = null;
     private List<ImageView> viewList;
     private int viewSize;
@@ -78,7 +79,7 @@ public class HotelDetailBannerView extends FrameLayout {
     }
 
     private void initViewPager() {
-        this.mViewPager = new ViewPager(this.getContext());
+        this.mViewPager = new MyScrollViewPager(this.getContext());
         LayoutParams layoutParams = new LayoutParams(-2, -2);
         this.mViewPager.setLayoutParams(layoutParams);
         this.mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -157,7 +158,7 @@ public class HotelDetailBannerView extends FrameLayout {
 
             for (int i = 0; i < this.mLinearPosition.getChildCount(); ++i) {
                 if (i == curPos % this.viewSize) {
-                    this.mLinearPosition.getChildAt(i).setBackgroundResource(R.mipmap.home_banner_carousel_1);
+                    this.mLinearPosition.getChildAt(i).setBackgroundResource(R.mipmap.icon_banner_indicator_select);
                 } else {
                     this.mLinearPosition.getChildAt(i).setBackgroundResource(R.mipmap.icon_banner_indicator_unselect);
                 }
@@ -165,13 +166,23 @@ public class HotelDetailBannerView extends FrameLayout {
         }
     }
 
-    public void setViewList(Context mContext, List<ImageView> viewList, List<BannerUrlBO> bannerUrlList) {
+    public void setViewList(Context mContext, List<ImageView> viewList, List<String> bannerUrlList) {
         this.viewList = viewList;
         this.mContext = mContext;
         if (viewList != null && viewList.size() != 0) {
             this.viewSize = viewList.size();
-            // ScenicSpotDetailBannerAdapter bannerAdapter = new ScenicSpotDetailBannerAdapter(mContext, viewList, bannerUrlList);
-            //  this.setAdapter(bannerAdapter);
+            if(bannerUrlList.size() > 1) {
+                this.mViewPager.setScroll(true);
+            }else {
+                this.mViewPager.setScroll(false);
+            }
+             ScenicSpotDetailBannerAdapter bannerAdapter = new ScenicSpotDetailBannerAdapter(mContext, viewList, bannerUrlList, new ScenicSpotDetailBannerAdapter.ScenicSpotDetailBannerListener() {
+                 @Override
+                 public void scenicSpotDetailBannerListener() {
+
+                 }
+             });
+             this.setAdapter(bannerAdapter);
         }
 
     }

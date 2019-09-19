@@ -14,15 +14,18 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HotelAdapter;
 import com.nbhysj.coupon.adapter.HotelHomestaySectionAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotClassificationAdapter;
+import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.HotelPresenter;
@@ -72,13 +75,13 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     @BindView(R.id.rv_hot_scenic_spot)
     RecyclerView mRvHotelHomestay;
     LinearLayoutManager scenicSpotsLinearLayoutManager;
-    //景点栏目
+    //酒店分栏目
     private HotelHomestaySectionAdapter hotelHomestaySectionAdapter;
-    //景点分类
-    private ScenicSpotClassificationAdapter scenicSpotClassificationAdapter;
+    //酒店分类
+    private MchRankingClassificationAdapter scenicSpotClassificationAdapter;
     //酒店适配器
     private HotelAdapter hotelAdapter;
-    //景点中间分类
+    //酒店分中间分类
     List<ScenicSpotHomePageResponse.CateEntity> mCateEntityList;
     //酒店栏目
     List<MchTypeBean> mHotelHotList;
@@ -99,6 +102,7 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     private String mSortStr = "FJ";
     String latitude;
     String longitude;
+
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -142,8 +146,8 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallHotelActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        scenicSpotClassificationAdapter = new ScenicSpotClassificationAdapter(ShoppingMallHotelActivity.this, MchTypeEnum.MCH_HOTEL.getValue());
-        scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
+        scenicSpotClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHotelActivity.this, MchTypeEnum.MCH_HOTEL.getValue());
+        scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(scenicSpotClassificationAdapter);
 
         scenicSpotsLinearLayoutManager = new LinearLayoutManager(ShoppingMallHotelActivity.this);
@@ -232,7 +236,7 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
 
                     //景点分类
                     mCateEntityList = res.getData().getCate();
-                    scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
+                    scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
                     scenicSpotClassificationAdapter.notifyDataSetChanged();
 
                     List<MchTypeBean> scenicSpotList = res.getData().getMch().getNearby().getResult();
@@ -285,7 +289,22 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     }
 
     @Override
+    public void hotelHomestayOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
+
+    }
+
+    @Override
     public void getHotelBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void getHotelHomestayOrderInitResult(BackResult<HotelOrderInitResponse> res) {
 
     }
 

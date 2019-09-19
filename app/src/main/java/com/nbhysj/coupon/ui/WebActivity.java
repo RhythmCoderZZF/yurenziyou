@@ -171,7 +171,7 @@ public class WebActivity extends BaseActivity<LoginPresenter, LoginModel> implem
     }
 
     @Override
-    public void getLoginSaltResult(BackResult<String> res) {
+    public void getLoginSaltResult(BackResult res) {
 
     }
 

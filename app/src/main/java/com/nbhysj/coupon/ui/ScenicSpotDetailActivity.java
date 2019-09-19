@@ -149,7 +149,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     //位置
     @BindView(R.id.rlyt_scenic_spot_location)
     RelativeLayout mRlytScenicSpotLocation;
-
     private int height;
     private List<ImageView> viewList;
     private List<String> bannerList;
@@ -343,7 +342,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 mScrollViewScenicSpotDetail.setScrolListener(ScenicSpotDetailActivity.this);
             }
         });
-
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
         layoutManager.setOrientation(layoutManager.VERTICAL);
@@ -575,7 +573,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 break;
             case R.id.rlyt_scenic_spots_ranking_list:
 
-                toActivity(FineGoodListActivity.class);
+                toActivity(ScenicSpotBangDanListActivity.class);
 
                 break;
             case R.id.img_menu:

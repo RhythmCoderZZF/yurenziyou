@@ -17,8 +17,10 @@ import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.HotelReputationResponse;
 import com.nbhysj.coupon.model.response.MchCitiesBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
+import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.HomestayBangDanListActivity;
 import com.nbhysj.coupon.ui.HotelBangDanListActivity;
+import com.nbhysj.coupon.ui.RecreationBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotListActivity;
@@ -34,21 +36,21 @@ import butterknife.ButterKnife;
 
 /**
  * @author hysj created at 2019/4/19.
- * description : 景点类型分类适配器
+ * description : 商户类型榜单分类适配器
  */
-public class ScenicSpotClassificationAdapter extends RecyclerView.Adapter<ScenicSpotClassificationAdapter.ViewHolder> {
+public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRankingClassificationAdapter.ViewHolder> {
 
     List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList;
     private Context mContext;
     private String mchType;
 
-    public ScenicSpotClassificationAdapter(Context mContext,String mchType) {
+    public MchRankingClassificationAdapter(Context mContext,String mchType) {
 
         this.mContext = mContext;
         this.mchType = mchType;
     }
 
-    public void setScenicSpotClassificationList(List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList) {
+    public void setMchRankingClassificationList(List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList) {
 
         this.scenicSpotClassifiyList = scenicSpotClassifiyList;
     }
@@ -87,12 +89,18 @@ public class ScenicSpotClassificationAdapter extends RecyclerView.Adapter<Scenic
                     {
                         intent.setClass(mContext, ScenicSpotBangDanListActivity.class);
 
-                    } else if(mchType.equals(MchTypeEnum.MCH_HOTEL.getValue())){
+                    }  else if(mchType.equals(MchTypeEnum.MCH_FOOD.getValue())){
+
+                        intent.setClass(mContext, FineFoodBangDanListActivity.class);
+                    }else if(mchType.equals(MchTypeEnum.MCH_HOTEL.getValue())){
 
                         intent.setClass(mContext, HotelBangDanListActivity.class);
                     } else if(mchType.equals(MchTypeEnum.MCH_HOMESTAY.getValue())){
 
                         intent.setClass(mContext, HomestayBangDanListActivity.class);
+                    }else if(mchType.equals(MchTypeEnum.MCH_RECREATION.getValue())){
+
+                        intent.setClass(mContext, RecreationBangDanListActivity.class);
                     }
                     mContext.startActivity(intent);
                 }

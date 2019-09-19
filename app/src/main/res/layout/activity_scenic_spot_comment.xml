@@ -78,7 +78,8 @@
                         ratingbar:starDistance="5dp"
                         ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
                         ratingbar:starFill="@mipmap/icon_solid_orange_star"
-                        ratingbar:starSize="14dp" />
+                        ratingbar:starSize="14dp"
+                      />
 
                     <TextView
                         android:layout_width="wrap_content"

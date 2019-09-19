@@ -49,7 +49,7 @@ import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
-import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
+import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TravellerBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
@@ -880,12 +880,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     @Override
-    public void ticketOrderSubmitResult(BackResult<TicketOrderSubmitResponse> res) {
+    public void ticketOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                    TicketOrderSubmitResponse ticketOrderSubmitResponse = res.getData();
+                    OrderSubmitResponse ticketOrderSubmitResponse = res.getData();
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
@@ -1015,6 +1015,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 
     @Override

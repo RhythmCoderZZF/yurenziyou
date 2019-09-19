@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_4"
-            android:text="￥"
+            android:text="¥"
             android:textColor="@color/color_text_orange2"
             android:textSize="@dimen/text_size_tiny" />
 
@@ -45,7 +45,7 @@
             android:id="@+id/tv_per_capita_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="156"
+            android:text="0"
             android:textColor="@color/color_text_orange2"
             android:textSize="@dimen/text_size_xmedium" />
 

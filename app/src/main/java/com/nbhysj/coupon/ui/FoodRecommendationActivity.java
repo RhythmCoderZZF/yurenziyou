@@ -102,7 +102,7 @@ public class FoodRecommendationActivity extends BaseActivity {
 
 
         mBannerDeliciousFood.startLoop(false);
-        mBannerDeliciousFood.setViewList(FoodRecommendationActivity.this, viewList, bannerList);
+      //  mBannerDeliciousFood.setViewList(FoodRecommendationActivity.this, viewList, bannerList);
 
         GridLayoutManager gridLayoutManager =
                 new GridLayoutManager(FoodRecommendationActivity.this,

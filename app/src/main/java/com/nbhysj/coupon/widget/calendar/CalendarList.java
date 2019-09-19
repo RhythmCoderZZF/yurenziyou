@@ -364,7 +364,7 @@ public class CalendarList extends FrameLayout {
             calendar.setTime(startDate);
 
             //结束日期
-            calendar.add(Calendar.MONTH, 1);
+            calendar.add(Calendar.MONTH, 3);
             Date endDate = new Date(calendar.getTimeInMillis());
 
             Log.d(TAG, "startDate:" + format.format(startDate) + "----------endDate:" + format.format(endDate));

@@ -55,7 +55,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 app:image_scale_type="fit_xy"
-                                app:indicator_drawable_selected="@mipmap/home_banner_carousel_1"
+                                app:indicator_drawable_selected="@mipmap/icon_banner_indicator_select"
                                 app:indicator_drawable_unselected="@mipmap/icon_banner_indicator_unselect"
                                 app:indicator_height="@dimen/dp_3"
                                 app:indicator_width="@dimen/dp_10"></com.youth.banner.Banner>

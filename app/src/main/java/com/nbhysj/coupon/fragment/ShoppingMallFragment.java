@@ -38,7 +38,7 @@ import com.nbhysj.coupon.model.response.ShoppingMallMenuBean;
 import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.CombinationListActivity;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
-import com.nbhysj.coupon.ui.FineGoodListActivity;
+import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.ShoppingMallFineFoodActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHomestayActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHotelActivity;
@@ -341,7 +341,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         shoppingMallMenuAdapter.setShoppingMallMenuList(shoppingMallMenuList);
         mRvShoppingMallMenuClassify.setAdapter(shoppingMallMenuAdapter);
 
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvShoppingMallSmallBanner.setLayoutManager(linearLayoutManager);
@@ -380,7 +379,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         popularScenicSpotsAdapter.setPopularScenicSpotsList(popularScenicSpotsList);
         mRvPopularScenicSpots.setAdapter(popularScenicSpotsAdapter);
 
-
         LinearLayoutManager deliciousFoodLinearLayout = new LinearLayoutManager(getActivity());
         deliciousFoodLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvDeliciousFoodRecommendation.setLayoutManager(deliciousFoodLinearLayout);
@@ -394,7 +392,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         mHotelAdapter = new HotelAdapter(getActivity());
         mHotelAdapter.setHotelList(hotelList);
         mRvHotelReputation.setAdapter(mHotelAdapter);
-
 
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(getActivity());
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
@@ -463,8 +460,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     shopMallIndexSmallBannerAdapter.notifyDataSetChanged();
 
                     //大banner
-                    bannerList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555675742935&di=4c82bf091f644525979cefd0402888df&imgtype=0&src=http%3A%2F%2Fimg2.ph.126.net%2FLQILaNyFbFqu5AZFbSu1kw%3D%3D%2F6631433903071736684.jpg");
-                    bannerList.add("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg");
                     mBannerview.setViewList(getActivity(), bannerList);
 
                     //景点列表
@@ -575,7 +570,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 break;
             case R.id.tv_view_more_delicious_food:
 
-                toActivity(FineGoodListActivity.class);
+                toActivity(FineFoodBangDanListActivity.class);
 
                 break;
             case R.id.rlyt_flash_sale_one:

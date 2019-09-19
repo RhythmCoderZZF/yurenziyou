@@ -34,6 +34,11 @@ public class HomestayPresenter extends HomestayContract.Presenter {
     }
 
     @Override
+    public void getMchHomestayDetail(int mchId) {
+        mRxManager.add(mModel.getMchHomestayDetail(mchId).subscribe(res -> mView.getMchHomestayDetailResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

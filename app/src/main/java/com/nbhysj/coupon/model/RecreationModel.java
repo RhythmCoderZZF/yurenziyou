@@ -32,6 +32,6 @@ public class RecreationModel implements RecreationContract.Model {
 
     @Override
     public Observable<BackResult<MchBangDanRankingResponse>> getRecreationDanRanking(int cityId) {
-        return Api.getInstance().apiService.getScenicBangDanRanking(cityId).compose(RxSchedulers.io_main());
+        return Api.getInstance().apiService.getRecreationRanking(cityId).compose(RxSchedulers.io_main());
     }
 }

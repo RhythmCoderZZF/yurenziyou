@@ -12,6 +12,7 @@ import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
+import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.request.OrderCancelRequest;
@@ -40,14 +41,18 @@ import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
+import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
+import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
+import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
@@ -57,7 +62,6 @@ import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
-import com.nbhysj.coupon.model.response.TicketOrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
@@ -102,7 +106,7 @@ public interface ApiService {
 
     //4.获取盐(只有登录可用)
     @GET("api/user/getLoginSalt")
-    Observable<BackResult<String>> getLoginSalt(@Query("username") String username);
+    Observable<BackResult> getLoginSalt(@Query("username") String username);
 
     //5.获取盐(通过邮箱修改密码)
     @GET("api/user/getSalt")
@@ -297,6 +301,10 @@ public interface ApiService {
     Observable<BackResult<ScenicSpotResponse>> findFoodByCate(@QueryMap HashMap<String, String> map);
     //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
 
+    //美食榜单
+    @GET("api/store/foodRanking")
+    Observable<BackResult<MchBangDanRankingResponse>> getFoodBangDanRank(@Query("cityId") int cityId);
+
     //酒店栏目首页
     @GET("api/store/hotel")
     Observable<BackResult<ScenicSpotHomePageResponse>> getHotelHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
@@ -329,6 +337,10 @@ public interface ApiService {
     @GET("api/store/findRecreationByCate")
     Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(@QueryMap HashMap<String, String> map);
 
+    //互动榜单
+    @GET("api/store/recreationRanking")
+    Observable<BackResult<MchBangDanRankingResponse>> getRecreationRanking(@Query("cityId") int cityId);
+
     //商户类型收藏
     @POST("api/mch/mchCollection")
     Observable<BackResult> mchCollection(@Body MchCollectionRequest mchCollectionRequest);
@@ -341,9 +353,13 @@ public interface ApiService {
     @GET("api/destination/findMchBycityName")
     Observable<BackResult<HotScenicSpotResponse>> findMchBycityName(@Query("cityId") int cityId, @Query("mchType") int mchType, @Query("page") int page, @Query("pageSize") int pageSize);
 
-    //景点详情
+    //商户详情
     @GET("api/mchDetails")
     Observable<BackResult<MchDetailsResponse>> getMchDetails(@Query("mchId") int mchId);
+
+    //民宿详情
+    @GET("api/mchDetails")
+    Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(@Query("mchId") int mchId);
 
     //商家相册
     @GET("api/mchPhoto/findByMchId")
@@ -442,7 +458,7 @@ public interface ApiService {
 
     //门票订单生成接口(门票下单接口)
     @POST("api/ticketOrder")
-    Observable<BackResult<TicketOrderSubmitResponse>> ticketOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
+    Observable<BackResult<OrderSubmitResponse>> ticketOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
 
     //获取订单列表
     @GET("api/order/userOrderList")
@@ -479,6 +495,14 @@ public interface ApiService {
     //推荐酒店评分
     @GET("api/order/score")
     Observable<BackResult> willingToRecommendScore(@Query("orderNo") String orderNo,@Query("score") int score);
+
+    //酒店+民宿下单初始化页面
+    @GET("api/goods/hotel/orderSubmission")
+    Observable<BackResult<HotelOrderInitResponse>> getHotelHomestayOrderInit(@Query("goodId") int goodsId, @Query("checkInAndOutTime") String checkInAndOutTime);
+
+    //酒店+民宿下单接口
+    @POST("api/goods/hotel")
+    Observable<BackResult<OrderSubmitResponse>> hotelHomestayOrderSubmit(@Body HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest);
 
 
 }

@@ -1,11 +1,13 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +17,7 @@ import com.nbhysj.coupon.model.response.DeliciousFoodRecommendResponse;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.HotelReputationResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -57,15 +60,16 @@ public class HomestayAdapter extends RecyclerView.Adapter<HomestayAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            MchTypeBean hotelResponse = hotelReputationList.get(itemPosition);
-            int consumePrice = hotelResponse.getConsumePrice();
-            String photo = hotelResponse.getPhoto();
-            String mchName = hotelResponse.getMchName();
-            String homestayAddress = hotelResponse.getAddress();
-            int authenticationStatus = hotelResponse.getAuthenticationStatus();
-            String lord = hotelResponse.getLord();
-            int loveStatus = hotelResponse.getLoveStatus();
-            int dataId = hotelResponse.getId();
+            MchTypeBean homestayResponse = hotelReputationList.get(itemPosition);
+            int consumePrice = homestayResponse.getConsumePrice();
+            int mchId = homestayResponse.getId();
+            String photo = homestayResponse.getPhoto();
+            String mchName = homestayResponse.getMchName();
+            String homestayAddress = homestayResponse.getAddress();
+            int authenticationStatus = homestayResponse.getAuthenticationStatus();
+            String lord = homestayResponse.getLord();
+            int loveStatus = homestayResponse.getLoveStatus();
+            int dataId = homestayResponse.getId();
 
             GlideUtil.loadImage(mContext, photo, holder.mImgHomestay);
             GlideUtil.loadImage(mContext, lord, holder.mImgHouseOwnerAvatar);
@@ -90,6 +94,18 @@ public class HomestayAdapter extends RecyclerView.Adapter<HomestayAdapter.ViewHo
                 public void onClick(View view) {
 
                     homestayCollectionListener.setHomestayCollection(itemPosition,dataId);
+
+                }
+            });
+
+            holder.mLlytHomestayItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, HomestayDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
+                    mContext.startActivity(intent);
 
                 }
             });
@@ -122,9 +138,11 @@ public class HomestayAdapter extends RecyclerView.Adapter<HomestayAdapter.ViewHo
         //房东头像
         @BindView(R.id.img_the_owner_of_the_house_avatar)
         ImageView mImgHouseOwnerAvatar;
-        //酒店类型
+        //房东身份验证
         @BindView(R.id.img_house_owner_name_authentication)
         ImageView mImgHouseOwnerAuthentication;
+        @BindView(R.id.llyt_homestay_item)
+        LinearLayout mLlytHomestayItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

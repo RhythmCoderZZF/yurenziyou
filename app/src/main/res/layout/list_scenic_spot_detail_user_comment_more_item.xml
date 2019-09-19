@@ -50,8 +50,8 @@
                     android:focusable="false"
                     ratingbar:starCount="5"
                     ratingbar:starDistance="5dp"
-                    ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
-                    ratingbar:starFill="@mipmap/icon_solid_orange_star"
+                    ratingbar:starEmpty="@mipmap/icon_hollow_yellow_star"
+                    ratingbar:starFill="@mipmap/icon_solid_yellow_star"
                     ratingbar:starSize="13dp" />
 
             </RelativeLayout>

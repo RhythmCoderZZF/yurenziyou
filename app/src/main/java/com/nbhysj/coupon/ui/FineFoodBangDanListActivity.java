@@ -12,42 +12,62 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.FineFoodListAdapter;
+import com.nbhysj.coupon.adapter.FineFoodBangDanListAdapter;
+import com.nbhysj.coupon.adapter.RecreationBangDanListAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.FineFoodContract;
+import com.nbhysj.coupon.contract.RecreationContract;
+import com.nbhysj.coupon.model.FineFoodModel;
+import com.nbhysj.coupon.model.RecreationModel;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
+import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.presenter.FineFoodPresenter;
+import com.nbhysj.coupon.presenter.RecreationPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * @auther：hysj created on 2019/05/09
+ * @auther：hysj created on 2019/09/16
  * description：美食榜单列表
  */
-public class FineGoodBangDanListActivity extends BaseActivity {
+public class FineFoodBangDanListActivity extends BaseActivity<FineFoodPresenter, FineFoodModel> implements FineFoodContract.View {
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout mSmartRefreshLayout;
-    //美食热门榜
-    @BindView(R.id.rv_fine_food)
-    RecyclerView mRvFindFood;
+    //景点热门榜
+    @BindView(R.id.rv_scenic_spot_bangdan)
+    RecyclerView mRvScenicSpotBangdan;
     @BindView(R.id.rlyt_fine_food_header)
     RelativeLayout mRlytFineFoodHeader;
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     @BindView(R.id.iv_back)
     ImageView mImgBack;
-    //美食收藏
+    //互动榜单收藏
     @BindView(R.id.img_fine_food_collection)
     ImageView mImgFineFoodCollection;
-    //美食转发
+    //互动榜单转发
     @BindView(R.id.img_fine_food_forward)
     ImageView mImgFineFoodForward;
-    private FineFoodListAdapter fineFoodListAdapter;
+    private FineFoodBangDanListAdapter fineFoodBangDanListAdapter;
     private LinearLayoutManager scenicSpotsLinearLayoutManager;
+    //景点列表
+    List<MchTypeBean> mRecreationList;
+    View header;
+    private ImageView mImgFineFoodHeader;
 
     @Override
     public int getLayoutId() {
@@ -55,11 +75,18 @@ public class FineGoodBangDanListActivity extends BaseActivity {
         StatusBarCompat.translucentStatusBar(this, false);
         //修改状态栏字体颜色
         StatusBarUtil.setImmersiveStatusBar(this, true);
-        return R.layout.activity_fine_good_list;
+        return R.layout.activity_scenic_spot_bangdan_list;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
+        if (mRecreationList == null) {
+
+            mRecreationList = new ArrayList<>();
+        } else {
+            mRecreationList.clear();
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -76,34 +103,29 @@ public class FineGoodBangDanListActivity extends BaseActivity {
             mToolbarSpace.setVisibility(View.GONE);
         }
 
-        scenicSpotsLinearLayoutManager = new LinearLayoutManager(FineGoodBangDanListActivity.this);
+        scenicSpotsLinearLayoutManager = new LinearLayoutManager(FineFoodBangDanListActivity.this);
         scenicSpotsLinearLayoutManager.setOrientation(scenicSpotsLinearLayoutManager.VERTICAL);
-        mRvFindFood.setLayoutManager(scenicSpotsLinearLayoutManager);
-        fineFoodListAdapter = new FineFoodListAdapter(FineGoodBangDanListActivity.this);
-        mRvFindFood.setAdapter(fineFoodListAdapter);
-        setHeader(mRvFindFood);
+        mRvScenicSpotBangdan.setLayoutManager(scenicSpotsLinearLayoutManager);
+        fineFoodBangDanListAdapter = new FineFoodBangDanListAdapter(FineFoodBangDanListActivity.this);
+        fineFoodBangDanListAdapter.setFineFoodList(mRecreationList);
+        mRvScenicSpotBangdan.setAdapter(fineFoodBangDanListAdapter);
+        setHeader(mRvScenicSpotBangdan);
     }
 
 
     private void setHeader(RecyclerView view) {
-        View header = LayoutInflater.from(this).inflate(R.layout.layout_fine_food_header_item, view, false);
-
-        ImageView mImgFineFoodHeader = (ImageView) header.findViewById(R.id.img_fine_food_header);
-
-        Glide.with(mContext)
-                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555913878204&di=c240220bb8301fb4afda212125f2bc69&imgtype=0&src=http%3A%2F%2Fb.zol-img.com.cn%2Fdesk%2Fbizhi%2Fimage%2F1%2F960x600%2F1354097420734.jpg")
-                .into(mImgFineFoodHeader);
-        fineFoodListAdapter.setHeaderView(header);
+        header = LayoutInflater.from(this).inflate(R.layout.layout_fine_food_header_item, view, false);
+        mImgFineFoodHeader = header.findViewById(R.id.img_fine_food_header);
     }
 
     @Override
     public void initData() {
-        mRvFindFood.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        getFoodBangDanRankingList();
+        mRvScenicSpotBangdan.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
 
                 //找到即将移出屏幕Item的position,position是移出屏幕item的数量
                 int position = scenicSpotsLinearLayoutManager.findFirstVisibleItemPosition();
@@ -171,6 +193,52 @@ public class FineGoodBangDanListActivity extends BaseActivity {
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this, mModel);
+    }
+
+    @Override
+    public void getFineFoodHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
+
+    }
+
+    @Override
+    public void findFoodByCateResult(BackResult<ScenicSpotResponse> res) {
+
+    }
+
+    @Override
+    public void getFoodBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    List<MchTypeBean> scenicSpotList = res.getData().getMchs();
+                    mRecreationList.addAll(scenicSpotList);
+                    fineFoodBangDanListAdapter.setFineFoodList(mRecreationList);
+                    fineFoodBangDanListAdapter.notifyDataSetChanged();
+
+                    MchBangDanRankingResponse.BannerEntity banner = res.getData().getBanner();
+                    if (banner != null) {
+                        String photoUrl = banner.getPhoto();
+                        GlideUtil.loadImage(mContext, photoUrl, mImgFineFoodHeader);
+                    }
+                    fineFoodBangDanListAdapter.setHeaderView(header);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(FineFoodBangDanListActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(FineFoodBangDanListActivity.this,Constants.getResultMsg(msg));
     }
 
     @OnClick({R.id.iv_back})
@@ -181,6 +249,15 @@ public class FineGoodBangDanListActivity extends BaseActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    //获取美食榜单列表
+    public void getFoodBangDanRankingList() {
+
+        if (validateInternet()) {
+
+            mPresenter.getFoodBangDanRanking(Constants.CITY_CODE);
         }
     }
 }

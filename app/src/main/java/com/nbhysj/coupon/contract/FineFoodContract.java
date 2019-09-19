@@ -13,7 +13,7 @@ import java.util.HashMap;
 import io.reactivex.Observable;
 
 /**
- * @auther：hysj created on 2019/06/06
+ * @auther：hysj created on 2019/09/16
  * description：美食模块
  */
 public interface FineFoodContract {
@@ -30,7 +30,7 @@ public interface FineFoodContract {
         Observable<BackResult<ScenicSpotResponse>> findFoodByCate(HashMap<String, String> map);
 
         //美食榜单
-        Observable<BackResult<MchBangDanRankingResponse>> getScenicBangDanRanking(int cityId);
+        Observable<BackResult<MchBangDanRankingResponse>> getFoodBangDanRanking(int cityId);
     }
 
     interface View extends BaseView {
@@ -39,7 +39,7 @@ public interface FineFoodContract {
 
         void findFoodByCateResult(BackResult<ScenicSpotResponse> res);
 
-        void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
+        void getFoodBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
         void showMsg(String msg);
     }
@@ -51,6 +51,6 @@ public interface FineFoodContract {
         //美食列表-筛选
         public abstract void findFoodByCate(HashMap<String, String> map);
 
-        public abstract void getScenicBangDanRanking(int cityId);
+        public abstract void getFoodBangDanRanking(int cityId);
     }
 }

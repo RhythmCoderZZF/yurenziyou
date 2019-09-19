@@ -1,54 +1,48 @@
 package com.nbhysj.coupon.model.response;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * @auther：hysj created on 2019/6/1
- * description：酒店
+ * description：酒店民宿
  */
 public class HotelBean {
 
     private int id;
 
-    private String mchNo;
+    private String title;
 
-    private String mchName;
+    private String type;
 
-    private String mchType;
+    private String type2;
 
-    private String mchType2;
+    private float score;
+
+    private double price;
 
     private String photo;
 
-    private String longitude;
+    private String checkinTime;
 
-    private String latitude;
+    private String leaveTime;
 
-    private String address;
+    private List<ServiceEntity> serviceJson;
 
-    private String tel;
+    private String distance;
 
-    private int commentScore;
+    //民宿
+    private String bedType;
 
-    private String intro;
+    private String acreage;
 
-    private int businessStatus;
+    private int bedNum;
 
-    private String company;
+    private int marketPrice;
 
-    private int consumePrice;
+    private int defaultPrice;
 
-    private int level;
-
-    private int hotelType;
-
-    private String county;
-
-    private int commentNum;
-
-    private String tags;
-
-    private double distance;
-
-    private long ctime;
+    private String roomType;
 
     public int getId() {
         return id;
@@ -58,36 +52,44 @@ public class HotelBean {
         this.id = id;
     }
 
-    public String getMchNo() {
-        return mchNo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMchNo(String mchNo) {
-        this.mchNo = mchNo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMchName() {
-        return mchName;
+    public String getType() {
+        return type;
     }
 
-    public void setMchName(String mchName) {
-        this.mchName = mchName;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getMchType() {
-        return mchType;
+    public String getType2() {
+        return type2;
     }
 
-    public void setMchType(String mchType) {
-        this.mchType = mchType;
+    public void setType2(String type2) {
+        this.type2 = type2;
     }
 
-    public String getMchType2() {
-        return mchType2;
+    public float getScore() {
+        return score;
     }
 
-    public void setMchType2(String mchType2) {
-        this.mchType2 = mchType2;
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getPhoto() {
@@ -98,131 +100,121 @@ public class HotelBean {
         this.photo = photo;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public String getCheckinTime() {
+        return checkinTime;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setCheckinTime(String checkinTime) {
+        this.checkinTime = checkinTime;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public String getLeaveTime() {
+        return leaveTime;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setLeaveTime(String leaveTime) {
+        this.leaveTime = leaveTime;
     }
 
-    public String getAddress() {
-        return address;
+    public List<ServiceEntity> getServiceJson() {
+        return serviceJson;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setServiceJson(List<ServiceEntity> serviceJson) {
+        this.serviceJson = serviceJson;
     }
 
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public int getCommentScore() {
-        return commentScore;
-    }
-
-    public void setCommentScore(int commentScore) {
-        this.commentScore = commentScore;
-    }
-
-    public String getIntro() {
-        return intro;
-    }
-
-    public void setIntro(String intro) {
-        this.intro = intro;
-    }
-
-    public int getBusinessStatus() {
-        return businessStatus;
-    }
-
-    public void setBusinessStatus(int businessStatus) {
-        this.businessStatus = businessStatus;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public int getConsumePrice() {
-        return consumePrice;
-    }
-
-    public void setConsumePrice(int consumePrice) {
-        this.consumePrice = consumePrice;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public int getHotelType() {
-        return hotelType;
-    }
-
-    public void setHotelType(int hotelType) {
-        this.hotelType = hotelType;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public int getCommentNum() {
-        return commentNum;
-    }
-
-    public void setCommentNum(int commentNum) {
-        this.commentNum = commentNum;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public double getDistance() {
+    public String getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(String distance) {
         this.distance = distance;
     }
 
-    public long getCtime() {
-        return ctime;
+    public void setScore(float score) {
+        this.score = score;
     }
 
-    public void setCtime(long ctime) {
-        this.ctime = ctime;
+    public String getBedType() {
+        return bedType;
     }
+
+    public void setBedType(String bedType) {
+        this.bedType = bedType;
+    }
+
+    public String getAcreage() {
+        return acreage;
+    }
+
+    public void setAcreage(String acreage) {
+        this.acreage = acreage;
+    }
+
+    public int getBedNum() {
+        return bedNum;
+    }
+
+    public void setBedNum(int bedNum) {
+        this.bedNum = bedNum;
+    }
+
+    public int getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(int marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public int getDefaultPrice() {
+        return defaultPrice;
+    }
+
+    public void setDefaultPrice(int defaultPrice) {
+        this.defaultPrice = defaultPrice;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
+
+    public class ServiceEntity implements Serializable {
+
+        private String value;
+
+        private String title;
+
+        private String photo;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getPhoto() {
+            return photo;
+        }
+
+        public void setPhoto(String photo) {
+            this.photo = photo;
+        }
+    }
+
 }

@@ -137,10 +137,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     }
 
     @Override
-    public void getLoginSaltResult(BackResult<String> res) {
+    public void getLoginSaltResult(BackResult res) {
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
-                saltKey = res.getData();
+                saltKey = (String) res.getData();
                 login();
                 break;
             default:

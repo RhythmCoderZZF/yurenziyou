@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import butterknife.BindView;
@@ -39,10 +42,19 @@ public class PaymentOrderActivity extends BaseActivity {
     ImageView mImgWechatPaymentCheck;
     @BindView(R.id.img_alipay_payment_check)
     ImageView mImgAlipayPaymentCheck;
+    //剩余支付时间
+    @BindView(R.id.tv_pay_exprire_time)
+    TextView mTvPayExprireTime;
+    //金额
+    @BindView(R.id.tv_price)
+    TextView mTvPrice;
+    //商品名字
+    @BindView(R.id.tv_good_name)
+    TextView mTvGoodName;
     private int paymentMethodType = 1;
 
     public int getLayoutId() {
-
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_payment_order;
     }
 
@@ -68,43 +80,17 @@ public class PaymentOrderActivity extends BaseActivity {
 
     @Override
     public void initData() {
-      /*  mCkbWechatPayment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
 
 
-                if(isCheck){
+        OrderSubmitResponse orderSubmitResponse = (OrderSubmitResponse)getIntent().getSerializableExtra("orderSubmitResponse");
+        int price = orderSubmitResponse.getPrice();
+        String orderNo = orderSubmitResponse.getOrderNo();
+        String title = orderSubmitResponse.getTitle();
+        long payExprireTime = orderSubmitResponse.getPayExprireTime();
 
-                    mImgWechatPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_true);
-                } else {
-
-                    mImgWechatPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_true);
-                }
-
-            }
-        });
-
-        mCkbAlipayPayment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
-
-            }
-        });
-
-        mRgMerchantAlbum.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                if (mRbtnMerchantAlbum.getId() == checkedId) {
-                    mRbtnfriendsAlbum.setChecked(false);
-                    goFragment(0);
-                }
-
-                if (mRbtnfriendsAlbum.getId() == checkedId) {
-                    mRbtnMerchantAlbum.setChecked(false);
-                    goFragment(1);
-                }
-            }
-        });*/
+        mTvPrice.setText(String.valueOf(price));
+        mTvGoodName.setText(title);
+        mTvPayExprireTime.setText("1");
 
         mRlytWechatPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,26 +109,6 @@ public class PaymentOrderActivity extends BaseActivity {
                 mImgWechatPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_false);
             }
         });
-
-
-      /*  mRgPaymentMethod.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                if (mRbtnWechatPayment.getId() == checkedId) {
-
-                    mRbtnAlipayPayment.setChecked(false);
-                    mImgWechatPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_true);
-                    mImgAlipayPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_false);
-                }
-
-                if (mRbtnAlipayPayment.getId() == checkedId) {
-
-                    mRbtnWechatPayment.setChecked(false);
-                    mImgAlipayPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_true);
-                    mImgWechatPaymentCheck.setBackgroundResource(R.mipmap.icon_payment_method_check_false);
-                }
-            }
-        });*/
     }
 
     @Override

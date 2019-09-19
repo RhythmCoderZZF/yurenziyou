@@ -13,19 +13,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.HomestayBangDanListAdapter;
 import com.nbhysj.coupon.adapter.HotelBangDanListAdapter;
 import com.nbhysj.coupon.common.Constants;
-import com.nbhysj.coupon.contract.HomestayContract;
 import com.nbhysj.coupon.contract.HotelContract;
-import com.nbhysj.coupon.model.HomestayModel;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
-import com.nbhysj.coupon.presenter.HomestayPresenter;
 import com.nbhysj.coupon.presenter.HotelPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
@@ -235,6 +234,20 @@ public class HotelBangDanListActivity extends BaseActivity<HotelPresenter, Hotel
 
     }
 
+    @Override
+    public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void getHotelHomestayOrderInitResult(BackResult<HotelOrderInitResponse> res) {
+
+    }
+
+    @Override
+    public void hotelHomestayOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
+
+    }
 
     @Override
     public void showMsg(String msg) {

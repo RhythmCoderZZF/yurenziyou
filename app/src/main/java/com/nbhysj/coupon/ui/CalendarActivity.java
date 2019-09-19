@@ -48,7 +48,7 @@ public class CalendarActivity extends BaseActivity {
     public void initView(Bundle savedInstanceState) {
 
         ToolbarHelper.setBar(CalendarActivity.this, getResources().getString(R.string.str_calendar_select), R.mipmap.icon_left_arrow_black);
-        selectType = getIntent().getIntExtra("selectType", 0);  //0:创建行程 || 1:编辑行程选择日期
+        selectType = getIntent().getIntExtra("selectType", 0);  //0:创建行程 || 1:编辑行程选择日期 || 酒店民宿下单日期选择
         CalendarList calendarList = findViewById(R.id.calendar_list);
         calendarList.setOnDateSelected(new CalendarList.OnDateSelected() {
             @Override

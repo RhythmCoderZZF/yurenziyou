@@ -15,7 +15,9 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DeliciousFoodSectionAdapter;
 import com.nbhysj.coupon.adapter.FineFoodClassificationAdapter;
 import com.nbhysj.coupon.adapter.FineFoodListAdapter;
+import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -71,7 +73,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
     //美食栏目
     private DeliciousFoodSectionAdapter deliciousFoodSectionAdapter;
     //美食分类
-    private FineFoodClassificationAdapter fineFoodClassificationAdapter;
+    private MchRankingClassificationAdapter fineFoodClassificationAdapter;
     //美食适配器
     private FineFoodListAdapter fineFoodListAdapter;
     //美食中间分类
@@ -135,8 +137,8 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallFineFoodActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        fineFoodClassificationAdapter = new FineFoodClassificationAdapter(ShoppingMallFineFoodActivity.this);
-        fineFoodClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
+        fineFoodClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallFineFoodActivity.this, MchTypeEnum.MCH_FOOD.getValue());
+        fineFoodClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(fineFoodClassificationAdapter);
 
         LinearLayoutManager scenicSpotsLinearLayoutManager = new LinearLayoutManager(ShoppingMallFineFoodActivity.this);
@@ -233,7 +235,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
 
                     //美食分类
                     mCateEntityList = res.getData().getCate();
-                    fineFoodClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
+                    fineFoodClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
                     fineFoodClassificationAdapter.notifyDataSetChanged();
 
                     List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
@@ -281,13 +283,13 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
                 showToast(ShoppingMallFineFoodActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+    public void getFoodBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
-
 
     @Override
     public void showMsg(String msg) {

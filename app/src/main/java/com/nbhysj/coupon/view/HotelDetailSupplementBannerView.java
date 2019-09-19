@@ -167,7 +167,7 @@ public class HotelDetailSupplementBannerView extends FrameLayout {
         }
     }
 
-    public void setViewList(Context mContext, List<ImageView> viewList, List<BannerUrlBO> bannerUrlList, ScenicSpotDetailBannerViewListener scenicSpotDetailBannerViewListener) {
+    public void setViewList(Context mContext, List<ImageView> viewList, List<String> bannerUrlList, ScenicSpotDetailBannerViewListener scenicSpotDetailBannerViewListener) {
         this.viewList = viewList;
         this.mContext = mContext;
         this.scenicSpotDetailBannerViewListener = scenicSpotDetailBannerViewListener;

@@ -8,10 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.MyTravelListAdapter;
 import com.nbhysj.coupon.adapter.RecreationListAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotsListAdapter;
-import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.model.DestinationModel;

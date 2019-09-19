@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
-    android:id="@+id/llyt_hotel_room_item"
+    android:id="@+id/rlyt_homestay_room_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -29,12 +29,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_hotel_room_type"
+            android:id="@+id/tv_homestay_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_1"
             android:layout_marginRight="@dimen/dp_15"
-            android:text="无窗特惠标间"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xnormal"
             android:textStyle="bold" />
@@ -90,9 +90,10 @@
 
 
             <TextView
+                android:id="@+id/tv_homestay_room_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥159"
+                android:text="¥0.00"
                 android:textColor="@color/color_orange2"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_medium" />

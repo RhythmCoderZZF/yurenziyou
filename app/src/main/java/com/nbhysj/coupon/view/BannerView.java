@@ -158,7 +158,7 @@ public class BannerView extends FrameLayout {
 
             for (int i = 0; i < this.mLinearPosition.getChildCount(); ++i) {
                 if (i == curPos % this.viewSize) {
-                    this.mLinearPosition.getChildAt(i).setBackgroundResource(R.mipmap.home_banner_carousel_1);
+                    this.mLinearPosition.getChildAt(i).setBackgroundResource(R.mipmap.icon_banner_indicator_select);
                 } else {
                     this.mLinearPosition.getChildAt(i).setBackgroundResource(R.mipmap.icon_banner_indicator_unselect);
                 }

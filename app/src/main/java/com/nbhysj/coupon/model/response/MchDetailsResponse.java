@@ -21,8 +21,10 @@ public class MchDetailsResponse implements Serializable {
 
     private CommentEntity comment;
 
-    //景点附近
+    //附近
     private NearbyEntity nearby;
+
+    private NearbyHotelEntity nearbyHotel;
 
     public List<VisitGuideEntity> getVisitGuide() {
         return visitGuide;
@@ -70,6 +72,14 @@ public class MchDetailsResponse implements Serializable {
 
     public void setNearby(NearbyEntity nearby) {
         this.nearby = nearby;
+    }
+
+    public NearbyHotelEntity getNearbyHotel() {
+        return nearbyHotel;
+    }
+
+    public void setNearbyHotel(NearbyHotelEntity nearbyHotel) {
+        this.nearbyHotel = nearbyHotel;
     }
 
     public class VisitGuideEntity implements Serializable {
@@ -373,9 +383,9 @@ public class MchDetailsResponse implements Serializable {
 
         private int mchPhotoCount;
 
-        private long checkinTime;
+        private String checkinTime;
 
-        private long leaveTime;
+        private String leaveTime;
 
         private List<TagsEntity> tags;
 
@@ -390,6 +400,10 @@ public class MchDetailsResponse implements Serializable {
 
         //地图 String
         private String staticMap;
+
+        private String allFacilityDetails;
+
+        private String bookingInformationDetails;
 
         public int getMchId() {
             return mchId;
@@ -591,19 +605,19 @@ public class MchDetailsResponse implements Serializable {
             this.mchPhotoCount = mchPhotoCount;
         }
 
-        public long getCheckinTime() {
+        public String getCheckinTime() {
             return checkinTime;
         }
 
-        public void setCheckinTime(long checkinTime) {
+        public void setCheckinTime(String checkinTime) {
             this.checkinTime = checkinTime;
         }
 
-        public long getLeaveTime() {
+        public String getLeaveTime() {
             return leaveTime;
         }
 
-        public void setLeaveTime(long leaveTime) {
+        public void setLeaveTime(String leaveTime) {
             this.leaveTime = leaveTime;
         }
 
@@ -669,6 +683,22 @@ public class MchDetailsResponse implements Serializable {
 
         public void setStaticMap(String staticMap) {
             this.staticMap = staticMap;
+        }
+
+        public String getAllFacilityDetails() {
+            return allFacilityDetails;
+        }
+
+        public void setAllFacilityDetails(String allFacilityDetails) {
+            this.allFacilityDetails = allFacilityDetails;
+        }
+
+        public String getBookingInformationDetails() {
+            return bookingInformationDetails;
+        }
+
+        public void setBookingInformationDetails(String bookingInformationDetails) {
+            this.bookingInformationDetails = bookingInformationDetails;
         }
     }
 
@@ -911,6 +941,8 @@ public class MchDetailsResponse implements Serializable {
 
         private int questionCount;
 
+        private String answerContent;
+
         public int getQuestionId() {
             return questionId;
         }
@@ -942,9 +974,19 @@ public class MchDetailsResponse implements Serializable {
         public void setQuestionCount(int questionCount) {
             this.questionCount = questionCount;
         }
+
+        public String getAnswerContent() {
+            return answerContent;
+        }
+
+        public void setAnswerContent(String answerContent) {
+            this.answerContent = answerContent;
+        }
     }
 
     public class CommentEntity {
+
+        private int commentNum;
 
         private ScoreEntity score;
 
@@ -975,19 +1017,27 @@ public class MchDetailsResponse implements Serializable {
         public void setLabel(List<LabelEntity> label) {
             this.label = label;
         }
+
+        public int getCommentNum() {
+            return commentNum;
+        }
+
+        public void setCommentNum(int commentNum) {
+            this.commentNum = commentNum;
+        }
     }
 
     public class ScoreEntity implements Serializable {
 
         private int commentNum;
 
-        private int commentScore3;
+        private float commentScore;
 
-        private int commentScore;
+        private double commentScore1;
 
-        private int commentScore1;
+        private double commentScore2;
 
-        private int commentScore2;
+        private double commentScore3;
 
         public int getCommentNum() {
             return commentNum;
@@ -997,36 +1047,36 @@ public class MchDetailsResponse implements Serializable {
             this.commentNum = commentNum;
         }
 
-        public int getCommentScore3() {
-            return commentScore3;
-        }
-
-        public void setCommentScore3(int commentScore3) {
-            this.commentScore3 = commentScore3;
-        }
-
-        public int getCommentScore() {
+        public float getCommentScore() {
             return commentScore;
         }
 
-        public void setCommentScore(int commentScore) {
+        public void setCommentScore(float commentScore) {
             this.commentScore = commentScore;
         }
 
-        public int getCommentScore1() {
+        public double getCommentScore1() {
             return commentScore1;
         }
 
-        public void setCommentScore1(int commentScore1) {
+        public void setCommentScore1(double commentScore1) {
             this.commentScore1 = commentScore1;
         }
 
-        public int getCommentScore2() {
+        public double getCommentScore2() {
             return commentScore2;
         }
 
-        public void setCommentScore2(int commentScore2) {
+        public void setCommentScore2(double commentScore2) {
             this.commentScore2 = commentScore2;
+        }
+
+        public double getCommentScore3() {
+            return commentScore3;
+        }
+
+        public void setCommentScore3(double commentScore3) {
+            this.commentScore3 = commentScore3;
         }
     }
 
@@ -1269,6 +1319,9 @@ public class MchDetailsResponse implements Serializable {
 
         private List<NearbyTypeResponse> group;
 
+        //酒店(娱乐)
+        private List<NearbyTypeResponse> recreation;
+
         public List<NearbyTypeResponse> getHotel() {
             return hotel;
         }
@@ -1300,6 +1353,14 @@ public class MchDetailsResponse implements Serializable {
         public void setGroup(List<NearbyTypeResponse> group) {
             this.group = group;
         }
+
+        public List<NearbyTypeResponse> getRecreation() {
+            return recreation;
+        }
+
+        public void setRecreation(List<NearbyTypeResponse> recreation) {
+            this.recreation = recreation;
+        }
     }
 
     public class ServiceEntity implements Serializable{
@@ -1309,7 +1370,6 @@ public class MchDetailsResponse implements Serializable {
         private String title;
 
         private String photo;
-
 
         public String getValue() {
             return value;
@@ -1335,4 +1395,28 @@ public class MchDetailsResponse implements Serializable {
             this.photo = photo;
         }
     }
+
+    public class NearbyHotelEntity{
+
+        private int hotelCount;
+
+        private List<HotelBean> hotel;
+
+        public int getHotelCount() {
+            return hotelCount;
+        }
+
+        public void setHotelCount(int hotelCount) {
+            this.hotelCount = hotelCount;
+        }
+
+        public List<HotelBean> getHotel() {
+            return hotel;
+        }
+
+        public void setHotel(List<HotelBean> hotel) {
+            this.hotel = hotel;
+        }
+    }
+
 }

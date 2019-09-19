@@ -26,12 +26,13 @@
 
         <LinearLayout
             android:id="@+id/llyt_confirm_payment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_pay_exprire_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -55,20 +56,22 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="175.00"
+                    android:text="0.00"
                     android:textColor="@color/txt_font_black2"
                     android:textSize="36sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_good_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_19"
-                android:text="宁波海洋世界成人票"
+                android:text=""
                 android:textColor="@color/color_text_gray20"
                 android:textSize="@dimen/text_size_small" />
         </LinearLayout>

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import io.reactivex.Observable;
 
 /**
- * @auther：hysj created on 2019/06/06
+ * @auther：hysj created on 2019/09/16
  * description：互动模块
  */
 public interface RecreationContract {
@@ -23,13 +23,13 @@ public interface RecreationContract {
      **/
     interface Model extends BaseModel {
 
-        //景点栏目列表
+        //互动栏目列表
         Observable<BackResult<ScenicSpotHomePageResponse>> getRecreationHomePage(String longitude, String latitude);
 
-        //景点列表-筛选
+        //互动列表-筛选
         Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(HashMap<String, String> map);
 
-        //榜单
+        //互动榜单
         Observable<BackResult<MchBangDanRankingResponse>> getRecreationDanRanking(int cityId);
     }
 
@@ -39,7 +39,7 @@ public interface RecreationContract {
 
         void findRecreationByCateResult(BackResult<ScenicSpotResponse> res);
 
-        void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
+        void getRecreationDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
         void showMsg(String msg);
     }
@@ -51,6 +51,6 @@ public interface RecreationContract {
         //互动列表-筛选
         public abstract void findRecreationByCate(HashMap<String, String> map);
 
-        public abstract void getScenicBangDanRanking(int cityId);
+        public abstract void getRecreationBangDanRanking(int cityId);
     }
 }

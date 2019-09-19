@@ -11,9 +11,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
+import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.widget.glide.GlideApp;
 import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
+import com.nbhysj.coupon.widget.glide.GlideRoundedCornersTransform;
 
 import java.util.List;
 
@@ -26,9 +29,9 @@ public class HotelDetailSupplementBannerAdapter extends PagerAdapter {
     private int size;
     private final int cacheCount = 3;
     private Context mContext;
-    private List<BannerUrlBO> bannerUrlList;
+    private List<String> bannerUrlList;
 
-    public HotelDetailSupplementBannerAdapter(Context mContext, List<ImageView> viewList, List<BannerUrlBO> bannerUrlList) {
+    public HotelDetailSupplementBannerAdapter(Context mContext, List<ImageView> viewList, List<String> bannerUrlList) {
         this.viewList = viewList;
         this.size = viewList.size();
         this.mContext = mContext;
@@ -43,35 +46,31 @@ public class HotelDetailSupplementBannerAdapter extends PagerAdapter {
     }
 
     public Object instantiateItem(ViewGroup container, int position) {
+
         ImageView view = (ImageView) this.viewList.get(position % this.size);
-       /* ViewGroup parent = (ViewGroup)(view).getParent();
+        ViewGroup parent = (ViewGroup) (view).getParent();
         if (parent != null) {
             parent.removeView(view);
         }
 
-        container.addView(view);*/
+        container.addView(view);
 
-        RequestOptions myOptions = new RequestOptions()
-                .transform(new GlideRoundTransform(mContext, 13));
-
-        Glide.with(mContext)
-                .load(bannerUrlList.get(position % this.size).getUrl())
-                .apply(myOptions)
-                .into(view);
-       /* GlideApp.with(mContext)
-                .load(bannerUrlList.get(position % this.size).getUrl())
-                .placeholder(R.mipmap.icon_placeholder_image)
-                .error(R.mipmap.icon_placeholder_image)
-                .skipMemoryCache(true)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new GlideRoundCornersTransUtils(mContext, 135, GlideRoundCornersTransUtils.CornerType.TOP))
+     /*   Glide.with(mContext)
+                .load(bannerUrlList.get(position % this.size))
                 .into(view);*/
+        GlideUtil.loadRoundedCornersImage(bannerUrlList.get(position % this.size),view, Tools.dip2px(mContext,5), GlideRoundedCornersTransform.CornerType.TOP);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //scenicSpotDetailBannerListener.scenicSpotDetailBannerListener();
+            }
+        });
         return view;
     }
 
     public int getCount() {
-        return 2147483647;
+        return bannerUrlList.size();
     }
 
     public boolean isViewFromObject(View view, Object object) {

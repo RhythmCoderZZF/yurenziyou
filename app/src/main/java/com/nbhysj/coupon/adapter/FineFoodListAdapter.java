@@ -86,9 +86,9 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 List<MchTypeBean.TagsEntity> tagsEntityList = fineFoodBean.getTags();
                 if (!TextUtils.isEmpty(mchName)) {
 
-                    holder1.mTvPopularScenicSpotName.setText(mchName);
+                    holder1.mTvMchName.setText(mchName);
                 } else {
-                    holder1.mTvPopularScenicSpotName.setText(dataName);
+                    holder1.mTvMchName.setText(dataName);
                 }
 
                 if (mIntro != null) {
@@ -157,8 +157,8 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        //景区名字
-        TextView mTvPopularScenicSpotName;
+        //商户名字
+        TextView mTvMchName;
         //美食图片
         ImageView mImgFineFood;
         //美食标签
@@ -175,7 +175,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mTvPopularScenicSpotName = itemView.findViewById(R.id.tv_scenic_spots_name);
+            mTvMchName = itemView.findViewById(R.id.tv_mch_name);
             mImgFineFood = itemView.findViewById(R.id.image_fine_food);
             mTagFlowlayoutFineFood = itemView.findViewById(R.id.flowlayout_fine_food_label);
             mTvFineFoodSerialNum = itemView.findViewById(R.id.tv_fine_food_serial_number);

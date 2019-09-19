@@ -18,15 +18,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * @author hysj created at 2019/4/7.
- * description : 房源适配器
+ * @author hysj created at 2019/09/19.
+ * description:民宿房源适配器
  */
-public class HouseResourcesAdapter extends RecyclerView.Adapter<HouseResourcesAdapter.ViewHolder> {
+public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResourcesAdapter.ViewHolder> {
 
     List<ShopMallHomePageResponse.GuessEntity> guessYouLikeList;
     private Context mContext;
 
-    public HouseResourcesAdapter(Context mContext) {
+    public HomestayResourcesAdapter(Context mContext) {
 
         this.mContext = mContext;
     }
@@ -52,7 +52,7 @@ public class HouseResourcesAdapter extends RecyclerView.Adapter<HouseResourcesAd
             ShopMallHomePageResponse.GuessEntity guessEntity = guessYouLikeList.get(itemPosition);
             String photo = guessEntity.getPhoto();
             String mchName = guessEntity.getMchName();
-            int mConsumePrice = guessEntity.getConsumePrice();
+            double mConsumePrice = guessEntity.getConsumePrice();
             GlideUtil.loadCornersTransformImage(mContext, photo, 5, holder.mImgShoppingMallGuessYouLike);
             holder.mTvMchName.setText(mchName);
             holder.mTvPerCapitaPrice.setText(String.valueOf(mConsumePrice));

@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import java.util.HashMap;
@@ -33,6 +34,9 @@ public interface HomestayContract {
 
         //民宿收藏
         Observable<BackResult> mchCollection(MchCollectionRequest mchCollectionRequest);
+
+        //民宿收藏
+        Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(int mchId);
     }
 
     interface View extends BaseView {
@@ -44,6 +48,8 @@ public interface HomestayContract {
         void getHomestayBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
         void mchCollectionResult(BackResult res);
+
+        void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res);
 
         void showMsg(String msg);
     }
@@ -59,5 +65,8 @@ public interface HomestayContract {
 
         //民宿收藏
         public abstract void mchCollection(MchCollectionRequest mchCollectionRequest);
+
+        //民宿详情
+        public abstract void getMchHomestayDetail(int mchId);
     }
 }

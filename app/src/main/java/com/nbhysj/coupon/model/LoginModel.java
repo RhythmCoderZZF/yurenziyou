@@ -30,7 +30,7 @@ public class LoginModel implements LoginContract.Model {
     }
 
     @Override
-    public Observable<BackResult<String>> getLoginSalt(String mobile) {
+    public Observable<BackResult> getLoginSalt(String mobile) {
         return Api.getInstance().apiService.getLoginSalt(mobile).compose(RxSchedulers.io_main());
     }
 

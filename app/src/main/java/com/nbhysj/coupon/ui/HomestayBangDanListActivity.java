@@ -24,6 +24,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -241,6 +242,11 @@ public class HomestayBangDanListActivity extends BaseActivity<HomestayPresenter,
 
     @Override
     public void mchCollectionResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res) {
 
     }
 

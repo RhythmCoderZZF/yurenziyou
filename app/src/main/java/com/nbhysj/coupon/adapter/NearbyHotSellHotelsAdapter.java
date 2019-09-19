@@ -1,40 +1,50 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
+import com.nbhysj.coupon.model.response.HotelBean;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
+import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
 
 /**
- * @author hysj created at 2019/05/13.
+ * @author hysj created at 2019/09/17.
  * description:附近热销酒店适配器
  */
 public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSellHotelsAdapter.ViewHolder> {
 
-
-    List<NearbyScenicSpotsResponse> nearbyScenicSpotsList;
+    StringBuffer stringBuffer = new StringBuffer();
+    List<HotelBean> hotelList;
     private Context mContext;
 
     public NearbyHotSellHotelsAdapter(Context mContext) {
 
         this.mContext = mContext;
+        stringBuffer.setLength(0);
     }
 
-    public void setNearbyScenicSpotsList(List<NearbyScenicSpotsResponse> nearbyScenicSpotsList) {
+    public void setHotSellHotelList(List<HotelBean> hotelList) {
 
-        this.nearbyScenicSpotsList = nearbyScenicSpotsList;
+        this.hotelList = hotelList;
     }
 
     @Override
@@ -49,21 +59,67 @@ public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSe
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-          /*  NearbyScenicSpotsResponse nearbyScenicSpots = nearbyScenicSpotsList.get(itemPosition);
-            holder.mTvHotelName.setText(nearbyScenicSpots.getScenicSpotsName());
-            holder.mTvHotelType.setText(nearbyScenicSpots.getScenicSpotsScore() + "分");
-            holder.mStarBarScenicSpots.setIntegerMark(true);
-            holder.mStarBarScenicSpots.setStarMark(nearbyScenicSpots.getStarLevel());
-            holder.mTvScenicSpotsDistance.setText("距景点" + nearbyScenicSpots.getScenicSpotsDistance() + "m");
-            holder.mTvPerCapitaPrice.setText(nearbyScenicSpots.getScenicSpotsTicketPrice());*/
 
-            RequestOptions myOptions = new RequestOptions()
-                    .transform(new GlideRoundTransform(mContext, 5));
+            HotelBean hotelBean = hotelList.get(itemPosition);
+            int mchId = hotelBean.getId();
+            String hotelPhotoUrl = hotelBean.getPhoto();
+            String distance = hotelBean.getDistance();
+            String checkinTime = hotelBean.getCheckinTime();
+            String leaveTime = hotelBean.getLeaveTime();
+            String nearByMchType = hotelBean.getType();
+            String mchType2 = hotelBean.getType2();
+            float score = hotelBean.getScore();
+            String title = hotelBean.getTitle();
+            double price = hotelBean.getPrice();
+            List<HotelBean.ServiceEntity> serviceList = hotelBean.getServiceJson();
 
-            Glide.with(mContext)
-                    .load("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1555639803&di=038b9646f3b207fcf7ed84a41c72a85b&src=http://b-ssl.duitang.com/uploads/item/20182/21/2018221142159_MZ33z.jpeg")
-                    .apply(myOptions)
-                    .into(holder.mImgHotelRoom);
+            GlideUtil.loadImage(mContext, hotelPhotoUrl, holder.mImgHotelRoom);
+            if (!TextUtils.isEmpty(distance)) {
+                holder.mTvLocationDistance.setText(distance);
+            }
+
+            holder.mStarBarScenicSpots.setIntegerMark(false);
+            holder.mStarBarScenicSpots.setStarMark(score);
+
+                holder.mTvScore.setText(String.valueOf(score) + "分");
+                if(!TextUtils.isEmpty(title)) {
+                    holder.mTvHotelName.setText(title);
+                }
+
+            holder.mTvPerCapitaPrice.setText(String.valueOf(price));
+
+            for(int i = 0;i < serviceList.size();i++)
+            {
+                String serviceTitle = serviceList.get(i).getTitle();
+                if(!TextUtils.isEmpty(serviceTitle))
+                {
+                    stringBuffer.append(serviceTitle);
+                }
+            }
+
+            holder.mHotelInfoDes.setText("入住时间" + checkinTime + "-" + leaveTime + stringBuffer.toString());
+
+            holder.mLlytHotSellHotelItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String mchType = MchTypeEnum.MCH_HOTEL.getValue();
+                    String mchHotelType = MchTypeEnum.MCH_HOTEL1.getValue();
+                    String mchHomestayType = MchTypeEnum.MCH_HOTEL2.getValue();
+                    if(nearByMchType != null && mchType2 != null) {
+                        if (nearByMchType.equals(mchType))
+                        {
+                            if (mchType2.equals(mchHotelType))
+                            {
+
+                                Intent intent = new Intent();
+                                intent.putExtra("mchId", mchId);
+                                intent.setClass(mContext, HotelDetailsActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        }
+                    }
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +128,7 @@ public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSe
 
     @Override
     public int getItemCount() {
-        return 5;
+        return hotelList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,15 +136,20 @@ public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSe
         //附近酒店名字
         TextView mTvHotelName;
         //酒店房间图片
-        ImageView mImgHotelRoom;
+        RoundedImageView mImgHotelRoom;
         //酒店类型
         TextView mTvHotelType;
         //评分星级
         StarBarView mStarBarScenicSpots;
-        //距离景区距离
-        TextView mTvScenicSpotsDistance;
+        //距离距离
+        TextView mTvLocationDistance;
         //人均价格
         TextView mTvPerCapitaPrice;
+        //分数
+        TextView mTvScore;
+        //酒店信息描述
+        TextView mHotelInfoDes;
+        LinearLayout mLlytHotSellHotelItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -97,8 +158,11 @@ public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSe
             mImgHotelRoom = itemView.findViewById(R.id.image_hotel_room);
             mTvHotelType = itemView.findViewById(R.id.tv_hotel_type);
             mStarBarScenicSpots = itemView.findViewById(R.id.starbar_scenic_spots);
-            mTvScenicSpotsDistance = itemView.findViewById(R.id.tv_scenic_spots_distance);
+            mTvLocationDistance = itemView.findViewById(R.id.tv_location_distance);
             mTvPerCapitaPrice = itemView.findViewById(R.id.tv_per_capita_price);
+            mTvScore = itemView.findViewById(R.id.tv_score);
+            mHotelInfoDes = itemView.findViewById(R.id.tv_hotel_info_des);
+            mLlytHotSellHotelItem = itemView.findViewById(R.id.llyt_hot_sell_hotel_item);
         }
     }
 }

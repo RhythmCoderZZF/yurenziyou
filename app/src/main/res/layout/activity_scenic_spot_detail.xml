@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ScenicSpotDetailActivity"
-    android:background="@color/background_l_grey">
+    android:background="@color/background_l_grey"
+    android:orientation="vertical">
 
     <com.nbhysj.coupon.view.RecyclerScrollView
         android:id="@+id/scrollview_scenic_spot_detail"
@@ -141,8 +142,9 @@
                             ratingbar:starCount="5"
                             ratingbar:starDistance="5dp"
                             ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
-                            ratingbar:starFill="@mipmap/icon_solid_drak_orange_star"
-                            ratingbar:starSize="14dp" />
+                            ratingbar:starFill="@mipmap/icon_solid_orange_star"
+                            ratingbar:starSize="14dp"
+                           />
                     </LinearLayout>
 
                     <TextView

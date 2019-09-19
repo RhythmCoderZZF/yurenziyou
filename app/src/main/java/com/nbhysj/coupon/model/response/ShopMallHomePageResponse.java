@@ -439,7 +439,8 @@ public class ShopMallHomePageResponse {
         private String defaultPwd;
 
         private int del;
-        private int consumePrice;
+
+        private double consumePrice;
 
         private int recommStatus;
 
@@ -755,11 +756,11 @@ public class ShopMallHomePageResponse {
             this.del = del;
         }
 
-        public int getConsumePrice() {
+        public double getConsumePrice() {
             return consumePrice;
         }
 
-        public void setConsumePrice(int consumePrice) {
+        public void setConsumePrice(double consumePrice) {
             this.consumePrice = consumePrice;
         }
 

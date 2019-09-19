@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,7 +45,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_hotel_reputation_item, parent, false);//解决宽度不能铺满
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_hotel_item, parent, false);//解决宽度不能铺满
         ViewHolder hold = new ViewHolder(view);
         return hold;
     }
@@ -63,6 +62,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
             int consumePrice = hotelResponse.getConsumePrice();
             String photo = hotelResponse.getPhoto();
             holder.mTvHotelName.setText(hotelResponse.getMchName());
+            int mchId = hotelResponse.getId();
             holder.mTvHotelReputationScore.setText(String.valueOf(commentScore));
             if (intro != null) {
 
@@ -105,6 +105,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
                 public void onClick(View view) {
 
                     Intent intent = new Intent();
+                    intent.putExtra("mchId",mchId);
                     intent.setClass(mContext, HotelDetailsActivity.class);
                     mContext.startActivity(intent);
                 }

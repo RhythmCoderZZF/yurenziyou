@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.presenter;
 
 import com.nbhysj.coupon.contract.HotelContract;
+import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 
 import java.util.HashMap;
 
@@ -24,6 +25,21 @@ public class HotelPresenter extends HotelContract.Presenter {
     @Override
     public void getHotelBangDanRanking(int cityId) {
         mRxManager.add(mModel.getHotelBangDanRanking(cityId).subscribe(res -> mView.getHotelBangDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getMchDetails(int mchId) {
+        mRxManager.add(mModel.getMchDetails(mchId).subscribe(res -> mView.getMchDetailsResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getHotelHomestayOrderInit(int goodsId, String checkInAndOutTime) {
+        mRxManager.add(mModel.getHotelHomestayOrderInit(goodsId,checkInAndOutTime).subscribe(res -> mView.getHotelHomestayOrderInitResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void hotelHomestayOrderSubmit(HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest) {
+        mRxManager.add(mModel.hotelHomestayOrderSubmit(hotelHomestayOrderSubmitRequest).subscribe(res -> mView.hotelHomestayOrderSubmitResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

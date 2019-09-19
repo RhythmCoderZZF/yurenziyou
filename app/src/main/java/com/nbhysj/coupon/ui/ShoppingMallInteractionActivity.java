@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.InteractionSectionAdapter;
+import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.adapter.RecreationListAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.RecreationContract;
@@ -74,7 +74,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
     //互动栏目
     private InteractionSectionAdapter interactionSectionAdapter;
     //互动分类
-    private ScenicSpotClassificationAdapter scenicSpotClassificationAdapter;
+    private MchRankingClassificationAdapter mchRankingClassificationAdapter;
     //互动适配器
     private RecreationListAdapter recreationListAdapter;
     //景点中间分类
@@ -134,13 +134,13 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
         interactionSectionAdapter.setInteractionSectionList(mScenicSpotHotList);
         mRvPopularScenicSpots.setAdapter(interactionSectionAdapter);
 
-        //景点分类
+        //互动分类
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallInteractionActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        scenicSpotClassificationAdapter = new ScenicSpotClassificationAdapter(ShoppingMallInteractionActivity.this,MchTypeEnum.MCH_SCENIC.getValue());
-        scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
-        mRvScenicSpotClassification.setAdapter(scenicSpotClassificationAdapter);
+        mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallInteractionActivity.this,MchTypeEnum.MCH_RECREATION.getValue());
+        mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
+        mRvScenicSpotClassification.setAdapter(mchRankingClassificationAdapter);
 
         LinearLayoutManager scenicSpotsLinearLayoutManager = new LinearLayoutManager(ShoppingMallInteractionActivity.this);
         scenicSpotsLinearLayoutManager.setOrientation(scenicSpotsLinearLayoutManager.VERTICAL);
@@ -236,8 +236,8 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
 
                     //景点分类
                     mCateEntityList = res.getData().getCate();
-                    scenicSpotClassificationAdapter.setScenicSpotClassificationList(mCateEntityList);
-                    scenicSpotClassificationAdapter.notifyDataSetChanged();
+                    mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
+                    mchRankingClassificationAdapter.notifyDataSetChanged();
 
                     List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
                     mScenicSpotList.addAll(scenicSpotList);
@@ -287,10 +287,9 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+    public void getRecreationDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
-
 
     @Override
     public void showMsg(String msg) {

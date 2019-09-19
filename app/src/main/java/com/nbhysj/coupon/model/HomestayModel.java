@@ -7,6 +7,7 @@ import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import java.util.HashMap;
@@ -37,5 +38,10 @@ public class HomestayModel implements HomestayContract.Model {
     @Override
     public Observable<BackResult> mchCollection(MchCollectionRequest mchCollectionRequest) {
         return Api.getInstance().apiService.mchCollection(mchCollectionRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(int mchId) {
+        return Api.getInstance().apiService.getMchHomestayDetail(mchId).compose(RxSchedulers.io_main());
     }
 }

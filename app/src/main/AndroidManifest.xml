@@ -141,7 +141,7 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity
-            android:name=".ui.FineGoodBangDanListActivity"
+            android:name=".ui.FineFoodBangDanListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ScenicSpotBangDanListActivity"
@@ -150,11 +150,14 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.HotelBangDanListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.RecreationBangDanListActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.ScenicSpotListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.HomestayDetailsActivity"
+            android:name=".ui.HomestayDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
@@ -268,9 +271,7 @@
         <activity
             android:name=".ui.ScenicSpotDestinationActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.FineGoodListActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.ShoppingMallDestinationActivity"
             android:screenOrientation="portrait" />

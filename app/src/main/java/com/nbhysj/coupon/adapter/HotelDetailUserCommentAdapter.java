@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.view.StarBarView;
@@ -38,7 +39,7 @@ public class HotelDetailUserCommentAdapter extends RecyclerView.Adapter<HotelDet
      * 如果使用position作为key，则删除、增加条目的时候会出现显示错乱
      */
     private SparseArray<Integer> mTextStateList;//保存文本状态集合
-    List<ScenicSpotsUserCommentResponse> scenicSpotsUserCommentList;
+    List<MchDetailsResponse.SubCommentEntity> scenicSpotsUserCommentList;
     private Context mContext;
 
     public HotelDetailUserCommentAdapter(Context mContext) {
@@ -47,7 +48,7 @@ public class HotelDetailUserCommentAdapter extends RecyclerView.Adapter<HotelDet
         mTextStateList = new SparseArray<>();
     }
 
-    public void setScenicSpotsUserCommentList(List<ScenicSpotsUserCommentResponse> scenicSpotsUserCommentList) {
+    public void setHotelDetailUserCommentList(List<MchDetailsResponse.SubCommentEntity> scenicSpotsUserCommentList) {
 
         this.scenicSpotsUserCommentList = scenicSpotsUserCommentList;
     }
@@ -65,9 +66,11 @@ public class HotelDetailUserCommentAdapter extends RecyclerView.Adapter<HotelDet
 
         try {
             int state = mTextStateList.get(scenicSpotsUserCommentList.get(position).getId(), STATE_UNKNOW);
-            ScenicSpotsUserCommentResponse userCommentResponse = scenicSpotsUserCommentList.get(position);
-            holder.mTvUserName.setText(userCommentResponse.getUsername());
-            holder.mImgUserAvatar.loadCircle(userCommentResponse.getUserAvatarPhoto(), R.mipmap.icon_placeholder_image);
+            MchDetailsResponse.SubCommentEntity userCommentResponse = scenicSpotsUserCommentList.get(position);
+            MchDetailsResponse.UserEntity userEntity = userCommentResponse.getUser();
+            holder.mTvUserName.setText(userEntity.getNickname());
+            String avatarUrl = userEntity.getAvater();
+            holder.mImgUserAvatar.loadCircle(avatarUrl, R.mipmap.icon_placeholder_image);
             // holder.mTvCommentPublishTime.setText(userCommentResponse.getCommentPublishTime());
 
             //第一次初始化，未知状态

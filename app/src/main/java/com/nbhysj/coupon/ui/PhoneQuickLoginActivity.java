@@ -203,12 +203,12 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
     }
 
     @Override
-    public void getLoginSaltResult(BackResult<String> res) {
+    public void getLoginSaltResult(BackResult res) {
 
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
 
-                String saltKey = res.getData();
+                String saltKey = (String) res.getData();
                 login(saltKey);
 
                 break;

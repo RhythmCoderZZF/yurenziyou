@@ -22,8 +22,8 @@ public class RecreationPresenter extends RecreationContract.Presenter {
     }
 
     @Override
-    public void getScenicBangDanRanking(int cityId) {
-        mRxManager.add(mModel.getRecreationDanRanking(cityId).subscribe(res -> mView.getScenicBangDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getRecreationBangDanRanking(int cityId) {
+        mRxManager.add(mModel.getRecreationDanRanking(cityId).subscribe(res -> mView.getRecreationDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

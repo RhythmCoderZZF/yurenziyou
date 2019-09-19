@@ -22,8 +22,8 @@ public class FineFoodPresenter extends FineFoodContract.Presenter {
     }
 
     @Override
-    public void getScenicBangDanRanking(int cityId) {
-        mRxManager.add(mModel.getScenicBangDanRanking(cityId).subscribe(res -> mView.getScenicBangDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getFoodBangDanRanking(int cityId) {
+        mRxManager.add(mModel.getFoodBangDanRanking(cityId).subscribe(res -> mView.getFoodBangDanRankingResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override
