@@ -30,41 +30,29 @@ import butterknife.BindView;
 
 /**
  * created by hysj on 2019/08/27.
+ * descreiption:webview 基类
  */
 public class WebActivity extends BaseActivity<LoginPresenter, LoginModel> implements LoginContract.View {
     @BindView(R.id.pb_web)
     ProgressBar myProgressBar;
     @BindView(R.id.webview)
     WebView webview;
-
-    private int mType;
-    private String joinus;
-    private String about;
-    private String service;
-
-
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_web;
     }
 
-   /* @Override
-    public void initView() {
-        Intent intent = getIntent();
-        mType = intent.getIntExtra("type", 0);
-        service = intent.getStringExtra("service");
-
-    }*/
-
     @Override
     public void initData() {
         try {
-            ToolbarHelper.setBar(this, "用车", R.mipmap.icon_left_arrow_black);
-            String carH5Url = getIntent().getStringExtra("carH5Url");
-            String encodedURL = URLEncoder.encode("https://sandbox-mobile.caocaokeji.cn/pay-travel/home", "UTF-8");
-          //  setWebView("https://sandbox-mobile.caocaokeji.cn/pay-travel/home?client_id=d40e8cab04052bc1&timestamp=1566904554718&ext_user_id=49&sign=dfdc7d2e747dcea4f46b203fe1aa6be04ef94990&startLg=121.583030&startLt=121.583030&startType=0&callback_info=%7B%22userId%22:49%7D");
-            setWebView("file:///android_asset/fas/index.html");
+
+            String title = getIntent().getStringExtra("title");
+
+            ToolbarHelper.setBar(this, title, R.mipmap.icon_left_arrow_black);
+            String url = getIntent().getStringExtra("url");
+           // String encodedURL = URLEncoder.encode("https://sandbox-mobile.caocaokeji.cn/pay-travel/home", "UTF-8");
+            setWebView(url);
         }catch (Exception e){
             e.printStackTrace();
         }

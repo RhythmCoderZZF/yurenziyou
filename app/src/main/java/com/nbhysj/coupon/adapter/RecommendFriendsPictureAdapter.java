@@ -31,7 +31,7 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
     private Context mContext;
     private RecommendPostsDetailListener recommendPostsDetailListener;
 
-    public RecommendFriendsPictureAdapter(Context mContext,RecommendPostsDetailListener recommendPostsDetailListener) {
+    public RecommendFriendsPictureAdapter(Context mContext, RecommendPostsDetailListener recommendPostsDetailListener) {
 
         this.mContext = mContext;
         this.recommendPostsDetailListener = recommendPostsDetailListener;
@@ -64,13 +64,15 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
             holder.mImgRecommendFriends.setAdjustViewBounds(true);
             int photoWidth = recommendFriends.getPhotoWidth();
             int photoHeight = recommendFriends.getPhotoHeight();
+            int postsType = recommendFriends.getPostsType(); //1图片，2语音，3视频
+            String resourceUrl = recommendFriends.getResourceUrl();
             ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
             layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
             holder.mTvName.setText(name);
             int browseNum = recommendFriends.getHits();
             holder.mTvLookNum.setText(String.valueOf(browseNum));
 
-            GlideUtil.loadImage(mContext, imageUrl,holder.mImgRecommendFriends);
+            GlideUtil.loadImage(mContext, imageUrl, holder.mImgRecommendFriends);
 
             if (recommendFriends.isLove()) {
 
@@ -79,6 +81,16 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
 
                 holder.mImgIsLove.setImageResource(R.mipmap.icon_love_white_homepage_remmend);
             }
+
+            if (postsType == 3) { //视频类型 现在图标
+
+                holder.mImgVideoPlay.setVisibility(View.VISIBLE);
+
+            } else {
+
+                holder.mImgVideoPlay.setVisibility(View.GONE);
+            }
+
 
             holder.mCardViewRecommendFriendsItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,7 +135,7 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
         //浏览量
         public TextView mTvLookNum;
 
-        public ImageView mImgRecommendFriends, mImgIsLove;
+        public ImageView mImgRecommendFriends, mImgIsLove, mImgVideoPlay;
 
         TextView mTvDes;
 
@@ -139,10 +151,11 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
             mTvDes = itemView.findViewById(R.id.tv_description);
             mImgIsLove = itemView.findViewById(R.id.img_is_love);
             mCardViewRecommendFriendsItem = itemView.findViewById(R.id.card_view_recommend_friends_item);
+            mImgVideoPlay = itemView.findViewById(R.id.img_video_play);
         }
     }
 
-    public interface RecommendPostsDetailListener{
+    public interface RecommendPostsDetailListener {
 
         //查看推荐
         void lookRecommendPostDetailListener(int mPosition);

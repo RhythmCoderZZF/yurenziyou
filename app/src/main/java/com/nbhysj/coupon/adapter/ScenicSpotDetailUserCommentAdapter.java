@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.CommentUserEntity;
+import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
@@ -48,7 +50,7 @@ public class ScenicSpotDetailUserCommentAdapter extends RecyclerView.Adapter<Sce
      * 如果使用position作为key，则删除、增加条目的时候会出现显示错乱
      */
     private SparseArray<Integer> mTextStateList;//保存文本状态集合
-    List<MchDetailsResponse.SubCommentEntity> scenicSpotsUserCommentList;
+    List<MchCommentEntity> scenicSpotsUserCommentList;
     private Context mContext;
 
     public ScenicSpotDetailUserCommentAdapter(Context mContext) {
@@ -57,7 +59,7 @@ public class ScenicSpotDetailUserCommentAdapter extends RecyclerView.Adapter<Sce
         mTextStateList = new SparseArray<>();
     }
 
-    public void setScenicSpotsUserCommentList(List<MchDetailsResponse.SubCommentEntity> scenicSpotsUserCommentList) {
+    public void setScenicSpotsUserCommentList(List<MchCommentEntity> scenicSpotsUserCommentList) {
 
         this.scenicSpotsUserCommentList = scenicSpotsUserCommentList;
     }
@@ -75,8 +77,8 @@ public class ScenicSpotDetailUserCommentAdapter extends RecyclerView.Adapter<Sce
 
         try {
             int state = mTextStateList.get(scenicSpotsUserCommentList.get(position).getId(), STATE_UNKNOW);
-            MchDetailsResponse.SubCommentEntity userCommentResponse = scenicSpotsUserCommentList.get(position);
-            MchDetailsResponse.UserEntity userEntity = userCommentResponse.getUser();
+            MchCommentEntity userCommentResponse = scenicSpotsUserCommentList.get(position);
+            CommentUserEntity userEntity = userCommentResponse.getUser();
             holder.mTvUserName.setText(userEntity.getNickname());
             String avatarUrl = userEntity.getAvater();
             GlideUtil.loadImage(mContext, avatarUrl, holder.mImgUserAvatar);

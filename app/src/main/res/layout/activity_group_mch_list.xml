@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CombinationListActivity"
+    tools:context=".ui.GroupMchListActivity"
     android:background="@color/white">
 
     <LinearLayout
@@ -18,9 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="161dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/bg_travel_assistant_detail" />
+           />
 
-        <com.nbhysj.coupon.widget.NearbyTabIndicator
+        <com.nbhysj.coupon.widget.GroupMchTabIndicator
             android:id="@+id/indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,13 +49,13 @@
             android:layout_height="match_parent"
             android:background="@color/line_bg"
             app:srlAccentColor="#00000000"
-            app:srlEnableHeaderTranslationContent="false"
+            app:srlEnableHeaderTranslationContent="true"
             app:srlEnableLoadMore="true"
             app:srlEnableNestedScrolling="true"
             app:srlEnablePreviewInEditMode="true"
             app:srlPrimaryColor="#00000000">
 
-            <com.scwang.smartrefresh.header.MaterialHeader
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HotelDetailRoomAdapter;
-import com.nbhysj.coupon.adapter.HotelDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.HotelNearbyAdapter;
 import com.nbhysj.coupon.adapter.NearbyHotSellHotelsAdapter;
 import com.nbhysj.coupon.common.Constants;
@@ -29,7 +28,10 @@ import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.dialog.HotelDetailsSupplementDialog;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.HotelBean;
+import com.nbhysj.coupon.model.response.LabelEntity;
+import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -163,10 +165,10 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     private MchDetailsResponse.MchDetailsEntity mchDetailsEntity;
 
     //评论列表
-    List<MchDetailsResponse.SubCommentEntity> commentList;
+    List<MchCommentEntity> commentList;
 
     //用户评论标签
-    List<MchDetailsResponse.LabelEntity> labelEntityList;
+    List<LabelEntity> labelEntityList;
     //商户id
     private int mchId;
     //商户名
@@ -181,7 +183,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     //酒店商品列表
     private List<MchGoodsBean> mchHotelGoodsList;
 
-    private HotelDetailUserCommentAdapter hotelDetailUserCommentAdapter;
+    //private HotelDetailUserCommentAdapter hotelDetailUserCommentAdapter;
 
     //酒店附近
     private HotelNearbyAdapter hotelNearbyAdapter;
@@ -287,13 +289,6 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
     @Override
     public void initData() {
-
-        LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(HotelDetailsActivity.this);
-        userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
-        mRvUserComment.setLayoutManager(userCommentLayoutManager);
-        hotelDetailUserCommentAdapter = new HotelDetailUserCommentAdapter(HotelDetailsActivity.this);
-        hotelDetailUserCommentAdapter.setHotelDetailUserCommentList(commentList);
-        mRvUserComment.setAdapter(hotelDetailUserCommentAdapter);
 
         LinearLayoutManager deliciousFoodLinearLayout = new LinearLayoutManager(HotelDetailsActivity.this);
         deliciousFoodLinearLayout.setOrientation(deliciousFoodLinearLayout.HORIZONTAL);
@@ -497,17 +492,17 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     mTvFacilitiesScore.setText("设施" + Tools.getFormatDecimalPoint(facilitiesCommentScore));
                     mTvHygieneScore.setText("卫生" + Tools.getFormatDecimalPoint(hygieneScoreCommentScore));
 
-                    if (commentList != null) {
+                  /*  if (commentList != null) {
                         hotelDetailUserCommentAdapter.setHotelDetailUserCommentList(commentList);
                         hotelDetailUserCommentAdapter.notifyDataSetChanged();
-                    }
+                    }*/
 
                     mStarBarViewOccupantScore.setIntegerMark(false);
                     mStarBarViewOccupantScore.setStarMark(commentScore);
 
-                    tagAdapter = new TagAdapter<MchDetailsResponse.LabelEntity>(labelEntityList) {
+                    tagAdapter = new TagAdapter<LabelEntity>(labelEntityList) {
                         @Override
-                        public View getView(FlowLayout parent, int position, MchDetailsResponse.LabelEntity option) {
+                        public View getView(FlowLayout parent, int position, LabelEntity option) {
                             View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_gray_frame,
                                     mTagFlowHotelCommentLabel, false);
                             TextView tv = view.findViewById(R.id.tv_flowlayout);

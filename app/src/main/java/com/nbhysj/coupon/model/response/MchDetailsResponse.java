@@ -5,11 +5,11 @@ import java.util.List;
 
 /**
  * @auther：hysj created on 2019/6/9
- * description：景点详情
+ * description：景点详情（组合共用）
  */
 public class MchDetailsResponse implements Serializable {
 
-    //游玩指南
+    //游玩指南(景点详情)
     private List<VisitGuideEntity> visitGuide;
 
     //商户详情
@@ -24,6 +24,7 @@ public class MchDetailsResponse implements Serializable {
     //附近
     private NearbyEntity nearby;
 
+    //酒店民宿
     private NearbyHotelEntity nearbyHotel;
 
     public List<VisitGuideEntity> getVisitGuide() {
@@ -765,119 +766,6 @@ public class MchDetailsResponse implements Serializable {
         }
     }
 
-    public class MchTagsEntity {
-
-        private int id;
-
-        private String mchNo;
-
-        private int mchId;
-
-        private String mchType;
-
-        private String title;
-
-        private String value;
-
-        private int zanNum;
-
-        private long cTime;
-
-        private long uTime;
-
-        private int del;
-
-        private int supplierId;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getMchNo() {
-            return mchNo;
-        }
-
-        public void setMchNo(String mchNo) {
-            this.mchNo = mchNo;
-        }
-
-        public int getMchId() {
-            return mchId;
-        }
-
-        public void setMchId(int mchId) {
-            this.mchId = mchId;
-        }
-
-        public String getMchType() {
-            return mchType;
-        }
-
-        public void setMchType(String mchType) {
-            this.mchType = mchType;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public int getZanNum() {
-            return zanNum;
-        }
-
-        public void setZanNum(int zanNum) {
-            this.zanNum = zanNum;
-        }
-
-        public long getcTime() {
-            return cTime;
-        }
-
-        public void setcTime(long cTime) {
-            this.cTime = cTime;
-        }
-
-        public long getuTime() {
-            return uTime;
-        }
-
-        public void setuTime(long uTime) {
-            this.uTime = uTime;
-        }
-
-        public int getDel() {
-            return del;
-        }
-
-        public void setDel(int del) {
-            this.del = del;
-        }
-
-        public int getSupplierId() {
-            return supplierId;
-        }
-
-        public void setSupplierId(int supplierId) {
-            this.supplierId = supplierId;
-        }
-    }
-
     public class TagsEntity implements Serializable {
 
         private int id;
@@ -990,7 +878,7 @@ public class MchDetailsResponse implements Serializable {
 
         private ScoreEntity score;
 
-        private List<SubCommentEntity> comment;
+        private List<MchCommentEntity> comment;
 
         private List<LabelEntity> label;
 
@@ -1002,11 +890,11 @@ public class MchDetailsResponse implements Serializable {
             this.score = score;
         }
 
-        public List<SubCommentEntity> getComment() {
+        public List<MchCommentEntity> getComment() {
             return comment;
         }
 
-        public void setComment(List<SubCommentEntity> comment) {
+        public void setComment(List<MchCommentEntity> comment) {
             this.comment = comment;
         }
 
@@ -1077,235 +965,6 @@ public class MchDetailsResponse implements Serializable {
 
         public void setCommentScore3(double commentScore3) {
             this.commentScore3 = commentScore3;
-        }
-    }
-
-    public class SubCommentEntity implements Serializable {
-
-        private int id;
-
-        private int score;
-
-        private String content;
-
-        private List<String> photo;
-
-        private int zanNum;
-
-        private int top;
-
-        private String reply;
-
-        private UserEntity user;
-
-        private int hitsNum;
-
-        private String mchDetails;
-
-        private int goodsId;
-
-        private String goodsTitle;
-
-        private long payTime;
-
-        private long ctime;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getScore() {
-            return score;
-        }
-
-        public void setScore(int score) {
-            this.score = score;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public List<String> getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(List<String> photo) {
-            this.photo = photo;
-        }
-
-        public int getZanNum() {
-            return zanNum;
-        }
-
-        public void setZanNum(int zanNum) {
-            this.zanNum = zanNum;
-        }
-
-        public int getTop() {
-            return top;
-        }
-
-        public void setTop(int top) {
-            this.top = top;
-        }
-
-        public String getReply() {
-            return reply;
-        }
-
-        public void setReply(String reply) {
-            this.reply = reply;
-        }
-
-        public UserEntity getUser() {
-            return user;
-        }
-
-        public void setUser(UserEntity user) {
-            this.user = user;
-        }
-
-        public int getHitsNum() {
-            return hitsNum;
-        }
-
-        public void setHitsNum(int hitsNum) {
-            this.hitsNum = hitsNum;
-        }
-
-        public String getMchDetails() {
-            return mchDetails;
-        }
-
-        public void setMchDetails(String mchDetails) {
-            this.mchDetails = mchDetails;
-        }
-
-        public long getCtime() {
-            return ctime;
-        }
-
-        public void setCtime(long ctime) {
-            this.ctime = ctime;
-        }
-
-        public int getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(int goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getGoodsTitle() {
-            return goodsTitle;
-        }
-
-        public void setGoodsTitle(String goodsTitle) {
-            this.goodsTitle = goodsTitle;
-        }
-
-        public long getPayTime() {
-            return payTime;
-        }
-
-        public void setPayTime(long payTime) {
-            this.payTime = payTime;
-        }
-    }
-
-    public class UserEntity implements Serializable {
-
-        private int mchFlag;
-
-        private int id;
-
-        private String nickname;
-
-        private String avater;
-
-        private String photos;
-
-        public int getMchFlag() {
-            return mchFlag;
-        }
-
-        public void setMchFlag(int mchFlag) {
-            this.mchFlag = mchFlag;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getNickname() {
-            return nickname;
-        }
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
-
-        public String getAvater() {
-            return avater;
-        }
-
-        public void setAvater(String avater) {
-            this.avater = avater;
-        }
-
-        public String getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(String photos) {
-            this.photos = photos;
-        }
-    }
-
-    public class LabelEntity implements Serializable{
-
-        private String title;
-
-        private int count;
-
-        private int value;
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public int getCount() {
-            return count;
-        }
-
-        public void setCount(int count) {
-            this.count = count;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public void setValue(int value) {
-            this.value = value;
         }
     }
 
@@ -1416,6 +1075,130 @@ public class MchDetailsResponse implements Serializable {
 
         public void setHotel(List<HotelBean> hotel) {
             this.hotel = hotel;
+        }
+    }
+
+    //组合(查看更多)
+    public class NearbyFoodEntity {
+
+        private int id;
+
+        private String title;
+
+        private String type;
+
+        private String type2;
+
+        private int score;
+
+        private int price;
+
+        private String photo;
+
+        private String distance;
+
+        private String county;
+
+        private String countyId;
+
+        private int level;
+
+        private List<BaseTagsBean> tags;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getType2() {
+            return type2;
+        }
+
+        public void setType2(String type2) {
+            this.type2 = type2;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
+        }
+
+        public String getPhoto() {
+            return photo;
+        }
+
+        public void setPhoto(String photo) {
+            this.photo = photo;
+        }
+
+        public String getDistance() {
+            return distance;
+        }
+
+        public void setDistance(String distance) {
+            this.distance = distance;
+        }
+
+        public String getCounty() {
+            return county;
+        }
+
+        public void setCounty(String county) {
+            this.county = county;
+        }
+
+        public String getCountyId() {
+            return countyId;
+        }
+
+        public void setCountyId(String countyId) {
+            this.countyId = countyId;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public void setLevel(int level) {
+            this.level = level;
+        }
+
+        public List<BaseTagsBean> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<BaseTagsBean> tags) {
+            this.tags = tags;
         }
     }
 

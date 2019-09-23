@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,9 +37,9 @@ import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.ShoppingMallMenuBean;
 import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
-import com.nbhysj.coupon.ui.CombinationListActivity;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
+import com.nbhysj.coupon.ui.GroupMchListActivity;
 import com.nbhysj.coupon.ui.ShoppingMallFineFoodActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHomestayActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHotelActivity;
@@ -46,9 +47,11 @@ import com.nbhysj.coupon.ui.ShoppingMallInteractionActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScenicSpotActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScreeningActivity;
 import com.nbhysj.coupon.ui.ShoppingMallSpecialSaleActivity;
+import com.nbhysj.coupon.ui.StrategyActivity;
 import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.BannerView;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -324,13 +327,13 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 } else if (position == 2) {
                     toActivity(ShoppingMallHotelActivity.class); //酒店
                 } else if (position == 3) {
-                    //  toActivity(MutiScrollDemoActivity.class);
+                      toActivity(StrategyActivity.class);  //攻略
                 } else if (position == 4) {
                     toActivity(ShoppingMallHomestayActivity.class); //民宿
                 } else if (position == 5) {
                     toActivity(ShoppingMallInteractionActivity.class);  //互动
                 } else if (position == 6) {
-                    toActivity(CombinationListActivity.class);
+                    toActivity(GroupMchListActivity.class);
                 } else if (position == 7) {                              //用车
 
                    // toActivity(IntroductionOfLandlordActivity.class);
@@ -598,11 +601,14 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     CarH5UrlResponse carH5UrlResponse = res.getData();
                     String carH5Url = carH5UrlResponse.getUrl();
 
-                    Intent intent = new Intent();
-                    intent.putExtra("carH5Url",carH5Url);
-                    intent.setClass(getActivity(), WebActivity.class);
-                    startActivity(intent);
-
+                    if(!TextUtils.isEmpty(carH5Url))
+                    {
+                        Intent intent = new Intent();
+                        intent.putExtra("url", carH5Url);
+                        intent.putExtra("title", Constants.VEHICLE_USE_H5_TITLE);
+                        intent.setClass(getActivity(), WebActivity.class);
+                        startActivity(intent);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -618,7 +624,9 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         if(validateInternet())
         {
             showProgressDialog(getActivity());
-            mPresenter.getCarH5Url("121.583030","29.790590");
+            String latitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
+            String longitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
+            mPresenter.getCarH5Url(longitude,latitude);
         }
     }
 

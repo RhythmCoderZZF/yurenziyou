@@ -35,6 +35,7 @@ import com.nbhysj.coupon.model.OrderDetailModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.model.response.OrderDetailGuessBean;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
 import com.nbhysj.coupon.model.response.OrderDetailScenicSpotReponse;
 import com.nbhysj.coupon.presenter.OrderDetailPresenter;
@@ -160,7 +161,7 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
     //可能会遇到的问题
     private List<OrderDetailResponse.AnswerEntity> problemList;
 
-    private List<MchTypeBean> guessYouLikeList;
+    private List<OrderDetailGuessBean> guessYouLikeList;
 
     private OrderDetailProblemAdapter orderDetailProblemAdapter;
 
@@ -263,10 +264,10 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
 
         LinearLayoutManager linearLayout = new LinearLayoutManager(MyOrderDetailActivity.this);
         //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRvGuessYouLike.setLayoutManager(linearLayout);
+        /*mRvGuessYouLike.setLayoutManager(linearLayout);
         gussYouLikeAdapter = new MchTypeAdapter(MyOrderDetailActivity.this);
         gussYouLikeAdapter.setMchTypeDetailList(guessYouLikeList);
-        mRvGuessYouLike.setAdapter(gussYouLikeAdapter);
+        mRvGuessYouLike.setAdapter(gussYouLikeAdapter);*/
 
     }
 
@@ -539,9 +540,9 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
                     orderDetailVehicleUseAdapter.notifyDataSetChanged();
 
                     //猜你喜欢
-                    guessYouLikeList = orderDetailResponse.getGuess();
+                 /*   guessYouLikeList = orderDetailResponse.getGuess();
                     gussYouLikeAdapter.setMchTypeDetailList(guessYouLikeList);
-                    gussYouLikeAdapter.notifyDataSetChanged();
+                    gussYouLikeAdapter.notifyDataSetChanged();*/
 
                 } catch (Exception e) {
                     e.printStackTrace();

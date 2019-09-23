@@ -28,7 +28,7 @@ public class MchGoodsBean {
 
     private String ticketIntoType;
 
-    /*******  景点商品   *******/
+    /*******  酒店民宿商品   *******/
     private int id;
 
     //面积
@@ -79,6 +79,13 @@ public class MchGoodsBean {
     private List<String> photos;
 
     private long ctime;
+
+    /********  组合  *********/
+    private int packageId;
+
+    private List<String> containCosts;
+
+    private String goodsBuyNotes;
 
     public int getGoodsId() {
         return goodsId;
@@ -334,5 +341,29 @@ public class MchGoodsBean {
 
     public void setCtime(long ctime) {
         this.ctime = ctime;
+    }
+
+    public int getPackageId() {
+        return packageId;
+    }
+
+    public void setPackageId(int packageId) {
+        this.packageId = packageId;
+    }
+
+    public List<String> getContainCosts() {
+        return containCosts;
+    }
+
+    public void setContainCosts(List<String> containCosts) {
+        this.containCosts = containCosts;
+    }
+
+    public String getGoodsBuyNotes() {
+        return goodsBuyNotes;
+    }
+
+    public void setGoodsBuyNotes(String goodsBuyNotes) {
+        this.goodsBuyNotes = goodsBuyNotes;
     }
 }

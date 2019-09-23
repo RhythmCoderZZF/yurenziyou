@@ -67,12 +67,12 @@ public class HomestayAdapter extends RecyclerView.Adapter<HomestayAdapter.ViewHo
             String mchName = homestayResponse.getMchName();
             String homestayAddress = homestayResponse.getAddress();
             int authenticationStatus = homestayResponse.getAuthenticationStatus();
-            String lord = homestayResponse.getLord();
+            String avatarUrl = homestayResponse.getAvatar();
             int loveStatus = homestayResponse.getLoveStatus();
             int dataId = homestayResponse.getId();
 
             GlideUtil.loadImage(mContext, photo, holder.mImgHomestay);
-            GlideUtil.loadImage(mContext, lord, holder.mImgHouseOwnerAvatar);
+            GlideUtil.loadImage(mContext, avatarUrl, holder.mImgHouseOwnerAvatar);
             holder.mTvHomestayName.setText(mchName);
             holder.mTvHomestayAddress.setText(homestayAddress);
             holder.mTvHomestayPrice.setText(String.valueOf(consumePrice));

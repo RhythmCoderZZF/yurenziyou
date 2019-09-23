@@ -32,7 +32,11 @@ public class HotelBean {
     private String distance;
 
     //民宿
+    private int mchId;
+
     private String bedType;
+
+    private int intoNum;
 
     private String acreage;
 
@@ -182,6 +186,22 @@ public class HotelBean {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public int getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(int mchId) {
+        this.mchId = mchId;
+    }
+
+    public int getIntoNum() {
+        return intoNum;
+    }
+
+    public void setIntoNum(int intoNum) {
+        this.intoNum = intoNum;
     }
 
     public class ServiceEntity implements Serializable {

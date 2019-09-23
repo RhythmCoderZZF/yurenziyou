@@ -691,15 +691,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_57"
-                android:text="已减5元"
-                android:textColor="@color/color_text_orange2"
-                android:textSize="@dimen/text_size_tiny"
-                android:textStyle="bold"
-                android:visibility="gone" />
         </LinearLayout>
 
 

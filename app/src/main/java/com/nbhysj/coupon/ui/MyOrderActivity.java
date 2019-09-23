@@ -59,6 +59,7 @@ public class MyOrderActivity extends BaseActivity {
 
     @Override
     public void initData() {
+
         mImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

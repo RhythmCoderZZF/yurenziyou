@@ -26,7 +26,7 @@ public class OrderDetailResponse implements Serializable{
     private OrderInvoiceEntity orderInvoice;
 
     //猜你喜欢
-    private List<MchTypeBean> guess;
+    private List<OrderDetailGuessBean> guess;
 
     private OrderEntity order;
 
@@ -103,11 +103,11 @@ public class OrderDetailResponse implements Serializable{
         this.orderInvoice = orderInvoice;
     }
 
-    public List<MchTypeBean> getGuess() {
+    public List<OrderDetailGuessBean> getGuess() {
         return guess;
     }
 
-    public void setGuess(List<MchTypeBean> guess) {
+    public void setGuess(List<OrderDetailGuessBean> guess) {
         this.guess = guess;
     }
 

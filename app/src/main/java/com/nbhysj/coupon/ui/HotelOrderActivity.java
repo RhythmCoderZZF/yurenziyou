@@ -266,7 +266,6 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                 showToast(HotelOrderActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
-
     }
 
     @Override

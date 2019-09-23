@@ -26,7 +26,15 @@ public class Constants {
 
     public static final int NO_MORE_LOAD_CODE = -1;      //暂无数据
 
-
+    /************** h5标题 ************************/
+    //用车
+    public static final String VEHICLE_USE_H5_TITLE = "用车";
+    //房源详情
+    public static final String HOUSE_INFO_H5_TITEL = "房源详情";
+    //更多设备
+    public static final String All_FACILITY_H5_TITEL = "更多设备";
+    //更多设备
+    public static final String STRATEGY_H5_TITEL = "攻略";
 
     public static final String CONNECT_TIMED_OUT = "timeout";
 

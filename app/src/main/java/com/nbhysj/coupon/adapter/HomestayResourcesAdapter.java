@@ -1,15 +1,20 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.util.List;
@@ -23,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResourcesAdapter.ViewHolder> {
 
-    List<ShopMallHomePageResponse.GuessEntity> guessYouLikeList;
+    List<HotelBean> homestayResourcesList;
     private Context mContext;
 
     public HomestayResourcesAdapter(Context mContext) {
@@ -31,15 +36,15 @@ public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResou
         this.mContext = mContext;
     }
 
-    public void setGuessYouLikeList(List<ShopMallHomePageResponse.GuessEntity> guessYouLikeList) {
+    public void setHomestayResourcesList(List<HotelBean> homestayResourcesList) {
 
-        this.guessYouLikeList = guessYouLikeList;
+        this.homestayResourcesList = homestayResourcesList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_housing_resources_item, parent, false);//解决宽度不能铺满
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_hot_selling_homestay_nearby_item, parent, false);//解决宽度不能铺满
         ViewHolder hold = new ViewHolder(view);
         return hold;
     }
@@ -49,13 +54,33 @@ public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResou
 
         try {
 
-            ShopMallHomePageResponse.GuessEntity guessEntity = guessYouLikeList.get(itemPosition);
-            String photo = guessEntity.getPhoto();
-            String mchName = guessEntity.getMchName();
-            double mConsumePrice = guessEntity.getConsumePrice();
-            GlideUtil.loadCornersTransformImage(mContext, photo, 5, holder.mImgShoppingMallGuessYouLike);
-            holder.mTvMchName.setText(mchName);
-            holder.mTvPerCapitaPrice.setText(String.valueOf(mConsumePrice));
+            HotelBean homestayBean = homestayResourcesList.get(itemPosition);
+            int mchId = homestayBean.getMchId();
+            String photo = homestayBean.getPhoto();
+            String title = homestayBean.getTitle();
+            int defaultPrice = homestayBean.getDefaultPrice();
+            int marketPrice = homestayBean.getMarketPrice();
+            int bedNum = homestayBean.getBedNum();
+            String acreage = homestayBean.getAcreage();
+            int intoNum = homestayBean.getIntoNum();
+            GlideUtil.loadImage(mContext, photo, holder.mImgHomestay);
+            holder.mTvHomestayTitle.setText(title);
+            holder.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
+            holder.mTvDefaultPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+            holder.mTvMarketPrice.setText(String.valueOf(marketPrice));
+
+            holder.mTvHomestayTag.setText(bedNum + "居室." + acreage + "㎡" + ".可住" + intoNum + "人");
+
+            holder.mLlytHomestayResourcesItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, HomestayDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
+                    mContext.startActivity(intent);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,19 +88,27 @@ public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResou
 
     @Override
     public int getItemCount() {
-        return guessYouLikeList.size();
+        return homestayResourcesList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.image_guess_you_like)
-        ImageView mImgShoppingMallGuessYouLike;
-        //价格
-        @BindView(R.id.tv_per_capita_price)
-        TextView mTvPerCapitaPrice;
-        //商户名
-        @BindView(R.id.tv_merchant_name)
-        TextView mTvMchName;
+        //民宿照片
+        @BindView(R.id.image_homestay)
+        ImageView mImgHomestay;
+        //市场价格
+        @BindView(R.id.tv_market_price)
+        TextView mTvMarketPrice;
+        //默认价格
+        @BindView(R.id.tv_default_price)
+        TextView mTvDefaultPrice;
+        //民宿名
+        @BindView(R.id.tv_homestay_title)
+        TextView mTvHomestayTitle;
+        //民宿标签
+        @BindView(R.id.tv_homestay_tag)
+        TextView mTvHomestayTag;
+        @BindView(R.id.llyt_homestay_resources_item)
+        LinearLayout mLlytHomestayResourcesItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

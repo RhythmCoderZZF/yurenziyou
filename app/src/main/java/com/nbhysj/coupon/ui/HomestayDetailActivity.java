@@ -1,14 +1,14 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,45 +18,45 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HomestayEquipmentAdapter;
 import com.nbhysj.coupon.adapter.HomestayReservationAdapter;
-import com.nbhysj.coupon.adapter.NearbyHotSellHotelsAdapter;
+import com.nbhysj.coupon.adapter.HomestayResourcesAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomestayContract;
 import com.nbhysj.coupon.model.HomestayModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.BannerUrlBO;
-import com.nbhysj.coupon.model.response.EquipmentResponse;
+import com.nbhysj.coupon.model.response.CommentUserEntity;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
-import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
 import com.nbhysj.coupon.presenter.HomestayPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
+import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
+import com.nbhysj.coupon.view.StarBarView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @auther：hysj created on 2019/05/30
@@ -68,26 +68,8 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     View mToolbarSpace;
     @BindView(R.id.banner_hotel_detail)
     HotelDetailBannerView mBannerViewHotelDetail;
-    @BindView(R.id.flowlayout_hotel_comment_label)
-    TagFlowLayout mTagFlowHotelCommentLabel;
-    @BindView(R.id.rv_user_comment)
-    RecyclerView mRvUserComment;
-    @BindView(R.id.rv_hotel_periphery_recommendation)
-    RecyclerView mRvHotelPeriphery;
     @BindView(R.id.scrollview_homestay_detail)
     RecyclerScrollView mScrollViewHomeStayDetail;
-    @BindView(R.id.tv_delicious_food)
-    TextView mTvDeliciousFood;
-    @BindView(R.id.tv_entertainment)
-    TextView mTvEntertainment;
-    @BindView(R.id.tv_scenic_spot)
-    TextView mTvScenicSpot;
-    @BindView(R.id.view_delicious_food)
-    View mViewDeliciousFood;
-    @BindView(R.id.view_entertainment)
-    View mViewEntertainment;
-    @BindView(R.id.view_scenic_spot)
-    View mViewScenicSpot;
     @BindView(R.id.ibtn_back)
     ImageButton mImgBtnBack;
     //收藏
@@ -108,21 +90,175 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     //民宿名字
     @BindView(R.id.tv_homestay_name)
     TextView mTvHomestayName;
-    //问题内容
-    @BindView(R.id.tv_question_content)
-    TextView mTvQuestionContent;
-    //回答内容
-    @BindView(R.id.tv_answer_content)
-    TextView mTvAnswerContent;
     //民宿
     @BindView(R.id.rv_hot_selling_homestay_nearby)
     RecyclerView mRvHotSellingHomestaysNearby;
+    //民宿标签
+    @BindView(R.id.flowlayout_homestay_label)
+    TagFlowLayout mFlowlayoutHomestayLabel;
+    //民宿价格
+    @BindView(R.id.tv_homestay_price)
+    TextView mTvHomestayPrice;
+    //房东头像
+    @BindView(R.id.image_landlor_avatar)
+    ImageView mImgLandorAvatar;
+    //房东名
+    @BindView(R.id.tv_landlor_name)
+    TextView mTvLandlorName;
+    //实名认证
+    @BindView(R.id.llyt_authentication_status)
+    LinearLayout mLlytAuthenticationStatus;
+    //平均确认时长
+    @BindView(R.id.tv_confirm_time)
+    TextView mTvConfirmTime;
+    //房源数量
+    @BindView(R.id.tv_house_resouce_num)
+    TextView mTvHouseResouceNum;
+    //预定成功率
+    @BindView(R.id.tv_booking_success_rate)
+    TextView mTvBookSuccessRate;
+    //房东评分
+    @BindView(R.id.tv_landlor_score)
+    TextView mTvLandorScore;
+    //房源信息
+    @BindView(R.id.tv_house_info)
+    TextView mTvHouseInfo;
+    //房源信息
+    @BindView(R.id.llyt_house_info)
+    LinearLayout mLlytHouseInfo;
+    //评分
+    @BindView(R.id.tv_comment_score)
+    TextView mTvCommentScore;
+    //民宿评分
+    @BindView(R.id.starbar_homestay_score)
+    StarBarView mStarBarViewHomestay;
+    //民宿景点评分
+    @BindView(R.id.tv_service_score)
+    TextView mTvServiceScore;
+    //民宿服务进度条
+    @BindView(R.id.pb_service_score_progressbar)
+    ProgressBar mProgressBarServiceScore;
+    //民宿设施评分
+    @BindView(R.id.tv_facility_score)
+    TextView mTvFacilityScore;
+    //民宿设施进度条
+    @BindView(R.id.pb_facility_score_progressbar)
+    ProgressBar mProgressBarfacilityScore;
+    //民宿卫生评分
+    @BindView(R.id.tv_hygiene_score)
+    TextView mTvHygieneScore;
+    //民宿卫生评分进度条
+    @BindView(R.id.pb_hygiene_score_progressbar)
+    ProgressBar mProgressBarHygieneScore;
+    //用户评论
+    @BindView(R.id.llyt_user_comment)
+    LinearLayout mLlytUserComment;
+    //评论描述
+    @BindView(R.id.tv_expand_comment_des)
+    TextView mTvExpandCommentDes;
+    //评论者用户名
+    @BindView(R.id.tv_commentator_username)
+    TextView mTvCommentatorUsername;
+    //评论时间
+    @BindView(R.id.tv_comment_time)
+    TextView mTvCommentTime;
+    //评论者头像
+    @BindView(R.id.image_comment_user_avatar)
+    CircleImageView mCircleImgCommentUserAvatar;
+    //总评论数
+    @BindView(R.id.tv_total_comment_num)
+    TextView mTvTotalCommentNum;
+    //静态地图
+    @BindView(R.id.img_static_map)
+    ImageView mImageStaticMap;
+    //民宿地址
+    @BindView(R.id.tv_homestay_address)
+    TextView mTvHomestayAddress;
+    //押金
+    @BindView(R.id.tv_deposit)
+    TextView mTvDeposit;
+    //发票状态
+    @BindView(R.id.tv_invoice_status)
+    TextView mTvInvoiceStatus;
+    //入住时间
+    @BindView(R.id.tv_check_in_time)
+    TextView mTvCheckInTime;
+    //离店时间
+    @BindView(R.id.tv_departure_time)
+    TextView mTvDepartureTime;
+    //接待时间
+
+    @BindView(R.id.tv_reception_time)
+    TextView mTvReceptionTime;
+    //儿童政策
+    @BindView(R.id.img_child_rule)
+    ImageView mImgChildRule;
+    //儿童政策
+    @BindView(R.id.tv_child_rule)
+    TextView mTvChildRule;
+    //抽烟
+    @BindView(R.id.img_smoking_rule)
+    ImageView mImgSmokingRule;
+    //抽烟
+    @BindView(R.id.tv_smoking_rule)
+    TextView mTvSmokingRule;
+    //做饭
+    @BindView(R.id.img_cook_rule)
+    ImageView mImgCookRule;
+    //做饭
+    @BindView(R.id.tv_cook_rule)
+    TextView mTvCookRule;
+    //商业拍摄
+    @BindView(R.id.img_commercial_shooting_rule)
+    ImageView mImgCommercialShooting;
+    //商业拍摄
+    @BindView(R.id.tv_commercial_shooting_rule)
+    TextView mTvCommercialShooting;
+    //额外加人
+    @BindView(R.id.img_extra_person_rule)
+    ImageView mImgExtraPersonRule;
+    //额外加人
+    @BindView(R.id.tv_extra_person_rule)
+    TextView mTvExtraPersonRule;
+    //接待老人
+    @BindView(R.id.img_elderly_rule)
+    ImageView mImgElderlyRule;
+    //接待老人
+    @BindView(R.id.tv_elderly_rule)
+    TextView mTvElderlyRule;
+    //携带宠物
+    @BindView(R.id.img_pets_rule)
+    ImageView mImgPetsRule;
+    //携带宠物
+    @BindView(R.id.tv_pets_rule)
+    TextView mTvPetsRule;
+    //聚会
+    @BindView(R.id.img_party_rule)
+    ImageView mImgPartyRule;
+    //聚会
+    @BindView(R.id.tv_party_rule)
+    TextView mTvPartyRule;
+    //额外加床
+    @BindView(R.id.img_extra_bed_rule)
+    ImageView mImgExtraBedRule;
+    //额外加床
+    @BindView(R.id.tv_extra_bed_rule)
+    TextView mTvExtraBedRule;
+    //接待贵宾
+    @BindView(R.id.img_receive_foreign_guests_rule)
+    ImageView mImgReceiveForeignGuestsRule;
+    //接待贵宾
+    @BindView(R.id.tv_receive_foreign_guests_rule)
+    TextView mTvReceiveForeignGuestsRule;
+
+
     private int height;
     private List<ImageView> viewList;
     private List<String> bannerList;
-    List<EquipmentResponse> equipmentResponseList = null;
+    //设备列表
+    List<MchHomestayDetailsResponse.ServiceEntity> facilityList;
 
-    private List<HotelBean> hotSellingHotelsNearbyList;
+    private List<HotelBean> homestayResourcesList;
 
     //民宿商品列表
     private List<MchGoodsBean> mchHomestayGoodsList;
@@ -135,12 +271,23 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
     //商户名
     private String mchName;
+    ///民宿预定
     private HomestayReservationAdapter homestayReservationAdapter;
 
-    private NearbyHotSellHotelsAdapter nearbyHotSellHotelsAdapter;
+    //民宿房源
+    private HomestayResourcesAdapter homestayResourcesAdapter;
 
-    List<MchHomestayDetailsResponse.SubCommentEntity> commentList;
+    //民宿设备
+    private HomestayEquipmentAdapter homestayEquipmentAdapter;
 
+    //用户评论列表
+    private List<MchCommentEntity> commentList;
+
+    //房源详情h5
+    private String houseDetailsH5Url;
+
+    //设备详情h5
+    private String allFacilityH5Url;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -155,21 +302,21 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
         mchId = getIntent().getIntExtra("mchId", 0);
 
-        if (equipmentResponseList == null) {
+        if (facilityList == null) {
 
-            equipmentResponseList = new ArrayList<>();
+            facilityList = new ArrayList<>();
 
         } else {
 
-            equipmentResponseList.clear();
+            facilityList.clear();
         }
 
-        //民宿
-        if (hotSellingHotelsNearbyList == null) {
+        //民宿列表
+        if (homestayResourcesList == null) {
 
-            hotSellingHotelsNearbyList = new ArrayList<>();
+            homestayResourcesList = new ArrayList<>();
         } else {
-            hotSellingHotelsNearbyList.clear();
+            homestayResourcesList.clear();
         }
 
         //民宿商品列表
@@ -198,7 +345,6 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-
 
         ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
         layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
@@ -232,7 +378,6 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
             }
         }
 
-
         mBannerViewHotelDetail.startLoop(false);
         // mBannerViewHotelDetail.setViewList(HomestayDetailActivity.this, viewList, bannerList);
 
@@ -243,6 +388,13 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
             @Override
             public void setHotelRoomItemListener(int position) {
 
+                Intent intent = new Intent();
+                intent.setClass(HomestayDetailActivity.this, HotelOrderActivity.class);
+                MchGoodsBean mchGoodsBean = mchHomestayGoodsList.get(position);
+                int goodId = mchGoodsBean.getId();
+                intent.putExtra("goodsId",goodId);
+                intent.putExtra("mchName",mchName);
+                startActivity(intent);
             }
         });
         homestayReservationAdapter.setHomestayReservationList(mchHomestayGoodsList);
@@ -269,89 +421,73 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     @Override
     public void initData() {
 
-        List<String> fineFoodTagList = new ArrayList<>();
-        fineFoodTagList.add("服务热情(500)");
-        fineFoodTagList.add("实惠(20)");
-        fineFoodTagList.add("干净卫生(200)");
-        fineFoodTagList.add("服务热情(500)");
-        fineFoodTagList.add("刷差评(200)");
-        TagAdapter tagAdapter = new TagAdapter<String>(fineFoodTagList) {
-            @Override
-            public View getView(FlowLayout parent, int position, String option) {
-                View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_gray_frame,
-                        mTagFlowHotelCommentLabel, false);
-                TextView tv = view.findViewById(R.id.tv_flowlayout);
-                tv.setText(option);
-
-                return view;
-            }
-        };
-        mTagFlowHotelCommentLabel.setMaxSelectCount(1);
-        mTagFlowHotelCommentLabel.setAdapter(tagAdapter);
-
-        mTagFlowHotelCommentLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-            @Override
-            public boolean onTagClick(View view, int position, FlowLayout parent) {
-                String content = "";
-                Set<Integer> selectPosSet = mTagFlowHotelCommentLabel.getSelectedList();
-                Iterator it = selectPosSet.iterator();
-                while (it.hasNext()) {
-                    int index = (int) it.next();
-                    //content = options[index];
-                    // MoveToPosition(layoutManager,index);
-
-
-                }
-                return true;
-            }
-        });
-        tagAdapter.setSelectedList(0);
-
-        List<ScenicSpotsUserCommentResponse> spotsUserCommentResponseList = new ArrayList<>();
-        List<String> userCommentPhotoList = new ArrayList<>();
-        userCommentPhotoList.add("http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg");
-        userCommentPhotoList.add("http://d.hiphotos.baidu.com/lvpics/w=1000/sign=e2347e78217f9e2f703519082f00eb24/730e0cf3d7ca7bcb49f90bb1b8096b63f724a8aa.jpg");
-        userCommentPhotoList.add("http://i0.hexunimg.cn/2011-08-18/132587770.jpg");
-        ScenicSpotsUserCommentResponse userCommentResponse = new ScenicSpotsUserCommentResponse();
-        userCommentResponse.setId(1);
-        userCommentResponse.setUsername("陈发发");
-        userCommentResponse.setCommentPublishTime("2019-04-29");
-        userCommentResponse.setContent("第一次去海洋馆真的超级幸运,先去看的是剧场表扬 互动环节的时候很幸运被抽中和白鲸接触来了一个深海之吻超级感动,后面又到水族参观,最喜欢的是哒哒哒哒哒哒多多");
-        userCommentResponse.setStarLevel(3);
-        userCommentResponse.setUserAvatarPhoto("http://pic9.nipic.com/20100901/4753218_163400058451_2.jpg");
-        userCommentResponse.setUserCommentPhotoList(userCommentPhotoList);
-
-        spotsUserCommentResponseList.add(userCommentResponse);
-        LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(HomestayDetailActivity.this);
-        userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
-        mRvUserComment.setLayoutManager(userCommentLayoutManager);
-       /* HotelDetailUserCommentAdapter hotelDetailUserCommentAdapter = new HotelDetailUserCommentAdapter(HomestayDetailActivity.this);
-        hotelDetailUserCommentAdapter.setHotelDetailUserCommentList(spotsUserCommentResponseList);
-        mRvUserComment.setAdapter(hotelDetailUserCommentAdapter);*/
-
-    /*    LinearLayoutManager deliciousFoodLinearLayout = new LinearLayoutManager(HomestayDetailActivity.this);
-        deliciousFoodLinearLayout.setOrientation(deliciousFoodLinearLayout.HORIZONTAL);
-        mRvHotelPeriphery.setLayoutManager(deliciousFoodLinearLayout);
-        Home hotelPeripheryAdapter = new HotelPeripheryAdapter(HomestayDetailActivity.this);
-        mRvHotelPeriphery.setAdapter(hotelPeripheryAdapter);*/
-
         //看了这个房的人还看了
-        LinearLayoutManager layoutManager = new LinearLayoutManager(HomestayDetailActivity.this);
+        GridLayoutManager layoutManager = new GridLayoutManager(HomestayDetailActivity.this, 2);
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvHotSellingHomestaysNearby.setLayoutManager(layoutManager);
-        nearbyHotSellHotelsAdapter = new NearbyHotSellHotelsAdapter(HomestayDetailActivity.this);
-        nearbyHotSellHotelsAdapter.setHotSellHotelList(hotSellingHotelsNearbyList);
-        mRvHotSellingHomestaysNearby.setAdapter(nearbyHotSellHotelsAdapter);
+        mRvHotSellingHomestaysNearby.addItemDecoration(new RecyclerViewItemDecoration(Tools.dip2px(HomestayDetailActivity.this, 10)));
+        homestayResourcesAdapter = new HomestayResourcesAdapter(HomestayDetailActivity.this);
+        homestayResourcesAdapter.setHomestayResourcesList(homestayResourcesList);
+        mRvHotSellingHomestaysNearby.setAdapter(homestayResourcesAdapter);
 
-        List<EquipmentResponse> equipmentResponseList = initEquipmentList();
-        //附近热销酒店
+        //设备列表
         GridLayoutManager homestayEquipmentLayoutManager = new GridLayoutManager(HomestayDetailActivity.this, 4);
         homestayEquipmentLayoutManager.setOrientation(homestayEquipmentLayoutManager.VERTICAL);
         mRvHomestayEquipment.setLayoutManager(homestayEquipmentLayoutManager);
-        HomestayEquipmentAdapter homestayEquipmentAdapter = new HomestayEquipmentAdapter(HomestayDetailActivity.this);
-        homestayEquipmentAdapter.setEquipmentList(equipmentResponseList);
+        homestayEquipmentAdapter = new HomestayEquipmentAdapter(HomestayDetailActivity.this, new HomestayEquipmentAdapter.AllFacilityItemListener() {
+            @Override
+            public void setAllFacilityItemListenerCallback()
+            {
+                if(!TextUtils.isEmpty(houseDetailsH5Url)) {
+
+                    Intent intent = new Intent();
+                    intent.putExtra("url", allFacilityH5Url);
+                    intent.putExtra("title", Constants.All_FACILITY_H5_TITEL);
+                    intent.setClass(HomestayDetailActivity.this, WebActivity.class);
+                    startActivity(intent);
+
+                }
+            }
+        });
+        homestayEquipmentAdapter.setEquipmentList(facilityList);
         mRvHomestayEquipment.setAdapter(homestayEquipmentAdapter);
 
+    }
+
+    /**
+     * 为RecyclerView增加间距
+     * 预设2列，如果是3列，则左右值不同
+     */
+    public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
+        private int space = 0;
+        private int pos;
+
+        public RecyclerViewItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+            outRect.top = space;
+
+            //该View在整个RecyclerView中位置。
+            pos = parent.getChildAdapterPosition(view);
+
+            //取模
+
+            //两列的左边一列
+            if (pos % 2 == 0) {
+                outRect.left = space;
+                outRect.right = space / 2;
+            }
+
+            //两列的右边一列
+            if (pos % 2 == 1) {
+                outRect.left = space / 2;
+                outRect.right = space;
+            }
+        }
     }
 
     @Override
@@ -360,40 +496,25 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back})
+    @OnClick({R.id.ibtn_back,R.id.llyt_house_info})
     public void onClick(View v) {
-        Typeface normalFont = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
-        mTvEntertainment.setTypeface(normalFont);
-        Typeface boldFont = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
-        mTvEntertainment.setTypeface(boldFont);
         switch (v.getId()) {
-            case R.id.llyt_delicious_food:
-                mViewDeliciousFood.setVisibility(View.VISIBLE);
-                mViewEntertainment.setVisibility(View.GONE);
-                mViewScenicSpot.setVisibility(View.GONE);
-                mTvDeliciousFood.setTypeface(boldFont);
-                mTvEntertainment.setTypeface(normalFont);
-                mTvScenicSpot.setTypeface(normalFont);
-                break;
-            case R.id.llyt_entertainment:
-                mViewEntertainment.setVisibility(View.VISIBLE);
-                mViewDeliciousFood.setVisibility(View.GONE);
-                mViewScenicSpot.setVisibility(View.GONE);
-                mTvEntertainment.setTypeface(boldFont);
-                mTvDeliciousFood.setTypeface(normalFont);
-                mTvScenicSpot.setTypeface(normalFont);
-                break;
-            case R.id.llyt_scenic_spot:
-                mViewScenicSpot.setVisibility(View.VISIBLE);
-                mViewDeliciousFood.setVisibility(View.GONE);
-                mViewEntertainment.setVisibility(View.GONE);
-                mTvScenicSpot.setTypeface(boldFont);
-                mTvDeliciousFood.setTypeface(normalFont);
-                mTvEntertainment.setTypeface(normalFont);
-                break;
             case R.id.ibtn_back:
 
                 HomestayDetailActivity.this.finish();
+
+                break;
+            case R.id.llyt_house_info:
+
+                if(!TextUtils.isEmpty(houseDetailsH5Url)) {
+
+                    Intent intent = new Intent();
+                    intent.putExtra("url", houseDetailsH5Url);
+                    intent.putExtra("title", Constants.HOUSE_INFO_H5_TITEL);
+                    intent.setClass(HomestayDetailActivity.this, WebActivity.class);
+                    startActivity(intent);
+
+                }
 
                 break;
             default:
@@ -433,30 +554,17 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
                     mchDetailsEntity = homestayDetailsResponse.getMchDetails();
                     MchHomestayDetailsResponse.MchQuestionEntity mchQuestionEntity = homestayDetailsResponse.getMchQuestion(); //问题
-
-                    mchHomestayGoodsList = homestayDetailsResponse.getMchGoods();     //酒店商品展示列表
-                    //latitude = mchDetailsEntity.getLatitude();
-                    //longitude = mchDetailsEntity.getLongitude();
-
-                    mchName = mchDetailsEntity.getMchName();
-                    //A级
-                    int level = mchDetailsEntity.getLevel();
-                    //评价
-                    int commentNum = mchDetailsEntity.getCommentNum();
-                    int mConsumePrice = mchDetailsEntity.getConsumePrice();
-                    float mCommentScore = mchDetailsEntity.getCommentScore();
-                    //商户地址
-                    String address = mchDetailsEntity.getAddress();
-                    List<MchHomestayDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
-                    mTvHomestayName.setText(Html.fromHtml(mchName + "<font color='#FF666666' size='10'>" + address + "</font>"));
-                /*     mTvHotelCommentScore.setText(String.valueOf(mCommentScore));
-                    mStarBarView.setIntegerMark(false);
-
-                    mStarBarView.setStarMark(mCommentScore);
-                    mTvCommentNum.setText(commentNum + "评论");
-*/
-                    //banner
                     bannerList = mchDetailsEntity.getRecommendPhoto();
+                    int consumePrice = mchDetailsEntity.getConsumePrice();
+                    String buildInfo = mchDetailsEntity.getBuildInfo();
+                    MchHomestayDetailsResponse.LandlorEntity landlorEntity = homestayDetailsResponse.getLandlor();
+                    String nickName = landlorEntity.getNickname();
+                    int authenticationStatus = landlorEntity.getAuthenticationStatus(); //实名认证
+                    String avatarUrl = landlorEntity.getAvatar();  //头像
+                    int confirmTime = landlorEntity.getConfirmTime(); //平均确认时间
+                    int homestayRoomNum = landlorEntity.getHomestayRoomNum(); //民宿房源数
+                    int landorScore = landlorEntity.getScore();
+                    int bookingSuccessRate = landlorEntity.getBookingSuccess();
 
                     if (bannerList.size() > 0) {
 
@@ -472,92 +580,303 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     mBannerViewHotelDetail.startLoop(false);
                     mBannerViewHotelDetail.setViewList(HomestayDetailActivity.this, viewList, bannerList);
 
+                    mTvHomestayPrice.setText(String.valueOf(consumePrice));
 
-                    homestayReservationAdapter.setHomestayReservationList(mchHomestayGoodsList);
-                    homestayReservationAdapter.notifyDataSetChanged();
+                    mchHomestayGoodsList = homestayDetailsResponse.getMchGoods();     //酒店商品展示列表
 
+                    mchName = mchDetailsEntity.getMchName();
+                    //A级
+                    int level = mchDetailsEntity.getLevel();
+                    //商户地址
+                    String address = mchDetailsEntity.getAddress();
+                    List<MchHomestayDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
+
+                    if (tagsEntityList != null) {
+                        if (tagsEntityList.size() > 0) {
+                            mFlowlayoutHomestayLabel.setAdapter(new TagAdapter<MchHomestayDetailsResponse.TagsEntity>(tagsEntityList) {
+
+                                @Override
+                                public View getView(FlowLayout parent, int position, MchHomestayDetailsResponse.TagsEntity tagsEntity) {
+                                    LayoutInflater mInflater = LayoutInflater.from(mContext);
+                                    TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_homestay,
+                                            mFlowlayoutHomestayLabel, false);
+                                    tagName.setText(tagsEntity.getTitle());
+                                    return tagName;
+                                }
+                            });
+                        }
+                    }
+
+                   // String content = "<font color=\"#FF4970\" size='1px' >" + address + "</font>";
+                    if(!TextUtils.isEmpty(mchName))
+                    {
+                        mTvHomestayName.setText(mchName);
+                    }
+
+                    if(mchHomestayGoodsList != null)
+                    {
+                        homestayReservationAdapter.setHomestayReservationList(mchHomestayGoodsList);
+                        homestayReservationAdapter.notifyDataSetChanged();
+                    }
+
+                    mTvBookSuccessRate.setText(bookingSuccessRate + "%");
+                    mTvConfirmTime.setText(String.valueOf(confirmTime) + "分钟");
+                    mTvLandlorName.setText(nickName);
+                    mTvHouseResouceNum.setText(String.valueOf(homestayRoomNum));
+                    mTvLandorScore.setText(String.valueOf(landorScore) + "分");
+                    GlideUtil.loadImage(HomestayDetailActivity.this, avatarUrl, mImgLandorAvatar);
+
+                    //实名认证
+                    if (authenticationStatus == 0) {
+                        mLlytAuthenticationStatus.setVisibility(View.GONE);
+
+                    } else if (authenticationStatus == 1) {
+                        mLlytAuthenticationStatus.setVisibility(View.VISIBLE);
+                    }
+
+                    MchHomestayDetailsResponse.ContentEntity contentEntity = mchDetailsEntity.getContent();
+                    String houseInfo = contentEntity.getHouseInfo();
+                    MchHomestayDetailsResponse.FacilityServiceEntity facilityServiceEntity = contentEntity.getService();
+                    facilityList = facilityServiceEntity.getFacility();
+                    allFacilityH5Url = facilityServiceEntity.getAllFacility();
+                    houseDetailsH5Url = contentEntity.getHouseDetails();
+
+                    //房源信息非空
+                    if (!TextUtils.isEmpty(houseInfo)) {
+                        mLlytHouseInfo.setVisibility(View.VISIBLE);
+                        mTvHouseInfo.setText(houseInfo);
+
+                    } else {
+                        mLlytHouseInfo.setVisibility(View.GONE);
+                    }
+
+                    //设备详情
+                    homestayEquipmentAdapter.setEquipmentList(facilityList);
+                    homestayEquipmentAdapter.notifyDataSetChanged();
+
+                    //综合评价
                     MchHomestayDetailsResponse.CommentEntity commentEntity = homestayDetailsResponse.getComment();
                     commentList = commentEntity.getComment();
 
                     MchHomestayDetailsResponse.ScoreEntity scoreEntity = commentEntity.getScore();
+                    float commentScore = scoreEntity.getCommentScore();
+                    double commentScore1 = scoreEntity.getCommentScore1();
+                    double commentScore2 = scoreEntity.getCommentScore2();
+                    double commentScore3 = scoreEntity.getCommentScore3();
 
-                   /* if (commentList != null)
-                    {
-                        hotelDetailUserCommentAdapter.setHotelDetailUserCommentList(commentList);
-                        hotelDetailUserCommentAdapter.notifyDataSetChanged();
-                    }
+                    mTvCommentScore.setText(String.valueOf(commentScore));
+                    mStarBarViewHomestay.setStarMark(commentScore);
 
-                    mStarBarViewOccupantScore.setIntegerMark(false);
-                    mStarBarViewOccupantScore.setStarMark(commentScore);
+                    mTvServiceScore.setText(String.valueOf(commentScore1));
+                    mProgressBarServiceScore.setProgress((int) commentScore1);
+                    mTvFacilityScore.setText(String.valueOf(commentScore2));
+                    mProgressBarfacilityScore.setProgress((int) commentScore2);
+                    mTvHygieneScore.setText(String.valueOf(commentScore3));
+                    mProgressBarHygieneScore.setProgress((int) commentScore3);
 
-                    tagAdapter = new TagAdapter<MchDetailsResponse.LabelEntity>(labelEntityList) {
-                        @Override
-                        public View getView(FlowLayout parent, int position, MchDetailsResponse.LabelEntity option) {
-                            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_gray_frame,
-                                    mTagFlowHotelCommentLabel, false);
-                            TextView tv = view.findViewById(R.id.tv_flowlayout);
-                            tv.setText(option.getTitle());
-                            return view;
-                        }
-                    };
-                    mTagFlowHotelCommentLabel.setMaxSelectCount(1);
-                    mTagFlowHotelCommentLabel.setAdapter(tagAdapter);*/
+                    if (commentList != null) {
 
-               /*     mTagFlowHotelCommentLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-                        @Override
-                        public boolean onTagClick(View view, int position, FlowLayout parent) {
-                            String content = "";
-                            Set<Integer> selectPosSet = mTagFlowHotelCommentLabel.getSelectedList();
-                            Iterator it = selectPosSet.iterator();
-                            while (it.hasNext()) {
-                                int index = (int) it.next();
-                                //content = options[index];
-                                // MoveToPosition(layoutManager,index);
+                        mLlytUserComment.setVisibility(View.VISIBLE);
+                        if (commentList != null) {
+                            int commentNum = commentList.size();
+                            if (commentNum > 0) {
+                                MchCommentEntity homestayCommentEntity = commentList.get(0);
+                                String commentContent = homestayCommentEntity.getContent();
+
+                                CommentUserEntity commentUser = homestayCommentEntity.getUser();
+                                mTvExpandCommentDes.setText(commentContent);
+                                String commentUserAvater = commentUser.getAvater();
+                                String commentUserNickName = commentUser.getNickname();
+                                long cTime = homestayCommentEntity.getCtime();
+                                String commentTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, cTime);
+                                mTvCommentTime.setText(commentTime);
+                                mTvCommentatorUsername.setText(commentUserNickName);
+                                GlideUtil.loadImage(HomestayDetailActivity.this, commentUserAvater, mCircleImgCommentUserAvatar);
+                                mTvTotalCommentNum.setText("查看详查看全部" + commentNum + "条评论 >");
 
 
                             }
-                            return true;
                         }
-                    });
-                    tagAdapter.setSelectedList(0);*/
-                    String questionContent = mchQuestionEntity.getQuestionContent();
-                    String answerContent = mchQuestionEntity.getAnswerContent();
-                    //问
-                    if (!TextUtils.isEmpty(questionContent)) {
-                        mTvQuestionContent.setText(questionContent);
-                    }
-                    //答
-                    if (!TextUtils.isEmpty(answerContent)) {
 
-                        mTvAnswerContent.setText(answerContent);
+                    } else {
+                        mLlytUserComment.setVisibility(View.GONE);
                     }
 
-                    //设备详情
-                    List<MchHomestayDetailsResponse.ServiceEntity> tagsList = mchDetailsEntity.getServiceJson();
 
-                   /* mTagFlowLayoutDevice.setAdapter(new TagAdapter<MchDetailsResponse.ServiceEntity>(tagsList) {
+                    String staticMapUrl = mchDetailsEntity.getStaticMap();
+                    GlideUtil.loadImage(HomestayDetailActivity.this, staticMapUrl, mImageStaticMap);
 
-                        @Override
-                        public View getView(FlowLayout parent, int position, MchDetailsResponse.ServiceEntity tagsEntity) {
-                            LayoutInflater  mInflater = LayoutInflater.from(mContext);
-                            LinearLayout mLlytDevice = (LinearLayout) mInflater.inflate(R.layout.layout_flowlayout_device_detail,
-                                    mTagFlowLayoutDevice, false);
-                            TextView mTvDeviceTitle = mLlytDevice.findViewById(R.id.tv_device_title);
-                            ImageView mImgDevice = mLlytDevice.findViewById(R.id.img_device);
-                            String devicePhoto = tagsEntity.getPhoto();
-                            mTvDeviceTitle.setText(tagsEntity.getTitle());
-                            GlideUtil.loadImage(HotelDetailsActivity.this,devicePhoto,mImgDevice);
-                            return mLlytDevice;
-                        }
-                    });*/
+                    mTvHomestayAddress.setText(address);
 
                     String checkinTime = mchDetailsEntity.getCheckinTime();
                     String leaveTime = mchDetailsEntity.getLeaveTime();
 
+                    if (contentEntity != null) {
+                        MchHomestayDetailsResponse.NoticeEntity noticeEntity = contentEntity.getNotice();
+                        String depositInfo = noticeEntity.getDepositInfo(); //押金
+                        int invoiceStatus = noticeEntity.getInvoiceStatus();
+                        String receptionInfo = noticeEntity.getReceptionInfo();
+                        mTvCheckInTime.setText("入住日" + checkinTime + "后");
+                        mTvDepartureTime.setText("离店日" + leaveTime + "之前");
+                        mTvReceptionTime.setText(receptionInfo);
+
+                        //发票状态
+                        if (invoiceStatus == 0) {
+                            mTvInvoiceStatus.setText(getResources().getString(R.string.str_non_invoiceable));
+                        } else if (invoiceStatus == 1) {
+                            mTvInvoiceStatus.setText(getResources().getString(R.string.str_invoiceable));
+                        }
+
+                        //押金
+                        if(!TextUtils.isEmpty(depositInfo))
+                        {
+                            mTvDeposit.setText("线下支付给房东" + depositInfo);
+                        }
+
+                        int ruleChild = noticeEntity.getRuleChild(); //儿童政策
+                        int ruleSmoking = noticeEntity.getRuleSmoking(); //抽烟
+                        int ruleCook = noticeEntity.getRuleCook(); //做饭
+                        int rulePhotograph = noticeEntity.getRulePhotograph(); //商业拍摄
+                        int rulePerson = noticeEntity.getRulePerson();  //额外加人
+                        int ruleElderly = noticeEntity.getRuleElderly(); //接待老人
+                        int rulePets = noticeEntity.getRulePets(); // 携带宠物
+                        int ruleParty = noticeEntity.getRuleParty();  //聚会
+                        int ruleBed = noticeEntity.getRuleBed();     //额外加床
+                        int ruleForeigner = noticeEntity.getRuleForeigner(); //接待外宾
+
+                        //接待儿童
+                        if (ruleChild == 1) {
+
+                            mTvChildRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvChildRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgChildRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleChild == 0) {
+
+                            mTvChildRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                            mImgChildRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                        }
+
+                        //抽烟
+                        if (ruleSmoking == 1) {
+
+                            mTvSmokingRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvSmokingRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgSmokingRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleSmoking == 0) {
+
+                            mTvSmokingRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                            mImgSmokingRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                        }
+
+                        //做饭
+                        if (ruleCook == 1) {
+
+                            mTvCookRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvCookRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgCookRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleCook == 0) {
+                            mImgCookRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                            mTvCookRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                        }
+
+                        //商业拍摄
+                        if (rulePhotograph == 1) {
+                            mImgCommercialShooting.setImageResource(R.mipmap.icon_homestay_rule_false);
+                            mTvCommercialShooting.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvCookRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+
+                        } else if (rulePhotograph == 0) {
+                            mImgCommercialShooting.setImageResource(R.mipmap.icon_homestay_rule_true);
+                            mTvCommercialShooting.setTextColor(getResources().getColor(R.color.color_text_black7));
+                        }
+
+                        //额外加人
+                        if (rulePerson == 1) {
+
+                            mTvExtraPersonRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvExtraPersonRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgExtraPersonRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+
+                        } else if (rulePerson == 0) {
+                            mImgExtraPersonRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                            mTvExtraPersonRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                        }
+
+                        //接待老人
+                        if (ruleElderly == 1) {
+
+                            mTvElderlyRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvElderlyRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+
+                            mImgElderlyRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleElderly == 0) {
+                            mImgElderlyRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                            mTvElderlyRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                        }
+
+                        //携带宠物
+                        if (rulePets == 1) {
+
+                            mTvPetsRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvPetsRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgPetsRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (rulePets == 0) {
+                            mImgPetsRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                            mTvPetsRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                        }
+
+                        //聚会
+                        if (ruleParty == 1) {
+
+                            mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                            mTvPartyRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                            mTvPartyRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleParty == 0) {
+
+                            mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                            mTvPartyRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                            mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                        }
+
+                        //额外加床
+                        if (ruleBed == 1) {
+
+                            mTvExtraBedRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvExtraBedRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgExtraBedRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleBed == 0) {
+
+                            mTvExtraBedRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                            mImgExtraBedRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                        }
+
+                        //接待外宾
+                        if (ruleForeigner == 1) {
+
+                            mTvReceiveForeignGuestsRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                            mTvReceiveForeignGuestsRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
+                            mImgReceiveForeignGuestsRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                        } else if (ruleForeigner == 0) {
+
+                            mTvReceiveForeignGuestsRule.setTextColor(getResources().getColor(R.color.color_text_black7));
+                            mImgReceiveForeignGuestsRule.setImageResource(R.mipmap.icon_homestay_rule_true);
+                        }
+                    }
+
                     //附近热销酒店
-                    hotSellingHotelsNearbyList = homestayDetailsResponse.getNearbyHotel();
-                    nearbyHotSellHotelsAdapter.setHotSellHotelList(hotSellingHotelsNearbyList);
-                    nearbyHotSellHotelsAdapter.notifyDataSetChanged();
+                    homestayResourcesList = homestayDetailsResponse.getNearbyHotel();
+                    homestayResourcesAdapter.setHomestayResourcesList(homestayResourcesList);
+                    homestayResourcesAdapter.notifyDataSetChanged();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -597,50 +916,13 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         }
     }
 
-    public List<EquipmentResponse> initEquipmentList() {
-        EquipmentResponse equipmentResponse = new EquipmentResponse();
-        equipmentResponse.setImage(R.mipmap.icon_central_heating);
-        equipmentResponse.setName("暖气");
-        EquipmentResponse equipmentResponse1 = new EquipmentResponse();
-        equipmentResponse1.setImage(R.mipmap.icon_wireless_internet_access);
-        equipmentResponse1.setName("WI-FI");
-        EquipmentResponse equipmentResponse2 = new EquipmentResponse();
-        equipmentResponse2.setImage(R.mipmap.icon_necessaries);
-        equipmentResponse2.setName("生活必需品");
-        EquipmentResponse equipmentResponse3 = new EquipmentResponse();
-        equipmentResponse3.setImage(R.mipmap.icon_hair_drier);
-        equipmentResponse3.setName("吹风机");
-        EquipmentResponse equipmentResponse4 = new EquipmentResponse();
-        equipmentResponse4.setImage(R.mipmap.icon_television);
-        equipmentResponse4.setName("电视机");
-        EquipmentResponse equipmentResponse5 = new EquipmentResponse();
-        equipmentResponse5.setImage(R.mipmap.icon_washing_machine);
-        equipmentResponse5.setName("洗衣机");
-        EquipmentResponse equipmentResponse6 = new EquipmentResponse();
-        equipmentResponse6.setImage(R.mipmap.icon_air_conditioner);
-        equipmentResponse6.setName("空调");
-        /*EquipmentResponse equipmentResponse7 = new EquipmentResponse();
-        equipmentResponse7.setImage(R.mipmap.icon_washing_machine);
-        equipmentResponse7.setName("洗衣机");
-        EquipmentResponse equipmentResponse8 = new EquipmentResponse();
-        equipmentResponse8.setImage(R.mipmap.icon_air_conditioner);
-        equipmentResponse8.setName("空调");*/
-        equipmentResponseList.add(equipmentResponse);
-        equipmentResponseList.add(equipmentResponse1);
-        equipmentResponseList.add(equipmentResponse2);
-        equipmentResponseList.add(equipmentResponse3);
-        equipmentResponseList.add(equipmentResponse4);
-        equipmentResponseList.add(equipmentResponse5);
-        equipmentResponseList.add(equipmentResponse6);
-      /*  equipmentResponseList.add(equipmentResponse7);
-        equipmentResponseList.add(equipmentResponse8);*/
-        return equipmentResponseList;
-    }
-
     //获取酒店详情
     public void getMchHomestayDetail() {
 
-        mPresenter.getMchHomestayDetail(mchId);
+        if(validateInternet()) {
+            showProgressDialog(HomestayDetailActivity.this);
+            mPresenter.getMchHomestayDetail(mchId);
+        }
     }
 
 }

@@ -219,6 +219,11 @@
     <string name="str_un_bookable">不可订</string>
     <string name="str_fill_in_vehicle_info">填写用车信息</string>
     <string name="str_sure_to_delete_the_order">确认删除该订单吗</string>
+    <string name="str_house_details">房源信息</string>
+    <string name="str_strategy">攻略</string>
+    <string name="str_package_meal">组合套餐</string>
+    <string name="str_group_mch_detail">套餐详情</string>
+    <string name="str_official">官方</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -263,6 +268,9 @@
     <string name="str_room_num_select">房间数量选择</string>
     <string name="str_checkin_username">请填写入住人姓名</string>
     <string name="str_checkin_user_phone">请填写入住人手机号</string>
+    <string name="str_non_invoiceable">不可开发票</string>
+    <string name="str_invoiceable">可开发票</string>
+    <string name="str_immediate_pre_order">立即预购</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

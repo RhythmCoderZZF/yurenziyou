@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.DeliciousFoodRecommendResponse;
+import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.LabelResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentAdapter.ViewHolder> {
 
-    List<MchDetailsResponse.LabelEntity> labelResponseList;
+    List<LabelEntity> labelResponseList;
     private Context mContext;
 
     public UserCommentAdapter(Context mContext) {
@@ -35,7 +36,7 @@ public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentAdapter.
         this.mContext = mContext;
     }
 
-    public void setLabelList(List<MchDetailsResponse.LabelEntity> labelResponseList) {
+    public void setLabelList(List<LabelEntity> labelResponseList) {
 
         this.labelResponseList = labelResponseList;
     }
@@ -52,7 +53,7 @@ public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentAdapter.
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            MchDetailsResponse.LabelEntity labelEntity = labelResponseList.get(itemPosition);
+            LabelEntity labelEntity = labelResponseList.get(itemPosition);
             String label = labelEntity.getTitle();
             int count = labelEntity.getCount();
             holder.mTvTagUserComment.setText(label + String.valueOf(count));

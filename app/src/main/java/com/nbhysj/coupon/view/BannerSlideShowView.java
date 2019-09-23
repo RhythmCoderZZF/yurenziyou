@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,14 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.Target;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.widget.glide.GlideApp;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -301,7 +294,7 @@ public class BannerSlideShowView extends FrameLayout {
             if (imageViewsList.size() < 1) {
                 return 0;
             }
-            return Integer.MAX_VALUE;
+            return imageViewsList.size();
         }
 
         @Override

@@ -2,7 +2,7 @@ package com.nbhysj.coupon.common.Enum;
 
 /**
  * @auther：hysj created on 2019/3/28
- * description：1.图片 2.音频 3.视频 4.动图
+ * description：type:1.图片 2.音频 3.视频 4.动图
  */
 public enum UploadFileTypeEnum {
 

@@ -34,8 +34,10 @@ import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HomePageResponse;
+import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyTypeResponse;
@@ -158,9 +160,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     MchDetailsResponse.MchDetailsEntity mchDetailsEntity;
     private List<MchDetailsResponse.VisitGuideEntity> visitGuideList;
     //用户评论标签
-    List<MchDetailsResponse.LabelEntity> labelEntityList;
+    List<LabelEntity> labelEntityList;
     //评论列表
-    List<MchDetailsResponse.SubCommentEntity> commentList;
+    List<MchCommentEntity> commentList;
     //景点列表
     List<NearbyTypeResponse> nearbyScenicSpotsList;
     //组合
@@ -244,8 +246,16 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             groupGoodsList.clear();
         }
 
-        viewList = new ArrayList<ImageView>();
-        bannerList = new ArrayList<>();
+        if(viewList == null) {
+            viewList = new ArrayList<ImageView>();
+        } else {
+            viewList.clear();
+        }
+        if(bannerList == null) {
+            bannerList = new ArrayList<>();
+        } else{
+            bannerList.clear();
+        }
 
     }
 

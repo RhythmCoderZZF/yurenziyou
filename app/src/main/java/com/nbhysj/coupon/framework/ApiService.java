@@ -5,7 +5,9 @@ import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.AddTrafficRequest;
 import com.nbhysj.coupon.model.request.ContactsInfoRequest;
+import com.nbhysj.coupon.model.request.CreateFavoritesRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
+import com.nbhysj.coupon.model.request.DeleteFavoritesRequest;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.DeleteTripRequest;
@@ -15,6 +17,7 @@ import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
+import com.nbhysj.coupon.model.request.MoveFavoritesContentRequest;
 import com.nbhysj.coupon.model.request.OrderCancelRequest;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
@@ -29,6 +32,7 @@ import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.TripintelligentRequest;
+import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -38,10 +42,12 @@ import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
+import com.nbhysj.coupon.model.response.FavoritesResponse;
+import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
+import com.nbhysj.coupon.model.response.GroupMchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
-import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
@@ -60,6 +66,7 @@ import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
+import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
@@ -504,6 +511,43 @@ public interface ApiService {
     @POST("api/goods/hotel")
     Observable<BackResult<OrderSubmitResponse>> hotelHomestayOrderSubmit(@Body HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest);
 
+    /****************  专辑   *****************/
+    //新增专辑
+    @POST("api/userFavorites/createFavorites")
+    Observable<BackResult> createFavorites(@Body CreateFavoritesRequest createFavoritesRequest);
+
+    //修改专辑
+    @PUT("api/userFavorites/updateFavorites")
+    Observable<BackResult> updateFavorites(@Body UpdateFavoritesRequest updateFavoritesRequest);
+
+    //删除专辑
+    @HTTP(method = "DELETE", path = "api/userContacts", hasBody = true)
+    Observable<BackResult> deleteContactsInfo(@Body DeleteFavoritesRequest deleteFavoritesRequest);
+
+    //查询专辑内容
+    @GET("api/userFavorites/query")
+    Observable<BackResult<FavoritesResponse>> queryUserFavorites(@Query("id")int id, @Query("page")int page, @Query("pageSize")int pageSize);
+
+    //移动专辑内容
+    @PUT("api/userFavorites/moveContent")
+    Observable<BackResult> moveFavorites(@Body MoveFavoritesContentRequest moveFavoritesContentRequest);
+
+    //攻略列表
+    @GET("api/strategyArticle/findAllStrategy")
+    Observable<BackResult<StrategyResponse>> findAllStrategy(@Query("page")int page, @Query("pageSize")int pageSize);
+
+    /***************   组合模块    ***************/
+    //组合首页
+    @GET("api/group")
+    Observable<BackResult<GroupMchResponse>> getGroupHomePage();
+
+    //组合列表
+    @GET("api/group/homeList")
+    Observable<BackResult<StrategyResponse>> getGroupHomeList(@Query("tagsId")int tagsId,@Query("page")int page, @Query("pageSize")int pageSize);
+
+    //组合详情
+    @GET("api/mchDetails/groupDetails")
+    Observable<BackResult<GroupMchDetailsResponse>> getGroupMchDetail(@Query("packageId")int packageId);
 
 }
 

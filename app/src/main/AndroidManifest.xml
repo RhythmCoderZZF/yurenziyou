@@ -69,7 +69,10 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.CombinationDetailsActivity"></activity>
+        <activity android:name=".ui.StrategyActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ui.GroupMchDetailsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.VehicleAddressSelectionActivity"
             android:screenOrientation="portrait" />
@@ -133,7 +136,7 @@
         <activity
             android:name=".ui.ShoppingMallInteractionActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.CombinationListActivity" />
+        <activity android:name=".ui.GroupMchListActivity" />
         <activity android:name=".ui.ShoppingMallSpecialSaleActivity" /> <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -146,13 +149,15 @@
         <activity
             android:name=".ui.ScenicSpotBangDanListActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.HomestayBangDanListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.HotelBangDanListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.RecreationBangDanListActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".ui.HomestayBangDanListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HotelBangDanListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RecreationBangDanListActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ScenicSpotListActivity"
             android:screenOrientation="portrait" />
@@ -271,7 +276,6 @@
         <activity
             android:name=".ui.ScenicSpotDestinationActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.ShoppingMallDestinationActivity"
             android:screenOrientation="portrait" />

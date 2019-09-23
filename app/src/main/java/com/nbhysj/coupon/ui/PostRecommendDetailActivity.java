@@ -36,6 +36,7 @@ import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.widget.customjzvd.MyJzvdStd;
+import com.nbhysj.coupon.widget.wavelineview.ExpandButtonLayout;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.io.IOException;
@@ -45,7 +46,10 @@ import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.umeng.commonsdk.statistics.AnalyticsConstants.LOG_TAG;
-
+/**
+ * @auther：hysj created on 2019/03/02
+ * description：帖子详情
+ */
 public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter, HomePageModel> implements HomePageContract.View {
 
     //头像
@@ -143,6 +147,13 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @BindView(R.id.jzvd_post_video)
     MyJzvdStd mJzvdPostVideo;
 
+    //帖子详情照片
+    @BindView(R.id.rlyt_post_detail_picture)
+    RelativeLayout mRlytPostDetailPicture;
+
+    @BindView(R.id.layout_expanded_button)
+    ExpandButtonLayout mBtnLayoutExpandSound;
+
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     private String mLatitude = "";
@@ -222,6 +233,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         String resourceUrl = postInfoEntity.getResourceUrl();  //mp4
                         String postPublishTime = DateUtil.transferLongToDateStr(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
                         String userName = postInfoEntity.getNickname(); //用户名
+                        int postsType = postInfoEntity.getPostsType();  //1图片，2语音，3视频
 
                         //头像
                         if(avatarUrl != null)
@@ -238,26 +250,24 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         mTvPostTime.setText(postPublishTime);
                         mTvTime.setText(postPublishTime);
 
-                        if(resources != null)
-                        {
-                            mBannerViewFriendDetailPicture.setVisibility(View.VISIBLE);
+                        if(postsType == 1){ //图片
+
+                            mRlytPostDetailPicture.setVisibility(View.VISIBLE);
                             mJzvdPostVideo.setVisibility(View.GONE);
+                            mBtnLayoutExpandSound.setVisibility(View.GONE);
                             mBannerViewFriendDetailPicture.initUI(resources);
+                        } else if(postsType == 2) {  //音频+图片
 
-                            if(TextUtils.isEmpty(resourceUrl))
-                            {
-                                getMediaPlayer(resourceUrl);
-                            }
+                            mRlytPostDetailPicture.setVisibility(View.VISIBLE);
+                            mJzvdPostVideo.setVisibility(View.GONE);
+                            mBtnLayoutExpandSound.setVisibility(View.VISIBLE);
+                            mBannerViewFriendDetailPicture.initUI(resources);
+                        } else if(postsType == 3){  //视频
 
-                        } else {
-
-                           //videoThumbnailBitmap = BitmapUtils.getNetVideoBitmap(resourceUrl);
-                            //mImgPostVideGif.setImageBitmap(videoThumbnailBitmap);
                             mJzvdPostVideo.setVisibility(View.VISIBLE);
-                            mBannerViewFriendDetailPicture.setVisibility(View.GONE);
+                            mRlytPostDetailPicture.setVisibility(View.GONE);
                             mJzvdPostVideo.setUp(resourceUrl, "");
                             Glide.with(this).load(photoUrl).into(mJzvdPostVideo.thumbImageView);
-
                         }
 
                     }
@@ -400,7 +410,21 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     public void postsCommentResult(BackResult res) {
 
     }
-
+    @Override
+    public void onBackPressed() {
+        if (mJzvdPostVideo.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mJzvdPostVideo != null)
+        {
+            mJzvdPostVideo.releaseAllVideos();
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -408,6 +432,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
             videoThumbnailBitmap = null;
         }
+
+        stopPlaying();
     }
 
     public void getMediaPlayer(String audioFileUrl)
@@ -451,4 +477,6 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
+
+
 }
