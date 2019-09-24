@@ -83,15 +83,17 @@ public class PaymentOrderActivity extends BaseActivity {
 
 
         OrderSubmitResponse orderSubmitResponse = (OrderSubmitResponse)getIntent().getSerializableExtra("orderSubmitResponse");
-        int price = orderSubmitResponse.getPrice();
-        String orderNo = orderSubmitResponse.getOrderNo();
-        String title = orderSubmitResponse.getTitle();
-        long payExprireTime = orderSubmitResponse.getPayExprireTime();
+        if(orderSubmitResponse != null)
+        {
+            int price = orderSubmitResponse.getPrice();
+            String orderNo = orderSubmitResponse.getOrderNo();
+            String title = orderSubmitResponse.getTitle();
+            long payExprireTime = orderSubmitResponse.getPayExprireTime();
 
-        mTvPrice.setText(String.valueOf(price));
-        mTvGoodName.setText(title);
-        mTvPayExprireTime.setText("1");
-
+            mTvPrice.setText(String.valueOf(price));
+            mTvGoodName.setText(title);
+            mTvPayExprireTime.setText("1");
+        }
         mRlytWechatPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

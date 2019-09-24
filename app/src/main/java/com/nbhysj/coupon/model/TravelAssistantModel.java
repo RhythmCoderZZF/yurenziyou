@@ -98,7 +98,7 @@ public class TravelAssistantModel implements TravelAssistantContract.Model {
     }
 
     @Override
-    public Observable<BackResult<WeatherResponse>> getWeather(String cityCode) {
+    public Observable<BackResult<WeatherResponse>> getWeather(int cityCode) {
         return Api.getInstance().apiService.getWeather(cityCode).compose(RxSchedulers.io_main());
     }
 }

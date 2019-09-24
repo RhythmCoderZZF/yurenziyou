@@ -68,9 +68,11 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
 
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
 
-            if(!TextUtils.isEmpty(startPlace))
+            if(!TextUtils.isEmpty(startPlace) && !TextUtils.isEmpty(endPlace))
             {
                 holder.mTvTripPath.setText(startPlace + "-" + endPlace);
+            } else {
+                holder.mTvTripPath.setText("");
             }
 
             if(!TextUtils.isEmpty(endDate))
@@ -88,8 +90,8 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
                     holder.mTvTravelAssistantTag.setText("行程结束");
                 }
             }
-            String mStartDate = DateUtil.toMMDD(startDate);
-            String mEndDate = DateUtil.toMMDD(endDate);
+            String mStartDate = DateUtil.toMMDDStr(startDate);
+            String mEndDate = DateUtil.toMMDDStr(endDate);
 
             holder.mTvMyTravelDate.setText(mStartDate + "-" + mEndDate);
 

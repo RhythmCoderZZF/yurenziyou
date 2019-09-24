@@ -7,8 +7,6 @@ import android.view.View;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MineCollectionAllItemAdapter;
-import com.nbhysj.coupon.adapter.MyTravelListAdapter;
-import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 
 import butterknife.BindView;
 

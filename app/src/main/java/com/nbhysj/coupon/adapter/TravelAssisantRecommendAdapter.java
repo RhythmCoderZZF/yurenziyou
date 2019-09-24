@@ -1,18 +1,25 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -24,7 +31,7 @@ import java.util.List;
  */
 public class TravelAssisantRecommendAdapter extends RecyclerView.Adapter<TravelAssisantRecommendAdapter.ViewHolder> {
 
-    List<TripHomePageResponse.StrategyEntity> strategyList;
+    List<StrategyBean> strategyList;
     private Context mContext;
 
     public TravelAssisantRecommendAdapter(Context mContext) {
@@ -32,7 +39,7 @@ public class TravelAssisantRecommendAdapter extends RecyclerView.Adapter<TravelA
         this.mContext = mContext;
     }
 
-    public void setTravelAssisantStrategyList(List<TripHomePageResponse.StrategyEntity> strategyList) {
+    public void setTravelAssisantStrategyList(List<StrategyBean> strategyList) {
 
         this.strategyList = strategyList;
     }
@@ -50,14 +57,34 @@ public class TravelAssisantRecommendAdapter extends RecyclerView.Adapter<TravelA
 
         try {
 
-            TripHomePageResponse.StrategyEntity strategyEntity = strategyList.get(itemPosition);
+            StrategyBean strategyEntity = strategyList.get(itemPosition);
             String photoUrl = strategyEntity.getPhoto();
             String title = strategyEntity.getTitle();
             String intro = strategyEntity.getIntro();
+            String strategyH5Url = strategyEntity.getStrategyH5Url();
 
-            holder.mTvScenicSpotSpotName.setText(title);
-            holder.mTvScenicSpotSpotDes.setText(intro);
-            GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
+            holder.mTvStrategyName.setText(title);
+            if(!TextUtils.isEmpty(intro)) {
+                holder.mTvStrategyDes.setText(intro);
+            } else {
+                holder.mTvStrategyDes.setText("");
+            }
+            GlideUtil.loadImage(mContext, photoUrl, holder.mImgStrategy);
+
+            holder.mRlytStrategyItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(!TextUtils.isEmpty(strategyH5Url))
+                    {
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, WebActivity.class);
+                        intent.putExtra("title", Constants.STRATEGY_H5_TITEL);
+                        intent.putExtra("url",strategyH5Url);
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,20 +98,22 @@ public class TravelAssisantRecommendAdapter extends RecyclerView.Adapter<TravelA
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //景点照片
-        ImageView mImgScenicSpots;
+        ImageView mImgStrategy;
 
-        TextView mTvScenicSpotSpotName;
+        TextView mTvStrategyName;
 
-        TextView mTvScenicSpotSpotDes;
+        TextView mTvStrategyDes;
+
+        RelativeLayout mRlytStrategyItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
-            mTvScenicSpotSpotName = itemView.findViewById(R.id.tv_scenic_spots_name);
-            mTvScenicSpotSpotDes = itemView.findViewById(R.id.tv_scenic_spots_des);
+            mImgStrategy = itemView.findViewById(R.id.image_strategy);
+            mTvStrategyName = itemView.findViewById(R.id.tv_strategy_name);
+            mTvStrategyDes = itemView.findViewById(R.id.tv_strategy_des);
+            mRlytStrategyItem = itemView.findViewById(R.id.rlyt_strategy_item);
         }
     }
-
 
 }

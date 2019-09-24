@@ -451,7 +451,7 @@ public interface ApiService {
 
     //获取天气接口
     @GET("api/weather")
-    Observable<BackResult<WeatherResponse>> getWeather(@Query("cityCode") String cityCode);
+    Observable<BackResult<WeatherResponse>> getWeather(@Query("cityCode") int cityCode);
 
     /**********************************        用车          ****************************************/
 
@@ -548,6 +548,10 @@ public interface ApiService {
     //组合详情
     @GET("api/mchDetails/groupDetails")
     Observable<BackResult<GroupMchDetailsResponse>> getGroupMchDetail(@Query("packageId")int packageId);
+
+    //组合下单初始化
+    @GET("api/groupOrder/priceDate")
+    Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(@Query("groupId")int groupId);
 
 }
 

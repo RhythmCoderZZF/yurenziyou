@@ -16,6 +16,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.model.response.ContactsBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.ui.WebActivity;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 
 public class StrategyListAdapter extends RecyclerView.Adapter<StrategyListAdapter.ViewHolder> {
 
-    List<StrategyResponse.StrategyEntity> strategyList;
+    List<StrategyBean> strategyList;
     private Context mContext;
 
     public StrategyListAdapter(Context mContext) {
@@ -42,7 +43,7 @@ public class StrategyListAdapter extends RecyclerView.Adapter<StrategyListAdapte
         this.mContext = mContext;
     }
 
-    public void setStrategyList(List<StrategyResponse.StrategyEntity> strategyList) {
+    public void setStrategyList(List<StrategyBean> strategyList) {
 
         this.strategyList = strategyList;
     }
@@ -60,16 +61,16 @@ public class StrategyListAdapter extends RecyclerView.Adapter<StrategyListAdapte
 
         try {
 
-            StrategyResponse.StrategyEntity strategyEntity = strategyList.get(itemPosition);
+            StrategyBean strategyEntity = strategyList.get(itemPosition);
             String photoUrl = strategyEntity.getPhoto();
             String title = strategyEntity.getTitle();
             int hits = strategyEntity.getHits();
             int collectionNum = strategyEntity.getCollectionNum();
             String intro = strategyEntity.getIntro();
             String strategyH5Url = strategyEntity.getStrategyH5Url();
-            if(!TextUtils.isEmpty(intro))
+            if(!TextUtils.isEmpty(title))
             {
-                holder.mTvStrategyName.setText(intro);
+                holder.mTvStrategyName.setText(title);
             }
             holder.mTvStrategyPraiseNum.setText(String.valueOf(hits));
             holder.mTvStrategyCollectionNum.setText(String.valueOf(collectionNum));

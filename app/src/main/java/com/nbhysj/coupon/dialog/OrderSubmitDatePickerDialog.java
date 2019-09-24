@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.widget.calendar.CalendarList;
 import com.nbhysj.coupon.widget.calendar.ticketcalendar.TicketSelectCalendarList;
+import com.nbhysj.coupon.widget.calendar.ticketcalendar.TicketSelectDateBean;
 
 import java.util.List;
 
@@ -118,7 +119,15 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
             public void singleDateSelected(String ticketSelectDate) {
                 mStartDate = ticketSelectDate;
                 mEndDate = "";
-                orderSubmitDatePickerListener.setTickeDatePickerSelectListener(ticketSelectDate);
+                    for (int i = 0; i < goodsPriceList.size();i++){
+                        String goodPriceDate = goodsPriceList.get(i).getDate();
+                        if(goodPriceDate.equals(ticketSelectDate))
+                        {
+                           GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceList.get(i);
+                            orderSubmitDatePickerListener.setTickeDatePickerSelectListener(goodsPriceDatesResponse);
+                        }
+                }
+
                 dismiss();
             }
         });
@@ -137,7 +146,7 @@ public class OrderSubmitDatePickerDialog extends DialogFragment {
 
         void setDataStatisticsDatePickerListener(String startDate, String endDate);
 
-        void setTickeDatePickerSelectListener(String ticketDateSelect);
+        void setTickeDatePickerSelectListener(GoodsPriceDatesResponse goodsPriceDatesResponse);
     }
 
     public void setDatePickerClear() {

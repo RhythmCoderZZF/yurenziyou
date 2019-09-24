@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MyTravelListAdapter;
-import com.nbhysj.coupon.adapter.NearbyHotSellHotelsAdapter;
+import com.nbhysj.coupon.adapter.StrategyListAdapter;
 import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
+import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
@@ -70,14 +71,17 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     //有行程
     @BindView(R.id.llyt_my_trip_assistant)
     LinearLayout mLlytMyTripAssistant;
+    //行程助手攻略推荐
+    @BindView(R.id.llyt_trip_strategy_recommend)
+    LinearLayout mLlytStrategyRecommend;
 
     //有行程攻略列表
     private List<TripHomePageResponse.TripEntity> tripEntityList;
     //无行程攻略列表
-    List<TripHomePageResponse.StrategyEntity> strategyList;
+    List<StrategyBean> strategyList;
     private MyTravelListAdapter myTravelListAdapter;
 
-    private TravelAssisantRecommendAdapter travelAssisantRecommendAdapter;
+    private TravelAssisantRecommendAdapter strategyRecommendListAdapter;
 
     private int mPosition;
     public TravelAssistantFragment() {
@@ -131,10 +135,9 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvTravelAssisantRecommend.setLayoutManager(layoutManager);
-        travelAssisantRecommendAdapter = new TravelAssisantRecommendAdapter(getActivity());
-        travelAssisantRecommendAdapter.setTravelAssisantStrategyList(strategyList);
-        mRvTravelAssisantRecommend.setAdapter(travelAssisantRecommendAdapter);
-
+        strategyRecommendListAdapter = new TravelAssisantRecommendAdapter(getActivity());
+        strategyRecommendListAdapter.setTravelAssisantStrategyList(strategyList);
+        mRvTravelAssisantRecommend.setAdapter(strategyRecommendListAdapter);
 
         //我的行程列表   有行程
         LinearLayoutManager travelListAdapterLayoutManager = new LinearLayoutManager(getActivity());
@@ -198,9 +201,22 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
                     } else {
                         mLlytNoTripAssistant.setVisibility(View.VISIBLE);
                         mLlytMyTripAssistant.setVisibility(View.GONE);
-                        strategyList = tripHomePageResponse.getStrategy();
-                        travelAssisantRecommendAdapter.setTravelAssisantStrategyList(strategyList);
-                        travelAssisantRecommendAdapter.notifyDataSetChanged();
+
+                    }
+
+                    //行程助手攻略推荐
+                    strategyList = tripHomePageResponse.getStrategy();
+                    if(strategyList != null) {
+
+                        if(strategyList.size() > 0) {
+                            mLlytStrategyRecommend.setVisibility(View.VISIBLE);
+                            strategyRecommendListAdapter.setTravelAssisantStrategyList(strategyList);
+                            strategyRecommendListAdapter.notifyDataSetChanged();
+                        }else {
+                            mLlytStrategyRecommend.setVisibility(View.GONE);
+                        }
+                    } else {
+                        mLlytStrategyRecommend.setVisibility(View.GONE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

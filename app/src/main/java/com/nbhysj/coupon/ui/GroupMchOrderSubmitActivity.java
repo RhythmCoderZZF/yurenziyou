@@ -27,6 +27,7 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AddTouristInformationAdapter;
+import com.nbhysj.coupon.adapter.GroupMchOrderUseDateSelectAdapter;
 import com.nbhysj.coupon.adapter.IncreaseTicketAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailTicketInfoAdapter;
 import com.nbhysj.coupon.adapter.OrderUseDateSelectAdapter;
@@ -35,6 +36,8 @@ import com.nbhysj.coupon.adapter.VehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
+import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
+import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
@@ -48,6 +51,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.TravellerBean;
@@ -56,6 +60,7 @@ import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.view.MyRecycleView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,11 +74,11 @@ import butterknife.OnClick;
  * @auther：hysj created on 2019/08/20
  * description：订单提交
  */
-public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, OrderSubmitModel> implements OrderSubmitContract.View, PoiSearch.OnPoiSearchListener {
+public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, OrderSubmitModel> implements OrderSubmitContract.View, PoiSearch.OnPoiSearchListener {
 
     //订单使用日期选择
     @BindView(R.id.rv_use_ticket_date)
-    RecyclerView mRvUseTicketDateSelect;
+    MyRecycleView mRvUseTicketDateSelect;
     //游客信息列表
     @BindView(R.id.rv_tourist_information)
     RecyclerView mRvTouristInformation;
@@ -83,9 +88,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //游客电话
     @BindView(R.id.tv_tourist_mobile)
     TextView mTvTouristMobile;
-
-    @BindView(R.id.rv_increase_ticket)
-    RecyclerView mRvIncreaseTicket;
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     @BindView(R.id.llyt_order_detail_item)
@@ -138,9 +140,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @BindView(R.id.tv_ticket_title)
     TextView mTvTicketTitle;
 
-    @BindView(R.id.llyt_increase_ticket)
-    LinearLayout mLlytIncreaseTicket;
-
     //添加更多用车
     @BindView(R.id.tv_add_vehicle_more)
     TextView mTvAddVehicleMore;
@@ -191,11 +190,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //使用日期价格
     private int datePrice;
 
-    //增加门票价格
-    private int increaseTicketPrice;
-
-    //商品id
-    private int goodsId;
+    //组合id
+    private int groupId;
 
     private List<TravellerBean> travellersList;
 
@@ -206,10 +202,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private OrderSubmitDatePickerDialog orderSubmitDatePickerDialog;
 
     //时间价格订单适配器
-    private OrderUseDateSelectAdapter orderUseDateSelectAdapter;
-
-    //增加门票适配器
-    private IncreaseTicketAdapter increaseTicketAdapter;
+    private GroupMchOrderUseDateSelectAdapter orderUseDateSelectAdapter;
 
     //价格明细
     OrderDetailTicketInfoAdapter orderDetailTicketInfoAdapter;
@@ -250,6 +243,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //用车适配器
     private VehicleUseAdapter vehicleUseAdapter;
 
+    private PurchaseInstructionsBrowseDialog mPurchaseInstructionsDialog;
+
     Map<String, Object> map = new HashMap<>();
 
     private PoiSearch.Query query;// Poi查询条件类
@@ -282,7 +277,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //每页条数
     private int mPageSize = 10000;
 
-    List<GoodsPriceDatesResponse> goodsPriceDatesList;
+    //是否开启用车模块
+    private int openCarStatus;
+
+    //组合商品购买须知
+    private String goodsBuyNotesH5Url;
+
     @Override
     public int getLayoutId() {
 
@@ -290,7 +290,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         StatusBarCompat.translucentStatusBar(this, false);
         //修改状态栏字体颜色
         StatusBarUtil.setImmersiveStatusBar(this, true);
-        return R.layout.activity_submit_order;
+        return R.layout.activity_group_mch_submit_order;
     }
 
     @Override
@@ -313,7 +313,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             mToolbarSpace.setVisibility(View.GONE);
         }
 
-        goodsId = getIntent().getIntExtra("goodsId", 0);
+        groupId = getIntent().getIntExtra("groupId", 0);
 
         if (travellersList == null) {
 
@@ -367,12 +367,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             carsBeanList.clear();
         }
 
-        if(goodsPriceDatesList == null){
-
-            goodsPriceDatesList = new ArrayList<>();
-        } else {
-            goodsPriceDatesList.clear();
-        }
         inAnimation = new TranslateAnimation(
                 TranslateAnimation.RELATIVE_TO_SELF, 0, TranslateAnimation.RELATIVE_TO_SELF, 0,
                 TranslateAnimation.RELATIVE_TO_SELF, 1, TranslateAnimation.RELATIVE_TO_SELF, 0);
@@ -398,8 +392,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                     mCkbOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
 
-                    if (goodsPriceDetailList != null)
-                    {
+                    if (goodsPriceDetailList != null) {
                         goodsPriceDetailList.clear();
                     }
 
@@ -438,11 +431,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             }
         });
 
-        GridLayoutManager layoutManager = new GridLayoutManager(OrderSubmitActivity.this, 4);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(GroupMchOrderSubmitActivity.this);
+        layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvUseTicketDateSelect.setLayoutManager(layoutManager);
-        orderUseDateSelectAdapter = new OrderUseDateSelectAdapter(OrderSubmitActivity.this, new OrderUseDateSelectAdapter.OrderUseDateSelectListener() {
+        orderUseDateSelectAdapter = new GroupMchOrderUseDateSelectAdapter(GroupMchOrderSubmitActivity.this, new GroupMchOrderUseDateSelectAdapter.GroupMchOrderUseDateSelectListener() {
             @Override
-            public void moreDatesCallBack() {
+            public void setMoreDatesCallBack() {
 
                 if (orderSubmitDatePickerDialog == null) {
                     orderSubmitDatePickerDialog = new OrderSubmitDatePickerDialog();
@@ -455,27 +449,22 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         @Override
                         public void setTickeDatePickerSelectListener(GoodsPriceDatesResponse goodsPriceDatesResponse) {
 
-                            for(int i = 0; i < orderSubmitDateList.size();i++)
+                         /*   for(int i = 0; i < orderSubmitDateList.size();i++)
                             {
                                 orderSubmitDateList.get(i).setSelectDatePrice(false);
                                 String date = orderSubmitDateList.get(i).getDate();
-                                String goodsPriceDatesSelect = goodsPriceDatesResponse.getDate();
-                                if(date.equals(goodsPriceDatesSelect))
+                                String ticketDateSelect = goodsPriceDatesResponse.getDate();
+                                if(date.equals(ticketDateSelect))
                                 {
                                     orderSubmitDateList.get(i).setSelectDatePrice(true);
-                                } else {
-
-                                    orderSubmitDateList.remove(2);
-                                    goodsPriceDatesResponse.setIsCanBooking(1);
-                                    orderSubmitDateList.add(goodsPriceDatesResponse);
                                 }
                             }
 
                             orderUseDateSelectAdapter.setOrderUseDateSelectList(orderSubmitDateList);
-                            orderUseDateSelectAdapter.notifyDataSetChanged();
-                         //   showToast(OrderSubmitActivity.this,ticketDateSelect);
+                            orderUseDateSelectAdapter.notifyDataSetChanged();*/
                         }
-                    },goodsPriceDatesList);
+
+                    }, orderSubmitDateList);
                     orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
                 } else {
                     orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
@@ -485,28 +474,25 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             }
 
             @Override
-            public void datePriceSelectCallBack(int position) {
-
-                GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDatesList.get(position);
+            public void setDatePriceSelectCallBack(int position) {
+                GoodsPriceDatesResponse goodsPriceDatesResponse = orderSubmitDateList.get(position);
                 datePrice = goodsPriceDatesResponse.getPrice();
                 goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
-                int totalPrice = increaseTicketPrice + datePrice;
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
 
+              //  mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
             }
         });
-        //订单提交日期
-        orderSubmitDateList = DateUtil.getOrderSubmitDate();
-        orderUseDateSelectAdapter.setOrderUseDateSelectList(orderSubmitDateList);
+
+        orderUseDateSelectAdapter.setOrderUseDateSelectList(goodsPriceList);
         mRvUseTicketDateSelect.setAdapter(orderUseDateSelectAdapter);
 
         /**
          * 游客信息列表
          */
-        LinearLayoutManager touristInfoLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
+        LinearLayoutManager touristInfoLayoutManager = new LinearLayoutManager(GroupMchOrderSubmitActivity.this);
         touristInfoLayoutManager.setOrientation(touristInfoLayoutManager.HORIZONTAL);
         mRvTouristInformation.setLayoutManager(touristInfoLayoutManager);
-        touristInformationAdapter = new TouristInformationAdapter(OrderSubmitActivity.this, new TouristInformationAdapter.TouristInformationListener() {
+        touristInformationAdapter = new TouristInformationAdapter(GroupMchOrderSubmitActivity.this, new TouristInformationAdapter.TouristInformationListener() {
             @Override
             public void setTouristInformationListener(int position, boolean isAddTourists) {
 
@@ -533,36 +519,18 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         touristInformationAdapter.setTouristInfoList(travellersList);
         mRvTouristInformation.setAdapter(touristInformationAdapter);
 
-        //增加票价
-        LinearLayoutManager increaseTicketLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
-        mRvIncreaseTicket.setLayoutManager(increaseTicketLayoutManager);
-        increaseTicketLayoutManager.setOrientation(increaseTicketLayoutManager.VERTICAL);
-        increaseTicketAdapter = new IncreaseTicketAdapter(OrderSubmitActivity.this, new IncreaseTicketAdapter.IncreaseTicketListener() {
-            @Override
-            public void setPurchaseNumListener(int position, int purchasePrice, int mAddTicketPurchaseNum) { //mAddTicketPurchaseNum 增加门票数量
-                increaseTicketPrice = purchasePrice;
-                int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;  //mPurchaseNum
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
-                if (goodsPriceTicketAddList.size() > 0) {
-                    goodsPriceTicketAddList.get(position).setTicketPurchaseNum(mAddTicketPurchaseNum);
-                }
-            }
-        });
-        increaseTicketAdapter.setIncreaseTicketList(goodsPriceList);
-        mRvIncreaseTicket.setAdapter(increaseTicketAdapter);
-
-        LinearLayoutManager orderDeatilTicketInfoLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
+        LinearLayoutManager orderDeatilTicketInfoLayoutManager = new LinearLayoutManager(GroupMchOrderSubmitActivity.this);
         mRvOrderDeatilTicketInfo.setLayoutManager(orderDeatilTicketInfoLayoutManager);
         orderDeatilTicketInfoLayoutManager.setOrientation(orderDeatilTicketInfoLayoutManager.VERTICAL);
-        orderDetailTicketInfoAdapter = new OrderDetailTicketInfoAdapter(OrderSubmitActivity.this);
+        orderDetailTicketInfoAdapter = new OrderDetailTicketInfoAdapter(GroupMchOrderSubmitActivity.this);
         orderDetailTicketInfoAdapter.setOrderDetailTicketList(goodsPriceDetailList);
         mRvOrderDeatilTicketInfo.setAdapter(orderDetailTicketInfoAdapter);
 
         //新增游客信息弹框
-        LinearLayoutManager newTouristsLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
+        LinearLayoutManager newTouristsLayoutManager = new LinearLayoutManager(GroupMchOrderSubmitActivity.this);
         mRvNewTourists.setLayoutManager(newTouristsLayoutManager);
         newTouristsLayoutManager.setOrientation(newTouristsLayoutManager.VERTICAL);
-        addTouristInformationAdapter = new AddTouristInformationAdapter(OrderSubmitActivity.this, new AddTouristInformationAdapter.TouristInformationListener() {
+        addTouristInformationAdapter = new AddTouristInformationAdapter(GroupMchOrderSubmitActivity.this, new AddTouristInformationAdapter.TouristInformationListener() {
             @Override
             public void setEditTouristInfoListener(int position) {
 
@@ -584,7 +552,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         mLlytAddAndUpdateTourists.setEnabled(false);
 
         //车辆 路径信息
-        LinearLayoutManager travelByCarLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
+        LinearLayoutManager travelByCarLayoutManager = new LinearLayoutManager(GroupMchOrderSubmitActivity.this);
         travelByCarLayoutManager.setOrientation(travelByCarLayoutManager.VERTICAL);
         mRvTravelByCar.setLayoutManager(travelByCarLayoutManager);
         vehicleUseAdapter = new VehicleUseAdapter();
@@ -596,7 +564,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @Override
     public void initData() {
 
-        getOrderSubmitInit();
+        showProgressDialog(GroupMchOrderSubmitActivity.this);
+        getGroupMchOrderSubmitInit();
 
         mCkbIsNeedUseCar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -627,7 +596,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
             R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
             R.id.img_tourist_mobile_input_cancel,
-            R.id.tv_tourist_edit_confirm,R.id.tv_tourists_info_edit,R.id.tv_delete_frequently_used_tourists,R.id.img_tourist_add_username_input_cancel,R.id.img_tourist_add_mobile_input_cancel,R.id.tv_add_tourists_confirm})
+            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -671,8 +640,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 mLlytAddTourists.setVisibility(View.VISIBLE);
                 mLlytAddTourists.startAnimation(inAnimation);
                 int visibility = mLlytAddTourists.getVisibility();
-                if (visibility == 8)
-                {
+                if (visibility == 8) {
                     mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
                 }
 
@@ -681,15 +649,20 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 break;
             case R.id.tv_confirm:
-                showToast(OrderSubmitActivity.this, mLlytAddAndUpdateTourists.getVisibility() + "");
+                showToast(GroupMchOrderSubmitActivity.this, mLlytAddAndUpdateTourists.getVisibility() + "");
                 break;
             case R.id.ibtn_back:
 
-                OrderSubmitActivity.this.finish();
+                GroupMchOrderSubmitActivity.this.finish();
 
                 break;
             case R.id.tv_purchase_notes:
-                showToast(OrderSubmitActivity.this, "购买须知");
+
+                if (mPurchaseInstructionsDialog == null)
+                {
+                    mPurchaseInstructionsDialog = new PurchaseInstructionsBrowseDialog(getResources().getString(R.string.str_purchase_instructions), goodsBuyNotesH5Url);
+                }
+                mPurchaseInstructionsDialog.show(getFragmentManager(), "组合商品购票须知");
                 break;
             case R.id.img_reduce_purchase_num:
 
@@ -699,12 +672,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     if (goodsPriceList.size() > 0) {
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
-                        int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                        mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                        //   mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
                     }
                 } else {
 
-                    showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_need_to_buy_at_least_one));
+                    showToast(GroupMchOrderSubmitActivity.this, getResources().getString(R.string.str_need_to_buy_at_least_one));
                     return;
                 }
 
@@ -716,8 +688,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
-                int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                //int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                // mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
                 break;
             case R.id.tv_add_vehicle_more:
 
@@ -800,14 +772,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
                 break;
             default:
-                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
-    }
-
-    @Override
-    public void getGroupMchOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res) {
-
     }
 
     @Override
@@ -824,7 +791,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
                 break;
             default:
-                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
@@ -858,7 +825,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
                 break;
             default:
-                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
@@ -873,8 +840,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     TravellerBean travellersEntity = travellersList.get(mPosition);
 
                     travellersList.remove(travellersEntity);
-                    if(travellersList != null) {
-                        if(travellersList.size() > 0) {
+                    if (travellersList != null) {
+                        if (travellersList.size() > 0) {
                             TravellerBean travellers = travellersList.get(0);
                             travellers.setTravellerSelect(true);
                             addTouristInformationAdapter.setTouristInfoList(travellersList);
@@ -907,9 +874,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     OrderSubmitResponse ticketOrderSubmitResponse = res.getData();
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("orderSubmitResponse", ticketOrderSubmitResponse);
+                    bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
                     intent.putExtras(bundle);
-                    intent.setClass(OrderSubmitActivity.this, PaymentOrderActivity.class);
+                    intent.setClass(GroupMchOrderSubmitActivity.this, PaymentOrderActivity.class);
                     startActivity(intent);
 
                 } catch (Exception e) {
@@ -917,54 +884,59 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
                 break;
             default:
-                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
 
     @Override
     public void getOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res) {
+
+    }
+
+    @Override
+    public void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    EstimatedPriceResponse estimatedPrice = res.getData();
+                    vehicleUseAddDialog.setTotalVehicleExpenses(estimatedPrice);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void getGroupMchOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
 
                     OrderSubmitInitResponse orderSubmitInitResponse = res.getData();
+                     openCarStatus = orderSubmitInitResponse.getOpenCarStatus();
+                     goodsBuyNotesH5Url = orderSubmitInitResponse.getGoodsBuyNotes();
                     travellersList = orderSubmitInitResponse.getTravellers();
+                    String title = orderSubmitInitResponse.getTitle();
                     userTravelerId = travellersList.get(0).getId();
 
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(1);
-                    String title = goodsPriceEntity.getTitle();
-                    //商品价格日期
-                    goodsPriceDatesList = goodsPriceEntity.getGoodsPriceDates();
 
-                    for (int i = 0; i < orderSubmitDateList.size(); i++) {
-                        GoodsPriceDatesResponse orderSubmitDateResponse = orderSubmitDateList.get(i);
-                        String orderSubmitDate = orderSubmitDateResponse.getDate();
-                        for (int j = 0; j < goodsPriceDatesList.size(); j++) {
-                            GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDatesList.get(j);
-                            String goodsPriceDate = goodsPriceDatesResponse.getDate();
-                            int id = goodsPriceDatesResponse.getId();
-                            int price = goodsPriceDatesResponse.getPrice();
-
-                            if (orderSubmitDate.equals(goodsPriceDate)) {
-                                orderSubmitDateResponse.setIsCanBooking(1);
-                                orderSubmitDateResponse.setId(id);
-                                orderSubmitDateResponse.setPrice(price);
-                                orderSubmitDateResponse.setSelectDatePrice(true);
-                            }
-                        }
-                    }
 
                     //订单日期价格
-                    orderUseDateSelectAdapter.setOrderUseDateSelectList(orderSubmitDateList);
+                    orderUseDateSelectAdapter.setOrderUseDateSelectList(goodsPriceList);
                     orderUseDateSelectAdapter.notifyDataSetChanged();
 
                     //增加门票
-                    if (goodsPriceList != null)
-                    {
+                    if (goodsPriceList != null) {
                         if (goodsPriceList.size() > 0) {
 
                             for (int i = 0; i < goodsPriceList.size(); i++) {
@@ -974,16 +946,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                                 }
                             }
                         }
-                    }
-
-                    if (goodsPriceTicketAddList.size() == 0) {
-                        mLlytIncreaseTicket.setVisibility(View.GONE);
-
-                    } else {
-
-                        mLlytIncreaseTicket.setVisibility(View.VISIBLE);
-                        increaseTicketAdapter.setIncreaseTicketList(goodsPriceTicketAddList);
-                        increaseTicketAdapter.notifyDataSetChanged();
                     }
 
                     if (travellersList != null) {
@@ -1007,32 +969,15 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                         mRlytTouristInfoItem.setVisibility(View.GONE);
                     }
-                    mTvTicketTitle.setText(title);
-
+                    if (!TextUtils.isEmpty(title)) {
+                        mTvTicketTitle.setText(title);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             default:
-                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
-                break;
-        }
-    }
-
-    @Override
-    public void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res) {
-        dismissProgressDialog();
-        switch (res.getCode()) {
-            case Constants.SUCCESS_CODE:
-                try {
-                    EstimatedPriceResponse estimatedPrice = res.getData();
-                    vehicleUseAddDialog.setTotalVehicleExpenses(estimatedPrice);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
@@ -1046,16 +991,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     public void showMsg(String msg) {
 
         dismissProgressDialog();
-        showToast(OrderSubmitActivity.this, Constants.getResultMsg(msg));
-    }
-
-    //获取订单初始化
-    public void getOrderSubmitInit() {
-
-        if (validateInternet()) {
-            showProgressDialog(OrderSubmitActivity.this);
-            mPresenter.getOrderSubmitInit(goodsId);
-        }
+        showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(msg));
     }
 
     //获取订单初始化
@@ -1065,35 +1001,35 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             if (!TextUtils.isEmpty(departureTime)) {
                 map.put("departureTime", departureTime);
             } else {
-                showToast(OrderSubmitActivity.this, "请选择出行时间");
+                showToast(GroupMchOrderSubmitActivity.this, "请选择出行时间");
                 return;
             }
 
             if (!TextUtils.isEmpty(startLg)) {
                 map.put("startLg", startLg);
             } else {
-                showToast(OrderSubmitActivity.this, "请选择所在位置");
+                showToast(GroupMchOrderSubmitActivity.this, "请选择所在位置");
                 return;
             }
 
             if (!TextUtils.isEmpty(startLt)) {
                 map.put("startLt", startLt);
             } else {
-                showToast(OrderSubmitActivity.this, "请选择所在位置");
+                showToast(GroupMchOrderSubmitActivity.this, "请选择所在位置");
                 return;
             }
 
             if (!TextUtils.isEmpty(endLg)) {
                 map.put("endLg", endLg);
             } else {
-                showToast(OrderSubmitActivity.this, "请选择目的地");
+                showToast(GroupMchOrderSubmitActivity.this, "请选择目的地");
                 return;
             }
 
             if (!TextUtils.isEmpty(endLt)) {
                 map.put("endLt", endLt);
             } else {
-                showToast(OrderSubmitActivity.this, "请选择目的地");
+                showToast(GroupMchOrderSubmitActivity.this, "请选择目的地");
                 return;
             }
 
@@ -1101,10 +1037,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 map.put("carType", carType);
             } else {
-                showToast(OrderSubmitActivity.this, "请选择车辆类型");
+                showToast(GroupMchOrderSubmitActivity.this, "请选择车辆类型");
                 return;
             }
-            showProgressDialog(OrderSubmitActivity.this);
+            showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle("正在计算,请稍等...");
             mPresenter.getEstimatedPrice(map);
         }
@@ -1147,8 +1083,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             goodsBean.setPriceDate(goodsPriceDateSelect);
             goodsList.add(goodsBean);
 
-            for (int i = 0; i < goodsPriceTicketAddList.size(); i++)
-            {
+            for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
 
                 OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
                 int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
@@ -1171,7 +1106,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             } else {
                 ticketOrderSubmitRequest.setCarStatus(0);
             }
-            showProgressDialog(OrderSubmitActivity.this);
+            showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle("正在提交订单...");
             mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
         }
@@ -1189,13 +1124,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             //请填写中文名
             if (TextUtils.isEmpty(touristName)) {
 
-                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_chinese_name));
+                showToast(GroupMchOrderSubmitActivity.this, getResources().getString(R.string.str_input_chinese_name));
                 return;
             }
             //请填写手机号
             if (TextUtils.isEmpty(touristMobile)) {
 
-                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
+                showToast(GroupMchOrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
                 return;
             }
 
@@ -1211,7 +1146,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             updateTravellerRequest.setRealname(touristName);
             updateTravellerRequest.setMobile(touristMobile);
             updateTravellerRequest.setId(userTravelerId);
-            showProgressDialog(OrderSubmitActivity.this);
+            showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle(getResources().getString(R.string.str_saving));
 
             mPresenter.updateUserTraveller(updateTravellerRequest);
@@ -1219,7 +1154,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     //增加游客
-    public void addTraveller(){
+    public void addTraveller() {
 
         if (validateInternet()) {
 
@@ -1229,13 +1164,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             //请填写中文名
             if (TextUtils.isEmpty(touristName)) {
 
-                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_chinese_name));
+                showToast(GroupMchOrderSubmitActivity.this, getResources().getString(R.string.str_input_chinese_name));
                 return;
             }
             //请填写手机号
             if (TextUtils.isEmpty(touristMobile)) {
 
-                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
+                showToast(GroupMchOrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
                 return;
             }
 
@@ -1251,7 +1186,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             addTravellerRequest.setRealname(touristName);
             addTravellerRequest.setMobile(touristMobile);
             addTravellerRequest.setId(userTravelerId);
-            showProgressDialog(OrderSubmitActivity.this);
+            showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle(getResources().getString(R.string.str_saving));
 
             mPresenter.addUserTraveller(addTravellerRequest);
@@ -1259,11 +1194,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     //删除游客信息
-    public void deleteTravellerInfo(){
+    public void deleteTravellerInfo() {
 
-        if(validateInternet())
-        {
-            showProgressDialog(OrderSubmitActivity.this);
+        if (validateInternet()) {
+            showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle("正在删除...");
             DeleteTravellerInfoRequest deleteTravellerInfoRequest = new DeleteTravellerInfoRequest();
             deleteTravellerInfoRequest.setId(userTravelerId);
@@ -1271,17 +1205,17 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
     }
 
-    public void getTravellerList(){
+    public void getTravellerList() {
 
-        showProgressDialog(OrderSubmitActivity.this);
-        mPresenter.getUserTravellerList(getSharedPreferencesUserId(),mPage,mPageSize);
+        showProgressDialog(GroupMchOrderSubmitActivity.this);
+        mPresenter.getUserTravellerList(getSharedPreferencesUserId(), mPage, mPageSize);
     }
 
     /**
      * 开始进行poi搜索
      */
     protected void doSearchQuery(String keywords) {
-        showProgressDialog(OrderSubmitActivity.this);
+        showProgressDialog(GroupMchOrderSubmitActivity.this);
         // 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
         query = new PoiSearch.Query(keywords, "", Constants.DEFAULT_CITY);
         // 设置每页最多返回多少条poiitem
@@ -1329,13 +1263,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     mVehicleUseOprateFlag = vehicleUseOprateFlag;
                     if (vehicleUseOprateFlag == 0) {
                         Intent mIntent = new Intent();
-                        mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                        mIntent.setClass(GroupMchOrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
                         mIntent.putExtra("vehicleUseOprateFlag", vehicleUseOprateFlag);
                         startActivityForResult(mIntent, REQUEST_CODE_MY_LOCATION_SELECT);
                     } else if (vehicleUseOprateFlag == 1) {
 
                         Intent mIntent = new Intent();
-                        mIntent.setClass(OrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
+                        mIntent.setClass(GroupMchOrderSubmitActivity.this, VehicleAddressSelectionActivity.class);
                         mIntent.putExtra("vehicleUseOprateFlag", vehicleUseOprateFlag);
                         startActivityForResult(mIntent, REQUEST_CODE_DESTINATION_SELECT);
                     } else if (vehicleUseOprateFlag == 2) {  //用车时间
@@ -1399,7 +1333,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 @Override
                 public void setVehicleUseParamEmptyCallBack(String message) {
 
-                    showToast(OrderSubmitActivity.this, message);
+                    showToast(GroupMchOrderSubmitActivity.this, message);
                 }
 
                 @Override
@@ -1410,5 +1344,14 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             });
         }
         vehicleUseAddDialog.show(getFragmentManager(), "");
+    }
+
+    //组合商品下单初始化
+    public void getGroupMchOrderSubmitInit() {
+
+        if (validateInternet()) {
+
+            mPresenter.getGroupMchOrderSubmitInit(groupId);
+        }
     }
 }

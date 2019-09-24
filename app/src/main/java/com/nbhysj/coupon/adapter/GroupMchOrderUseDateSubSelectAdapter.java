@@ -6,21 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.TicketBookStatusEnum;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
-import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.util.DateUtil;
-import com.nbhysj.coupon.view.StarBarView;
-import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import java.util.List;
@@ -29,7 +21,7 @@ import java.util.List;
  * @author hysj created at 2019/4/27.
  * description:订单使用日期选择适配器
  */
-public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDateSelectAdapter.ViewHolder> {
+public class GroupMchOrderUseDateSubSelectAdapter extends RecyclerView.Adapter<GroupMchOrderUseDateSubSelectAdapter.ViewHolder> {
 
     List<GoodsPriceDatesResponse> goodsPriceDatesList;
     private Context mContext;
@@ -37,7 +29,7 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
     private OrderUseDateSelectListener orderUseDateSelectListener;
     GoodsPriceDatesResponse goodsPriceDatesResponse;
 
-    public OrderUseDateSelectAdapter(Context mContext, OrderUseDateSelectListener orderUseDateSelectListener) {
+    public GroupMchOrderUseDateSubSelectAdapter(Context mContext, OrderUseDateSelectListener orderUseDateSelectListener) {
 
         this.mContext = mContext;
         this.orderUseDateSelectListener = orderUseDateSelectListener;

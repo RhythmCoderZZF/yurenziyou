@@ -12,6 +12,15 @@ public class OrderSubmitInitResponse {
 
     private List<GoodsPriceEntity> goodsPrice;
 
+    //购买须知H5
+    private String goodsBuyNotes;
+
+    //开启用车模式状态
+    private int openCarStatus;
+
+    //组合标题
+    private String title;
+
     public List<TravellerBean> getTravellers() {
         return travellers;
     }
@@ -26,6 +35,30 @@ public class OrderSubmitInitResponse {
 
     public void setGoodsPrice(List<GoodsPriceEntity> goodsPrice) {
         this.goodsPrice = goodsPrice;
+    }
+
+    public String getGoodsBuyNotes() {
+        return goodsBuyNotes;
+    }
+
+    public void setGoodsBuyNotes(String goodsBuyNotes) {
+        this.goodsBuyNotes = goodsBuyNotes;
+    }
+
+    public int getOpenCarStatus() {
+        return openCarStatus;
+    }
+
+    public void setOpenCarStatus(int openCarStatus) {
+        this.openCarStatus = openCarStatus;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public class TravellersEntity{

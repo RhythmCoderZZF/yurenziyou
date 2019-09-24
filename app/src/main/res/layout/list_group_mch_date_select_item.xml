@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_19"
+    android:orientation="vertical"
+      >
+
+    <TextView
+        android:id="@+id/tv_group_mch_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_xmedium"
+        android:textColor="@color/color_text_black7"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:textStyle="bold"
+        android:text=""/>
+
+
+        <com.nbhysj.coupon.view.MyRecycleView
+            android:id="@+id/rv_use_ticket_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_19"
+            ></com.nbhysj.coupon.view.MyRecycleView>
+
+</LinearLayout>

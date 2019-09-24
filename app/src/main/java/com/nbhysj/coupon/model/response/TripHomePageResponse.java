@@ -13,7 +13,7 @@ public class TripHomePageResponse implements Serializable {
     private List<TripEntity> trip;
 
     //攻略推荐
-    private List<StrategyEntity> strategy;
+    private List<StrategyBean> strategy;
 
     public List<TripEntity> getTrip() {
         return trip;
@@ -23,11 +23,11 @@ public class TripHomePageResponse implements Serializable {
         this.trip = trip;
     }
 
-    public List<StrategyEntity> getStrategy() {
+    public List<StrategyBean> getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(List<StrategyEntity> strategy) {
+    public void setStrategy(List<StrategyBean> strategy) {
         this.strategy = strategy;
     }
 
@@ -111,49 +111,6 @@ public class TripHomePageResponse implements Serializable {
 
         public void setEndPlace(String endPlace) {
             this.endPlace = endPlace;
-        }
-    }
-
-    public class StrategyEntity implements Serializable{
-
-        private int id;
-
-        private String photo;
-
-        private String title;
-
-        private String intro;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(String photo) {
-            this.photo = photo;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getIntro() {
-            return intro;
-        }
-
-        public void setIntro(String intro) {
-            this.intro = intro;
         }
     }
 }

@@ -19,6 +19,7 @@ import com.nbhysj.coupon.common.Enum.TicketEntranceWayEnum;
 import com.nbhysj.coupon.common.Enum.TicketRefundSettingsEnum;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.GroupMchOrderSubmitActivity;
 import com.nbhysj.coupon.ui.OrderSubmitActivity;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -223,8 +224,8 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
             public void onClick(View view)
             {
                 Intent mIntent = new Intent();
-                mIntent.setClass(context, OrderSubmitActivity.class);
-                mIntent.putExtra("goodsId",goodsId);
+                mIntent.setClass(context, GroupMchOrderSubmitActivity.class);
+                mIntent.putExtra("groupId",goodsId);
                 context.startActivity(mIntent);
             }
         });

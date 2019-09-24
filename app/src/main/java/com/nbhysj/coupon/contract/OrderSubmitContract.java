@@ -48,6 +48,9 @@ public interface OrderSubmitContract {
         //删除旅客
         Observable<BackResult> deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
 
+        //组合订单提交界面(组合价格日历)
+        Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(int groupId);
+
     }
 
     interface View extends BaseView {
@@ -68,6 +71,8 @@ public interface OrderSubmitContract {
 
         void deleteUserTravellerResult(BackResult res);
 
+        void getGroupMchOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res);
+
         void showMsg(String msg);
     }
 
@@ -86,5 +91,7 @@ public interface OrderSubmitContract {
         public abstract void updateUserTraveller(TravellerInfoRequest updateTravellerRequest);
 
         public abstract void deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
+
+        public abstract void getGroupMchOrderSubmitInit(int groupId);
     }
 }

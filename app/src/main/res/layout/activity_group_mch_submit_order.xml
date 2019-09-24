@@ -78,12 +78,11 @@
 
                         <TextView
                             android:id="@+id/tv_ticket_title"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="@dimen/dp_16"
                             android:text=""
-                            android:layout_toLeftOf="@+id/tv_purchase_notes"
                             android:textColor="@color/txt_font_black2"
                             android:textSize="@dimen/text_size_xlarge"
                             android:textStyle="bold" />
@@ -116,35 +115,20 @@
                         android:layout_marginRight="@dimen/dp_14"
                         android:background="@color/color_text_gray16" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="131dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_15"
-                            android:layout_marginTop="@dimen/dp_20"
-                            android:text="使用日期"
-                            android:textColor="@color/txt_font_black2"
-                            android:textSize="@dimen/text_size_xmedium"
-                            android:textStyle="bold" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_60"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_13">
 
-                            <android.support.v7.widget.RecyclerView
+                            <com.nbhysj.coupon.view.MyRecycleView
                                 android:id="@+id/rv_use_ticket_date"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="@dimen/dp_7"
-                           ></android.support.v7.widget.RecyclerView>
+                           ></com.nbhysj.coupon.view.MyRecycleView>
 
                         </RelativeLayout>
-                    </LinearLayout>
                 </LinearLayout>
 
                 <View
@@ -367,32 +351,6 @@
                         android:textColor="@color/color_text_blue5"
                         android:textSize="@dimen/text_size_small" />
                 </RelativeLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/llyt_increase_ticket"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@drawable/bg_order_date_select_top_shape"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp_56"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:gravity="center_vertical"
-                        android:text="@string/str_increase_ticket"
-                        android:textColor="@color/txt_font_black2"
-                        android:textSize="@dimen/text_size_xmedium"
-                        android:textStyle="bold" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_increase_ticket"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

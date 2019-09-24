@@ -7,10 +7,7 @@ import android.view.View;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.BroadcastItemAdapter;
-import com.nbhysj.coupon.adapter.MyTravelListAdapter;
-import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 import com.nbhysj.coupon.model.response.ImageData;
-import com.nbhysj.coupon.ui.BroadcastActivity;
 
 import java.util.ArrayList;
 import java.util.List;

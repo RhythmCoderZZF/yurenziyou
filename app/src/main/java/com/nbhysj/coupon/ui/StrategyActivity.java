@@ -13,6 +13,7 @@ import com.nbhysj.coupon.contract.StrategyContract;
 import com.nbhysj.coupon.model.StrategyModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.presenter.StrategyPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
@@ -47,7 +48,7 @@ public class StrategyActivity extends BaseActivity<StrategyPresenter, StrategyMo
 
     private StrategyListAdapter strategyListAdapter;
 
-    private List<StrategyResponse.StrategyEntity> mStrategyList;
+    private List<StrategyBean> mStrategyList;
     private boolean isOnRefresh;
     private boolean isOnLoadMore = false;
 
@@ -168,7 +169,7 @@ public class StrategyActivity extends BaseActivity<StrategyPresenter, StrategyMo
 
                     BasePaginationResult paginationResult = res.getData().getPage();
                     mTotalPageCount = paginationResult.getPageCount();
-                    List<StrategyResponse.StrategyEntity> strategyList = res.getData().getResult();
+                    List<StrategyBean> strategyList = res.getData().getResult();
 
                     if (mTotalPageCount == 0)
                     {

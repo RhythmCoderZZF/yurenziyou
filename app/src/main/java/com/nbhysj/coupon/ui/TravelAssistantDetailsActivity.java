@@ -206,7 +206,7 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                 String countyId = tripDetailsResponse.getCountyId();
                 if(isFirstEntry){
 
-                    getWeather("330200");
+                    getWeather(Constants.CITY_CODE);
                     isFirstEntry = false;
                 }
 
@@ -459,7 +459,7 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     }
 
     //获取行程助手详情
-    public void getWeather(String cityCode) {
+    public void getWeather(int cityCode) {
 
         if (validateInternet()) {
 

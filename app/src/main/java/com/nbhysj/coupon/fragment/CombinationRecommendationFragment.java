@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.MyTravelListAdapter;
 import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 
 import butterknife.BindView;

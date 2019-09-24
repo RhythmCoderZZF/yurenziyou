@@ -9,8 +9,6 @@ import android.view.View;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MineCollectionAlbumAdapter;
-import com.nbhysj.coupon.adapter.MyTravelListAdapter;
-import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 import com.nbhysj.coupon.model.response.MineCollectionAlbumResponse;
 import com.nbhysj.coupon.ui.EditAlbumActivity;
 import com.nbhysj.coupon.ui.NewAlbumActivity;

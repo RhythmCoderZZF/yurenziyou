@@ -75,7 +75,7 @@ public interface TravelAssistantContract {
         Observable<BackResult<TripRouteMapResponse>> getTripRouteMap(int tripId);
 
         //获取天气接口
-        Observable<BackResult<WeatherResponse>> getWeather(String cityCode);
+        Observable<BackResult<WeatherResponse>> getWeather(int cityCode);
 
     }
 
@@ -156,6 +156,6 @@ public interface TravelAssistantContract {
         public abstract void getTripRouteMap(int tripId);
 
         //获取天气接口
-        public abstract void getWeather(String cityCode);
+        public abstract void getWeather(int cityCode);
     }
 }

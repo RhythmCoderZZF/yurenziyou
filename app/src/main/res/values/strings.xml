@@ -271,6 +271,7 @@
     <string name="str_non_invoiceable">不可开发票</string>
     <string name="str_invoiceable">可开发票</string>
     <string name="str_immediate_pre_order">立即预购</string>
+    <string name="str_purchase_instructions">购买须知</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

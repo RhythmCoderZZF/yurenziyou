@@ -56,4 +56,9 @@ public class OrderSubmitModel implements OrderSubmitContract.Model {
     public Observable<BackResult<OrderSubmitResponse>> ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
         return Api.getInstance().apiService.ticketOrderSubmit(ticketOrderSubmitRequest).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(int groupId) {
+        return Api.getInstance().apiService.getGroupMchOrderSubmitInit(groupId).compose(RxSchedulers.io_main());
+    }
 }

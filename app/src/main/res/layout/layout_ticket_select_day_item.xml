@@ -1,49 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlyt_day_item"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#ffffff"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
-    android:layout_height="50dp">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llyt_day_item"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="日"
+            android:textColor="@color/btn_alert_press"
             android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/tv_day"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/color_text_black6"
-                android:textSize="@dimen/text_size_xnormal"
-                android:textStyle="bold"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="一"
+            android:textColor="#FF7E7D7D"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/tv_ticket_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:textColor="@color/color_text_black6"
-                android:textSize="@dimen/text_size_small"
-               />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="二"
+            android:textColor="#FF7E7D7D"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="三"
+            android:textColor="#FF7E7D7D"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="四"
+            android:textColor="#FF7E7D7D"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="五"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="六"
+            android:textColor="@color/btn_alert_press"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
-</RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:alpha="0.25"
+        android:layout_toRightOf="@+id/tv_ticket_already_used"
+        android:background="@color/color_text_gray6"></View>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_ticket_date_select"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

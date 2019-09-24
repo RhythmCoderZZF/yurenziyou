@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -75,6 +77,15 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     //周几
     @BindView(R.id.tv_travel_week)
     TextView mTvTravelWeek;
+    //无行程数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytTripNoData;
+    //无行程数据
+    @BindView(R.id.iv_nodata)
+    ImageView mImgNoData;
+    //无行程数据
+    @BindView(R.id.tv_nodata)
+    TextView mTvTripNoData;
 
     TripDetailsResponse.DetailsEntity detailsEntity;
     private List<TripDetailsResponse.TripDetailsEntity> tripDetailsList;
@@ -212,9 +223,16 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
         try {
 
             setTravelAssistantHeader();
-            travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
-            travelAssistantDetailAdapter.notifyDataSetChanged();
+            if(tripDetailsList.size() > 0)
+            {
+                mRlytTripNoData.setVisibility(View.GONE);
+                travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
+                travelAssistantDetailAdapter.notifyDataSetChanged();
 
+            } else {
+                mRlytTripNoData.setVisibility(View.VISIBLE);
+                mTvTripNoData.setText("该天还没有行程哦~");
+            }
 
         }catch (Exception e){
             e.printStackTrace();

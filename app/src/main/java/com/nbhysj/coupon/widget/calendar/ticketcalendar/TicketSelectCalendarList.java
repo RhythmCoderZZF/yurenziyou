@@ -28,7 +28,10 @@ import java.util.Date;
 import java.util.List;
 
 import static com.nbhysj.coupon.view.RoundedImageView.TAG;
-
+/**
+ * @auther：hysj created on 2019/09/14
+ * description：票日期选择
+ */
 public class TicketSelectCalendarList extends FrameLayout {
     RecyclerView mRvTicketDateSelect;
     CalendarAdapter adapter;
@@ -225,7 +228,7 @@ public class TicketSelectCalendarList extends FrameLayout {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             if (i == TicketSelectDateBean.item_type_day) {
-                View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_day, viewGroup, false);
+                View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_day_ticket_select, viewGroup, false);
 
                 final CalendarAdapter.DayViewHolder dayViewHolder = new CalendarAdapter.DayViewHolder(rootView);
                 dayViewHolder.itemView.setOnClickListener(new OnClickListener() {

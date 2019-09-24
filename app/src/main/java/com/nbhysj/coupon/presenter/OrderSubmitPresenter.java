@@ -52,6 +52,11 @@ public class OrderSubmitPresenter extends OrderSubmitContract.Presenter {
     }
 
     @Override
+    public void getGroupMchOrderSubmitInit(int groupId) {
+        mRxManager.add(mModel.getGroupMchOrderSubmitInit(groupId).subscribe(res -> mView.getGroupMchOrderSubmitInitResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }
