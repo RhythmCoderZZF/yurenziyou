@@ -84,9 +84,9 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
                 //日期
                 String date = goodsPriceDatesResponse.getDate();
                 //是否可以预订
-                int isCanBooking = goodsPriceDatesResponse.getIsCanBookings();
+                int isCanBooking = goodsPriceDatesResponse.getIsCanBooking();
                 //价格
-                int price = goodsPriceDatesResponse.getPrice();
+                double price = goodsPriceDatesResponse.getPrice();
                 //判断是否是今天
                 boolean isCurrentDate = DateUtil.isCurrentDate(date, DateUtil.sDateYMDFormat);
                 String mmdd = DateUtil.toMMDD(date);
@@ -141,7 +141,7 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
                         orderUseDateSelectListener.moreDatesCallBack();
                     } else {
 
-                        int isCanBooking = goodsPriceDatesList.get(itemPosition).getIsCanBookings();
+                        int isCanBooking = goodsPriceDatesList.get(itemPosition).getIsCanBooking();
                         if (isCanBooking == TicketBookStatusEnum.BOOKABLE.getKey())  //0:不可预订 1:可预订
                         {
                             mSelectPosition = itemPosition;

@@ -113,8 +113,8 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         }
         MchGoodsBean mchGoodsBean = entranceTicketList.get(groupPosition);
         String title = mchGoodsBean.getTitle();
-        int defaultPrice = mchGoodsBean.getDefaultPrice();
-        int marketPrice = mchGoodsBean.getMarketPrice();
+        double defaultPrice = mchGoodsBean.getDefaultPrice();
+        double marketPrice = mchGoodsBean.getMarketPrice();
         String bookingInfo = mchGoodsBean.getBookingInfo();
         groupitem.mTvTicketTitle.setText(title);
         groupitem.mTvDefaultPrice.setText(String.valueOf(defaultPrice));
@@ -157,8 +157,8 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         goodsPriceTagList.clear();
         MchGoodsBean mchGoodsBean = entranceTicketList.get(groupPosition);
         String bookingInfo = mchGoodsBean.getBookingInfo();
-        int defaultPrice = mchGoodsBean.getDefaultPrice();
-        int marketPrice = mchGoodsBean.getMarketPrice();
+        double defaultPrice = mchGoodsBean.getDefaultPrice();
+        double marketPrice = mchGoodsBean.getMarketPrice();
         int sellNum = mchGoodsBean.getSellNum();
         String refundSettingsValue = mchGoodsBean.getRefundSettings(); //退票信息
         String ticketIntoTypeValue = mchGoodsBean.getTicketIntoType(); //换票信息
@@ -201,7 +201,7 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         chilItem.mTvBookTicketInfo.setText(bookingInfo);
         chilItem.mTvSellNum.setText("已售"+ sellNum + " | 购买须知 >");
         chilItem.mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
-        int discountAmount = marketPrice - defaultPrice;
+        double discountAmount = marketPrice - defaultPrice;
         chilItem.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
         chilItem.mTvAlreadyReduced.setText("已减" + String.valueOf(discountAmount) + "元");
 

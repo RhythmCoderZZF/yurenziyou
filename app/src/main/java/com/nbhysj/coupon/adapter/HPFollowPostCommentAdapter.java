@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.LabelResponse;
+import com.nbhysj.coupon.model.response.PostCommentBean;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  */
 public class HPFollowPostCommentAdapter extends RecyclerView.Adapter<HPFollowPostCommentAdapter.ViewHolder> {
 
-    List<HomePageSubTopicTagBean.PostsCommentsEntity> postsCommentsList;
+    List<PostCommentBean> postsCommentsList;
     private Context mContext;
 
     public HPFollowPostCommentAdapter(Context mContext) {
@@ -30,7 +31,7 @@ public class HPFollowPostCommentAdapter extends RecyclerView.Adapter<HPFollowPos
         this.mContext = mContext;
     }
 
-    public void setLabelList(List<HomePageSubTopicTagBean.PostsCommentsEntity> labelResponseList) {
+    public void setLabelList(List<PostCommentBean> labelResponseList) {
 
         this.postsCommentsList = labelResponseList;
     }
@@ -47,8 +48,8 @@ public class HPFollowPostCommentAdapter extends RecyclerView.Adapter<HPFollowPos
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            //DeliciousFoodRecommendResponse deliciousFoodRecommend = deliciousFoodRecommendList.get(itemPosition);
-            HomePageSubTopicTagBean.PostsCommentsEntity postsCommentsEntity = postsCommentsList.get(itemPosition);
+
+            PostCommentBean postsCommentsEntity = postsCommentsList.get(itemPosition);
             String content = postsCommentsEntity.getContent();
             String nickname = postsCommentsEntity.getNickname();
             holder.mTvCommentContent.setText(content);

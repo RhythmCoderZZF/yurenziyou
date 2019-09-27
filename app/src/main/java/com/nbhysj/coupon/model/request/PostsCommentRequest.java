@@ -7,20 +7,24 @@ package com.nbhysj.coupon.model.request;
 public class PostsCommentRequest {
 
     //帖子id
-    private String articleId;
+    private int articleId;
 
     //评论内容
     private String content;
 
     //评论id,0为评论帖子
-    private String pid;
+    private int pid;
 
-    public String getArticleId() {
+    public int getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(String articleId) {
+    public void setArticleId(int articleId) {
         this.articleId = articleId;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     public String getContent() {
@@ -31,11 +35,7 @@ public class PostsCommentRequest {
         this.content = content;
     }
 
-    public String getPid() {
+    public int getPid() {
         return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
     }
 }

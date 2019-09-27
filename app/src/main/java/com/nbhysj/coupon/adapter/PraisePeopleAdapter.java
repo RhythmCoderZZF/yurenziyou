@@ -13,6 +13,7 @@ import com.example.library.banner.BannerLayout;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.ZanAvatersBean;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.BannerSlideShowView;
@@ -45,13 +46,13 @@ public class PraisePeopleAdapter extends RecyclerView.Adapter<PraisePeopleAdapte
     private int mEmptyType = 0;
 
     private Context mContext;
-    private List<HomePageSubTopicTagBean.ZanAvatersEntity> zanAvatersList;
+    private List<ZanAvatersBean> zanAvatersList;
 
     public PraisePeopleAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setPraisePeopleList(List<HomePageSubTopicTagBean.ZanAvatersEntity> zanAvatersList) {
+    public void setPraisePeopleList(List<ZanAvatersBean> zanAvatersList) {
 
         this.zanAvatersList = zanAvatersList;
     }
@@ -101,12 +102,5 @@ public class PraisePeopleAdapter extends RecyclerView.Adapter<PraisePeopleAdapte
             ButterKnife.bind(this, itemView);
 
         }
-    }
-
-    public interface HouseDetailListener {
-
-        public void setcheckItemListener(int position);
-
-        public void setDeleteItemListener(int position);
     }
 }

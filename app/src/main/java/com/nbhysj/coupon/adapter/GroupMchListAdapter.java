@@ -61,7 +61,7 @@ public class GroupMchListAdapter extends RecyclerView.Adapter<GroupMchListAdapte
 
             String title = packageVOSEntity.getTitle();
             String intro = packageVOSEntity.getIntro();
-            int marketPrice = packageVOSEntity.getMarketPrice();
+            double marketPrice = packageVOSEntity.getMarketPrice();
             int packageId = packageVOSEntity.getId();
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgGroupMch);
             holder.mTvGroupMchName.setText(title);

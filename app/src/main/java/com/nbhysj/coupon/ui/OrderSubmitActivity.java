@@ -189,7 +189,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private int mPurchaseNum = 1;
 
     //使用日期价格
-    private int datePrice;
+    private double datePrice;
 
     //增加门票价格
     private int increaseTicketPrice;
@@ -283,6 +283,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private int mPageSize = 10000;
 
     List<GoodsPriceDatesResponse> goodsPriceDatesList;
+
+    //城市ID
+    private int cityCode;
+
+    private int lineType;
     @Override
     public int getLayoutId() {
 
@@ -490,7 +495,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDatesList.get(position);
                 datePrice = goodsPriceDatesResponse.getPrice();
                 goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
-                int totalPrice = increaseTicketPrice + datePrice;
+                double totalPrice = increaseTicketPrice + datePrice;
                 mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
 
             }
@@ -541,7 +546,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             @Override
             public void setPurchaseNumListener(int position, int purchasePrice, int mAddTicketPurchaseNum) { //mAddTicketPurchaseNum 增加门票数量
                 increaseTicketPrice = purchasePrice;
-                int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;  //mPurchaseNum
+                double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;  //mPurchaseNum
                 mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
                 if (goodsPriceTicketAddList.size() > 0) {
                     goodsPriceTicketAddList.get(position).setTicketPurchaseNum(mAddTicketPurchaseNum);
@@ -699,7 +704,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     if (goodsPriceList.size() > 0) {
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
-                        int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                        double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
                         mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
                     }
                 } else {
@@ -712,11 +717,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             case R.id.img_add_purchase_num:
                 mPurchaseNum++;
                 mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
-                if (goodsPriceList.size() > 0) {
+                if (goodsPriceList.size() > 0)
+                {
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
-                int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
                 mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
                 break;
             case R.id.tv_add_vehicle_more:
@@ -947,7 +953,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                             GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDatesList.get(j);
                             String goodsPriceDate = goodsPriceDatesResponse.getDate();
                             int id = goodsPriceDatesResponse.getId();
-                            int price = goodsPriceDatesResponse.getPrice();
+                            double price = goodsPriceDatesResponse.getPrice();
 
                             if (orderSubmitDate.equals(goodsPriceDate)) {
                                 orderSubmitDateResponse.setIsCanBooking(1);
@@ -1026,6 +1032,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             case Constants.SUCCESS_CODE:
                 try {
                     EstimatedPriceResponse estimatedPrice = res.getData();
+                    cityCode = estimatedPrice.getCityCode();
+                    lineType = estimatedPrice.getLineType();
                     vehicleUseAddDialog.setTotalVehicleExpenses(estimatedPrice);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1111,6 +1119,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     @Override
+    public void groupMchOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -1166,7 +1179,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             ticketOrderSubmitRequest.setCars(carsBeanList);
 
             //是否用车 1:用 || 0:不用
-            if (mCkbIsNeedUseCar.isChecked()) {
+            if (mCkbIsNeedUseCar.isChecked())
+            {
                 ticketOrderSubmitRequest.setCarStatus(1);
             } else {
                 ticketOrderSubmitRequest.setCarStatus(0);
@@ -1390,6 +1404,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 @Override
                 public void setVehicleUseConfirmCallBack(CarsBean carsBean) {
                     mLlytVehicleUse.setVisibility(View.VISIBLE);
+                    carsBean.setCityCode(cityCode);
+                    carsBean.setLineType(lineType);
                     carsBeanList.add(carsBean);
                     vehicleUseAdapter.setVehicleUseList(carsBeanList);
                     vehicleUseAdapter.notifyDataSetChanged();

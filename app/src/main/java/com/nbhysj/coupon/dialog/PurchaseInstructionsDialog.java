@@ -109,13 +109,13 @@ public class PurchaseInstructionsDialog extends DialogFragment {
         myProgressBar = view.findViewById(R.id.pb_web);
         if(mchHotelGoodsBean != null) {
             String title = mchHotelGoodsBean.getTitle();
-            int marketPrice = mchHotelGoodsBean.getMarketPrice();
-            int defaultPrice = mchHotelGoodsBean.getDefaultPrice();
+            double marketPrice = mchHotelGoodsBean.getMarketPrice();
+            double defaultPrice = mchHotelGoodsBean.getDefaultPrice();
             mTvHotelTitle.setText(title);
             mTvDefaultPrice.setText(String.valueOf(defaultPrice));
             mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
 
-            int discountAmount = marketPrice - defaultPrice;
+            double discountAmount = marketPrice - defaultPrice;
             mTvDefaultPrice.setText(String.valueOf(defaultPrice));
             mTvAlreadyReducedPrice.setText("已减" + String.valueOf(discountAmount) + "元");
 

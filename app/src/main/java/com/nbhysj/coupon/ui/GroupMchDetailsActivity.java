@@ -316,7 +316,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                     mchName = mchDetailsEntity.getMchName();
                     //评价
                     int commentNum = mchDetailsEntity.getCommentNum();
-                    int mConsumePrice = mchDetailsEntity.getConsumePrice();
+                    double mConsumePrice = mchDetailsEntity.getConsumePrice();
                     float mCommentScore = mchDetailsEntity.getCommentScore();
                     List<GroupMchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
 

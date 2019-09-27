@@ -439,7 +439,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     int level = mchDetailsEntity.getLevel();
                     //评价
                     int commentNum = mchDetailsEntity.getCommentNum();
-                    int mConsumePrice = mchDetailsEntity.getConsumePrice();
+                    double mConsumePrice = mchDetailsEntity.getConsumePrice();
                     float mCommentScore = mchDetailsEntity.getCommentScore();
 
                     List<MchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();

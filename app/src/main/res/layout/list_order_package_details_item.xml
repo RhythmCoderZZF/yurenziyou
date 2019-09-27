@@ -82,8 +82,8 @@
         android:layout_toRightOf="@+id/view_line"
         android:gravity="center"
         android:text="0张"
-        android:textColor="@color/txt_font_black2"
-        android:textSize="@dimen/text_size_xsmall"
+        android:textColor="@color/color_text_gray28"
+        android:textSize="@dimen/text_size_small"
         app:layout_widthPercent="8%"
         android:textStyle="bold" />
 
@@ -106,8 +106,8 @@
         android:gravity="center"
         android:text="0张"
         app:layout_widthPercent="8%"
-        android:textColor="@color/txt_font_black2"
-        android:textSize="@dimen/text_size_xsmall"
+        android:textColor="@color/color_text_gray28"
+        android:textSize="@dimen/text_size_small"
         android:textStyle="bold" />
 
     <View
@@ -150,7 +150,7 @@
                 android:gravity="right|center_vertical"
                 android:text="0.00"
                 android:textColor="@color/color_text_black7"
-                android:textSize="@dimen/text_size_normal"
+                android:textSize="@dimen/text_size_xnormal"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -161,9 +161,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="@dimen/dp_16"
-            android:text="x2"
+            android:text="x0"
             android:textColor="@color/color_text_gray28"
-            android:textSize="@dimen/text_size_normal" />
+            android:textSize="@dimen/text_size_small" />
 
         <TextView
             android:id="@+id/tv_apply_for_refund"

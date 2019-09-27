@@ -19,6 +19,10 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.FollowDetailBean;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.PostCommentBean;
+import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
+import com.nbhysj.coupon.model.response.TopicsBean;
+import com.nbhysj.coupon.model.response.ZanAvatersBean;
 import com.nbhysj.coupon.ui.FoodRecommendationActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -95,19 +99,19 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             String postPublishDate = DateUtil.dateFormat(date);
             holder.mTvTime.setText(postPublishDate);
             String avaterUrl = followDetailBean.getAvater();
-            List<HomePageSubTopicTagBean.PostsCommentsEntity> postsCommentsList = followDetailBean.getPostsComments();
+            List<PostCommentBean> postsCommentsList = followDetailBean.getPostsComments();
             GlideUtil.loadImage(mContext, avaterUrl, holder.mImgRecommendUserAvatar);
             List<String> bannerUrlList = followDetailBean.getResources();
 
             if (bannerUrlList != null) {
                 holder.mSlideViewFriendDetailPictrue.initUI(bannerUrlList);
             }
-            List<HomePageSubTopicTagBean.TopicsEntity> topicsList = followDetailBean.getTopics();
+            List<TopicsBean> topicsList = followDetailBean.getTopics();
             // List<FollowDetailBean.UserEntity> interestUserList = followDetailBean.getInterestUserEntity();
-            holder.mTagFlowLayout.setAdapter(new TagAdapter<HomePageSubTopicTagBean.TopicsEntity>(topicsList) {
+            holder.mTagFlowLayout.setAdapter(new TagAdapter<TopicsBean>(topicsList) {
 
                 @Override
-                public View getView(FlowLayout parent, int position, HomePageSubTopicTagBean.TopicsEntity topicsEntity) {
+                public View getView(FlowLayout parent, int position, TopicsBean topicsEntity) {
                     mInflater = LayoutInflater.from(mContext);
                     TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tv,
                             holder.mTagFlowLayout, false);
@@ -123,7 +127,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             int browseNum = followDetailBean.getHits();
             holder.mTvBrowseNum.setText("浏览" + String.valueOf(browseNum));
 
-            List<HomePageSubTopicTagBean.ZanAvatersEntity> zanAvatersList = followDetailBean.getZanAvaters();
+            List<ZanAvatersBean> zanAvatersList = followDetailBean.getZanAvaters();
             if (zanAvatersList != null) {
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -173,7 +177,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             String postPublishTime = DateUtil.transferLongToDateStr(DateUtil.sDateYMDFormat, followDetailBean.getCtime());
             holder.mTvPostTime.setText(postPublishTime);
 
-            List<HomePageSubTopicTagBean.RecommendUsersEntity> recommendUsersList = followDetailBean.getRecommendUsers();
+            List<RecommendInterestUsersBean> recommendUsersList = followDetailBean.getRecommendUsers();
 
             /*List<FollowDetailBean.UserEntity> followDetailList = new ArrayList<>();
 
@@ -204,7 +208,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 holder.mRvUserOfInterest.setLayoutManager(userOfInterestLinearLayoutManager);
                 FollowUsersOfInterestAdapter followUsersOfInterestAdapter = new FollowUsersOfInterestAdapter(mContext, new FollowUsersOfInterestAdapter.UsersOfInterestItemClickListener() {
                     @Override
-                    public void setUsersOfInterestItemClickListener(HomePageSubTopicTagBean.RecommendUsersEntity userEntity) {
+                    public void setUsersOfInterestItemClickListener(RecommendInterestUsersBean userEntity) {
 
                         followListener.setUserOfInterestListener(userEntity);
 
@@ -382,7 +386,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     public interface FollowListener {
 
         //可能感兴趣的用户 点击关注
-        void setUserOfInterestListener(HomePageSubTopicTagBean.RecommendUsersEntity userEntity);
+        void setUserOfInterestListener(RecommendInterestUsersBean userEntity);
 
         //查看更多感兴趣用户
         void setUserOfInterestLookMoreListener();

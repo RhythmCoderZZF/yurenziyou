@@ -2,36 +2,25 @@ package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.CardBean;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
-import com.nbhysj.coupon.ui.NearbyCardDetailActivity;
-import com.nbhysj.coupon.view.GlideImageView;
-import com.nbhysj.coupon.widget.glide.GlideApp;
-import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
+import com.nbhysj.coupon.ui.PartialApplyForRefundActivity;
 
 import java.util.List;
 
 public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAdapter.CardHolder> {
 
-    private Context mContent;
+    private Context mContext;
     //订单列表
     List<OrderDetailResponse.OrderGoodsEntity> orderGoodsList;
-    public GoodMealDetailAdapter(Context mContent) {
-        this.mContent = mContent;
+    public GoodMealDetailAdapter(Context mContext) {
+        this.mContext = mContext;
     }
 
     public void setOrderMealList(List<OrderDetailResponse.OrderGoodsEntity> orderGoodsList){
@@ -56,11 +45,51 @@ public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAd
         //商品可用到期时间
         String goodTime = orderGoodsEntity.getGoodTime();
 
-        holder.mTvMchName.setText(mchName);
+        String usedNum = orderGoodsEntity.getUsedNum();
+        String surplusNum = orderGoodsEntity.getSurplusNum();
+        String goodsTotalFee = orderGoodsEntity.getGoodsTotalFee();
+        String goodNum = orderGoodsEntity.getGoodsNum();
+        String goodsId = orderGoodsEntity.getGoodsId();
 
-        holder.mTvTicketTitle.setText(goodsTitle);
+        if(!TextUtils.isEmpty(mchName))
+        {
+            holder.mTvMchName.setText(mchName);
+        }
 
-        holder.mTvTicketCanUseTime.setText(goodTime);
+        if(!TextUtils.isEmpty(goodsTitle))
+        {
+            holder.mTvTicketTitle.setText(goodsTitle);
+        }
+
+        if(!TextUtils.isEmpty(goodTime))
+        {
+            holder.mTvTicketCanUseTime.setText(goodTime);
+        }
+
+        holder.mTvTicketAlreadyUsed.setText(usedNum + "张");
+
+        if(!TextUtils.isEmpty(surplusNum))
+        {
+             holder.mTvTicketRemainder.setText(surplusNum + "张");
+        }
+
+        if(!TextUtils.isEmpty(goodsTotalFee))
+        {
+            holder.mTvAmountOfMoney.setText(goodsTotalFee);
+        }
+
+        holder.mTvGoodNum.setText("x" + goodNum);
+
+        holder.mTvApplyForRefund.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent mIntent = new Intent();
+                mIntent.setClass(mContext, PartialApplyForRefundActivity.class);
+                mIntent.putExtra("goodsId",goodsId);
+                mContext.startActivity(mIntent);
+            }
+        });
     }
 
     @Override
@@ -75,13 +104,28 @@ public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAd
         TextView mTvTicketTitle;
         //可使用时间
         TextView mTvTicketCanUseTime;
-
+        //已用票数
+        TextView mTvTicketAlreadyUsed;
+        //剩余票数
+        TextView mTvTicketRemainder;
+        //金额
+        TextView mTvAmountOfMoney;
+        //商品数量
+        TextView mTvGoodNum;
+        //申请退款
+        TextView mTvApplyForRefund;
         public CardHolder(View itemView) {
             super(itemView);
 
             mTvMchName = itemView.findViewById(R.id.tv_mch_name);
             mTvTicketTitle = itemView.findViewById(R.id.tv_ticket_title);
             mTvTicketCanUseTime = itemView.findViewById(R.id.tv_ticket_can_use_time);
+            mTvTicketAlreadyUsed = itemView.findViewById(R.id.tv_ticket_already_used);
+            mTvTicketRemainder = itemView.findViewById(R.id.tv_ticket_remainder);
+            mTvAmountOfMoney = itemView.findViewById(R.id.tv_amount_of_money);
+            mTvGoodNum = itemView.findViewById(R.id.tv_good_num);
+            mTvApplyForRefund = itemView.findViewById(R.id.tv_apply_for_refund);
+
         }
     }
 }

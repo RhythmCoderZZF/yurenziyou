@@ -87,8 +87,8 @@ public class TestView extends View {
          * 多色渐变
          */
 
-        int colorStart = getResources().getColor(R.color.color_blue);
-        int colorEnd = getResources().getColor(R.color.color_green);
+        int colorStart = getResources().getColor(R.color.color_blue5);
+        int colorEnd = getResources().getColor(R.color.color_green5);
         LinearGradient backGradient = null;
         if (1 == 0) {
             backGradient = new LinearGradient(0, 0, 0, heigth / 3 + 100, new int[]{colorStart, colorEnd}, null, Shader.TileMode.CLAMP);

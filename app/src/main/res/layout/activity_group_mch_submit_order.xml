@@ -353,10 +353,12 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlyt_open_car_status"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_56"
                     android:layout_marginTop="@dimen/dp_8"
-                    android:background="@drawable/bg_order_date_select_top_shape">
+                    android:background="@drawable/bg_order_date_select_top_shape"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -608,12 +610,21 @@
                         android:textSize="@dimen/text_size_tiny" />
 
                     <TextView
-                        android:id="@+id/tv_market_ticket_price"
+                        android:id="@+id/tv_total_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textColor="@color/color_text_orange2"
                         android:textSize="@dimen/text_size_xlarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_default_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¥0"
+                        android:textColor="@color/color_text_gray35"
+                        android:textSize="@dimen/text_size_tiny"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -634,7 +645,6 @@
             android:drawablePadding="@dimen/dp_2"
             android:gravity="center_vertical"
             android:text="明细" />
-
 
         <TextView
             android:id="@+id/tv_order_detail_look"

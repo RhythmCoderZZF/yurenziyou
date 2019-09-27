@@ -26,6 +26,7 @@ import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
+import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.CommentsListActivity;
 import com.nbhysj.coupon.ui.FindFriendsActivity;
@@ -169,7 +170,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         followListAdapter = new FollowListAdapter(getActivity(), new FollowListAdapter.FollowListener() {
 
             @Override
-            public void setUserOfInterestListener(HomePageSubTopicTagBean.RecommendUsersEntity userEntity) {
+            public void setUserOfInterestListener(RecommendInterestUsersBean userEntity) {
                 Toast.makeText(mContext, "关注" + userEntity.getNickname(), Toast.LENGTH_SHORT).show();
             }
 

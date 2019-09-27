@@ -383,8 +383,16 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
 
             tripDetailsList = detailsEntity.getTripDetails();
             tripDetailsList.get(mPosition).setTitle(remarks);
-            travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
-            travelAssistantDetailAdapter.notifyDataSetChanged();
+            if(tripDetailsList.size() > 0)
+            {
+                mRlytTripNoData.setVisibility(View.GONE);
+                travelAssistantDetailAdapter.setTravelAssistantDetailList(tripDetailsList);
+                travelAssistantDetailAdapter.notifyDataSetChanged();
+
+            } else {
+                mRlytTripNoData.setVisibility(View.VISIBLE);
+                mTvTripNoData.setText("该天还没有行程哦~");
+            }
            /* if(fmPagerAdapter != null) {
                 fmPagerAdapter.notifyDataSetChanged();
             }

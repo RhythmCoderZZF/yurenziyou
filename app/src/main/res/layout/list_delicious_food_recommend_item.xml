@@ -38,17 +38,21 @@
                 android:gravity="center"
                 android:text="江浙菜"
                 android:textSize="@dimen/text_size_small"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_delicious_food_store"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
+            android:paddingRight="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_7"
-            android:text="宁波海洋世界"
+            android:text=""
+            android:lines="1"
+            android:ellipsize="end"
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_normal"
             android:textStyle="bold"
@@ -75,7 +79,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥"
+                android:text="¥"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_tiny"
                 android:layout_marginLeft="@dimen/dp_4" />
@@ -84,7 +88,7 @@
                 android:id="@+id/tv_per_capita_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="156"
+                android:text="0"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_small" />
         </LinearLayout>
@@ -92,6 +96,6 @@
 
     <View
         android:id="@+id/view_footer"
-        android:layout_width="@dimen/dp_15"
+        android:layout_width="@dimen/dp_10"
         android:layout_height="match_parent" />
 </LinearLayout>

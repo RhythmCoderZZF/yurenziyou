@@ -10,7 +10,7 @@ public class GroupGoodsBean {
 
     private int id;
 
-    private int marketPrice;
+    private double marketPrice;
 
     private int packageId;
 
@@ -38,11 +38,11 @@ public class GroupGoodsBean {
         this.id = id;
     }
 
-    public int getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public void setMarketPrice(int marketPrice) {
+    public void setMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
     }
 

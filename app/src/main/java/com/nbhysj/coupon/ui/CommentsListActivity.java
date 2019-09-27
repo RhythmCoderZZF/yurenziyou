@@ -58,7 +58,6 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
     private SmileyParser mParser;
     private Activity activity;
     private ImageView emojie_tv;
-    private GridView gridView;
     List<List<Integer>> caicaiList = new ArrayList<>();//表情2的数据源
     List<List<String>> caicaiTxtList = new ArrayList<>();//表情2的符号数据源
     Map<Integer, List<List<Integer>>> expressionTypeList = new TreeMap<>();//表情总数据源,以图标为key
@@ -179,7 +178,6 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
         emojie_tv.setOnClickListener(this);
         TextView mTvSure = findViewById(R.id.enSure);
         mTvSure.setOnClickListener(this);
-        gridView = (GridView) getLayoutInflater().inflate(R.layout.gridview_emoji, null);//表情gridView
         vViewPager = (ViewPager) findViewById(R.id.viwepager_expression);//viewPager
         vLl_dots = (LinearLayout) findViewById(R.id.ll_dot_container);//圆点容器
         main_emoji_layout = (LinearLayout) findViewById(R.id.main_emoji_layout);

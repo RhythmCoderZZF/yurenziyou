@@ -8,6 +8,8 @@ import java.util.List;
  */
 public class OrderSubmitInitResponse {
 
+    private double payFee;
+
     private List<TravellerBean> travellers;
 
     private List<GoodsPriceEntity> goodsPrice;
@@ -20,6 +22,14 @@ public class OrderSubmitInitResponse {
 
     //组合标题
     private String title;
+
+    public double getPayFee() {
+        return payFee;
+    }
+
+    public void setPayFee(double payFee) {
+        this.payFee = payFee;
+    }
 
     public List<TravellerBean> getTravellers() {
         return travellers;
@@ -94,8 +104,6 @@ public class OrderSubmitInitResponse {
         private String mobile;
 
         private int selfStatus;
-
-
 
         public int getId() {
             return id;
@@ -282,7 +290,11 @@ public class OrderSubmitInitResponse {
 
         private int twoConfirmStatus;
 
+        private String goodsType;
+
         private List<GoodsPriceDatesResponse> goodsPriceDates;
+
+        private List<GoodsPriceDatesResponse> goodsPriceSelectList;
 
         private String ticketIntoType;
 
@@ -526,6 +538,14 @@ public class OrderSubmitInitResponse {
             this.refundNote = refundNote;
         }
 
+        public String getGoodsType() {
+            return goodsType;
+        }
+
+        public void setGoodsType(String goodsType) {
+            this.goodsType = goodsType;
+        }
+
         public int getTwoConfirmStatus() {
             return twoConfirmStatus;
         }
@@ -548,6 +568,14 @@ public class OrderSubmitInitResponse {
 
         public void setTicketPurchaseNum(int ticketPurchaseNum) {
             this.ticketPurchaseNum = ticketPurchaseNum;
+        }
+
+        public List<GoodsPriceDatesResponse> getGoodsPriceSelectList() {
+            return goodsPriceSelectList;
+        }
+
+        public void setGoodsPriceSelectList(List<GoodsPriceDatesResponse> goodsPriceSelectList) {
+            this.goodsPriceSelectList = goodsPriceSelectList;
         }
     }
 }

@@ -4,6 +4,7 @@ import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
+import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
@@ -54,6 +55,11 @@ public class OrderSubmitPresenter extends OrderSubmitContract.Presenter {
     @Override
     public void getGroupMchOrderSubmitInit(int groupId) {
         mRxManager.add(mModel.getGroupMchOrderSubmitInit(groupId).subscribe(res -> mView.getGroupMchOrderSubmitInitResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void groupMchOrderSubmit(GroupMchOrderSubmitRequest groupMchOrderSubmitRequest) {
+        mRxManager.add(mModel.groupMchOrderSubmit(groupMchOrderSubmitRequest).subscribe(res -> mView.groupMchOrderSubmitResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

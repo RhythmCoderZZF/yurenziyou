@@ -26,18 +26,15 @@ import com.nbhysj.coupon.adapter.MchTypeAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailProblemAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailVehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
-import com.nbhysj.coupon.common.Enum.OrderTypeEnum;
+import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
 import com.nbhysj.coupon.contract.OrderDetailContract;
 import com.nbhysj.coupon.dialog.OrderPriceDetailsDialog;
 import com.nbhysj.coupon.dialog.OrderVerificationCodeDialog;
 import com.nbhysj.coupon.fragment.OrderDetailScenicFragmentManager;
 import com.nbhysj.coupon.model.OrderDetailModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.HotTagsTopicBean;
-import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.OrderDetailGuessBean;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
-import com.nbhysj.coupon.model.response.OrderDetailScenicSpotReponse;
 import com.nbhysj.coupon.presenter.OrderDetailPresenter;
 import com.nbhysj.coupon.widget.MyViewPager;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -481,10 +478,10 @@ public class MyOrderDetailActivity extends BaseActivity<OrderDetailPresenter, Or
                     String realName = orderUserEntity.getRealname();
                     String mobile = orderUserEntity.getMobile();
 
-                    if (goodType.equals(OrderTypeEnum.getEnumByKey(0).getValue())) {
+                    if (goodType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
                         mTvContacts.setText("联系人");
 
-                    } else if (goodType.equals(OrderTypeEnum.getEnumByKey(2).getValue())) {
+                    } else if (goodType.equals(GoodsTypeEnum.getEnumByKey(2).getValue())) {
                         mTvContacts.setText("入住人");
                     }
 

@@ -4,6 +4,7 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
+import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -51,6 +52,9 @@ public interface OrderSubmitContract {
         //组合订单提交界面(组合价格日历)
         Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(int groupId);
 
+        //组合订单下单
+        Observable<BackResult<OrderSubmitResponse>> groupMchOrderSubmit(GroupMchOrderSubmitRequest groupMchOrderSubmitRequest);
+
     }
 
     interface View extends BaseView {
@@ -73,6 +77,9 @@ public interface OrderSubmitContract {
 
         void getGroupMchOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res);
 
+        //订单提交返回
+        void groupMchOrderSubmitResult(BackResult<OrderSubmitResponse> res);
+
         void showMsg(String msg);
     }
 
@@ -93,5 +100,7 @@ public interface OrderSubmitContract {
         public abstract void deleteUserTraveller(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
 
         public abstract void getGroupMchOrderSubmitInit(int groupId);
+
+        public abstract void groupMchOrderSubmit(GroupMchOrderSubmitRequest groupMchOrderSubmitRequest);
     }
 }

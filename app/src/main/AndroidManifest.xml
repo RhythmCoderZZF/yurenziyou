@@ -69,13 +69,16 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.GroupMchOrderSubmitActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.StrategyActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.GroupMchDetailsActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity android:name=".ui.AllRefundApplyActivity"></activity>
+        <activity
+            android:name=".ui.GroupMchOrderSubmitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.StrategyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.GroupMchDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.VehicleAddressSelectionActivity"
             android:screenOrientation="portrait" />
@@ -126,7 +129,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.IntroductionOfLandlordActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.ShoppingMallFineFoodActivity"
             android:screenOrientation="portrait" />
@@ -178,7 +181,7 @@
         </activity>
         <activity android:name=".ui.NewAlbumActivity" />
         <activity
-            android:name=".ui.ApplyForRefundActivity"
+            android:name=".ui.PartialApplyForRefundActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity

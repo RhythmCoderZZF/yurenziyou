@@ -138,6 +138,10 @@
     <string name="str_order_cancel">取消订单</string>
     <string name="str_order_comment" translatable="false">去评价</string>
     <string name="str_order_payment" translatable="false">去付款</string>
+    <string name="str_order_refund" translatable="false">去退款</string>
+    <string name="str_order_buy_again">再次预定</string>
+    <string name="str_viewing_refund_progress">查看进度</string>
+    <string name="str_viewing_refund_detail">查看详情</string>
     <string name="str_renminbi_symbol" translatable="false">¥</string>
     <string name="str_order_detail" translatable="false">订单详情</string>
     <string name="str_transaction_success" translatable="false">交易成功</string>
@@ -224,6 +228,9 @@
     <string name="str_package_meal">组合套餐</string>
     <string name="str_group_mch_detail">套餐详情</string>
     <string name="str_official">官方</string>
+    <string name="str_actual_refund_amount">实退金额</string>
+    <string name="str_return_from_original_road">原路退回</string>
+    <string name="str_confirm_refund">确认退款</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -248,6 +255,8 @@
     <string name="str_calendar_select" translatable="false">选择日期</string>
     <string name="str_calendar" translatable="false">日期</string>
     <string name="str_scenic_spot" translatable="false">景点</string>
+    <string name="str_group_mch" translatable="false">组合</string>
+    <string name="str_hotel" translatable="false">酒店</string>
     <string name="str_remarks" translatable="false">备注</string>
     <string name="str_useful" translatable="false">有用</string>
     <string name="str_adopt" translatable="false">采纳</string>
@@ -272,6 +281,7 @@
     <string name="str_invoiceable">可开发票</string>
     <string name="str_immediate_pre_order">立即预购</string>
     <string name="str_purchase_instructions">购买须知</string>
+    <string name="str_reduction_and_exemption">减免优惠</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

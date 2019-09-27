@@ -52,6 +52,9 @@ public class UserOrderListResponse {
 
         private StatusEntity statusVO;
 
+        //支付过期时间
+        private long payExprireTime;
+
         private List<OrderListCarEntity> orderListCarVO;
 
         public String getOrderType() {
@@ -148,6 +151,15 @@ public class UserOrderListResponse {
 
         public void setOrderListCarVO(List<OrderListCarEntity> orderListCarVO) {
             this.orderListCarVO = orderListCarVO;
+        }
+
+
+        public long getPayExprireTime() {
+            return payExprireTime;
+        }
+
+        public void setPayExprireTime(long payExprireTime) {
+            this.payExprireTime = payExprireTime;
         }
     }
 
@@ -411,6 +423,7 @@ public class UserOrderListResponse {
             this.carPrice = carPrice;
         }
     }
+
 
 
 }

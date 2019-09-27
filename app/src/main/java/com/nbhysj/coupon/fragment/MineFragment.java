@@ -95,9 +95,6 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
         if (!TextUtils.isEmpty(avatar)) {
             mImgAvatar.loadCircle(avatar);
-        } else {
-
-            mImgAvatar.loadCircle("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
         }
       /* ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
         layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度

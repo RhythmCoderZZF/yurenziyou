@@ -6,14 +6,12 @@
     <color name="color_light_gray">#787878</color>
     <color name="graph_grey">#7b8181</color>
     <color name="gray">#DCDCDC</color>
-
     <color name="color_graph_black">#5f000000</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="color_black">#212121</color>
     <color name="text_black">#333333</color>
     <color name="color_text_black2">#302F2F</color>
-
     <color name="text_grey">#999999</color>
     <color name="button_grey">#cccccc</color>
     <color name="text_heyanma">#628AB3</color>
@@ -59,7 +57,6 @@
     <color name="color_light_orange">#1AFA8C16</color>
     <color name="drop_down_selected">#FA8C16</color>
     <color name="drop_down_unselected">#111111</color>
-
     <color name="popup_window_bg">#aa2c3e50</color>
     <color name="popup_windwo_bg_stroke">#cc2c3e50</color>
     <color name="color_light_black">#333333</color>
@@ -79,10 +76,12 @@
     <color name="color_line_view">#0DDDF6</color>
     <color name="color_blue">#00C7DA</color>
     <color name="color_blue2">#2C75D3</color>
+
     <color name="blue">#06CFCC</color>
     <color name="blue1">#0DD</color>
     <color name="color_blue3">#15E4C6</color>
     <color name="color_blu4">#FF0DDDF6</color>
+    <color name="color_blue5">#FF00C7DA</color>
     <color name="color_green2">#1DEB96</color>
     <color name="color_green3">#14E3CF</color>
     <color name="color_green4">#49E8E1</color>
@@ -142,7 +141,6 @@
     <color name="color_text_gray39">#FFBDC0C8</color>
     <color name="color_text_gray40">#FF9A9A9A</color>
     <color name="color_text_gray41">#FFE6E6E6</color>
-
     <color name="color_text_orange">#FEB143</color>
     <color name="color_text_orange2">#FF7221</color>
     <color name="color_text_orange3">#FF7E3C</color>
@@ -158,7 +156,6 @@
     <color name="color_text_blue10">#FF6AA9F8</color>
     <color name="color_text_blue11">#FF35A1D7</color>
     <color name="color_text_blue12">#FF0552AB</color>
-
     <color name="transparentsmll_bg">#33000000</color>
     <color name="regis_account_exist">#222222</color>
     <color name="color_dark_red">#FF4970</color>

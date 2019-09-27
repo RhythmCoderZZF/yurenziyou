@@ -14,7 +14,7 @@ public class Constants {
     //请求pwd加盐
     public static final String saltEncryptKey = "nbhysj_";
 
-    public static final int CITY_CODE = 330200;  //token过期
+    public static final int CITY_CODE = 330200;  //城市Id
 
     public static final int UNAUTHORIZED_401 = 401;  //token过期
 

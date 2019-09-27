@@ -39,6 +39,11 @@ public class CarsBean {
     //预估时间(预估方法获得)
     private int duration;
 
+    //城市ID
+    private int cityCode;
+
+    private int lineType;
+
     public int getCarType() {
         return carType;
     }
@@ -125,5 +130,21 @@ public class CarsBean {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(int cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public int getLineType() {
+        return lineType;
+    }
+
+    public void setLineType(int lineType) {
+        this.lineType = lineType;
     }
 }

@@ -145,7 +145,7 @@ public class GroupMchResponse {
         private String intro;
 
         //市场价格
-        private int marketPrice;
+        private double marketPrice;
 
         //照片
         private String photo;
@@ -174,11 +174,11 @@ public class GroupMchResponse {
             this.intro = intro;
         }
 
-        public int getMarketPrice() {
+        public double getMarketPrice() {
             return marketPrice;
         }
 
-        public void setMarketPrice(int marketPrice) {
+        public void setMarketPrice(double marketPrice) {
             this.marketPrice = marketPrice;
         }
 

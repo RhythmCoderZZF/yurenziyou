@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -58,16 +62,18 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
             MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             int scenicSpotSequence = itemPosition + 1;
             holder.mTvPopularScenicSpotSequence.setText("No." + scenicSpotSequence);
+            int mchId = popularScenicSpots.getId();
             int consumePrice = popularScenicSpots.getConsumePrice();
             int commentScore = popularScenicSpots.getCommentScore();
             String address = popularScenicSpots.getAddress();
             String scenicSpotsPhoto = popularScenicSpots.getPhoto();
+            String mchType = popularScenicSpots.getMchType();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(consumePrice));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(commentScore) + "分");
             holder.mTvPopularScenicSpotLocation.setText(address);
             holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getCompany());
 
-            GlideUtil.loadCornersTransformImage(mContext, scenicSpotsPhoto, 5, holder.mImgScenicSpots);
+            GlideUtil.loadImage(mContext, scenicSpotsPhoto,  holder.mImgScenicSpots);
 
             if (itemPosition == 0) {
 
@@ -83,6 +89,21 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
             } else {
                 holder.mFooter.setVisibility(View.GONE);
             }
+
+            holder.mLlytHotScenicSpotsItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
+                    if(mchType.equals(mchScenic))
+                    {
+                        Intent intent = new Intent();
+                        intent.putExtra("mchId", mchId);
+                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,11 +132,14 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
         TextView mTvPopularScenicSpotName;
         //景区照片
         @BindView(R.id.image_scenic_spots)
-        ImageView mImgScenicSpots;
+        RoundedImageView mImgScenicSpots;
         @BindView(R.id.view_header)
         View mHeader;
         @BindView(R.id.view_footer)
         View mFooter;
+        //热门景点
+        @BindView(R.id.llyt_hot_scenic_spots_item)
+        LinearLayout mLlytHotScenicSpotsItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -50,12 +50,13 @@ public class GroupMchOrderUseDateSelectAdapter extends RecyclerView.Adapter<Grou
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
+    public void onBindViewHolder(ViewHolder holder, final int groupItemPosition) {
 
         try {
 
-            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsList.get(itemPosition);
+            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsList.get(groupItemPosition);
             String title = goodsPriceEntity.getTitle();
+
             if(!TextUtils.isEmpty(title))
             {
                 holder.mTvGroupMchName.setText(title + "使用日期");
@@ -63,17 +64,19 @@ public class GroupMchOrderUseDateSelectAdapter extends RecyclerView.Adapter<Grou
 
             //订单提交日期
             orderSubmitDateList = DateUtil.getOrderSubmitDate();
+
             //商品价格日期
             List<GoodsPriceDatesResponse> goodsPriceDatesList = goodsPriceEntity.getGoodsPriceDates();
 
-            for (int i = 0; i < orderSubmitDateList.size(); i++) {
+            for (int i = 0; i < orderSubmitDateList.size(); i++)
+            {
                 GoodsPriceDatesResponse orderSubmitDateResponse = orderSubmitDateList.get(i);
                 String orderSubmitDate = orderSubmitDateResponse.getDate();
                 for (int j = 0; j < goodsPriceDatesList.size(); j++) {
                     GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDatesList.get(j);
                     String goodsPriceDate = goodsPriceDatesResponse.getDate();
                     int id = goodsPriceDatesResponse.getId();
-                    int price = goodsPriceDatesResponse.getPrice();
+                    double price = goodsPriceDatesResponse.getPrice();
 
                     if (orderSubmitDate.equals(goodsPriceDate)) {
                         orderSubmitDateResponse.setIsCanBooking(1);
@@ -83,20 +86,20 @@ public class GroupMchOrderUseDateSelectAdapter extends RecyclerView.Adapter<Grou
                     }
                 }
             }
-
+            goodsPriceEntity.setGoodsPriceSelectList(orderSubmitDateList);
             GridLayoutManager layoutManager = new GridLayoutManager(mContext, 4);
             holder.mRvUseTicketDate.setLayoutManager(layoutManager);
             orderUseDateSelectAdapter = new GroupMchOrderUseDateSubSelectAdapter(mContext, new GroupMchOrderUseDateSubSelectAdapter.OrderUseDateSelectListener() {
                 @Override
                 public void moreDatesCallBack() {
 
-                    orderUseDateSelectListener.setMoreDatesCallBack();
+                    orderUseDateSelectListener.setMoreDatesCallBack(groupItemPosition);
                 }
 
                 @Override
-                public void datePriceSelectCallBack(int position) {
+                public void datePriceSelectCallBack(int dateSubSelectPosition) {
 
-                    orderUseDateSelectListener.setDatePriceSelectCallBack(position);
+                    orderUseDateSelectListener.setDatePriceSelectCallBack(groupItemPosition,dateSubSelectPosition);
                 }
             });
 
@@ -131,8 +134,8 @@ public class GroupMchOrderUseDateSelectAdapter extends RecyclerView.Adapter<Grou
 
     public interface GroupMchOrderUseDateSelectListener {
 
-        void setMoreDatesCallBack();
+        void setMoreDatesCallBack(int position);
 
-        void setDatePriceSelectCallBack(int position);
+        void setDatePriceSelectCallBack(int groupPosition,int childPosition);
     }
 }

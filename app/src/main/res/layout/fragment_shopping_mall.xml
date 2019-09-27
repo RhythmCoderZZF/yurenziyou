@@ -117,16 +117,15 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/line_bg"
+        android:background="@color/white"
         app:srlAccentColor="#00000000"
-        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableHeaderTranslationContent="true"
         app:srlEnableLoadMore="false"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
 
-
-        <com.scwang.smartrefresh.header.MaterialHeader
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -319,31 +318,38 @@
                         android:layout_marginRight="@dimen/dp_5"
                         android:background="@color/background_l_grey">
 
-                        <ImageView
-                            android:id="@+id/image_flash_sale_one"
+                        <com.nbhysj.coupon.view.RoundedImageView
+                            android:id="@+id/image_limited_sale_one"
                             android:layout_width="167dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:scaleType="fitXY"></ImageView>
+                            android:scaleType="fitXY"
+                            app:riv_corner_radius="@dimen/dp_5"></com.nbhysj.coupon.view.RoundedImageView>
 
                         <TextView
-                            android:layout_width="@dimen/dp_56"
-                            android:layout_height="@dimen/dp_20"
+                            android:id="@+id/tv_limited_sale_one_discount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginTop="@dimen/dp_18"
                             android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
                             android:gravity="center"
-                            android:text="￥156"
+                            android:paddingLeft="@dimen/dp_6"
+                            android:paddingRight="@dimen/dp_6"
+                            android:text=""
                             android:textColor="@color/white" />
 
                         <TextView
-                            android:layout_width="@dimen/dp_56"
+                            android:id="@+id/tv_limited_sale_one_title"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/dp_20"
                             android:layout_above="@+id/rlyt_flash_sale_one_price"
                             android:layout_marginLeft="@dimen/dp_4"
-                            android:gravity="center"
-                            android:text="宁波宁波宁波宁波"
-                            android:textColor="@color/txt_font_black2"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:paddingRight="@dimen/dp_10"
+                            android:textColor="@color/color_text_black7"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
 
                         <RelativeLayout
@@ -357,10 +363,12 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
                                 android:layout_marginLeft="@dimen/dp_3"
                                 android:gravity="center"
                                 android:text="[限时特卖]"
-                                android:textColor="@color/txt_font_black2"
+                                android:textColor="@color/color_text_black7"
+                                android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold" />
 
                             <LinearLayout
@@ -374,16 +382,16 @@
                                     android:id="@+id/tv_flash_sale_one_rmb_symbol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="￥"
+                                    android:text="¥"
                                     android:textColor="@color/color_text_orange2"
                                     android:textSize="@dimen/text_size_xsmall"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tv_flash_sale_one_per_capita_price"
+                                    android:id="@+id/tv_limited_sale_one_price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="156"
+                                    android:text="0"
                                     android:textColor="@color/color_text_orange2"
                                     android:textSize="@dimen/text_size_medium"
                                     android:textStyle="bold" />
@@ -414,32 +422,38 @@
                             android:layout_weight="1"
                             android:background="@color/background_l_grey">
 
-                            <com.nbhysj.coupon.view.GlideImageView
-                                android:id="@+id/image_flash_sale_two"
+                            <com.nbhysj.coupon.view.RoundedImageView
+                                android:id="@+id/image_limited_sale_two"
                                 android:layout_width="match_parent"
                                 android:layout_height="103dp"
-
-                                />
+                                android:scaleType="fitXY"
+                                app:riv_corner_radius="@dimen/dp_5" />
 
                             <TextView
-                                android:layout_width="@dimen/dp_56"
-                                android:layout_height="@dimen/dp_20"
+                                android:id="@+id/tv_limited_sale_two_discount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginTop="@dimen/dp_18"
-                                android:layout_marginBottom="@dimen/dp_10"
+                                android:layout_marginTop="@dimen/dp_9"
                                 android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
                                 android:gravity="center"
-                                android:text="￥156"
+                                android:paddingLeft="@dimen/dp_6"
+                                android:paddingRight="@dimen/dp_6"
+                                android:text=""
                                 android:textColor="@color/white" />
 
                             <TextView
-                                android:layout_width="@dimen/dp_56"
-                                android:layout_height="@dimen/dp_20"
+                                android:id="@+id/tv_limited_sale_two_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_above="@+id/rlyt_flash_sale_two_price"
                                 android:layout_marginLeft="@dimen/dp_4"
-                                android:gravity="center"
-                                android:text="宁波宁波宁波宁波"
-                                android:textColor="@color/txt_font_black2"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:paddingRight="@dimen/dp_10"
+                                android:text=""
+                                android:textColor="@color/color_text_black7"
+                                android:textSize="@dimen/text_size_xsmall"
                                 android:textStyle="bold" />
 
                             <RelativeLayout
@@ -453,10 +467,12 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
                                     android:layout_marginLeft="@dimen/dp_3"
                                     android:gravity="center"
                                     android:text="[限时特卖]"
-                                    android:textColor="@color/txt_font_black2"
+                                    android:textColor="@color/color_text_black7"
+                                    android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold" />
 
                                 <LinearLayout
@@ -470,16 +486,16 @@
                                         android:id="@+id/tv_flash_sale_two_rmb_symbol"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="￥"
+                                        android:text="¥"
                                         android:textColor="@color/color_text_orange2"
                                         android:textSize="@dimen/text_size_xsmall"
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/tv_flash_sale_two_per_capita_price"
+                                        android:id="@+id/tv_limited_sale_two_price"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="156"
+                                        android:text="0"
                                         android:textColor="@color/color_text_orange2"
                                         android:textSize="@dimen/text_size_medium"
                                         android:textStyle="bold" />
@@ -504,30 +520,37 @@
                             android:layout_weight="1"
                             android:background="@color/background_l_grey">
 
-                            <com.nbhysj.coupon.view.GlideImageView
-                                android:id="@+id/image_flash_sale_three"
+                            <com.nbhysj.coupon.view.RoundedImageView
+                                android:id="@+id/image_limited_sale_three"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/dp_104" />
+                                android:layout_height="@dimen/dp_104"
+                                android:scaleType="fitXY"
+                                app:riv_corner_radius="@dimen/dp_5" />
 
                             <TextView
-                                android:layout_width="@dimen/dp_56"
-                                android:layout_height="@dimen/dp_20"
+                                android:id="@+id/tv_limited_sale_three_discount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginTop="@dimen/dp_18"
-                                android:layout_marginBottom="@dimen/dp_10"
+                                android:layout_marginTop="@dimen/dp_9"
                                 android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
                                 android:gravity="center"
-                                android:text="￥156"
+                                android:paddingLeft="@dimen/dp_6"
+                                android:paddingRight="@dimen/dp_6"
+                                android:text=""
                                 android:textColor="@color/white" />
 
                             <TextView
-                                android:layout_width="@dimen/dp_56"
+                                android:id="@+id/tv_limited_sale_three_title"
+                                android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp_20"
                                 android:layout_above="@+id/rlyt_flash_sale_three_price"
                                 android:layout_marginLeft="@dimen/dp_4"
-                                android:gravity="center"
-                                android:text="宁波宁波宁波宁波"
-                                android:textColor="@color/txt_font_black2"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:paddingRight="@dimen/dp_10"
+                                android:textColor="@color/color_text_black7"
+                                android:textSize="@dimen/text_size_xsmall"
                                 android:textStyle="bold" />
 
                             <RelativeLayout
@@ -541,10 +564,12 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
                                     android:layout_marginLeft="@dimen/dp_3"
                                     android:gravity="center"
                                     android:text="[限时特卖]"
-                                    android:textColor="@color/txt_font_black2"
+                                    android:textColor="@color/color_text_black7"
+                                    android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold" />
 
                                 <LinearLayout
@@ -558,16 +583,16 @@
                                         android:id="@+id/tv_flash_sale_three_rmb_symbol"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="￥"
+                                        android:text="¥"
                                         android:textColor="@color/color_text_orange2"
                                         android:textSize="@dimen/text_size_xsmall"
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/tv_flash_sale_three_per_capita_price"
+                                        android:id="@+id/tv_limited_sale_three_price"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="156"
+                                        android:text="0"
                                         android:textColor="@color/color_text_orange2"
                                         android:textSize="@dimen/text_size_medium"
                                         android:textStyle="bold" />
@@ -901,11 +926,11 @@
                                             android:id="@+id/tv_travel_theme_four_title"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
+                                            android:layout_above="@+id/tv_travel_theme_four_des"
                                             android:layout_marginLeft="@dimen/dp_12"
                                             android:layout_marginBottom="@dimen/dp_10"
                                             android:text="第一次来宁波"
                                             android:textColor="@color/white"
-                                            android:layout_above="@+id/tv_travel_theme_four_des"
                                             android:textSize="@dimen/text_size_xnormal"
                                             android:textStyle="bold" />
 

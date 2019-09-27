@@ -24,11 +24,13 @@ public class GoodsBean {
 
     private String goodsName;
 
-    private int goodsPrice;
+    private double goodsPrice;
 
     private int marketPrice;
 
     private String salesDiscount;
+
+    private String mchType;
 
     private long ctime;
 
@@ -104,11 +106,11 @@ public class GoodsBean {
         this.goodsName = goodsName;
     }
 
-    public int getGoodsPrice() {
+    public double getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(int goodsPrice) {
+    public void setGoodsPrice(double goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
@@ -126,6 +128,14 @@ public class GoodsBean {
 
     public void setSalesDiscount(String salesDiscount) {
         this.salesDiscount = salesDiscount;
+    }
+
+    public String getMchType() {
+        return mchType;
+    }
+
+    public void setMchType(String mchType) {
+        this.mchType = mchType;
     }
 
     public long getCtime() {

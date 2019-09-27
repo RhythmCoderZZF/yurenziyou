@@ -57,11 +57,10 @@ public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayRes
             MchGoodsBean mchGoodsBean = mchHomestayGoodsList.get(itemPosition);
             String photoUrl = mchGoodsBean.getPhoto();
             String title = mchGoodsBean.getTitle();
-            int marketPrice = mchGoodsBean.getMarketPrice();
+            double marketPrice = mchGoodsBean.getMarketPrice();
             int breakfastStatus = mchGoodsBean.getBreakfastStatus();
             int windowStatus = mchGoodsBean.getWindowStatus();
             String bedInfo = mchGoodsBean.getBedInfo();
-
 
             holder.mTvHomestayTitle.setText(title);
             holder.mTvHomestayRoomPrice.setText("¥ " + String.valueOf(marketPrice));

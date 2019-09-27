@@ -34,6 +34,7 @@ import com.nbhysj.coupon.adapter.OrderUseDateSelectAdapter;
 import com.nbhysj.coupon.adapter.TouristInformationAdapter;
 import com.nbhysj.coupon.adapter.VehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
@@ -45,6 +46,7 @@ import com.nbhysj.coupon.model.OrderSubmitModel;
 import com.nbhysj.coupon.model.request.CarsBean;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.GoodsBean;
+import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -60,6 +62,7 @@ import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.MyRecycleView;
 
 import java.util.ArrayList;
@@ -133,9 +136,6 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     //购买数量
     @BindView(R.id.tv_purchase_num)
     TextView mTvPurchaseNum;
-    //市场票价
-    @BindView(R.id.tv_market_ticket_price)
-    TextView mTvMarketTicketPrice;
     //票标题
     @BindView(R.id.tv_ticket_title)
     TextView mTvTicketTitle;
@@ -184,11 +184,22 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     @BindView(R.id.tv_delete_frequently_used_tourists)
     TextView mTvTouristDelete;
 
+    //默认价格
+    @BindView(R.id.tv_default_price)
+    TextView mTvDefaultPrice;
+    //用车状态
+    @BindView(R.id.rlyt_open_car_status)
+    RelativeLayout mRlytOpenCarStatus;
+
+    //总金额
+    @BindView(R.id.tv_total_price)
+    TextView mTvTotalPrice;
+
     //购买数量
     private int mPurchaseNum = 1;
 
     //使用日期价格
-    private int datePrice;
+    private double datePrice;
 
     //组合id
     private int groupId;
@@ -212,9 +223,6 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
     //日历价格
     private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceList;
-
-    //增加门票
-    private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceTicketAddList;
 
     //价格明细
     private List<OrderSubmitInitResponse.GoodsPriceEntity> goodsPriceDetailList;
@@ -260,9 +268,6 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     //旅客id
     private int userTravelerId;
 
-    //商品价格日历选择
-    private String goodsPriceDateSelect;
-
     private int mPosition;
 
     //游客名字
@@ -282,6 +287,11 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
     //组合商品购买须知
     private String goodsBuyNotesH5Url;
+
+    //城市ID
+    private int cityCode;
+
+    private int lineType;
 
     @Override
     public int getLayoutId() {
@@ -337,14 +347,6 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
         } else {
             goodsPriceList.clear();
         }
-
-        if (goodsPriceTicketAddList == null) {
-
-            goodsPriceTicketAddList = new ArrayList<>();
-        } else {
-            goodsPriceTicketAddList.clear();
-        }
-
         //价格明细
         if (goodsPriceDetailList == null) {
 
@@ -392,14 +394,14 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                     mCkbOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
 
-                    if (goodsPriceDetailList != null) {
+                    if (goodsPriceDetailList != null)
+                    {
                         goodsPriceDetailList.clear();
                     }
 
                     if (goodsPriceList != null) {
 
                         //对增加门票进行遍历
-
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
                         if (ticketPurchaseNum > 0) {
@@ -407,19 +409,6 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                         }
                     }
 
-                    if (goodsPriceTicketAddList != null) {
-
-                        //对增加门票进行遍历
-                        for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
-                            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceTicketAddList.get(i);
-                            int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
-                            if (ticketPurchaseNum > 0) {
-                                goodsPriceDetailList.add(goodsPriceEntity);
-                            }
-                        }
-                        orderDetailTicketInfoAdapter.setOrderDetailTicketList(goodsPriceDetailList);
-                        orderDetailTicketInfoAdapter.notifyDataSetChanged();
-                    }
                 } else {
                     mLlytOrderDetailItem.setVisibility(View.GONE);
                     mLlytOrderDetailItem.startAnimation(outAnimation);
@@ -436,50 +425,50 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
         mRvUseTicketDateSelect.setLayoutManager(layoutManager);
         orderUseDateSelectAdapter = new GroupMchOrderUseDateSelectAdapter(GroupMchOrderSubmitActivity.this, new GroupMchOrderUseDateSelectAdapter.GroupMchOrderUseDateSelectListener() {
             @Override
-            public void setMoreDatesCallBack() {
-
+            public void setMoreDatesCallBack(int position) {
+                OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(position);
+                orderSubmitDateList = goodsPriceEntity.getGoodsPriceDates();
                 if (orderSubmitDatePickerDialog == null) {
                     orderSubmitDatePickerDialog = new OrderSubmitDatePickerDialog();
-                    orderSubmitDatePickerDialog.setDataStatisticsDatePickerDialog(new OrderSubmitDatePickerDialog.OrderSubmitDatePickerListener() {
-                        @Override
-                        public void setDataStatisticsDatePickerListener(String startDate, String endDate) {
 
-                        }
-
-                        @Override
-                        public void setTickeDatePickerSelectListener(GoodsPriceDatesResponse goodsPriceDatesResponse) {
-
-                         /*   for(int i = 0; i < orderSubmitDateList.size();i++)
-                            {
-                                orderSubmitDateList.get(i).setSelectDatePrice(false);
-                                String date = orderSubmitDateList.get(i).getDate();
-                                String ticketDateSelect = goodsPriceDatesResponse.getDate();
-                                if(date.equals(ticketDateSelect))
-                                {
-                                    orderSubmitDateList.get(i).setSelectDatePrice(true);
-                                }
-                            }
-
-                            orderUseDateSelectAdapter.setOrderUseDateSelectList(orderSubmitDateList);
-                            orderUseDateSelectAdapter.notifyDataSetChanged();*/
-                        }
-
-                    }, orderSubmitDateList);
-                    orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
-                } else {
-                    orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
-                    orderSubmitDatePickerDialog.setDatePickerClear();
                 }
+                orderSubmitDatePickerDialog.setDataStatisticsDatePickerDialog(new OrderSubmitDatePickerDialog.OrderSubmitDatePickerListener() {
+                    @Override
+                    public void setDataStatisticsDatePickerListener(String startDate, String endDate) {
 
+                    }
+
+                    @Override
+                    public void setTickeDatePickerSelectListener(GoodsPriceDatesResponse goodsPriceDatesResponse) {
+                        OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceList.get(position);
+                        List<GoodsPriceDatesResponse> goodsPriceDatesList = goodsPrice.getGoodsPriceDates();
+                        for (int i = 0; i < goodsPriceDatesList.size(); i++) {
+                            goodsPriceDatesList.get(i).setSelectDatePrice(false);
+                            String date = goodsPriceDatesList.get(i).getDate();
+                            String ticketDateSelect = goodsPriceDatesResponse.getDate();
+                            if (date.equals(ticketDateSelect)) {
+                                goodsPriceDatesList.get(i).setSelectDatePrice(true);
+                            }
+                        }
+
+                        orderUseDateSelectAdapter.setOrderUseDateSelectList(goodsPriceList);
+                        orderUseDateSelectAdapter.notifyDataSetChanged();
+                    }
+
+                }, orderSubmitDateList);
+                orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
+                orderSubmitDatePickerDialog.setDatePickerClear();
             }
 
             @Override
-            public void setDatePriceSelectCallBack(int position) {
-                GoodsPriceDatesResponse goodsPriceDatesResponse = orderSubmitDateList.get(position);
-                datePrice = goodsPriceDatesResponse.getPrice();
-                goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
+            public void setDatePriceSelectCallBack(int groupItemPosition, int childItemPosition) {
+                OrderSubmitInitResponse.GoodsPriceEntity goodsPriceDatesResponse = goodsPriceList.get(groupItemPosition);
+                orderSubmitDateList = goodsPriceDatesResponse.getGoodsPriceDates();
+                GoodsPriceDatesResponse goodsPriceDateEntity = orderSubmitDateList.get(childItemPosition);
+                //datePrice = goodsPriceDateEntity.getPrice();
+              //  goodsPriceDateSelect = goodsPriceDateEntity.getDate();
 
-              //  mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                //  mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
             }
         });
 
@@ -583,7 +572,6 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 }
             }
         });
-
     }
 
     @Override
@@ -658,8 +646,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 break;
             case R.id.tv_purchase_notes:
 
-                if (mPurchaseInstructionsDialog == null)
-                {
+                if (mPurchaseInstructionsDialog == null) {
                     mPurchaseInstructionsDialog = new PurchaseInstructionsBrowseDialog(getResources().getString(R.string.str_purchase_instructions), goodsBuyNotesH5Url);
                 }
                 mPurchaseInstructionsDialog.show(getFragmentManager(), "组合商品购票须知");
@@ -867,26 +854,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
     @Override
     public void ticketOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
-        dismissProgressDialog();
-        switch (res.getCode()) {
-            case Constants.SUCCESS_CODE:
-                try {
-                    OrderSubmitResponse ticketOrderSubmitResponse = res.getData();
-                    Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
-                    intent.putExtras(bundle);
-                    intent.setClass(GroupMchOrderSubmitActivity.this, PaymentOrderActivity.class);
-                    startActivity(intent);
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
-                break;
-        }
     }
 
     @Override
@@ -901,6 +869,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
             case Constants.SUCCESS_CODE:
                 try {
                     EstimatedPriceResponse estimatedPrice = res.getData();
+                    cityCode = estimatedPrice.getCityCode();
+                    lineType = estimatedPrice.getLineType();
                     vehicleUseAddDialog.setTotalVehicleExpenses(estimatedPrice);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -920,33 +890,30 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 try {
 
                     OrderSubmitInitResponse orderSubmitInitResponse = res.getData();
-                     openCarStatus = orderSubmitInitResponse.getOpenCarStatus();
-                     goodsBuyNotesH5Url = orderSubmitInitResponse.getGoodsBuyNotes();
+                    openCarStatus = orderSubmitInitResponse.getOpenCarStatus();
+                    goodsBuyNotesH5Url = orderSubmitInitResponse.getGoodsBuyNotes();
                     travellersList = orderSubmitInitResponse.getTravellers();
                     String title = orderSubmitInitResponse.getTitle();
                     userTravelerId = travellersList.get(0).getId();
+                    double payFee = orderSubmitInitResponse.getPayFee();
+
+                    //开启用车状态
+                    if(openCarStatus == 0){
+
+                        mRlytOpenCarStatus.setVisibility(View.GONE);    //用车隐藏
+
+                    } else if(openCarStatus == 1)
+                    {
+                        mRlytOpenCarStatus.setVisibility(View.VISIBLE); //用车显示
+                    }
 
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(1);
 
-
                     //订单日期价格
                     orderUseDateSelectAdapter.setOrderUseDateSelectList(goodsPriceList);
                     orderUseDateSelectAdapter.notifyDataSetChanged();
-
-                    //增加门票
-                    if (goodsPriceList != null) {
-                        if (goodsPriceList.size() > 0) {
-
-                            for (int i = 0; i < goodsPriceList.size(); i++) {
-                                if (i > 0) {
-                                    OrderSubmitInitResponse.GoodsPriceEntity goodsPriceBean = goodsPriceList.get(i);
-                                    goodsPriceTicketAddList.add(goodsPriceBean);
-                                }
-                            }
-                        }
-                    }
 
                     if (travellersList != null) {
                         mRlytTouristInfoItem.setVisibility(View.VISIBLE);
@@ -972,6 +939,32 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     if (!TextUtils.isEmpty(title)) {
                         mTvTicketTitle.setText(title);
                     }
+
+                    mTvTotalPrice.setText(Tools.getTwoDecimalPoint(payFee));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(GroupMchOrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void groupMchOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    OrderSubmitResponse ticketOrderSubmitResponse = res.getData();
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
+                    intent.putExtras(bundle);
+                    intent.setClass(GroupMchOrderSubmitActivity.this, PaymentOrderActivity.class);
+                    startActivity(intent);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1072,43 +1065,50 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
         if (validateInternet()) {
 
             goodsList.clear();
-            TicketOrderSubmitRequest ticketOrderSubmitRequest = new TicketOrderSubmitRequest();
-            ticketOrderSubmitRequest.setUserTravelerId(userTravelerId);
+            GroupMchOrderSubmitRequest groupMchOrderSubmitRequest = new GroupMchOrderSubmitRequest();
+            groupMchOrderSubmitRequest.setUserTravelerId(userTravelerId);
+            groupMchOrderSubmitRequest.setGroupId(groupId);
+            groupMchOrderSubmitRequest.setNum(mPurchaseNum);
 
-            OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
-            int goodsId = goodsPriceEntity.getGoodsId();
-            GoodsBean goodsBean = new GoodsBean();
-            goodsBean.setGoodsId(goodsId);
-            goodsBean.setNum(mPurchaseNum);
-            goodsBean.setPriceDate(goodsPriceDateSelect);
-            goodsList.add(goodsBean);
+            for (int i = 0; i < goodsPriceList.size(); i++)
+            {
+                OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceList.get(i);
+                String goodsType = goodsPrice.getGoodsType();
+                List<GoodsPriceDatesResponse> goodsPriceEntityList = goodsPrice.getGoodsPriceSelectList();
+                GoodsBean goodsTicket = null;
+                for (int j = 0; j < goodsPriceEntityList.size(); j++) {
 
-            for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
-
-                OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
-                int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
-                int goodId = goodsPrice.getGoodsId();
-                if (tcketPurchaseNum > 0) {
-                    GoodsBean goodsAddTicket = new GoodsBean();
-                    goodsAddTicket.setGoodsId(goodId);
-                    goodsAddTicket.setNum(tcketPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
-                    goodsAddTicket.setPriceDate(goodsPriceDateSelect);
-                    goodsList.add(goodsAddTicket);
+                    GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceEntityList.get(j);
+                    boolean isSelectDatePrice = goodsPriceDatesResponse.isSelectDatePrice();
+                   // int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
+                    String date = goodsPriceDatesResponse.getDate();
+                    int goodId = goodsPrice.getGoodsId();
+                    if (isSelectDatePrice)
+                    {
+                        goodsTicket = new GoodsBean();
+                        goodsTicket.setGoodsId(goodId);
+                       // goodsAddTicket.setNum(mPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
+                        goodsTicket.setDate(date);
+                        goodsTicket.setGoodsType(goodsType);
+                        goodsList.add(goodsTicket);
+                    }
                 }
             }
 
-            ticketOrderSubmitRequest.setGoods(goodsList);
-            ticketOrderSubmitRequest.setCars(carsBeanList);
+            groupMchOrderSubmitRequest.setGoods(goodsList);
+            groupMchOrderSubmitRequest.setCars(carsBeanList);
 
             //是否用车 1:用 || 0:不用
-            if (mCkbIsNeedUseCar.isChecked()) {
-                ticketOrderSubmitRequest.setCarStatus(1);
+            if (mCkbIsNeedUseCar.isChecked())
+            {
+                groupMchOrderSubmitRequest.setCarStatus(1);
             } else {
-                ticketOrderSubmitRequest.setCarStatus(0);
+                groupMchOrderSubmitRequest.setCarStatus(0);
             }
+            System.out.print(groupMchOrderSubmitRequest);
             showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle("正在提交订单...");
-            mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
+            mPresenter.groupMchOrderSubmit(groupMchOrderSubmitRequest);
         }
     }
 
@@ -1324,6 +1324,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 @Override
                 public void setVehicleUseConfirmCallBack(CarsBean carsBean) {
                     mLlytVehicleUse.setVisibility(View.VISIBLE);
+                    carsBean.setCityCode(cityCode);
+                    carsBean.setLineType(lineType);
                     carsBeanList.add(carsBean);
                     vehicleUseAdapter.setVehicleUseList(carsBeanList);
                     vehicleUseAdapter.notifyDataSetChanged();

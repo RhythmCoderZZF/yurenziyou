@@ -4,11 +4,15 @@ package com.nbhysj.coupon.ui;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,31 +25,45 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.adapter.FollowUsersOfInterestAdapter;
+import com.nbhysj.coupon.adapter.HPFollowPostCommentAdapter;
+import com.nbhysj.coupon.adapter.PraisePeopleAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.model.HomePageModel;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HomePageResponse;
+import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.PostCommentBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
+import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
+import com.nbhysj.coupon.model.response.TopicsBean;
+import com.nbhysj.coupon.model.response.ZanAvatersBean;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.BitmapUtils;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.widget.customjzvd.MyJzvdStd;
 import com.nbhysj.coupon.widget.wavelineview.ExpandButtonLayout;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.umeng.commonsdk.statistics.AnalyticsConstants.LOG_TAG;
+
 /**
  * @auther：hysj created on 2019/03/02
  * description：帖子详情
@@ -122,8 +140,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     ImageView mImgCommentUserAvatar;
 
     //添加评论
-    @BindView(R.id.edt_add_comment)
-    EditText mEdtAddComment;
+    @BindView(R.id.edt_post_comment)
+    EditText mEdtPostCommentContent;
 
     //帖子发布时间
     @BindView(R.id.tv_post_time)
@@ -154,6 +172,14 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @BindView(R.id.layout_expanded_button)
     ExpandButtonLayout mBtnLayoutExpandSound;
 
+    //是否点过赞 0:否 1:是
+    @BindView(R.id.tv_post_praise)
+    TextView mTvPostPraise;
+
+    //帖子收藏数
+    @BindView(R.id.tv_post_collection_num)
+    TextView mTvPostCollectionNum;
+
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     private String mLatitude = "";
@@ -168,6 +194,13 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     Bitmap videoThumbnailBitmap;
 
     private MediaPlayer mMediaPlayer = null;
+
+    //点赞用户
+    private PraisePeopleAdapter praisePeopleAdapter;
+
+    private HPFollowPostCommentAdapter hpFollowPostCommentAdapter;
+    List<ZanAvatersBean> zanAvatersList;
+
     @Override
     public int getLayoutId() {
 
@@ -178,21 +211,49 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setBar(PostRecommendDetailActivity.this,getResources().getString(R.string.str_recommendation_detail),R.mipmap.icon_left_arrow_black);
+        ToolbarHelper.setBar(PostRecommendDetailActivity.this, getResources().getString(R.string.str_recommendation_detail), R.mipmap.icon_left_arrow_black);
 
-        mPostId = getIntent().getIntExtra("postId",0);
+        mPostId = getIntent().getIntExtra("postId", 0);
+
+        if (zanAvatersList == null) {
+
+            zanAvatersList = new ArrayList<>();
+
+        } else {
+            zanAvatersList.clear();
+        }
+        //点赞用户列表
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setOrientation(layoutManager.HORIZONTAL);
+        mRvPraisePeopleNum.setLayoutManager(layoutManager);
+        praisePeopleAdapter = new PraisePeopleAdapter(mContext);
+        praisePeopleAdapter.setPraisePeopleList(zanAvatersList);
+        mRvPraisePeopleNum.setAdapter(praisePeopleAdapter);
+
+        mRlytPraisePeopleNum.getBackground().setAlpha(40);
     }
 
     @Override
     public void initData() {
         initLocation();
 
+        mEdtPostCommentContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    Log.i("---", "搜索操作执行");
+                    postCommentRequest();
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override
     public void initPresenter() {
 
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
@@ -224,45 +285,61 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
                     PostInfoDetailResponse postInfoDetailResponse = res.getData();
                     List<PostInfoDetailResponse.PostInfoEntity> postInfoList = postInfoDetailResponse.getResult();
-                    if(postInfoList != null)
-                    {
+                    if (postInfoList != null) {
                         PostInfoDetailResponse.PostInfoEntity postInfoEntity = postInfoList.get(0);
+                        mPostId = postInfoEntity.getId();
                         String photoUrl = postInfoEntity.getPhoto();          //拍视频生成 gif
-                        String avatarUrl = postInfoEntity.getAvater();
+                        String publisherAvatarUrl = postInfoEntity.getAvater();
                         List<String> resources = postInfoEntity.getResources(); //图片
                         String resourceUrl = postInfoEntity.getResourceUrl();  //mp4
-                        String postPublishTime = DateUtil.transferLongToDateStr(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
+                        String content = postInfoEntity.getContent();
+                        String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
                         String userName = postInfoEntity.getNickname(); //用户名
                         int postsType = postInfoEntity.getPostsType();  //1图片，2语音，3视频
+                        //推荐用户
+                        List<RecommendInterestUsersBean> recommendUsersList = postInfoEntity.getRecommendUsers();
 
                         //头像
-                        if(avatarUrl != null)
-                        {
-                            GlideUtil.loadImage(PostRecommendDetailActivity.this,avatarUrl,mImgUserAvatar);
+                        if (publisherAvatarUrl != null) {
+                            GlideUtil.loadImage(PostRecommendDetailActivity.this, publisherAvatarUrl, mImgUserAvatar);
                         }
 
-                        if(TextUtils.isEmpty(userName))
-                        {
+                        String userAvatarUrl = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
+
+                        if (userAvatarUrl != null) {
+                            GlideUtil.loadImage(PostRecommendDetailActivity.this, userAvatarUrl, mImgCommentUserAvatar);
+                        }
+
+                        if (!TextUtils.isEmpty(userName)) {
                             mTvUserName.setText(userName);
                         }
+
+
+                        if (!TextUtils.isEmpty(content)) {
+                            mExpandPostDescription.setText(content);
+                        }
+
+                        int hitsNum = postInfoEntity.getHits(); //浏览数
+                        mTvBrowseNum.setText("浏览" + String.valueOf(hitsNum));
 
                         //帖子时间
                         mTvPostTime.setText(postPublishTime);
                         mTvTime.setText(postPublishTime);
 
-                        if(postsType == 1){ //图片
+                        if (postsType == 1) { //图片
 
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
                             mJzvdPostVideo.setVisibility(View.GONE);
                             mBtnLayoutExpandSound.setVisibility(View.GONE);
                             mBannerViewFriendDetailPicture.initUI(resources);
-                        } else if(postsType == 2) {  //音频+图片
+                        } else if (postsType == 2) {  //音频+图片
 
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
                             mJzvdPostVideo.setVisibility(View.GONE);
                             mBtnLayoutExpandSound.setVisibility(View.VISIBLE);
                             mBannerViewFriendDetailPicture.initUI(resources);
-                        } else if(postsType == 3){  //视频
+
+                        } else if (postsType == 3) {  //视频
 
                             mJzvdPostVideo.setVisibility(View.VISIBLE);
                             mRlytPostDetailPicture.setVisibility(View.GONE);
@@ -270,6 +347,95 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                             Glide.with(this).load(photoUrl).into(mJzvdPostVideo.thumbImageView);
                         }
 
+                        //用户点赞
+                        List<ZanAvatersBean> zanAvatersList = postInfoEntity.getZanAvaters();
+                        int zanCount = postInfoEntity.getZanCount();
+                        if (zanAvatersList != null) {
+
+                            praisePeopleAdapter.setPraisePeopleList(zanAvatersList);
+                            praisePeopleAdapter.notifyDataSetChanged();
+                        }
+
+                        //点赞用户数量
+                        mTvPraisePeopleNum.setText(String.valueOf(zanCount));
+
+                        int zanStatus = postInfoEntity.getZanStatus(); //是否点赞过
+                        if (zanStatus == 0) {
+
+                            mTvPostPraise.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_love_gray), null, null, null);
+                            mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.text_grey));
+                            mRlytPraise.setBackgroundResource(R.drawable.bg_rect_light_gray_shape_radius_five);
+                        } else {
+
+                            mTvPostPraise.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_note_heart_white), null, null, null);
+                            mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.white));
+                            mRlytPraise.setBackgroundResource(R.drawable.bg_praise_rect_dark_red_shape);
+                        }
+
+                        int commentCount = postInfoEntity.getCommentCount();//评论数
+                        int collectionCount = postInfoEntity.getCollectionCount();//收藏数
+                        mTvPostCommentNum.setText(String.valueOf(commentCount));
+                        mTvPostCollectionNum.setText(String.valueOf(collectionCount));
+
+                        //主题标签
+                        List<TopicsBean> topicsList = postInfoEntity.getTopics();
+                        if (topicsList != null) {
+                            mTagFlowLayout.setAdapter(new TagAdapter<TopicsBean>(topicsList) {
+
+                                @Override
+                                public View getView(FlowLayout parent, int position, TopicsBean topicsEntity) {
+                                    LayoutInflater mInflater = LayoutInflater.from(mContext);
+                                    TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tv,
+                                            mTagFlowLayout, false);
+                                    tagName.getBackground().setAlpha(80);
+                                    tagName.setText(topicsEntity.getTitle());
+                                    return tagName;
+                                }
+                            });
+                        }
+
+                        //帖子评论
+                        List<PostCommentBean> postsCommentsList = postInfoEntity.getPostsComments();
+
+                        if (postsCommentsList != null) {
+                            mLlytUserComment.setVisibility(View.VISIBLE);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+                            linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
+                            mRvUserComment.setLayoutManager(linearLayoutManager);
+                            hpFollowPostCommentAdapter = new HPFollowPostCommentAdapter(mContext);
+                            hpFollowPostCommentAdapter.setLabelList(postsCommentsList);
+                            mRvUserComment.setAdapter(hpFollowPostCommentAdapter);
+                            mTvTotalCommentNum.setText("查看" + postsCommentsList.size() + "条评论");
+                        } else {
+
+                            mLlytUserComment.setVisibility(View.GONE);
+                        }
+
+                        if (recommendUsersList != null) {
+
+                            mRlytInterestUser.setVisibility(View.VISIBLE);
+                        }
+
+                        if (recommendUsersList != null) {
+                            mRlytInterestUser.setVisibility(View.VISIBLE);
+                            //可能感兴趣列表
+                            LinearLayoutManager userOfInterestLinearLayoutManager = new LinearLayoutManager(mContext);
+                            userOfInterestLinearLayoutManager.setOrientation(userOfInterestLinearLayoutManager.HORIZONTAL);
+                            mRvUserOfInterest.setLayoutManager(userOfInterestLinearLayoutManager);
+                            FollowUsersOfInterestAdapter followUsersOfInterestAdapter = new FollowUsersOfInterestAdapter(mContext, new FollowUsersOfInterestAdapter.UsersOfInterestItemClickListener() {
+                                @Override
+                                public void setUsersOfInterestItemClickListener(RecommendInterestUsersBean userEntity) {
+
+
+                                }
+                            });
+                            followUsersOfInterestAdapter.setFollowUsersOfInterestList(recommendUsersList);
+                            mRvUserOfInterest.setAdapter(followUsersOfInterestAdapter);
+
+                        } else {
+
+                            mRlytInterestUser.setVisibility(View.GONE);
+                        }
                     }
 
                 } catch (Exception e) {
@@ -288,6 +454,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         dismissProgressDialog();
         showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(msg));
     }
+
     /**
      * 初始化定位
      */
@@ -348,6 +515,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 mLongitude = String.valueOf(location.getLongitude());
                 mLatitude = String.valueOf(location.getLatitude());
 
+                showProgressDialog(PostRecommendDetailActivity.this);
                 getPostInfo();
              /*   StringBuffer sb = new StringBuffer();
                 //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
@@ -397,10 +565,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         }
     };
 
-    public void getPostInfo(){
+    public void getPostInfo() {
 
-        if(validateInternet())
-        {
+        if (validateInternet()) {
             mPresenter.getPostInfo(mPostId, mPostKey, mLatitude, mLongitude);
         }
 
@@ -410,6 +577,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     public void postsCommentResult(BackResult res) {
 
     }
+
     @Override
     public void onBackPressed() {
         if (mJzvdPostVideo.backPress()) {
@@ -417,18 +585,19 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         }
         super.onBackPressed();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
-        if(mJzvdPostVideo != null)
-        {
+        if (mJzvdPostVideo != null) {
             mJzvdPostVideo.releaseAllVideos();
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(videoThumbnailBitmap != null){
+        if (videoThumbnailBitmap != null) {
 
             videoThumbnailBitmap = null;
         }
@@ -436,8 +605,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         stopPlaying();
     }
 
-    public void getMediaPlayer(String audioFileUrl)
-    {
+    public void getMediaPlayer(String audioFileUrl) {
         mMediaPlayer = new MediaPlayer();
 
         try {
@@ -466,8 +634,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     private void stopPlaying() {
 
-        if(mMediaPlayer != null)
-        {
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.reset();
             mMediaPlayer.release();
@@ -478,5 +645,25 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         }
     }
 
+    //帖子评论
+    public void postCommentRequest() {
+
+        if (validateInternet()) {
+
+            String postCommentContent = mEdtPostCommentContent.getText().toString().trim();
+
+            if (!TextUtils.isEmpty(postCommentContent)) {
+                dismissProgressDialog();
+                showToast(PostRecommendDetailActivity.this, "请填写帖子评论");
+                return;
+            }
+            PostsCommentRequest postsCommentRequest = new PostsCommentRequest();
+            postsCommentRequest.setArticleId(mPostId);
+            postsCommentRequest.setContent(postCommentContent);
+            postsCommentRequest.setPid(0);
+            mPresenter.postsCommentRequest(postsCommentRequest);
+
+        }
+    }
 
 }

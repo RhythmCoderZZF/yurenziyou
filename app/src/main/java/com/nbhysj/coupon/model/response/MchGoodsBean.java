@@ -10,9 +10,9 @@ public class MchGoodsBean {
 
     /******** 公共字段 *********/
 
-    private int defaultPrice;
+    private double defaultPrice;
 
-    private int marketPrice;
+    private double marketPrice;
 
     private int sellNum;
 
@@ -103,15 +103,15 @@ public class MchGoodsBean {
         this.title = title;
     }
 
-    public int getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public void setMarketPrice(int marketPrice) {
+    public void setMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
     }
 
-    public int getDefaultPrice() {
+    public double getDefaultPrice() {
         return defaultPrice;
     }
 

@@ -14,12 +14,15 @@ import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
+import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.request.MoveFavoritesContentRequest;
+import com.nbhysj.coupon.model.request.OrderAllRefundRequest;
 import com.nbhysj.coupon.model.request.OrderCancelRequest;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
+import com.nbhysj.coupon.model.request.OrderPartialRefundRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
@@ -56,9 +59,12 @@ import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
+import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
+import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.PostCommentBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
@@ -79,6 +85,7 @@ import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.model.response.WeatherResponse;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -280,6 +287,10 @@ public interface ApiService {
     @POST("api/postsComment")
     Observable<BackResult> postsCommentRequest(@Body PostsCommentRequest postsCommentRequest);
 
+    //分页查看帖子所有评论
+    @GET("api/postsComment/findAllByAuthorId")
+    Observable<BackResult<PostCommentBean>> findAllByAuthorId(@Query("articleId") int articleId, @Query("page") int page, @Query("pageSize") int pageSize);
+
     /***********************************   商城   ****************************************/
 
     //获取商城首页
@@ -479,7 +490,7 @@ public interface ApiService {
     @GET("api/order/queryAwaitGoing")
     Observable<BackResult<UserOrderListResponse>> getQueryAwaitGoingList(@Query("page") int page, @Query("pageSize") int pageSize);
 
-      //用户待评论订单
+    //用户待评论订单
     @GET("api/order/queryAwaitComment")
     Observable<BackResult<UserOrderListResponse>> getQueryAwaitCommentList(@Query("page") int page, @Query("pageSize") int pageSize);
 
@@ -501,7 +512,7 @@ public interface ApiService {
 
     //推荐酒店评分
     @GET("api/order/score")
-    Observable<BackResult> willingToRecommendScore(@Query("orderNo") String orderNo,@Query("score") int score);
+    Observable<BackResult> willingToRecommendScore(@Query("orderNo") String orderNo, @Query("score") int score);
 
     //酒店+民宿下单初始化页面
     @GET("api/goods/hotel/orderSubmission")
@@ -526,7 +537,7 @@ public interface ApiService {
 
     //查询专辑内容
     @GET("api/userFavorites/query")
-    Observable<BackResult<FavoritesResponse>> queryUserFavorites(@Query("id")int id, @Query("page")int page, @Query("pageSize")int pageSize);
+    Observable<BackResult<FavoritesResponse>> queryUserFavorites(@Query("id") int id, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //移动专辑内容
     @PUT("api/userFavorites/moveContent")
@@ -534,7 +545,7 @@ public interface ApiService {
 
     //攻略列表
     @GET("api/strategyArticle/findAllStrategy")
-    Observable<BackResult<StrategyResponse>> findAllStrategy(@Query("page")int page, @Query("pageSize")int pageSize);
+    Observable<BackResult<StrategyResponse>> findAllStrategy(@Query("page") int page, @Query("pageSize") int pageSize);
 
     /***************   组合模块    ***************/
     //组合首页
@@ -543,15 +554,37 @@ public interface ApiService {
 
     //组合列表
     @GET("api/group/homeList")
-    Observable<BackResult<StrategyResponse>> getGroupHomeList(@Query("tagsId")int tagsId,@Query("page")int page, @Query("pageSize")int pageSize);
+    Observable<BackResult<StrategyResponse>> getGroupHomeList(@Query("tagsId") int tagsId, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //组合详情
     @GET("api/mchDetails/groupDetails")
-    Observable<BackResult<GroupMchDetailsResponse>> getGroupMchDetail(@Query("packageId")int packageId);
+    Observable<BackResult<GroupMchDetailsResponse>> getGroupMchDetail(@Query("packageId") int packageId);
 
     //组合下单初始化
     @GET("api/groupOrder/priceDate")
-    Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(@Query("groupId")int groupId);
+    Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(@Query("groupId") int groupId);
+
+    //组合下单
+    @POST("api/groupOrder")
+    Observable<BackResult<OrderSubmitResponse>> groupMchOrderSubmit(@Body GroupMchOrderSubmitRequest groupMchOrderSubmitRequest);
+
+    /***************   退款    ******************/
+    //部分退款页面初始化
+    @GET("api/orderRefund/refundOneIndex")
+    Observable<BackResult<OrderRefundInitResponse>> getOrderRefundPartialInit(@Query("orderGoodsId") int orderGoodsId, @Query("goodsType") String goodsType);
+
+    //部分退款提交
+    @POST("api/orderRefund/one")
+    Observable<BackResult> orderPartialRefundSubmit(@Body OrderPartialRefundRequest orderPartialRefundRequest);
+
+    //全部退款页面初始化
+    @GET("api/orderRefund/refundAllIndex")
+    Observable<BackResult<OrderAllRefundInitResponse>> getOrderRefundAllInit(@Query("orderNo") String orderNo);
+
+    //全部退款提交
+    @POST("api/orderRefund/all")
+    Observable<BackResult> orderAllRefundSubmit(@Body OrderAllRefundRequest orderAllRefundRequest);
+
 
 }
 

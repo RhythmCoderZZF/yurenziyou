@@ -2,24 +2,17 @@ package com.nbhysj.coupon.fragment;
 
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.RecommendFriendsPictureAdapter;
-import com.nbhysj.coupon.common.Enum.OrderTypeEnum;
+import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
-import com.nbhysj.coupon.model.response.OrderDetailScenicSpotReponse;
-import com.nbhysj.coupon.model.response.RecommendFriendsBean;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -84,7 +77,7 @@ public class OrderDetailScenicSpotFragment extends BaseFragment {
         String goodNum = orderGoodsEntity.getGoodsNum();   //商品数量
         String note = orderGoodsEntity.getNote();
 
-        if(goodType.equals(OrderTypeEnum.getEnumByKey(0).getValue())) {
+        if(goodType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
             mTvMchName.setText(orderGoodsEntity.getMchName());
            // mTvTicketType.setText(goodsTitle + goodNum + "张");
             mTvAddress.setText(province + city + county + address);

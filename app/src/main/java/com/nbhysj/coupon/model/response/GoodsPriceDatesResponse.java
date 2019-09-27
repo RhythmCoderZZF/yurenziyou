@@ -12,7 +12,7 @@ public class GoodsPriceDatesResponse {
     private String date;
 
     //价格
-    private int price;
+    private double price;
 
     //可售状态
     private int sellStatus;
@@ -45,12 +45,20 @@ public class GoodsPriceDatesResponse {
         this.date = date;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isSelectDatePrice() {
+        return isSelectDatePrice;
+    }
+
+    public void setSelectDatePrice(boolean selectDatePrice) {
+        isSelectDatePrice = selectDatePrice;
     }
 
     public int getSellStatus() {
@@ -77,23 +85,11 @@ public class GoodsPriceDatesResponse {
         this.maxBuyNum = maxBuyNum;
     }
 
-    public int getIsCanBookings() {
+    public int getIsCanBooking() {
         return isCanBooking;
     }
 
     public void setIsCanBooking(int isCanBooking) {
         this.isCanBooking = isCanBooking;
-    }
-
-    public int getIsCanBooking() {
-        return isCanBooking;
-    }
-
-    public boolean isSelectDatePrice() {
-        return isSelectDatePrice;
-    }
-
-    public void setSelectDatePrice(boolean selectDatePrice) {
-        isSelectDatePrice = selectDatePrice;
     }
 }

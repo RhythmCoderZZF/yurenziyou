@@ -25,7 +25,7 @@ public class TicketSelectDateBean {
     //是否可订票
     private int sellStatus = 0;
 
-    private int ticketPrice = 0;
+    private double ticketPrice = 0;
 
     public int getItemState() {
         return itemState;
@@ -139,11 +139,11 @@ public class TicketSelectDateBean {
         this.sellStatus = sellStatus;
     }
 
-    public int getTicketPrice() {
+    public double getTicketPrice() {
         return ticketPrice;
     }
 
-    public void setTicketPrice(int ticketPrice) {
+    public void setTicketPrice(double ticketPrice) {
         this.ticketPrice = ticketPrice;
     }
 }

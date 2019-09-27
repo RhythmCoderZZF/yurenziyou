@@ -42,7 +42,7 @@ public class HotelBean {
 
     private int bedNum;
 
-    private int marketPrice;
+    private double marketPrice;
 
     private int defaultPrice;
 
@@ -164,11 +164,11 @@ public class HotelBean {
         this.bedNum = bedNum;
     }
 
-    public int getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public void setMarketPrice(int marketPrice) {
+    public void setMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
     }
 

@@ -9,11 +9,16 @@ public class GoodsBean {
     //商品id
     private int goodsId;
 
+    private String goodsType;
+
     //商品数量
     private int num;
 
     //购买时间
     private String priceDate;
+
+    //组合价格日期
+    private String date;
 
     public int getGoodsId() {
         return goodsId;
@@ -37,5 +42,21 @@ public class GoodsBean {
 
     public void setPriceDate(String priceDate) {
         this.priceDate = priceDate;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

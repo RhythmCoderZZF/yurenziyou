@@ -199,7 +199,7 @@ public class TicketSelectCalendarList extends FrameLayout {
                 String dateStr = dateBean.getDateStr();
                 for (int j = 0; j < goodsPriceList.size();j++){
                     String goodPriceDate = goodsPriceList.get(j).getDate();
-                    int mTicketPrice =  goodsPriceList.get(j).getPrice();
+                    double mTicketPrice =  goodsPriceList.get(j).getPrice();
                     if(dateStr != null)
                     {
                         if (dateStr.equals(goodPriceDate)) {
@@ -302,7 +302,7 @@ public class TicketSelectCalendarList extends FrameLayout {
 
                 } else if(sellStatus == 1)
                 {
-                    int ticketPrice = dateBean.getTicketPrice();
+                    double ticketPrice = dateBean.getTicketPrice();
                     vh.tv_day.setTextColor(getResources().getColor(R.color.color_text_black6));
                     vh.mRlytDayItem.setClickable(true);
                     vh.mTvTicketPrice.setVisibility(View.VISIBLE);

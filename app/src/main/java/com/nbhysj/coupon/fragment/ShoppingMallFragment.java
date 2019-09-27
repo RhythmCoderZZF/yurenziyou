@@ -31,7 +31,9 @@ import com.nbhysj.coupon.model.ShopMallHomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.DeliciousFoodResponse;
+import com.nbhysj.coupon.model.response.GoodsBean;
 import com.nbhysj.coupon.model.response.GroupGoodsBean;
+import com.nbhysj.coupon.model.response.LimitedSaleBean;
 import com.nbhysj.coupon.model.response.MchCitiesBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
@@ -52,12 +54,15 @@ import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.BannerView;
 import com.nbhysj.coupon.view.GlideImageView;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,14 +81,43 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     @BindView(R.id.rv_shopping_mall_menu_classify)
     RecyclerView mRvShoppingMallMenuClassify;
     //限时特卖图片1
-    @BindView(R.id.image_flash_sale_one)
-    ImageView mImageFlashSaleOne;
+    @BindView(R.id.image_limited_sale_one)
+    RoundedImageView mImageFlashSaleOne;
+    //限时特卖1折扣
+    @BindView(R.id.tv_limited_sale_one_discount)
+    TextView mTvLimitedSaleOneDiscount;
+    //限时特卖1标题
+    @BindView(R.id.tv_limited_sale_one_title)
+    TextView mTvLimitedSaleOneTitle;
+    //限时特卖1价格
+    @BindView(R.id.tv_limited_sale_one_price)
+    TextView mTvLimitedSaleOnePrice;
     //限时特卖图片2
-    @BindView(R.id.image_flash_sale_two)
-    GlideImageView mImageFlashSaleTwo;
+    @BindView(R.id.image_limited_sale_two)
+    RoundedImageView mImageFlashSaleTwo;
+    //限时特卖2折扣
+    @BindView(R.id.tv_limited_sale_two_discount)
+    TextView mTvLimitedSaleTwoDiscount;
+    //限时特卖2标题
+    @BindView(R.id.tv_limited_sale_two_title)
+    TextView mTvLimitedSaleTwoTitle;
+    //限时特卖2价格
+    @BindView(R.id.tv_limited_sale_two_price)
+    TextView mTvLimitedSaleTwoPrice;
+
     //限时特卖图片3
-    @BindView(R.id.image_flash_sale_three)
-    GlideImageView mImageFlashSaleThree;
+    @BindView(R.id.image_limited_sale_three)
+    RoundedImageView mImageFlashSaleThree;
+    //限时特卖2折扣
+    @BindView(R.id.tv_limited_sale_three_discount)
+    TextView mTvLimitedSaleThreeDiscount;
+    //限时特卖2标题
+    @BindView(R.id.tv_limited_sale_three_title)
+    TextView mTvLimitedSaleThreeTitle;
+    //限时特卖2价格
+    @BindView(R.id.tv_limited_sale_three_price)
+    TextView mTvLimitedSaleThreePrice;
+
     //热门景点
     @BindView(R.id.rv_popular_scenic_spots)
     RecyclerView mRvPopularScenicSpots;
@@ -145,13 +179,23 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     //商城刷新
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout mSmartRefreshLayout;
-    //限时特卖人民币符号
+    //限时特卖1人民币符号
     @BindView(R.id.tv_flash_sale_one_rmb_symbol)
-    TextView mTvFlashSaleOneRMBSymbol;
-    @BindView(R.id.tv_flash_sale_one_per_capita_price)
-    TextView mTvFlashSaleOnePerCapitaPrice;
+    TextView mTvLimitedSaleOneRMBSymbol;
     @BindView(R.id.tv_flash_sale_one_rise)
-    TextView mTvFlashSaleOneRise;
+    TextView mTvLimitedSaleOneRise;
+
+    //限时特卖2人民币符号
+    @BindView(R.id.tv_flash_sale_two_rmb_symbol)
+    TextView mTvLimitedSaleTwoRMBSymbol;
+    @BindView(R.id.tv_flash_sale_two_rise)
+    TextView mTvLimitedSaleTwoRise;
+
+    //限时特卖3人民币符号
+    @BindView(R.id.tv_flash_sale_three_rmb_symbol)
+    TextView mTvLimitedSaleThreeRMBSymbol;
+    @BindView(R.id.tv_flash_sale_three_rise)
+    TextView mTvLimitedSaleThreeRise;
 
     private ShoppingMallMenuAdapter shoppingMallMenuAdapter;
     //热门景点
@@ -187,6 +231,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     private ShopMallIndexSmallBannerAdapter shopMallIndexSmallBannerAdapter;
 
     List<ShoppingMallMenuBean> shoppingMallMenuList;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_shopping_mall;
@@ -242,7 +287,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     @Override
     public void initData() {
 
-        if(shoppingMallMenuList == null){
+        if (shoppingMallMenuList == null) {
 
             shoppingMallMenuList = new ArrayList<>();
         } else {
@@ -327,7 +372,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 } else if (position == 2) {
                     toActivity(ShoppingMallHotelActivity.class); //酒店
                 } else if (position == 3) {
-                      toActivity(StrategyActivity.class);  //攻略
+                    toActivity(StrategyActivity.class);  //攻略
                 } else if (position == 4) {
                     toActivity(ShoppingMallHomestayActivity.class); //民宿
                 } else if (position == 5) {
@@ -336,7 +381,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     toActivity(GroupMchListActivity.class);
                 } else if (position == 7) {                              //用车
 
-                   // toActivity(IntroductionOfLandlordActivity.class);
+                    // toActivity(IntroductionOfLandlordActivity.class);
                     getCarH5Url();
                 }
             }
@@ -350,29 +395,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         shopMallIndexSmallBannerAdapter = new ShopMallIndexSmallBannerAdapter(getActivity());
         shopMallIndexSmallBannerAdapter.setShopMallIndexSmallBannerList(shopMallIndexSmallList);
         mRvShoppingMallSmallBanner.setAdapter(shopMallIndexSmallBannerAdapter);
-
-        //第一个是上下文，第二个是圆角的弧度
-        RequestOptions myOptions = new RequestOptions()
-                .transform(new GlideRoundTransform(getActivity(), 5));
-
-        Glide.with(this)
-                .load("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg")
-                .apply(myOptions)
-                .into(mImageFlashSaleTwo);
-
-        Glide.with(this)
-                .load("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg")
-                .apply(myOptions)
-                .into(mImageFlashSaleThree);
-
-        Glide.with(this)
-                .load("http://pic32.nipic.com/20130823/13339320_183302468194_2.jpg")
-                .apply(myOptions)
-                .into(mImageFlashSaleOne);
-
-
-        mTvFlashSaleOneRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
-        mTvFlashSaleOnePerCapitaPrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("156", 0xFFF7418C, 0xFFFBAB66));
 
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getActivity());
@@ -455,20 +477,61 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
             case Constants.SUCCESS_CODE:
                 try {
                     mSmartRefreshLayout.finishRefresh();
-                    bannerList = res.getData().getBigBanners();
-                    //小Banner
-                    List<String> smallBanners = res.getData().getSmallBanners();
-
-                    shopMallIndexSmallBannerAdapter.setShopMallIndexSmallBannerList(smallBanners);
-                    shopMallIndexSmallBannerAdapter.notifyDataSetChanged();
+                    ShopMallHomePageResponse shopMallHomePageResponse = res.getData();
+                    bannerList = shopMallHomePageResponse.getBigBanners();
 
                     //大banner
                     mBannerview.setViewList(getActivity(), bannerList);
 
                     //景点列表
-                    popularScenicSpotsList = res.getData().getScenicList();
+                    popularScenicSpotsList = shopMallHomePageResponse.getScenicList();
                     popularScenicSpotsAdapter.setPopularScenicSpotsList(popularScenicSpotsList);
                     popularScenicSpotsAdapter.notifyDataSetChanged();
+
+                    //小Banner
+                    List<String> smallBanners = shopMallHomePageResponse.getSmallBanners();
+                    shopMallIndexSmallBannerAdapter.setShopMallIndexSmallBannerList(smallBanners);
+                    shopMallIndexSmallBannerAdapter.notifyDataSetChanged();
+
+                    //限时特卖
+                    LimitedSaleBean limitedSaleBean = shopMallHomePageResponse.getLimitedSale();
+                    List<GoodsBean> limitedSaleGoodsList = limitedSaleBean.getGoods();
+                    if (limitedSaleGoodsList != null) {
+
+                        //限时特卖1
+                        GoodsBean goodsBeanOne = limitedSaleGoodsList.get(0);
+                        String limitedSaleOneGoodsPhoto = goodsBeanOne.getGoodsPhoto();
+                        String limitedSaleOneGoodsName = goodsBeanOne.getGoodsName();
+                        String limitedSaleOneSalesDiscount = goodsBeanOne.getSalesDiscount();
+                        double goodsPrice = goodsBeanOne.getGoodsPrice();
+                        GlideUtil.loadImage(getActivity(), limitedSaleOneGoodsPhoto, mImageFlashSaleOne);
+                        mTvLimitedSaleOneTitle.setText(limitedSaleOneGoodsName);
+                        mTvLimitedSaleOneDiscount.setText(limitedSaleOneSalesDiscount + "折");
+                        mTvLimitedSaleOneRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
+                        mTvLimitedSaleOnePrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+
+                        //限时特卖2
+                        GoodsBean goodsBeanTwo = limitedSaleGoodsList.get(1);
+                        String limitedSaleTwoGoodsPhoto = goodsBeanTwo.getGoodsPhoto();
+                        String limitedSaleTwoGoodsName = goodsBeanTwo.getGoodsName();
+                        String limitedSaleTwoSalesDiscount = goodsBeanTwo.getSalesDiscount();
+                        GlideUtil.loadImage(getActivity(), limitedSaleTwoGoodsPhoto, mImageFlashSaleTwo);
+                        mTvLimitedSaleTwoTitle.setText(limitedSaleTwoGoodsName);
+                        mTvLimitedSaleTwoDiscount.setText(limitedSaleTwoSalesDiscount + "折");
+                        mTvLimitedSaleTwoRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
+                        mTvLimitedSaleTwoPrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+
+                        //限时特卖3
+                        GoodsBean goodsBeanThree = limitedSaleGoodsList.get(2);
+                        String limitedSaleThreeGoodsPhoto = goodsBeanThree.getGoodsPhoto();
+                        String limitedSaleThreeGoodsName = goodsBeanThree.getGoodsName();
+                        String limitedSaleThreeSalesDiscount = goodsBeanThree.getSalesDiscount();
+                        GlideUtil.loadImage(getActivity(), limitedSaleThreeGoodsPhoto, mImageFlashSaleThree);
+                        mTvLimitedSaleThreeTitle.setText(limitedSaleThreeGoodsName);
+                        mTvLimitedSaleThreeDiscount.setText(limitedSaleThreeSalesDiscount + "折");
+                        mTvLimitedSaleThreeRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
+                        mTvLimitedSaleThreePrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+                    }
 
                     //美食列表
                     deliciousFoodList = res.getData().getFoodList();
@@ -601,8 +664,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     CarH5UrlResponse carH5UrlResponse = res.getData();
                     String carH5Url = carH5UrlResponse.getUrl();
 
-                    if(!TextUtils.isEmpty(carH5Url))
-                    {
+                    if (!TextUtils.isEmpty(carH5Url)) {
                         Intent intent = new Intent();
                         intent.putExtra("url", carH5Url);
                         intent.putExtra("title", Constants.VEHICLE_USE_H5_TITLE);
@@ -619,18 +681,16 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         }
     }
 
-    public void getCarH5Url()
-    {
-        if(validateInternet())
-        {
+    public void getCarH5Url() {
+        if (validateInternet()) {
             showProgressDialog(getActivity());
-            String latitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
-            String longitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
-            mPresenter.getCarH5Url(longitude,latitude);
+            String latitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE, "");
+            String longitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE, "");
+            mPresenter.getCarH5Url(longitude, latitude);
         }
     }
 
-    public List<ShoppingMallMenuBean> getShopMallMenuList(){
+    public List<ShoppingMallMenuBean> getShopMallMenuList() {
 
         ShoppingMallMenuBean shoppingMallFamousScenery = new ShoppingMallMenuBean();
         shoppingMallFamousScenery.setTitle("风景名胜");

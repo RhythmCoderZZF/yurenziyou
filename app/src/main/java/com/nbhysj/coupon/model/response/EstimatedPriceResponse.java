@@ -26,6 +26,8 @@ public class EstimatedPriceResponse {
 
     private int lineType;
 
+    private int cityCode;
+
     public String getName() {
         return name;
     }
@@ -104,5 +106,13 @@ public class EstimatedPriceResponse {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(int cityCode) {
+        this.cityCode = cityCode;
     }
 }

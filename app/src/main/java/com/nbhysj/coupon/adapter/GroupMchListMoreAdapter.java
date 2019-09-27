@@ -59,7 +59,7 @@ public class GroupMchListMoreAdapter extends RecyclerView.Adapter<GroupMchListMo
             String title = groupMchMoreEntity.getTitle();
             String photoUrl = groupMchMoreEntity.getPhoto();
             int score = groupMchMoreEntity.getScore();
-            int price = groupMchMoreEntity.getPrice();
+            double price = groupMchMoreEntity.getPrice();
 
             GlideUtil.loadImage(mContext,photoUrl,holder.mImgGroupMch);
             holder.mTvGroupMchScore.setText(score + "分");

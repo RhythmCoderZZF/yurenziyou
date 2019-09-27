@@ -3,6 +3,7 @@ import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
+import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -60,5 +61,10 @@ public class OrderSubmitModel implements OrderSubmitContract.Model {
     @Override
     public Observable<BackResult<OrderSubmitInitResponse>> getGroupMchOrderSubmitInit(int groupId) {
         return Api.getInstance().apiService.getGroupMchOrderSubmitInit(groupId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<OrderSubmitResponse>> groupMchOrderSubmit(GroupMchOrderSubmitRequest groupMchOrderSubmitRequest) {
+        return Api.getInstance().apiService.groupMchOrderSubmit(groupMchOrderSubmitRequest).compose(RxSchedulers.io_main());
     }
 }

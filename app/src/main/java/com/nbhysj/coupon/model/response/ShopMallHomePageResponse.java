@@ -17,6 +17,9 @@ public class ShopMallHomePageResponse {
     //景点列表
     private List<MchTypeBean> scenicList;
 
+    //限时特卖
+    private LimitedSaleBean limitedSale;
+
     //美食
     private List<DeliciousFoodResponse> foodList;
 
@@ -100,7 +103,6 @@ public class ShopMallHomePageResponse {
         this.groupGoodsVO = groupGoodsVO;
     }
 
-
     public List<GuessEntity> getGuess() {
         return guess;
     }
@@ -109,262 +111,13 @@ public class ShopMallHomePageResponse {
         this.guess = guess;
     }
 
-    /* //酒店列表
-    private List<HotelBean> hotelList;
-
-    //旅行主题
-    private List<TravelBannersEntity> travelBanners;
-
-    //自由行
-    private List<GroupGoodsBean> groupGoodsVO;
-
-    //猜你喜欢
-    private List<GuessEntity> guess;
-
-    //美食
-    private List<DeliciousFoodResponse> foodList;
-
-
-
-    //未读消息
-    private int unreadNum;
-
-    //首页banner
-    private List<String> bigBanners;
-
-    //景点列表
-    private List<MchTypeBean> scenicList;
-
-    private List<LimitedSaleBean> limitedSale;
-
-    public List<String> getSmallBanners() {
-        return smallBanners;
-    }
-
-    public void setSmallBanners(List<String> smallBanners) {
-        this.smallBanners = smallBanners;
-    }
-
-    public List<HotelBean> getHotelList() {
-        return hotelList;
-    }
-
-    public void setHotelList(List<HotelBean> hotelList) {
-        this.hotelList = hotelList;
-    }
-
-    public List<TravelBannersEntity> getTravelBanners() {
-        return travelBanners;
-    }
-
-    public void setTravelBanners(List<TravelBannersEntity> travelBanners) {
-        this.travelBanners = travelBanners;
-    }
-
-    public List<GroupGoodsBean> getGroupGoodsVO() {
-        return groupGoodsVO;
-    }
-
-    public void setGroupGoodsVO(List<GroupGoodsBean> groupGoodsVO) {
-        this.groupGoodsVO = groupGoodsVO;
-    }
-
-    public List<GuessEntity> getGuess() {
-        return guess;
-    }
-
-    public void setGuess(List<GuessEntity> guess) {
-        this.guess = guess;
-    }
-
-    public List<DeliciousFoodResponse> getFoodList() {
-        return foodList;
-    }
-
-    public void setFoodList(List<DeliciousFoodResponse> foodList) {
-        this.foodList = foodList;
-    }
-
-    public List<MchCitiesBean> getMchCities() {
-        return mchCities;
-    }
-
-    public void setMchCities(List<MchCitiesBean> mchCities) {
-        this.mchCities = mchCities;
-    }
-
-    public int getUnreadNum() {
-        return unreadNum;
-    }
-
-    public void setUnreadNum(int unreadNum) {
-        this.unreadNum = unreadNum;
-    }
-
-    public List<String> getBigBanners() {
-        return bigBanners;
-    }
-
-    public void setBigBanners(List<String> bigBanners) {
-        this.bigBanners = bigBanners;
-    }
-
-    public List<MchTypeBean> getScenicList() {
-        return scenicList;
-    }
-
-    public void setScenicList(List<MchTypeBean> scenicList) {
-        this.scenicList = scenicList;
-    }
-
-    public List<LimitedSaleBean> getLimitedSale() {
+    public LimitedSaleBean getLimitedSale() {
         return limitedSale;
     }
 
-    public void setLimitedSale(List<LimitedSaleBean> limitedSale) {
+    public void setLimitedSale(LimitedSaleBean limitedSale) {
         this.limitedSale = limitedSale;
     }
-
-    public class TravelBannersEntity {
-
-        private int id;
-        private int del;
-        private long startTime;
-        private long endTime;
-        private int sort;
-        private String bannerFlag;
-        private String photo;
-        private String title;
-        private String url;
-        private String urlType;
-        private int status;
-        private String intro;
-        private long ctime;
-        private long utime;
-        private Object tails;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getDel() {
-            return del;
-        }
-
-        public void setDel(int del) {
-            this.del = del;
-        }
-
-        public long getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(long startTime) {
-            this.startTime = startTime;
-        }
-
-        public long getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(long endTime) {
-            this.endTime = endTime;
-        }
-
-        public int getSort() {
-            return sort;
-        }
-
-        public void setSort(int sort) {
-            this.sort = sort;
-        }
-
-        public String getBannerFlag() {
-            return bannerFlag;
-        }
-
-        public void setBannerFlag(String bannerFlag) {
-            this.bannerFlag = bannerFlag;
-        }
-
-        public String getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(String photo) {
-            this.photo = photo;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getUrlType() {
-            return urlType;
-        }
-
-        public void setUrlType(String urlType) {
-            this.urlType = urlType;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public String getIntro() {
-            return intro;
-        }
-
-        public void setIntro(String intro) {
-            this.intro = intro;
-        }
-
-        public long getCtime() {
-            return ctime;
-        }
-
-        public void setCtime(long ctime) {
-            this.ctime = ctime;
-        }
-
-        public long getUtime() {
-            return utime;
-        }
-
-        public void setUtime(long utime) {
-            this.utime = utime;
-        }
-
-        public Object getTails() {
-            return tails;
-        }
-
-        public void setTails(Object tails) {
-            this.tails = tails;
-        }
-    }
-
-
 
     /**
      * 猜你喜欢
@@ -796,13 +549,6 @@ public class ShopMallHomePageResponse {
             this.utime = utime;
         }
 
-      /*  public TailsEntity getTails() {
-            return tails;
-        }
-
-        public void setTails(TailsEntity tails) {
-            this.tails = tails;
-        }*/
     }
 
     public class TailsEntity {

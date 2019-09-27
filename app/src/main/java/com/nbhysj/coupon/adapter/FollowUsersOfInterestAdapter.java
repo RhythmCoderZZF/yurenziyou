@@ -12,6 +12,7 @@ import com.example.library.banner.BannerLayout;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.FollowDetailBean;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
 
@@ -26,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FollowUsersOfInterestAdapter extends RecyclerView.Adapter<FollowUsersOfInterestAdapter.ViewHolder> {
 
     private Context context;
-    private List<HomePageSubTopicTagBean.RecommendUsersEntity> userEntityList;
+    private List<RecommendInterestUsersBean> userEntityList;
     private UsersOfInterestItemClickListener usersOfInterestItemClickListener;
 
     public FollowUsersOfInterestAdapter(Context context, UsersOfInterestItemClickListener usersOfInterestItemClickListener) {
@@ -36,7 +37,7 @@ public class FollowUsersOfInterestAdapter extends RecyclerView.Adapter<FollowUse
     }
 
 
-    public void setFollowUsersOfInterestList(List<HomePageSubTopicTagBean.RecommendUsersEntity> userEntityList) {
+    public void setFollowUsersOfInterestList(List<RecommendInterestUsersBean> userEntityList) {
         this.userEntityList = userEntityList;
     }
 
@@ -50,7 +51,7 @@ public class FollowUsersOfInterestAdapter extends RecyclerView.Adapter<FollowUse
         if (userEntityList == null || userEntityList.isEmpty())
             return;
         // final int pos = position % userEntityList.size();
-        HomePageSubTopicTagBean.RecommendUsersEntity userEntity = userEntityList.get(position);
+        RecommendInterestUsersBean userEntity = userEntityList.get(position);
         String avatarUrl = userEntity.getAvater();
         // String description = userEntity.get();
         String username = userEntity.getNickname();
@@ -88,8 +89,8 @@ public class FollowUsersOfInterestAdapter extends RecyclerView.Adapter<FollowUse
         }
     }
 
-    interface UsersOfInterestItemClickListener {
+    public interface UsersOfInterestItemClickListener {
 
-        void setUsersOfInterestItemClickListener(HomePageSubTopicTagBean.RecommendUsersEntity userEntity);
+        void setUsersOfInterestItemClickListener(RecommendInterestUsersBean userEntity);
     }
 }

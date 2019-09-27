@@ -374,7 +374,7 @@ public class MchDetailsResponse implements Serializable {
 
         private float commentScore;
 
-        private int consumePrice;
+        private double consumePrice;
 
         private String mchRanking;
 
@@ -454,11 +454,11 @@ public class MchDetailsResponse implements Serializable {
             this.photo = photo;
         }
 
-        public int getConsumePrice() {
+        public double getConsumePrice() {
             return consumePrice;
         }
 
-        public void setConsumePrice(int consumePrice) {
+        public void setConsumePrice(double consumePrice) {
             this.consumePrice = consumePrice;
         }
 
@@ -1091,7 +1091,7 @@ public class MchDetailsResponse implements Serializable {
 
         private int score;
 
-        private int price;
+        private double price;
 
         private String photo;
 
@@ -1145,11 +1145,11 @@ public class MchDetailsResponse implements Serializable {
             this.score = score;
         }
 
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(double price) {
             this.price = price;
         }
 

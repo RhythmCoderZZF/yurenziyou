@@ -59,7 +59,7 @@ public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResou
             String photo = homestayBean.getPhoto();
             String title = homestayBean.getTitle();
             int defaultPrice = homestayBean.getDefaultPrice();
-            int marketPrice = homestayBean.getMarketPrice();
+            double marketPrice = homestayBean.getMarketPrice();
             int bedNum = homestayBean.getBedNum();
             String acreage = homestayBean.getAcreage();
             int intoNum = homestayBean.getIntoNum();

@@ -42,6 +42,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.fragment.CameraFragment;
 import com.nbhysj.coupon.fragment.HomeFragment;
 import com.nbhysj.coupon.fragment.MineFragment;
+import com.nbhysj.coupon.fragment.MineTestFragment;
 import com.nbhysj.coupon.fragment.ShoppingMallFragment;
 import com.nbhysj.coupon.fragment.TravelAssistantFragment;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
@@ -84,7 +85,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         house(R.id.navigation_house, ShoppingMallFragment.class),
         camera(R.id.navigation_camera, CameraFragment.class),
         footprint(R.id.navigation_footprint, TravelAssistantFragment.class),
-        mine(R.id.navigation_mine, MineFragment.class),
+        mine(R.id.navigation_mine, MineTestFragment.class),
         ;
 
         private Fragment fragment;
@@ -164,7 +165,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         fragments.add(new ShoppingMallFragment());
         fragments.add(new CameraFragment());
         fragments.add(new TravelAssistantFragment());
-        fragments.add(new MineFragment());
+        fragments.add(new MineTestFragment());
         //  msgListCountResult();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);

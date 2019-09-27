@@ -77,9 +77,10 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
             if (recommendFriends.isLove()) {
 
                 holder.mImgIsLove.setImageResource(R.mipmap.icon_love_red_homepage_remmend);
+                holder.mImgIsLove.setVisibility(View.VISIBLE);
             } else {
 
-                holder.mImgIsLove.setImageResource(R.mipmap.icon_love_white_homepage_remmend);
+                holder.mImgIsLove.setVisibility(View.GONE);
             }
 
             if (postsType == 3) { //视频类型 现在图标
@@ -101,13 +102,13 @@ public class RecommendFriendsPictureAdapter extends RecyclerView.Adapter<Recomme
                 }
             });
 
-            holder.mImgIsLove.setOnClickListener(new View.OnClickListener() {
+           /* holder.mImgIsLove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     recommendPostsDetailListener.setPostIsCollectionListener(itemPosition);
                 }
-            });
+            });*/
 
         } catch (Exception e) {
             e.printStackTrace();

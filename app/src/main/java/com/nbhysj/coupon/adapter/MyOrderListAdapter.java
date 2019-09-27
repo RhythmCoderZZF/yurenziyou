@@ -13,10 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.common.Enum.OrderTypeEnum;
+import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.ui.MyOrderDetailActivity;
-import com.nbhysj.coupon.ui.OrderSubmitActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.Tools;
 
@@ -103,18 +102,72 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             orderVehicleUseAdapter.setVehicleUseList(orderListCarList);
             holder.mRvVehicleUse.setAdapter(orderVehicleUseAdapter);
 
-
             holder.mTvOrderStatus.setText(orderStatus);
             holder.mTvCommodityNum.setText("共" + goodsNum + "件商品");
             holder.mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-            if (orderType.equals(OrderTypeEnum.getEnumByKey(0))) {
+            if (orderType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
                 holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_destination_scenic_spot);
-            } else {
+                holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_scenic_spot));
+            } else if (orderType.equals(GoodsTypeEnum.getEnumByKey(2).getValue())) {
 
+                holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_destination_hotel);
+                holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_hotel));
+
+            } else if (orderType.equals(GoodsTypeEnum.getEnumByKey(4).getValue())) {
+
+                holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_order_group_mch);
+                holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_group_mch));
 
             }
 
-            if (canCancelStatus == 1 || orderStatus.equals("交易关闭")) {
+            //可取消
+            if (canCancelStatus == 0) {
+
+                holder.mTvOrderCancel.setVisibility(View.GONE);
+
+            } else if (canCancelStatus == 1) {
+
+                holder.mTvOrderCancel.setVisibility(View.VISIBLE);
+            }
+
+            //待支付
+            if (canPayStatus == 0) {
+
+                holder.mRlytPendingOrder.setVisibility(View.GONE);
+
+            } else if (canCancelStatus == 1) {
+
+                holder.mRlytPendingOrder.setVisibility(View.VISIBLE);
+            }
+
+            //待支付
+            if (canBuyAgainStatus == 0) {
+                holder.mTvOrderRefundBuyAgain.setVisibility(View.GONE);
+
+            } else if (canBuyAgainStatus == 1) {
+
+                holder.mTvOrderRefundBuyAgain.setVisibility(View.VISIBLE);
+            }
+
+            //可删除订单
+            if (canDelStatus == 0) {
+                holder.mTvOrderDelete.setVisibility(View.GONE);
+
+            } else if (canDelStatus == 1) {
+
+                holder.mTvOrderDelete.setVisibility(View.VISIBLE);
+            }
+
+            //可评论
+            if (commentStatus == 0) {
+                holder.mTvOrderComment.setVisibility(View.GONE);
+
+            } else if (commentStatus == 1) {
+
+                holder.mTvOrderComment.setVisibility(View.VISIBLE);
+            }
+
+          /*  if (canCancelStatus == 1 || orderStatus.equals("交易关闭")) {
 
                 holder.mRlytTransactionClosed.setVisibility(View.VISIBLE);
                 holder.mRlytPendingOrder.setVisibility(View.GONE);
@@ -136,10 +189,10 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                 Date date = new Date();
                 long currentTime = date.getTime();
                 long remainingTimeLong  = outTime*1000 - currentTime;
-         /*       long days = remainingTimeLong / (1000 * 60 * 60 * 24);
+         *//*       long days = remainingTimeLong / (1000 * 60 * 60 * 24);
                 long hours = (remainingTimeLong-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
                 int minutes = (int) ((remainingTimeLong) / (1000 * 60));
-                long second = (remainingTimeLong-days*(1000 * 60 * 60 * 24) - hours*(1000* 60 * 60) - minutes*(1000* 60 * 60))/1000;*/
+                long second = (remainingTimeLong-days*(1000 * 60 * 60 * 24) - hours*(1000* 60 * 60) - minutes*(1000* 60 * 60))/1000;*//*
               //  String time = minutes+"分"+second+"秒";
                 String time = DateUtil.millisToStringShort(remainingTimeLong);
               //  String remainingTime = DateUtil.getTheRemainingTime(remainingTimeLong,DateUtil.sDateHHMMSSFormat);
@@ -152,11 +205,35 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
                     }
                 });
-            } else if(commentStatus == 1 || orderStatus.equals("待评价")){
+            } else if(orderStatus.equals("待付款"))
+            {
+                holder.mRlytPendingOrder.setVisibility(View.VISIBLE);
+                holder.mRlytTransactionClosed.setVisibility(View.GONE);
+                holder.mRlytSuccessfulTrade.setVisibility(View.GONE);
+                Date date = new Date();
+                long currentTime = date.getTime();
+                long remainingTimeLong  = outTime*1000 - currentTime;
+         *//*       long days = remainingTimeLong / (1000 * 60 * 60 * 24);
+                long hours = (remainingTimeLong-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
+                int minutes = (int) ((remainingTimeLong) / (1000 * 60));
+                long second = (remainingTimeLong-days*(1000 * 60 * 60 * 24) - hours*(1000* 60 * 60) - minutes*(1000* 60 * 60))/1000;*//*
+                //  String time = minutes+"分"+second+"秒";
+                String time = DateUtil.millisToStringShort(remainingTimeLong);
+                //  String remainingTime = DateUtil.getTheRemainingTime(remainingTimeLong,DateUtil.sDateHHMMSSFormat);
+                holder.mTvPendingPaymentTime.setText(time+"后订单将取消");
+                holder.mTvOrderPayment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        myOrderListener.setOrderPendingPaymentListener(orderTypeEntity);
+
+                    }
+                });
+            }else if(commentStatus == 1 || orderStatus.equals("待评价")){
                 holder.mRlytTransactionClosed.setVisibility(View.GONE);
                 holder.mRlytPendingOrder.setVisibility(View.GONE);
                 holder.mRlytSuccessfulTrade.setVisibility(View.VISIBLE);
-            }
+            }*/
 
             holder.mLlytMyOrderItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,7 +241,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
                     Intent intent = new Intent();
                     intent.setClass(mContext, MyOrderDetailActivity.class);
-                    intent.putExtra("orderNo",orderNo);
+                    intent.putExtra("orderNo", orderNo);
                     mContext.startActivity(intent);
                 }
             });
@@ -185,9 +262,9 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
         //订单类型图片
         @BindView(R.id.img_order_type_tag)
         ImageView mImgOrderTypeTag;
-        //订单类型
-        @BindView(R.id.tv_order_type)
-        TextView mTvOrderType;
+        //订单商户类型
+        @BindView(R.id.tv_order_mch_type)
+        TextView mTvOrderMchType;
         //订单状态
         @BindView(R.id.tv_order_status)
         TextView mTvOrderStatus;
@@ -225,13 +302,27 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
         @BindView(R.id.rlyt_pending_order)
         RelativeLayout mRlytPendingOrder;
 
-        //交易成功
+        //订单去退款
+        @BindView(R.id.tv_order_refund)
+        TextView mTvOrderRefund;
+
+        //再次预定
+        @BindView(R.id.tv_order_buy_again)
+        TextView mTvOrderRefundBuyAgain;
+
+        //查看退款进度
+        @BindView(R.id.tv_viewing_refund_progress)
+        TextView mTvViewingRefundProgress;
+        //查看退款详情
+        @BindView(R.id.tv_viewing_refund_detail)
+        TextView mTvViewingRefundDetail;
+      /*  //交易成功
         @BindView(R.id.rlyt_successful_trade)
         RelativeLayout mRlytSuccessfulTrade;
 
         //交易关闭
         @BindView(R.id.rlyt_transaction_closed)
-        RelativeLayout mRlytTransactionClosed;
+        RelativeLayout mRlytTransactionClosed;*/
 
         //总价格
         @BindView(R.id.tv_total_price)
