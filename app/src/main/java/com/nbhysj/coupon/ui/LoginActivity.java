@@ -3,13 +3,17 @@ package com.nbhysj.coupon.ui;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -31,9 +35,11 @@ import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.LoginPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.view.GlideImageView;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -44,6 +50,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.http.FieldMap;
 
 /**
@@ -54,7 +61,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
 
     //用户头像
     @BindView(R.id.image_user_avatar)
-    GlideImageView mImageUserAvatar;
+    CircleImageView mImageUserAvatar;
     //用户名
     @BindView(R.id.et_username)
     EditText mEdtUsername;
@@ -62,8 +69,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     @BindView(R.id.et_password)
     EditText mEdtPassword;
     //查看和隐藏密码
-    @BindView(R.id.btn_toggle_pwd)
-    ToggleButton mBtnTogglePwd;
+    @BindView(R.id.img_password_is_invisible)
+    ImageView mImgPwdIsInvisible;
+    @BindView(R.id.tv_login)
+    TextView mTvLogin;
     //用户名
     private String username;
     //未加密的密码
@@ -83,6 +92,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     //第三方绑定请求code
     private int THIRD_PARTY_LOGIN_REQUEST_CODE = 0;
 
+    private boolean isSeePasswordOprate = true;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -97,29 +107,63 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
 
     @Override
     public void initData() {
-        mImageUserAvatar.loadCircle("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
-        if (!TextUtils.isEmpty(avatar)) {
-            mImageUserAvatar.loadCircle(avatar);
-        } else {
-
-            mImageUserAvatar.loadCircle("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
+        if (!TextUtils.isEmpty(avatar))
+        {
+            GlideUtil.loadImage(LoginActivity.this,avatar,mImageUserAvatar);
         }
-        /**
-         * 查看密码
-         */
-        mBtnTogglePwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        mImgPwdIsInvisible.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //如果选中，显示密码
-                    mBtnTogglePwd.setBackgroundResource(R.mipmap.icon_see_password);
+            public void onClick(View view) {
+                if(isSeePasswordOprate)
+                {
+                    mImgPwdIsInvisible.setImageResource(R.mipmap.icon_see_password);
+                    isSeePasswordOprate = false;
+
                     mEdtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
                 } else {
-                    //否则隐藏密码
-                    mBtnTogglePwd.setBackgroundResource(R.mipmap.icon_invisible_password);
+
+                    mImgPwdIsInvisible.setImageResource(R.mipmap.icon_invisible_password);
+                    isSeePasswordOprate = true;
                     mEdtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
+            }
+        });
+
+
+        mEdtUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkIsInputFill();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mEdtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkIsInputFill();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
@@ -149,7 +193,23 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                 break;
         }
     }
+    //校验输入信息是否填写完成
+    public void checkIsInputFill() {
 
+        username = mEdtUsername.toString().trim();
+        password = mEdtPassword.getText().toString().trim();
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password))
+        {
+            mTvLogin.setBackgroundResource(R.drawable.bg_rect_gray_shape);
+            mTvLogin.setEnabled(false);
+            mTvLogin.setClickable(false);
+        } else if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password))
+        {
+            mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
+            mTvLogin.setEnabled(true);
+            mTvLogin.setClickable(true);
+        }
+    }
     @Override
     public void loginResult(BackResult<LoginResponse> res) {
         dismissProgressDialog();
@@ -190,6 +250,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
 
                     String currentVersionName = getCurrentVersionName();
                     SharedPreferencesUtils.putData("version",currentVersionName);
+                    setResult(RESULT_OK);
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -251,7 +312,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
         showToast(LoginActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.tv_find_pwd, R.id.tv_login, R.id.rlyt_weixin, R.id.rlyt_qq, R.id.rlyt_sina_weibo})
+    @OnClick({R.id.tv_find_pwd, R.id.tv_login, R.id.rlyt_weixin, R.id.rlyt_qq, R.id.rlyt_sina_weibo,R.id.tv_toolbar_right})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.tv_find_pwd:  //忘记密码
@@ -278,6 +339,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                 oprateTips(getResources().getString(R.string.str_weibo), SHARE_MEDIA.SINA);
 
                 break;
+              case R.id.tv_toolbar_right:
+            toActivity(UserRegistrationActivity.class);
+            break;
             default:
                 break;
         }

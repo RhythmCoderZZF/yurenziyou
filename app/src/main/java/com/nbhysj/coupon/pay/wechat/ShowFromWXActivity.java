@@ -1,12 +1,12 @@
-package com.nbhysj.coupon;
-
-import com.nbhysj.coupon.R;
+package com.nbhysj.coupon.pay.wechat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import com.nbhysj.coupon.R;
 
 public class ShowFromWXActivity extends Activity {
 	

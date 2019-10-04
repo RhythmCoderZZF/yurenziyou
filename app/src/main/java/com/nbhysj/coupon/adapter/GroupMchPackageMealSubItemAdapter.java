@@ -7,13 +7,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
-import com.nbhysj.coupon.model.response.MchAlbumResponse;
-import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 
 import java.util.List;
 

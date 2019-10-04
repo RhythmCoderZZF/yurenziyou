@@ -24,8 +24,11 @@ import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.LoginResponse;
+import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.RegisterPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -89,12 +92,13 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_user_registration;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        ToolbarHelper.setBar(UserRegistrationActivity.this, "", R.mipmap.nav_ico_back_black, R.mipmap.icon_cancel);
+        ToolbarHelper.setHeaderBar(UserRegistrationActivity.this, "", R.mipmap.nav_ico_back_black, R.mipmap.icon_cancel);
         mImgToolbarRight.setOnClickListener(v -> {
 
             UserRegistrationActivity.this.finish();
@@ -134,15 +138,85 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                String username = charSequence.toString();
 
-                if (TextUtils.isEmpty(username)) {
+                String verifyCode = charSequence.toString();
+                String phone = mEdtPhone.getText().toString();
+                String password = mEdtPassword.getText().toString();
+                if (TextUtils.isEmpty(verifyCode) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
                     mTvLogin.setBackgroundResource(R.drawable.bg_rect_gray_shape);
                     mLinePhone.setBackgroundResource(R.color.line_grey);
-                } else {
+                    mTvLogin.setEnabled(false);
+                    mTvLogin.setClickable(false);
+                } else if(!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)){
 
                     mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
                     mLinePhone.setBackgroundResource(R.drawable.btn_oprate_bg);
+                    mTvLogin.setEnabled(true);
+                    mTvLogin.setClickable(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mEdtVerifyCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                String verifyCode = charSequence.toString();
+                String phone = mEdtPhone.getText().toString();
+                String password = mEdtPassword.getText().toString();
+                if (TextUtils.isEmpty(verifyCode) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
+                    mTvLogin.setBackgroundResource(R.drawable.bg_rect_gray_shape);
+                    mLinePhone.setBackgroundResource(R.color.line_grey);
+                    mTvLogin.setEnabled(false);
+                    mTvLogin.setClickable(false);
+                } else if(!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)){
+
+                    mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
+                    mLinePhone.setBackgroundResource(R.drawable.btn_oprate_bg);
+                    mTvLogin.setEnabled(true);
+                    mTvLogin.setClickable(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+        mEdtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                String verifyCode = charSequence.toString();
+                String phone = mEdtPhone.getText().toString();
+                String password = mEdtPassword.getText().toString();
+                if (TextUtils.isEmpty(verifyCode) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
+                    mTvLogin.setBackgroundResource(R.drawable.bg_rect_gray_shape);
+                    mLinePhone.setBackgroundResource(R.color.line_grey);
+                    mTvLogin.setEnabled(false);
+                } else if(!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)){
+
+                    mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
+                    mLinePhone.setBackgroundResource(R.drawable.btn_oprate_bg);
+                    mTvLogin.setEnabled(true);
+                    mTvLogin.setClickable(true);
                 }
             }
 
@@ -192,7 +266,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
     }
 
 
-    @OnClick({R.id.tv_get_verification_code, R.id.tv_login})
+    @OnClick({R.id.tv_get_verification_code, R.id.tv_login,R.id.iv_toolbar_right})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.tv_get_verification_code:
@@ -202,12 +276,18 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                         showToast(UserRegistrationActivity.this, getResources().getString(R.string.str_input_phone));
                         return;
                     }
+                    showProgressDialog(UserRegistrationActivity.this);
+                    mDialog.setTitle("正在发送验证码...");
                     mPresenter.getRegisterVerifyCode(phoneNum);
                 }
                 break;
             case R.id.tv_login:
 
                 getSalt();
+                break;
+            case R.id.iv_toolbar_right:
+
+                UserRegistrationActivity.this.finish();
                 break;
             default:
                 break;
@@ -217,14 +297,15 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mTimer != null) {
+        if (mTimer != null)
+        {
             mTimer.cancel();
         }
     }
 
     @Override
     public void getRegisterVerifyCodeResult(BackResult res) {
-
+        dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 delaytime = 60;
@@ -250,17 +331,49 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                 }
                 break;
             default:
+                dismissProgressDialog();
                 showToast(UserRegistrationActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
 
     @Override
-    public void getSaltResult(BackResult<String> res) {
+    public void getUserInfoResult(BackResult<UserInfoResponse> res) {
+        dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                    String saltKey = res.getData();
+                    UserInfoResponse userInfoResponse = res.getData();
+                    String avatar = userInfoResponse.getAvater();      //用户头像
+                    String profile = userInfoResponse.getProfile();   //简介
+                    int sex = userInfoResponse.getSex();              //性别
+                    String birthday = userInfoResponse.getBirthday(); //生日
+                    String fansNum = String.valueOf(userInfoResponse.getFansNum()); //粉丝数
+                    String followNum = String.valueOf(userInfoResponse.getFollowNum()); //关注数
+                    String collectionNum = String.valueOf(userInfoResponse.getCollectionNum()); //收藏数
+                    String zanNum = String.valueOf(userInfoResponse.getZanNum()); //点赞数
+                    SharedPreferencesUtils.saveUserInfoData(avatar, sex, birthday, profile, fansNum, followNum, collectionNum, zanNum);
+
+                    String currentVersionName = getCurrentVersionName();
+                    SharedPreferencesUtils.putData("version",currentVersionName);
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            default:
+                showToast(UserRegistrationActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void getSaltResult(BackResult<Object> res) {
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    String saltKey = (String) res.getData();
                     String password = mEdtPassword.getText().toString().trim();
                     verifyCode = mEdtVerifyCode.getText().toString().trim();
                     encryptedPwd = EncryptedSignatureUtil.getHmacMd5Bytes(saltKey.getBytes(), password.getBytes());
@@ -272,11 +385,13 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                     registerUserRequest.setSalt(saltKey);
                     mPresenter.registerUser(registerUserRequest);
                 } catch (NoSuchAlgorithmException e) {
+                    dismissProgressDialog();
                     e.printStackTrace();
                 }
 
                 break;
             default:
+                dismissProgressDialog();
                 showToast(UserRegistrationActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
@@ -290,14 +405,22 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                 try {
 
                     LoginResponse loginResponse = res.getData();
-                    showToast(UserRegistrationActivity.this, "手机号:" + loginResponse.getMobile());
+                    userId = loginResponse.getId();                 //用户id
+                    String mobile = loginResponse.getMobile();      //手机号
+                    String nickname = loginResponse.getNickname();  //昵称
+                    String username = loginResponse.getUsername();  //用户名
+                    String token = res.getToken();
+                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                    getUserInfo();
 
                 } catch (Exception e) {
+                    dismissProgressDialog();
                     e.printStackTrace();
                 }
 
                 break;
             default:
+                dismissProgressDialog();
                 showToast(UserRegistrationActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
@@ -305,7 +428,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
     @Override
     public void showMsg(String msg) {
-
+        dismissProgressDialog();
         showToast(UserRegistrationActivity.this, Constants.getResultMsg(msg));
     }
 
@@ -314,6 +437,12 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
         if (validateInternet()) {
             phoneNum = mEdtPhone.getText().toString().trim();
+            if(TextUtils.isEmpty(phoneNum)){
+
+                showToast(UserRegistrationActivity.this,getResources().getString(R.string.str_input_phone_number));
+                return;
+            }
+            showProgressDialog(UserRegistrationActivity.this);
             mPresenter.getSalt(phoneNum);
         }
     }
@@ -327,6 +456,15 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
             loginRequest.setUsername(phoneNum);
             loginRequest.setPassword(encryptedPwd);
             mPresenter.login(loginRequest);
+        }
+    }
+
+    //获取用户信息
+    public void getUserInfo() {
+
+        if (validateInternet()) {
+
+            mPresenter.getUserInfo(userId);
         }
     }
 }

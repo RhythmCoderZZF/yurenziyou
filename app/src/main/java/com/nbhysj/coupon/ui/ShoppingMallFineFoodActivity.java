@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DeliciousFoodSectionAdapter;
-import com.nbhysj.coupon.adapter.FineFoodClassificationAdapter;
 import com.nbhysj.coupon.adapter.FineFoodListAdapter;
 import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
@@ -23,11 +22,14 @@ import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.FineFoodPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.StickyScrollView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -95,6 +97,10 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
     int mTotalPageCount;
     //排序规则类型 FJ=附近热门 ZH=综合排序 默认FJ
     private String mSortStr = "FJ";
+    //经度
+    String longitude;
+    //纬度
+    String latitude;
 
     @Override
     public int getLayoutId() {
@@ -122,7 +128,8 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
         } else {
             mScenicSpotList.clear();
         }
-
+        longitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
+        latitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
         showProgressDialog(ShoppingMallFineFoodActivity.this);
         getFineFoodHomePage();
 
@@ -219,30 +226,25 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                /*    if (isOnLoadMore) {
 
-                        // mSmartRefreshLayout.finishLoadMore();
-                    } else {
-
-                        recommendFriendsList.clear();
-                        recommendFriendsAdapter.notifyDataSetChanged();
-                    }*/
-
+                    ScenicSpotHomePageResponse foodHomePageBean = res.getData();
                     //美食栏
-                    mScenicSpotHotList = res.getData().getHot();
+                    mScenicSpotHotList = foodHomePageBean.getHot();
                     deliciousFoodSectionAdapter.setDeliciousFoodRecommendList(mScenicSpotHotList);
                     deliciousFoodSectionAdapter.notifyDataSetChanged();
 
                     //美食分类
-                    mCateEntityList = res.getData().getCate();
+                    mCateEntityList = foodHomePageBean.getCate();
                     fineFoodClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
                     fineFoodClassificationAdapter.notifyDataSetChanged();
 
-                    List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
-                    mScenicSpotList.addAll(scenicSpotList);
-                    fineFoodListAdapter.setFineFoodList(mScenicSpotList);
-                    fineFoodListAdapter.notifyDataSetChanged();
-                    BasePaginationResult pageBean = res.getData().getMch().getOverflow().getPage();
+                    List<MchTypeBean> scenicSpotList = foodHomePageBean.getMch().getNearby().getResult();
+                    if(scenicSpotList != null) {
+                        mScenicSpotList.addAll(scenicSpotList);
+                        fineFoodListAdapter.setFineFoodList(mScenicSpotList);
+                        fineFoodListAdapter.notifyDataSetChanged();
+                    }
+                    BasePaginationResult pageBean = foodHomePageBean.getMch().getNearby().getPage();
                     mTotalPageCount = pageBean.getPageCount();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -288,6 +290,11 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
 
     @Override
     public void getFoodBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void getFoodDetailResult(BackResult<MchFoodDetailResponse> res) {
 
     }
 
@@ -414,7 +421,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
 
         if (validateInternet()) {
 
-            mPresenter.getFineFoodHomePage("121.583009", "29.853123");
+            mPresenter.getFineFoodHomePage(longitude, latitude);
         }
     }
 
@@ -426,8 +433,8 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
             scenicSpotByCateRequest.put("Sorting", mSortStr);
             scenicSpotByCateRequest.put("page", String.valueOf(mPage));
             scenicSpotByCateRequest.put("pageSize", String.valueOf(mPageSize));
-            scenicSpotByCateRequest.put("longitude", "121.583009");
-            scenicSpotByCateRequest.put("latitude", "29.853123");
+            scenicSpotByCateRequest.put("longitude",longitude);
+            scenicSpotByCateRequest.put("latitude", latitude);
             mPresenter.findFoodByCate(scenicSpotByCateRequest);
         }
     }

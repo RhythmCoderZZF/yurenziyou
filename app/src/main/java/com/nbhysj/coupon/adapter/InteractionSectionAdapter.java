@@ -13,7 +13,10 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.FoodRecommendationActivity;
+import com.nbhysj.coupon.ui.RecreationDetailActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
 
@@ -26,7 +29,7 @@ import butterknife.ButterKnife;
  */
 public class InteractionSectionAdapter extends RecyclerView.Adapter<InteractionSectionAdapter.ViewHolder> {
 
-    List<MchTypeBean> hotelHomestayList;
+    List<MchTypeBean> recreationList;
     private Context mContext;
 
     public InteractionSectionAdapter(Context mContext) {
@@ -34,9 +37,9 @@ public class InteractionSectionAdapter extends RecyclerView.Adapter<InteractionS
         this.mContext = mContext;
     }
 
-    public void setInteractionSectionList(List<MchTypeBean> hotelHomestayList) {
+    public void setInteractionSectionList(List<MchTypeBean> recreationList) {
 
-        this.hotelHomestayList = hotelHomestayList;
+        this.recreationList = recreationList;
     }
 
     @Override
@@ -51,12 +54,12 @@ public class InteractionSectionAdapter extends RecyclerView.Adapter<InteractionS
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            MchTypeBean scenicSpotBean = hotelHomestayList.get(itemPosition);
-            String photo = scenicSpotBean.getPhoto();
-            //holder.mTvFoodCuisine.setText(scenicSpotBean.getIntro());
-            holder.mTvHotelHomestayName.setText(scenicSpotBean.getMchName());
+            MchTypeBean recreationEntity = recreationList.get(itemPosition);
+            int mchId = recreationEntity.getId();
+            String photo = recreationEntity.getPhoto();
+            holder.mTvRecreationyName.setText(recreationEntity.getMchName());
 
-            GlideUtil.loadCornersTransformImage(mContext, photo, 5, holder.mImgHotelhomestay);
+            GlideUtil.loadImage(mContext, photo, holder.mImgRecreation);
 
             if (itemPosition == 0) {
 
@@ -66,19 +69,20 @@ public class InteractionSectionAdapter extends RecyclerView.Adapter<InteractionS
                 holder.mHeader.setVisibility(View.GONE);
             }
 
-            if (itemPosition == hotelHomestayList.size() - 1) {
+            if (itemPosition == recreationList.size() - 1) {
 
                 holder.mFooter.setVisibility(View.VISIBLE);
             } else {
                 holder.mFooter.setVisibility(View.GONE);
             }
 
-            holder.mLlytHotelHomestayItem.setOnClickListener(new View.OnClickListener() {
+            holder.mLlytRecreationItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     Intent intent = new Intent();
-                    intent.setClass(mContext, FoodRecommendationActivity.class);
+                    intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
                     mContext.startActivity(intent);
                 }
             });
@@ -90,22 +94,22 @@ public class InteractionSectionAdapter extends RecyclerView.Adapter<InteractionS
 
     @Override
     public int getItemCount() {
-        return hotelHomestayList.size();
+        return recreationList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        //美食位置
-        @BindView(R.id.tv_hotel_homestay_name)
-        TextView mTvHotelHomestayName;
+        //互动名字
+        @BindView(R.id.tv_recreation_name)
+        TextView mTvRecreationyName;
         //美食照片
-        @BindView(R.id.image_hotel_homestay)
-        ImageView mImgHotelhomestay;
+        @BindView(R.id.image_recreation)
+        RoundedImageView mImgRecreation;
         @BindView(R.id.view_header)
         View mHeader;
         @BindView(R.id.view_footer)
         View mFooter;
-        @BindView(R.id.llyt_hotel_homestay_item)
-        LinearLayout mLlytHotelHomestayItem;
+        @BindView(R.id.llyt_recreation_item)
+        LinearLayout mLlytRecreationItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

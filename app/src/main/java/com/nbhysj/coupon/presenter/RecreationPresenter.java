@@ -27,6 +27,11 @@ public class RecreationPresenter extends RecreationContract.Presenter {
     }
 
     @Override
+    public void getRecreationDetail(int mchId) {
+        mRxManager.add(mModel.getRecreationDetail(mchId).subscribe(res -> mView.getRecreationDetailResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

@@ -38,6 +38,7 @@ import com.nbhysj.coupon.model.response.MchCitiesBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.ShoppingMallMenuBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
@@ -50,6 +51,7 @@ import com.nbhysj.coupon.ui.ShoppingMallScenicSpotActivity;
 import com.nbhysj.coupon.ui.ShoppingMallScreeningActivity;
 import com.nbhysj.coupon.ui.ShoppingMallSpecialSaleActivity;
 import com.nbhysj.coupon.ui.StrategyActivity;
+import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
@@ -132,35 +134,35 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     RecyclerView mRvScenicSpotClassification;
     //旅行主题
     @BindView(R.id.img_travel_theme_one)
-    ImageView mImgTravelThemeOne;
+    RoundedImageView mImgTravelThemeOne;
     @BindView(R.id.tv_travel_theme_one_title)
     TextView mTvTravelThemeOneTitle;
     @BindView(R.id.tv_travel_theme_one_des)
     TextView mTvTravelThemeOneDes;
     //旅行主题2
     @BindView(R.id.img_travel_theme_two)
-    ImageView mImgTravelThemeTwo;
+    RoundedImageView mImgTravelThemeTwo;
     @BindView(R.id.tv_travel_theme_two_title)
     TextView mTvTravelThemeTwoTitle;
     @BindView(R.id.tv_travel_theme_two_des)
     TextView mTvTravelThemeTwoDes;
     //旅行主题3
     @BindView(R.id.img_travel_theme_three)
-    ImageView mImgTravelThemeThree;
+    RoundedImageView mImgTravelThemeThree;
     @BindView(R.id.tv_travel_theme_three_title)
     TextView mTvTravelThemeThreeTitle;
     @BindView(R.id.tv_travel_theme_three_des)
     TextView mTvTravelThemeThreeDes;
     //旅行主题4
     @BindView(R.id.img_travel_theme_four)
-    ImageView mImgTravelThemeFour;
+    RoundedImageView mImgTravelThemeFour;
     @BindView(R.id.tv_travel_theme_four_title)
     TextView mTvTravelThemeFourTitle;
     @BindView(R.id.tv_travel_theme_four_des)
     TextView mTvTravelThemeFourDes;
     //旅行主题5
     @BindView(R.id.img_travel_theme_five)
-    ImageView mImgTravelThemeFive;
+    RoundedImageView mImgTravelThemeFive;
     @BindView(R.id.tv_travel_theme_five_title)
     TextView mTvTravelThemeFiveTitle;
     @BindView(R.id.tv_travel_theme_five_des)
@@ -196,6 +198,17 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     TextView mTvLimitedSaleThreeRMBSymbol;
     @BindView(R.id.tv_flash_sale_three_rise)
     TextView mTvLimitedSaleThreeRise;
+    //温度
+    @BindView(R.id.tv_temperature)
+    TextView mTvTemperature;
+
+    //天气状况
+    @BindView(R.id.tv_weather)
+    TextView mTvWeather;
+
+    //天气
+    @BindView(R.id.img_weather)
+    ImageView mImgWeather;
 
     private ShoppingMallMenuAdapter shoppingMallMenuAdapter;
     //热门景点
@@ -262,6 +275,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
 
         bannerList = new ArrayList<>();
+        getWeather(Constants.CITY_CODE);
         getShopMallHomePageData();
 
 
@@ -553,35 +567,35 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     //旅行主题1
                     ShopMallHomePageResponse.TravelBannersEntity travelThemeOne = travelBannersList.get(0);
                     String travelThemeOnePhotoUrl = travelThemeOne.getPhoto();
-                    GlideUtil.loadCornersTransformImage(getActivity(), travelThemeOnePhotoUrl, 5, mImgTravelThemeOne);
+                    GlideUtil.loadImage(getActivity(), travelThemeOnePhotoUrl, mImgTravelThemeOne);
                     mTvTravelThemeOneTitle.setText(travelThemeOne.getTitle());
                     mTvTravelThemeOneDes.setText(travelThemeOne.getIntro());
 
                     //旅行主题2
                     ShopMallHomePageResponse.TravelBannersEntity travelThemeTwo = travelBannersList.get(1);
-                    String travelThemeTwoPhotoUrl = travelThemeOne.getPhoto();
-                    GlideUtil.loadCornersTransformImage(getActivity(), travelThemeTwoPhotoUrl, 5, mImgTravelThemeTwo);
+                    String travelThemeTwoPhotoUrl = travelThemeTwo.getPhoto();
+                    GlideUtil.loadImage(getActivity(), travelThemeTwoPhotoUrl,  mImgTravelThemeTwo);
                     mTvTravelThemeTwoTitle.setText(travelThemeTwo.getTitle());
                     mTvTravelThemeTwoDes.setText(travelThemeOne.getIntro());
 
                     //旅行主题3
                     ShopMallHomePageResponse.TravelBannersEntity travelThemeThree = travelBannersList.get(2);
                     String travelThemeThreePhotoUrl = travelThemeThree.getPhoto();
-                    GlideUtil.loadCornersTransformImage(getActivity(), travelThemeThreePhotoUrl, 5, mImgTravelThemeThree);
+                    GlideUtil.loadImage(getActivity(), travelThemeThreePhotoUrl,  mImgTravelThemeThree);
                     mTvTravelThemeThreeTitle.setText(travelThemeThree.getTitle());
                     mTvTravelThemeThreeDes.setText(travelThemeThree.getIntro());
 
                     //旅行主题4
                     ShopMallHomePageResponse.TravelBannersEntity travelThemeFour = travelBannersList.get(3);
                     String travelThemeFourPhotoUrl = travelThemeThree.getPhoto();
-                    GlideUtil.loadCornersTransformImage(getActivity(), travelThemeFourPhotoUrl, 5, mImgTravelThemeFour);
+                    GlideUtil.loadImage(getActivity(), travelThemeFourPhotoUrl, mImgTravelThemeFour);
                     mTvTravelThemeFourTitle.setText(travelThemeFour.getTitle());
                     mTvTravelThemeFourDes.setText(travelThemeFour.getIntro());
 
                     //旅行主题5
                     ShopMallHomePageResponse.TravelBannersEntity travelThemeFive = travelBannersList.get(4);
                     String travelThemeFivePhotoUrl = travelThemeFive.getPhoto();
-                    GlideUtil.loadCornersTransformImage(getActivity(), travelThemeFivePhotoUrl, 5, mImgTravelThemeFive);
+                    GlideUtil.loadImage(getActivity(), travelThemeFivePhotoUrl, mImgTravelThemeFive);
                     mTvTravelThemeFiveTitle.setText(travelThemeFive.getTitle());
                     mTvTravelThemeFiveDes.setText(travelThemeFive.getIntro());
 
@@ -621,7 +635,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         }
     }
 
-    @OnClick({R.id.ll_search, R.id.tv_view_more_popular_scenic_spots, R.id.tv_view_more_delicious_food, R.id.rlyt_flash_sale_one})
+    @OnClick({R.id.ll_search, R.id.tv_view_more_popular_scenic_spots, R.id.tv_view_more_delicious_food, R.id.rlyt_flash_sale})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_search:
@@ -639,7 +653,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 toActivity(FineFoodBangDanListActivity.class);
 
                 break;
-            case R.id.rlyt_flash_sale_one:
+            case R.id.rlyt_flash_sale:
                 toActivity(ShoppingMallSpecialSaleActivity.class);
                 break;
 
@@ -671,6 +685,32 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                         intent.setClass(getActivity(), WebActivity.class);
                         startActivity(intent);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    WeatherResponse weatherResponse = res.getData();
+                    String weather = weatherResponse.getWeather();
+                    String temperature = weatherResponse.getTemperature();
+                    String photoUrl = weatherResponse.getPhoto();
+                    mTvTemperature.setText(temperature + "°");
+                    mTvWeather.setText(weather);
+                    GlideUtil.loadImage(getActivity(),photoUrl,mImgWeather);
+
+                    System.out.print(weatherResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -734,5 +774,16 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         shoppingMallMenuList.add(shoppingMallUseCar);
 
         return shoppingMallMenuList;
+    }
+
+    //获取天气接口
+    public void getWeather(int cityCode) {
+
+        if (validateInternet()) {
+
+            //showProgressDialog(getActivity());
+            mPresenter.getWeather(cityCode);
+
+        }
     }
 }

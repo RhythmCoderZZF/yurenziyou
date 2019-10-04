@@ -2,6 +2,7 @@ package com.nbhysj.coupon.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.LoginPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.LogUtil;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import java.net.URLDecoder;
@@ -102,8 +104,14 @@ public class WebActivity extends BaseActivity<LoginPresenter, LoginModel> implem
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 view.loadUrl(url);
-
-                return true;
+                Uri uri = Uri.parse(url);
+                LogUtil.e("打印Scheme", uri.getScheme() + "==" + url);
+                if (!"http".equals(uri.getScheme()) || !"https".equals(uri.getScheme())) {
+                    return false;
+                } else {
+                    view.loadUrl(url);
+                    return false;
+                }
             }
 
             @Override

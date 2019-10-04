@@ -16,6 +16,7 @@ import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 
 import java.util.List;
 
@@ -58,16 +59,16 @@ public class HomestayResourcesAdapter extends RecyclerView.Adapter<HomestayResou
             int mchId = homestayBean.getMchId();
             String photo = homestayBean.getPhoto();
             String title = homestayBean.getTitle();
-            int defaultPrice = homestayBean.getDefaultPrice();
+            double defaultPrice = homestayBean.getDefaultPrice();
             double marketPrice = homestayBean.getMarketPrice();
             int bedNum = homestayBean.getBedNum();
             String acreage = homestayBean.getAcreage();
             int intoNum = homestayBean.getIntoNum();
             GlideUtil.loadImage(mContext, photo, holder.mImgHomestay);
             holder.mTvHomestayTitle.setText(title);
-            holder.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
+            holder.mTvDefaultPrice.setText("¥" + Tools.getTwoDecimalPoint(defaultPrice));
             holder.mTvDefaultPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
-            holder.mTvMarketPrice.setText(String.valueOf(marketPrice));
+            holder.mTvMarketPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
 
             holder.mTvHomestayTag.setText(bedNum + "居室." + acreage + "㎡" + ".可住" + intoNum + "人");
 

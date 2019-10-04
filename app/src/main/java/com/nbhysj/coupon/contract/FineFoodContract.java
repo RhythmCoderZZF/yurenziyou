@@ -5,6 +5,8 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 
@@ -31,6 +33,9 @@ public interface FineFoodContract {
 
         //美食榜单
         Observable<BackResult<MchBangDanRankingResponse>> getFoodBangDanRanking(int cityId);
+
+        //美食详情
+        Observable<BackResult<MchFoodDetailResponse>> getFoodDetail(int mchId);
     }
 
     interface View extends BaseView {
@@ -40,6 +45,8 @@ public interface FineFoodContract {
         void findFoodByCateResult(BackResult<ScenicSpotResponse> res);
 
         void getFoodBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
+
+        void getFoodDetailResult(BackResult<MchFoodDetailResponse> res);
 
         void showMsg(String msg);
     }
@@ -52,5 +59,7 @@ public interface FineFoodContract {
         public abstract void findFoodByCate(HashMap<String, String> map);
 
         public abstract void getFoodBangDanRanking(int cityId);
+
+        public abstract void getFoodDetail(int mchId);
     }
 }

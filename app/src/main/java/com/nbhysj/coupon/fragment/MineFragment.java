@@ -28,6 +28,7 @@ import com.nbhysj.coupon.ui.LoginActivity;
 import com.nbhysj.coupon.ui.MyBusinessCardActivity;
 import com.nbhysj.coupon.ui.MyOrderActivity;
 import com.nbhysj.coupon.ui.PersonalSettingsActivity;
+import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
 /**
  * created by hysj on 2018/07/31.
  * description: 我的
@@ -193,8 +195,9 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         });*/
     }
 
-    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order, R.id.rlyt_my_business_card})
+    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order, R.id.rlyt_my_business_card,R.id.llyt_pending_payment,R.id.llyt_pending_travel,R.id.llyt_pending_comment,R.id.llyt_order_refund})
     public void onClick(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.img_personal_setting:
 
@@ -207,7 +210,11 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 toActivity(PersonalSettingsActivity.class);
                 break;
             case R.id.llyt_all_order:
-                toActivity(MyOrderActivity.class);
+
+                intent.putExtra("orderStatus", 0);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                intent.setClass(getActivity(), MyOrderActivity.class);
+                getActivity().startActivity(intent);
+
                 break;
             case R.id.rlyt_my_business_card:
 
@@ -221,6 +228,31 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                         startActivity(intent);
                     }
                 });
+                break;
+            case R.id.llyt_pending_payment:
+
+                intent.putExtra("orderStatus", 1);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                intent.setClass(getActivity(), MyOrderActivity.class);
+                getActivity().startActivity(intent);
+                break;
+
+            case R.id.llyt_pending_travel:
+
+                intent.putExtra("orderStatus", 2);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                intent.setClass(getActivity(), MyOrderActivity.class);
+                getActivity().startActivity(intent);
+                break;
+            case R.id.llyt_pending_comment:
+
+                intent.putExtra("orderStatus", 3);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                intent.setClass(getActivity(), MyOrderActivity.class);
+                getActivity().startActivity(intent);
+                break;
+            case R.id.llyt_order_refund:
+
+                intent.putExtra("orderStatus", 4);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                intent.setClass(getActivity(), MyOrderActivity.class);
+                getActivity().startActivity(intent);
                 break;
             default:
                 break;
@@ -332,7 +364,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
             }
         } else {
             if (isFristCreate) {
-                toActivity(LoginActivity.class);
+                toActivity(PhoneQuickLoginActivity.class);
                 isFristCreate = false;
             }
         }
@@ -346,7 +378,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
             if (TextUtils.isEmpty(token)) {
 
-                toActivity(LoginActivity.class);
+                toActivity(PhoneQuickLoginActivity.class);
             }
         }
     }

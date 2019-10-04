@@ -30,12 +30,9 @@ import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.CommentsListActivity;
 import com.nbhysj.coupon.ui.FindFriendsActivity;
-import com.nbhysj.coupon.ui.LoginActivity;
-import com.nbhysj.coupon.ui.MainActivity;
 import com.nbhysj.coupon.ui.NewAlbumActivity;
+import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
-import com.nbhysj.coupon.view.JudgeNestedScrollView;
-import com.nbhysj.coupon.widget.glide.CacheImageLoader;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -395,7 +392,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 break;
                 case Constants.USER_NOT_LOGIN_CODE:
 
-                    toActivity(LoginActivity.class);
+                    toActivity(PhoneQuickLoginActivity.class);
 
                     break;
             default:
@@ -436,7 +433,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
             if (TextUtils.isEmpty(token)) {
-                toActivity(LoginActivity.class);
+                toActivity(PhoneQuickLoginActivity.class);
             }
 
         }
@@ -451,7 +448,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
             if (TextUtils.isEmpty(token)) {
-                toActivity(LoginActivity.class);
+                toActivity(PhoneQuickLoginActivity.class);
             }
         }
 

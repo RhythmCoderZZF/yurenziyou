@@ -40,6 +40,11 @@ allprojects {
         }
         maven { url 'https://dl.bintray.com/sfsheng0322/maven' }
         maven { url "https://dl.bintray.com/thelasterstar/maven/" } //第三方登录
+
+        // 支付宝 SDK AAR 包所需的配置
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 

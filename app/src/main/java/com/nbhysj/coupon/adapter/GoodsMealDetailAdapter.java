@@ -14,12 +14,12 @@ import com.nbhysj.coupon.ui.PartialApplyForRefundActivity;
 
 import java.util.List;
 
-public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAdapter.CardHolder> {
+public class GoodsMealDetailAdapter extends RecyclerView.Adapter<GoodsMealDetailAdapter.CardHolder> {
 
     private Context mContext;
     //订单列表
     List<OrderDetailResponse.OrderGoodsEntity> orderGoodsList;
-    public GoodMealDetailAdapter(Context mContext) {
+    public GoodsMealDetailAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -50,17 +50,21 @@ public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAd
         String goodsTotalFee = orderGoodsEntity.getGoodsTotalFee();
         String goodNum = orderGoodsEntity.getGoodsNum();
         String goodsId = orderGoodsEntity.getGoodsId();
+        int canRefundStatus = orderGoodsEntity.getCanRefundStatus();
 
+        //商户名
         if(!TextUtils.isEmpty(mchName))
         {
             holder.mTvMchName.setText(mchName);
         }
 
+        //商品名称
         if(!TextUtils.isEmpty(goodsTitle))
         {
             holder.mTvTicketTitle.setText(goodsTitle);
         }
 
+        //商品可用时间
         if(!TextUtils.isEmpty(goodTime))
         {
             holder.mTvTicketCanUseTime.setText(goodTime);
@@ -68,6 +72,7 @@ public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAd
 
         holder.mTvTicketAlreadyUsed.setText(usedNum + "张");
 
+        //剩余票数量
         if(!TextUtils.isEmpty(surplusNum))
         {
              holder.mTvTicketRemainder.setText(surplusNum + "张");
@@ -78,6 +83,17 @@ public class GoodMealDetailAdapter extends RecyclerView.Adapter<GoodMealDetailAd
             holder.mTvAmountOfMoney.setText(goodsTotalFee);
         }
 
+        //是否可退款
+        if(canRefundStatus == 0)
+        {
+            holder.mTvApplyForRefund.setVisibility(View.GONE);
+
+        } else if(canRefundStatus == 1)
+        {
+            holder.mTvApplyForRefund.setVisibility(View.VISIBLE);
+        }
+
+        //商品数量
         holder.mTvGoodNum.setText("x" + goodNum);
 
         holder.mTvApplyForRefund.setOnClickListener(new View.OnClickListener() {

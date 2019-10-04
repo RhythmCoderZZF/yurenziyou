@@ -62,9 +62,8 @@
                 android:gravity="center_vertical"
                 android:hint="@string/str_input_phone_number"
                 android:maxLines="1"
-                android:text="18757194434"
+                android:text=""
                 android:textColor="@color/color_text_gray"
-                android:textColorHint="@color/color_text_gray"
                 android:textSize="@dimen/text_size_medium" />
 
         </RelativeLayout>
@@ -103,11 +102,11 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_2"
-                android:background="@drawable/selector_get_verifycode_bg"
+                android:background="@drawable/bg_get_verifiycode_unenabled"
                 android:gravity="center"
                 android:padding="@dimen/dp_6"
                 android:text="@string/str_get_verification_code"
-                android:textColor="@drawable/selector_get_verifycode_bg"
+                android:textColor="@color/color_text_gray6"
                 android:textSize="@dimen/text_size_small"
                 android:enabled="true" />
 
@@ -172,7 +171,6 @@
 
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/tv_login"
         android:layout_width="match_parent"
@@ -187,6 +185,7 @@
         android:gravity="center"
         android:text="@string/txt_login"
         android:textColor="@color/white"
+        android:enabled="false"
         android:textSize="@dimen/text_size_large" />
 
     <TextView
@@ -195,7 +194,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_25"
-        android:text="点击注册即表示接受鱼人自游的"
+        android:text=""
         android:textSize="@dimen/text_size_small" />
 
 </LinearLayout>

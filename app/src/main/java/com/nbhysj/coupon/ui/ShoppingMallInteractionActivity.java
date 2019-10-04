@@ -22,12 +22,14 @@ import com.nbhysj.coupon.model.RecreationModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.RecreationPresenter;
 import com.nbhysj.coupon.presenter.ScenicSpotPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.StickyScrollView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -96,6 +98,10 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
     int mTotalPageCount;
     //排序规则类型 FJ=附近热门 ZH=综合排序 默认FJ
     private String mSortStr = "FJ";
+    //经度
+    String longitude;
+    //纬度
+    String latitude;
 
     @Override
     public int getLayoutId() {
@@ -124,6 +130,8 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
             mScenicSpotList.clear();
         }
 
+        longitude = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
+        latitude = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
         showProgressDialog(ShoppingMallInteractionActivity.this);
         getScenicSpotHomePage();
 
@@ -239,11 +247,11 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
                     mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
                     mchRankingClassificationAdapter.notifyDataSetChanged();
 
-                    List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
+                    List<MchTypeBean> scenicSpotList = res.getData().getMch().getNearby().getResult();
                     mScenicSpotList.addAll(scenicSpotList);
                     recreationListAdapter.setRecreationListList(mScenicSpotList);
                     recreationListAdapter.notifyDataSetChanged();
-                    BasePaginationResult pageBean = res.getData().getMch().getOverflow().getPage();
+                    BasePaginationResult pageBean = res.getData().getMch().getNearby().getPage();
                     mTotalPageCount = pageBean.getPageCount();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -288,6 +296,11 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
 
     @Override
     public void getRecreationDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void getRecreationDetailResult(BackResult<MchDetailsResponse> res) {
 
     }
 
@@ -414,7 +427,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
 
         if (validateInternet()) {
 
-            mPresenter.getRecreationHomePage("121.583009", "29.853123");
+            mPresenter.getRecreationHomePage(longitude, latitude);
         }
     }
 
@@ -426,8 +439,8 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
             scenicSpotByCateRequest.put("Sorting", mSortStr);
             scenicSpotByCateRequest.put("page", String.valueOf(mPage));
             scenicSpotByCateRequest.put("pageSize", String.valueOf(mPageSize));
-            scenicSpotByCateRequest.put("longitude", "121.583009");
-            scenicSpotByCateRequest.put("latitude", "29.853123");
+            scenicSpotByCateRequest.put("longitude",longitude);
+            scenicSpotByCateRequest.put("latitude", latitude);
             mPresenter.findRecreationByCate(scenicSpotByCateRequest);
         }
     }

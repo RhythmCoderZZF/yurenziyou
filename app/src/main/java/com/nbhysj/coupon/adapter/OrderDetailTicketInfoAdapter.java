@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
@@ -57,10 +58,10 @@ public class OrderDetailTicketInfoAdapter extends RecyclerView.Adapter<OrderDeta
             OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(itemPosition);
             int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
             String title = goodsPriceEntity.getTitle();
-            int defaultPrice = goodsPriceEntity.getDefaultPrice();
+            double defaultPrice = goodsPriceEntity.getDefaultPrice();
             holder.mTvTicketTitle.setText(title + "X" + ticketPurchaseNum);
-            int mTotalTicketPrice = defaultPrice * ticketPurchaseNum;
-            holder.mTvTicketPrice.setText("¥" + String.valueOf(mTotalTicketPrice));
+            double mTotalTicketPrice = defaultPrice * ticketPurchaseNum;
+            holder.mTvTicketPrice.setText("¥" + Tools.getTwoDecimalPoint(mTotalTicketPrice));
 
         } catch (Exception e) {
             e.printStackTrace();

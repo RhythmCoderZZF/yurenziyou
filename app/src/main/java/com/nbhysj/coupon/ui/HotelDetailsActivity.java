@@ -28,7 +28,6 @@ import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.dialog.HotelDetailsSupplementDialog;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchCommentEntity;

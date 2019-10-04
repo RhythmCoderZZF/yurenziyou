@@ -33,8 +33,10 @@ import com.nbhysj.coupon.adapter.OrderUseDateSelectAdapter;
 import com.nbhysj.coupon.adapter.TouristInformationAdapter;
 import com.nbhysj.coupon.adapter.VehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
+import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
 import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
@@ -56,6 +58,7 @@ import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,6 +131,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //增加游客
     @BindView(R.id.llyt_add_tourists)
     LinearLayout mLlytAddTourists;
+    //增加游客取消
+    @BindView(R.id.tv_add_tourists_cancel)
+    TextView mTvAddTouristsCancel;
     //购买数量
     @BindView(R.id.tv_purchase_num)
     TextView mTvPurchaseNum;
@@ -192,10 +198,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private double datePrice;
 
     //增加门票价格
-    private int increaseTicketPrice;
+    private double increaseTicketPrice;
 
     //商品id
     private int goodsId;
+
+    //商户类型
+    private String mchType;
 
     private List<TravellerBean> travellersList;
 
@@ -288,6 +297,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private int cityCode;
 
     private int lineType;
+
+    //购买须知h5
+    private String mchByNotesH5Url;
+
+    private PurchaseInstructionsBrowseDialog mPurchaseInstructionsDialog;
     @Override
     public int getLayoutId() {
 
@@ -308,7 +322,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
-
         ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
         layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
         mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
@@ -319,6 +332,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
 
         goodsId = getIntent().getIntExtra("goodsId", 0);
+        mchType = getIntent().getStringExtra("mchType");
 
         if (travellersList == null) {
 
@@ -496,7 +510,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 datePrice = goodsPriceDatesResponse.getPrice();
                 goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
                 double totalPrice = increaseTicketPrice + datePrice;
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
 
             }
         });
@@ -544,10 +558,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         increaseTicketLayoutManager.setOrientation(increaseTicketLayoutManager.VERTICAL);
         increaseTicketAdapter = new IncreaseTicketAdapter(OrderSubmitActivity.this, new IncreaseTicketAdapter.IncreaseTicketListener() {
             @Override
-            public void setPurchaseNumListener(int position, int purchasePrice, int mAddTicketPurchaseNum) { //mAddTicketPurchaseNum 增加门票数量
+            public void setPurchaseNumListener(int position, double purchasePrice, int mAddTicketPurchaseNum) { //mAddTicketPurchaseNum 增加门票数量
                 increaseTicketPrice = purchasePrice;
                 double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;  //mPurchaseNum
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
                 if (goodsPriceTicketAddList.size() > 0) {
                     goodsPriceTicketAddList.get(position).setTicketPurchaseNum(mAddTicketPurchaseNum);
                 }
@@ -632,7 +646,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
             R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
             R.id.img_tourist_mobile_input_cancel,
-            R.id.tv_tourist_edit_confirm,R.id.tv_tourists_info_edit,R.id.tv_delete_frequently_used_tourists,R.id.img_tourist_add_username_input_cancel,R.id.img_tourist_add_mobile_input_cancel,R.id.tv_add_tourists_confirm})
+            R.id.tv_tourist_edit_confirm,R.id.tv_tourists_info_edit,R.id.tv_delete_frequently_used_tourists,R.id.img_tourist_add_username_input_cancel,R.id.img_tourist_add_mobile_input_cancel,R.id.tv_add_tourists_confirm,R.id.tv_add_tourists_cancel})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -645,31 +659,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 break;
             case R.id.rlyt_new_tourists_bg_half:
 
-                int addTouristsVisibility = mLlytAddTourists.getVisibility();
-                int editTouristsVisibility = mLlytEditTourists.getVisibility();
-                if (addTouristsVisibility == 8 && editTouristsVisibility == 8) {
-                    mRlytNewTouristsBgHalf.setVisibility(View.GONE);
-                    mLlytAddAndUpdateTourists.setVisibility(View.GONE);
-                    mLlytAddAndUpdateTourists.startAnimation(outAnimation);
-
-                } else {
-
-                    mLlytAddTourists.setVisibility(View.GONE);
-                    mLlytAddTourists.startAnimation(outAnimation);
-
-                }
-                if (editTouristsVisibility == 8 && addTouristsVisibility == 8) {
-
-                    mRlytNewTouristsBgHalf.setVisibility(View.GONE);
-                    mLlytAddAndUpdateTourists.setVisibility(View.GONE);
-                    mLlytAddAndUpdateTourists.startAnimation(outAnimation);
-
-                } else {
-
-                    mLlytEditTourists.setVisibility(View.GONE);
-                    mLlytEditTourists.startAnimation(outAnimation);
-
-                }
+                setTouristInfoDialog();
 
                 break;
             case R.id.tv_added_frequently_used_tourists:
@@ -682,11 +672,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
 
                 break;
+            case R.id.tv_add_tourists_cancel:
+
+                setTouristInfoDialog();
+
+            break;
             case R.id.rlyt_ticket:
 
                 break;
             case R.id.tv_confirm:
-                showToast(OrderSubmitActivity.this, mLlytAddAndUpdateTourists.getVisibility() + "");
+                setTouristInfoDialog();
                 break;
             case R.id.ibtn_back:
 
@@ -694,7 +689,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 break;
             case R.id.tv_purchase_notes:
-                showToast(OrderSubmitActivity.this, "购买须知");
+
+                if (mPurchaseInstructionsDialog == null) {
+                    mPurchaseInstructionsDialog = new PurchaseInstructionsBrowseDialog(getResources().getString(R.string.str_purchase_instructions), mchByNotesH5Url);
+                }
+                mPurchaseInstructionsDialog.show(getFragmentManager(), "组合商品购票须知");
                 break;
             case R.id.img_reduce_purchase_num:
 
@@ -705,7 +704,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                         double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                        mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
                     }
                 } else {
 
@@ -723,7 +722,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
                 double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
                 break;
             case R.id.tv_add_vehicle_more:
 
@@ -753,8 +752,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 mLlytAddAndUpdateTourists.setVisibility(View.VISIBLE);
                 mLlytAddAndUpdateTourists.startAnimation(inAnimation);
                 mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
-                mEdtTouristName.setText(realname);
-                mEdtTouristMobile.setText(mobile);
+              /*  mEdtTouristName.setText(realname);
+                mEdtTouristMobile.setText(mobile);*/
+
+                addTouristInformationAdapter.setTouristInfoList(travellersList);
+                addTouristInformationAdapter.notifyDataSetChanged();
 
                 break;
             case R.id.tv_delete_frequently_used_tourists:
@@ -777,6 +779,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 addTraveller();
 
                 break;
+
+
             default:
                 break;
         }
@@ -788,10 +792,18 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                    mPosition++;
+                   // mPosition++;
                     TravellerInfoResponse travellerInfoResponse = res.getData();
                     travellersList = travellerInfoResponse.getResult();
-                    travellersList.get(mPosition).setTravellerSelect(true);
+                    if(travellersList.size() > 0)
+                    {
+                        TravellerBean travellerBean = travellersList.get(0);
+                        travellerBean.setTravellerSelect(true);
+                        realname = travellerBean.getRealname();
+                        mobile = travellerBean.getMobile();
+                        mTvTouristName.setText(realname);
+                        mTvTouristMobile.setText(mobile);
+                    }
 
                     addTouristInformationAdapter.setTouristInfoList(travellersList);
                     addTouristInformationAdapter.notifyDataSetChanged();
@@ -822,7 +834,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-
+                    setTouristInfoDialog();
                     getTravellerList();
 
                 } catch (Exception e) {
@@ -870,17 +882,27 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     @Override
+    public void getRecreationDatePriceInitResult(BackResult<OrderSubmitInitResponse> res) {
+
+    }
+
+    @Override
+    public void recreationOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
+
+    }
+
+    @Override
     public void deleteUserTravellerResult(BackResult res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
 
-                    TravellerBean travellersEntity = travellersList.get(mPosition);
-
-                    travellersList.remove(travellersEntity);
                     if(travellersList != null) {
                         if(travellersList.size() > 0) {
+                            TravellerBean travellersEntity = travellersList.get(mPosition);
+
+                            travellersList.remove(travellersEntity);
                             TravellerBean travellers = travellersList.get(0);
                             travellers.setTravellerSelect(true);
                             addTouristInformationAdapter.setTouristInfoList(travellersList);
@@ -912,10 +934,15 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 try {
                     OrderSubmitResponse ticketOrderSubmitResponse = res.getData();
                     Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("orderSubmitResponse", ticketOrderSubmitResponse);
-                    intent.putExtras(bundle);
-                    intent.setClass(OrderSubmitActivity.this, PaymentOrderActivity.class);
+                    double price = ticketOrderSubmitResponse.getPrice();
+                    String title = ticketOrderSubmitResponse.getTitle();
+                    long payExprireTime = ticketOrderSubmitResponse.getPayExprireTime();
+                    String orderNo = ticketOrderSubmitResponse.getOrderNo();
+                    intent.setClass(OrderSubmitActivity.this, OrderPaymentActivity.class);
+                    intent.putExtra("price",price);
+                    intent.putExtra("title",title);
+                    intent.putExtra("payExprireTime",payExprireTime);
+                    intent.putExtra("orderNo",orderNo);
                     startActivity(intent);
 
                 } catch (Exception e) {
@@ -937,7 +964,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                     OrderSubmitInitResponse orderSubmitInitResponse = res.getData();
                     travellersList = orderSubmitInitResponse.getTravellers();
-                    userTravelerId = travellersList.get(0).getId();
 
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
@@ -993,14 +1019,18 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     }
 
                     if (travellersList != null) {
-                        mRlytTouristInfoItem.setVisibility(View.VISIBLE);
-                        TravellerBean travellersEntity = travellersList.get(0);
-                        if (travellersEntity != null) {
-                            travellersEntity.setTravellerSelect(true);
-                            realname = travellersEntity.getRealname();
-                            mobile = travellersEntity.getMobile();
-                            mTvTouristName.setText(realname);
-                            mTvTouristMobile.setText(mobile);
+                        if (travellersList.size() > 0){
+                            TravellerBean travellersEntity = travellersList.get(0);
+                            userTravelerId = travellersEntity.getId();
+                            mRlytTouristInfoItem.setVisibility(View.VISIBLE);
+
+                                travellersEntity.setTravellerSelect(true);
+                                realname = travellersEntity.getRealname();
+                                mobile = travellersEntity.getMobile();
+                                mTvTouristName.setText(realname);
+                                mTvTouristMobile.setText(mobile);
+                        } else {
+                            mRlytTouristInfoItem.setVisibility(View.GONE);
                         }
 
                         touristInformationAdapter.setTouristInfoList(travellersList);
@@ -1014,6 +1044,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         mRlytTouristInfoItem.setVisibility(View.GONE);
                     }
                     mTvTicketTitle.setText(title);
+
+                    mchByNotesH5Url = orderSubmitInitResponse.getGoodsBuyNotes();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1062,7 +1094,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
         if (validateInternet()) {
             showProgressDialog(OrderSubmitActivity.this);
-            mPresenter.getOrderSubmitInit(goodsId);
+            String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
+            String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+
+            if(mchType.equals(mchScenic))
+            {
+                mPresenter.getOrderSubmitInit(goodsId);
+            } else if(mchType.equals(mchRecreation))
+            {
+                mPresenter.getRecreationDatePriceInit(goodsId);
+            }
         }
     }
 
@@ -1150,6 +1191,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
             goodsList.clear();
             TicketOrderSubmitRequest ticketOrderSubmitRequest = new TicketOrderSubmitRequest();
+
+            if(userTravelerId == 0){
+
+                showToast(OrderSubmitActivity.this,"请填写顾客信息");
+                return;
+            }
+
             ticketOrderSubmitRequest.setUserTravelerId(userTravelerId);
 
             OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
@@ -1187,7 +1235,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             }
             showProgressDialog(OrderSubmitActivity.this);
             mDialog.setTitle("正在提交订单...");
-            mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
+            String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
+            String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+            if(mchType.equals(mchScenic))
+            {
+                mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
+            } else if(mchType.equals(mchRecreation))
+            {
+                mPresenter.recreationOrderSubmit(ticketOrderSubmitRequest);
+            }
+
         }
     }
 
@@ -1426,5 +1483,33 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             });
         }
         vehicleUseAddDialog.show(getFragmentManager(), "");
+    }
+
+    public void setTouristInfoDialog(){
+        int addTouristsVisibility1 = mLlytAddTourists.getVisibility();
+        int editTouristsVisibility1 = mLlytEditTourists.getVisibility();
+        if (addTouristsVisibility1 == 8 && editTouristsVisibility1 == 8) {
+            mRlytNewTouristsBgHalf.setVisibility(View.GONE);
+            mLlytAddAndUpdateTourists.setVisibility(View.GONE);
+            mLlytAddAndUpdateTourists.startAnimation(outAnimation);
+
+        } else {
+
+            mLlytAddTourists.setVisibility(View.GONE);
+            mLlytAddTourists.startAnimation(outAnimation);
+
+        }
+        if (editTouristsVisibility1 == 8 && addTouristsVisibility1 == 8) {
+
+            mRlytNewTouristsBgHalf.setVisibility(View.GONE);
+            mLlytAddAndUpdateTourists.setVisibility(View.GONE);
+            mLlytAddAndUpdateTourists.startAnimation(outAnimation);
+
+        } else {
+
+            mLlytEditTourists.setVisibility(View.GONE);
+            mLlytEditTourists.startAnimation(outAnimation);
+
+        }
     }
 }

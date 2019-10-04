@@ -83,7 +83,7 @@ public class ScenicSpotDetailUserCommentAdapter extends RecyclerView.Adapter<Sce
             String avatarUrl = userEntity.getAvater();
             GlideUtil.loadImage(mContext, avatarUrl, holder.mImgUserAvatar);
             long cTime = userCommentResponse.getCtime();
-            holder.mTvCommentPublishTime.setText(DateUtil.transferLongToDateStr(DateUtil.sDateYMDFormat, cTime));
+            holder.mTvCommentPublishTime.setText(DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, cTime));
             holder.mStarBarScenicSpots.setIntegerMark(true);
             holder.mStarBarScenicSpots.setStarMark(userCommentResponse.getScore());
 

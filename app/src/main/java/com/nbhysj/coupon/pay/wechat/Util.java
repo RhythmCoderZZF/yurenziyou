@@ -1,4 +1,13 @@
-package com.nbhysj.coupon;
+package com.nbhysj.coupon.pay.wechat;
+
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import junit.framework.Assert;
+
+import org.apache.http.conn.ssl.SSLSocketFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -19,16 +28,6 @@ import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-
-import junit.framework.Assert;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap.CompressFormat;
-import android.util.Log;
-
-import org.apache.http.conn.ssl.SSLSocketFactory;
 
 public class Util {
 	

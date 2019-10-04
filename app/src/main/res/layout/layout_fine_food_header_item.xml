@@ -2,7 +2,7 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/img_fine_food_header"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_190"
+    android:layout_height="@dimen/dp_210"
     android:scaleType="fitXY"
     android:orientation="vertical">
 

@@ -41,7 +41,7 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         try {
-            if (viewType == GoodsTypeEnum.GOODS_TICKET.getKey() || viewType == GoodsTypeEnum.GOODS_HOTEL_ROOM.getKey() || viewType == GoodsTypeEnum.GOODS_RECREACTION.getKey() || viewType == GoodsTypeEnum.ITEM_FOOD.getKey()) {
+            if (viewType == GoodsTypeEnum.GOODS_TICKET.getKey() || viewType == GoodsTypeEnum.GOODS_HOTEL_ROOM.getKey() || viewType == GoodsTypeEnum.GOODS_RECREATION.getKey() || viewType == GoodsTypeEnum.ITEM_FOOD.getKey()) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_all_goods_refund_item, parent, false);//解决宽度不能铺满
                 GoodsViewHolder hold = new GoodsViewHolder(view);
                 return hold;

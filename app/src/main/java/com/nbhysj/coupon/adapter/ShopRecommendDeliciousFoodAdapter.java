@@ -12,7 +12,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.MchFoodBean;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -23,7 +27,7 @@ import java.util.List;
  */
 public class ShopRecommendDeliciousFoodAdapter extends RecyclerView.Adapter<ShopRecommendDeliciousFoodAdapter.ViewHolder> {
 
-    List<NearbyScenicSpotsResponse> nearbyScenicSpotsList;
+    List<MchFoodBean> mchFoodList;
     private Context mContext;
 
     public ShopRecommendDeliciousFoodAdapter(Context mContext) {
@@ -31,9 +35,9 @@ public class ShopRecommendDeliciousFoodAdapter extends RecyclerView.Adapter<Shop
         this.mContext = mContext;
     }
 
-    public void setNearbyScenicSpotsList(List<NearbyScenicSpotsResponse> nearbyScenicSpotsList) {
+    public void setMchFoodsList(List<MchFoodBean> mchFoodList) {
 
-        this.nearbyScenicSpotsList = nearbyScenicSpotsList;
+        this.mchFoodList = mchFoodList;
     }
 
     @Override
@@ -48,14 +52,19 @@ public class ShopRecommendDeliciousFoodAdapter extends RecyclerView.Adapter<Shop
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            RequestOptions myOptions = new RequestOptions()
-                    .transform(new GlideRoundTransform(mContext, 5));
+            MchFoodBean mchFoodBean = mchFoodList.get(itemPosition);
+            String title = mchFoodBean.getTitle();
+            String photoUrl = mchFoodBean.getPhoto();
+            float score =  mchFoodBean.getScore();
+            String marketPrice = mchFoodBean.getMarketPrice();
 
-            Glide.with(mContext)
-                    .load("https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1557554460&di=587cccfcf79487fa86575a004a4785fd&src=http://seopic.699pic.com/photo/50014/4961.jpg_wh1200.jpg")
-                    .apply(myOptions)
-                    .into(holder.mImgDeliciousFood);
-
+            GlideUtil.loadImage(mContext,photoUrl,holder.mImgDeliciousFood);
+            //美食名字
+            holder.mTvDeliciousFoodName.setText(title);
+            //评分
+            holder.mTvDeliciousFoodScore.setText("评分" + String.valueOf(score));
+            //美食价格
+            holder.mTvDeliciousFoodPrice.setText("¥" + marketPrice);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,18 +73,27 @@ public class ShopRecommendDeliciousFoodAdapter extends RecyclerView.Adapter<Shop
 
     @Override
     public int getItemCount() {
-        return 3;
+        return mchFoodList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //美食照片
-        ImageView mImgDeliciousFood;
+        RoundedImageView mImgDeliciousFood;
+        //美食名字
+        TextView mTvDeliciousFoodName;
+        //美食价格
+        TextView mTvDeliciousFoodPrice;
+        //美食评分
+        TextView mTvDeliciousFoodScore;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             mImgDeliciousFood = itemView.findViewById(R.id.image_delicious_food);
+            mTvDeliciousFoodName = itemView.findViewById(R.id.tv_delicious_food_name);
+            mTvDeliciousFoodPrice = itemView.findViewById(R.id.tv_food_price);
+            mTvDeliciousFoodScore = itemView.findViewById(R.id.tv_food_score);
         }
     }
 

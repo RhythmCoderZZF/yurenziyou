@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.GroupMchModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.GroupMchResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.presenter.GroupMchPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;

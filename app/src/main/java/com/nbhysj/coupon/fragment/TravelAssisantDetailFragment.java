@@ -33,20 +33,10 @@ import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
-import com.nbhysj.coupon.ui.LoginActivity;
-import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.TravelAssistantRemarksActivity;
 import com.nbhysj.coupon.util.DateUtil;
-import com.umeng.socialize.UMShareAPI;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-
 import static android.app.Activity.RESULT_OK;
 
 /**

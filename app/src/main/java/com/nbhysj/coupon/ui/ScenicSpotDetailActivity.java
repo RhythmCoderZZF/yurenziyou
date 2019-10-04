@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,7 +31,9 @@ import com.nbhysj.coupon.adapter.PlayGuideAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
+import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -151,6 +155,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     //位置
     @BindView(R.id.rlyt_scenic_spot_location)
     RelativeLayout mRlytScenicSpotLocation;
+    //门票
+    @BindView(R.id.llyt_ticket_info)
+    LinearLayout mLlytTicketInfo;
     private int height;
     private List<ImageView> viewList;
     private List<String> bannerList;
@@ -174,6 +181,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     private GroupListAdapter groupListAdapter;
     //商户名
     private int mchId;
+    //商户类型
+    private String mchType;
+    //地址
     private String address;
     //商户名
     private String mchName;
@@ -181,6 +191,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     String latitude;
     //经度
     String longitude;
+
+    //查看全部景点信息
+    private String mchByNotesH5Url;
 
     @Override
     public int getLayoutId() {
@@ -194,6 +207,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     @Override
     public void initView(Bundle savedInstanceState) {
         mchId = getIntent().getIntExtra("mchId", 0);
+        mchType = getIntent().getStringExtra("mchType");
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -261,6 +275,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
     @Override
     public void initData() {
+        showProgressDialog(ScenicSpotDetailActivity.this);
         getMchDetails();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
@@ -504,7 +519,12 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvOpeningHours.setText(mchDetailsEntity.getOpenTime());
                     mTvMchRanking.setText(mchDetailsEntity.getMchRanking());
                     mTvQuestionNum.setText(String.valueOf(mchQuestionEntity.getQuestionCount()) + "个问题>");
-                    mTvQuestionContent.setText(String.valueOf(mchQuestionEntity.getQuestionContent()));
+                    String questionContent = mchQuestionEntity.getQuestionContent();
+                    if(!TextUtils.isEmpty(questionContent))
+                    {
+                        mTvQuestionContent.setText(questionContent);
+                    }
+
                     mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
 
                     List<MchDetailsResponse.VisitGuideEntity> visitGuideList = mchDetailsResponse.getVisitGuide();
@@ -513,8 +533,31 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         playGuideAdapter.notifyDataSetChanged();
                     }
 
-                    AdmissionTicketExpandableAdapter myExpandableAdapter = new AdmissionTicketExpandableAdapter(this, mchGoodsList);
-                    mExpandableListTicket.setAdapter(myExpandableAdapter);
+                    //门票
+                    if(mchGoodsList != null)
+                    {
+                        if(mchGoodsList.size() > 0) {
+                            mLlytTicketInfo.setVisibility(View.VISIBLE);
+
+                            AdmissionTicketExpandableAdapter myExpandableAdapter = new AdmissionTicketExpandableAdapter(this, mchType, mchGoodsList);
+                            mExpandableListTicket.setAdapter(myExpandableAdapter);
+                        } else {
+
+                            mLlytTicketInfo.setVisibility(View.GONE);
+                        }
+                    } else {
+
+                        mLlytTicketInfo.setVisibility(View.GONE);
+
+                    }
+                    mchByNotesH5Url = mchDetailsResponse.getMchByNotes();
+
+                    //优待政策
+                    String discountInfo = mchDetailsEntity.getDiscountInfo();
+                    if(!TextUtils.isEmpty(discountInfo))
+                    {
+                        mTvDiscountInfo.setText(discountInfo);
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -574,7 +617,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         }
     }
 
-    @OnClick({R.id.ibtn_back, R.id.rlyt_scenic_spots_ranking_list, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.rlyt_view_more_tour_guide, R.id.tv_question_num})
+    @OnClick({R.id.ibtn_back, R.id.rlyt_scenic_spots_ranking_list, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.rlyt_view_more_tour_guide,
+            R.id.tv_question_num, R.id.tv_look_all_scenic_spot_info})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -582,8 +626,17 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 ScenicSpotDetailActivity.this.finish();
                 break;
             case R.id.rlyt_scenic_spots_ranking_list:
+                String mchTypeScenic = MchTypeEnum.MCH_SCENIC.getValue();
+                String mchTypeRecreation = MchTypeEnum.MCH_RECREATION.getValue();
 
-                toActivity(ScenicSpotBangDanListActivity.class);
+                if(mchType.equals(mchTypeScenic))
+                {
+                    toActivity(ScenicSpotBangDanListActivity.class);
+
+                } else if(mchType.equals(mchTypeRecreation))
+                {
+                    toActivity(RecreationBangDanListActivity.class);
+                }
 
                 break;
             case R.id.img_menu:
@@ -626,6 +679,18 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             case R.id.tv_question_num:
 
                 toActivity(MoreQuestionsActivity.class);
+
+                break;
+            case R.id.tv_look_all_scenic_spot_info:
+
+                if(!TextUtils.isEmpty(mchByNotesH5Url)) {
+
+                    intent.putExtra("url", mchByNotesH5Url);
+                    intent.putExtra("title", mchName);
+                    intent.setClass(ScenicSpotDetailActivity.this, WebActivity.class);
+                    startActivity(intent);
+
+                }
 
                 break;
             default:

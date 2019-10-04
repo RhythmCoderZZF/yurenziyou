@@ -1,63 +1,25 @@
 package com.nbhysj.coupon.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.adapter.ConscienceRecommendationListAdapter;
 import com.nbhysj.coupon.adapter.FlashSaleGrabAtOnceAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.LimitedTimeSaleContract;
 import com.nbhysj.coupon.fragment.ConscienceRecommendationListFragment;
-import com.nbhysj.coupon.fragment.FollowFragment;
-import com.nbhysj.coupon.fragment.HotelSelectionFragment;
-import com.nbhysj.coupon.fragment.InteractiveSelectionFragment;
-import com.nbhysj.coupon.fragment.LocalFoodFragment;
-import com.nbhysj.coupon.fragment.ScenicSpotFragment;
 import com.nbhysj.coupon.model.LimitedTimeSaleModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.ConscienceRecommendationBean;
-import com.nbhysj.coupon.model.response.GroupMchResponse;
 import com.nbhysj.coupon.model.response.LimitedTimeSalePageBean;
 import com.nbhysj.coupon.presenter.LimitedTimeSalePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
-import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.util.ScreenUtil;
-import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
-import com.nbhysj.coupon.view.JudgeNestedScrollView;
-import com.nbhysj.coupon.view.RecyclerScrollView;
-import com.nbhysj.coupon.view.StickyScrollView;
-import com.nbhysj.coupon.widget.GroupMchTabIndicator;
-import com.nbhysj.coupon.widget.MyViewPager;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
-
-import net.lucode.hackware.magicindicator.MagicIndicator;
-import net.lucode.hackware.magicindicator.ViewPagerHelper;
-import net.lucode.hackware.magicindicator.buildins.UIUtil;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,10 +29,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * @author hysj created at 2019/4/19.
- * description:商城特卖
+ * @author hysj created at 2019/09/30.
+ * description:商城限时特卖详情
  */
-public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSalePresenter, LimitedTimeSaleModel> implements LimitedTimeSaleContract.View {
+public class ShoppingMallLimitedSaleDetailActivity extends BaseActivity<LimitedTimeSalePresenter, LimitedTimeSaleModel> implements LimitedTimeSaleContract.View {
 
     //热门景点
     @BindView(R.id.tv_hot_scenic_spot)
@@ -90,9 +52,6 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
     //附近推荐
     @BindView(R.id.rv_nearby_recommend)
     RecyclerView mRvNearByRecommend;
-    int toolBarPositionY = 0;
-    private int mOffset = 0;
-    private int mScrollY = 0;
     private String[] mTitles = new String[]{"热门景点", "组合推荐", "酒店精选", "互动精选"};
     private List<String> mDataList = Arrays.asList(mTitles);
     private FlashSaleGrabAtOnceAdapter flashSaleGrabAtOnceAdapter;
@@ -118,7 +77,7 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
             conscienceRecommendationList.clear();
         }
 
-        showProgressDialog(ShoppingMallSpecialSaleActivity.this);
+        showProgressDialog(ShoppingMallLimitedSaleDetailActivity.this);
         getLimitedTimeSalePage();
        /* fragments = new ArrayList<>();
         List<Fragment> fragments1 = getSupportFragmentManager().getFragments();
@@ -148,16 +107,16 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
         flashSaleGrabAtOnceAdapter = new FlashSaleGrabAtOnceAdapter(ShoppingMallSpecialSaleActivity.this);
         mRvFlashSaleImmediateRobbery.setAdapter(flashSaleGrabAtOnceAdapter);*/
 
-        LinearLayoutManager hotelReputationLinearLayout = new LinearLayoutManager(ShoppingMallSpecialSaleActivity.this);
+        LinearLayoutManager hotelReputationLinearLayout = new LinearLayoutManager(ShoppingMallLimitedSaleDetailActivity.this);
         hotelReputationLinearLayout.setOrientation(hotelReputationLinearLayout.HORIZONTAL);
         mRvFlashSaleImmediateRobbery.setLayoutManager(hotelReputationLinearLayout);
-        flashSaleGrabAtOnceAdapter = new FlashSaleGrabAtOnceAdapter(ShoppingMallSpecialSaleActivity.this);
+        flashSaleGrabAtOnceAdapter = new FlashSaleGrabAtOnceAdapter(ShoppingMallLimitedSaleDetailActivity.this);
         mRvFlashSaleImmediateRobbery.setAdapter(flashSaleGrabAtOnceAdapter);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ShoppingMallSpecialSaleActivity.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ShoppingMallLimitedSaleDetailActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         mRvNearByRecommend.setLayoutManager(linearLayoutManager);
-        conscienceRecommendationListAdapter = new ConscienceRecommendationListAdapter(ShoppingMallSpecialSaleActivity.this);
+        conscienceRecommendationListAdapter = new ConscienceRecommendationListAdapter(ShoppingMallLimitedSaleDetailActivity.this);
         conscienceRecommendationListAdapter.setConscienceRecommendationList(conscienceRecommendationList);
         mRvNearByRecommend.setAdapter(conscienceRecommendationListAdapter);
 
@@ -370,7 +329,7 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
                 }
                 break;
             default:
-                showToast(ShoppingMallSpecialSaleActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(ShoppingMallLimitedSaleDetailActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
@@ -379,7 +338,7 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
     public void showMsg(String msg) {
 
         dismissProgressDialog();
-        showToast(ShoppingMallSpecialSaleActivity.this, Constants.getResultMsg(msg));
+        showToast(ShoppingMallLimitedSaleDetailActivity.this, Constants.getResultMsg(msg));
     }
 
     @OnClick({R.id.img_back})
@@ -388,7 +347,7 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
 
             case R.id.img_back:
 
-                ShoppingMallSpecialSaleActivity.this.finish();
+                ShoppingMallLimitedSaleDetailActivity.this.finish();
 
                 break;
             default:

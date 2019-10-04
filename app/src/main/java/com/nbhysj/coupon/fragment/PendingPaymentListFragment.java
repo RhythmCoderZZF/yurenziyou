@@ -13,6 +13,7 @@ import com.nbhysj.coupon.contract.OrderListContract;
 import com.nbhysj.coupon.model.OrderListModel;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.presenter.OrderListPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -38,13 +39,14 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
     //暂无订单数据
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoOrderData;
-    private List<UserOrderListResponse.OrderTypeEntity> orderTypeList;
+    private List<UserOrderListResponse.OrderTypeEntity> pendingPayOrderList;
     private int mPage = 1;
     private int mPageSize = 10;
     private MyOrderListAdapter myOrderListAdapter;
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
     int mTotalPageCount;
     private boolean isOnLoadMore = false;
+
     public static PendingPaymentListFragment newInstance(String content) {
         PendingPaymentListFragment fragment = new PendingPaymentListFragment();
 
@@ -53,24 +55,24 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_my_order_item;
+        return R.layout.fragment_my_order_list;
     }
 
     @Override
     public void initPresenter() {
 
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
     public void initView(View v) {
 
-        if (orderTypeList == null) {
+        if (pendingPayOrderList == null) {
 
-            orderTypeList = new ArrayList<>();
+            pendingPayOrderList = new ArrayList<>();
         } else {
 
-            orderTypeList.clear();
+            pendingPayOrderList.clear();
         }
 
         // 创建一个线性布局管理器
@@ -93,7 +95,7 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
             }
         });
-        myOrderListAdapter.setMyOrderList(orderTypeList);
+        myOrderListAdapter.setMyOrderList(pendingPayOrderList);
         mRvMyOrderList.setAdapter(myOrderListAdapter);
     }
 
@@ -108,10 +110,9 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
                     @Override
                     public void run() {
                         mPage = 1;
-                        orderTypeList.clear();
+                        pendingPayOrderList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
-                       // showProgressDialog(getActivity());
-                        getOrderList();
+                        getPendingPaymentOrderList();
 
                     }
                 }, 100);
@@ -127,11 +128,11 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
                     public void run() {
                         isOnLoadMore = true;
                         try {
-                            if (mTotalPageCount == orderTypeList.size()) {
+                            if (mTotalPageCount == pendingPayOrderList.size()) {
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
                                 mPage++;
-                                getOrderList();
+                                getPendingPaymentOrderList();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -146,7 +147,11 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
     @Override
     public void showMsg(String msg) {
-
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
+        dismissProgressDialog();
+        showToast(getActivity(),Constants.getResultMsg(msg));
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
@@ -179,8 +184,11 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
     @Override
     public void lazyInitView(View view) {
+        if (pendingPayOrderList != null) {
+            pendingPayOrderList.clear();
+        }
         showProgressDialog(getActivity());
-        getOrderList();
+        getPendingPaymentOrderList();
     }
 
     @Override
@@ -195,16 +203,15 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
             case Constants.SUCCESS_CODE:
                 try {
 
-                    orderTypeList.remove(mOrderTypeEntity);
-                    if(orderTypeList.size() > 0)
-                    {
+                    pendingPayOrderList.remove(mOrderTypeEntity);
+                    if (pendingPayOrderList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
 
                     } else {
 
                         mRlytNoOrderData.setVisibility(View.VISIBLE);
                     }
-                    myOrderListAdapter.setMyOrderList(orderTypeList);
+                    myOrderListAdapter.setMyOrderList(pendingPayOrderList);
                     myOrderListAdapter.notifyDataSetChanged();
 
                 } catch (Exception e) {
@@ -218,8 +225,26 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
     }
 
     @Override
+    public void getAwaitGoingOrderListResult(BackResult<UserOrderListResponse> res) {
+
+    }
+
+    @Override
+    public void getAwaitCommentOrderListResult(BackResult<UserOrderListResponse> res) {
+
+    }
+
+    @Override
+    public void getAwaitRefundOrderListResult(BackResult<UserOrderListResponse> res) {
+
+    }
+
+    @Override
     public void getPendingOrdersListResult(BackResult<UserOrderListResponse> res) {
         dismissProgressDialog();
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
@@ -228,22 +253,28 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
                         mSmartRefreshLayout.finishLoadMore();
                     } else {
 
-                        orderTypeList.clear();
+                        pendingPayOrderList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
                         mSmartRefreshLayout.finishRefresh();
                         mSmartRefreshLayout.setNoMoreData(false);
                     }
                     UserOrderListResponse orderListResponse = res.getData();
-                    orderTypeList = orderListResponse.getResult();
-                    if(orderTypeList.size() > 0)
-                    {
-                        mRlytNoOrderData.setVisibility(View.GONE);
+                    BasePaginationResult paginationResult = orderListResponse.getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
 
-                    } else {
-
+                    if (mTotalPageCount == 0) {
                         mRlytNoOrderData.setVisibility(View.VISIBLE);
+                    } else {
+                        mRlytNoOrderData.setVisibility(View.GONE);
                     }
-                    myOrderListAdapter.setMyOrderList(orderTypeList);
+
+                    List<UserOrderListResponse.OrderTypeEntity> orderTypeList = orderListResponse.getResult();
+
+                    if (orderTypeList != null) {
+                        pendingPayOrderList.addAll(orderTypeList);
+                    }
+
+                    myOrderListAdapter.setMyOrderList(pendingPayOrderList);
                     myOrderListAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -261,22 +292,22 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
     }
 
     /**
-     * 获取订单列表
+     * 获取待支付订单列表
      */
-    public void getOrderList(){
+    public void getPendingPaymentOrderList() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
-            mPresenter.getPendingOrdersList(mPage,mPageSize);
+            mPresenter.getPendingOrdersList(mPage, mPageSize);
         }
     }
 
     /**
      * 删除订单
      */
-    public void orderDelete(){
+    public void orderDelete() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
             showProgressDialog(getActivity());
             mDialog.setTitle(getResources().getString(R.string.str_order_deleting));
             String orderNo = mOrderTypeEntity.getOrderNo();

@@ -35,6 +35,17 @@ public class Constants {
     public static final String All_FACILITY_H5_TITEL = "更多设备";
     //更多设备
     public static final String STRATEGY_H5_TITEL = "攻略";
+    //更多设备
+    public static final String ORDER_PURCHASE_INSTRUCTIONS_H5_TITEL = "购买须知";
+
+    /**********************************************/
+
+    /********************    支付code    ********************/
+    public static final String PAYMENT_SUCCESS_CODE_ALIPAY = "10000";
+
+    public static final String PAYMENT_CANCEL_CODE_ALIPAY = "6001";
+
+
 
     public static final String CONNECT_TIMED_OUT = "timeout";
 
@@ -56,7 +67,7 @@ public class Constants {
 
         if (msg != null) {
 
-            if (msg.contains(CONNECT_TIMED_OUT) || msg.contains("Failed to connect")) {
+            if (msg.contains(CONNECT_TIMED_OUT) || msg.contains("failed to connect")) {
                 return "服务器连接超时";
 
             } else if (msg.contains("HTTP") && !msg.equals("HTTP 401 Unauthorized")) {   //404 502 500

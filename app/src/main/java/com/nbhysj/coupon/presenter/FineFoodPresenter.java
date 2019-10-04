@@ -27,6 +27,11 @@ public class FineFoodPresenter extends FineFoodContract.Presenter {
     }
 
     @Override
+    public void getFoodDetail(int mchId) {
+        mRxManager.add(mModel.getFoodDetail(mchId).subscribe(res -> mView.getFoodDetailResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

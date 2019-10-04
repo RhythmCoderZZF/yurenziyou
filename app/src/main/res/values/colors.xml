@@ -141,6 +141,7 @@
     <color name="color_text_gray39">#FFBDC0C8</color>
     <color name="color_text_gray40">#FF9A9A9A</color>
     <color name="color_text_gray41">#FFE6E6E6</color>
+    <color name="color_text_gray42">#FF585858</color>
     <color name="color_text_orange">#FEB143</color>
     <color name="color_text_orange2">#FF7221</color>
     <color name="color_text_orange3">#FF7E3C</color>
@@ -170,4 +171,12 @@
     <color name="check_bg">#f2f2f2</color>
     <color name="un_press_color">#9C27B0</color>
 
+
+    <color name="grey">#58616d</color>
+    <color name="darkgrey">#ff404040</color>
+    <color name="toasterro">#9fd524</color>
+    <color name="lightgrey">#ff888888</color>
+    <color name="semitransparent">#80000000</color>
+    <color name="lightransparent">#a0000000</color>
+    <color name="navpage">#FFE1E8EB</color>
 </resources>

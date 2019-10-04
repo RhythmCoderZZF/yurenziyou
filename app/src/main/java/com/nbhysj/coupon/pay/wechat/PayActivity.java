@@ -1,15 +1,17 @@
-package com.nbhysj.coupon;
+package com.nbhysj.coupon.pay.wechat;
 
 
-import com.tencent.mm.opensdk.constants.Build;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.nbhysj.coupon.R;
+import com.tencent.mm.opensdk.constants.Build;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class PayActivity extends Activity {
 	
@@ -36,7 +38,7 @@ public class PayActivity extends Activity {
                 req.timeStamp		= "1569985574";
                 req.packageValue	= "Sign=WXPay";
                 req.sign			= "63258221C38EE017BAB6E5F99E46C161";
-                req.extData			= "{\"order_no\":\"20190928093648\"}"; // optional
+                //req.extData			= "{\"order_no\":\"20190928093648\"}"; // optional
                 Toast.makeText(PayActivity.this, "正常调起支付", Toast.LENGTH_SHORT).show();
                 // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
                 api.sendReq(req);

@@ -66,7 +66,7 @@ public class HotelBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ViewHolder holder1 = (ViewHolder) holder;
                 try {
                     MchTypeBean hotelResponse = hotelList.get(pos);
-                    int commentScore = hotelResponse.getCommentScore();
+                    double commentScore = hotelResponse.getCommentScore();
                     String intro = hotelResponse.getIntro();
                     int level = hotelResponse.getLevel();
                     int commentNum = hotelResponse.getCommentNum();

@@ -106,7 +106,7 @@ public class MchTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             String intro = mchTypeBean.getIntro();
             String address = mchTypeBean.getAddress();
             String distance = mchTypeBean.getDistance();      //距离
-            int commentScore = mchTypeBean.getCommentScore(); //评分
+            double commentScore = mchTypeBean.getCommentScore(); //评分
             if (holder instanceof ScenicSpotsViewHolder) {
 
                 GlideUtil.loadImage(mContext, photoUrl, ((ScenicSpotsViewHolder) holder).mImgScenicSpots);

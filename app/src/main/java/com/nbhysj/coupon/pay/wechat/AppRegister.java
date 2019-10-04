@@ -1,11 +1,11 @@
-package com.nbhysj.coupon;
-
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+package com.nbhysj.coupon.pay.wechat;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class AppRegister extends BroadcastReceiver {
 
@@ -14,6 +14,7 @@ public class AppRegister extends BroadcastReceiver {
 		final IWXAPI msgApi = WXAPIFactory.createWXAPI(context, null);
 
 		// 将该app注册到微信
-		msgApi.registerApp(Constants.APP_ID);
+		boolean registerApp = msgApi.registerApp(Constants.APP_ID);
+		System.out.print(registerApp);
 	}
 }

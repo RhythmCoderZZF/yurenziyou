@@ -27,7 +27,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
+import com.nbhysj.coupon.ui.GroupMchOrderSubmitActivity;
 import com.nbhysj.coupon.ui.HotelOrderActivity;
 import com.nbhysj.coupon.ui.OrderSubmitActivity;
 import com.nbhysj.coupon.view.HotelDetailSupplementBannerView;
@@ -42,7 +44,6 @@ import java.util.List;
 public class PurchaseInstructionsDialog extends DialogFragment {
     private Context context;
     private View view;
-    private List<ImageView> viewList;
     MchGoodsBean mchHotelGoodsBean;
     WebView webview;
     ProgressBar myProgressBar;
@@ -53,6 +54,7 @@ public class PurchaseInstructionsDialog extends DialogFragment {
     //立即预购
     private TextView mTvReservationImmdiate;
     private String mchName;
+    private String mchType;
     //已减
     private TextView mTvAlreadyReducedPrice;
 
@@ -61,9 +63,10 @@ public class PurchaseInstructionsDialog extends DialogFragment {
     }
 
     @SuppressLint("ValidFragment")
-    public PurchaseInstructionsDialog(MchGoodsBean mchHotelGoodsBean, String mchName) {
+    public PurchaseInstructionsDialog(MchGoodsBean mchHotelGoodsBean, String mchType, String mchName) {
 
         this.mchHotelGoodsBean = mchHotelGoodsBean;
+        this.mchType = mchType;
         this.mchName = mchName;
     }
 
@@ -141,10 +144,22 @@ public class PurchaseInstructionsDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
+                String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
+                String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
+                String mchGroupType = MchTypeEnum.MCH_GROUP.getValue();
                 Intent intent = new Intent();
-                intent.setClass(context, OrderSubmitActivity.class);
+                if(mchType.equals(mchScenicType) || mchType.equals(mchRecreationType))
+                {
+                    intent.putExtra("mchType", mchType);
+                    intent.setClass(context, OrderSubmitActivity.class);
+
+                } else if(mchType.equals(mchGroupType))
+                {
+                    intent.setClass(context, GroupMchOrderSubmitActivity.class);
+                }
                 int goodId = mchHotelGoodsBean.getId();
                 intent.putExtra("goodsId", goodId);
+
                 startActivity(intent);
             }
         });

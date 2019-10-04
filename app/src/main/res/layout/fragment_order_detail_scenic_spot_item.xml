@@ -46,7 +46,8 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
-        android:background="@mipmap/icon_map" />
+        android:scaleType="fitXY"
+      />
 
     <TextView
         android:id="@+id/tv_address"
@@ -54,9 +55,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_12"
-        android:drawableLeft="@mipmap/icon_location_distance_gray"
+        android:layout_marginRight="@dimen/dp_10"
+        android:drawableLeft="@mipmap/icon_gray_location_mch_address"
         android:drawablePadding="@dimen/dp_5"
-        android:textColor="@color/txt_font_black2"
+        android:textColor="@color/color_text_gray28"
         android:textSize="@dimen/text_size_normal" />
 
 </LinearLayout>

@@ -24,15 +24,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.AdmissionTicketExpandableAdapter;
 import com.nbhysj.coupon.adapter.GroupMchListMoreAdapter;
 import com.nbhysj.coupon.adapter.GroupMchPackageMealItemAdapter;
 import com.nbhysj.coupon.adapter.GroupMchTicketAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.GroupMchContract;
-import com.nbhysj.coupon.dialog.HotelDetailsSupplementDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.GroupMchModel;
@@ -136,6 +135,8 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
     //更多组合列表
     @BindView(R.id.rv_group_mch_more)
     RecyclerView mRvGroupMchListMore;
+    @BindView(R.id.rv_user_comment)
+    RecyclerView mRvUserComment;
     //用户评论标签
     List<LabelEntity> labelEntityList;
     private GroupMchDetailsResponse mchDetailsResponse;
@@ -256,6 +257,13 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
         groupMchPackageMealItemAdapter = new GroupMchPackageMealItemAdapter(GroupMchDetailsActivity.this);
         groupMchPackageMealItemAdapter.setGroupMchPackageMealList(groupMchPackageMealList);
         mRvGroupMchPackageMealDetail.setAdapter(groupMchPackageMealItemAdapter);
+
+        LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(GroupMchDetailsActivity.this);
+        userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
+        mRvUserComment.setLayoutManager(userCommentLayoutManager);
+        scenicSpotDetailUserCommentAdapter = new ScenicSpotDetailUserCommentAdapter(GroupMchDetailsActivity.this);
+        scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
+        mRvUserComment.setAdapter(scenicSpotDetailUserCommentAdapter);
 
         LinearLayoutManager groupMchListMoreLinearLayoutManager = new LinearLayoutManager(GroupMchDetailsActivity.this);
         groupMchListMoreLinearLayoutManager.setOrientation(groupMchListMoreLinearLayoutManager.VERTICAL);
@@ -412,7 +420,8 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                                 MchGoodsBean mchGoodsBean = mchGoodsList.get(childPosition);
                                 String mchName = mchDetailsEntity.getMchName();
 
-                                mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(mchGoodsBean, mchName);
+                                String mchType = MchTypeEnum.MCH_GROUP.getValue();
+                                mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(mchGoodsBean,mchType,mchName);
                             }
                             mPurchaseInstructionsDialog.show(getFragmentManager(), "组合商品购票须知");
                         }

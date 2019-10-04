@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llyt_delicious_food_section_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -21,11 +22,12 @@
             android:layout_width="163dp"
             android:layout_height="102dp">
 
-            <ImageView
+            <com.nbhysj.coupon.view.RoundedImageView
                 android:id="@+id/image_delicious_food"
                 android:layout_width="163dp"
                 android:layout_height="102dp"
                 android:layout_centerVertical="true"
+                app:riv_corner_radius="@dimen/dp_5"
                 android:scaleType="fitXY" />
 
             <TextView
@@ -38,18 +40,20 @@
                 android:gravity="center"
                 android:text="江浙菜"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_small" />
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_delicious_food_store"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_marginBottom="@dimen/dp_16"
-            android:text="宁波海洋世界"
+            android:paddingRight="@dimen/dp_10"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_normal"
             android:textStyle="bold"

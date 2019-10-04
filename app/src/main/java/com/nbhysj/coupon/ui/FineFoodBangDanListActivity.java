@@ -14,19 +14,17 @@ import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FineFoodBangDanListAdapter;
-import com.nbhysj.coupon.adapter.RecreationBangDanListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.FineFoodContract;
-import com.nbhysj.coupon.contract.RecreationContract;
 import com.nbhysj.coupon.model.FineFoodModel;
-import com.nbhysj.coupon.model.RecreationModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.FineFoodPresenter;
-import com.nbhysj.coupon.presenter.RecreationPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -239,6 +237,11 @@ public class FineFoodBangDanListActivity extends BaseActivity<FineFoodPresenter,
 
         dismissProgressDialog();
         showToast(FineFoodBangDanListActivity.this,Constants.getResultMsg(msg));
+    }
+
+    @Override
+    public void getFoodDetailResult(BackResult<MchFoodDetailResponse> res) {
+
     }
 
     @OnClick({R.id.iv_back})

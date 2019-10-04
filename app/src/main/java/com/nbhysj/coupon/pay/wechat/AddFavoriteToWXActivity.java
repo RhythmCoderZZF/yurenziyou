@@ -1,11 +1,5 @@
-package com.nbhysj.coupon;
+package com.nbhysj.coupon.pay.wechat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.net.URL;
-
-import com.nbhysj.coupon.uikit.CameraUtil;
-import com.nbhysj.coupon.uikit.MMAlert;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.nbhysj.coupon.R;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
@@ -31,6 +26,10 @@ import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URL;
 
 public class AddFavoriteToWXActivity extends Activity {
 	private static final int THUMB_SIZE = 150;
@@ -102,7 +101,7 @@ public class AddFavoriteToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_img), 
+				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_img),
 						AddFavoriteToWXActivity.this.getResources().getStringArray(R.array.send_img_item),
 						null, new MMAlert.OnAlertSelectId(){
 
@@ -202,7 +201,7 @@ public class AddFavoriteToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_file), 
+				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_file),
 						AddFavoriteToWXActivity.this.getResources().getStringArray(R.array.send_file_item),
 						null, new MMAlert.OnAlertSelectId(){
 
@@ -351,7 +350,7 @@ public class AddFavoriteToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_video), 
+				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_video),
 						AddFavoriteToWXActivity.this.getResources().getStringArray(R.array.send_video_item),
 						null, new MMAlert.OnAlertSelectId(){
 
@@ -445,7 +444,7 @@ public class AddFavoriteToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_appdata), 
+				MMAlert.showAlert(AddFavoriteToWXActivity.this, getString(R.string.send_appdata),
 					AddFavoriteToWXActivity.this.getResources().getStringArray(R.array.send_appdata_item),
 					null, new MMAlert.OnAlertSelectId(){
 

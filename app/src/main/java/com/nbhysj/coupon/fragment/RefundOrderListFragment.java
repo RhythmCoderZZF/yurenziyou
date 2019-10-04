@@ -28,9 +28,9 @@ import butterknife.BindView;
 
 /**
  * created by hysj on 2018/09/27.
- * description: 我的订单(待出行列表)
+ * description: 我的订单(售后列表)
  */
-public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, OrderListModel> implements OrderListContract.View {
+public class RefundOrderListFragment extends BaseFragment<OrderListPresenter, OrderListModel> implements OrderListContract.View {
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout mSmartRefreshLayout;
     //我的订单列表
@@ -46,8 +46,8 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
     int mTotalPageCount;
     private boolean isOnLoadMore = false;
-    public static PendingTravelListFragment newInstance(String content) {
-        PendingTravelListFragment fragment = new PendingTravelListFragment();
+    public static RefundOrderListFragment newInstance(String content) {
+        RefundOrderListFragment fragment = new RefundOrderListFragment();
 
         return fragment;
     }
@@ -112,7 +112,7 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
                         pendingTravelOrderTypeList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
                        // showProgressDialog(getActivity());
-                        getPendingTravelOrderList();
+                        getRefundOrderList();
 
                     }
                 }, 100);
@@ -132,7 +132,7 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
                                 mPage++;
-                                getPendingTravelOrderList();
+                                getRefundOrderList();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -147,7 +147,11 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
 
     @Override
     public void showMsg(String msg) {
-
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
+        dismissProgressDialog();
+        showToast(getActivity(),Constants.getResultMsg(msg));
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
@@ -180,8 +184,9 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
 
     @Override
     public void lazyInitView(View view) {
+        pendingTravelOrderTypeList.clear();
         showProgressDialog(getActivity());
-        getPendingTravelOrderList();
+        getRefundOrderList();
     }
 
     @Override
@@ -191,6 +196,16 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
 
     @Override
     public void getAwaitGoingOrderListResult(BackResult<UserOrderListResponse> res) {
+
+    }
+
+    @Override
+    public void getAwaitCommentOrderListResult(BackResult<UserOrderListResponse> res) {
+
+    }
+
+    @Override
+    public void getAwaitRefundOrderListResult(BackResult<UserOrderListResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
             mSmartRefreshLayout.finishRefresh();
@@ -239,16 +254,6 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
     }
 
     @Override
-    public void getAwaitCommentOrderListResult(BackResult<UserOrderListResponse> res) {
-
-    }
-
-    @Override
-    public void getAwaitRefundOrderListResult(BackResult<UserOrderListResponse> res) {
-
-    }
-
-    @Override
     public void deleteOrderResult(BackResult res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -288,13 +293,13 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
     }
 
     /**
-     * 获取订单列表
+     * 获取退款订单列表
      */
-    public void getPendingTravelOrderList(){
+    public void getRefundOrderList(){
 
         if(validateInternet()){
 
-            mPresenter.getAwaitGoingOrderList(mPage,mPageSize);
+            mPresenter.getAwaitRefundOrderList(mPage,mPageSize);
         }
     }
 

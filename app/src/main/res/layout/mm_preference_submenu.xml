@@ -7,4 +7,4 @@
 	android:layout_gravity="right|center_vertical"
 	android:focusable="false"
 	android:clickable="false"
-	android:src="@drawable/mm_submenu" />
+	android:src="@drawable/shape_flowlayout_stroke_light_green" />

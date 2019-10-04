@@ -7,6 +7,7 @@ import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.LoginResponse;
+import com.nbhysj.coupon.model.response.UserInfoResponse;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -26,9 +27,12 @@ public interface RegisterContract {
 
         Observable<BackResult> registerUser(RegisterUserRequest registerUserRequest);
 
-        Observable<BackResult<String>> getSalt(String mobile);
+        Observable<BackResult<Object>> getSalt(String mobile);
 
         Observable<BackResult<LoginResponse>> login(LoginRequest loginRequest);
+
+        //获取用户信息
+        Observable<BackResult<UserInfoResponse>> getUserInfo(int userId);
 
     }
 
@@ -38,9 +42,11 @@ public interface RegisterContract {
 
         void registerUserResult(BackResult res);
 
-        void getSaltResult(BackResult<String> res);
+        void getSaltResult(BackResult<Object> res);
 
         void loginResult(BackResult<LoginResponse> res);
+
+        void getUserInfoResult(BackResult<UserInfoResponse> res);
 
         void showMsg(String msg);
     }
@@ -54,5 +60,7 @@ public interface RegisterContract {
         public abstract void getSalt(String mobile);
 
         public abstract void login(LoginRequest loginRequest);
+
+        public abstract void getUserInfo(int userId);
     }
 }

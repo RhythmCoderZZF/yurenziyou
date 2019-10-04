@@ -31,6 +31,21 @@ public class OrderListPresenter extends OrderListContract.Presenter {
     }
 
     @Override
+    public void getAwaitGoingOrderList(int page, int pageSize) {
+        mRxManager.add(mModel.getAwaitGoingOrderList(page,pageSize).subscribe(res -> mView.getAwaitGoingOrderListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getAwaitCommentOrderList(int page, int pageSize) {
+        mRxManager.add(mModel.getAwaitCommentOrderList(page,pageSize).subscribe(res -> mView.getAwaitCommentOrderListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getAwaitRefundOrderList(int page, int pageSize) {
+        mRxManager.add(mModel.getAwaitRefundOrderList(page,pageSize).subscribe(res -> mView.getAwaitRefundOrderListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

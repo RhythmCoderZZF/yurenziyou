@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/navigation_main"
-        android:icon="@mipmap/icon_tab_home"
+        android:icon="@drawable/bg_bottom_navigation_main_selector"
         android:title="首页" />
 
     <item
         android:id="@+id/navigation_house"
-        android:icon="@mipmap/icon_shopping_mall"
+        android:icon="@drawable/bg_bottom_navigation_store_selector"
         android:title="商城" />
     <item
         android:id="@+id/navigation_camera"
@@ -16,11 +16,11 @@
 
     <item
         android:id="@+id/navigation_footprint"
-        android:icon="@mipmap/tab_ico_house_nor"
+        android:icon="@drawable/bg_bottom_navigation_assistant_selector"
         android:title="助手" />
 
     <item
         android:id="@+id/navigation_mine"
-        android:icon="@mipmap/tab_ico_my_nor"
+        android:icon="@drawable/bg_bottom_navigation_mine_selector"
         android:title="我的" />
 </menu>

@@ -649,7 +649,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 if (mPurchaseInstructionsDialog == null) {
                     mPurchaseInstructionsDialog = new PurchaseInstructionsBrowseDialog(getResources().getString(R.string.str_purchase_instructions), goodsBuyNotesH5Url);
                 }
-                mPurchaseInstructionsDialog.show(getFragmentManager(), "组合商品购票须知");
+                mPurchaseInstructionsDialog.show(getFragmentManager(), "单商品购票须知");
                 break;
             case R.id.img_reduce_purchase_num:
 
@@ -962,7 +962,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
                     intent.putExtras(bundle);
-                    intent.setClass(GroupMchOrderSubmitActivity.this, PaymentOrderActivity.class);
+                    intent.setClass(GroupMchOrderSubmitActivity.this, OrderPaymentActivity.class);
                     startActivity(intent);
 
                 } catch (Exception e) {
@@ -977,6 +977,16 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void getRecreationDatePriceInitResult(BackResult<OrderSubmitInitResponse> res) {
+
+    }
+
+    @Override
+    public void recreationOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
 
     }
 

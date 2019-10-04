@@ -11,7 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.RecreationDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -61,8 +64,9 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
 
             MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             String photoUrl = popularScenicSpots.getPhoto();
+            int mchId = popularScenicSpots.getId();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
-            holder.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()) + "分");
+            holder.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()));
             holder.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
             holder.mTvMchName.setText(popularScenicSpots.getMchName());
             holder.mTvScenicSpotsDistance.setText("距您" + popularScenicSpots.getDistance() + "公里");
@@ -95,6 +99,9 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
 
                     Intent intent = new Intent();
                     intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
+                    String mchType = MchTypeEnum.MCH_RECREATION.getValue();
+                    intent.putExtra("mchType", mchType);
                     mContext.startActivity(intent);
                 }
             });

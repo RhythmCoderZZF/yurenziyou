@@ -33,7 +33,7 @@
             android:textSize="@dimen/text_size_tiny" />
 
         <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/flowlayout_hot_label"
+            android:id="@+id/flowlayout_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -117,11 +117,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_5"
-            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_10"
             android:background="@drawable/bg_light_orange_radius_shape"
             android:paddingLeft="@dimen/dp_14"
             android:paddingTop="@dimen/dp_5"
-            android:paddingRight="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_10"
+            android:layout_gravity="right"
+            android:gravity="right"
             android:paddingBottom="@dimen/dp_5"
             android:text="立即预购"
             android:textColor="@color/white"

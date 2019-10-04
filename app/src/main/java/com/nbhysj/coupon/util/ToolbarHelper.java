@@ -106,16 +106,32 @@ public class ToolbarHelper {
         });
     }
 
-    public static void setLoginBar(final AppCompatActivity activity, String title, int leftIcon, String toolbarRightTitle) {
+    public static void setHeaderBar(final AppCompatActivity activity, String title, int leftIcon, int rightIcon) {
         ImageButton mIbtnBack = (ImageButton) activity.findViewById(R.id.iv_back);
         TextView mTvTitle = (TextView) activity.findViewById(R.id.tv_title);
-        TextView toolbarRight = (TextView) activity.findViewById(R.id.tv_toolbar_right);
+        ImageView mImgbarRight = (ImageView) activity.findViewById(R.id.iv_toolbar_right);
 
         if (!TextUtils.isEmpty(title)) {
             mTvTitle.setText(title);
         }
         mIbtnBack.setImageResource(leftIcon);
+        mImgbarRight.setImageResource(rightIcon);
+        mIbtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.onBackPressed();
+            }
+        });
+    }
+
+    public static void setLoginBar(final AppCompatActivity activity, String title, int leftIcon, String toolbarRightTitle) {
+        ImageButton mIbtnBack = (ImageButton) activity.findViewById(R.id.iv_back);
+        TextView mTvTitle = (TextView) activity.findViewById(R.id.tv_title);
+        TextView toolbarRight = (TextView) activity.findViewById(R.id.tv_toolbar_right);
+
+        mIbtnBack.setImageResource(leftIcon);
         toolbarRight.setText(toolbarRightTitle);
+        mTvTitle.setText(title);
         mIbtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

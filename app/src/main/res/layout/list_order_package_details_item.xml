@@ -45,7 +45,7 @@
                 android:layout_marginTop="@dimen/dp_3"
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xsmall"
-                android:textStyle="bold" />
+               />
 
             <TextView
                 android:id="@+id/tv_ticket_can_use_time"

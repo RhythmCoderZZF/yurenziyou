@@ -12,8 +12,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="45dp"
 		android:gravity="center"
-		android:textSize="@dimen/TitleTextSize"
+		android:textSize="@dimen/text_size_small"
 		android:textColor="@color/white"
-		android:background="@drawable/btn_style_alert_dialog_cancel" />
+		android:background="@drawable/shape_flowlayout_stroke_light_green" />
 	
 </LinearLayout>

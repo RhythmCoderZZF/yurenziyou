@@ -23,12 +23,12 @@ public interface FindPwdContract {
 
         Observable<BackResult> getFindPwdVerifyCode(String mobile);
 
-        Observable<BackResult<String>> getSalt(String mobile);
+        Observable<BackResult<Object>> getSalt(String mobile);
 
         //通过手机号修改密码
         Observable<BackResult> modifyPasswordByMobile(FindPwdByPhoneRequest findPwdByPhoneRequest);
 
-        Observable<BackResult<String>> updatePwdByEmailGetSalt(String email);
+        Observable<BackResult<Object>> updatePwdByEmailGetSalt(String email);
 
         Observable<BackResult> sendEmail(String mobile);
 
@@ -40,11 +40,11 @@ public interface FindPwdContract {
 
         void getFindPwdVerifyCodeResult(BackResult res);
 
-        void getSaltResult(BackResult<String> res);
+        void getSaltResult(BackResult<Object> res);
 
         void modifyPasswordByMobileResult(BackResult<LoginResponse> res);
 
-        void updatePwdByEmailGetSaltResult(BackResult<String> res);
+        void updatePwdByEmailGetSaltResult(BackResult<Object> res);
 
         void sendEmailResult(BackResult res);
 

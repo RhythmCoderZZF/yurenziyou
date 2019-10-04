@@ -14,7 +14,6 @@
         android:id="@+id/mm_trans_layer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/semitransparent"
         android:visibility="gone" >
     </Button>
 

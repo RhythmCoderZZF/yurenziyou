@@ -159,7 +159,7 @@
         android:layout_marginLeft="@dimen/dp_50"
         android:layout_marginTop="@dimen/dp_30"
         android:layout_marginRight="@dimen/dp_50"
-        android:background="@drawable/bg_rect_gray_shape"
+        android:background="@drawable/bg_recommend_tablayout_select"
         android:gravity="center"
         android:text="@string/txt_find_pwd"
         android:textColor="@color/white"

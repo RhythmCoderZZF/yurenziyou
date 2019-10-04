@@ -33,4 +33,19 @@ public class OrderListModel implements OrderListContract.Model
     public Observable<BackResult> cancelOrder(OrderCancelRequest cancelOrderRequest) {
         return Api.getInstance().apiService.cancelOrder(cancelOrderRequest).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult<UserOrderListResponse>> getAwaitGoingOrderList(int page, int pageSize) {
+        return Api.getInstance().apiService.getAwaitGoingList(page,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<UserOrderListResponse>> getAwaitCommentOrderList(int page, int pageSize) {
+        return Api.getInstance().apiService.getAwaitCommentList(page,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<UserOrderListResponse>> getAwaitRefundOrderList(int page, int pageSize) {
+        return Api.getInstance().apiService.getAwaitRefundList(page,pageSize).compose(RxSchedulers.io_main());
+    }
 }

@@ -15,9 +15,11 @@ public class NearbyTypeResponse implements Serializable {
 
     private String type;
 
-    private int score;
+    private String type2;
 
-    private int price;
+    private float score;
+
+    private double price;
 
     private String photo;
 
@@ -55,19 +57,27 @@ public class NearbyTypeResponse implements Serializable {
         this.type = type;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public String getType2() {
+        return type2;
+    }
+
+    public void setType2(String type2) {
+        this.type2 = type2;
+    }
+
+    public void setScore(float score) {
         this.score = score;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

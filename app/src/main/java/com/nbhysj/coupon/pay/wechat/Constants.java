@@ -1,4 +1,4 @@
-package com.nbhysj.coupon;
+package com.nbhysj.coupon.pay.wechat;
 
 public class Constants {
 	// APP_ID 替换为你的应用从官方网站申请到的合法appId

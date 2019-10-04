@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.OrderDetailResponse;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.widget.glide.GlideApp;
 import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
@@ -25,9 +26,9 @@ import java.util.List;
 public class HotelQuestionAndAnswerAdapter extends RecyclerView.Adapter<HotelQuestionAndAnswerAdapter.ViewHolder> {
 
     /**
-     * 酒店问答内容
+     * 问答内容
      */
-    List<String> mQuestionContentList;
+    List<OrderDetailResponse.AnswerEntity> answerList;
     private Context mContext;
 
     public HotelQuestionAndAnswerAdapter(Context mContext) {
@@ -35,9 +36,9 @@ public class HotelQuestionAndAnswerAdapter extends RecyclerView.Adapter<HotelQue
         this.mContext = mContext;
     }
 
-    public void setQuestionContentList(List<String> questionContentList) {
+    public void setQuestionContentList(List<OrderDetailResponse.AnswerEntity> answerList) {
 
-        this.mQuestionContentList = questionContentList;
+        this.answerList = answerList;
     }
 
     @Override
@@ -53,8 +54,9 @@ public class HotelQuestionAndAnswerAdapter extends RecyclerView.Adapter<HotelQue
 
         try {
 
-            String questionContent = mQuestionContentList.get(itemPosition);
-            holder.mTvQuestionContent.setText(questionContent);
+            OrderDetailResponse.AnswerEntity answerEntity = answerList.get(itemPosition);
+            String content = answerEntity.getContent();
+            holder.mTvQuestionContent.setText(content);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +65,7 @@ public class HotelQuestionAndAnswerAdapter extends RecyclerView.Adapter<HotelQue
 
     @Override
     public int getItemCount() {
-        return mQuestionContentList.size();
+        return answerList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,8 +1,5 @@
-package com.nbhysj.coupon;
+package com.nbhysj.coupon.pay.wechat;
 
-import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.uikit.CameraUtil;
-import com.nbhysj.coupon.uikit.MMAlert;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.nbhysj.coupon.R;
 import com.tencent.mm.opensdk.modelmsg.GetMessageFromWX;
 import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;

@@ -27,6 +27,15 @@ public interface OrderListContract {
         //获取待付款订单列表
         Observable<BackResult<UserOrderListResponse>> getPendingOrdersList(int page,int pageSize);
 
+        //获取待出行列表
+        Observable<BackResult<UserOrderListResponse>> getAwaitGoingOrderList(int page,int pageSize);
+
+        //获取待评价列表
+        Observable<BackResult<UserOrderListResponse>> getAwaitCommentOrderList(int page,int pageSize);
+
+        //获取售后列表
+        Observable<BackResult<UserOrderListResponse>> getAwaitRefundOrderList(int page,int pageSize);
+
         //删除订单
         Observable<BackResult> deleteOrder(OrderDeleteRequest deleteOrderRequest);
 
@@ -41,6 +50,12 @@ public interface OrderListContract {
 
         void getPendingOrdersListResult(BackResult<UserOrderListResponse> res);
 
+        void getAwaitGoingOrderListResult(BackResult<UserOrderListResponse> res);
+
+        void getAwaitCommentOrderListResult(BackResult<UserOrderListResponse> res);
+
+        void getAwaitRefundOrderListResult(BackResult<UserOrderListResponse> res);
+
         void deleteOrderResult(BackResult res);
 
         void cancelOrderResult(BackResult res);
@@ -53,6 +68,12 @@ public interface OrderListContract {
         public abstract void getUserOrderList(int page,int pageSize);
 
         public abstract void getPendingOrdersList(int page,int pageSize);
+
+        public abstract void getAwaitGoingOrderList(int page,int pageSize);
+
+        public abstract void getAwaitCommentOrderList(int page,int pageSize);
+
+        public abstract void getAwaitRefundOrderList(int page,int pageSize);
 
         public abstract void deleteOrder(OrderDeleteRequest orderDeleteRequest);
 

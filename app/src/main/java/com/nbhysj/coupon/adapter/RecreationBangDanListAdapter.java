@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.RecreationDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -72,15 +73,23 @@ public class RecreationBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 MchTypeBean popularScenicSpots = recreationList.get(position - 1);
+                int mchId = popularScenicSpots.getDataId();
                 String photoUrl = popularScenicSpots.getPhoto();
                 holder1.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
-                holder1.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()) + "分");
+                holder1.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()));
                 holder1.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
                 holder1.mTvMchName.setText(popularScenicSpots.getMchName());
                 holder1.mTvScenicSpotsDistance.setText("距您" + popularScenicSpots.getDistance() + "公里");
                 String city = popularScenicSpots.getCity();
                 String country = popularScenicSpots.getCounty();
-                holder1.mTvLocation.setText(city + "." + country);
+
+                if(!TextUtils.isEmpty(city))
+                {
+                    holder1.mTvLocation.setText(city + "." + country);
+                } else {
+                    holder1.mTvLocation.setText(country);
+                }
+
                 List<MchTypeBean.TagsEntity> tagsEntityList = popularScenicSpots.getTags();
 
                 GlideUtil.loadImage(mContext, photoUrl, holder1.mImgScenicSpots);
@@ -107,6 +116,7 @@ public class RecreationBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
 
                         Intent intent = new Intent();
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId",mchId);
                         mContext.startActivity(intent);
                     }
                 });

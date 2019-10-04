@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -71,9 +72,11 @@ public class FineFoodBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 MchTypeBean fineFoodBean = mFineFoodList.get(pos);
+                int mchId = fineFoodBean.getDataId();
                 String photoUrl = fineFoodBean.getPhoto();
                 String mchName = fineFoodBean.getMchName();
                 String dataName = fineFoodBean.getDataName();
+                float commentScore = fineFoodBean.getCommentScore();
                 String mIntro = fineFoodBean.getIntro();
                 int level = fineFoodBean.getLevel();
                 String mConsumePrice = String.valueOf(fineFoodBean.getConsumePrice());
@@ -92,16 +95,16 @@ public class FineFoodBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     holder1.mTvFineFoodDes.setText("");
                 }
-                holder1.mTvFineFoodPrice.setText("¥ " + mConsumePrice + "/人");
-                holder1.mStarBarView.setStarMark(level);
+                holder1.mTvFineFoodPrice.setText("¥" + mConsumePrice + "/人");
+                holder1.mStarBarView.setStarMark(commentScore);
                 holder1.mStarBarView.setIntegerMark(true);
 
-               if (position < 4) {
+              /* if (position < 4) {
                     holder1.mTvFineFoodSerialNum.setText("TOP." + position);
                     holder1.mTvFineFoodSerialNum.setVisibility(View.VISIBLE);
                 } else {
                     holder1.mTvFineFoodSerialNum.setVisibility(View.GONE);
-                }
+                }*/
 
                 GlideUtil.loadImage(mContext, photoUrl, holder1.mImgFineFood);
 
@@ -120,7 +123,16 @@ public class FineFoodBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
                         });
                     }
                 }
+                holder1.mRlytFineFood.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, FoodDetailActivity.class);
+                        intent.putExtra("mchId",mchId);
+                        mContext.startActivity(intent);
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,6 +176,8 @@ public class FineFoodBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
         TextView mTvFineFoodPrice;
         //评分星级
         StarBarView mStarBarView;
+        //美食
+        RelativeLayout mRlytFineFood;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -174,6 +188,8 @@ public class FineFoodBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
             mTvFineFoodDes = itemView.findViewById(R.id.tv_fine_food_des);
             mTvFineFoodPrice = itemView.findViewById(R.id.tv_price);
             mStarBarView = itemView.findViewById(R.id.starbar_store_fine_food);
+            mRlytFineFood = itemView.findViewById(R.id.rlyt_fine_food_item);
+
         }
     }
 }

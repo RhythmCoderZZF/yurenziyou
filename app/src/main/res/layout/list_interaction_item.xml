@@ -108,7 +108,7 @@
                     android:id="@+id/tv_scenic_spots_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="距您5.8公里"
+                    android:text="距您0.0公里"
                     android:textColor="@color/color_text_gray24"
                     android:textSize="@dimen/text_size_xtiny" />
 
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_6"
-                    android:text="宁波.鄞州"
+                    android:text=""
                     android:textColor="@color/color_text_gray24"
                     android:textSize="@dimen/text_size_xtiny" />
             </LinearLayout>
@@ -137,7 +137,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥"
+                    android:text="¥"
                     android:textColor="@color/color_text_orange2"
                     android:textSize="@dimen/text_size_tiny" />
 

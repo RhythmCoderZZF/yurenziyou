@@ -18,6 +18,7 @@ import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -114,6 +115,11 @@ public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSe
                                 Intent intent = new Intent();
                                 intent.putExtra("mchId", mchId);
                                 intent.setClass(mContext, HotelDetailsActivity.class);
+                                mContext.startActivity(intent);
+                            } else if(mchType2.equals(mchHomestayType)){
+                                Intent intent = new Intent();
+                                intent.putExtra("mchId", mchId);
+                                intent.setClass(mContext, HomestayDetailActivity.class);
                                 mContext.startActivity(intent);
                             }
                         }

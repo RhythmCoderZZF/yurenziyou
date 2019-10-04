@@ -9,6 +9,7 @@ import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import io.reactivex.Observable;
 
@@ -28,5 +29,10 @@ public class ShopMallHomePageModel implements ShopMallHomePageContract.Model {
     @Override
     public Observable<BackResult<CarH5UrlResponse>> getCarH5Url(String startLg, String startLt) {
         return Api.getInstance().apiService.getCarH5Url(startLg,startLg).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<WeatherResponse>> getWeather(int cityCode) {
+        return Api.getInstance().apiService.getWeather(cityCode).compose(RxSchedulers.io_main());
     }
 }

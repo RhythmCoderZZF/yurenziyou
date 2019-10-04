@@ -52,15 +52,18 @@ import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
+import com.nbhysj.coupon.model.response.LimitedTimeSalePageBean;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
+import com.nbhysj.coupon.model.response.OrderPaymentResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
@@ -92,7 +95,6 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
@@ -116,7 +118,7 @@ public interface ApiService {
 
     //3.获取盐(登录除外)
     @GET("api/user/getSalt")
-    Observable<BackResult<String>> getSalt(@Query("mobile") String mobile);
+    Observable<BackResult<Object>> getSalt(@Query("mobile") String mobile);
 
     //4.获取盐(只有登录可用)
     @GET("api/user/getLoginSalt")
@@ -124,7 +126,7 @@ public interface ApiService {
 
     //5.获取盐(通过邮箱修改密码)
     @GET("api/user/getSalt")
-    Observable<BackResult<String>> updatePwdByEmailGetSalt(@Query("email") String email);
+    Observable<BackResult<Object>> updatePwdByEmailGetSalt(@Query("email") String email);
 
     //6.获取登录验证短信
     @GET("api/user/login/message")
@@ -379,6 +381,10 @@ public interface ApiService {
     @GET("api/mchDetails")
     Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(@Query("mchId") int mchId);
 
+    //美食详情
+    @GET("api/mchDetails")
+    Observable<BackResult<MchFoodDetailResponse>> getMchFoodDetail(@Query("mchId") int mchId);
+
     //商家相册
     @GET("api/mchPhoto/findByMchId")
     Observable<BackResult<MchAlbumResponse>> getMchAlbumList(@Query("mchId") int mchId);
@@ -394,6 +400,27 @@ public interface ApiService {
     //门票订单提交界面(景区日历价格)
     @GET("api/goods/scenic")
     Observable<BackResult<OrderSubmitInitResponse>> getOrderSubmitInit(@Query("goodsId") int goodsId);
+
+    //门票订单生成接口(门票下单接口)
+    @POST("api/ticketOrder")
+    Observable<BackResult<OrderSubmitResponse>> ticketOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
+    //景区互动价格日历
+    @GET("api/recreation/goods")
+    Observable<BackResult<OrderSubmitInitResponse>> getRecreationDatePriceInit(@Query("goodsId") int goodsId);
+
+    //互动下单接口
+    @POST("api/goods/recreation")
+    Observable<BackResult<OrderSubmitResponse>> recreationOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
+    //首页限时特卖列表
+    @GET("api/mch/limitedTimeSalePage")
+    Observable<BackResult<LimitedTimeSalePageBean>> getLimitedTimeSalePage();
+
+    //首页限时特卖详情
+    @GET("api/mch/rushPurchaseInfo")
+    Observable<BackResult<OrderSubmitInitResponse>> getRushPurchaseInfo();
+
 
     /*************     行程助手      ***************/
     //行程助手列表
@@ -474,10 +501,6 @@ public interface ApiService {
     @GET("car/carH5Url")
     Observable<BackResult<CarH5UrlResponse>> getCarH5Url(@Query("startLg") String longitude, @Query("startLt") String latitude);
 
-    //门票订单生成接口(门票下单接口)
-    @POST("api/ticketOrder")
-    Observable<BackResult<OrderSubmitResponse>> ticketOrderSubmit(@Body TicketOrderSubmitRequest ticketOrderSubmitRequest);
-
     //获取订单列表
     @GET("api/order/userOrderList")
     Observable<BackResult<UserOrderListResponse>> getUserOrderList(@Query("page") int page, @Query("pageSize") int pageSize);
@@ -488,15 +511,15 @@ public interface ApiService {
 
     //用户待出行订单
     @GET("api/order/queryAwaitGoing")
-    Observable<BackResult<UserOrderListResponse>> getQueryAwaitGoingList(@Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<BackResult<UserOrderListResponse>> getAwaitGoingList(@Query("page") int page, @Query("pageSize") int pageSize);
 
     //用户待评论订单
     @GET("api/order/queryAwaitComment")
-    Observable<BackResult<UserOrderListResponse>> getQueryAwaitCommentList(@Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<BackResult<UserOrderListResponse>> getAwaitCommentList(@Query("page") int page, @Query("pageSize") int pageSize);
 
     //退换/售后订单列表
     @GET("api/order/queryAwaitRefund")
-    Observable<BackResult<UserOrderListResponse>> getQueryAwaitRefundList(@Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<BackResult<UserOrderListResponse>> getAwaitRefundList(@Query("page") int page, @Query("pageSize") int pageSize);
 
     //删除订单
     @HTTP(method = "DELETE", path = "api/order/deleteOrder", hasBody = true)
@@ -585,6 +608,10 @@ public interface ApiService {
     @POST("api/orderRefund/all")
     Observable<BackResult> orderAllRefundSubmit(@Body OrderAllRefundRequest orderAllRefundRequest);
 
+    /***************    支付   *********************/
+    //支付
+    @GET("api/order/pay/pay")
+    Observable<BackResult<OrderPaymentResponse>> orderPayment(@Query("orderNo") String orderNo, @Query("paymentFlag") String paymentFlag);
 
 }
 

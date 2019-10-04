@@ -2,6 +2,7 @@ package com.nbhysj.coupon.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,15 +29,15 @@ import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.CalendarActivity;
-import com.nbhysj.coupon.ui.HotelDetailsActivity;
-import com.nbhysj.coupon.ui.LoginActivity;
-import com.nbhysj.coupon.ui.MyBusinessCardActivity;
+import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.TravelAssistantEditActivity;
-import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     private boolean isLoginFristCreate = true;
     public static final int TRIP_EDIT_RESULT_CODE = 10000;
     private int userId;
+    @BindView(R.id.refresh_layout)
+    SmartRefreshLayout mSmartRefreshLayout;
     //行程助手推荐
     @BindView(R.id.rv_recommended_for_you_travel)
     RecyclerView mRvTravelAssisantRecommend;
@@ -177,6 +180,20 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     @Override
     public void initData() {
 
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        getTravelAssistantList();
+                    }
+                }, 100);
+
+            }
+        });
     }
 
     @Override
@@ -187,6 +204,10 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     @Override
     public void getTravelAssistantHomePageResult(BackResult<TripHomePageResponse> res) {
         dismissProgressDialog();
+        if (mSmartRefreshLayout != null)
+        {
+            mSmartRefreshLayout.finishRefresh();
+        }
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
@@ -368,7 +389,7 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             }
         } else {
             if (isFristCreate) {
-                toActivity(LoginActivity.class);
+                toActivity(PhoneQuickLoginActivity.class);
                 isFristCreate = false;
 
             }
@@ -384,7 +405,7 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
             if (TextUtils.isEmpty(token)) {
 
-                toActivity(LoginActivity.class);
+                toActivity(PhoneQuickLoginActivity.class);
             }
         }
     }

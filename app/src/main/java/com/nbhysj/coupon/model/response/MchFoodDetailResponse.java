@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @auther：hysj created on 2019/6/9
- * description：景点详情
+ * @auther：hysj created on 2019/09/28
+ * description：美食详情
  */
-public class MchDetailsResponse implements Serializable {
-
-    //游玩指南(景点详情)
-    private List<VisitGuideEntity> visitGuide;
+public class MchFoodDetailResponse implements Serializable {
 
     private String mchByNotes;
 
@@ -19,25 +16,11 @@ public class MchDetailsResponse implements Serializable {
 
     private MchQuestionEntity mchQuestion;
 
-    private List<MchGoodsBean> mchGoods;
+    private List<MchFoodBean> mchGoods;
 
     private CommentEntity comment;
 
-    //附近
-    private NearbyEntity nearby;
-
-    //酒店民宿
-    private NearbyHotelEntity nearbyHotel;
-
     private List<NearbyFoodEntity> nearbyFood;
-
-    public List<VisitGuideEntity> getVisitGuide() {
-        return visitGuide;
-    }
-
-    public void setVisitGuide(List<VisitGuideEntity> visitGuide) {
-        this.visitGuide = visitGuide;
-    }
 
     public MchDetailsEntity getMchDetails() {
         return mchDetails;
@@ -55,36 +38,12 @@ public class MchDetailsResponse implements Serializable {
         this.mchQuestion = mchQuestion;
     }
 
-    public List<MchGoodsBean> getMchGoods() {
-        return mchGoods;
-    }
-
-    public void setMchGoods(List<MchGoodsBean> mchGoods) {
-        this.mchGoods = mchGoods;
-    }
-
     public CommentEntity getComment() {
         return comment;
     }
 
     public void setComment(CommentEntity comment) {
         this.comment = comment;
-    }
-
-    public NearbyEntity getNearby() {
-        return nearby;
-    }
-
-    public void setNearby(NearbyEntity nearby) {
-        this.nearby = nearby;
-    }
-
-    public NearbyHotelEntity getNearbyHotel() {
-        return nearbyHotel;
-    }
-
-    public void setNearbyHotel(NearbyHotelEntity nearbyHotel) {
-        this.nearbyHotel = nearbyHotel;
     }
 
     public String getMchByNotes() {
@@ -101,6 +60,14 @@ public class MchDetailsResponse implements Serializable {
 
     public void setNearbyFood(List<NearbyFoodEntity> nearbyFood) {
         this.nearbyFood = nearbyFood;
+    }
+
+    public List<MchFoodBean> getMchGoods() {
+        return mchGoods;
+    }
+
+    public void setMchGoods(List<MchFoodBean> mchGoods) {
+        this.mchGoods = mchGoods;
     }
 
     public class VisitGuideEntity implements Serializable {
@@ -1150,7 +1117,7 @@ public class MchDetailsResponse implements Serializable {
 
         private String type2;
 
-        private int score;
+        private float score;
 
         private double price;
 
@@ -1198,11 +1165,11 @@ public class MchDetailsResponse implements Serializable {
             this.type2 = type2;
         }
 
-        public int getScore() {
+        public float getScore() {
             return score;
         }
 
-        public void setScore(int score) {
+        public void setScore(float score) {
             this.score = score;
         }
 

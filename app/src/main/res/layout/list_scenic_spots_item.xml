@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llyt_scenic_spot_item"
     android:layout_width="match_parent"
     android:layout_height="143dp"
@@ -79,14 +80,16 @@
 
         <TextView
             android:id="@+id/tv_scenic_spots_des"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/llyt_scenic_spot_score"
             android:layout_marginTop="@dimen/dp_9"
-            android:layout_marginRight="@dimen/dp_74"
+            android:layout_marginRight="@dimen/dp_20"
             android:ellipsize="end"
             android:lines="2"
             android:text=""
+            android:layout_marginBottom="@dimen/dp_5"
+            android:textColor="@color/color_text_black7"
             android:textSize="@dimen/text_size_xtiny" />
 
         <LinearLayout
@@ -99,11 +102,13 @@
 
             <TextView
                 android:id="@+id/tv_scenic_spots_level"
-                android:layout_width="@dimen/dp_38"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_15"
                 android:background="@drawable/bg_tag_radius_purplish_red_yellow_gradient"
                 android:gravity="center"
                 android:text=""
+                android:paddingLeft="@dimen/dp_8"
+                android:paddingRight="@dimen/dp_8"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_tiny" />
 
@@ -122,15 +127,14 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_8"
             android:layout_marginRight="@dimen/dp_19"
-            android:layout_marginBottom="@dimen/dp_22"
+            android:layout_marginBottom="@dimen/dp_20"
             android:orientation="horizontal">
 
             <TextView

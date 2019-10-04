@@ -458,7 +458,7 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
         }
     }
 
-    //获取行程助手详情
+    //获取天气接口
     public void getWeather(int cityCode) {
 
         if (validateInternet()) {

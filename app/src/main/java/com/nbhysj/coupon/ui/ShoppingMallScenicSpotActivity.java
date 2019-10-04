@@ -231,30 +231,23 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                /*    if (isOnLoadMore) {
 
-                        // mSmartRefreshLayout.finishLoadMore();
-                    } else {
-
-                        recommendFriendsList.clear();
-                        recommendFriendsAdapter.notifyDataSetChanged();
-                    }*/
-
+                    ScenicSpotHomePageResponse scenicSpotHomePageResponse = res.getData();
                     //景点栏
-                    mScenicSpotHotList = res.getData().getHot();
+                    mScenicSpotHotList = scenicSpotHomePageResponse.getHot();
                     destinationScenicSpotsAdapter.setPopularScenicSpotsList(mScenicSpotHotList);
                     destinationScenicSpotsAdapter.notifyDataSetChanged();
 
                     //景点分类
-                    mCateEntityList = res.getData().getCate();
+                    mCateEntityList = scenicSpotHomePageResponse.getCate();
                     scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
                     scenicSpotClassificationAdapter.notifyDataSetChanged();
 
-                    List<MchTypeBean> scenicSpotList = res.getData().getMch().getOverflow().getResult();
+                    List<MchTypeBean> scenicSpotList = scenicSpotHomePageResponse.getMch().getNearby().getResult();
                     mScenicSpotList.addAll(scenicSpotList);
                     scenicSpotsListAdapter.setPopularScenicSpotsList(mScenicSpotList);
                     scenicSpotsListAdapter.notifyDataSetChanged();
-                    BasePaginationResult pageBean = res.getData().getMch().getOverflow().getPage();
+                    BasePaginationResult pageBean = scenicSpotHomePageResponse.getMch().getNearby().getPage();
                     mTotalPageCount = pageBean.getPageCount();
                 } catch (Exception e) {
                     e.printStackTrace();

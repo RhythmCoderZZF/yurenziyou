@@ -330,7 +330,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
                             mJzvdPostVideo.setVisibility(View.GONE);
-                            mBtnLayoutExpandSound.setVisibility(View.GONE);
+                            mBtnLayoutExpandSound.setVisibility(View.INVISIBLE);
                             mBannerViewFriendDetailPicture.initUI(resources);
                         } else if (postsType == 2) {  //音频+图片
 

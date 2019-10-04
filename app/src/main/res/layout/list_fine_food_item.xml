@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
-    android:id="@+id/llyt_recyclerview_item"
+    android:id="@+id/rlyt_fine_food_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_9"
@@ -23,11 +23,8 @@
             android:layout_height="104dp"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:scaleType="fitXY"
             app:riv_corner_radius="5dip"
-            app:riv_mutate_background="true"
-            app:riv_oval="false"
-
+            android:scaleType="fitXY"
             />
 
         <TextView

@@ -67,6 +67,13 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
             myOrderTicketListAdapter.setUserOrderList(goodsEntityList);
             holder.mRvUserTicketDetail.setAdapter(myOrderTicketListAdapter);
 
+            holder.mTvOrderToComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +106,9 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
         //地址
         TextView mTvAddress;
 
+        //订单评价
+        TextView mTvOrderToComment;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -110,6 +120,12 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
             mImgTicketPhotograph = itemView.findViewById(R.id.img_ticket_photograph);
             mTvMchName = itemView.findViewById(R.id.tv_mch_name);
             mTvAddress = itemView.findViewById(R.id.tv_address);
+            mTvOrderToComment = itemView.findViewById(R.id.tv_order_to_comment);
         }
+    }
+
+    public interface OrderOnclickListener{
+
+        void setOrderOnclickListener();
     }
 }

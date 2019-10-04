@@ -30,23 +30,21 @@ import com.nbhysj.coupon.adapter.PlayGuideAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
-import com.nbhysj.coupon.contract.ScenicSpotContract;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
+import com.nbhysj.coupon.contract.RecreationContract;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
-import com.nbhysj.coupon.model.ScenicSpotModel;
+import com.nbhysj.coupon.model.RecreationModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
-import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyTypeResponse;
-import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
-import com.nbhysj.coupon.model.response.TourGuideBean;
-import com.nbhysj.coupon.presenter.ScenicSpotPresenter;
+import com.nbhysj.coupon.presenter.RecreationPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.PopupWindowUtil;
@@ -68,9 +66,9 @@ import butterknife.OnClick;
 
 /**
  * @auther：hysj created on 2019/04/28
- * description：景点详情
+ * description：互动详情
  */
-public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, ScenicSpotModel> implements ScenicSpotContract.View, RecyclerScrollView.OnScrollListener {
+public class RecreationDetailActivity extends BaseActivity<RecreationPresenter, RecreationModel> implements RecreationContract.View, RecyclerScrollView.OnScrollListener {
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     @BindView(R.id.banner)
@@ -265,19 +263,19 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
     @Override
     public void initData() {
-        showProgressDialog(ScenicSpotDetailActivity.this);
+        showProgressDialog(RecreationDetailActivity.this);
         getMchDetails();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(RecreationDetailActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvPlayGuide.setLayoutManager(linearLayoutManager);
-        playGuideAdapter = new PlayGuideAdapter(ScenicSpotDetailActivity.this);
+        playGuideAdapter = new PlayGuideAdapter(RecreationDetailActivity.this);
         playGuideAdapter.setVisitGuideEntityList(visitGuideList);
         mRvPlayGuide.setAdapter(playGuideAdapter);
 
-        GridLayoutManager linearLayoutManager1 = new GridLayoutManager(ScenicSpotDetailActivity.this, 3);
+        GridLayoutManager linearLayoutManager1 = new GridLayoutManager(RecreationDetailActivity.this, 3);
         linearLayoutManager1.setOrientation(linearLayoutManager1.VERTICAL);
         mRvUserCommentSearchTag.setLayoutManager(linearLayoutManager1);
-        userCommentAdapter = new UserCommentAdapter(ScenicSpotDetailActivity.this);
+        userCommentAdapter = new UserCommentAdapter(RecreationDetailActivity.this);
         userCommentAdapter.setLabelList(labelEntityList);
         mRvUserCommentSearchTag.setAdapter(userCommentAdapter);
 
@@ -354,26 +352,26 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 height = bannerView.getHeight();
                 bannerView.getWidth();
 
-                mScrollViewScenicSpotDetail.setScrolListener(ScenicSpotDetailActivity.this);
+                mScrollViewScenicSpotDetail.setScrolListener(RecreationDetailActivity.this);
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(RecreationDetailActivity.this);
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvNearScenicSpot.setLayoutManager(layoutManager);
 
-        groupListAdapter = new GroupListAdapter(ScenicSpotDetailActivity.this);
+        groupListAdapter = new GroupListAdapter(RecreationDetailActivity.this);
         groupListAdapter.setGroupList(groupGoodsList);
         mRvNearScenicSpot.setAdapter(groupListAdapter);
 
-        nearbyScenicSpotAdapter = new NearbyScenicSpotAdapter(ScenicSpotDetailActivity.this);
+        nearbyScenicSpotAdapter = new NearbyScenicSpotAdapter(RecreationDetailActivity.this);
         nearbyScenicSpotAdapter.setNearbyScenicSpotsList(nearbyScenicSpotsList);
         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
 
-        LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
+        LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(RecreationDetailActivity.this);
         userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
         mRvUserComment.setLayoutManager(userCommentLayoutManager);
-        scenicSpotDetailUserCommentAdapter = new ScenicSpotDetailUserCommentAdapter(ScenicSpotDetailActivity.this);
+        scenicSpotDetailUserCommentAdapter = new ScenicSpotDetailUserCommentAdapter(RecreationDetailActivity.this);
         scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
         mRvUserComment.setAdapter(scenicSpotDetailUserCommentAdapter);
 
@@ -388,22 +386,22 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
 
     @Override
-    public void getScenicSpotHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
+    public void getRecreationHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
 
     }
 
     @Override
-    public void findScenicByCateResult(BackResult<ScenicSpotResponse> res) {
+    public void findRecreationByCateResult(BackResult<ScenicSpotResponse> res) {
 
     }
 
     @Override
-    public void getScenicBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+    public void getRecreationDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
 
     @Override
-    public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+    public void getRecreationDetailResult(BackResult<MchDetailsResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
@@ -460,7 +458,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     if (bannerList.size() > 0) {
 
                         for (int i = 0; i < bannerList.size(); i++) {
-                            ImageView image = new ImageView(ScenicSpotDetailActivity.this);
+                            ImageView image = new ImageView(RecreationDetailActivity.this);
                             image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                             //设置显示格式
                             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -471,7 +469,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvBannerNum.setText("1/" + bannerList.size() + "张");
                     mTvBannerNum.getBackground().setAlpha(50);
                     //bannerView.startLoop(true);
-                    bannerView.setViewList(ScenicSpotDetailActivity.this, viewList, bannerList, new ScenicSpotDetailBannerView.ScenicSpotDetailBannerViewListener() {
+                    bannerView.setViewList(RecreationDetailActivity.this, viewList, bannerList, new ScenicSpotDetailBannerView.ScenicSpotDetailBannerViewListener() {
                         @Override
                         public void setScenicSpotDetailBannerViewListener(int curPos) {
 
@@ -483,7 +481,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                             Intent intent = new Intent();
                             intent.putExtra("mchId", mchId);
-                            intent.setClass(ScenicSpotDetailActivity.this, ScenicSpotsAlbumActivity.class);
+                            intent.setClass(RecreationDetailActivity.this, ScenicSpotsAlbumActivity.class);
                             startActivity(intent);
 
                         }
@@ -522,8 +520,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         playGuideAdapter.setVisitGuideEntityList(visitGuideList);
                         playGuideAdapter.notifyDataSetChanged();
                     }
-
-                    AdmissionTicketExpandableAdapter myExpandableAdapter = new AdmissionTicketExpandableAdapter(this, mchGoodsList);
+                    String mchTypeRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+                    AdmissionTicketExpandableAdapter myExpandableAdapter = new AdmissionTicketExpandableAdapter(this,mchTypeRecreation, mchGoodsList);
                     mExpandableListTicket.setAdapter(myExpandableAdapter);
 
                     mchByNotesH5Url = mchDetailsResponse.getMchByNotes();
@@ -540,30 +538,15 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 }
                 break;
             default:
-                showToast(ScenicSpotDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(RecreationDetailActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
 
     @Override
-    public void getTourGuideListResult(BackResult<List<TourGuideBean>> res) {
-
-    }
-
-    @Override
-    public void getMchAlbumListResult(BackResult<MchAlbumResponse> res) {
-
-    }
-
-    @Override
-    public void getNetFriendAlbumListResult(BackResult<NetFriendAlbumResponse> res) {
-
-    }
-
-    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
-        showToast(ScenicSpotDetailActivity.this, Constants.getResultMsg(msg));
+        showToast(RecreationDetailActivity.this, Constants.getResultMsg(msg));
     }
 
     @Override
@@ -599,11 +582,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.ibtn_back:
-                ScenicSpotDetailActivity.this.finish();
+                RecreationDetailActivity.this.finish();
                 break;
             case R.id.rlyt_scenic_spots_ranking_list:
 
-                toActivity(ScenicSpotBangDanListActivity.class);
+                toActivity(RecreationBangDanListActivity.class);
 
                 break;
             case R.id.img_menu:
@@ -614,19 +597,19 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                 bundle.putSerializable("mchDetailsEntity", mchDetailsEntity);
                 intent.putExtras(bundle);
-                intent.setClass(ScenicSpotDetailActivity.this, ScenicSpotsDetailLocationMapActivity.class);
+                intent.setClass(RecreationDetailActivity.this, ScenicSpotsDetailLocationMapActivity.class);
                 startActivity(intent);
                 break;
             case R.id.rlyt_view_more_tour_guide:
 
                 intent.putExtra("mchId", mchId);
-                intent.setClass(ScenicSpotDetailActivity.this, PlayGuideActivity.class);
+                intent.setClass(RecreationDetailActivity.this, PlayGuideActivity.class);
                 toActivityWithParameters(PlayGuideActivity.class, intent);
 
                 break;
             case R.id.img_scenic_spot_forward:
 
-                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(ScenicSpotDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(RecreationDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
                     @Override
                     public void onSharePlatformItemClick(String sharePlatform) {
 
@@ -654,7 +637,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                     intent.putExtra("url", mchByNotesH5Url);
                     intent.putExtra("title", mchName);
-                    intent.setClass(ScenicSpotDetailActivity.this, WebActivity.class);
+                    intent.setClass(RecreationDetailActivity.this, WebActivity.class);
                     startActivity(intent);
 
                 }
@@ -706,6 +689,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
     public void getMchDetails() {
 
-        mPresenter.getMchDetails(mchId);
+        mPresenter.getRecreationDetail(mchId);
     }
 }

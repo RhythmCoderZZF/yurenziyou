@@ -9,11 +9,11 @@
 	android:paddingBottom="4dp">
 	<TextView
 		android:id="@+id/popup_text"
-		android:textSize="@dimen/TitleTextSize"
+		android:textSize="@dimen/text_size_small"
 		android:textColor="@color/black"
 		android:layout_width="fill_parent"
 		android:layout_height="45dp"
 		android:gravity="center"
-		android:background="@drawable/btn_style_alert_dialog_button" />
+		android:background="@drawable/bg_rect_gray_shape" />
 	
 </LinearLayout>

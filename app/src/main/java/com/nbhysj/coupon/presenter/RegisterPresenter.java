@@ -31,6 +31,11 @@ public class RegisterPresenter extends RegisterContract.Presenter {
     }
 
     @Override
+    public void getUserInfo(int userId) {
+        mRxManager.add(mModel.getUserInfo(userId).subscribe(res -> mView.getUserInfoResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

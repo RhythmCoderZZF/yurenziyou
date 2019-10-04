@@ -11,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 
-
 import com.nbhysj.coupon.R;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.List;
  * 描    述: 绘制波浪曲线
  * ================================================
  */
-public class WaveLineView extends RenderView {
+public class GreenWaveLineView extends RenderView {
 
     private final int DEFAULT_SAMPLING_SIZE = 74;
     private final float DEFAULT_OFFSET_SPEED =  450F;
@@ -100,15 +99,15 @@ public class WaveLineView extends RenderView {
     private boolean isOpenPrepareAnim = false;
 
     private boolean isTransparentMode = false;
-    public WaveLineView(Context context) {
+    public GreenWaveLineView(Context context) {
         this(context, null);
     }
 
-    public WaveLineView(Context context, AttributeSet attrs) {
+    public GreenWaveLineView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public WaveLineView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GreenWaveLineView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttr(attrs);
     }
@@ -117,7 +116,7 @@ public class WaveLineView extends RenderView {
         TypedArray t = getContext().obtainStyledAttributes(attrs, R.styleable.WaveLineView);
         backGroundColor = t.getColor(R.styleable.WaveLineView_wlvBackgroundColor, Color.WHITE);
         samplingSize = t.getInt(R.styleable.WaveLineView_wlvSamplingSize, DEFAULT_SAMPLING_SIZE);
-        lineColor = t.getColor(R.styleable.WaveLineView_wlvLineColor, Color.parseColor("#FFFFFFFF"));
+        lineColor = t.getColor(R.styleable.WaveLineView_wlvLineColor, Color.parseColor("#FF0DDDF6"));
         thickLineWidth = (int)t.getDimension(R.styleable.WaveLineView_wlvThickLineWidth, 2);
         fineLineWidth = (int)t.getDimension(R.styleable.WaveLineView_wlvFineLineWidth, 2);
         offsetSpeed = t.getFloat(R.styleable.WaveLineView_wlvMoveSpeed, DEFAULT_OFFSET_SPEED);

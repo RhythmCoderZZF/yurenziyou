@@ -171,6 +171,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         navigation.setSelectedItemId(TabFragment.values()[0].menuId);
+        navigation.setItemIconTintList(null);
         setBottomNavigationItem(navigation, 8, 8, 8);
         adjustNavigationIcoSize(navigation);
 

@@ -44,7 +44,7 @@ public class HotelBean {
 
     private double marketPrice;
 
-    private int defaultPrice;
+    private double defaultPrice;
 
     private String roomType;
 
@@ -172,11 +172,11 @@ public class HotelBean {
         this.marketPrice = marketPrice;
     }
 
-    public int getDefaultPrice() {
+    public double getDefaultPrice() {
         return defaultPrice;
     }
 
-    public void setDefaultPrice(int defaultPrice) {
+    public void setDefaultPrice(double defaultPrice) {
         this.defaultPrice = defaultPrice;
     }
 

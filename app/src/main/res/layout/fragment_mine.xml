@@ -329,6 +329,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llyt_pending_payment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -336,7 +337,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="@dimen/dp_28"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp_28"
                             android:layout_gravity="center_horizontal"
                             android:src="@mipmap/icon_pending_payment" />
@@ -353,6 +354,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llyt_pending_travel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -377,6 +379,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llyt_pending_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -401,6 +404,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llyt_order_refund"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

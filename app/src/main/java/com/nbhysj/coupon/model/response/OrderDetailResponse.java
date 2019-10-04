@@ -17,6 +17,9 @@ public class OrderDetailResponse implements Serializable{
 
     private String validSum;
 
+    //(单)商家(组合)客服电话
+    private String tel;
+
     private List<AnswerEntity> notAnswer;
 
     private List<AnswerEntity> Answer;
@@ -38,6 +41,9 @@ public class OrderDetailResponse implements Serializable{
     private int goodSum;
 
     private List<OrderGoodsEntity> orderGoods;
+
+    //0//全部退款 0不可退 1可退
+    private int delAllStatus;
 
     public String getTitle() {
         return title;
@@ -149,6 +155,22 @@ public class OrderDetailResponse implements Serializable{
 
     public void setOrderGoods(List<OrderGoodsEntity> orderGoods) {
         this.orderGoods = orderGoods;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public int getDelAllStatus() {
+        return delAllStatus;
+    }
+
+    public void setDelAllStatus(int delAllStatus) {
+        this.delAllStatus = delAllStatus;
     }
 
     public class AnswerEntity implements Serializable{
@@ -378,89 +400,6 @@ public class OrderDetailResponse implements Serializable{
 
         public void setNo(String no) {
             this.no = no;
-        }
-    }
-
-    public class GuessEntity implements Serializable{
-
-        private int mchId;
-
-        private String mchType;
-
-        private String mchName;
-
-        private String distance;
-
-        private String photo;
-
-        private int commentCount;
-
-        private int price;
-
-        private int hotelType;
-
-        public int getMchId() {
-            return mchId;
-        }
-
-        public void setMchId(int mchId) {
-            this.mchId = mchId;
-        }
-
-        public String getMchType() {
-            return mchType;
-        }
-
-        public void setMchType(String mchType) {
-            this.mchType = mchType;
-        }
-
-        public String getMchName() {
-            return mchName;
-        }
-
-        public void setMchName(String mchName) {
-            this.mchName = mchName;
-        }
-
-        public String getDistance() {
-            return distance;
-        }
-
-        public void setDistance(String distance) {
-            this.distance = distance;
-        }
-
-        public String getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(String photo) {
-            this.photo = photo;
-        }
-
-        public int getCommentCount() {
-            return commentCount;
-        }
-
-        public void setCommentCount(int commentCount) {
-            this.commentCount = commentCount;
-        }
-
-        public int getPrice() {
-            return price;
-        }
-
-        public void setPrice(int price) {
-            this.price = price;
-        }
-
-        public int getHotelType() {
-            return hotelType;
-        }
-
-        public void setHotelType(int hotelType) {
-            this.hotelType = hotelType;
         }
     }
 
@@ -696,6 +635,8 @@ public class OrderDetailResponse implements Serializable{
 
         private String goodsTotalFee;
 
+        private int canRefundStatus;
+
         public int getOrderGoodsId() {
             return orderGoodsId;
         }
@@ -822,6 +763,14 @@ public class OrderDetailResponse implements Serializable{
 
         public void setGoodsTotalFee(String goodsTotalFee) {
             this.goodsTotalFee = goodsTotalFee;
+        }
+
+        public int getCanRefundStatus() {
+            return canRefundStatus;
+        }
+
+        public void setCanRefundStatus(int canRefundStatus) {
+            this.canRefundStatus = canRefundStatus;
         }
     }
 

@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * @auther：hysj created on 2019/05/28
+ * @auther：hysj created on 2019/09/27
  * description：全部退款申请
  */
 public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, OrderRefundModel> implements OrderRefundContract.View {

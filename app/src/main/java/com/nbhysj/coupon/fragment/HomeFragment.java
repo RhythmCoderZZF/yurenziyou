@@ -29,6 +29,7 @@ import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
+import com.nbhysj.coupon.ui.HomePageSearchActivity;
 import com.nbhysj.coupon.ui.MessageActivity;
 import com.nbhysj.coupon.widget.glide.CacheImageLoader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -352,13 +353,16 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
         });
     }
 
-    @OnClick({R.id.rlyt_message_num})
+    @OnClick({R.id.rlyt_message_num,R.id.ll_search})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_message_num:
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), MessageActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.ll_search:
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;

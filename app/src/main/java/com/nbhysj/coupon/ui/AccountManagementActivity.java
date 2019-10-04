@@ -12,6 +12,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.AccountmanagementPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
@@ -39,10 +40,12 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
     //邮箱绑定
     @BindView(R.id.tv_qq_account)
     TextView mTvQQAccountBind;
+
     private ThirdPartyLoginStatusResponse thirdPartyLoginStatusResponse;
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_account_management;
     }
 
@@ -110,13 +113,18 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.rlyt_logout})
+    @OnClick({R.id.rlyt_logout,R.id.rlyt_update_password})
     public void onclick(View view) {
         {
             switch (view.getId()) {
                 case R.id.rlyt_logout:
 
                     toActivityWithFinish(LoginActivity.class, null);
+
+                    break;
+                case R.id.rlyt_update_password:
+
+                    toActivity(FindPasswordActivity.class);
 
                     break;
                 default:

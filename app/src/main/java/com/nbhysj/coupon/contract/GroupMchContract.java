@@ -6,6 +6,8 @@ import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.GroupMchResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
+
 import io.reactivex.Observable;
 
 /**

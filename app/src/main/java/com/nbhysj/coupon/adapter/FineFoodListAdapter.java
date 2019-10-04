@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,6 +19,8 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -77,11 +82,13 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 MchTypeBean fineFoodBean = mFineFoodList.get(pos);
+                int mchId = fineFoodBean.getId();
                 String photoUrl = fineFoodBean.getPhoto();
                 String mchName = fineFoodBean.getMchName();
                 String dataName = fineFoodBean.getDataName();
                 String mIntro = fineFoodBean.getIntro();
                 int level = fineFoodBean.getLevel();
+                float commentScore = fineFoodBean.getCommentScore();
                 String mConsumePrice = String.valueOf(fineFoodBean.getConsumePrice());
                 List<MchTypeBean.TagsEntity> tagsEntityList = fineFoodBean.getTags();
                 if (!TextUtils.isEmpty(mchName)) {
@@ -99,16 +106,16 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     holder1.mTvFineFoodDes.setText("");
                 }
                 holder1.mTvFineFoodPrice.setText("¥ " + mConsumePrice + "/人");
-                holder1.mStarBarView.setStarMark(level);
+                holder1.mStarBarView.setStarMark(commentScore);
                 holder1.mStarBarView.setIntegerMark(true);
 
-                if (position < 3) {
+             /*   if (position < 3) {
                     int mPosition = position + 1;
                     holder1.mTvFineFoodSerialNum.setText("TOP." + mPosition);
                     holder1.mTvFineFoodSerialNum.setVisibility(View.VISIBLE);
                 } else {
                     holder1.mTvFineFoodSerialNum.setVisibility(View.GONE);
-                }
+                }*/
 
                 GlideUtil.loadImage(mContext, photoUrl, holder1.mImgFineFood);
 
@@ -127,6 +134,18 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         });
                     }
                 }
+
+                holder1.mRlytFineFoodItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, FoodDetailActivity.class);
+                        intent.putExtra("mchId",mchId);
+                        mContext.startActivity(intent);
+
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,6 +191,8 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //评分星级
         StarBarView mStarBarView;
 
+        RelativeLayout mRlytFineFoodItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -182,6 +203,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mTvFineFoodDes = itemView.findViewById(R.id.tv_fine_food_des);
             mTvFineFoodPrice = itemView.findViewById(R.id.tv_price);
             mStarBarView = itemView.findViewById(R.id.starbar_store_fine_food);
+            mRlytFineFoodItem = itemView.findViewById(R.id.rlyt_fine_food_item);
         }
     }
 }

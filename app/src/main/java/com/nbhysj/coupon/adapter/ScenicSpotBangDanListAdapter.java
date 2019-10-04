@@ -77,17 +77,18 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 MchTypeBean popularScenicSpots = popularScenicSpotsList.get(position - 1);
+                int mchId = popularScenicSpots.getDataId();
                 String photoUrl = popularScenicSpots.getPhoto();
                 holder1.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
                 holder1.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()));
                 holder1.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
-                holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getDataName());
+                holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
                 holder1.mTvScenicSpotsDes.setText(popularScenicSpots.getIntro());
                 int level = popularScenicSpots.getLevel();
                 if (level == 0) {
                     holder1.mTvScenicSpotsLevel.setVisibility(View.GONE);
                 } else {
-                    holder1.mTvScenicSpotsLevel.setText(level + "A");
+                    holder1.mTvScenicSpotsLevel.setText(level + "A级景区");
                     holder1.mTvScenicSpotsLevel.setVisibility(View.VISIBLE);
                 }
 
@@ -116,6 +117,7 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
 
                         Intent intent = new Intent();
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId",mchId);
                         mContext.startActivity(intent);
                     }
                 });

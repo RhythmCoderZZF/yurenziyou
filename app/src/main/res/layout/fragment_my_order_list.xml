@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/dp_10"
     android:focusableInTouchMode="true"
     android:background="@color/background_l_grey"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -16,7 +16,7 @@
         android:background="@color/background_l_grey"
         app:srlAccentColor="#00000000"
         app:srlEnableHeaderTranslationContent="true"
-        app:srlEnableLoadMore="false"
+        app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="false"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
@@ -33,6 +33,8 @@
                 android:id="@+id/rv_my_order"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/background_l_grey"
+                android:clickable="false"
                 ></android.support.v7.widget.RecyclerView>
 
             <include layout="@layout/layout_order_no_data"></include>

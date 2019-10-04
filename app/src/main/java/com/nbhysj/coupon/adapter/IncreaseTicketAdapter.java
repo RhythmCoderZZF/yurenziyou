@@ -41,7 +41,7 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
     //购买数量
     private int mPurchaseNum = 0;
     //购买票价格
-    private int mPurchasePrice = 0;
+    private double mPurchasePrice = 0;
 
     public IncreaseTicketAdapter(Context mContext, IncreaseTicketListener increaseTicketListener) {
 
@@ -78,8 +78,8 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
             String ticketIntoTypeValue = null;
             OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(itemPosition);
             String photoUrl = goodsPriceEntity.getPhoto();
-            int mDefaultPrice = goodsPriceEntity.getDefaultPrice();
-            int mMarketPrice = goodsPriceEntity.getOtherMarketPrice();
+            double mDefaultPrice = goodsPriceEntity.getDefaultPrice();
+            double mMarketPrice = goodsPriceEntity.getOtherMarketPrice();
 
             String refundSettings = goodsPriceEntity.getRefundSettings();
 
@@ -215,7 +215,7 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
 
     public interface IncreaseTicketListener {
 
-        void setPurchaseNumListener(int position,int price,int mPurchaseNum);
+        void setPurchaseNumListener(int position,double price,int mPurchaseNum);
 
     }
 }

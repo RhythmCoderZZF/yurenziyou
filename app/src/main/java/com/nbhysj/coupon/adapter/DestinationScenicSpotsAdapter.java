@@ -18,6 +18,8 @@ import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -58,15 +60,15 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
         try {
             MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             String photo = popularScenicSpots.getPhoto();
-            int scenicSpotSequence = itemPosition + 1;
-            holder.mTvPopularScenicSpotSequence.setText("TOP." + scenicSpotSequence);
+            int mchId = popularScenicSpots.getId();
+            double commentScore = popularScenicSpots.getCommentScore();
             holder.mTvPopularScenicSpotLocation.setText(popularScenicSpots.getCounty());
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
-            holder.mTvPopularScenicSpotScore.setText(popularScenicSpots.getCommentScore() + "分");
+            holder.mTvPopularScenicSpotScore.setText(Tools.getTwoDecimalPoint(commentScore) + "分");
             holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
 
 
-            GlideUtil.loadCornersTransformImage(mContext, photo, 5, holder.mImgScenicSpots);
+            GlideUtil.loadImage(mContext, photo, holder.mImgScenicSpots);
 
             if (itemPosition == 0) {
 
@@ -89,6 +91,7 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
 
                     Intent intent = new Intent();
                     intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
                     mContext.startActivity(intent);
 
                 }
@@ -104,9 +107,6 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        //景区序列
-        @BindView(R.id.tv_popular_scenic_spot_sequence)
-        TextView mTvPopularScenicSpotSequence;
         //景区位置
         @BindView(R.id.tv_scenic_spots_location)
         TextView mTvPopularScenicSpotLocation;
@@ -121,7 +121,7 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
         TextView mTvPopularScenicSpotName;
         //景区照片
         @BindView(R.id.image_scenic_spots)
-        ImageView mImgScenicSpots;
+        RoundedImageView mImgScenicSpots;
         @BindView(R.id.view_header)
         View mHeader;
         @BindView(R.id.view_footer)

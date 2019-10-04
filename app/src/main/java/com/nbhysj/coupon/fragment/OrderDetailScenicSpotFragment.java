@@ -77,14 +77,14 @@ public class OrderDetailScenicSpotFragment extends BaseFragment {
         String goodNum = orderGoodsEntity.getGoodsNum();   //商品数量
         String note = orderGoodsEntity.getNote();
 
-        if(goodType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
+        //if(goodType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
             mTvMchName.setText(orderGoodsEntity.getMchName());
            // mTvTicketType.setText(goodsTitle + goodNum + "张");
             mTvAddress.setText(province + city + county + address);
             mTvContent.setText("营业时间" + orderGoodsEntity.getOpenTime());
 
             GlideUtil.loadImage(getActivity(),note, mImgMchAddress);
-        }
+      //  }
     }
 
     @Override

@@ -5,12 +5,14 @@ import java.util.List;
 
 /**
  * @auther：hysj created on 2019/6/9
- * description：景点详情（组合共用）
+ * description：景点详情
  */
 public class MchDetailsResponse implements Serializable {
 
     //游玩指南(景点详情)
     private List<VisitGuideEntity> visitGuide;
+
+    private String mchByNotes;
 
     //商户详情
     private MchDetailsEntity mchDetails;
@@ -26,6 +28,8 @@ public class MchDetailsResponse implements Serializable {
 
     //酒店民宿
     private NearbyHotelEntity nearbyHotel;
+
+    private List<NearbyFoodEntity> nearbyFood;
 
     public List<VisitGuideEntity> getVisitGuide() {
         return visitGuide;
@@ -81,6 +85,22 @@ public class MchDetailsResponse implements Serializable {
 
     public void setNearbyHotel(NearbyHotelEntity nearbyHotel) {
         this.nearbyHotel = nearbyHotel;
+    }
+
+    public String getMchByNotes() {
+        return mchByNotes;
+    }
+
+    public void setMchByNotes(String mchByNotes) {
+        this.mchByNotes = mchByNotes;
+    }
+
+    public List<NearbyFoodEntity> getNearbyFood() {
+        return nearbyFood;
+    }
+
+    public void setNearbyFood(List<NearbyFoodEntity> nearbyFood) {
+        this.nearbyFood = nearbyFood;
     }
 
     public class VisitGuideEntity implements Serializable {
@@ -334,6 +354,8 @@ public class MchDetailsResponse implements Serializable {
 
         private String mchType;
 
+        private String mchType2;
+
         private int supplierId;
 
         private String mchName;
@@ -373,6 +395,12 @@ public class MchDetailsResponse implements Serializable {
         private String tel;
 
         private float commentScore;
+
+        private float commentScore1;
+
+        private float commentScore2;
+
+        private float commentScore3;
 
         private double consumePrice;
 
@@ -700,6 +728,38 @@ public class MchDetailsResponse implements Serializable {
 
         public void setBookingInformationDetails(String bookingInformationDetails) {
             this.bookingInformationDetails = bookingInformationDetails;
+        }
+
+        public String getMchType2() {
+            return mchType2;
+        }
+
+        public void setMchType2(String mchType2) {
+            this.mchType2 = mchType2;
+        }
+
+        public float getCommentScore1() {
+            return commentScore1;
+        }
+
+        public void setCommentScore1(float commentScore1) {
+            this.commentScore1 = commentScore1;
+        }
+
+        public float getCommentScore2() {
+            return commentScore2;
+        }
+
+        public void setCommentScore2(float commentScore2) {
+            this.commentScore2 = commentScore2;
+        }
+
+        public float getCommentScore3() {
+            return commentScore3;
+        }
+
+        public void setCommentScore3(float commentScore3) {
+            this.commentScore3 = commentScore3;
         }
     }
 
@@ -1201,5 +1261,6 @@ public class MchDetailsResponse implements Serializable {
             this.tags = tags;
         }
     }
+
 
 }

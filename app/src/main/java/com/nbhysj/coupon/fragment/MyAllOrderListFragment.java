@@ -31,7 +31,7 @@ import butterknife.BindView;
  * created by hysj on 2018/03/29.
  * description: 我的订单
  */
-public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderListModel> implements OrderListContract.View {
+public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, OrderListModel> implements OrderListContract.View {
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout mSmartRefreshLayout;
     //我的订单列表
@@ -40,7 +40,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     //暂无订单数据
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoOrderData;
-    private List<UserOrderListResponse.OrderTypeEntity> orderTypeList;
+    private List<UserOrderListResponse.OrderTypeEntity> orderAllList;
     private int mPage = 1;
     private int mPageSize = 10;
     int mTotalPageCount;
@@ -48,8 +48,8 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     private MyOrderListAdapter myOrderListAdapter;
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
 
-    public static MyOrderListFragment newInstance(String content) {
-        MyOrderListFragment fragment = new MyOrderListFragment();
+    public static MyAllOrderListFragment newInstance(String content) {
+        MyAllOrderListFragment fragment = new MyAllOrderListFragment();
 
         fragment.mContent = content;
 
@@ -87,12 +87,12 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     @Override
     public void initView(View v) {
 
-        if (orderTypeList == null) {
+        if (orderAllList == null) {
 
-            orderTypeList = new ArrayList<>();
+            orderAllList = new ArrayList<>();
         } else {
 
-            orderTypeList.clear();
+            orderAllList.clear();
         }
 
         // 创建一个线性布局管理器
@@ -128,7 +128,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
 
             }
         });
-        myOrderListAdapter.setMyOrderList(orderTypeList);
+        myOrderListAdapter.setMyOrderList(orderAllList);
         mRvMyOrderList.setAdapter(myOrderListAdapter);
     }
 
@@ -144,7 +144,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
                     @Override
                     public void run() {
                         mPage = 1;
-                        orderTypeList.clear();
+                        orderAllList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
                         showProgressDialog(getActivity());
                         getOrderList();
@@ -163,7 +163,7 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
                     public void run() {
                         isOnLoadMore = true;
                         try {
-                            if (mTotalPageCount == orderTypeList.size()) {
+                            if (mTotalPageCount == orderAllList.size()) {
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
                                 mPage++;
@@ -182,7 +182,9 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
 
     @Override
     public void showMsg(String msg) {
-
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
         dismissProgressDialog();
         showToast(getActivity(), Constants.getResultMsg(msg));
     }
@@ -224,6 +226,9 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
     @Override
     public void getUserOrderListResult(BackResult<UserOrderListResponse> res) {
         dismissProgressDialog();
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
@@ -232,23 +237,30 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
                         mSmartRefreshLayout.finishLoadMore();
                     } else {
 
-                        orderTypeList.clear();
+                        orderAllList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
                         mSmartRefreshLayout.finishRefresh();
                         mSmartRefreshLayout.setNoMoreData(false);
                     }
                     UserOrderListResponse orderListResponse = res.getData();
-                    orderTypeList = orderListResponse.getResult();
                     BasePaginationResult paginationResult = orderListResponse.getPage();
                     mTotalPageCount = paginationResult.getPageCount();
-                    if (orderTypeList.size() > 0) {
-                        mRlytNoOrderData.setVisibility(View.GONE);
 
-                    } else {
-
+                    if (mTotalPageCount == 0)
+                    {
                         mRlytNoOrderData.setVisibility(View.VISIBLE);
+                    } else {
+                        mRlytNoOrderData.setVisibility(View.GONE);
                     }
-                    myOrderListAdapter.setMyOrderList(orderTypeList);
+
+                    List<UserOrderListResponse.OrderTypeEntity> orderTypeList = orderListResponse.getResult();
+
+                    if (orderTypeList != null)
+                    {
+                        orderAllList.addAll(orderTypeList);
+                    }
+
+                    myOrderListAdapter.setMyOrderList(orderAllList);
                     myOrderListAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -277,15 +289,15 @@ public class MyOrderListFragment extends BaseFragment<OrderListPresenter, OrderL
             case Constants.SUCCESS_CODE:
                 try {
 
-                    orderTypeList.remove(mOrderTypeEntity);
-                    if (orderTypeList.size() > 0) {
+                    orderAllList.remove(mOrderTypeEntity);
+                    if (orderAllList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
 
                     } else {
 
                         mRlytNoOrderData.setVisibility(View.VISIBLE);
                     }
-                    myOrderListAdapter.setMyOrderList(orderTypeList);
+                    myOrderListAdapter.setMyOrderList(orderAllList);
                     myOrderListAdapter.notifyDataSetChanged();
 
                 } catch (Exception e) {

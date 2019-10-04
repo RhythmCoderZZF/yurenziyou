@@ -1,10 +1,4 @@
-package com.nbhysj.coupon;
-
-import java.io.File;
-
-import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.uikit.CameraUtil;
-import com.nbhysj.coupon.uikit.MMAlert;
+package com.nbhysj.coupon.pay.wechat;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -19,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.nbhysj.coupon.R;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
@@ -31,6 +26,8 @@ import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import java.io.File;
 
 public class SendToWXActivity extends Activity {
 
@@ -108,7 +105,7 @@ public class SendToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(SendToWXActivity.this, getString(R.string.send_img), 
+				MMAlert.showAlert(SendToWXActivity.this, getString(R.string.send_img),
 						SendToWXActivity.this.getResources().getStringArray(R.array.send_img_item),
 						null, new MMAlert.OnAlertSelectId(){
 
@@ -274,7 +271,7 @@ public class SendToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(SendToWXActivity.this, getString(R.string.send_video), 
+				MMAlert.showAlert(SendToWXActivity.this, getString(R.string.send_video),
 						SendToWXActivity.this.getResources().getStringArray(R.array.send_video_item),
 						null, new MMAlert.OnAlertSelectId(){
 
@@ -368,7 +365,7 @@ public class SendToWXActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				MMAlert.showAlert(SendToWXActivity.this, getString(R.string.send_appdata), 
+				MMAlert.showAlert(SendToWXActivity.this, getString(R.string.send_appdata),
 					SendToWXActivity.this.getResources().getStringArray(R.array.send_appdata_item),
 					null, new MMAlert.OnAlertSelectId(){
 

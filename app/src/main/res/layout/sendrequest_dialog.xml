@@ -13,7 +13,7 @@
         android:paddingRight="8dp"
         android:singleLine="false"
         android:textColor="@color/white"
-        android:textSize="@dimen/TitleTextSize" />
+        android:textSize="@dimen/text_size_small" />
 
     <View
         style="@style/MMSplit"

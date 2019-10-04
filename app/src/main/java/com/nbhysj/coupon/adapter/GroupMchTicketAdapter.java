@@ -122,7 +122,11 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         groupitem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
         if(!TextUtils.isEmpty(bookingInfo))
         {
+            groupitem.mTvBookInfo.setVisibility(View.VISIBLE);
             groupitem.mTvBookInfo.setText(bookingInfo);
+        } else {
+
+            groupitem.mTvBookInfo.setVisibility(View.GONE);
         }
         if (isExpanded) {
             groupitem.mImgTicketExpandable.setImageResource(R.mipmap.icon_admission_ticket_expand);

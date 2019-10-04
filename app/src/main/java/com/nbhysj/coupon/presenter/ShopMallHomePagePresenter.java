@@ -22,4 +22,11 @@ public class ShopMallHomePagePresenter extends ShopMallHomePageContract.Presente
     public void getCarH5Url(String startLg, String startLt) {
         mRxManager.add(mModel.getCarH5Url(startLg,startLt).subscribe(res -> mView.getCarH5UrlResult(res), e -> mView.showMsg(e.getMessage())));
     }
+
+
+    @Override
+    public void getWeather(int cityCode) {
+        mRxManager.add(mModel.getWeather(cityCode).subscribe(res -> mView.getWeatherResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
 }

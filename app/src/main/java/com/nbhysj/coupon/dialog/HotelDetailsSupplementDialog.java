@@ -114,6 +114,7 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
         double marketPrice = mchHotelGoodsBean.getMarketPrice();
         mTvHotelTitle.setText(title);
         mTvPrice.setText(String.valueOf(marketPrice));
+        String goodsBuyNotes = mchHotelGoodsBean.getGoodsBuyNotes();
 
         mRlytNewTourists.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +168,7 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
             }
         });
 
-        setWebView("http://www.baidu.com");
+        setWebView(goodsBuyNotes);
 
     }
     public void setWebView(String url) {

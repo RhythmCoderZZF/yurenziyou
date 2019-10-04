@@ -1,4 +1,4 @@
-package com.nbhysj.wxapi;
+package com.nbhysj.coupon.wxapi;
 
 import android.app.Activity;
 import android.content.Intent;

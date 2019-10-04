@@ -11,6 +11,7 @@ import com.nbhysj.coupon.fragment.FindPwdByPhoneFragment;
 import com.nbhysj.coupon.fragment.FollowFragment;
 import com.nbhysj.coupon.fragment.NearbyFragment;
 import com.nbhysj.coupon.fragment.RecommendFragment;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ import butterknife.BindView;
  */
 public class FindPasswordActivity extends BaseActivity {
 
-    private FindPwdByPhoneFragment homeFragment2;
-    private FindPwdByEmailFragment nearbyFragment;
+    private FindPwdByPhoneFragment mFindPwdByPhone;
+    private FindPwdByEmailFragment mFindPwdByEmail;
     private String[] titles = new String[]{"手机找回", "邮箱找回"};
     @BindView(R.id.tab_layout)
     SlidingTabLayout tabLayout;
@@ -35,25 +36,26 @@ public class FindPasswordActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_find_password;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setBar(FindPasswordActivity.this, "", R.mipmap.nav_ico_back_black, R.mipmap.icon_cancel);
+        ToolbarHelper.setHeaderBar(FindPasswordActivity.this, "", R.mipmap.nav_ico_back_black, R.mipmap.icon_cancel);
         fragments = new ArrayList<>();
         List<Fragment> fragments1 = getSupportFragmentManager().getFragments();
         if (fragments1 != null && fragments1.size() > 1) {
-            homeFragment2 = (FindPwdByPhoneFragment) fragments1.get(1);
-            nearbyFragment = (FindPwdByEmailFragment) fragments1.get(2);
+            mFindPwdByPhone = (FindPwdByPhoneFragment) fragments1.get(1);
+            mFindPwdByEmail = (FindPwdByEmailFragment) fragments1.get(2);
         } else {
-            homeFragment2 = new FindPwdByPhoneFragment();
-            nearbyFragment = new FindPwdByEmailFragment();
+            mFindPwdByPhone = new FindPwdByPhoneFragment();
+            mFindPwdByEmail = new FindPwdByEmailFragment();
         }
 
-        fragments.add(homeFragment2);
-        fragments.add(nearbyFragment);
+        fragments.add(mFindPwdByPhone);
+        fragments.add(mFindPwdByEmail);
 
         tabLayout.setViewPager(viewpager, titles, FindPasswordActivity.this, fragments);
     }

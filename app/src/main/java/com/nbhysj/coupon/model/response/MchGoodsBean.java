@@ -115,7 +115,7 @@ public class MchGoodsBean {
         return defaultPrice;
     }
 
-    public void setDefaultPrice(int defaultPrice) {
+    public void setDefaultPrice(double defaultPrice) {
         this.defaultPrice = defaultPrice;
     }
 

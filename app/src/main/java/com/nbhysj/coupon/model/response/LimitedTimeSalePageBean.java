@@ -1,58 +1,146 @@
 package com.nbhysj.coupon.model.response;
 
+import java.util.List;
+
 /**
  * @auther：hysj created on 2019/9/29
- * description：良心推荐
+ * description：限时特卖列表
  */
-public class ConscienceRecommendationBean {
+public class LimitedTimeSalePageBean {
 
-    private int id;
+    private TimeLimitEntity timeLimit;
 
-    private String photo;
+    private RecommendEntity recommend;
 
-    private String title;
-
-    private double price;
-
-    private String type;
-
-    public int getId() {
-        return id;
+    public TimeLimitEntity getTimeLimit() {
+        return timeLimit;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTimeLimit(TimeLimitEntity timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
-    public String getPhoto() {
-        return photo;
+    public RecommendEntity getRecommend() {
+        return recommend;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setRecommend(RecommendEntity recommend) {
+        this.recommend = recommend;
     }
 
-    public String getTitle() {
-        return title;
+    public class TimeLimitEntity{
+
+        private int id;
+
+        private String title;
+
+        private long startTime;
+
+        private long endTime;
+
+        private int goodsCount;
+
+        private List<GoodsBean> goods;
+
+        private long ctime;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public long getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(long startTime) {
+            this.startTime = startTime;
+        }
+
+        public long getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(long endTime) {
+            this.endTime = endTime;
+        }
+
+        public int getGoodsCount() {
+            return goodsCount;
+        }
+
+        public void setGoodsCount(int goodsCount) {
+            this.goodsCount = goodsCount;
+        }
+
+        public List<GoodsBean> getGoods() {
+            return goods;
+        }
+
+        public void setGoods(List<GoodsBean> goods) {
+            this.goods = goods;
+        }
+
+        public long getCtime() {
+            return ctime;
+        }
+
+        public void setCtime(long ctime) {
+            this.ctime = ctime;
+        }
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public class RecommendEntity{
 
-    public double getPrice() {
-        return price;
-    }
+        private List<ConscienceRecommendationBean> recreation;
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+        private List<ConscienceRecommendationBean> hotel;
 
-    public String getType() {
-        return type;
-    }
+        private List<ConscienceRecommendationBean> scenic;
 
-    public void setType(String type) {
-        this.type = type;
+        private List<ConscienceRecommendationBean> group;
+
+        public List<ConscienceRecommendationBean> getRecreation() {
+            return recreation;
+        }
+
+        public void setRecreation(List<ConscienceRecommendationBean> recreation) {
+            this.recreation = recreation;
+        }
+
+        public List<ConscienceRecommendationBean> getHotel() {
+            return hotel;
+        }
+
+        public void setHotel(List<ConscienceRecommendationBean> hotel) {
+            this.hotel = hotel;
+        }
+
+        public List<ConscienceRecommendationBean> getScenic() {
+            return scenic;
+        }
+
+        public void setScenic(List<ConscienceRecommendationBean> scenic) {
+            this.scenic = scenic;
+        }
+
+        public List<ConscienceRecommendationBean> getGroup() {
+            return group;
+        }
+
+        public void setGroup(List<ConscienceRecommendationBean> group) {
+            this.group = group;
+        }
     }
 }

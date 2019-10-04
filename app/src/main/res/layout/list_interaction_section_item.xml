@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llyt_hotel_homestay_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_recreation_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp_10"
@@ -17,20 +18,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/image_hotel_homestay"
+        <com.nbhysj.coupon.view.RoundedImageView
+            android:id="@+id/image_recreation"
             android:layout_width="163dp"
             android:layout_height="102dp"
             android:layout_centerVertical="true"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            app:riv_corner_radius="@dimen/dp_5" />
 
         <TextView
-            android:id="@+id/tv_hotel_homestay_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_recreation_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_marginBottom="@dimen/dp_16"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingRight="@dimen/dp_10"
             android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_normal"

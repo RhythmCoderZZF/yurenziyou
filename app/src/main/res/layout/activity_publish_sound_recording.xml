@@ -74,14 +74,14 @@
         android:max="30"
         android:progress="0" />
 
-        <com.nbhysj.coupon.widget.wavelineview.WaveLineView
+        <com.nbhysj.coupon.widget.wavelineview.GreenWaveLineView
             android:id="@+id/wave_line_view_audio_frequency"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_83"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginRight="@dimen/dp_25"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_18"
             app:wlvBackgroundColor="@android:color/transparent"
             />
     </RelativeLayout>

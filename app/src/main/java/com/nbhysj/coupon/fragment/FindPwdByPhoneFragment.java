@@ -5,8 +5,11 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -41,6 +44,9 @@ public class FindPwdByPhoneFragment extends BaseFragment<FindPwdPresenter, FindP
     EditText mEdtVerifyCode;
     @BindView(R.id.tv_find_pwd)
     TextView mTvFindPwd;
+    //查看和隐藏密码
+    @BindView(R.id.img_password_is_invisible)
+    ImageView mImgPwdIsInvisible;
     //加密后的密码
     private String encryptedPwd;
     private String phoneNum;
@@ -49,6 +55,8 @@ public class FindPwdByPhoneFragment extends BaseFragment<FindPwdPresenter, FindP
     Handler handler;
     private int delaytime = 60;
     private int VERIFY_CODE_MSG = 0;
+
+    private boolean isSeePasswordOprate = true;
 
     public FindPwdByPhoneFragment() {
     }
@@ -157,6 +165,25 @@ public class FindPwdByPhoneFragment extends BaseFragment<FindPwdPresenter, FindP
 
             }
         });
+
+        mImgPwdIsInvisible.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isSeePasswordOprate)
+                {
+                    mImgPwdIsInvisible.setImageResource(R.mipmap.icon_see_password);
+                    isSeePasswordOprate = false;
+
+                    mEdtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
+                } else {
+
+                    mImgPwdIsInvisible.setImageResource(R.mipmap.icon_invisible_password);
+                    isSeePasswordOprate = true;
+                    mEdtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
     }
 
     @Override
@@ -175,11 +202,11 @@ public class FindPwdByPhoneFragment extends BaseFragment<FindPwdPresenter, FindP
     }
 
     @Override
-    public void getSaltResult(BackResult<String> res) {
+    public void getSaltResult(BackResult<Object> res) {
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
 
-                String saltKey = res.getData();
+                String saltKey = (String) res.getData();
                 findPwdByPhone(saltKey);
                 break;
             default:
@@ -194,7 +221,7 @@ public class FindPwdByPhoneFragment extends BaseFragment<FindPwdPresenter, FindP
     }
 
     @Override
-    public void updatePwdByEmailGetSaltResult(BackResult<String> res) {
+    public void updatePwdByEmailGetSaltResult(BackResult<Object> res) {
 
     }
 

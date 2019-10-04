@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.DeliciousFoodShopRecommendMoreAdapter;
+import com.nbhysj.coupon.adapter.FoodNearbyMoreAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.ShopRecommendDeliciousFoodAdapter;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
@@ -155,7 +155,7 @@ public class FoodRecommendationActivity extends BaseActivity {
                         2);
         mRvDeliciousFoodMoreRecommendation.setLayoutManager(moreRecommendationGridLayoutManager);
         // linearLayoutManager.setAutoMeasureEnabled(true);
-        DeliciousFoodShopRecommendMoreAdapter deliciousFoodShopRecommendMoreAdapter = new DeliciousFoodShopRecommendMoreAdapter(FoodRecommendationActivity.this);
+        FoodNearbyMoreAdapter deliciousFoodShopRecommendMoreAdapter = new FoodNearbyMoreAdapter(FoodRecommendationActivity.this);
         mRvDeliciousFoodMoreRecommendation.setAdapter(deliciousFoodShopRecommendMoreAdapter);
         mRvDeliciousFoodMoreRecommendation.addItemDecoration(new RecyclerItemDecoration(11, 2));
     }
@@ -207,30 +207,30 @@ public class FoodRecommendationActivity extends BaseActivity {
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
-        private int itemSpace;
-        private int itemNum;
+            private int itemSpace;
+            private int itemNum;
 
-        /**
-         * @param itemSpace item间隔
-         * @param itemNum   每行item的个数
-         */
-        public RecyclerItemDecoration(int itemSpace, int itemNum) {
-            this.itemSpace = itemSpace;
-            this.itemNum = itemNum;
-        }
+            /**
+             * @param itemSpace item间隔
+             * @param itemNum   每行item的个数
+             */
+            public RecyclerItemDecoration(int itemSpace, int itemNum) {
+                this.itemSpace = itemSpace;
+                this.itemNum = itemNum;
+            }
 
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
                 /*if (parent.getChildLayoutPosition(view)%itemNum == 0){  //parent.getChildLayoutPosition(view) 获取view的下标
                     outRect.left = 0;
                 } else {
                     outRect.left = itemSpace;
                 }*/
-            outRect.left = itemSpace;
-            outRect.right = itemSpace;
-            //outRect.right = itemSpace;
-        }
+                outRect.left = itemSpace;
+                outRect.right = itemSpace;
+                //outRect.right = itemSpace;
+            }
     }
 
     @OnClick({R.id.tv_recommend_delicious_food_look_more})

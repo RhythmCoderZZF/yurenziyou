@@ -238,10 +238,16 @@ public class RecreationBangDanListActivity extends BaseActivity<RecreationPresen
         }
     }
 
+    @Override
+    public void getRecreationDetailResult(BackResult<MchDetailsResponse> res) {
+
+    }
 
     @Override
     public void showMsg(String msg) {
 
+        dismissProgressDialog();
+        showToast(RecreationBangDanListActivity.this,Constants.getResultMsg(msg));
     }
 
     @OnClick({R.id.iv_back})

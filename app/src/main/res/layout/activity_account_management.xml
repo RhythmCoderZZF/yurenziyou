@@ -195,6 +195,7 @@
                 android:layout_marginLeft="@dimen/dp_16" />
 
             <RelativeLayout
+                android:id="@+id/rlyt_update_password"
                 android:layout_width="match_parent"
                 android:layout_height="56dp">
 
@@ -232,7 +233,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
         android:layout_alignParentBottom="true"
-        android:background="@color/line">
+        android:background="@color/line"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

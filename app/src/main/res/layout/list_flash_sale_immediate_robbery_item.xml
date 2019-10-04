@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_limited_time_robbery"
     android:layout_width="@dimen/dp_150"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="@dimen/dp_8"
     android:background="@drawable/bg_white_radius_five_shape"
     android:layout_marginRight="@dimen/dp_10"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
+        <com.nbhysj.coupon.view.RoundedImageView
             android:id="@+id/image_flash_sale"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_105"
             android:scaleType="fitXY"
-            android:adjustViewBounds="true" />
-
-    </RelativeLayout>
+            android:adjustViewBounds="true"
+            app:riv_corner_radius_top_left="@dimen/dp_5"
+            app:riv_corner_radius_top_right="@dimen/dp_5"
+           />
 
     <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_limited_sale_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_10"
-        android:text="宁波宁波自由行 往返含住宿"
+        android:text=""
+        android:lines="1"
+        android:ellipsize="end"
         android:layout_marginRight="@dimen/dp_10"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_normal" />
@@ -42,17 +43,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginLeft="@dimen/dp_5"
             android:text="@string/str_renminbi_symbol"
             android:textColor="#FFFE2C4A"
             android:textSize="@dimen/text_size_xsmall" />
 
         <TextView
+            android:id="@+id/tv_limited_time_sale_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:text="156"
+            android:text="0"
             android:textColor="#FFFE2C4A"
             android:textSize="@dimen/text_size_xlarge" />
     </LinearLayout>

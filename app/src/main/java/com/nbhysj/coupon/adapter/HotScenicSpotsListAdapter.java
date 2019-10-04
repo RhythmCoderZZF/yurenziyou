@@ -56,7 +56,7 @@ public class HotScenicSpotsListAdapter extends RecyclerView.Adapter<HotScenicSpo
             // PopularScenicSpotsResponse popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             MchTypeBean hotMchTypeBean = popularScenicSpotsList.get(itemPosition);
             int mConsumePrice = hotMchTypeBean.getConsumePrice();
-            int mCommentScore = hotMchTypeBean.getCommentScore();
+            double mCommentScore = hotMchTypeBean.getCommentScore();
             String photoUrl = hotMchTypeBean.getPhoto();
             String intro = hotMchTypeBean.getIntro();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(mConsumePrice));

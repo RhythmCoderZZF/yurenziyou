@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
@@ -76,7 +77,7 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
             if (level == 0) {
                 holder.mTvScenicSpotsLevel.setVisibility(View.GONE);
             } else {
-                holder.mTvScenicSpotsLevel.setText(level + "A");
+                holder.mTvScenicSpotsLevel.setText(level + "A级景区");
                 holder.mTvScenicSpotsLevel.setVisibility(View.VISIBLE);
             }
 
@@ -106,6 +107,8 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
                     Intent intent = new Intent();
                     intent.setClass(mContext, ScenicSpotDetailActivity.class);
                     intent.putExtra("mchId", mchtId);
+                    String mchType = MchTypeEnum.MCH_SCENIC.getValue();
+                    intent.putExtra("mchType", mchType);
                     mContext.startActivity(intent);
                 }
             });

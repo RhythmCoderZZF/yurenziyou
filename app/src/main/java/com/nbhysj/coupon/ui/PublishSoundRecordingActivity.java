@@ -30,6 +30,7 @@ import com.nbhysj.coupon.service.RecordingService;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
+import com.nbhysj.coupon.widget.wavelineview.GreenWaveLineView;
 import com.nbhysj.coupon.widget.wavelineview.WaveLineView;
 
 import java.io.File;
@@ -78,7 +79,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     TextView mTvAudioDuration;
 
     @BindView(R.id.wave_line_view_audio_frequency)
-    WaveLineView mWaveLineViewAudioFrequency;
+    GreenWaveLineView mWaveLineViewAudioFrequency;
 
     private MediaPlayer mediaPlayer;
 
@@ -97,6 +98,10 @@ public class PublishSoundRecordingActivity extends BaseActivity {
     private boolean isPause = false;
     private static int delay = 1000;  //1s
     private static int period = 1000;  //1s
+    //音频时长
+    private int mediaDuration;
+   // 音频时长(秒)
+    private int mediaDurationSecond;
 
     @Override
     public int getLayoutId() {
@@ -141,6 +146,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
 
                     int progressDurTime = (int)time / 1000;
                     mProgressAudioParentBar.setProgress(progressDurTime);
+
                 }
             }
         };
@@ -303,7 +309,7 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                     mediaPlayer.setDataSource(filePath);
                     mediaPlayer.prepare();
 
-                    int mediaDuration = mediaPlayer.getDuration();
+                    mediaDuration = mediaPlayer.getDuration();
 
                     String ms = timeParse(mediaDuration);
 
@@ -364,19 +370,19 @@ public class PublishSoundRecordingActivity extends BaseActivity {
      * @param duration 音乐时长
      * @return
      */
-    public static String timeParse(long duration) {
+    public  String timeParse(long duration) {
         String time = "";
         long minute = duration / 60000;
         long seconds = duration % 60000;
-        long second = Math.round((float) seconds / 1000);
+        mediaDurationSecond = (int) seconds / 1000;
         if (minute < 10) {
             time += "0";
         }
         time += minute + ":";
-        if (second < 10) {
+        if (mediaDurationSecond < 10) {
             time += "0";
         }
-        time += second;
+        time += mediaDurationSecond;
         return time;
 
     }
@@ -395,7 +401,9 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                         - TimeUnit.MINUTES.toSeconds(minutes);
 
                 mTvAudioDuration.setText(String.format("%02d:%02d", minutes, seconds) + "/" +  "00:30");
-
+                if(seconds == mediaDurationSecond){
+                    mIbtnSoundMediaPlay.setBackgroundResource(R.mipmap.icon_sound_media_play);
+                }
                 updateSeekBar();
             }
         }

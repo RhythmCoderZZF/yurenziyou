@@ -8,6 +8,7 @@ import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.LoginResponse;
+import com.nbhysj.coupon.model.response.UserInfoResponse;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -30,12 +31,17 @@ public class RegisterModel implements RegisterContract.Model {
     }
 
     @Override
-    public Observable<BackResult<String>> getSalt(String mobile) {
+    public Observable<BackResult<Object>> getSalt(String mobile) {
         return Api.getInstance().apiService.getSalt(mobile).compose(RxSchedulers.io_main());
     }
 
     @Override
     public Observable<BackResult<LoginResponse>> login(LoginRequest loginRequest) {
         return Api.getInstance().apiService.login(loginRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<UserInfoResponse>> getUserInfo(int userId) {
+        return Api.getInstance().apiService.getUserInfo(userId).compose(RxSchedulers.io_main());
     }
 }

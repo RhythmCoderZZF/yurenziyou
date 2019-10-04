@@ -3,6 +3,7 @@ package com.nbhysj.coupon.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -26,9 +29,6 @@ import butterknife.ButterKnife;
  */
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> {
 
-    /**
-     * 酒店问答内容
-     */
     List<MchTypeBean> hotelList;
     private Context mContext;
 
@@ -55,7 +55,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
 
         try {
             MchTypeBean hotelResponse = hotelList.get(itemPosition);
-            int commentScore = hotelResponse.getCommentScore();
+            double commentScore = hotelResponse.getCommentScore();
             String intro = hotelResponse.getIntro();
             int level = hotelResponse.getLevel();
             int commentNum = hotelResponse.getCommentNum();
@@ -63,6 +63,8 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
             String photo = hotelResponse.getPhoto();
             holder.mTvHotelName.setText(hotelResponse.getMchName());
             int mchId = hotelResponse.getId();
+            String mchType = hotelResponse.getMchType();
+            String mchType2 = hotelResponse.getMchType2();
             holder.mTvHotelReputationScore.setText(String.valueOf(commentScore));
             if (intro != null) {
 
@@ -103,11 +105,24 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
             holder.mRlytHotelItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String type = MchTypeEnum.MCH_HOTEL.getValue();
+                    String hotelType = MchTypeEnum.MCH_HOTEL1.getValue();
+                    String homestayType = MchTypeEnum.MCH_HOTEL2.getValue();
+                    if (mchType.equals(type)) {
+                        if (!TextUtils.isEmpty(mchType2)) {
+                            Intent intent = new Intent();
+                            intent.putExtra("mchId", mchId);
+                            if (mchType2.equals(hotelType)) {
 
-                    Intent intent = new Intent();
-                    intent.putExtra("mchId",mchId);
-                    intent.setClass(mContext, HotelDetailsActivity.class);
-                    mContext.startActivity(intent);
+                                intent.setClass(mContext, HotelDetailsActivity.class);
+                                mContext.startActivity(intent);
+                            } else if (mchType2.equals(homestayType)) {
+                                intent.setClass(mContext, HomestayDetailActivity.class);
+                                mContext.startActivity(intent);
+                            }
+
+                        }
+                    }
                 }
             });
 

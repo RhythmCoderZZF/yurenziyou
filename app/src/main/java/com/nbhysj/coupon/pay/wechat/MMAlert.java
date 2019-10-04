@@ -1,16 +1,10 @@
-package com.nbhysj.coupon.uikit;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.Util;
+package com.nbhysj.coupon.pay.wechat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -23,11 +17,16 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.nbhysj.coupon.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class MMAlert {
 
@@ -44,7 +43,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(title);
 		builder.setMessage(msg);
@@ -65,7 +64,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(titleId);
 		builder.setMessage(msgId);
@@ -86,7 +85,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(titleId);
 		builder.setMessage(msgId);
@@ -102,7 +101,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(title);
 		builder.setMessage(msg);
@@ -118,7 +117,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(titleId);
 		builder.setMessage(msgId);
@@ -136,7 +135,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(title);
 		builder.setMessage(msg);
@@ -153,7 +152,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(title);
 		builder.setMessage(msg);
@@ -171,7 +170,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_alert);
 		builder.setTitle(title);
 		builder.setMessage(msg);
@@ -188,7 +187,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setTitle(title);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.app_ok, lOk);
@@ -204,7 +203,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setTitle(title);
 		builder.setView(view);
 		builder.setPositiveButton(ok, lOk);
@@ -220,7 +219,7 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setTitle(title);
 		builder.setView(view);
 		builder.setPositiveButton(ok, lOk);
@@ -236,14 +235,14 @@ public final class MMAlert {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setTitle(title);
 		builder.setMessage(msg);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.app_ok, lOk);
 		builder.setNegativeButton(R.string.app_cancel, lCancel);
 		// builder.setCancelable(true);
-		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+		builder.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -257,12 +256,12 @@ public final class MMAlert {
 		return alert;
 	}
 
-	public static AlertDialog showAlert(final Context context, final String title, final View view, final DialogInterface.OnCancelListener lCancel) {
+	public static AlertDialog showAlert(final Context context, final String title, final View view, final OnCancelListener lCancel) {
 		if (context instanceof Activity && ((Activity) context).isFinishing()) {
 			return null;
 		}
 
-		final Builder builder = new AlertDialog.Builder(context);
+		final Builder builder = new Builder(context);
 		builder.setTitle(title);
 		builder.setView(view);
 		// builder.setCancelable(true);
@@ -278,7 +277,7 @@ public final class MMAlert {
 
 	public static ProgressDialog showProgressDlg(final Context context, final String title, final String message, final boolean indeterminate, final boolean cancelable, final OnCancelListener lCancel) {
 
-		return ProgressDialog.show(context, title, message, indeterminate, cancelable, new DialogInterface.OnCancelListener() {
+		return ProgressDialog.show(context, title, message, indeterminate, cancelable, new OnCancelListener() {
 
 			@Override
 			public void onCancel(final DialogInterface dialog) {

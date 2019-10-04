@@ -12,7 +12,7 @@ public class OrderSubmitResponse implements Serializable {
     private String orderNo;
 
     //票价格
-    private int price;
+    private double price;
 
     //票标题
     private String title;
@@ -28,11 +28,11 @@ public class OrderSubmitResponse implements Serializable {
         this.orderNo = orderNo;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

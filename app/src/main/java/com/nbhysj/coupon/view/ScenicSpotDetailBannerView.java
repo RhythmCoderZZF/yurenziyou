@@ -32,7 +32,7 @@ public class ScenicSpotDetailBannerView extends FrameLayout {
     private static final int MSG_LOOP = 1000;
     private static long LOOP_INTERVAL = 5000L;
     private LinearLayout mLinearPosition = null;
-    private ViewPager mViewPager = null;
+    private MyScrollViewPager mViewPager = null;
     private ScenicSpotDetailBannerView.BannerHandler mBannerHandler = null;
     private List<ImageView> viewList;
     private int viewSize;
@@ -80,7 +80,7 @@ public class ScenicSpotDetailBannerView extends FrameLayout {
     }
 
     private void initViewPager() {
-        this.mViewPager = new ViewPager(this.getContext());
+        this.mViewPager = new MyScrollViewPager(this.getContext());
         LayoutParams layoutParams = new LayoutParams(-2, -2);
         this.mViewPager.setLayoutParams(layoutParams);
         this.mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -174,6 +174,13 @@ public class ScenicSpotDetailBannerView extends FrameLayout {
         this.scenicSpotDetailBannerViewListener = scenicSpotDetailBannerViewListener;
         if (viewList != null && viewList.size() != 0) {
             this.viewSize = viewList.size();
+            if (this.viewSize > 1) {
+                //   startViewPager();
+                mViewPager.setScroll(true);
+            } else {
+                mViewPager.setScroll(false);
+
+            }
             ScenicSpotDetailBannerAdapter bannerAdapter = new ScenicSpotDetailBannerAdapter(mContext, viewList, bannerUrlList, new ScenicSpotDetailBannerAdapter.ScenicSpotDetailBannerListener() {
                 @Override
                 public void scenicSpotDetailBannerListener() {
@@ -183,6 +190,8 @@ public class ScenicSpotDetailBannerView extends FrameLayout {
             });
             this.setAdapter(bannerAdapter);
         }
+
+
 
     }
 

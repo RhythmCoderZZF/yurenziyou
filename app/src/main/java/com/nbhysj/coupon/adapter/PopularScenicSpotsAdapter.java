@@ -64,7 +64,7 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
             holder.mTvPopularScenicSpotSequence.setText("No." + scenicSpotSequence);
             int mchId = popularScenicSpots.getId();
             int consumePrice = popularScenicSpots.getConsumePrice();
-            int commentScore = popularScenicSpots.getCommentScore();
+            double commentScore = popularScenicSpots.getCommentScore();
             String address = popularScenicSpots.getAddress();
             String scenicSpotsPhoto = popularScenicSpots.getPhoto();
             String mchType = popularScenicSpots.getMchType();

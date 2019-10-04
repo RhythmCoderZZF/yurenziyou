@@ -68,10 +68,7 @@ public class GroupMchListAdapter extends RecyclerView.Adapter<GroupMchListAdapte
             holder.mTvGroupMchDes.setText(intro);
             holder.mTvGroupPrice.setText(String.valueOf(marketPrice));
 
-            List<String> fineFoodTagList = new ArrayList<>();
-            fineFoodTagList.add("主题乐园");
-            fineFoodTagList.add("酒店+景区");
-            holder.mTagFlowlayoutCombinationLabel.setAdapter(new TagAdapter<String>(fineFoodTagList) {
+          /*  holder.mTagFlowlayoutCombinationLabel.setAdapter(new TagAdapter<String>(fineFoodTagList) {
 
                 @Override
                 public View getView(FlowLayout parent, int position, String fineFoodTag) {
@@ -91,7 +88,7 @@ public class GroupMchListAdapter extends RecyclerView.Adapter<GroupMchListAdapte
                     tv.setText(fineFoodTag);
                     return view;
                 }
-            });
+            });*/
 
             holder.mRlytGroupMchItem.setOnClickListener(new View.OnClickListener() {
                 @Override

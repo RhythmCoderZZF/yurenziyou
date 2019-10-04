@@ -9,9 +9,12 @@ import android.widget.ImageView;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.fragment.MyAllOrderListFragment;
 import com.nbhysj.coupon.fragment.MyOrderFragmentManager;
-import com.nbhysj.coupon.fragment.MyOrderListFragment;
+import com.nbhysj.coupon.fragment.PendingCommentOrderListFragment;
 import com.nbhysj.coupon.fragment.PendingPaymentListFragment;
+import com.nbhysj.coupon.fragment.PendingTravelListFragment;
+import com.nbhysj.coupon.fragment.RefundOrderListFragment;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ public class MyOrderActivity extends BaseActivity {
     private String[] titles = new String[]{"全部", "待付款", "待出行", "待评价", "退换/售后"};
 
     private List<Fragment> fragmentList;
+
+    private int orderStatus;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -38,6 +43,7 @@ public class MyOrderActivity extends BaseActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
 
+        orderStatus = getIntent().getIntExtra("orderStatus",0);
         if(fragmentList == null){
 
             fragmentList = new ArrayList<>();
@@ -46,15 +52,16 @@ public class MyOrderActivity extends BaseActivity {
             fragmentList.clear();
         }
 
-        fragmentList.add(new MyOrderListFragment());
+        fragmentList.add(new MyAllOrderListFragment());
         fragmentList.add(new PendingPaymentListFragment());
-        fragmentList.add(new MyOrderListFragment());
-        fragmentList.add(new MyOrderListFragment());
-        fragmentList.add(new MyOrderListFragment());
+        fragmentList.add(new PendingTravelListFragment());
+        fragmentList.add(new PendingCommentOrderListFragment());
+        fragmentList.add(new RefundOrderListFragment());
 
         FragmentPagerAdapter adapter = new MyOrderFragmentManager(getSupportFragmentManager(), titles,fragmentList);
         viewpager.setAdapter(adapter);
         tabLayout.setViewPager(viewpager, titles);
+        viewpager.setCurrentItem(orderStatus);
     }
 
     @Override

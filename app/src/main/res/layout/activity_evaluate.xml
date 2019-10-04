@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.EvaluateActivity">
-
+    android:orientation="vertical"
+  >
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -20,13 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_15"
-                android:background="@mipmap/nav_ico_back_black" />
+                android:padding="@dimen/dp_10"
+                android:src="@mipmap/icon_left_arrow_black"
+               />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,7 +35,7 @@
                 android:layout_centerVertical="true"
                 android:gravity="center"
                 android:layout_centerInParent="true"
-                android:text="海洋世界大酒店"
+                android:text="@string/str_publication_evaluation"
                 android:textColor="@color/color_text_black7"
                 android:textSize="@dimen/text_size_large" />
 
@@ -59,4 +60,9 @@
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_evaluate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

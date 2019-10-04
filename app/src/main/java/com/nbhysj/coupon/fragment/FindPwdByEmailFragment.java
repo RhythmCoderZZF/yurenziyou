@@ -167,11 +167,11 @@ public class FindPwdByEmailFragment extends BaseFragment<FindPwdPresenter, FindP
     }
 
     @Override
-    public void updatePwdByEmailGetSaltResult(BackResult<String> res) {
+    public void updatePwdByEmailGetSaltResult(BackResult<Object> res) {
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
 
-                String saltKey = res.getData();
+                String saltKey = (String)res.getData();
                 modifyPasswordByEmail(saltKey);
                 break;
             default:
@@ -182,7 +182,7 @@ public class FindPwdByEmailFragment extends BaseFragment<FindPwdPresenter, FindP
     }
 
     @Override
-    public void getSaltResult(BackResult<String> res) {
+    public void getSaltResult(BackResult<Object> res) {
 
     }
 

@@ -12,11 +12,8 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
-import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
-import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
 

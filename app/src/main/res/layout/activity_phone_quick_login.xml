@@ -8,15 +8,9 @@
     android:focusableInTouchMode="true"
     tools:context=".ui.LoginActivity">
 
-    <View
-        android:id="@+id/toolbar_space"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"></View>
-
     <include layout="@layout/login_toolbar" />
 
-    <com.nbhysj.coupon.view.GlideImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_user_avatar"
         android:layout_width="@dimen/dp_100"
         android:layout_height="@dimen/dp_100"
@@ -24,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_45"
         android:layout_marginBottom="10dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@mipmap/icon_yrzy_app_logo" />
 
     <LinearLayout
         android:id="@+id/llyt_login_input"
@@ -62,13 +56,14 @@
                 android:layout_gravity="center"
                 android:layout_margin="6dp"
                 android:layout_marginBottom="@dimen/margin_tiny"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingBottom="@dimen/dp_3"
                 android:layout_toRightOf="@+id/tv_country_code"
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="@string/str_input_phone_number"
                 android:maxLines="1"
                 android:textColor="@color/color_text_gray"
-                android:textColorHint="@color/color_text_gray"
                 android:textSize="@dimen/text_size_medium" />
 
         </RelativeLayout>
@@ -87,7 +82,7 @@
 
             <EditText
                 android:id="@+id/edt_verification_code"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_2"
@@ -96,6 +91,9 @@
                 android:hint="验证码"
                 android:inputType="number"
                 android:maxLength="6"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingBottom="@dimen/dp_3"
+                android:layout_toLeftOf="@+id/tv_get_verification_code"
                 android:textColor="@color/color_text_gray"
                 android:textColorHint="@color/color_text_gray"
                 android:textSize="@dimen/text_size_medium" />
@@ -107,12 +105,12 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_2"
-                android:background="@drawable/selector_get_verifycode_bg"
+                android:background="@drawable/bg_get_verifiycode_unenabled"
                 android:enabled="true"
                 android:gravity="center"
                 android:padding="@dimen/dp_6"
                 android:text="@string/str_get_verification_code"
-                android:textColor="@drawable/selector_get_verifycode_bg"
+                android:textColor="@color/color_text_gray6"
                 android:textSize="@dimen/text_size_small" />
 
         </RelativeLayout>

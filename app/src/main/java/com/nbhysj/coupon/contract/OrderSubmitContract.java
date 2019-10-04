@@ -28,14 +28,21 @@ public interface OrderSubmitContract {
      **/
     interface Model extends BaseModel {
 
+        //互动订单提交界面(互动日历价格)
+        Observable<BackResult<OrderSubmitInitResponse>> getRecreationDatePriceInit(int goodsId);
+
+        //互动订单提交
+        Observable<BackResult<OrderSubmitResponse>> recreationOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
+
         //门票订单提交界面(景区日历价格)
         Observable<BackResult<OrderSubmitInitResponse>> getOrderSubmitInit(int goodsId);
 
-        //门票订单提交界面(景区日历价格)
-        Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(Map<String, Object> map);
-
         //门票订单提交
         Observable<BackResult<OrderSubmitResponse>> ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
+        //用车价格计算
+        Observable<BackResult<EstimatedPriceResponse>> getEstimatedPrice(Map<String, Object> map);
 
         //获取旅客列表
         Observable<BackResult<TravellerInfoResponse>> getUserTravellerList(int userId, int page, int pageSize);
@@ -59,12 +66,17 @@ public interface OrderSubmitContract {
 
     interface View extends BaseView {
 
-        void getOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res);
+        void getRecreationDatePriceInitResult(BackResult<OrderSubmitInitResponse> res);
 
-        void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res);
+        //订单提交返回
+        void recreationOrderSubmitResult(BackResult<OrderSubmitResponse> res);
+
+        void getOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res);
 
         //订单提交返回
         void ticketOrderSubmitResult(BackResult<OrderSubmitResponse> res);
+
+        void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res);
 
         //获取旅客列表
         void getUserTravellerListResult(BackResult<TravellerInfoResponse> res);
@@ -85,11 +97,15 @@ public interface OrderSubmitContract {
 
     abstract class Presenter extends BasePresenter<Model, View> {
 
+        public abstract void getRecreationDatePriceInit(int goodsId);
+
+        public abstract void recreationOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
         public abstract void getOrderSubmitInit(int goodsId);
 
-        public abstract void getEstimatedPrice(Map<String, Object> map);
-
         public abstract void ticketOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest);
+
+        public abstract void getEstimatedPrice(Map<String, Object> map);
 
         public abstract void getUserTravellerList(int userId, int page, int pageSize);
 

@@ -14,6 +14,8 @@ public class OrderDetailGuessBean {
 
     private String mchType;
 
+    private String mchType2;
+
     private String distance;
 
     private String photo;
@@ -28,7 +30,7 @@ public class OrderDetailGuessBean {
 
     private List<String> tags;
 
-    private int hotelType;
+    private String hotelType;
 
     public int getMchId() {
         return mchId;
@@ -110,11 +112,19 @@ public class OrderDetailGuessBean {
         this.tags = tags;
     }
 
-    public int getHotelType() {
+    public String getHotelType() {
         return hotelType;
     }
 
-    public void setHotelType(int hotelType) {
+    public void setHotelType(String hotelType) {
         this.hotelType = hotelType;
+    }
+
+    public String getMchType2() {
+        return mchType2;
+    }
+
+    public void setMchType2(String mchType2) {
+        this.mchType2 = mchType2;
     }
 }

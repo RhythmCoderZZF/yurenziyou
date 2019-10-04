@@ -1,11 +1,13 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -13,7 +15,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.GroupGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyTypeResponse;
+import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -51,16 +55,28 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
 
         try {
             NearbyTypeResponse groupGoodsBean = groupGoodsBeanList.get(itemPosition);
+            int packageId = groupGoodsBean.getId();
             String photoUrl = groupGoodsBean.getPhoto();
-            holder.mTvPopularScenicSpotName.setText(groupGoodsBean.getTitle());
-            //  holder.mTvScore.setText(groupGoodsBean.getMarketPrice() + "分");
-            // holder.mTvScenicSpotsDistance.setText("距景点" + nearbyScenicSpots.getScenicSpotsDistance() + "m");
+            float score = groupGoodsBean.getScore();
+            holder.mTvGroupMchGoodsName.setText(groupGoodsBean.getTitle());
             holder.mTvPerCapitaPrice.setText(String.valueOf(groupGoodsBean.getPrice()));
-            // holder.mTvHotelType.setText("品质客栈");
-            // holder.mTvHotelType.getBackground().setAlpha(30);
+
+            GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
+
+            holder.mTvScore.setText(String.valueOf(score));
+
+            holder.mLlytGroupMchGoodsItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, GroupMchDetailsActivity.class);
+                    intent.putExtra("packageId",packageId);
+                        mContext.startActivity(intent);
 
 
-            GlideUtil.loadCornersTransformImage(mContext, photoUrl, 5, holder.mImgScenicSpots);
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,10 +90,10 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        //景区名字
-        TextView mTvPopularScenicSpotName;
-        //景点图片
-        ImageView mImgScenicSpots;
+        //组合商品名
+        TextView mTvGroupMchGoodsName;
+        //组合商品图片
+        RoundedImageView mImgScenicSpots;
         //景区评分
         TextView mTvScore;
         //酒店类型
@@ -87,15 +103,18 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
         //人均价格
         TextView mTvPerCapitaPrice;
 
+        LinearLayout mLlytGroupMchGoodsItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mTvPopularScenicSpotName = itemView.findViewById(R.id.tv_scenic_spots_name);
-            mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
+            mTvGroupMchGoodsName = itemView.findViewById(R.id.tv_group_mch_goods_name);
+            mImgScenicSpots = itemView.findViewById(R.id.image_group_mch_goods);
             mTvScore = itemView.findViewById(R.id.tv_score);
             mTvHotelType = itemView.findViewById(R.id.tv_hotel_type);
             mTvScenicSpotsDistance = itemView.findViewById(R.id.tv_scenic_spots_distance);
-            mTvPerCapitaPrice = itemView.findViewById(R.id.tv_per_capita_price);
+            mTvPerCapitaPrice = itemView.findViewById(R.id.tv_price);
+            mLlytGroupMchGoodsItem = itemView.findViewById(R.id.llyt_group_mch_goods_item);
         }
     }
 }

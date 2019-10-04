@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.HomePageSearchActivity">
+    tools:context=".ui.HomePageSearchActivity"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
                 android:alpha="0.6"
                 android:src="@mipmap/icon_search_bar_gray" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_search_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
                 android:drawablePadding="4dp"
                 android:lines="1"
                 android:singleLine="true"
-                android:hint="宁波吃喝玩乐"
+                android:hint=""
                 android:textColor="@color/color_text_gray27"
                 android:textSize="@dimen/text_size_normal" />
 
@@ -56,18 +57,44 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_17"
+            android:layout_marginRight="@dimen/dp_7"
+            android:padding="@dimen/dp_10"
             android:text="@string/str_cancel" />
 
     </RelativeLayout>
 
-    <com.nbhysj.coupon.widget.HomePageSearchIndicator
-        android:id="@+id/indicator_homepage_search"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:background="@color/white">
 
-    </com.nbhysj.coupon.widget.HomePageSearchIndicator>
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/white"
+            app:tl_indicator_color="@color/color_line_view"
+            app:tl_indicator_corner_radius="30dp"
+            app:tl_indicator_height="3dp"
+            app:tl_indicator_margin_top="@dimen/dp_18"
+            app:tl_indicator_width="@dimen/dp_20"
+            app:tl_indicator_width_equal_title="false"
+            app:tl_tab_padding="15dp"
+            app:tl_textBold="SELECT"
+            app:tl_textSelectColor="@color/color_text_black"
+            app:tl_textUnselectColor="@color/color_text_gray"
+            app:tl_textsize="14sp" />
 
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+        />
 
 </LinearLayout>

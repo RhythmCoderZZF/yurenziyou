@@ -256,7 +256,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("orderSubmitResponse", orderSubmitResponse);
                     intent.putExtras(bundle);
-                    intent.setClass(HotelOrderActivity.this, PaymentOrderActivity.class);
+                    intent.setClass(HotelOrderActivity.this, OrderPaymentActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

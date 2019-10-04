@@ -39,6 +39,7 @@ import com.nbhysj.coupon.oss.service.ImageService;
 import com.nbhysj.coupon.oss.service.OssService;
 import com.nbhysj.coupon.oss.view.UIDisplayer;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
@@ -111,6 +112,7 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
     private int REQUEST_CODE_POST_PHOTO = 23;
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_account_and_personal_data;
     }
 

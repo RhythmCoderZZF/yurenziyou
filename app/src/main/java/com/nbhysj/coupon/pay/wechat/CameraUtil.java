@@ -1,10 +1,4 @@
-package com.nbhysj.coupon.uikit;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-
-import com.nbhysj.coupon.MD5;
+package com.nbhysj.coupon.pay.wechat;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -17,6 +11,10 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.text.format.DateFormat;
 import android.util.Log;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 public final class CameraUtil {
 

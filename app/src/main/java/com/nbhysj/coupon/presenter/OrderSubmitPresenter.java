@@ -63,6 +63,16 @@ public class OrderSubmitPresenter extends OrderSubmitContract.Presenter {
     }
 
     @Override
+    public void getRecreationDatePriceInit(int goodsId) {
+        mRxManager.add(mModel.getRecreationDatePriceInit(goodsId).subscribe(res -> mView.getOrderSubmitInitResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void recreationOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
+        mRxManager.add(mModel.recreationOrderSubmit(ticketOrderSubmitRequest).subscribe(res -> mView.ticketOrderSubmitResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

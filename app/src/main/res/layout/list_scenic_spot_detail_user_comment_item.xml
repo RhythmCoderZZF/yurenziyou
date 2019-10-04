@@ -62,10 +62,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_10"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="2019-03-04"
+                android:text=""
                 android:textColor="@color/color_text_gray17"
                 android:textSize="@dimen/text_size_small" />
         </RelativeLayout>

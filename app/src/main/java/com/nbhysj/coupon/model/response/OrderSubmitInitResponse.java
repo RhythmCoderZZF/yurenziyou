@@ -255,7 +255,7 @@ public class OrderSubmitInitResponse {
 
         private String title;
 
-        private int defaultPrice;
+        private double defaultPrice;
 
         private int insuranceStatus;
 
@@ -298,9 +298,9 @@ public class OrderSubmitInitResponse {
 
         private String ticketIntoType;
 
-        private int otherPrice;
+        private double otherPrice;
 
-        private int otherMarketPrice;
+        private double otherMarketPrice;
 
         private int otherId;
 
@@ -314,19 +314,19 @@ public class OrderSubmitInitResponse {
             this.ticketIntoType = ticketIntoType;
         }
 
-        public int getOtherPrice() {
+        public double getOtherPrice() {
             return otherPrice;
         }
 
-        public void setOtherPrice(int otherPrice) {
+        public void setOtherPrice(double otherPrice) {
             this.otherPrice = otherPrice;
         }
 
-        public int getOtherMarketPrice() {
+        public double getOtherMarketPrice() {
             return otherMarketPrice;
         }
 
-        public void setOtherMarketPrice(int otherMarketPrice) {
+        public void setOtherMarketPrice(double otherMarketPrice) {
             this.otherMarketPrice = otherMarketPrice;
         }
 
@@ -410,11 +410,11 @@ public class OrderSubmitInitResponse {
             this.title = title;
         }
 
-        public int getDefaultPrice() {
+        public double getDefaultPrice() {
             return defaultPrice;
         }
 
-        public void setDefaultPrice(int defaultPrice) {
+        public void setDefaultPrice(double defaultPrice) {
             this.defaultPrice = defaultPrice;
         }
 

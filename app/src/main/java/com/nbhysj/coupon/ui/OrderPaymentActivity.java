@@ -58,7 +58,7 @@ import butterknife.OnClick;
  * @auther：hysj created on 2019/05/09
  * description:支付订单
  */
-public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, OrderPaymentModel> implements OrderPaymentContract.View {
+public class OrderPaymentActivity extends BaseActivity<OrderPaymentPresenter, OrderPaymentModel> implements OrderPaymentContract.View {
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     //支付方式
@@ -115,7 +115,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
                         if (TextUtils.equals(resultStatus, Constants.PAYMENT_SUCCESS_CODE_ALIPAY)) {  //支付成功code
                             // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                             // showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
-                            showToast(PaymentOrderActivity.this,getString(R.string.pay_success));
+                            showToast(OrderPaymentActivity.this,getString(R.string.pay_success));
                             toActivity(MyOrderActivity.class);
 
                         } if(TextUtils.equals(resultStatus,Constants.PAYMENT_CANCEL_CODE_ALIPAY)){  // 6001 操作取消
@@ -124,7 +124,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
 
                         } else {
                             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                            showToast(PaymentOrderActivity.this,getString(R.string.pay_fail));
+                            showToast(OrderPaymentActivity.this,getString(R.string.pay_fail));
 
                             // showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
                         }
@@ -141,10 +141,10 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
                         if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
                             // 获取alipay_open_id，调支付时作为参数extern_token 的value
                             // 传入，则支付账户为该授权账户
-                            showToast(PaymentOrderActivity.this,getString(R.string.auth_success));
+                            showToast(OrderPaymentActivity.this,getString(R.string.auth_success));
                         } else {
                             // 其他状态值则为授权失败
-                            showToast(PaymentOrderActivity.this,getString(R.string.auth_failed));
+                            showToast(OrderPaymentActivity.this,getString(R.string.auth_failed));
                             // showAlert(PayDemoActivity.this, getString(R.string.auth_failed) + authResult);
                         }
                         break;
@@ -164,7 +164,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setHeadBar(PaymentOrderActivity.this, getResources().getString(R.string.str_order_pay), R.mipmap.icon_left_arrow_black, "");
+        ToolbarHelper.setHeadBar(OrderPaymentActivity.this, getResources().getString(R.string.str_order_pay), R.mipmap.icon_left_arrow_black, "");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().getDecorView()
@@ -188,20 +188,18 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
 
         if (this.mBannerHandler == null)
         {
-            this.mBannerHandler = new BannerHandler(PaymentOrderActivity.this);
+            this.mBannerHandler = new BannerHandler(OrderPaymentActivity.this);
         }
-        OrderSubmitResponse orderSubmitResponse = (OrderSubmitResponse)getIntent().getSerializableExtra("orderSubmitResponse");
-        if(orderSubmitResponse != null)
-        {
-            double price = orderSubmitResponse.getPrice();
-            String title = orderSubmitResponse.getTitle();
-            long payExprireTime = orderSubmitResponse.getPayExprireTime();
-            orderNo = orderSubmitResponse.getOrderNo();
 
-            mTvPrice.setText(Tools.getTwoDecimalPoint(price));
-            mTvGoodName.setText(title);
-            mTvPayExprireTime.setText(DateUtil.millisToStringShort(payExprireTime));
-        }
+        double price = getIntent().getDoubleExtra("price",0);
+        String title = getIntent().getStringExtra("title");
+        long payExprireTime = getIntent().getLongExtra("payExprireTime",0);
+        orderNo = getIntent().getStringExtra("orderNo");
+
+        mTvPrice.setText(Tools.getTwoDecimalPoint(price));
+        mTvGoodName.setText(title);
+        mTvPayExprireTime.setText(DateUtil.millisToStringShort(payExprireTime));
+
         mRlytWechatPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,6 +227,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
 
     @Override
     public void orderPaymentResult(BackResult<OrderPaymentResponse> res) {
+        dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
@@ -241,19 +240,24 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
 
                     if(paymentMethodType.equals(wechat))
                     {
-
+                        String appId = orderPaymentResponse.getAppid();
+                        String partnerId = orderPaymentResponse.getPartnerid();
+                        String extdata = orderPaymentResponse.getExtdata();
+                        String nonceStr = orderPaymentResponse.getNoncestr();
+                        String prepayId = orderPaymentResponse.getPrepayid();
+                        String sign = orderPaymentResponse.getSign();
+                        long timestamp = orderPaymentResponse.getTimestamp();
                        // paymentMethodType
                         PayReq req = new PayReq();
                         //req.appId = "wxf8b4f85f3a794e77";  // 测试用appId
-                        req.appId			= "wx85e2b0cb3272fcd7";
-                        req.partnerId		= "1556149381";
-                        req.prepayId		= "wx02092930930481fdc329e6a81851682200";
-                        req.nonceStr		= "izGpoBPRrsfE5Iu2";
-                        req.timeStamp		= "1569979770";
+                        req.appId			= appId;
+                        req.partnerId		= partnerId;
+                        req.prepayId		= prepayId;
+                        req.nonceStr		= nonceStr;
+                        req.timeStamp		= String.valueOf(timestamp);
                         req.packageValue	= "Sign=WXPay";
-                        req.sign			= "63258221C38EE017BAB6E5F99E46C161";
-                        req.extData			= "{\\\"order_no\\\":\\\"20190928093648\\\"}"; // optional
-                        Toast.makeText(PaymentOrderActivity.this, "正常调起支付", Toast.LENGTH_SHORT).show();
+                        req.sign			= sign;
+                        req.extData			= extdata; // optional
                         // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
                         api.sendReq(req);
 
@@ -268,7 +272,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
                 break;
             default:
                 dismissProgressDialog();
-                showToast(PaymentOrderActivity.this, Constants.getResultMsg(res.getMsg()));
+                showToast(OrderPaymentActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
@@ -277,7 +281,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
     public void showMsg(String msg) {
 
         dismissProgressDialog();
-        showToast(PaymentOrderActivity.this,Constants.getResultMsg(msg));
+        showToast(OrderPaymentActivity.this,Constants.getResultMsg(msg));
     }
 
     @OnClick({R.id.tv_confirm_payment})
@@ -302,7 +306,7 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
 
             @Override
             public void run() {
-                PayTask alipay = new PayTask(PaymentOrderActivity.this);
+                PayTask alipay = new PayTask(OrderPaymentActivity.this);
                 Map<String, String> result = alipay.payV2(oredrPaymentBodyParam, true);
                 Log.i("msp", result.toString());
 
@@ -320,7 +324,9 @@ public class PaymentOrderActivity extends BaseActivity<OrderPaymentPresenter, Or
 
     public void orderPayment(){
 
-        if(validateInternet()){
+        if(validateInternet())
+        {
+            showProgressDialog(OrderPaymentActivity.this);
             mPresenter.orderPayment(orderNo,paymentMethodType);
         }
     }

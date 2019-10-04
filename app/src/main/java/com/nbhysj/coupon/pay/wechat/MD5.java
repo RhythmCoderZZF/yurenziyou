@@ -1,4 +1,4 @@
-package com.nbhysj.coupon;
+package com.nbhysj.coupon.pay.wechat;
 
 import java.security.MessageDigest;
 

@@ -14,9 +14,11 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.DeliciousFoodResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.FoodRecommendationActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
 
@@ -56,6 +58,7 @@ public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousF
         try {
             MchTypeBean scenicSpotBean = deliciousFoodRecommendList.get(itemPosition);
             String photo = scenicSpotBean.getPhoto();
+            int mchId = scenicSpotBean.getId();
             //holder.mTvFoodCuisine.setText(scenicSpotBean.getIntro());
             String mchName = scenicSpotBean.getMchName();
             String dataName = scenicSpotBean.getDataName();
@@ -66,7 +69,7 @@ public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousF
             } else {
                 holder.mTvDeliciousFoodStore.setText("");
             }
-            GlideUtil.loadCornersTransformImage(mContext, photo, 5, holder.mImgDeliciousFood);
+            GlideUtil.loadImage(mContext, photo,  holder.mImgDeliciousFood);
 
             if (itemPosition == 0) {
 
@@ -88,7 +91,8 @@ public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousF
                 public void onClick(View view) {
 
                     Intent intent = new Intent();
-                    intent.setClass(mContext, FoodRecommendationActivity.class);
+                    intent.setClass(mContext, FoodDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
                     mContext.startActivity(intent);
                 }
             });
@@ -112,7 +116,7 @@ public class DeliciousFoodSectionAdapter extends RecyclerView.Adapter<DeliciousF
         TextView mTvDeliciousFoodStore;
         //美食照片
         @BindView(R.id.image_delicious_food)
-        ImageView mImgDeliciousFood;
+        RoundedImageView mImgDeliciousFood;
         @BindView(R.id.view_header)
         View mHeader;
         @BindView(R.id.view_footer)

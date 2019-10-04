@@ -18,7 +18,7 @@ import io.reactivex.Observable;
 public class FindPwdModel implements FindPwdContract.Model {
 
     @Override
-    public Observable<BackResult<String>> getSalt(String mobile) {
+    public Observable<BackResult<Object>> getSalt(String mobile) {
         return Api.getInstance().apiService.getSalt(mobile).compose(RxSchedulers.io_main());
     }
 
@@ -33,7 +33,7 @@ public class FindPwdModel implements FindPwdContract.Model {
     }
 
     @Override
-    public Observable<BackResult<String>> updatePwdByEmailGetSalt(String email) {
+    public Observable<BackResult<Object>> updatePwdByEmailGetSalt(String email) {
         return Api.getInstance().apiService.updatePwdByEmailGetSalt(email).compose(RxSchedulers.io_main());
     }
 

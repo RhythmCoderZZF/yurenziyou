@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -101,6 +102,8 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
 
         ImageView mImgVisitorsCheck;
 
+        LinearLayout mLlytVisitorsItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -108,6 +111,7 @@ public class AddTouristInformationAdapter extends RecyclerView.Adapter<AddTouris
             mTvPhone = itemView.findViewById(R.id.tv_phone);
             mTvEditVisitors = itemView.findViewById(R.id.tv_edit_visitors);
             mImgVisitorsCheck = itemView.findViewById(R.id.img_visitors_check);
+            mLlytVisitorsItem = itemView.findViewById(R.id.llyt_visitors_item);
         }
     }
 

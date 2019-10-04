@@ -1,6 +1,8 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -25,17 +32,17 @@ import java.util.List;
  * @author hysj created at 2019/05/14.
  * description:商户附近适配器
  */
-public class DeliciousFoodShopRecommendMoreAdapter extends RecyclerView.Adapter<DeliciousFoodShopRecommendMoreAdapter.ViewHolder> {
+public class FoodNearbyMoreAdapter extends RecyclerView.Adapter<FoodNearbyMoreAdapter.ViewHolder> {
 
     List<MchFoodDetailResponse.NearbyFoodEntity> nearbyMchFoodList;
     private Context mContext;
 
-    public DeliciousFoodShopRecommendMoreAdapter(Context mContext) {
+    public FoodNearbyMoreAdapter(Context mContext) {
 
         this.mContext = mContext;
     }
 
-    public void setNearbyScenicSpotsList(List<MchFoodDetailResponse.NearbyFoodEntity> nearbyMchFoodList) {
+    public void setFoodNearbyList(List<MchFoodDetailResponse.NearbyFoodEntity> nearbyMchFoodList) {
 
         this.nearbyMchFoodList = nearbyMchFoodList;
     }
@@ -60,17 +67,60 @@ public class DeliciousFoodShopRecommendMoreAdapter extends RecyclerView.Adapter<
             String distance = nearbyFoodEntity.getDistance();
             double price = nearbyFoodEntity.getPrice();
             float score = nearbyFoodEntity.getScore();
+            String mchType = nearbyFoodEntity.getType();
+            int mchId = nearbyFoodEntity.getId();
 
-            GlideUtil.loadImage(mContext,photoUrl,holder.mImgDeliciousFood);
+            GlideUtil.loadImage(mContext, photoUrl, holder.mImgDeliciousFood);
             //商户名
             holder.mTvMchName.setText(title);
             //评分
             holder.mStarBarView.setIntegerMark(false);
             holder.mStarBarView.setStarMark(score);
 
-            holder.mTvAveragePricePerPerson.setText(Tools.getTwoDecimalPoint(price));
+            holder.mTvAveragePricePerPerson.setText("¥" + Tools.getTwoDecimalPoint(price));
 
-            holder.mTvMchAddress.setText(county + "  "+distance);
+            holder.mTvMchAddress.setText(county + "   " + distance);
+
+            holder.mCardViewFoodNearbyItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    String mchFood = MchTypeEnum.MCH_FOOD.getValue();
+                    String mchScenicSpot = MchTypeEnum.MCH_SCENIC.getValue();
+                    String mchHotel = MchTypeEnum.MCH_HOTEL.getValue();
+                    String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+                    if (mchType.equals(mchFood)) {
+                        intent.setClass(mContext, FoodDetailActivity.class);
+                        intent.putExtra("mchId", mchId);
+                        mContext.startActivity(intent);
+
+                    } else if (mchType.equals(mchScenicSpot)) {
+                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId", mchId);
+                        mContext.startActivity(intent);
+                    } else if (mchType.equals(mchRecreation)) {
+                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId", mchId);
+                        mContext.startActivity(intent);
+                    }else if (mchType.equals(mchHotel)) {
+                        String mchHotelType = MchTypeEnum.MCH_HOTEL1.getValue();
+                        String mchHomestayType = MchTypeEnum.MCH_HOTEL1.getValue();
+                        String type2 = nearbyFoodEntity.getType2();
+                        if (type2.equals(mchHotelType)) {
+
+                            intent.setClass(mContext, HotelDetailsActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+                        } else if (type2.equals(mchHomestayType)) {
+
+                            intent.setClass(mContext, HomestayDetailActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+                        }
+
+                    }
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +145,10 @@ public class DeliciousFoodShopRecommendMoreAdapter extends RecyclerView.Adapter<
 
         //商户位置
         TextView mTvMchAddress;
+
+        //附近美食
+        CardView mCardViewFoodNearbyItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -103,6 +157,7 @@ public class DeliciousFoodShopRecommendMoreAdapter extends RecyclerView.Adapter<
             mTvAveragePricePerPerson = itemView.findViewById(R.id.tv_average_price_per_person);
             mStarBarView = itemView.findViewById(R.id.starbar);
             mTvMchAddress = itemView.findViewById(R.id.tv_mch_address);
+            mCardViewFoodNearbyItem = itemView.findViewById(R.id.cardview_food_nearby_item);
         }
     }
 }

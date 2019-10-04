@@ -8,7 +8,6 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.OrderRefundInitAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderRefundContract;
-import com.nbhysj.coupon.model.OrderDetailModel;
 import com.nbhysj.coupon.model.OrderRefundModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
@@ -21,10 +20,10 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * @auther：hysj created on 2019/05/28
- * description：全部退款申请
+ * @auther：hysj created on 2019/09/27
+ * description：部分退款申请
  */
-public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, OrderRefundModel> implements OrderRefundContract.View {
+public class PartialRefundApplyActivity extends BaseActivity<OrderRefundPresenter, OrderRefundModel> implements OrderRefundContract.View {
 
     //商品全部退款
     @BindView(R.id.rv_order_all_refund)
@@ -48,10 +47,10 @@ public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, O
             orderRefundIniteList.clear();
         }
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AllRefundApplyActivity.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PartialRefundApplyActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         mRvOrderAllRefund.setLayoutManager(linearLayoutManager);
-        OrderRefundInitAdapter orderRefundInitAdapter = new OrderRefundInitAdapter(AllRefundApplyActivity.this);
+        OrderRefundInitAdapter orderRefundInitAdapter = new OrderRefundInitAdapter(PartialRefundApplyActivity.this);
         orderRefundInitAdapter.setOrderAllRefundList(orderRefundIniteList);
         mRvOrderAllRefund.setAdapter(orderRefundInitAdapter);
     }

@@ -34,6 +34,8 @@ public class UserOrderListResponse {
 
         private String orderStatus;
 
+        private String goodsName;
+
         private String orderNo;
 
         private String orderRefundNo;
@@ -79,6 +81,14 @@ public class UserOrderListResponse {
 
         public void setOrderNo(String orderNo) {
             this.orderNo = orderNo;
+        }
+
+        public String getGoodsName() {
+            return goodsName;
+        }
+
+        public void setGoodsName(String goodsName) {
+            this.goodsName = goodsName;
         }
 
         public String getOrderRefundNo() {

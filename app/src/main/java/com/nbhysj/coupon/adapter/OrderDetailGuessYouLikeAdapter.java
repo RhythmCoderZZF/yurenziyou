@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
-import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
+import com.nbhysj.coupon.model.response.OrderDetailGuessBean;
 import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.HomestayDetailActivity;
@@ -22,9 +20,6 @@ import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.Tools;
-import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -32,22 +27,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * @author hysj created at 2019/4/7.
- * description : 商城主页猜你喜欢适配器
+ * @author hysj created at 2019/10/03.
+ * description : 订单详情猜你喜欢适配器
  */
-public class ShoppingMallGuessYouLikeAdapter extends RecyclerView.Adapter<ShoppingMallGuessYouLikeAdapter.ViewHolder> {
+public class OrderDetailGuessYouLikeAdapter extends RecyclerView.Adapter<OrderDetailGuessYouLikeAdapter.ViewHolder> {
 
-    List<ShopMallHomePageResponse.GuessEntity> guessYouLikeList;
+    List<OrderDetailGuessBean> orderDetailGuessList;
     private Context mContext;
 
-    public ShoppingMallGuessYouLikeAdapter(Context mContext) {
+    public OrderDetailGuessYouLikeAdapter(Context mContext) {
 
         this.mContext = mContext;
     }
 
-    public void setGuessYouLikeList(List<ShopMallHomePageResponse.GuessEntity> guessYouLikeList) {
+    public void setGuessYouLikeList(List<OrderDetailGuessBean> orderDetailGuessList) {
 
-        this.guessYouLikeList = guessYouLikeList;
+        this.orderDetailGuessList = orderDetailGuessList;
     }
 
     @Override
@@ -63,11 +58,11 @@ public class ShoppingMallGuessYouLikeAdapter extends RecyclerView.Adapter<Shoppi
 
         try {
 
-            ShopMallHomePageResponse.GuessEntity guessEntity = guessYouLikeList.get(itemPosition);
+            OrderDetailGuessBean guessEntity = orderDetailGuessList.get(itemPosition);
             String photo = guessEntity.getPhoto();
-            int mchId = guessEntity.getId();
+            int mchId = guessEntity.getMchId();
             String mchName = guessEntity.getMchName();
-            double mConsumePrice = guessEntity.getConsumePrice();
+            double mConsumePrice = guessEntity.getPrice();
             String mchType = guessEntity.getMchType();
             GlideUtil.loadImage(mContext, photo, holder.mImgShoppingMallGuessYouLike);
             holder.mTvMchName.setText(mchName);
@@ -122,7 +117,7 @@ public class ShoppingMallGuessYouLikeAdapter extends RecyclerView.Adapter<Shoppi
 
     @Override
     public int getItemCount() {
-        return guessYouLikeList.size();
+        return orderDetailGuessList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

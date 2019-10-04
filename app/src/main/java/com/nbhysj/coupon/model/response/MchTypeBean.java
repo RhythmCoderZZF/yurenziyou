@@ -35,7 +35,7 @@ public class MchTypeBean implements Serializable {
 
     private String tel;
 
-    private int commentScore;
+    private float commentScore;
 
     private String intro;
 
@@ -242,11 +242,11 @@ public class MchTypeBean implements Serializable {
         this.tel = tel;
     }
 
-    public int getCommentScore() {
+    public float getCommentScore() {
         return commentScore;
     }
 
-    public void setCommentScore(int commentScore) {
+    public void setCommentScore(float commentScore) {
         this.commentScore = commentScore;
     }
 

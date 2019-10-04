@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.FoodRecommendationActivity;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class HotelHomestaySectionAdapter extends RecyclerView.Adapter<HotelHomes
 
         try {
             MchTypeBean scenicSpotBean = hotelHomestayList.get(itemPosition);
+            int mchId = scenicSpotBean.getId();
             String photo = scenicSpotBean.getPhoto();
             //holder.mTvFoodCuisine.setText(scenicSpotBean.getIntro());
             holder.mTvHotelHomestayName.setText(scenicSpotBean.getMchName());
@@ -78,7 +80,8 @@ public class HotelHomestaySectionAdapter extends RecyclerView.Adapter<HotelHomes
                 public void onClick(View view) {
 
                     Intent intent = new Intent();
-                    intent.setClass(mContext, FoodRecommendationActivity.class);
+                    intent.setClass(mContext, HomestayDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
                     mContext.startActivity(intent);
                 }
             });

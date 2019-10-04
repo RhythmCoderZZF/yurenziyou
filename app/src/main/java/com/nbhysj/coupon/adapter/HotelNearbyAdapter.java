@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.NearbyTypeResponse;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotsAlbumActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -61,12 +62,12 @@ public class HotelNearbyAdapter extends RecyclerView.Adapter<HotelNearbyAdapter.
             NearbyTypeResponse nearbyTypeResponse = nearbyTypeList.get(itemPosition);
             String nearbyTypePhoto = nearbyTypeResponse.getPhoto();
             String title = nearbyTypeResponse.getTitle();
-            int price = nearbyTypeResponse.getPrice();
+            double price = nearbyTypeResponse.getPrice();
             String mchType = nearbyTypeResponse.getType();
             int mchId = nearbyTypeResponse.getId();
 
             holder.mTvFoodMchName.setText(title);
-            holder.mTvPerCapitaPrice.setText(String.valueOf(price));
+            holder.mTvPerCapitaPrice.setText(Tools.getTwoDecimalPoint(price));
 
             GlideUtil.loadImage(mContext,nearbyTypePhoto,holder.mImgDeliciousFood);
 

@@ -19,6 +19,7 @@ import com.nbhysj.coupon.common.Enum.TicketBookStatusEnum;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
@@ -103,7 +104,7 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
 
                 } else if (itemPosition == 1) {
                     holder.mTvOrderUseDate.setText("明天" + mmdd);
-                    holder.mTvPrice.setText("¥" + price);
+                    holder.mTvPrice.setText("¥" + Tools.getTwoDecimalPoint(price));
                     holder.mTvPrice.setTextColor(mContext.getResources().getColor(R.color.color_orange3));
                     holder.mTvOrderUseDate.setTextColor(mContext.getResources().getColor(R.color.color_text_black7));
                     holder.mRlytOrderUseDate.setBackgroundResource(R.mipmap.icon_the_date_of_use_ticket_unselect);
@@ -113,14 +114,14 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
                     String whichDay = DateUtil.dateToWeek(date);
 
                     holder.mTvOrderUseDate.setText(whichDay + mmdd);
-                    holder.mTvPrice.setText("¥" + price);
+                    holder.mTvPrice.setText("¥" + Tools.getTwoDecimalPoint(price));
                     holder.mTvPrice.setTextColor(mContext.getResources().getColor(R.color.color_orange3));
                     holder.mTvOrderUseDate.setTextColor(mContext.getResources().getColor(R.color.color_text_black7));
 
                 }
 
                 if (isCanBooking == 1) {
-                    holder.mTvPrice.setText("¥" + price);
+                    holder.mTvPrice.setText("¥" + Tools.getTwoDecimalPoint(price));
                     holder.mTvPrice.setTextColor(mContext.getResources().getColor(R.color.color_orange3));
                     holder.mTvOrderUseDate.setTextColor(mContext.getResources().getColor(R.color.color_text_black7));
                     holder.mRlytOrderUseDate.setEnabled(true);

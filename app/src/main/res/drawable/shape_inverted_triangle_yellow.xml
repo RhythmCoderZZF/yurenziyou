@@ -8,7 +8,7 @@
             android:pivotY="5%"
             android:toDegrees="45">
             <shape android:shape="rectangle">
-                <solid android:color="@color/color_high_light_green" />
+                <solid android:color="#FFEEA752" />
             </shape>
         </rotate>
     </item>
