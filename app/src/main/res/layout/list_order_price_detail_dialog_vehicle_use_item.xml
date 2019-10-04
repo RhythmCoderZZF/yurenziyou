@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/llyt_traveller_info_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_radius_shape"
+        app:layout_widthPercent="70%"
+        android:orientation="vertical"
+       >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16">
+
+            <TextView
+                android:id="@+id/tv_vehicle_use_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_17"
+                android:drawableLeft="@mipmap/icon_use_the_car"
+                android:drawablePadding="@dimen/dp_5"
+                android:text=""
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_xsmall"
+                />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_starting_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_22"
+                android:drawableLeft="@drawable/shape_round_green_small"
+                android:drawablePadding="@dimen/dp_8"
+                android:text=""
+                android:textColor="@color/text_grey"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:id="@+id/tv_destination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_22"
+                android:layout_marginTop="@dimen/dp_3"
+                android:drawableLeft="@drawable/shape_round_orange_small"
+                android:drawablePadding="@dimen/dp_8"
+                android:text=""
+                android:textColor="@color/text_grey"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:id="@+id/tv_tips_for_travel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="@dimen/dp_14"
+                android:layout_marginRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_11"
+                android:layout_marginLeft="37dp"
+                android:text="距离出行时间还有不到1小时，不支持退款"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/color_orange3"
+                android:textSize="@dimen/text_size_xtiny"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_line_ticket_already_used"
+        android:layout_width="@dimen/dp_1"
+        android:layout_height="@dimen/dp_90"
+        android:layout_toRightOf="@+id/llyt_traveller_info_item"
+        android:alpha="0.25"
+        android:background="@color/color_text_gray6"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/view_line_ticket_already_used"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/dp_15"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:layout_gravity="right|center_vertical"
+                android:text="¥"
+                android:textColor="@color/color_text_black7"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_amount_of_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/dp_16"
+                android:gravity="right|center_vertical"
+                android:text="0.00"
+                android:textColor="@color/color_text_black7"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_apply_for_refund"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_14"
+            android:layout_marginRight="@dimen/dp_16"
+            android:gravity="right|center_vertical"
+            android:text="申请退款"
+            android:paddingLeft="@dimen/dp_13"
+            android:paddingRight="@dimen/dp_13"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:background="@drawable/bg_stroke_radius_thirteen_light_gray_shape"
+            android:textColor="@color/color_text_gray28"
+            android:textSize="@dimen/text_size_xsmall"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_order_vehicle_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_35"
+            android:gravity="right|center_vertical"
+            android:text="不可退"
+            android:paddingLeft="@dimen/dp_13"
+            android:paddingRight="@dimen/dp_13"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:textColor="@color/color_orange3"
+            android:textSize="@dimen/text_size_small"
+            />
+
+        <LinearLayout
+            android:id="@+id/llyt_tips_for_travel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/dp_30"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/dp_16"
+                android:gravity="right"
+                android:text="待出行"
+                android:paddingLeft="@dimen/dp_13"
+                android:paddingRight="@dimen/dp_13"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/color_orange3"
+                android:textSize="@dimen/text_size_small"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="@dimen/dp_14"
+                android:layout_marginRight="@dimen/dp_16"
+                android:gravity="right|center_vertical"
+                android:text="不可退"
+                android:paddingLeft="@dimen/dp_13"
+                android:paddingRight="@dimen/dp_13"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/color_orange3"
+                android:textSize="@dimen/text_size_small"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
+        android:alpha="0.25"
+        android:background="@color/color_text_gray6"
+        android:layout_alignParentBottom="true"></View>
+
+</android.support.percent.PercentRelativeLayout>
+
+
