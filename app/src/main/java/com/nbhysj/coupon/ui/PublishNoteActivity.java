@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
+import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.oss.Config;
 import com.nbhysj.coupon.oss.gifencoder.BitmapExtractor;
 import com.nbhysj.coupon.oss.gifencoder.GIFEncoder;
@@ -153,7 +155,7 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
 
     private Set<Integer> selectPosSet;
 
-    private List<String> selectTagList;
+    private List<Integer> selectTopicIdList;
 
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
@@ -176,6 +178,12 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
     //拍照||从相册里选择 视频拍摄
     private NoteSaveExitPromptDialog cameraCapturePromptDialog;
 
+    TagAdapter tagAdapter;
+
+    List<HotTagsTopicBean> hotTagsTopicResponse;
+
+    //音频播放
+    private MediaPlayer mediaPlayer;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -192,10 +200,16 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
             photos.clear();
         }
 
-        if (selectTagList == null) {
-            selectTagList = new ArrayList();
+        if (selectTopicIdList == null) {
+            selectTopicIdList = new ArrayList();
         } else {
-            selectTagList.clear();
+            selectTopicIdList.clear();
+        }
+
+        if(hotTagsTopicResponse == null){
+            hotTagsTopicResponse = new ArrayList<>();
+        } else {
+            hotTagsTopicResponse.clear();
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         mRvNotePicture.setNestedScrollingEnabled(false);
@@ -218,12 +232,23 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                         {
                             noteSaveExitPromptDialog = new NoteSaveExitPromptDialog(PublishNoteActivity.this).builder();
 
-                            noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_video_play), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
-                                @Override
-                                public void onClick(int which) {
+                                noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_video_play), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
 
-                                }
-                            });
+                                        if (!TextUtils.isEmpty(mAudiofileUrl)) {
+                                            try {
+                                                mediaPlayer = new MediaPlayer();
+                                                mediaPlayer.setDataSource(mAudiofileUrl);
+                                                mediaPlayer.prepare();
+                                                mediaPlayer.start();
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
                             noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_edit), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int which) {
@@ -234,6 +259,9 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                                 @Override
                                 public void onClick(int which) {
 
+                                    mAudiofileUrl = null;
+                                    notePictureItemAdapter.setNotePictureList(selectedPhotos, isPhotoSelect, mAudiofileUrl, 0);
+                                    notePictureItemAdapter.notifyDataSetChanged();
                                 }
                             });
                             noteSaveExitPromptDialog.setSheetItems();
@@ -317,7 +345,6 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
             @Override
             public void onSelected(Set<Integer> selectPosSet) {
 
-                showToast(PublishNoteActivity.this, "121");
             }
         });
     }
@@ -447,6 +474,30 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                 mchName = merchantEntity.getMchName();
                 mchId = merchantEntity.getMchId();
                 mTvMerchantName.setText(mchName);
+            } else if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_TAG_SELECT){
+                Bundle bundle= data.getExtras();
+                HotTagsTopicBean hotTagsTopicBean = (HotTagsTopicBean) bundle.getSerializable("topicResponse");
+                if(hotTagsTopicBean != null){
+
+                    hotTagsTopicResponse.add(hotTagsTopicBean);
+                }
+
+                tagAdapter.notifyDataChanged();
+
+                if(hotTagsTopicResponse != null && hotTagsTopicResponse.size() > 0)
+                {
+                    for(int i = 0; i < hotTagsTopicResponse.size();i++){
+                        int id = hotTagsTopicResponse.get(i).getId();
+                        for(int j = 0;j < selectTopicIdList.size(); j++)
+                        {
+                            int selectTopicId = selectTopicIdList.get(j);
+                            if (id == selectTopicId)
+                            {
+                                tagAdapter.setSelectedList(i);
+                            }
+                        }
+                }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -469,7 +520,14 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
 
                 break;
             case R.id.rlyt_add_tag:
-                toActivityForResult(MoreHotTagTopicActivity.class, REQUEST_CODE_TAG_SELECT);
+                BlurBehind.getInstance().execute(PublishNoteActivity.this, new OnBlurCompleteListener() {
+                    @Override
+                    public void onBlurComplete() {
+
+                        toActivityForResult(MoreHotTagTopicActivity.class, REQUEST_CODE_TAG_SELECT);
+                    }
+                });
+
                 break;
             case R.id.iv_back:
 
@@ -530,7 +588,7 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                             String audioName = getFileName(UploadFileTypeEnum.AUDIO.getValue(), mAudiofileUrl);
                             PublishPostRequest.ResourceInfoEntity resourceInfoEntity = new PublishPostRequest().new ResourceInfoEntity();
                             resourceInfoEntity.setType(UploadFileTypeEnum.AUDIO.getKey());
-                            resourceInfoEntity.setUrl(mAudiofileUrl);
+                            resourceInfoEntity.setUrl(audioName);
                             resourceInfoEntity.setDuration(duration);
                             resourceInfoEntityList.add(resourceInfoEntity);
                             mService.asyncPutFile(audioName, UploadFileTypeEnum.AUDIO.getValue(), mAudiofileUrl);
@@ -735,26 +793,17 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                    List<HotTagsTopicBean> hotTagsTopicResponse = res.getData();
-                    TagAdapter tagAdapter = new TagAdapter<HotTagsTopicBean>(hotTagsTopicResponse) {
+                    hotTagsTopicResponse = res.getData();
+                    tagAdapter = new TagAdapter<HotTagsTopicBean>(hotTagsTopicResponse) {
                         @Override
                         public View getView(FlowLayout parent, int position, HotTagsTopicBean hotTagsTopicEntity) {
-                            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_check_frame,
+                            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_post_topic,
                                     mTagHotLabel, false);
-                            selectTagList.clear();
+
                             TextView tv = view.findViewById(R.id.tv_flowlayout);
                             String title = hotTagsTopicEntity.getTitle();
                             tv.getBackground().setAlpha(99);
                             tv.setText(title);
-
-                          /*  tv.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                 //   setSelectedList(position);
-                                    selectPosSet = mTagHotLabel.getSelectedList();
-
-                                }
-                            });*/
 
                             return view;
                         }
@@ -764,18 +813,18 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                     mTagHotLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
                         @Override
                         public boolean onTagClick(View view, int position, FlowLayout parent) {
-                            selectTagList.clear();
+                            selectTopicIdList.clear();
 
                             //view.setVisibility(View.GONE);
                             selectPosSet = mTagHotLabel.getSelectedList();
                             Iterator it = selectPosSet.iterator();
                             while (it.hasNext()) {
                                 int index = (int) it.next();
-                                String title = hotTagsTopicResponse.get(index).getTitle();
-                                selectTagList.add(title);
+                                int topicId = hotTagsTopicResponse.get(index).getId();
+                                selectTopicIdList.add(topicId);
 
                             }
-                            Toast.makeText(PublishNoteActivity.this, selectTagList.toString(), Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(PublishNoteActivity.this, selectTopicIdList.toString(), Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     });
@@ -783,15 +832,11 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                         @Override
                         public void onSelected(Set<Integer> selectPosSet) {
 
-                            showToast(PublishNoteActivity.this, selectPosSet.toString());
+                            //showToast(PublishNoteActivity.this, selectPosSet.toString());
 
                         }
                     });
 
-                    // mTagHotLabel.getSelectedList();
-                  /*  FlowLayoutTagAdapter flowLayoutTagAdapter = new FlowLayoutTagAdapter(PublishNoteActivity.this);
-                    flowLayoutTagAdapter.setHotTagsTopicList(hotTagsTopicList);
-                    mTagHotLabel.setAdapter(flowLayoutTagAdapter);*/
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -825,16 +870,12 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
             publishPostRequest.setContent(profile);
             publishPostRequest.setLatitude(mLatitude);
             publishPostRequest.setLongitude(mLongitude);
-            List<Integer> mchIds = new ArrayList<>();
-            mchIds.add(mchId);
-            publishPostRequest.setMchIds(mchIds);
-
+            publishPostRequest.setMchIds(mchId);
             publishPostRequest.setSelectedLatitude(mLatitude);
             publishPostRequest.setSelectedLongitude(mLongitude);
             publishPostRequest.setResource(resourceInfoEntityList);
-            List<Integer> topicIds = new ArrayList<>();
-            topicIds.add(1);
-            publishPostRequest.setTopicIds(topicIds);
+
+            publishPostRequest.setTopicIds(selectTopicIdList);
 
             mPresenter.publishPost(publishPostRequest);
         }
@@ -1053,6 +1094,7 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                 public void onClick(int which) {
 
                     isPhotoSelect = false;
+                    showToast(PublishNoteActivity.this,"此功能正在开发中...");
                 }
             });
             cameraCapturePromptDialog.addSheetItem(getResources().getString(R.string.str_select_local_video), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {

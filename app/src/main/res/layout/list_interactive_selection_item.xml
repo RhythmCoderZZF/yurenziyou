@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llyt_recyclerview_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -21,12 +22,13 @@
             android:layout_width="138dp"
             android:layout_height="@dimen/dp_134">
 
-            <ImageView
+            <com.nbhysj.coupon.view.RoundedImageView
                 android:id="@+id/image_scenic_spots"
                 android:layout_width="@dimen/dp_134"
                 android:layout_height="@dimen/dp_134"
                 android:layout_centerVertical="true"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                app:riv_corner_radius="@dimen/dp_5"/>
 
             <TextView
                 android:id="@+id/tv_popular_scenic_spot_sequence"
@@ -37,18 +39,20 @@
                 android:gravity="center"
                 android:text="No.1"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_small" />
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_scenic_spots_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_recreation_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_marginBottom="@dimen/dp_5"
-            android:text="宁波海洋世界"
+            android:paddingRight="@dimen/dp_10"
+            android:text=""
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_normal"
             android:textStyle="bold"
@@ -59,14 +63,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginBottom="@dimen/dp_10"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥"
+                android:text="¥"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_tiny" />
 
@@ -74,7 +78,7 @@
                 android:id="@+id/tv_scenic_spots_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="156"
+                android:text="0.00"
                 android:textColor="@color/color_text_orange2"
                 android:textSize="@dimen/text_size_small" />
         </LinearLayout>

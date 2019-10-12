@@ -18,6 +18,7 @@ import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -79,7 +80,7 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
                 MchTypeBean popularScenicSpots = popularScenicSpotsList.get(position - 1);
                 int mchId = popularScenicSpots.getDataId();
                 String photoUrl = popularScenicSpots.getPhoto();
-                holder1.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
+                holder1.mTvPopularScenicSpotPrice.setText(Tools.getTwoDecimalPoint(popularScenicSpots.getConsumePrice()));
                 holder1.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()));
                 holder1.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
                 holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());

@@ -12,6 +12,7 @@ import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
@@ -46,5 +47,10 @@ public class OrderRefundModel implements OrderRefundContract.Model {
     @Override
     public Observable<BackResult> orderAllRefundSubmit(OrderAllRefundRequest orderAllRefundRequest) {
         return Api.getInstance().apiService.orderAllRefundSubmit(orderAllRefundRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<OrderRefundDetailResponse>> getOrderRefundDetail(String orderRefundNo) {
+        return Api.getInstance().apiService.getOrderRefundDetail(orderRefundNo).compose(RxSchedulers.io_main());
     }
 }

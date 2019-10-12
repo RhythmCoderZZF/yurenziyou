@@ -52,6 +52,7 @@
             android:layout_marginLeft="@dimen/dp_13"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:drawablePadding="@dimen/dp_1"
             android:drawableRight="@mipmap/icon_travel_assistant_edit"
             android:textColor="@color/white"

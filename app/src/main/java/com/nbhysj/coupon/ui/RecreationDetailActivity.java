@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AdmissionTicketExpandableAdapter;
-import com.nbhysj.coupon.adapter.GroupListAdapter;
+import com.nbhysj.coupon.adapter.NearbyGroupListAdapter;
 import com.nbhysj.coupon.adapter.NearbyScenicSpotAdapter;
 import com.nbhysj.coupon.adapter.PlayGuideAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
@@ -170,7 +170,7 @@ public class RecreationDetailActivity extends BaseActivity<RecreationPresenter, 
     //景点
     private NearbyScenicSpotAdapter nearbyScenicSpotAdapter;
     private ScenicSpotDetailUserCommentAdapter scenicSpotDetailUserCommentAdapter;
-    private GroupListAdapter groupListAdapter;
+    private NearbyGroupListAdapter groupListAdapter;
     //商户名
     private int mchId;
     private String address;
@@ -360,7 +360,7 @@ public class RecreationDetailActivity extends BaseActivity<RecreationPresenter, 
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvNearScenicSpot.setLayoutManager(layoutManager);
 
-        groupListAdapter = new GroupListAdapter(RecreationDetailActivity.this);
+        groupListAdapter = new NearbyGroupListAdapter(RecreationDetailActivity.this);
         groupListAdapter.setGroupList(groupGoodsList);
         mRvNearScenicSpot.setAdapter(groupListAdapter);
 

@@ -19,13 +19,17 @@ public class GoodsMealDetailAdapter extends RecyclerView.Adapter<GoodsMealDetail
     private Context mContext;
     //订单列表
     List<OrderDetailResponse.OrderGoodsEntity> orderGoodsList;
-    public GoodsMealDetailAdapter(Context mContext) {
+
+    private PartialApplyForRefundListener applyForRefundListener;
+    public GoodsMealDetailAdapter(Context mContext,PartialApplyForRefundListener partialApplyForRefundListener) {
         this.mContext = mContext;
+        this.applyForRefundListener = partialApplyForRefundListener;
     }
 
     public void setOrderMealList(List<OrderDetailResponse.OrderGoodsEntity> orderGoodsList){
 
         this.orderGoodsList = orderGoodsList;
+
 
     }
     @Override
@@ -38,6 +42,7 @@ public class GoodsMealDetailAdapter extends RecyclerView.Adapter<GoodsMealDetail
     public void onBindViewHolder(final CardHolder holder, final int position) {
 
         OrderDetailResponse.OrderGoodsEntity orderGoodsEntity = orderGoodsList.get(position);
+        int orderGoodsId = orderGoodsEntity.getOrderGoodsId();
         //商户名
         String mchName = orderGoodsEntity.getMchName();
         //商品标题
@@ -51,6 +56,7 @@ public class GoodsMealDetailAdapter extends RecyclerView.Adapter<GoodsMealDetail
         String goodNum = orderGoodsEntity.getGoodsNum();
         String goodsId = orderGoodsEntity.getGoodsId();
         int canRefundStatus = orderGoodsEntity.getCanRefundStatus();
+        String goodsType = orderGoodsEntity.getGoodType();
 
         //商户名
         if(!TextUtils.isEmpty(mchName))
@@ -100,10 +106,7 @@ public class GoodsMealDetailAdapter extends RecyclerView.Adapter<GoodsMealDetail
             @Override
             public void onClick(View view) {
 
-                Intent mIntent = new Intent();
-                mIntent.setClass(mContext, PartialApplyForRefundActivity.class);
-                mIntent.putExtra("goodsId",goodsId);
-                mContext.startActivity(mIntent);
+                applyForRefundListener.setPartialApplyForRefundListener(orderGoodsId,goodsType);
             }
         });
     }
@@ -143,5 +146,11 @@ public class GoodsMealDetailAdapter extends RecyclerView.Adapter<GoodsMealDetail
             mTvApplyForRefund = itemView.findViewById(R.id.tv_apply_for_refund);
 
         }
+    }
+
+    //部分商品申请退款
+    public interface PartialApplyForRefundListener{
+
+        void setPartialApplyForRefundListener(int orderGoodsId,String goodsType);
     }
 }

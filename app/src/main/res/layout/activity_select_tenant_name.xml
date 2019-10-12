@@ -34,6 +34,7 @@
         android:background="@color/white"
         android:hint="请输入住客的名字"
         android:paddingLeft="@dimen/dp_17"
+        android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
         android:textSize="@dimen/text_size_xsmall" />
 
     <TextView

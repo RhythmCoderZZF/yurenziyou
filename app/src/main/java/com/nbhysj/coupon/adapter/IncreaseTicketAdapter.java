@@ -17,6 +17,7 @@ import com.nbhysj.coupon.common.Enum.TicketRefundSettingsEnum;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.ui.OrderSubmitActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -80,6 +81,7 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
             String photoUrl = goodsPriceEntity.getPhoto();
             double mDefaultPrice = goodsPriceEntity.getDefaultPrice();
             double mMarketPrice = goodsPriceEntity.getOtherMarketPrice();
+            mPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
 
             String refundSettings = goodsPriceEntity.getRefundSettings();
 
@@ -103,14 +105,14 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
                 holder.mLlytIncreaseTicketItem.setBackgroundResource(R.color.white);
             }
 
-            GlideUtil.loadCornersTransformImage(mContext, photoUrl, 5, holder.mImgScenicSpots);
+            GlideUtil.loadImage(mContext, photoUrl,holder.mImgScenicSpots);
             holder.mTvTicketTitle.setText(title);
 
             holder.mTvDefaultPrice.setText(String.valueOf(mDefaultPrice));
 
             holder.mTvMarketPrice.setText("¥" + String.valueOf(mMarketPrice));
             holder.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-
+            goodsPriceTagList.clear();
             goodsPriceTagList.add("官方");
             goodsPriceTagList.add(refundSettingsValue);
             goodsPriceTagList.add(ticketIntoTypeValue);
@@ -145,7 +147,9 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
                 public void onClick(View view) {
 
                     if (mPurchaseNum > 0) {
+                        mPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
                         mPurchaseNum--;
+                        goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                         holder.mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
                         mPurchasePrice = mPurchaseNum * mDefaultPrice;
                         increaseTicketListener.setPurchaseNumListener(itemPosition,mPurchasePrice,mPurchaseNum);
@@ -156,8 +160,9 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
             holder.mImgPurchaseNumAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    mPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
                     mPurchaseNum++;
+                    goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                     holder.mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
                     mPurchasePrice = mPurchaseNum * mDefaultPrice;
                     increaseTicketListener.setPurchaseNumListener(itemPosition,mPurchasePrice,mPurchaseNum);
@@ -185,7 +190,7 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
         TextView mTvTicketTitle;
         //景区照片
         @BindView(R.id.image_scenic_spots)
-        ImageView mImgScenicSpots;
+        RoundedImageView mImgScenicSpots;
         //市场价格
         @BindView(R.id.tv_market_price)
         TextView mTvMarketPrice;

@@ -195,8 +195,7 @@ dependencies {
     api (name: 'alipaySdk-15.6.5-20190718211148', ext: 'aar')
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 
-
-
+    api 'org.greenrobot:eventbus:3.0.0'
 
 
 

@@ -38,6 +38,10 @@ public class OrderRefundPresenter extends OrderRefundContract.Presenter {
     }
 
     @Override
+    public void getOrderRefundDetail(String orderRefundNo) {
+        mRxManager.add(mModel.getOrderRefundDetail(orderRefundNo).subscribe(res -> mView.getOrderRefundDetailResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+    @Override
     public void onStart() {
 
     }

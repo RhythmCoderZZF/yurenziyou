@@ -7,6 +7,7 @@ import com.nbhysj.coupon.model.request.OrderAllRefundRequest;
 import com.nbhysj.coupon.model.request.OrderPartialRefundRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import io.reactivex.Observable;
@@ -34,6 +35,11 @@ public interface OrderRefundContract {
         //全部退款
         Observable<BackResult> orderAllRefundSubmit(OrderAllRefundRequest orderAllRefundRequest);
 
+
+        //全部退款
+        Observable<BackResult<OrderRefundDetailResponse>> getOrderRefundDetail(String orderRefundNo);
+
+
     }
 
     interface View extends BaseView {
@@ -45,6 +51,8 @@ public interface OrderRefundContract {
         void getOrderAllRefundDataInitResult(BackResult<OrderAllRefundInitResponse> res);
 
         void orderAllRefundSubmitResult(BackResult res);
+
+        void getOrderRefundDetailResult(BackResult<OrderRefundDetailResponse> res);
 
         void showMsg(String msg);
     }
@@ -58,6 +66,8 @@ public interface OrderRefundContract {
         public abstract void getOrderAllRefundDataInit(String orderNo);
 
         public abstract void orderAllRefundSubmit(OrderAllRefundRequest orderAllRefundRequest);
+
+        public abstract void getOrderRefundDetail(String orderRefundNo);
 
     }
 }

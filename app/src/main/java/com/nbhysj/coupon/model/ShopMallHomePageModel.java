@@ -28,7 +28,7 @@ public class ShopMallHomePageModel implements ShopMallHomePageContract.Model {
 
     @Override
     public Observable<BackResult<CarH5UrlResponse>> getCarH5Url(String startLg, String startLt) {
-        return Api.getInstance().apiService.getCarH5Url(startLg,startLg).compose(RxSchedulers.io_main());
+        return Api.getInstance().apiService.getCarH5Url(startLg,startLt).compose(RxSchedulers.io_main());
     }
 
     @Override

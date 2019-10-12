@@ -198,6 +198,7 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textColor="@color/color_text_gray28"
                 android:textSize="@dimen/text_size_small" />
 

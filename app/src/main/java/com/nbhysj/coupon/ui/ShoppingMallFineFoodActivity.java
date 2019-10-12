@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
@@ -144,7 +145,12 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallFineFoodActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        fineFoodClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallFineFoodActivity.this, MchTypeEnum.MCH_FOOD.getValue());
+        fineFoodClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallFineFoodActivity.this, MchTypeEnum.MCH_FOOD.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
+            @Override
+            public void setMchRankingClassificationListener(int cateId, String photoUrl) {
+
+            }
+        });
         fineFoodClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(fineFoodClassificationAdapter);
 
@@ -295,6 +301,11 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
 
     @Override
     public void getFoodDetailResult(BackResult<MchFoodDetailResponse> res) {
+
+    }
+
+    @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
 
     }
 

@@ -47,6 +47,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="37dp"
             android:textSize="@dimen/text_size_xnormal"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:maxLines="1"
             android:background="@null" />
     </LinearLayout>

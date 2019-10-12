@@ -61,10 +61,11 @@ public class DestinationScenicSpotsAdapter extends RecyclerView.Adapter<Destinat
             MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             String photo = popularScenicSpots.getPhoto();
             int mchId = popularScenicSpots.getId();
-            double commentScore = popularScenicSpots.getCommentScore();
+            float commentScore = popularScenicSpots.getCommentScore();
+            int consumePrice = popularScenicSpots.getConsumePrice();
             holder.mTvPopularScenicSpotLocation.setText(popularScenicSpots.getCounty());
-            holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
-            holder.mTvPopularScenicSpotScore.setText(Tools.getTwoDecimalPoint(commentScore) + "分");
+            holder.mTvPopularScenicSpotPrice.setText(String.valueOf(consumePrice));
+            holder.mTvPopularScenicSpotScore.setText(commentScore + "分");
             holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
 
 

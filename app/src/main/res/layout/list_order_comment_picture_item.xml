@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_95"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <com.nbhysj.coupon.view.RoundedImageView
+        android:id="@+id/img_comment_photo"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="@dimen/dp_15"
+        app:riv_corner_radius="@dimen/dp_5"
+        app:riv_border_color="@color/color_text_black2"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:id="@+id/img_comment_photo_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_photo_upload_delete"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/dp_10"
+        />
+
+
+</RelativeLayout>

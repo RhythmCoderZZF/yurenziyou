@@ -20,6 +20,7 @@ import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
@@ -246,6 +247,11 @@ public class HotelBangDanListActivity extends BaseActivity<HotelPresenter, Hotel
 
     @Override
     public void hotelHomestayOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
+
+    }
+
+    @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
 
     }
 

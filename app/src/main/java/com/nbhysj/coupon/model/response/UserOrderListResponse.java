@@ -238,6 +238,8 @@ public class UserOrderListResponse {
 
     public class GoodsEntity {
 
+        private int orderGoodsId;
+
         private int goodsId;
 
         private String goodsType;
@@ -249,6 +251,14 @@ public class UserOrderListResponse {
         private double goodsPrice;
 
         private String goodsTime;
+
+        public int getOrderGoodsId() {
+            return orderGoodsId;
+        }
+
+        public void setOrderGoodsId(int orderGoodsId) {
+            this.orderGoodsId = orderGoodsId;
+        }
 
         public int getGoodsId() {
             return goodsId;
@@ -342,6 +352,9 @@ public class UserOrderListResponse {
         //用车状态
         private int useCarStatus;
 
+        //是否可退款 0:不可退 1:可退
+        private int canRefundStatus;
+
         public int getCanPayStatus() {
             return canPayStatus;
         }
@@ -388,6 +401,14 @@ public class UserOrderListResponse {
 
         public void setUseCarStatus(int useCarStatus) {
             this.useCarStatus = useCarStatus;
+        }
+
+        public int getCanRefundStatus() {
+            return canRefundStatus;
+        }
+
+        public void setCanRefundStatus(int canRefundStatus) {
+            this.canRefundStatus = canRefundStatus;
         }
     }
 

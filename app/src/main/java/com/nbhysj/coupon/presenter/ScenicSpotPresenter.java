@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.presenter;
 
 import com.nbhysj.coupon.contract.ScenicSpotContract;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 
 import java.util.HashMap;
 
@@ -43,6 +44,11 @@ public class ScenicSpotPresenter extends ScenicSpotContract.Presenter {
     @Override
     public void getNetFriendAlbumList(int mchId, int page, int pageSize) {
         mRxManager.add(mModel.getNetFriendAlbumList(mchId, page, pageSize).subscribe(res -> mView.getNetFriendAlbumListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void mchCollection(MchCollectionRequest mchCollectionRequest) {
+        mRxManager.add(mModel.mchCollection(mchCollectionRequest).subscribe(res -> mView.mchCollectionResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

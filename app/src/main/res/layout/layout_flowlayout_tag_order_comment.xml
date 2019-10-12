@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_flowlayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_order_comment_tag_bg"
+    android:text=""
+    android:textSize="@dimen/text_size_xsmall"
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_16"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5"
+    android:layout_marginRight="@dimen/dp_3"
+    android:layout_marginTop="@dimen/dp_5"
+    android:button="@null"
+    android:checked="false"
+    android:textColor="@drawable/selector_order_comment_tag_bg"></TextView>
+

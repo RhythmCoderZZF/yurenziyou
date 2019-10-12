@@ -44,6 +44,16 @@ public class HomePagePresenter extends HomePageContract.Presenter {
     }
 
     @Override
+    public void getHomePageSearchAll(String queryType, String keyword) {
+        mRxManager.add(mModel.getHomePageSearchAll(queryType,keyword).subscribe(res -> mView.getHomePageSearchAllResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getHomePageSearchByType(String queryType, String keyword) {
+        mRxManager.add(mModel.getHomePageSearchByType(queryType,keyword).subscribe(res -> mView.getHomePageSearchByType(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

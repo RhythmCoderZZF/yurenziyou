@@ -78,12 +78,13 @@
 
                         <TextView
                             android:id="@+id/tv_ticket_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="@dimen/dp_16"
                             android:text=""
                             android:textColor="@color/txt_font_black2"
+                            android:layout_toLeftOf="@+id/tv_purchase_notes"
                             android:textSize="@dimen/text_size_xlarge"
                             android:textStyle="bold" />
 

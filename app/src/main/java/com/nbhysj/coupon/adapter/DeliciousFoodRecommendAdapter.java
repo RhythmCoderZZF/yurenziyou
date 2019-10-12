@@ -1,11 +1,13 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -14,7 +16,10 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.DeliciousFoodRecommendResponse;
 import com.nbhysj.coupon.model.response.DeliciousFoodResponse;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -54,13 +59,14 @@ public class DeliciousFoodRecommendAdapter extends RecyclerView.Adapter<Deliciou
 
         try {
             DeliciousFoodResponse deliciousFoodRecommend = deliciousFoodRecommendList.get(itemPosition);
+            int mchId = deliciousFoodRecommend.getId();
             int consumePrice = deliciousFoodRecommend.getConsumePrice();
             String photo = deliciousFoodRecommend.getPhoto();
             holder.mTvFoodCuisine.setText(deliciousFoodRecommend.getIntro());
             holder.mTvPerCapitaPrice.setText(String.valueOf(consumePrice));
             holder.mTvDeliciousFoodStore.setText(deliciousFoodRecommend.getMchName());
 
-            GlideUtil.loadCornersTransformImage(mContext, photo, 5, holder.mImgDeliciousFood);
+            GlideUtil.loadImage(mContext, photo,  holder.mImgDeliciousFood);
 
             if (itemPosition == 0) {
 
@@ -76,6 +82,17 @@ public class DeliciousFoodRecommendAdapter extends RecyclerView.Adapter<Deliciou
             } else {
                 holder.mFooter.setVisibility(View.GONE);
             }
+
+            holder.mLlytDeliciousFoodRecommendItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, FoodDetailActivity.class);
+                    intent.putExtra("mchId",mchId);
+                    mContext.startActivity(intent);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,11 +115,14 @@ public class DeliciousFoodRecommendAdapter extends RecyclerView.Adapter<Deliciou
         TextView mTvDeliciousFoodStore;
         //美食照片
         @BindView(R.id.image_delicious_food)
-        ImageView mImgDeliciousFood;
+        RoundedImageView mImgDeliciousFood;
         @BindView(R.id.view_header)
         View mHeader;
         @BindView(R.id.view_footer)
         View mFooter;
+        //美食推荐
+        @BindView(R.id.llyt_delicious_food_recommend_item)
+        LinearLayout mLlytDeliciousFoodRecommendItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

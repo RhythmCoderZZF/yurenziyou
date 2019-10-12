@@ -293,6 +293,9 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
     private int lineType;
 
+    //组合单价
+    private double payFee;
+
     @Override
     public int getLayoutId() {
 
@@ -659,7 +662,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     if (goodsPriceList.size() > 0) {
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
-                        //   mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                        double totalPrice = payFee * mPurchaseNum;
+                        mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
                     }
                 } else {
 
@@ -675,8 +679,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
-                //int totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                // mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                double totalPrice = payFee * mPurchaseNum;
+                mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
                 break;
             case R.id.tv_add_vehicle_more:
 
@@ -895,7 +899,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     travellersList = orderSubmitInitResponse.getTravellers();
                     String title = orderSubmitInitResponse.getTitle();
                     userTravelerId = travellersList.get(0).getId();
-                    double payFee = orderSubmitInitResponse.getPayFee();
+                    payFee = orderSubmitInitResponse.getPayFee();
 
                     //开启用车状态
                     if(openCarStatus == 0){
@@ -941,6 +945,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     }
 
                     mTvTotalPrice.setText(Tools.getTwoDecimalPoint(payFee));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -959,10 +964,15 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 try {
                     OrderSubmitResponse ticketOrderSubmitResponse = res.getData();
                     Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("ticketOrderSubmit", ticketOrderSubmitResponse);
-                    intent.putExtras(bundle);
+                    double price = ticketOrderSubmitResponse.getPrice();
+                    String title = ticketOrderSubmitResponse.getTitle();
+                    long payExprireTime = ticketOrderSubmitResponse.getPayExprireTime();
+                    String orderNo = ticketOrderSubmitResponse.getOrderNo();
                     intent.setClass(GroupMchOrderSubmitActivity.this, OrderPaymentActivity.class);
+                    intent.putExtra("price",price);
+                    intent.putExtra("title",title);
+                    intent.putExtra("payExprireTime",payExprireTime);
+                    intent.putExtra("orderNo",orderNo);
                     startActivity(intent);
 
                 } catch (Exception e) {

@@ -23,8 +23,10 @@ import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
+import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
@@ -451,6 +453,16 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 toActivity(PhoneQuickLoginActivity.class);
             }
         }
+
+    }
+
+    @Override
+    public void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res) {
+
+    }
+
+    @Override
+    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

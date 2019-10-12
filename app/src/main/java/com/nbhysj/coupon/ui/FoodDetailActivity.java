@@ -36,6 +36,7 @@ import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodBean;
@@ -161,6 +162,8 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     //经度
     String longitude;
 
+    //收藏状态
+    private int collectionStatus;
     private ShopRecommendDeliciousFoodAdapter recommendDeliciousFoodAdapter;
 
     @Override
@@ -418,6 +421,19 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
 
                         mLlytNearbyFood.setVisibility(View.GONE);
                     }
+
+                    collectionStatus = mchDetailsEntity.getUserCollectState();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -427,6 +443,38 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 break;
         }
     }
+
+    @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    MchCollectionResponse mchCollectionResponse = res.getData();
+                    collectionStatus = mchCollectionResponse.getCollectionStatus();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(FoodDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
 
     @Override
     public void showMsg(String msg) {
@@ -447,12 +495,16 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
             mRlytFoodHeader.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-            mImgCollection.setImageResource(R.mipmap.icon_black_fine_food_collection);
+            if(collectionStatus == 0) {
+                mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            }
             mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
             mImgScenicSpotForward.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_share));
             if (y <= 100) {
                 mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-                mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_fine_food_collection));
+                if(collectionStatus == 0) {
+                    mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
+                }
                 mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
                 mImgScenicSpotForward.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_share));
                 mRlytFoodHeader.getBackground().setAlpha(255);

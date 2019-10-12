@@ -135,6 +135,7 @@
     <string name="str_complete" translatable="false">完成</string>
     <string name="str_order_delete" translatable="false">删除订单</string>
     <string name="str_order_deleting" translatable="false">正在删除...</string>
+    <string name="str_order_canceling" translatable="false">正在取消...</string>
     <string name="str_order_cancel">取消订单</string>
     <string name="str_order_comment" translatable="false">去评价</string>
     <string name="str_order_payment" translatable="false">去付款</string>
@@ -148,6 +149,7 @@
     <string name="str_evaluate" translatable="false">评价</string>
     <string name="str_rebook" translatable="false">再次预定</string>
     <string name="str_online_payment" translatable="false">在线支付</string>
+    <string name="str_go_order_payment" translatable="false">去支付</string>
     <string name="str_more" translatable="false">更多</string>
     <string name="str_create_topic" translatable="false">创建话题</string>
     <string name="str_create_more_topic" translatable="false">搜索更多话题</string>
@@ -165,7 +167,7 @@
     <string name="str_my_ask_question" translatable="false">我要提问</string>
     <string name="str_ask_question_detail" translatable="false">问题详情</string>
     <string name="str_delicious_food_recommendation" translatable="false">美食推荐</string>
-    <string name="str_hotel_reputation" translatable="false">酒店名宿</string>
+    <string name="str_hotel_reputation" translatable="false">酒店民宿</string>
     <string name="str_travel_theme" translatable="false">旅行主题</string>
     <string name="str_independent_travel" translatable="false">自由行</string>
     <string name="str_historical_record" translatable="false">历史记录</string>
@@ -192,7 +194,7 @@
     <string name="str_confirm" translatable="false">确认</string>
     <string name="str_editing_visitors" translatable="false">编辑游客</string>
     <string name="str_add_visitors" translatable="false">新增游客</string>
-    <string name="str_details_of_facilities" translatable="false">详情设施</string>
+    <string name="str_details_of_facilities" translatable="false">设施详情</string>
     <string name="str_reservation_must_be_read" translatable="false">订房必读</string>
     <string name="str_hotel_periphery" translatable="false">酒店周边</string>
     <string name="str_immediate_payment" translatable="false">立即支付</string>
@@ -233,6 +235,10 @@
     <string name="str_confirm_refund">确认退款</string>
     <string name="str_refund_detail">退款详情</string>
     <string name="str_publication_evaluation">发表评价</string>
+    <string name="str_scenery">景 色</string>
+    <string name="str_interest">趣 味</string>
+    <string name="str_cost_performance">性价比</string>
+    <string name="str_order_comment_publish">发表评论</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -259,6 +265,7 @@
     <string name="str_scenic_spot" translatable="false">景点</string>
     <string name="str_group_mch" translatable="false">组合</string>
     <string name="str_hotel" translatable="false">酒店</string>
+    <string name="str_recreation" translatable="false">互动</string>
     <string name="str_remarks" translatable="false">备注</string>
     <string name="str_useful" translatable="false">有用</string>
     <string name="str_adopt" translatable="false">采纳</string>

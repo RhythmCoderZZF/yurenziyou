@@ -17,6 +17,7 @@ import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.view.StarBarView;
 import com.zhy.view.flowlayout.FlowLayout;

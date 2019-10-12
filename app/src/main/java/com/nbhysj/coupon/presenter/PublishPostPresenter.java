@@ -4,6 +4,7 @@ import com.nbhysj.coupon.contract.PublishPostContract;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.request.MerchantRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
+import com.nbhysj.coupon.model.request.TopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 
 /**
@@ -28,8 +29,8 @@ public class PublishPostPresenter extends PublishPostContract.Presenter {
     }
 
     @Override
-    public void createTopic(String title, String intro) {
-        mRxManager.add(mModel.createTopic(title, intro).subscribe(res -> mView.createTopicResult(res), e -> mView.showMsg(e.getMessage())));
+    public void createTopic(TopicRequest topicRequest) {
+        mRxManager.add(mModel.createTopic(topicRequest).subscribe(res -> mView.createTopicResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

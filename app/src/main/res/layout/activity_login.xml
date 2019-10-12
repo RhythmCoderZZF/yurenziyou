@@ -59,6 +59,7 @@
                 android:maxLines="1"
                 android:textColor="@color/color_text_gray"
                 android:textColorHint="@color/color_text_gray"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="@dimen/text_size_xmedium"
                 android:text="18757194434" />
 
@@ -101,6 +102,7 @@
                 android:layout_marginRight="@dimen/dp_10"
                 android:hint="@string/str_password"
                 android:inputType="textPassword"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:maxLines="1"
                 android:text="123456"
                 android:textColor="@color/color_text_gray"

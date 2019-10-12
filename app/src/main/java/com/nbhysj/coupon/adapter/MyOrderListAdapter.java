@@ -17,10 +17,17 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
 import com.nbhysj.coupon.common.Enum.OrderRefundStatusEnum;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
+import com.nbhysj.coupon.ui.AllRefundApplyActivity;
+import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.ui.OrderDetailActivity;
+import com.nbhysj.coupon.ui.OrderEvaluateActivity;
 import com.nbhysj.coupon.ui.OrderPaymentActivity;
 import com.nbhysj.coupon.ui.OrderSubmitActivity;
 import com.nbhysj.coupon.ui.RefundDetailsActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
+import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.Tools;
 
 import java.util.List;
@@ -77,6 +84,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             double totalPrice = orderTypeEntity.getTotalPrice();
             long outTime = orderTypeEntity.getOutTime();
             String orderNo = orderTypeEntity.getOrderNo();      //订单号
+            String orderRefundNo = orderTypeEntity.getOrderRefundNo();  //退款订单号
             String goodsName = orderTypeEntity.getGoodsName();  //商品名字
             UserOrderListResponse.StatusEntity statusEntity = orderTypeEntity.getStatusVO();
             int canBuyAgainStatus = statusEntity.getCanBuyAgainStatus();
@@ -85,6 +93,11 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             int canPayStatus = statusEntity.getCanPayStatus();
             int commentStatus = statusEntity.getCommentStatus();
             int useCarStatus = statusEntity.getUseCarStatus();
+            int canRefundStatus = statusEntity.getCanRefundStatus();
+            //再次购买
+            UserOrderListResponse.BuyAginEntity buyAginEntity = orderTypeEntity.getBuyAginVO();
+            int buyId = buyAginEntity.getBuyId();
+            String buyType = buyAginEntity.getBuyType();
 
             List<UserOrderListResponse.MchsEntity> mchsEntityList = orderTypeEntity.getMchs();
 
@@ -93,7 +106,17 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
             linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
             holder.mRvUserTicket.setLayoutManager(linearLayoutManager);
-            MyOrderTicketListAdapter myOrderTicketListAdapter = new MyOrderTicketListAdapter(mContext);
+            MyOrderTicketListAdapter myOrderTicketListAdapter = new MyOrderTicketListAdapter(mContext, new MyOrderTicketListAdapter.OrderOnclickListener() {
+                @Override
+                public void setLookMyOrderDetailListener() {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, OrderDetailActivity.class);
+                    intent.putExtra("orderNo", orderNo);
+                    mContext.startActivity(intent);
+
+                }
+            });
             myOrderTicketListAdapter.setMchsEntityList(mchsEntityList);
             holder.mRvUserTicket.setAdapter(myOrderTicketListAdapter);
 
@@ -101,22 +124,45 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             LinearLayoutManager vehicleUseLinearLayoutManager = new LinearLayoutManager(mContext);
             linearLayoutManager.setOrientation(vehicleUseLinearLayoutManager.VERTICAL);
             holder.mRvVehicleUse.setLayoutManager(vehicleUseLinearLayoutManager);
-            OrderVehicleUseAdapter orderVehicleUseAdapter = new OrderVehicleUseAdapter();
+            OrderVehicleUseAdapter orderVehicleUseAdapter = new OrderVehicleUseAdapter(new OrderVehicleUseAdapter.OrderOnclickListener() {
+                @Override
+                public void setLookMyOrderDetailListener() {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, OrderDetailActivity.class);
+                    intent.putExtra("orderNo", orderNo);
+                    mContext.startActivity(intent);
+
+                }
+            });
             orderVehicleUseAdapter.setVehicleUseList(orderListCarList);
             holder.mRvVehicleUse.setAdapter(orderVehicleUseAdapter);
 
             holder.mTvOrderStatus.setText(orderStatus);
             holder.mTvCommodityNum.setText("共" + goodsNum + "件商品");
             holder.mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-            if (orderType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
+            String goodsTypeTicket = GoodsTypeEnum.GOODS_TICKET.getValue();
+            String goodsTypeHotelRoom = GoodsTypeEnum.GOODS_HOTEL_ROOM.getValue();
+            String goodsTypeRecreation = GoodsTypeEnum.GOODS_RECREATION.getValue();
+            String goodsTypeGroup = GoodsTypeEnum.GROUP_GOODS.getValue();
+
+            String goodsTypeHotel = GoodsTypeEnum.MCH_HOTEL1.getValue();
+            String goodsTypeHotelHomestay = GoodsTypeEnum.MCH_HOTEL2.getValue();
+
+            if (orderType.equals(goodsTypeTicket)) {
                 holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_order_scenic_spot_tag);
                 holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_scenic_spot));
-            } else if (orderType.equals(GoodsTypeEnum.getEnumByKey(2).getValue())) {
+            } else if (orderType.equals(goodsTypeHotelRoom)) {
 
                 holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_order_hotel_tag);
                 holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_hotel));
 
-            } else if (orderType.equals(GoodsTypeEnum.getEnumByKey(4).getValue())) {
+            } else if (orderType.equals(goodsTypeRecreation)) {
+
+                holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_order_recreation_tag);
+                holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_recreation));
+
+            } else if (orderType.equals(goodsTypeGroup)) {
 
                 holder.mImgOrderTypeTag.setImageResource(R.mipmap.icon_order_group_mch_tag);
                 holder.mTvOrderMchType.setText(mContext.getResources().getString(R.string.str_group_mch));
@@ -134,21 +180,35 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
             //待支付
             if (canPayStatus == 0) {
-                holder.mLlytOrderRefund.setVisibility(View.VISIBLE);
+                holder.mLlytOrderNotPendingPayment.setVisibility(View.VISIBLE);
                 holder.mRlytPendingOrder.setVisibility(View.GONE);
 
-            } else if (canCancelStatus == 1) {
-                holder.mLlytOrderRefund.setVisibility(View.GONE);
+            } else if (canPayStatus == 1) {
+                holder.mLlytOrderNotPendingPayment.setVisibility(View.GONE);
                 holder.mRlytPendingOrder.setVisibility(View.VISIBLE);
+                long payExprireTime = orderTypeEntity.getPayExprireTime();
+                String payExprireTimeStr = DateUtil.millisToStringShort(payExprireTime);
+                holder.mTvPayExprireTime.setText(payExprireTimeStr + "后取消订单");
             }
 
-            //待支付
+            //再次购买
             if (canBuyAgainStatus == 0) {
+
                 holder.mTvOrderRefundBuyAgain.setVisibility(View.GONE);
 
             } else if (canBuyAgainStatus == 1) {
 
                 holder.mTvOrderRefundBuyAgain.setVisibility(View.VISIBLE);
+            }
+
+            //可退款
+            if (canRefundStatus == 0)
+            {
+                holder.mTvOrderRefund.setVisibility(View.GONE);
+
+            } else if(canRefundStatus == 1){
+
+                holder.mTvOrderRefund.setVisibility(View.VISIBLE);
             }
 
             //可删除订单
@@ -170,9 +230,9 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             }
 
             /**************************    退款    *************************/
-            if(!TextUtils.isEmpty(orderStatus)){
+            if (!TextUtils.isEmpty(orderStatus)) {
 
-                if(orderStatus.equals(OrderRefundStatusEnum.ORDER_REFUNDING.getValue())){
+                if (orderStatus.equals(OrderRefundStatusEnum.ORDER_REFUNDING.getValue())) {
 
                     holder.mTvViewingRefundProgress.setVisibility(View.VISIBLE);
                     holder.mTvViewingRefundProgress.setOnClickListener(new View.OnClickListener() {
@@ -180,18 +240,18 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                         public void onClick(View view) {
 
                             Intent intent = new Intent();
-                            intent.putExtra("orderNo",orderNo);
+                            intent.putExtra("orderRefundNo", orderRefundNo);
                             intent.setClass(mContext, RefundDetailsActivity.class);
                             mContext.startActivity(intent);
                         }
                     });
 
-                } else if(orderStatus.equals(OrderRefundStatusEnum.ORDER_REFUND_SUCCESSFUL.getValue())){
+                } else if (orderStatus.equals(OrderRefundStatusEnum.ORDER_REFUND_SUCCESSFUL.getValue())) {
 
                     holder.mTvOrderRefundBuyAgain.setVisibility(View.VISIBLE);
                     holder.mTvOrderDelete.setVisibility(View.VISIBLE);
 
-                } else if(orderStatus.equals(OrderRefundStatusEnum.ORDER_REFUND_CLOSED.getValue())){
+                } else if (orderStatus.equals(OrderRefundStatusEnum.ORDER_REFUND_CLOSED.getValue())) {
 
                     holder.mTvViewingRefundDetail.setVisibility(View.VISIBLE);
                 }
@@ -203,81 +263,59 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
                     Intent intent = new Intent();
                     intent.setClass(mContext, OrderPaymentActivity.class);
-                    intent.putExtra("price",totalPrice);
-                    intent.putExtra("title",goodsName);
-                    intent.putExtra("payExprireTime",outTime);
-                    intent.putExtra("orderNo",orderNo);
+                    intent.putExtra("price", totalPrice);
+                    intent.putExtra("title", goodsName);
+                    intent.putExtra("payExprireTime", outTime);
+                    intent.putExtra("orderNo", orderNo);
                     mContext.startActivity(intent);
                 }
             });
 
-          /*  if (canCancelStatus == 1 || orderStatus.equals("交易关闭")) {
+            holder.mTvOrderRefundBuyAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent mIntent = new Intent();
 
-                holder.mRlytTransactionClosed.setVisibility(View.VISIBLE);
-                holder.mRlytPendingOrder.setVisibility(View.GONE);
-                holder.mRlytSuccessfulTrade.setVisibility(View.GONE);
+                    if (orderType.equals(goodsTypeTicket)) {  //景点
 
-                holder.mTvOrderDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                        mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        mIntent.putExtra("mchId", buyId);
+                        mContext.startActivity(mIntent);
 
-                        myOrderListener.setMyOrderListener(orderTypeEntity);
+                    } else if (orderType.equals(goodsTypeRecreation)) {  //互动
 
-                    }
-                });
-            } else if(canPayStatus == 1 || orderStatus.equals("待付款"))
-            {
-                holder.mRlytPendingOrder.setVisibility(View.VISIBLE);
-                holder.mRlytTransactionClosed.setVisibility(View.GONE);
-                holder.mRlytSuccessfulTrade.setVisibility(View.GONE);
-                Date date = new Date();
-                long currentTime = date.getTime();
-                long remainingTimeLong  = outTime*1000 - currentTime;
-         *//*       long days = remainingTimeLong / (1000 * 60 * 60 * 24);
-                long hours = (remainingTimeLong-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
-                int minutes = (int) ((remainingTimeLong) / (1000 * 60));
-                long second = (remainingTimeLong-days*(1000 * 60 * 60 * 24) - hours*(1000* 60 * 60) - minutes*(1000* 60 * 60))/1000;*//*
-              //  String time = minutes+"分"+second+"秒";
-                String time = DateUtil.millisToStringShort(remainingTimeLong);
-              //  String remainingTime = DateUtil.getTheRemainingTime(remainingTimeLong,DateUtil.sDateHHMMSSFormat);
-                holder.mTvPendingPaymentTime.setText(time+"后订单将取消");
-                holder.mTvOrderPayment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                        mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        mIntent.putExtra("mchId", buyId);
+                        mContext.startActivity(mIntent);
 
-                        myOrderListener.setOrderPendingPaymentListener(orderTypeEntity);
+                    } else if (orderType.equals(goodsTypeGroup)) { //组合
+
+                        mIntent.setClass(mContext, GroupMchDetailsActivity.class);
+                        mIntent.putExtra("packageId", buyId);
+                        mContext.startActivity(mIntent);
+                    } else if (orderType.equals(goodsTypeHotel)) {  //酒店
+
+                        mIntent.setClass(mContext, HotelDetailsActivity.class);
+                        mIntent.putExtra("mchId", buyId);
+                        mContext.startActivity(mIntent);
+
+                    }else if (orderType.equals(goodsTypeHotelHomestay)) {  //民宿
+
+                        mIntent.setClass(mContext, HomestayDetailActivity.class);
+                        mIntent.putExtra("mchId", buyId);
+                        mContext.startActivity(mIntent);
 
                     }
-                });
-            } else if(orderStatus.equals("待付款"))
-            {
-                holder.mRlytPendingOrder.setVisibility(View.VISIBLE);
-                holder.mRlytTransactionClosed.setVisibility(View.GONE);
-                holder.mRlytSuccessfulTrade.setVisibility(View.GONE);
-                Date date = new Date();
-                long currentTime = date.getTime();
-                long remainingTimeLong  = outTime*1000 - currentTime;
-         *//*       long days = remainingTimeLong / (1000 * 60 * 60 * 24);
-                long hours = (remainingTimeLong-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
-                int minutes = (int) ((remainingTimeLong) / (1000 * 60));
-                long second = (remainingTimeLong-days*(1000 * 60 * 60 * 24) - hours*(1000* 60 * 60) - minutes*(1000* 60 * 60))/1000;*//*
-                //  String time = minutes+"分"+second+"秒";
-                String time = DateUtil.millisToStringShort(remainingTimeLong);
-                //  String remainingTime = DateUtil.getTheRemainingTime(remainingTimeLong,DateUtil.sDateHHMMSSFormat);
-                holder.mTvPendingPaymentTime.setText(time+"后订单将取消");
-                holder.mTvOrderPayment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                }
+            });
 
-                        myOrderListener.setOrderPendingPaymentListener(orderTypeEntity);
+            holder.mTvOrderRefund.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                    }
-                });
-            }else if(commentStatus == 1 || orderStatus.equals("待评价")){
-                holder.mRlytTransactionClosed.setVisibility(View.GONE);
-                holder.mRlytPendingOrder.setVisibility(View.GONE);
-                holder.mRlytSuccessfulTrade.setVisibility(View.VISIBLE);
-            }*/
+                    myOrderListener.setOrderAllRefundListener(orderNo);
+                }
+            });
 
             holder.mLlytMyOrderItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -289,6 +327,48 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                     mContext.startActivity(intent);
                 }
             });
+
+            holder.mTvOrderDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    myOrderListener.setOrderDeleteListener(position, orderTypeEntity);
+                }
+            });
+
+            holder.mTvOrderCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    myOrderListener.setOrderCancelListener(orderTypeEntity);
+                }
+            });
+
+            holder.mTvOrderComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    if(!orderType.equals(goodsTypeGroup))
+                    {
+                        if(mchsEntityList != null) {
+                            UserOrderListResponse.MchsEntity mchsEntity = mchsEntityList.get(0);
+                            UserOrderListResponse.GoodsEntity goodsEntity = mchsEntity.getGoodsVOList().get(0);
+                            if(goodsEntity != null) {
+
+                                int orderGoodsId = goodsEntity.getOrderGoodsId();
+                                myOrderListener.setPartialOrderCommentListener(orderGoodsId);
+                            }
+                        }
+
+
+                    } else {
+
+                        myOrderListener.setGroupOrderCommentListener(orderNo);
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -340,7 +420,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
         //待支付时间  订单将取消
         @BindView(R.id.tv_pending_payment_time)
-        TextView mTvPendingPaymentTime;
+        TextView mTvPayExprireTime;
 
         //待支付订单
         @BindView(R.id.rlyt_pending_order)
@@ -360,9 +440,9 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
         //查看退款详情
         @BindView(R.id.tv_viewing_refund_detail)
         TextView mTvViewingRefundDetail;
-        //订单退款
-        @BindView(R.id.llyt_order_refund)
-        LinearLayout mLlytOrderRefund;
+        //订单非待支付
+        @BindView(R.id.llyt_order_not_pending_payment)
+        LinearLayout mLlytOrderNotPendingPayment;
       /*  //交易成功
         @BindView(R.id.rlyt_successful_trade)
         RelativeLayout mRlytSuccessfulTrade;
@@ -383,8 +463,14 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
     public interface MyOrderListener {
 
-        void setMyOrderListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity);
+        void setOrderDeleteListener(int position, UserOrderListResponse.OrderTypeEntity orderTypeEntity);
 
-        void setOrderPendingPaymentListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity);
+        void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity);
+
+        void setOrderAllRefundListener(String orderNo);
+
+        void setGroupOrderCommentListener(String orderNo);
+
+        void setPartialOrderCommentListener(int orderGoodsId);
     }
 }

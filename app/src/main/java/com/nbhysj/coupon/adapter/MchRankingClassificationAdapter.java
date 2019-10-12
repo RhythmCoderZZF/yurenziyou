@@ -6,28 +6,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
-import com.nbhysj.coupon.model.response.HotelReputationResponse;
-import com.nbhysj.coupon.model.response.MchCitiesBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.HomestayBangDanListActivity;
-import com.nbhysj.coupon.ui.HotelBangDanListActivity;
 import com.nbhysj.coupon.ui.RecreationBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
-import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
-import com.nbhysj.coupon.ui.ScenicSpotListActivity;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.view.RoundedImageView;
-import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
 
@@ -43,11 +33,13 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
     List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList;
     private Context mContext;
     private String mchType;
+    private MchRankingClassificationListener mchRankingClassificationListener;
 
-    public MchRankingClassificationAdapter(Context mContext,String mchType) {
+    public MchRankingClassificationAdapter(Context mContext,String mchType,MchRankingClassificationListener mchRankingClassificationListener) {
 
         this.mContext = mContext;
         this.mchType = mchType;
+        this.mchRankingClassificationListener = mchRankingClassificationListener;
     }
 
     public void setMchRankingClassificationList(List<ScenicSpotHomePageResponse.CateEntity> scenicSpotClassifiyList) {
@@ -68,6 +60,7 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
 
         try {
             ScenicSpotHomePageResponse.CateEntity cateEntity = scenicSpotClassifiyList.get(itemPosition);
+            int cateId = cateEntity.getId();
             String mchtName = cateEntity.getTitle();
             String photo = cateEntity.getPhoto();
             holder.mTvScenicSpotName.setText(mchtName);
@@ -88,21 +81,24 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
                     if(mchType.equals(MchTypeEnum.MCH_SCENIC.getValue()))
                     {
                         intent.setClass(mContext, ScenicSpotBangDanListActivity.class);
-
+                        mContext.startActivity(intent);
                     }  else if(mchType.equals(MchTypeEnum.MCH_FOOD.getValue())){
 
                         intent.setClass(mContext, FineFoodBangDanListActivity.class);
+                        mContext.startActivity(intent);
                     }else if(mchType.equals(MchTypeEnum.MCH_HOTEL.getValue())){
 
-                        intent.setClass(mContext, HotelBangDanListActivity.class);
+                        mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);
                     } else if(mchType.equals(MchTypeEnum.MCH_HOMESTAY.getValue())){
 
                         intent.setClass(mContext, HomestayBangDanListActivity.class);
+                        mContext.startActivity(intent);
                     }else if(mchType.equals(MchTypeEnum.MCH_RECREATION.getValue())){
 
                         intent.setClass(mContext, RecreationBangDanListActivity.class);
+                        mContext.startActivity(intent);
                     }
-                    mContext.startActivity(intent);
+
                 }
             });
         } catch (Exception e) {
@@ -135,5 +131,10 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
 
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface MchRankingClassificationListener{
+
+        void setMchRankingClassificationListener(int cateId,String photoUrl);
     }
 }

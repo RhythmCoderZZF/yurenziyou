@@ -146,7 +146,12 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallInteractionActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallInteractionActivity.this,MchTypeEnum.MCH_RECREATION.getValue());
+        mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallInteractionActivity.this, MchTypeEnum.MCH_RECREATION.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
+            @Override
+            public void setMchRankingClassificationListener(int cateId, String photoUrl) {
+
+            }
+        });
         mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(mchRankingClassificationAdapter);
 

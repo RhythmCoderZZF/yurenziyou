@@ -26,6 +26,7 @@
         android:layout_width="240dp"
         android:layout_height="48dp"
         android:layout_marginTop="5dp"
+        android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
         android:hint="输入手机号" />
 
     <Button

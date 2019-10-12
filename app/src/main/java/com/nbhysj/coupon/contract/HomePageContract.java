@@ -8,8 +8,10 @@ import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagReponse;
+import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
@@ -47,6 +49,11 @@ public interface HomePageContract {
         //帖子评论
         Observable<BackResult> postsCommentRequest(PostsCommentRequest postsCommentRequest);
 
+        //首页搜索全部
+        Observable<BackResult<HomePageAllSearchResponse>> getHomePageSearchAll(String queryType,String keyword);
+
+        //首页搜索根据商户类型
+        Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(String queryType, String keyword);
     }
 
     interface View extends BaseView {
@@ -62,6 +69,10 @@ public interface HomePageContract {
         void postOprateResult(BackResult<PraiseOrCollectResponse> res);
 
         void postsCommentResult(BackResult res);
+
+        void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res);
+
+        void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res);
 
         void showMsg(String msg);
     }
@@ -82,6 +93,12 @@ public interface HomePageContract {
 
         //帖子评论
         public abstract void postsCommentRequest(PostsCommentRequest postsCommentRequest);
+
+        //首页搜索全部
+        public abstract void getHomePageSearchAll(String queryType,String keyword);
+
+        //首页根据类型搜索
+        public abstract void getHomePageSearchByType(String queryType,String keyword);
 
     }
 }

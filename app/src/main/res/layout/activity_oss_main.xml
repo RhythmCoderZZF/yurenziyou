@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.80"
                 android:hint="@string/stsserver"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -60,6 +61,7 @@
                 android:layout_width="98dp"
                 android:layout_height="wrap_content"
                 android:hint="bucketname"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="11sp" />
 
             <TextView
@@ -103,6 +105,7 @@
             android:id="@+id/edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:hint="@string/object_name" />
 
         <ProgressBar
@@ -150,6 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/resize_width"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:inputType="number" />
 
             <EditText
@@ -158,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/resize_height"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:inputType="number" />
 
             <Button
@@ -179,6 +184,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:hint="@string/watermark_hint" />
 
             <EditText
@@ -187,6 +193,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/watermark_size"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:inputType="number" />
 
             <Button

@@ -11,6 +11,7 @@ import com.nbhysj.coupon.contract.OrderRefundContract;
 import com.nbhysj.coupon.model.OrderRefundModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.presenter.OrderRefundPresenter;
 
@@ -83,6 +84,11 @@ public class PartialRefundApplyActivity extends BaseActivity<OrderRefundPresente
 
     @Override
     public void orderAllRefundSubmitResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getOrderRefundDetailResult(BackResult<OrderRefundDetailResponse> res) {
 
     }
 

@@ -70,7 +70,7 @@
         android:layout_height="@dimen/dp_110"
         android:layout_toRightOf="@+id/llyt_ticket_information"
         android:alpha="0.25"
-        android:background="@color/color_text_gray6"></TextView>
+        android:background="@color/color_text_gray38"></TextView>
 
     <TextView
         android:id="@+id/tv_ticket_already_used"
@@ -93,7 +93,7 @@
         android:layout_height="@dimen/dp_110"
         android:layout_toRightOf="@+id/tv_ticket_already_used"
         android:alpha="0.25"
-        android:background="@color/color_text_gray6"></View>
+        android:background="@color/color_text_gray38"></View>
 
     <TextView
         android:id="@+id/tv_ticket_remainder"
@@ -116,7 +116,7 @@
         android:layout_height="@dimen/dp_110"
         android:layout_toRightOf="@+id/tv_ticket_remainder"
         android:alpha="0.25"
-        android:background="@color/color_text_gray6"></View>
+        android:background="@color/color_text_gray38"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -191,7 +191,7 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
         android:alpha="0.25"
-        android:background="@color/color_text_gray6"
+        android:background="@color/color_text_gray38"
         android:layout_alignParentBottom="true"></View>
 
 </android.support.percent.PercentRelativeLayout>

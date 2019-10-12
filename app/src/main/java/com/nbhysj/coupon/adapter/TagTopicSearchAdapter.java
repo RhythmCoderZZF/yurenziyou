@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ public class TagTopicSearchAdapter extends RecyclerView.Adapter<TagTopicSearchAd
 
     @Override
     public void onBindViewHolder(final CardHolder holder, final int position) {
+
         HotTagsTopicBean topicSearchEntity = tagTopicSearchList.get(position);
         holder.mTvTagTopic.setText(topicSearchEntity.getTitle());
     }
@@ -59,10 +61,12 @@ public class TagTopicSearchAdapter extends RecyclerView.Adapter<TagTopicSearchAd
 
     static class CardHolder extends RecyclerView.ViewHolder {
         TextView mTvTagTopic;
+        LinearLayout mLlytCreateTopicItem;
 
         public CardHolder(View itemView) {
             super(itemView);
             mTvTagTopic = itemView.findViewById(R.id.tv_topic);
+            mLlytCreateTopicItem = itemView.findViewById(R.id.llyt_create_topic_item);
         }
     }
 }

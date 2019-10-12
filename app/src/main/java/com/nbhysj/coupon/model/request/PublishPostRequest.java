@@ -18,7 +18,7 @@ public class PublishPostRequest {
     private String longitude;
 
     //商户id集合
-    private List<Integer> mchIds;
+    private int mchIds;
 
     //资源集合
     private List<ResourceInfoEntity> resource;
@@ -48,11 +48,11 @@ public class PublishPostRequest {
         this.longitude = longitude;
     }
 
-    public List<Integer> getMchIds() {
+    public int getMchIds() {
         return mchIds;
     }
 
-    public void setMchIds(List<Integer> mchIds) {
+    public void setMchIds(int mchIds) {
         this.mchIds = mchIds;
     }
 

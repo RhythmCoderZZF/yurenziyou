@@ -25,8 +25,10 @@ import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
+import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.HomePageSearchActivity;
@@ -167,6 +169,16 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
 
     @Override
     public void postsCommentResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res) {
+
+    }
+
+    @Override
+    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

@@ -22,16 +22,20 @@ import com.nbhysj.coupon.model.request.MoveFavoritesContentRequest;
 import com.nbhysj.coupon.model.request.OrderAllRefundRequest;
 import com.nbhysj.coupon.model.request.OrderCancelRequest;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
+import com.nbhysj.coupon.model.request.OrderGroupCommentRequest;
+import com.nbhysj.coupon.model.request.OrderPartialCommentRequest;
 import com.nbhysj.coupon.model.request.OrderPartialRefundRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
+import com.nbhysj.coupon.model.request.QuestionAnsweringPublishRequest;
 import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.TopicRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.TripintelligentRequest;
@@ -48,7 +52,9 @@ import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.FavoritesResponse;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.GroupMchResponse;
+import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
+import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
@@ -56,6 +62,8 @@ import com.nbhysj.coupon.model.response.LimitedTimeSalePageBean;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCommentResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -63,7 +71,10 @@ import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
+import com.nbhysj.coupon.model.response.OrderGoodsInitResponse;
+import com.nbhysj.coupon.model.response.OrderGroupGoodsInitResponse;
 import com.nbhysj.coupon.model.response.OrderPaymentResponse;
+import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
@@ -78,6 +89,7 @@ import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
+import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
@@ -87,6 +99,7 @@ import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
+import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
 import com.nbhysj.coupon.model.response.WeatherResponse;
 
 import java.util.HashMap;
@@ -176,6 +189,10 @@ public interface ApiService {
     @POST("api/thirdPartyLogin/createUser")
     Observable<BackResult<LoginResponse>> thirdPartyLoginCreateUser(@Body ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind);
 
+     //名片
+    @GET("api/index/myNameCard")
+    Observable<BackResult<TravellerInfoResponse>> getMyNameCard(@Query("userId") int userId);
+
     /****************       1.旅客信息        *************/
     //15.查询旅客信息列表
     @GET("api/userTraveller")
@@ -253,8 +270,8 @@ public interface ApiService {
     Observable<BackResult<TagTopicSearchResponse>> topicSearch(@Query("type") String type, @Query("param") String param);
 
     //创建主题(新增标签)
-    @GET("api/topic/create")
-    Observable<BackResult> topicCreate(@Query("title") String title, @Query("intro") String intro);
+    @POST("api/topic/create")
+    Observable<BackResult<HotTagsTopicBean>> topicCreate(@Body TopicRequest topicRequest);
 
     //发布帖子
     @POST("api/posts/createPost")
@@ -363,7 +380,7 @@ public interface ApiService {
 
     //商户类型收藏
     @POST("api/mch/mchCollection")
-    Observable<BackResult> mchCollection(@Body MchCollectionRequest mchCollectionRequest);
+    Observable<BackResult<MchCollectionResponse>> mchCollection(@Body MchCollectionRequest mchCollectionRequest);
 
     //目的地首页
     @GET("api/destination/findByCityName")
@@ -421,6 +438,17 @@ public interface ApiService {
     @GET("api/mch/rushPurchaseInfo")
     Observable<BackResult<OrderSubmitInitResponse>> getRushPurchaseInfo();
 
+    //首页搜索
+    @GET("api/search")
+    Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(@Query("queryType") String queryType, @Query("keyword") String keyword);
+
+    //首页搜索全部
+    @GET("api/search")
+    Observable<BackResult<HomePageAllSearchResponse>> getHomePageSearchALL(@Query("queryType") String queryType, @Query("keyword") String keyword);
+
+    //获取商户评论列表
+    @GET("api/mchComment?mchId=128")
+    Observable<BackResult<MchCommentResponse>> getMchCommentList(@Query("mchId") int mchId);
 
     /*************     行程助手      ***************/
     //行程助手列表
@@ -608,10 +636,59 @@ public interface ApiService {
     @POST("api/orderRefund/all")
     Observable<BackResult> orderAllRefundSubmit(@Body OrderAllRefundRequest orderAllRefundRequest);
 
+    //获取退款详情
+    @GET("api/order/query/refund")
+    Observable<BackResult<OrderRefundDetailResponse>> getOrderRefundDetail(@Query("orderRefundNo") String orderRefundNo);
+
+
     /***************    支付   *********************/
     //支付
     @GET("api/order/pay/pay")
     Observable<BackResult<OrderPaymentResponse>> orderPayment(@Query("orderNo") String orderNo, @Query("paymentFlag") String paymentFlag);
+
+    /***************   订单评价  ********************/
+
+    //可以评论的订单商品（单个）
+    @GET("api/mchComment/mayCommentOrderGoods")
+    Observable<BackResult<OrderGoodsInitResponse>> getOrderGoodsCommentInit(@Query("orderGoodsId") int orderGoodsId);
+
+    //可以评论的订单商品（组合）
+    @GET("api/mchComment/mayCommentOrder")
+    Observable<BackResult<OrderGroupGoodsInitResponse>> getOrderGroupGoodsCommentInit(@Query("orderNo") String orderNo);
+
+    //评论订单商品（单个）
+    @POST("api/mchComment")
+    Observable<BackResult> orderGoodsComment(@Body OrderPartialCommentRequest orderPartialCommentRequest);
+
+    //评论订单商品（组合）
+    @POST("api/mchComment")
+    Observable<BackResult> orderGroupGoodsComment(@Body OrderGroupCommentRequest orderGroupCommentRequest);
+
+    /***************   商户问题  ********************/
+
+    //我要提问-发布问题
+    @POST("api/questionAnswering")
+    Observable<BackResult> questionAnswering(@Body QuestionAnsweringPublishRequest questionAnsweringPublishRequest);
+
+    //商户界面商户问答列表
+    @GET("api/mchQuestionAndAnswer")
+    Observable<BackResult<WaitMyAnswerResponse>> getMchQuestionAndAnswerList(@Query("mchId") int mchId,@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //待我来答列表
+    @GET("api/questionAnswering/waitMyAnswer")
+    Observable<BackResult<WaitMyAnswerResponse>> getWaitMyAnswerList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //我的回答列表
+    @GET("api/questionAnswering/myAnswer")
+    Observable<BackResult<WaitMyAnswerResponse>> getMyAnswerList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //我的同问列表
+    @GET("api/questionAnswering/userAskTogether")
+    Observable<BackResult<WaitMyAnswerResponse>> getUserAskTogetherList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //我的提问列表
+    @GET("api/questionAnswering/userQuestion")
+    Observable<BackResult<WaitMyAnswerResponse>> getUserQuestionList(@Query("page") int page, @Query("pageSize") int pageSize);
 
 }
 

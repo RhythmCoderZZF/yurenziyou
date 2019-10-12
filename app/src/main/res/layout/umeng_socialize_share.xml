@@ -63,6 +63,7 @@
         android:background="#ffffff"
         android:bufferType="spannable"
         android:gravity="top"
+        android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
         android:hint="编辑分享内容"
         android:lineSpacingExtra="3dp"
         android:paddingBottom="10dp"

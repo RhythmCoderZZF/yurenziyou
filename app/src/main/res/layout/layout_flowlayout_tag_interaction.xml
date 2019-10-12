@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_stroke_radius_two_blue_shape"
-    android:text="百年老字号"
+    android:text=""
     android:textSize="@dimen/text_size_tiny"
     android:paddingLeft="@dimen/dp_3"
     android:paddingRight="@dimen/dp_3"

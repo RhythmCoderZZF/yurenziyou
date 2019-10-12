@@ -3,9 +3,11 @@ package com.nbhysj.coupon.contract;
 import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -46,6 +48,10 @@ public interface ScenicSpotContract {
 
         //网友相册
         Observable<BackResult<NetFriendAlbumResponse>> getNetFriendAlbumList(int mchId, int page, int pageSize);
+
+        //商户收藏
+        Observable<BackResult<MchCollectionResponse>> mchCollection(MchCollectionRequest mchCollectionRequest);
+
     }
 
     interface View extends BaseView {
@@ -63,6 +69,8 @@ public interface ScenicSpotContract {
         void getMchAlbumListResult(BackResult<MchAlbumResponse> res);
 
         void getNetFriendAlbumListResult(BackResult<NetFriendAlbumResponse> res);
+
+        void mchCollectionResult(BackResult<MchCollectionResponse> res);
 
         void showMsg(String msg);
     }
@@ -83,5 +91,7 @@ public interface ScenicSpotContract {
         public abstract void getMchAlbumList(int mchId);
 
         public abstract void getNetFriendAlbumList(int mchId, int page, int pageSize);
+
+        public abstract void mchCollection(MchCollectionRequest mchCollectionRequest);
     }
 }

@@ -4,9 +4,11 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -43,6 +45,9 @@ public interface HotelContract {
         //酒店下单
         Observable<BackResult<OrderSubmitResponse>> hotelHomestayOrderSubmit(HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest);
 
+        //商户收藏
+        Observable<BackResult<MchCollectionResponse>> mchCollection(MchCollectionRequest mchCollectionRequest);
+
     }
 
     interface View extends BaseView {
@@ -58,6 +63,8 @@ public interface HotelContract {
         void getHotelHomestayOrderInitResult(BackResult<HotelOrderInitResponse> res);
 
         void hotelHomestayOrderSubmitResult(BackResult<OrderSubmitResponse> res);
+
+        void mchCollectionResult(BackResult<MchCollectionResponse> res);
 
         void showMsg(String msg);
     }
@@ -76,6 +83,8 @@ public interface HotelContract {
         public abstract void getHotelHomestayOrderInit(int goodsId, String checkInAndOutTime);
 
         public abstract void hotelHomestayOrderSubmit(HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest);
+
+        public abstract void mchCollection(MchCollectionRequest mchCollectionRequest);
 
     }
 }

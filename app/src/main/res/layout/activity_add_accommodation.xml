@@ -71,6 +71,7 @@
                 android:lines="1"
                 android:singleLine="true"
                 android:textColor="@color/color_text_gray17"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="@dimen/text_size_small" />
 
         </LinearLayout>

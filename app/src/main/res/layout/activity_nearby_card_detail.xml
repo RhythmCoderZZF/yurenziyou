@@ -543,6 +543,7 @@
             android:background="@drawable/bg_rect_light_gray_shape"
             android:focusable="true"
             android:hint="写评论…"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:paddingLeft="@dimen/dp_16"
             android:textColor="@color/color_text_gray5"
             android:textSize="14sp" />

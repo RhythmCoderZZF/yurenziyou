@@ -1,6 +1,9 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,16 +13,22 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MyOrderListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderListContract;
+import com.nbhysj.coupon.dialog.OprateDialog;
 import com.nbhysj.coupon.model.OrderListModel;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.presenter.OrderListPresenter;
+import com.nbhysj.coupon.ui.OrderEvaluateActivity;
+import com.nbhysj.coupon.ui.OrderGroupEvaluateActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +55,9 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
     int mTotalPageCount;
     private boolean isOnLoadMore = false;
+
+    private boolean visibleToUser;
+
     public static PendingCommentOrderListFragment newInstance(String content) {
         PendingCommentOrderListFragment fragment = new PendingCommentOrderListFragment();
 
@@ -60,7 +72,13 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
     @Override
     public void initPresenter() {
 
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -81,17 +99,72 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
 
         myOrderListAdapter = new MyOrderListAdapter(getActivity(), new MyOrderListAdapter.MyOrderListener() {
             @Override
-            public void setMyOrderListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderDeleteListener(int position, UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
 
                 mOrderTypeEntity = orderTypeEntity;
-                orderDelete();
+                OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
+                oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+                oprateDialog.setPositiveButton(getResources().getString(R.string.str_confirm), getResources().getColor(R.color.color_blue2), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        orderDelete();
+                    }
+                });
+
+                oprateDialog.show();
             }
 
 
             @Override
-            public void setOrderPendingPaymentListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {  //待付款
+            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {  //待付款
 
+                mOrderTypeEntity = orderTypeEntity;
+                OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
+                oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                    }
+                });
+                oprateDialog.setPositiveButton(getResources().getString(R.string.str_confirm), getResources().getColor(R.color.color_blue2), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        //order();
+                    }
+                });
+
+                oprateDialog.show();
+
+            }
+
+            @Override
+            public void setOrderAllRefundListener(String orderNo)
+            {
+
+            }
+
+            @Override
+            public void setGroupOrderCommentListener(String orderNo)
+            {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), OrderGroupEvaluateActivity.class);
+                intent.putExtra("orderNo", orderNo);
+                startActivity(intent);
+            }
+
+            @Override
+            public void setPartialOrderCommentListener(int orderGoodsId) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), OrderEvaluateActivity.class);
+                intent.putExtra("orderGoodsId", orderGoodsId);
+                startActivity(intent);
             }
         });
         myOrderListAdapter.setMyOrderList(pendingTravelOrderTypeList);
@@ -111,7 +184,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
                         mPage = 1;
                         pendingTravelOrderTypeList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
-                       // showProgressDialog(getActivity());
+                        // showProgressDialog(getActivity());
                         getPendingCommentOrderList();
 
                     }
@@ -151,7 +224,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
             mSmartRefreshLayout.finishRefresh();
         }
         dismissProgressDialog();
-        showToast(getActivity(),Constants.getResultMsg(msg));
+        showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
@@ -184,8 +257,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
 
     @Override
     public void lazyInitView(View view) {
-        if(pendingTravelOrderTypeList != null)
-        {
+        if (pendingTravelOrderTypeList != null) {
             pendingTravelOrderTypeList.clear();
         }
         showProgressDialog(getActivity());
@@ -225,8 +297,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
                     BasePaginationResult paginationResult = orderListResponse.getPage();
                     mTotalPageCount = paginationResult.getPageCount();
 
-                    if (mTotalPageCount == 0)
-                    {
+                    if (mTotalPageCount == 0) {
                         mRlytNoOrderData.setVisibility(View.VISIBLE);
                     } else {
                         mRlytNoOrderData.setVisibility(View.GONE);
@@ -234,8 +305,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
 
                     List<UserOrderListResponse.OrderTypeEntity> orderTypeList = orderListResponse.getResult();
 
-                    if (orderTypeList != null)
-                    {
+                    if (orderTypeList != null) {
                         pendingTravelOrderTypeList.addAll(orderTypeList);
                     }
 
@@ -264,8 +334,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
                 try {
 
                     pendingTravelOrderTypeList.remove(mOrderTypeEntity);
-                    if(pendingTravelOrderTypeList.size() > 0)
-                    {
+                    if (pendingTravelOrderTypeList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
 
                     } else {
@@ -298,26 +367,39 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
     /**
      * 获取订单列表
      */
-    public void getPendingCommentOrderList(){
+    public void getPendingCommentOrderList() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
-            mPresenter.getAwaitCommentOrderList(mPage,mPageSize);
+            mPresenter.getAwaitCommentOrderList(mPage, mPageSize);
         }
     }
 
     /**
      * 删除订单
      */
-    public void orderDelete(){
+    public void orderDelete() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
             showProgressDialog(getActivity());
             mDialog.setTitle(getResources().getString(R.string.str_order_deleting));
             String orderNo = mOrderTypeEntity.getOrderNo();
             OrderDeleteRequest deleteOrderRequest = new OrderDeleteRequest();
             deleteOrderRequest.setOrderNo(orderNo);
             mPresenter.deleteOrder(deleteOrderRequest);
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        visibleToUser = isVisibleToUser;
+    }
+
+    @Subscribe
+    public void onEvent(String commentOprate) {
+        if (visibleToUser) {
+            getPendingCommentOrderList();
         }
     }
 }

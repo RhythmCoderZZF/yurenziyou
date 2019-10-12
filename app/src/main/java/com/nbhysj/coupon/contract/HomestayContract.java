@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
@@ -33,10 +34,11 @@ public interface HomestayContract {
         Observable<BackResult<MchBangDanRankingResponse>> getHomestayBangDanRanking(int cityId);
 
         //民宿收藏
-        Observable<BackResult> mchCollection(MchCollectionRequest mchCollectionRequest);
+        Observable<BackResult<MchCollectionResponse>> mchCollection(MchCollectionRequest mchCollectionRequest);
 
         //民宿收藏
         Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(int mchId);
+
     }
 
     interface View extends BaseView {
@@ -47,7 +49,7 @@ public interface HomestayContract {
 
         void getHomestayBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
-        void mchCollectionResult(BackResult res);
+        void mchCollectionResult(BackResult<MchCollectionResponse> res);
 
         void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res);
 

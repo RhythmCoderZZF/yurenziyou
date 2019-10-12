@@ -193,7 +193,7 @@ public class ShopMallHomePageResponse {
 
         private int del;
 
-        private double consumePrice;
+        private int consumePrice;
 
         private int recommStatus;
 
@@ -509,11 +509,11 @@ public class ShopMallHomePageResponse {
             this.del = del;
         }
 
-        public double getConsumePrice() {
+        public int getConsumePrice() {
             return consumePrice;
         }
 
-        public void setConsumePrice(double consumePrice) {
+        public void setConsumePrice(int consumePrice) {
             this.consumePrice = consumePrice;
         }
 

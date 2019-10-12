@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,16 +20,20 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.HotTagsTypeEnum;
 import com.nbhysj.coupon.contract.PublishPostContract;
 import com.nbhysj.coupon.model.PublishPostModel;
+import com.nbhysj.coupon.model.request.TopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
+import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.presenter.PublishPostPresenter;
+import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @auther：hysj created on 2019/03/02
@@ -39,12 +44,13 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
     //推荐位置列表
     @BindView(R.id.rv_recommend_topic)
     RecyclerView mRvRecommendTopic;
+    //创建自定义主题
     @BindView(R.id.llyt_create_topic)
     LinearLayout mLlytCreateTopic;
     //搜索更多话题
     @BindView(R.id.et_search_topic)
     EditText mEdtSearchTopic;
-    //创建主题
+    //自定义主题
     @BindView(R.id.tv_topic)
     TextView mTvTopicCreate;
     @BindView(R.id.toolbar_space)
@@ -52,6 +58,9 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
     //取消
     @BindView(R.id.tv_cancel)
     TextView mTvCancel;
+    //为您推荐标签
+    @BindView(R.id.tv_recommend_topic_tag)
+    TextView mTvRecommendTopicTag;
     private String mTopicParam;
     private List<HotTagsTopicBean> tagTopicSearchList;
     private TagTopicSearchAdapter tagTopicSearchAdapter;
@@ -63,6 +72,12 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
+
+        BlurBehind.getInstance()
+                .withAlpha(100)
+                .withFilterColor(Color.parseColor("#000000"))
+                .setBackground(MoreHotTagTopicActivity.this);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -162,23 +177,38 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
             case Constants.SUCCESS_CODE:
                 try {
                     mLlytCreateTopic.setVisibility(View.VISIBLE);
+                    mTvRecommendTopicTag.setVisibility(View.GONE);
                     TagTopicSearchResponse tagTopicSearch = res.getData();
                     List<HotTagsTopicBean> tagTopicSearchList = tagTopicSearch.getResult();
-
                     String searchTopic = mEdtSearchTopic.getText().toString().trim();
-                    mTvTopicCreate.setText(searchTopic);
-                    if (tagTopicSearchList.size() > 0) {
-                        for (HotTagsTopicBean tagTopicSearchEntity : tagTopicSearchList) {
-                            String title = tagTopicSearchEntity.getTitle();
-                            if (title.equals(searchTopic)) {
+                    if(tagTopicSearchList != null && tagTopicSearchList.size() > 0)
+                    {
+                        mLlytCreateTopic.setVisibility(View.GONE);
+                        mRvRecommendTopic.setVisibility(View.VISIBLE);
+                        mTvRecommendTopicTag.setVisibility(View.VISIBLE);
 
-                                mLlytCreateTopic.setVisibility(View.GONE);
 
+                        if (tagTopicSearchList.size() > 0) {
+                            for (HotTagsTopicBean tagTopicSearchEntity : tagTopicSearchList) {
+                                String title = tagTopicSearchEntity.getTitle();
+                                if (title.equals(searchTopic)) {
+
+                                    mLlytCreateTopic.setVisibility(View.VISIBLE);
+                                    mRvRecommendTopic.setVisibility(View.GONE);
+                                    mTvRecommendTopicTag.setVisibility(View.GONE);
+
+                                }
                             }
                         }
+                        tagTopicSearchAdapter.setTagTopicList(tagTopicSearchList);
+                        tagTopicSearchAdapter.notifyDataSetChanged();
+                    } else {
+                        mTvTopicCreate.setText(searchTopic);
+                        mLlytCreateTopic.setVisibility(View.VISIBLE);
+                        mRvRecommendTopic.setVisibility(View.GONE);
+                        mTvRecommendTopicTag.setVisibility(View.GONE);
                     }
-                    tagTopicSearchAdapter.setTagTopicList(tagTopicSearchList);
-                    tagTopicSearchAdapter.notifyDataSetChanged();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -190,12 +220,19 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
     }
 
     @Override
-    public void createTopicResult(BackResult res) {
+    public void createTopicResult(BackResult<HotTagsTopicBean> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
 
+                    HotTagsTopicBean topicResponse = res.getData();
+                    Bundle bundle = new Bundle();
+                    Intent intent = new Intent();
+                    bundle.putSerializable("topicResponse",topicResponse);
+                    intent.putExtras(bundle);
+                    setResult(RESULT_OK,intent);
+                    finish();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -207,6 +244,7 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
         }
     }
 
+    //主题搜索
     public void searchTopic() {
 
         if (validateInternet()) {
@@ -215,11 +253,28 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
         }
     }
 
+    //创建主题
     public void createTopic() {
 
         if (validateInternet()) {
 
-            mPresenter.createTopic(HotTagsTypeEnum.TOPIC.getValue(), mTopicParam);
+            showProgressDialog(MoreHotTagTopicActivity.this);
+            mDialog.setTitle("正在创建主题...");
+            TopicRequest topicRequest = new TopicRequest();
+            topicRequest.setTitle(mTopicParam);
+            topicRequest.setIntro(mTopicParam);
+            mPresenter.createTopic(topicRequest);
+        }
+    }
+
+    @OnClick({R.id.llyt_create_topic})
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.llyt_create_topic:
+
+                createTopic();
+                break;
+            default:break;
         }
     }
 }

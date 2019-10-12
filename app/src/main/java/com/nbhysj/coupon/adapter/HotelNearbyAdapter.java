@@ -16,6 +16,9 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.DeliciousFoodRecommendResponse;
 import com.nbhysj.coupon.model.response.NearbyTypeResponse;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotsAlbumActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -89,14 +92,40 @@ public class HotelNearbyAdapter extends RecyclerView.Adapter<HotelNearbyAdapter.
             holder.mLlytHotelNearbyItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
-                    if(mchType.equals(mchScenic))
-                    {
-                        Intent intent = new Intent();
+                    Intent intent = new Intent();
+                    String mchFood = MchTypeEnum.MCH_FOOD.getValue();
+                    String mchScenicSpot = MchTypeEnum.MCH_SCENIC.getValue();
+                    String mchHotel = MchTypeEnum.MCH_HOTEL.getValue();
+                    String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+                    if (mchType.equals(mchFood)) {
+                        intent.setClass(mContext, FoodDetailActivity.class);
                         intent.putExtra("mchId", mchId);
-                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
                         mContext.startActivity(intent);
+
+                    } else if (mchType.equals(mchScenicSpot)) {
+                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId", mchId);
+                        mContext.startActivity(intent);
+                    } else if (mchType.equals(mchRecreation)) {
+                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId", mchId);
+                        mContext.startActivity(intent);
+                    }else if (mchType.equals(mchHotel)) {
+                        String mchHotelType = MchTypeEnum.MCH_HOTEL1.getValue();
+                        String mchHomestayType = MchTypeEnum.MCH_HOTEL1.getValue();
+                        String type2 = nearbyTypeResponse.getType2();
+                        if (type2.equals(mchHotelType)) {
+
+                            intent.setClass(mContext, HotelDetailsActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+                        } else if (type2.equals(mchHomestayType)) {
+
+                            intent.setClass(mContext, HomestayDetailActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+                        }
+
                     }
                 }
             });

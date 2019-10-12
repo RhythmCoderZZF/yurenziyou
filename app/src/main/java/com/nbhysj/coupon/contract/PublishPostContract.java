@@ -4,10 +4,12 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
+import com.nbhysj.coupon.model.request.TopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
+import com.nbhysj.coupon.model.response.TopicResponse;
 
 import java.util.List;
 
@@ -37,7 +39,7 @@ public interface PublishPostContract {
         Observable<BackResult<TagTopicSearchResponse>> topicSearch(String type, String param); //topic 类型：城市（city）或话题（topic）
 
         //创建话题
-        Observable<BackResult> createTopic(String title, String intro); //话题标题 话题简介
+        Observable<BackResult<HotTagsTopicBean>> createTopic(TopicRequest topicRequest); //话题标题 话题简介
     }
 
     interface View extends BaseView {
@@ -50,7 +52,7 @@ public interface PublishPostContract {
 
         void topicSearchResult(BackResult<TagTopicSearchResponse> res);
 
-        void createTopicResult(BackResult res);
+        void createTopicResult(BackResult<HotTagsTopicBean> res);
 
         void showMsg(String msg);
     }
@@ -65,7 +67,7 @@ public interface PublishPostContract {
 
         public abstract void topicSearch(String type, String param);
 
-        public abstract void createTopic(String title, String intro);
+        public abstract void createTopic(TopicRequest topicRequest);
 
     }
 }

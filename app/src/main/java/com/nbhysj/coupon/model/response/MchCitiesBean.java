@@ -12,6 +12,8 @@ public class MchCitiesBean {
 
     private String photo;
 
+    private String cityId;
+
     public int getId() {
         return id;
     }
@@ -34,5 +36,13 @@ public class MchCitiesBean {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
     }
 }

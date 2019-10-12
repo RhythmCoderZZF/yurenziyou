@@ -35,10 +35,12 @@ import com.nbhysj.coupon.contract.GroupMchContract;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.GroupMchModel;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.GroupMchResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
@@ -174,7 +176,8 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
 
     //购买须知弹框
     private PurchaseInstructionsDialog mPurchaseInstructionsDialog;
-
+    //收藏状态
+    private int collectionStatus;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -391,6 +394,18 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                         mLlytUserComment.setVisibility(View.GONE);
                     }
 
+                    collectionStatus = mchDetailsEntity.getUserCollectState();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
 
                     if (tagsEntityList != null) {
 
@@ -462,6 +477,36 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                 break;
         }
     }
+   /* @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    MchCollectionResponse mchCollectionResponse = res.getData();
+                    collectionStatus = mchCollectionResponse.getCollectionStatus();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(GroupMchDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }*/
 
     @Override
     public void onScroll(int y) {
@@ -476,12 +521,16 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
             mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-            mImgCollection.setImageResource(R.mipmap.icon_black_fine_food_collection);
+            if(collectionStatus == 0) {
+                mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            }
             mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
             mImgScenicSpotForward.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_share));
             if (y <= 100) {
                 mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-                mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_fine_food_collection));
+                if(collectionStatus == 0) {
+                    mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
+                }
                 mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
                 mImgScenicSpotForward.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_share));
                 mRlytScenicSpostsDetail.getBackground().setAlpha(255);
@@ -592,4 +641,15 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
             mPresenter.getGroupMchDetail(packageId);
         }
     }
+
+ /*   //商户收藏
+    public void mchCollection(){
+
+        if(validateInternet()) {
+            showProgressDialog(Grou.this);
+            MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
+            mchCollectionRequest.setDataId(packageId);
+            mPresenter.mchCollection(mchCollectionRequest);
+        }
+    }*/
 }

@@ -42,12 +42,10 @@ public class VehicleUseAdapter extends RecyclerView.Adapter<VehicleUseAdapter.Vi
         try {
             CarsBean carsBean = carList.get(itemPosition);
             String departureTime = carsBean.getDepartureTime();
-            double price = (double)carsBean.getPrice();
-            double priceDouble = price / 100;
+            double price = carsBean.getPrice();
             String startAddressName = carsBean.getStartName();
             String endAddressName = carsBean.getEndName();
-
-            holder.mTvVehicleExpenses.setText(Tools.getTwoDecimalPoint(priceDouble));
+            holder.mTvVehicleExpenses.setText(Tools.getTwoDecimalPoint(price));
             holder.mTvStartingPoint.setText(startAddressName);
             holder.mTvDestination.setText(endAddressName);
             holder.mTvVehicleUseTime.setText(departureTime);

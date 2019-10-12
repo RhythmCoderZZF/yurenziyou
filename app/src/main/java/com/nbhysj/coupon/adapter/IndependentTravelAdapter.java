@@ -1,17 +1,20 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.GroupGoodsBean;
+import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -57,6 +60,7 @@ public class IndependentTravelAdapter extends RecyclerView.Adapter<IndependentTr
 
         try {
             GroupGoodsBean groupGoodsBean = groupGoodsList.get(itemPosition);
+            int groupId = groupGoodsBean.getId();
             String title = groupGoodsBean.getTitle();
             String packageTitle = groupGoodsBean.getPackageTitle();
             String photo = groupGoodsBean.getPhoto();
@@ -86,6 +90,17 @@ public class IndependentTravelAdapter extends RecyclerView.Adapter<IndependentTr
 
                 holder.mTagFlowLayoutTravelLabel.setAdapter(tagAdapter);
             }
+
+            holder.mLlytGroupGoodsItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(mContext, GroupMchDetailsActivity.class);
+                    mIntent.putExtra("packageId",groupId);
+                    mContext.startActivity(mIntent);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,6 +125,9 @@ public class IndependentTravelAdapter extends RecyclerView.Adapter<IndependentTr
         //自由行描述
         @BindView(R.id.tv_independent_travel_des)
         TextView mTvIndependentTravelDes;
+        //组合商品Item
+        @BindView(R.id.llyt_group_goods_item)
+        LinearLayout mLlytGroupGoodsItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

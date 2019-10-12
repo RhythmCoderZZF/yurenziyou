@@ -10,8 +10,10 @@ import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagReponse;
+import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
@@ -55,4 +57,15 @@ public class HomePageModel implements HomePageContract.Model {
     public Observable<BackResult> postsCommentRequest(PostsCommentRequest postsCommentRequest) {
         return Api.getInstance().apiService.postsCommentRequest(postsCommentRequest).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult<HomePageAllSearchResponse>> getHomePageSearchAll(String queryType, String keyword) {
+            return Api.getInstance().apiService.getHomePageSearchALL(queryType,keyword).compose(RxSchedulers.io_main());
+        }
+
+    @Override
+    public Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(String queryType, String keyword) {
+        return Api.getInstance().apiService.getHomePageSearchByType(queryType,keyword).compose(RxSchedulers.io_main());
+    }
+
 }

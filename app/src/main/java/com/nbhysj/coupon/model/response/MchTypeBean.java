@@ -63,6 +63,8 @@ public class MchTypeBean implements Serializable {
 
     private long ctime;
 
+    private String hotelTypeName;
+
     /***  订单详情(猜你喜欢)字段 ***/
 
     private int mchId;
@@ -80,6 +82,26 @@ public class MchTypeBean implements Serializable {
     private String avatar;
 
     private int authenticationStatus;
+
+    /*********   攻略 首页搜索   *************/
+    private int collectionNum;
+
+    private String strategyH5Url;
+
+    private String searchType;
+
+    private String hotelType2;
+
+    private int zanNum;
+
+    private String title2;
+
+    private String title;
+
+    private String searchTitle;
+
+    private String content;
+
 
     public int getLoveStatus() {
         return loveStatus;
@@ -465,5 +487,86 @@ public class MchTypeBean implements Serializable {
         public void setSupplierId(int supplierId) {
             this.supplierId = supplierId;
         }
+    }
+
+    public int getCollectionNum() {
+        return collectionNum;
+    }
+
+    public void setCollectionNum(int collectionNum) {
+        this.collectionNum = collectionNum;
+    }
+
+    public String getStrategyH5Url() {
+        return strategyH5Url;
+    }
+
+    public void setStrategyH5Url(String strategyH5Url) {
+        this.strategyH5Url = strategyH5Url;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    public String getHotelType2() {
+        return hotelType2;
+    }
+
+    public void setHotelType2(String hotelType2) {
+        this.hotelType2 = hotelType2;
+    }
+
+    public int getZanNum() {
+        return zanNum;
+    }
+
+    public void setZanNum(int zanNum) {
+        this.zanNum = zanNum;
+    }
+
+    public String getTitle2() {
+        return title2;
+    }
+
+    public void setTitle2(String title2) {
+        this.title2 = title2;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSearchTitle() {
+        return searchTitle;
+    }
+
+    public void setSearchTitle(String searchTitle) {
+        this.searchTitle = searchTitle;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+
+    public String getHotelTypeName() {
+        return hotelTypeName;
+    }
+
+    public void setHotelTypeName(String hotelTypeName) {
+        this.hotelTypeName = hotelTypeName;
     }
 }

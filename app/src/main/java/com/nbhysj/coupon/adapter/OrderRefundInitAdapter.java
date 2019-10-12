@@ -41,6 +41,7 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         try {
+
             if (viewType == GoodsTypeEnum.GOODS_TICKET.getKey() || viewType == GoodsTypeEnum.GOODS_HOTEL_ROOM.getKey() || viewType == GoodsTypeEnum.GOODS_RECREATION.getKey() || viewType == GoodsTypeEnum.ITEM_FOOD.getKey()) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_all_goods_refund_item, parent, false);//解决宽度不能铺满
                 GoodsViewHolder hold = new GoodsViewHolder(view);
@@ -69,31 +70,35 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             OrderRefundInitResponse orderRefundInitEntity = orderRefundInitList.get(itemPosition);
             String photoUrl = orderRefundInitEntity.getPhoto();
             String title = orderRefundInitEntity.getTitle();
-            double deductPrice = orderRefundInitEntity.getDeductPrice();
-            double price = orderRefundInitEntity.getPrice();
+            String deductPrice = orderRefundInitEntity.getDeductPrice();
+            String price = orderRefundInitEntity.getPrice();
             String deductNote = orderRefundInitEntity.getDeductNote();
-            double totalPrice = orderRefundInitEntity.getTotalPrice();
+            String totalPrice = orderRefundInitEntity.getTotalPrice();
             int validNum = orderRefundInitEntity.getValidNum();  //可用数量
             int usedNum = orderRefundInitEntity.getUsedNum(); //已使用数量
+            int sumNum = orderRefundInitEntity.getSumNum();  //商品总数
 
             if (holder instanceof GoodsViewHolder) {
-
                 GlideUtil.loadImage(mContext, photoUrl, ((GoodsViewHolder) holder).mImgGoods);
 
                 if(!TextUtils.isEmpty(title))
                 {
-                    ((GoodsViewHolder) holder).mTvGoodDeductNote.setText(title);
+                    ((GoodsViewHolder) holder).mTvMchName.setText(title);
                 }
 
                 if(!TextUtils.isEmpty(deductNote))
                 {
+                    ((GoodsViewHolder) holder).mTvGoodDeductNote.setVisibility(View.VISIBLE);
                     ((GoodsViewHolder) holder).mTvGoodDeductNote.setText(deductNote);
+                } else {
+                    ((GoodsViewHolder) holder).mTvGoodDeductNote.setVisibility(View.GONE);
                 }
 
                 ((GoodsViewHolder) holder).mTvHasBeenUsedNum.setText(String.valueOf(usedNum));
                 ((GoodsViewHolder) holder).mTvQuantityOfRefundNum.setText(String.valueOf(validNum));
                 ((GoodsViewHolder) holder).mTvGoodDeductPrice.setText(String.valueOf(deductPrice));
                 ((GoodsViewHolder) holder).mTvTotalPrice.setText(String.valueOf(totalPrice));
+                ((GoodsViewHolder) holder).mTvGoodNum.setText("x" + String.valueOf(sumNum));
 
 
             } else if (holder instanceof GoodsVehicleViewHolder) {
@@ -101,11 +106,14 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 String vehicleStartAddress = orderRefundInitEntity.getStartName();
                 String vehicleEndAddress = orderRefundInitEntity.getEndName();
 
-                ((GoodsVehicleViewHolder) holder).mTvVehicleExpensesPrice.setText(Tools.getTwoDecimalPoint(price));
+                ((GoodsVehicleViewHolder) holder).mTvVehicleExpensesPrice.setText(price);
 
                 if(!TextUtils.isEmpty(deductNote))
                 {
+                    ((GoodsVehicleViewHolder) holder).mTvGoodDeductNote.setVisibility(View.VISIBLE);
                     ((GoodsVehicleViewHolder) holder).mTvGoodDeductNote.setText(deductNote);
+                } else {
+                    ((GoodsVehicleViewHolder) holder).mTvGoodDeductNote.setVisibility(View.GONE);
                 }
 
                 if(!TextUtils.isEmpty(goodsTime))
@@ -145,7 +153,7 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         String goodsType = orderRefundInitResponse.getGoodsType();
         if (goodsType.equals(GoodsTypeEnum.GOODS_TICKET.getValue())) {
             return GoodsTypeEnum.GOODS_TICKET.getKey();
-        } else if (goodsType.equals(MchTypeEnum.CAR.getValue())) {
+        } else if (goodsType.equals(GoodsTypeEnum.GOODS_CAR.getValue())) {
             return GoodsTypeEnum.GOODS_CAR.getKey();
         }
 
@@ -181,6 +189,9 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         //商品扣款价格
         TextView mTvGoodDeductPrice;
 
+        //商户名
+        TextView mTvMchName;
+
         public GoodsViewHolder(View itemView) {
             super(itemView);
 
@@ -191,6 +202,7 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             mTvGoodNum = itemView.findViewById(R.id.tv_good_num);
             mTvGoodDeductNote = itemView.findViewById(R.id.tv_good_deduct_note);
             mTvGoodDeductPrice = itemView.findViewById(R.id.tv_deduct_price);
+            mTvMchName = itemView.findViewById(R.id.tv_mch_name);
         }
     }
 
@@ -216,7 +228,6 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             super(itemView);
 
             mTvVehicleUseTime = itemView.findViewById(R.id.tv_vehicle_use_time);
-            mTvVehicleUseTime = itemView.findViewById(R.id.tv_deduction_information);
             mTvVehicleExpensesPrice = itemView.findViewById(R.id.tv_vehicle_expenses_price);
             mTvVehicleStartPoint = itemView.findViewById(R.id.tv_starting_point);
             mTvVehicleDestination = itemView.findViewById(R.id.tv_destination);

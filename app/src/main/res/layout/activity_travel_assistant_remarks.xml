@@ -24,6 +24,7 @@
             android:gravity="top"
             android:hint="请输入备忘..."
             android:maxLength="50"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:padding="@dimen/dp_16"
             android:textSize="@dimen/text_size_xnormal" />
 

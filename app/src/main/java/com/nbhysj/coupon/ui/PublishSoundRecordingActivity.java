@@ -302,10 +302,6 @@ public class PublishSoundRecordingActivity extends BaseActivity {
                     final String filePath = sharePreferences.getString("audio_path", "");
                     long duration = sharePreferences.getLong("duration", 0);
 
-                   // mProgressAudioParentBar
-                    System.out.print(filePath);
-                    System.out.print(duration);
-
                     mediaPlayer.setDataSource(filePath);
                     mediaPlayer.prepare();
 

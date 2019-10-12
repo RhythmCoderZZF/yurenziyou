@@ -20,6 +20,7 @@ import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -29,6 +30,7 @@ import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.ToolbarHelper;
+import com.nbhysj.coupon.util.Tools;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +42,7 @@ import butterknife.OnClick;
 
 /**
  * @auther：hysj created on 2019/05/09
- * description：酒店下单
+ * description：酒店下单(民宿共用)
  */
 public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel> implements HotelContract.View {
     @BindView(R.id.toolbar_space)
@@ -111,6 +113,12 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     private String leaveDateStr;
 
     StringBuffer stringBuffer = new StringBuffer();
+
+    //酒店或者民宿（单价）
+    private double price;
+
+    //酒店或者民宿（总价）
+    private double totalPrice;
     @Override
     public int getLayoutId() {
 
@@ -196,7 +204,8 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                 try {
                     stringBuffer.setLength(0);
                     HotelOrderInitResponse hotelOrderInitResponse = res.getData();
-                    double price = hotelOrderInitResponse.getPrice();
+                    price = hotelOrderInitResponse.getPrice();
+                    totalPrice = roomNum * price;
                     String intoTime = hotelOrderInitResponse.getIntoTime();
                     String leaveTime = hotelOrderInitResponse.getLeaveTime();
                     List<String> sign = hotelOrderInitResponse.getSign();
@@ -221,17 +230,14 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     //报销凭证
                     mTvReimbursementCertificate.setText(invoice);
                     //总价
-                    mTvTotelPrice.setText(String.valueOf(price));
+                    mTvTotelPrice.setText(Tools.getTwoDecimalPoint(price));
                     mTvHotelGoodsType.setText(title);
 
                     mTvArrivalHotelTime.setText(intoTime + "点后办理入住");
 
-
                     if(!TextUtils.isEmpty(intoAndLeaveDesc))
                     {
-
                         mTvIntoAndLeaveDes.setText(Html.fromHtml(intoAndLeaveDesc.replace("</br>","<br>")));
-
                     }
 
                 } catch (Exception e) {
@@ -253,10 +259,15 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                 try {
                     OrderSubmitResponse orderSubmitResponse = res.getData();
                     Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("orderSubmitResponse", orderSubmitResponse);
-                    intent.putExtras(bundle);
+                    double price = orderSubmitResponse.getPrice();
+                    String title = orderSubmitResponse.getTitle();
+                    long payExprireTime = orderSubmitResponse.getPayExprireTime();
+                    String orderNo = orderSubmitResponse.getOrderNo();
                     intent.setClass(HotelOrderActivity.this, OrderPaymentActivity.class);
+                    intent.putExtra("price",price);
+                    intent.putExtra("title",title);
+                    intent.putExtra("payExprireTime",payExprireTime);
+                    intent.putExtra("orderNo",orderNo);
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -269,6 +280,11 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     }
 
     @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(HotelOrderActivity.this, Constants.getResultMsg(msg));
@@ -276,6 +292,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
 
     @OnClick({R.id.tv_room_num,R.id.llyt_check_in_time,R.id.llyt_leave_time,R.id.tv_order_submit})
     public void onClick(View v){
+        Intent intent = new Intent();
         switch (v.getId()){
             case R.id.tv_room_num:
                 if (roomNumberSelectDialog == null) {
@@ -287,6 +304,9 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
 
                             roomNum = mItemSelectRoomNum;
                             mTvRoomNum.setText(String.valueOf(mItemSelectRoomNum) + "间");
+                            double totalPrice = roomNum * price;
+
+                            mTvTotelPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
                         }
                     });
                     roomNumberSelectDialog.show(getFragmentManager(), "");
@@ -297,14 +317,15 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     break;
             case R.id.llyt_check_in_time:
 
-                Intent intent = new Intent();
                 intent.setClass(HotelOrderActivity.this,CalendarActivity.class);
                 intent.putExtra("selectType",1);
                 startActivityForResult(intent,0);
                 break;
             case R.id.llyt_leave_time:
 
-                toActivityForResult(CalendarActivity.class,0);
+                intent.setClass(HotelOrderActivity.this,CalendarActivity.class);
+                intent.putExtra("selectType",1);
+                startActivityForResult(intent,0);
 
                 break;
             case R.id.tv_order_submit:

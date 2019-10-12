@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
 import com.nbhysj.coupon.view.GlideImageView;
 
 import java.util.List;
@@ -21,9 +22,9 @@ import butterknife.ButterKnife;
 public class MoreQuestionListAdapter extends RecyclerView.Adapter<MoreQuestionListAdapter.ViewHolder> {
 
     /**
-     * 酒店问答内容
+     * 商户问答  更多问题
      */
-    List<String> mQuestionContentList;
+    List<WaitMyAnswerResponse.WaitMyAnswerEntity> mQuestionContentList;
     private Context mContext;
 
     public MoreQuestionListAdapter(Context mContext) {
@@ -31,9 +32,9 @@ public class MoreQuestionListAdapter extends RecyclerView.Adapter<MoreQuestionLi
         this.mContext = mContext;
     }
 
-    public void setHotelContentList(List<String> questionContentList) {
+    public void setMoreQuestionList(List<WaitMyAnswerResponse.WaitMyAnswerEntity> waitMyAnswerList) {
 
-        this.mQuestionContentList = questionContentList;
+        this.mQuestionContentList = waitMyAnswerList;
     }
 
     @Override

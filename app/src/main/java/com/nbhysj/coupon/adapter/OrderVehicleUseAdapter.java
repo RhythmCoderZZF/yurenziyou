@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -21,8 +22,10 @@ public class OrderVehicleUseAdapter extends RecyclerView.Adapter<OrderVehicleUse
 
     List<UserOrderListResponse.OrderListCarEntity> carList;
 
-    public OrderVehicleUseAdapter() {
+    private OrderOnclickListener orderOnclickListener;
+    public OrderVehicleUseAdapter(OrderOnclickListener orderOnclickListener) {
 
+        this.orderOnclickListener = orderOnclickListener;
     }
 
     public void setVehicleUseList(List<UserOrderListResponse.OrderListCarEntity> carList) {
@@ -53,6 +56,14 @@ public class OrderVehicleUseAdapter extends RecyclerView.Adapter<OrderVehicleUse
             holder.mTvDestination.setText(endAddressName);
             holder.mTvVehicleUseTime.setText(departureTime);
 
+            holder.mLlytMyOrderItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    orderOnclickListener.setLookMyOrderDetailListener();
+
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,7 +84,7 @@ public class OrderVehicleUseAdapter extends RecyclerView.Adapter<OrderVehicleUse
         TextView mTvStartingPoint;
         //目的地
         TextView mTvDestination;
-
+        LinearLayout mLlytMyOrderItem;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -81,6 +92,12 @@ public class OrderVehicleUseAdapter extends RecyclerView.Adapter<OrderVehicleUse
             mTvVehicleExpenses = itemView.findViewById(R.id.tv_vehicle_expenses);
             mTvStartingPoint = itemView.findViewById(R.id.tv_starting_point);
             mTvDestination = itemView.findViewById(R.id.tv_destination);
+            mLlytMyOrderItem = itemView.findViewById(R.id.llyt_my_order_item);
         }
+    }
+
+    public interface OrderOnclickListener{
+
+        void setLookMyOrderDetailListener();
     }
 }

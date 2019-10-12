@@ -29,7 +29,6 @@
             app:riv_oval="false" />
 
         <RelativeLayout
-            android:id="@+id/rlyt_fine_food"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_11"
@@ -39,11 +38,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_ticket_name"
+                android:id="@+id/tv_mch_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_23"
-                android:text="宁波海洋世界成人票"
+                android:text=""
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_xsmall"
                 android:textStyle="bold" />
@@ -52,7 +51,7 @@
                 android:id="@+id/rlyt_has_been_used_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_ticket_name"
+                android:layout_below="@+id/tv_mch_name"
                 android:layout_marginTop="@dimen/dp_13"
                 android:orientation="horizontal">
 

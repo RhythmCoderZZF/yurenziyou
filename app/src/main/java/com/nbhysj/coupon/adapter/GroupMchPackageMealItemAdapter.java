@@ -1,17 +1,30 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
+import com.nbhysj.coupon.ui.HomestayBangDanListActivity;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
+import com.nbhysj.coupon.ui.RecreationBangDanListActivity;
+import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.view.MyRecycleView;
 
 import java.util.List;
@@ -54,9 +67,11 @@ public class GroupMchPackageMealItemAdapter extends RecyclerView.Adapter<GroupMc
 
         try {
             GroupMchDetailsResponse.ContentEntity contentEntity = groupMchPackageMealList.get(position);
+            int mchId = contentEntity.getMchId();
             String mchName = contentEntity.getMchName();
             int mchLevel = contentEntity.getScenicLevel();
             float mchScore = contentEntity.getScore();
+            String mchType = contentEntity.getMchType();
             if(!TextUtils.isEmpty(mchName))
             {
                 holder.mTvMchName.setText(mchName);
@@ -76,6 +91,63 @@ public class GroupMchPackageMealItemAdapter extends RecyclerView.Adapter<GroupMc
                 mchPackageMealSubItemAdapter.setGroupMchContentList(subContentEntityList);
                 holder.mRvGroupMchPhoto.setAdapter(mchPackageMealSubItemAdapter);
             }
+
+            holder.mLLytMchItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                 /*   Intent intent = new Intent();
+                    intent.putExtra("mchId",mchId);
+                    intent.setClass(mContext,)
+*/
+                    Intent intent = new Intent();
+                    String mchFood = MchTypeEnum.MCH_FOOD.getValue();
+                    String mchScenicSpot = MchTypeEnum.MCH_SCENIC.getValue();
+                    String mchHotel = MchTypeEnum.MCH_HOTEL.getValue();
+                    String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+                    String mchGroup = MchTypeEnum.MCH_GROUP2.getValue();
+                    if (mchType != null) {
+                        if (mchType.equals(mchFood)) {
+                            intent.setClass(mContext, FoodDetailActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+
+                        } else if (mchType.equals(mchScenicSpot)) {
+                            intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+                        } else if (mchType.equals(mchRecreation)) {
+                            intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                            intent.putExtra("mchId", mchId);
+                            mContext.startActivity(intent);
+                        } else if (mchType.equals(mchHotel)) {
+
+                            String mchHotel1 = MchTypeEnum.MCH_HOTEL1.getValue();//酒店
+                            String mchHotel2 = MchTypeEnum.MCH_HOTEL2.getValue(); //民宿
+                            String mchType2 = contentEntity.getMchType2();
+                            if (mchType2 != null) {
+                                if (mchType2.equals(mchHotel1)) {
+
+                                    intent.setClass(mContext, HotelDetailsActivity.class);
+                                    intent.putExtra("mchId", mchId);
+                                    mContext.startActivity(intent);
+                                } else if (mchType2.equals(mchHotel2)) {
+
+                                    intent.setClass(mContext, HomestayDetailActivity.class);
+                                    intent.putExtra("mchId", mchId);
+                                    mContext.startActivity(intent);
+                                }
+                            }
+
+                        } else if (mchType.equals(mchGroup)) {
+
+                            intent.setClass(mContext, GroupMchDetailsActivity.class);
+                            intent.putExtra("packageId", mchId);
+                            mContext.startActivity(intent);
+                        }
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,6 +172,8 @@ public class GroupMchPackageMealItemAdapter extends RecyclerView.Adapter<GroupMc
         //商户名
         @BindView(R.id.tv_mch_name)
         TextView mTvMchName;
+        @BindView(R.id.llyt_mch_item)
+        LinearLayout mLLytMchItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

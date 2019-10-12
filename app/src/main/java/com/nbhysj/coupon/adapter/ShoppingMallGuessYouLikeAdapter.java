@@ -67,11 +67,11 @@ public class ShoppingMallGuessYouLikeAdapter extends RecyclerView.Adapter<Shoppi
             String photo = guessEntity.getPhoto();
             int mchId = guessEntity.getId();
             String mchName = guessEntity.getMchName();
-            double mConsumePrice = guessEntity.getConsumePrice();
+            int mConsumePrice = guessEntity.getConsumePrice();
             String mchType = guessEntity.getMchType();
             GlideUtil.loadImage(mContext, photo, holder.mImgShoppingMallGuessYouLike);
             holder.mTvMchName.setText(mchName);
-            holder.mTvPerCapitaPrice.setText(Tools.getTwoDecimalPoint(mConsumePrice));
+            holder.mTvPerCapitaPrice.setText(String.valueOf(mConsumePrice));
 
             holder.LlytGuessYouLikeItem.setOnClickListener(new View.OnClickListener() {
                 @Override

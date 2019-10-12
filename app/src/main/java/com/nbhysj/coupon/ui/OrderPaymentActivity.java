@@ -59,8 +59,6 @@ import butterknife.OnClick;
  * description:支付订单
  */
 public class OrderPaymentActivity extends BaseActivity<OrderPaymentPresenter, OrderPaymentModel> implements OrderPaymentContract.View {
-    @BindView(R.id.toolbar_space)
-    View mToolbarSpace;
     //支付方式
     @BindView(R.id.rv_confirm_payment)
     RecyclerView mRvConfirmPayment;
@@ -112,15 +110,16 @@ public class OrderPaymentActivity extends BaseActivity<OrderPaymentPresenter, Or
                         String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                         String resultStatus = payResult.getResultStatus();
                         // 判断resultStatus 为9000则代表支付成功
-                        if (TextUtils.equals(resultStatus, Constants.PAYMENT_SUCCESS_CODE_ALIPAY)) {  //支付成功code
+                        if (resultStatus.equals(Constants.PAYMENT_SUCCESS_CODE_ALIPAY)) {  //支付成功code
                             // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                             // showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
-                            showToast(OrderPaymentActivity.this,getString(R.string.pay_success));
+                           // showToast(OrderPaymentActivity.this,getString(R.string.pay_success));
                             toActivity(MyOrderActivity.class);
-
-                        } if(TextUtils.equals(resultStatus,Constants.PAYMENT_CANCEL_CODE_ALIPAY)){  // 6001 操作取消
+                            finish();
+                        } else if(TextUtils.equals(resultStatus,Constants.PAYMENT_CANCEL_CODE_ALIPAY)){  // 6001 操作取消
 
                             toActivity(MyOrderActivity.class);
+                            finish();
 
                         } else {
                             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
@@ -165,22 +164,7 @@ public class OrderPaymentActivity extends BaseActivity<OrderPaymentPresenter, Or
     public void initView(Bundle savedInstanceState) {
 
         ToolbarHelper.setHeadBar(OrderPaymentActivity.this, getResources().getString(R.string.str_order_pay), R.mipmap.icon_left_arrow_black, "");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-            getWindow().getDecorView()
-                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
 
-        ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
-        layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
-        mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbarSpace.setVisibility(View.VISIBLE);
-        } else {
-            mToolbarSpace.setVisibility(View.GONE);
-        }
-
-        api = WXAPIFactory.createWXAPI(this, "wx85e2b0cb3272fcd7");
     }
 
     @Override
@@ -197,8 +181,16 @@ public class OrderPaymentActivity extends BaseActivity<OrderPaymentPresenter, Or
         orderNo = getIntent().getStringExtra("orderNo");
 
         mTvPrice.setText(Tools.getTwoDecimalPoint(price));
-        mTvGoodName.setText(title);
-        mTvPayExprireTime.setText(DateUtil.millisToStringShort(payExprireTime));
+        if(!TextUtils.isEmpty(title)) {
+            mTvGoodName.setText(title);
+        }
+
+        if(payExprireTime != 0) {
+            mTvPayExprireTime.setVisibility(View.VISIBLE);
+            mTvPayExprireTime.setText("剩余支付时间" + DateUtil.millisToStringShort(payExprireTime));
+        } else {
+            mTvPayExprireTime.setVisibility(View.GONE);
+        }
 
         mRlytWechatPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +239,7 @@ public class OrderPaymentActivity extends BaseActivity<OrderPaymentPresenter, Or
                         String prepayId = orderPaymentResponse.getPrepayid();
                         String sign = orderPaymentResponse.getSign();
                         long timestamp = orderPaymentResponse.getTimestamp();
+                        api = WXAPIFactory.createWXAPI(this, appId);
                        // paymentMethodType
                         PayReq req = new PayReq();
                         //req.appId = "wxf8b4f85f3a794e77";  // 测试用appId

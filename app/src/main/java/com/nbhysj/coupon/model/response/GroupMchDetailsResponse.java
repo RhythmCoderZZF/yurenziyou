@@ -691,6 +691,10 @@ public class GroupMchDetailsResponse implements Serializable {
 
         private int scenicLevel;
 
+        private String mchType;
+
+        private String mchType2;
+
         private List<SubContentEntity> content;
 
         public int getMchId() {
@@ -739,6 +743,22 @@ public class GroupMchDetailsResponse implements Serializable {
 
         public void setContent(List<SubContentEntity> content) {
             this.content = content;
+        }
+
+        public String getMchType() {
+            return mchType;
+        }
+
+        public void setMchType(String mchType) {
+            this.mchType = mchType;
+        }
+
+        public String getMchType2() {
+            return mchType2;
+        }
+
+        public void setMchType2(String mchType2) {
+            this.mchType2 = mchType2;
         }
     }
 
@@ -793,6 +813,8 @@ public class GroupMchDetailsResponse implements Serializable {
         public void setCtime(String ctime) {
             this.ctime = ctime;
         }
+
+
     }
 
     public class MchQuestionEntity implements Serializable {

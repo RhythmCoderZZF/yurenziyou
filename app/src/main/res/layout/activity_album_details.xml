@@ -130,6 +130,7 @@
             android:background="@null"
             android:gravity="center"
             android:hint="为你的专辑起一个好听的名字吧~"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:textColor="@color/text_grey"
             android:textColorHint="@color/text_grey"
             android:textSize="@dimen/text_size_small" />

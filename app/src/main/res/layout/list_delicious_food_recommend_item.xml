@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llyt_recyclerview_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llyt_delicious_food_recommend_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp_10"
@@ -21,12 +22,13 @@
             android:layout_width="163dp"
             android:layout_height="102dp">
 
-            <ImageView
+            <com.nbhysj.coupon.view.RoundedImageView
                 android:id="@+id/image_delicious_food"
                 android:layout_width="163dp"
                 android:layout_height="102dp"
                 android:layout_centerVertical="true"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                app:riv_corner_radius="@dimen/dp_5"/>
 
             <TextView
                 android:id="@+id/tv_food_cuisine"

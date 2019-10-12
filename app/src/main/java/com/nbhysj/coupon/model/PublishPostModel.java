@@ -7,12 +7,14 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.MerchantRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
+import com.nbhysj.coupon.model.request.TopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
+import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 
 import java.util.List;
@@ -42,8 +44,8 @@ public class PublishPostModel implements PublishPostContract.Model {
     }
 
     @Override
-    public Observable<BackResult> createTopic(String title, String intro) {
-        return Api.getInstance().apiService.topicCreate(title, intro).compose(RxSchedulers.io_main());
+    public Observable<BackResult<HotTagsTopicBean>> createTopic(TopicRequest topicRequest) {
+        return Api.getInstance().apiService.topicCreate(topicRequest).compose(RxSchedulers.io_main());
     }
 
     @Override

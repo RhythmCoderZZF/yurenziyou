@@ -63,7 +63,7 @@ public class VehicleUseAddDialog extends DialogFragment {
     int duration;
 
     //预估价格，单位分
-    int price;
+    double price;
 
     //预估金额的key，一口价订单会对预估金额做校验，priceKey有效期为5分钟，如果priceKey过期或出发地经纬度有变化必须重新预估
     String priceKey;
@@ -240,15 +240,13 @@ public class VehicleUseAddDialog extends DialogFragment {
 
     //设置用车费用合计
     public void setTotalVehicleExpenses(EstimatedPriceResponse estimatedPrice) {
-        String estimatedPriceStr = String.valueOf(estimatedPrice.getPrice());
-        double estimatedPriceDouble = estimatedPrice.getPrice() * 100;
-        price = (int) (estimatedPriceDouble);
+        price = estimatedPrice.getPrice();
+        // double estimatedPriceDouble = estimatedPrice.getPrice() * 100;
+        //price = (int) (estimatedPriceDouble);
         duration = estimatedPrice.getDuration();
         priceKey = estimatedPrice.getPriceKey();
 
-        if (!TextUtils.isEmpty(estimatedPriceStr)) {
-            mTvVehicleUseExpenses.setText(estimatedPriceStr);
-        }
+        mTvVehicleUseExpenses.setText(String.valueOf(price));
     }
 
     //评估用车价格

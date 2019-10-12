@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -55,13 +56,14 @@ public class HotScenicSpotsListAdapter extends RecyclerView.Adapter<HotScenicSpo
         try {
             // PopularScenicSpotsResponse popularScenicSpots = popularScenicSpotsList.get(itemPosition);
             MchTypeBean hotMchTypeBean = popularScenicSpotsList.get(itemPosition);
-            int mConsumePrice = hotMchTypeBean.getConsumePrice();
+            double mConsumePrice = hotMchTypeBean.getConsumePrice();
             double mCommentScore = hotMchTypeBean.getCommentScore();
+            int commentNum = hotMchTypeBean.getCommentNum();
             String photoUrl = hotMchTypeBean.getPhoto();
             String intro = hotMchTypeBean.getIntro();
-            holder.mTvPopularScenicSpotPrice.setText(String.valueOf(mConsumePrice));
+            holder.mTvPopularScenicSpotPrice.setText(Tools.getTwoDecimalPoint(mConsumePrice));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(mCommentScore) + "分");
-            holder.mTvScenicSpotCommentNum.setText("23条点评数");
+            holder.mTvScenicSpotCommentNum.setText(commentNum + "条点评数");
             holder.mTvPopularScenicSpotName.setText(hotMchTypeBean.getMchName());
             if (intro != null) {
                 holder.mTvScenicSpotsDes.setText(intro);

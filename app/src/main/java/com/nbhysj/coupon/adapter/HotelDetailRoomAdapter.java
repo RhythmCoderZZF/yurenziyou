@@ -15,6 +15,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -64,7 +65,7 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
             String bedInfo = mchGoodsBean.getBedInfo();
 
             holder.mTvHotelRoomTilte.setText(title);
-            holder.mTvHotelRoomPrice.setText(String.valueOf(marketPrice));
+            holder.mTvHotelRoomPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
             if(breakfastStatus == 0){
 
                 stringBuffer.append("不含早餐 ");

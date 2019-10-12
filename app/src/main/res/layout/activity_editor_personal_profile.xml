@@ -25,6 +25,7 @@
             android:hint="想要说点啥..."
             android:maxLength="50"
             android:padding="@dimen/dp_16"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:textSize="@dimen/text_size_xnormal" />
 
         <RelativeLayout

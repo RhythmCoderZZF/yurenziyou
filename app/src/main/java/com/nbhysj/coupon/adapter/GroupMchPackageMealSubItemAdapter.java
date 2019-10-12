@@ -59,12 +59,17 @@ public class GroupMchPackageMealSubItemAdapter extends RecyclerView.Adapter<Grou
             String content = subContentEntity.getContent();
             List<String> photoUrlList = subContentEntity.getPhotoJson();
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-            linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
-            holder.mIGroupMchSubPhoto.setLayoutManager(linearLayoutManager);
-            GroupMchPackageMealPhototemAdapter mchPackageMealPhototemAdapter = new GroupMchPackageMealPhototemAdapter(mContext);
-            mchPackageMealPhototemAdapter.setGroupMchContentList(photoUrlList);
-            holder.mIGroupMchSubPhoto.setAdapter(mchPackageMealPhototemAdapter);
+            if(photoUrlList != null)
+            {
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+                linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
+                holder.mIGroupMchSubPhoto.setLayoutManager(linearLayoutManager);
+                GroupMchPackageMealPhototemAdapter mchPackageMealPhototemAdapter = new GroupMchPackageMealPhototemAdapter(mContext);
+                mchPackageMealPhototemAdapter.setGroupMchContentList(photoUrlList);
+                holder.mIGroupMchSubPhoto.setAdapter(mchPackageMealPhototemAdapter);
+            }
+
             if(!TextUtils.isEmpty(content))
             {
                 holder.mTvMchContentDes.setText(content);

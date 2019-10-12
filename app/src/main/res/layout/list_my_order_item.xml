@@ -9,6 +9,8 @@
     android:layout_marginBottom="@dimen/dp_5"
     android:background="@drawable/bg_white_radius_shape"
     android:descendantFocusability="blocksDescendants"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -61,15 +63,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_9"
-        android:clickable="false"
-        android:focusable="false"></android.support.v7.widget.RecyclerView>
+        android:clickable="true"
+       ></android.support.v7.widget.RecyclerView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_vehicle_use"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false"
+        android:clickable="true"
         android:layout_marginTop="@dimen/dp_9"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
@@ -136,7 +137,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_20"
             android:gravity="right"
-            android:text="56分:00秒后订单将取消"
+            android:text=""
             android:textColor="@color/color_orange3"
             android:textSize="@dimen/text_size_small" />
 
@@ -179,7 +180,7 @@
 
 
     <LinearLayout
-        android:id="@+id/llyt_order_refund"
+        android:id="@+id/llyt_order_not_pending_payment"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_45"
         android:layout_gravity="right"

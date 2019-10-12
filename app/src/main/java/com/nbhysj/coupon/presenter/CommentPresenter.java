@@ -18,6 +18,12 @@ public class CommentPresenter extends CommentContract.Presenter {
     }
 
     @Override
+    public void getMchCommentList(int mchId) {
+        mRxManager.add(mModel.getMchCommentList(mchId).subscribe(res -> mView.postsCommentResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+
+    @Override
     public void onStart() {
 
     }

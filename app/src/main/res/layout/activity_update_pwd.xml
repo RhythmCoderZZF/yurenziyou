@@ -39,6 +39,7 @@
             android:layout_marginRight="10dp"
             android:background="@null"
             android:hint="@string/str_input_old_pwd"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:textColor="@color/color_text_gray"
             android:maxLength="20"
             android:textSize="@dimen/text_size_medium" />

@@ -4,13 +4,13 @@
     android:id="@+id/llyt_traveller_info_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_16"
-    android:background="@drawable/bg_white_radius_shape"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_17">
 
         <TextView
             android:id="@+id/tv_vehicle_use_time"
@@ -28,11 +28,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_3"
+            android:layout_marginRight="@dimen/dp_1"
             android:text="¥"
             android:layout_centerVertical="true"
             android:textColor="@color/color_text_black7"
-            android:layout_toLeftOf="@id/tv_vehicle_expenses"
+            android:layout_toLeftOf="@id/tv_vehicle_expenses_price"
             android:textSize="@dimen/text_size_small"
             />
 
@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_14"
+            android:layout_centerVertical="true"
             android:text="00.00"
             android:textColor="@color/color_text_black7"
             android:textSize="@dimen/text_size_xnormal"
@@ -53,7 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_9"
+        android:layout_marginLeft="@dimen/dp_10"
         android:orientation="vertical">
 
         <TextView
@@ -87,13 +89,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text=":"
+        android:text=""
         android:textSize="@dimen/text_size_tiny"
         android:textColor="@color/color_orange3"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_9"
-
+        android:visibility="gone"
         />
     <View
         android:layout_width="match_parent"

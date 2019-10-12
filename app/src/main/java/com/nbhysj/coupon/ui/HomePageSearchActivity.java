@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.fragment.HomeSearchComprehensiveFragment;
 import com.nbhysj.coupon.fragment.MyAllOrderListFragment;
 import com.nbhysj.coupon.fragment.MyOrderFragmentManager;
 import com.nbhysj.coupon.fragment.PendingCommentOrderListFragment;
@@ -35,7 +36,7 @@ public class HomePageSearchActivity extends BaseActivity {
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
-    private String[] titles = new String[]{"综合", "xiu", "住宿", "景点", "美食", "互动", "攻略"};
+    private String[] titles = new String[]{"综合", "XIU", "住宿", "景点", "美食", "互动", "攻略"};
     private List<Fragment> fragmentList;
     @Override
     public int getLayoutId()
@@ -55,7 +56,7 @@ public class HomePageSearchActivity extends BaseActivity {
             fragmentList.clear();
         }
 
-        fragmentList.add(new MyAllOrderListFragment());
+        fragmentList.add(new HomeSearchComprehensiveFragment());
         fragmentList.add(new PendingPaymentListFragment());
         fragmentList.add(new PendingTravelListFragment());
         fragmentList.add(new PendingCommentOrderListFragment());

@@ -147,7 +147,6 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
     @BindView(R.id.tv_location)
     TextView mTvLocation;
 
-    private int cityId = 330212;
     int toolBarPositionY = 0;
     private int mOffset = 0;
     private int mScrollY = 0;
@@ -168,6 +167,8 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
     DeliciousFoodSectionAdapter deliciousFoodSectionAdapter;
     StringBuffer stringBuffer = new StringBuffer();
 
+    //城市ID
+    private String cityId = String.valueOf(Constants.CITY_CODE);
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -186,6 +187,7 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
 
     @Override
     public void initData() {
+        cityId = getIntent().getStringExtra("cityId");
         getDestinationHomePage();
 
         if (scenicSpotBeanList == null) {
@@ -512,107 +514,113 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
 
     @Override
     public void getDestinationHomePageResult(BackResult<DestinationResponse> res) {
-        try {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    DestinationResponse destinationResponse = res.getData();
+                    List<BannerBean> bannerBeanList = destinationResponse.getBanner();
+                    String province = destinationResponse.getProvince();
+                    String city = destinationResponse.getCity();
+                    String county = destinationResponse.getCounty();
 
-            DestinationResponse destinationResponse = res.getData();
-            List<BannerBean> bannerBeanList = destinationResponse.getBanner();
-            String province = destinationResponse.getProvince();
-            String city = destinationResponse.getCity();
-            String county = destinationResponse.getCounty();
+                    mTvWelcomeToLocation.setText("欢迎来到" + city);
+                    mTvLocation.setText(province + county + city);
+                    scenicSpotBeanList = destinationResponse.getMches();//景点
+                    List<MchTypeBean> strategysList = destinationResponse.getStrategys();
+                    if (strategysList != null) {
+                        MchTypeBean strategysOne = strategysList.get(0);
+                        MchTypeBean strategysTwo = strategysList.get(1);
+                        String strategysOneTitle = strategysOne.getDataName();
+                        String strategysOneIntro = strategysOne.getIntro();
+                        String strategysOnePhotoUrl = strategysOne.getPhoto();
+                        mTvStrategysOneTitle.setText(strategysOneTitle);
+                        mTvStrategysOneDes.setText(strategysOneIntro);
+                        GlideUtil.loadImage(ScenicSpotDestinationActivity.this, strategysOnePhotoUrl, mImageStrategysOne);
 
-            mTvWelcomeToLocation.setText("欢迎来到" + city);
-            mTvLocation.setText(province + county + city);
-            scenicSpotBeanList = destinationResponse.getMches();//景点
-            List<MchTypeBean> strategysList = destinationResponse.getStrategys();
-            if (strategysList != null) {
-                MchTypeBean strategysOne = strategysList.get(0);
-                MchTypeBean strategysTwo = strategysList.get(1);
-                String strategysOneTitle = strategysOne.getDataName();
-                String strategysOneIntro = strategysOne.getIntro();
-                String strategysOnePhotoUrl = strategysOne.getPhoto();
-                mTvStrategysOneTitle.setText(strategysOneTitle);
-                mTvStrategysOneDes.setText(strategysOneIntro);
-                GlideUtil.loadImage(ScenicSpotDestinationActivity.this, strategysOnePhotoUrl, mImageStrategysOne);
-
-                if (strategysList.size() > 1) {
-                    String strategysTwoTitle = strategysTwo.getDataName();
-                    String strategysTwoIntro = strategysTwo.getIntro();
-                    String strategysTwoPhotoUrl = strategysTwo.getPhoto();
-                    mTvStrategysTwoTitle.setText(strategysTwoTitle);
-                    mTvStrategysTwoDes.setText(strategysTwoIntro);
-                    GlideUtil.loadImage(ScenicSpotDestinationActivity.this, strategysTwoPhotoUrl, mImageStrategysTwo);
-                }
-            }
-
-            interactiveSelectionList = destinationResponse.getInteraction();
-            fineFoodList = destinationResponse.getFood();
-            List<DestinationResponse.HomestaysEntity> homestaysEntityList = destinationResponse.getHomestays();
-            BannerBean bannerBean = bannerBeanList.get(0);
-            String photoUrl = bannerBean.getPhoto();
-            GlideUtil.loadImage(ScenicSpotDestinationActivity.this, photoUrl, mImgDestination);
-
-            destinationScenicSpotsBannerAdapter.setPopularScenicSpotsList(scenicSpotBeanList);
-            destinationScenicSpotsBannerAdapter.notifyDataSetChanged();
-
-            if (homestaysEntityList != null) {
-
-
-                if (homestaysEntityList.size() > 0) {
-
-                    for (int i = 0; i < homestaysEntityList.size(); i++) {
-                        ImageView image = new ImageView(ScenicSpotDestinationActivity.this);
-                        image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                        //设置显示格式
-                        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        viewList.add(image);
-                    }
-
-                    String mchName = homestaysEntityList.get(0).getMchName();
-                    List<BaseTagsBean> tagsList = homestaysEntityList.get(0).getTags();
-                    if (!TextUtils.isEmpty(mchName)) {
-                        mTvHotelHomestayName.setText(mchName);
-                    } else {
-                        mTvHotelHomestayName.setText("");
-                    }
-                    for (BaseTagsBean tagsBean : tagsList) {
-                        String title = tagsBean.getTitle();
-                        stringBuffer.append(title);
-                        stringBuffer.append("/");
-                    }
-
-                    String tagStr = stringBuffer.toString();
-                    if (tagStr.length() > 0) {
-                        String tag = tagStr.substring(0, tagStr.length() - 1);
-                        mTvHotelHomestayTag.setText(tag);
-                    }
-
-                    mBannerViewHomestay.setViewList(ScenicSpotDestinationActivity.this, viewList, homestaysEntityList, new DestinationBannerView.ScenicSpotDetailBannerViewListener() {
-                        @Override
-                        public void setScenicSpotDetailBannerViewListener(int curPos) {
-
-                            stringBuffer.setLength(0);
-                            DestinationResponse.HomestaysEntity homestaysEntity = homestaysEntityList.get(curPos % homestaysEntityList.size());
-                            String mchName = homestaysEntity.getMchName();
-                            List<BaseTagsBean> tagsList = homestaysEntity.getTags();
-
-                            homestaySwitching(mchName, tagsList);
+                        if (strategysList.size() > 1) {
+                            String strategysTwoTitle = strategysTwo.getDataName();
+                            String strategysTwoIntro = strategysTwo.getIntro();
+                            String strategysTwoPhotoUrl = strategysTwo.getPhoto();
+                            mTvStrategysTwoTitle.setText(strategysTwoTitle);
+                            mTvStrategysTwoDes.setText(strategysTwoIntro);
+                            GlideUtil.loadImage(ScenicSpotDestinationActivity.this, strategysTwoPhotoUrl, mImageStrategysTwo);
                         }
-                    });
+                    }
+
+                    interactiveSelectionList = destinationResponse.getInteraction();
+                    fineFoodList = destinationResponse.getFood();
+                    List<DestinationResponse.HomestaysEntity> homestaysEntityList = destinationResponse.getHomestays();
+                    BannerBean bannerBean = bannerBeanList.get(0);
+                    String photoUrl = bannerBean.getPhoto();
+                    GlideUtil.loadImage(ScenicSpotDestinationActivity.this, photoUrl, mImgDestination);
+
+                    destinationScenicSpotsBannerAdapter.setPopularScenicSpotsList(scenicSpotBeanList);
+                    destinationScenicSpotsBannerAdapter.notifyDataSetChanged();
+
+                    if (homestaysEntityList != null) {
+
+
+                        if (homestaysEntityList.size() > 0) {
+
+                            for (int i = 0; i < homestaysEntityList.size(); i++) {
+                                ImageView image = new ImageView(ScenicSpotDestinationActivity.this);
+                                image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                //设置显示格式
+                                image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                viewList.add(image);
+                            }
+
+                            String mchName = homestaysEntityList.get(0).getMchName();
+                            List<BaseTagsBean> tagsList = homestaysEntityList.get(0).getTags();
+                            if (!TextUtils.isEmpty(mchName)) {
+                                mTvHotelHomestayName.setText(mchName);
+                            } else {
+                                mTvHotelHomestayName.setText("");
+                            }
+                            for (BaseTagsBean tagsBean : tagsList) {
+                                String title = tagsBean.getTitle();
+                                stringBuffer.append(title);
+                                stringBuffer.append("/");
+                            }
+
+                            String tagStr = stringBuffer.toString();
+                            if (tagStr.length() > 0) {
+                                String tag = tagStr.substring(0, tagStr.length() - 1);
+                                mTvHotelHomestayTag.setText(tag);
+                            }
+
+                            mBannerViewHomestay.setViewList(ScenicSpotDestinationActivity.this, viewList, homestaysEntityList, new DestinationBannerView.ScenicSpotDetailBannerViewListener() {
+                                @Override
+                                public void setScenicSpotDetailBannerViewListener(int curPos) {
+
+                                    stringBuffer.setLength(0);
+                                    DestinationResponse.HomestaysEntity homestaysEntity = homestaysEntityList.get(curPos % homestaysEntityList.size());
+                                    String mchName = homestaysEntity.getMchName();
+                                    List<BaseTagsBean> tagsList = homestaysEntity.getTags();
+
+                                    homestaySwitching(mchName, tagsList);
+                                }
+                            });
+                        }
+                    }
+
+                    if (interactiveSelectionList != null) {
+                        interactiveSelectionAdapter.setInteractiveSelectionList(interactiveSelectionList);
+                        interactiveSelectionAdapter.notifyDataSetChanged();
+                    }
+
+                    if (fineFoodList != null) {
+                        deliciousFoodSectionAdapter.setDeliciousFoodRecommendList(fineFoodList);
+                        deliciousFoodSectionAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }
-
-            if (interactiveSelectionList != null) {
-                interactiveSelectionAdapter.setInteractiveSelectionList(interactiveSelectionList);
-                interactiveSelectionAdapter.notifyDataSetChanged();
-            }
-
-            if (fineFoodList != null) {
-                deliciousFoodSectionAdapter.setDeliciousFoodRecommendList(fineFoodList);
-                deliciousFoodSectionAdapter.notifyDataSetChanged();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+                break;
+            default:break;
         }
+
     }
 
     public void homestaySwitching(String mchName, List<BaseTagsBean> tagsList) {
@@ -669,7 +677,11 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
 
         if (validateInternet()) {
 
-            mPresenter.getDestinationHomePage(cityId);
+            if (!TextUtils.isEmpty(cityId))
+            {
+                showProgressDialog(ScenicSpotDestinationActivity.this);
+                mPresenter.getDestinationHomePage(Integer.parseInt(cityId));
+            }
         }
     }
 }

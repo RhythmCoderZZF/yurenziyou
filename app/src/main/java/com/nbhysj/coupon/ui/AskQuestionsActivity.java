@@ -3,6 +3,7 @@ package com.nbhysj.coupon.ui;
 import android.os.Bundle;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 /**
@@ -18,7 +19,7 @@ public class AskQuestionsActivity extends BaseActivity {
 
     @Override
     public void initView(Bundle savedInstanceState) {
-
+        StatusBarCompat.setStatusBarColor(this, -131077);
         ToolbarHelper.setBar(AskQuestionsActivity.this, getResources().getString(R.string.str_my_ask_question), R.mipmap.nav_ico_back_black);
     }
 

@@ -34,7 +34,7 @@ public class CarsBean {
     private String priceKey;
 
     //预估价格，单位分
-    private int price;
+    private double price;
 
     //预估时间(预估方法获得)
     private int duration;
@@ -116,11 +116,11 @@ public class CarsBean {
         this.priceKey = priceKey;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

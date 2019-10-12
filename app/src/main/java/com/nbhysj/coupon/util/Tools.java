@@ -1,10 +1,14 @@
 package com.nbhysj.coupon.util;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,5 +92,43 @@ public class Tools {
     public static String getTwoDecimalPoint(double dataValue) {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足. .00
         return decimalFormat.format(dataValue);
+    }
+
+    public static long getSoundDuring(String mUri)
+    {
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        long duration = 0;
+        try {
+            mediaPlayer.setDataSource(mUri);
+            mediaPlayer.prepare();
+            int mediaPlayerDuration = mediaPlayer.getDuration() ;
+            Double durationTime = new Double(mediaPlayerDuration);
+            double timeDouble = durationTime / 1000;
+            duration = Math.round(timeDouble);
+            /*if (0 != duration) {
+                //更新 seekbar 长度
+                int s = duration / 1000;
+                //设置文件时长，单位 "分:秒" 格式
+                String total = s / 60 + ":" + s % 60;
+                //记得释放资源
+                mediaPlayer.release();
+            }*/
+        } catch (
+                IOException e) {
+            e.printStackTrace();
+        }
+
+        return duration;
+    }
+
+
+    /*
+     * 是否为浮点数？double或float类型。
+     * @param str 传入的字符串。
+     * @return 是浮点数返回true,否则返回false。
+     */
+    public static boolean isDoubleOrFloat(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[.\\d]*$");
+        return pattern.matcher(str).matches();
     }
 }

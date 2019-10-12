@@ -126,11 +126,9 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
     @Override
     public void initData() {
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
-        if (!TextUtils.isEmpty(avatar)) {
+        if (!TextUtils.isEmpty(avatar))
+        {
             mImageUserAvatar.loadCircle(avatar);
-        } else {
-
-            mImageUserAvatar.loadCircle("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
         }
         String nickname = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.NICKNAME, "");
         int sex = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_SEX, 0);

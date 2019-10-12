@@ -7,24 +7,32 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.util.Tools;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
+
+import static com.umeng.commonsdk.statistics.AnalyticsConstants.LOG_TAG;
 
 
 public class ExpandButtonLayout extends RelativeLayout implements Animation.AnimationListener {
@@ -35,8 +43,12 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
     private TextView mTvSoundDuration;
     private WaveLineView mWaveLineView;
     AnimatorSet animatorSet;
-    CountDownTimer countDownTimer;
-
+    MyCountDownTimer mc;
+    //音频时长
+    private long mSoundDuringTime;
+    private MediaPlayer mMediaPlayer = null;
+    //音频文件
+    private String mAudioFileUrl;
     public ExpandButtonLayout(Context context) {
         super(context);
         init(context, null);
@@ -91,14 +103,15 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
 
         // timeCount.start();
 
-        countDownTimer = new CountDownTimer(8000, 1000) {
+      /*  CountDownTimer countDownTimer = new CountDownTimer(80000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) { // 计时过程显示
 
-                SimpleDateFormat formatter = new SimpleDateFormat("m:ss");//初始化Formatter的转换格式。
+       *//*         SimpleDateFormat formatter = new SimpleDateFormat("m:ss");//初始化Formatter的转换格式。
                 formatter.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
-                String hms = formatter.format(millisUntilFinished);
-                mTvSoundDuration.setText(hms);
+                String hms = formatter.format(millisUntilFinished);*//*
+                int time = (int)millisUntilFinished / 1000;
+                mTvSoundDuration.setText(String.valueOf(time));
             }
 
             @Override
@@ -108,8 +121,9 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
             }
         };
 
-        countDownTimer.start();
+        countDownTimer.start();*/
     }
+
 
     private int duration = 800;
     private boolean isExpand = false;
@@ -141,6 +155,10 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
     public void close() {
         //timeCount.cancel();
         mWaveLineView.setVisibility(View.GONE);
+        if(mc != null) {
+            mc.cancel();
+        }
+        stopPlaying();
 /*
         AnimationSet animationSet = new AnimationSet(true);
 
@@ -195,6 +213,8 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
      * 打开语音
      */
     public void open() {
+        mc = new MyCountDownTimer(mSoundDuringTime * 1000, 1000);
+        mc.start();
         mImgAudioFrequency.setVisibility(View.INVISIBLE);
 
     /*    RotateAnimation rotateAnimation = new RotateAnimation(270, 360,
@@ -246,7 +266,7 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
 
             }
         });
-
+        getMediaPlayer(mAudioFileUrl);
     }
 
     public void toggle() {
@@ -262,6 +282,16 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
         }
     }
 
+    public void setAudioFileUrl(String audioFileUrl){
+
+        if(!TextUtils.isEmpty(audioFileUrl))
+        {
+            mAudioFileUrl = audioFileUrl;
+            mSoundDuringTime = Tools.getSoundDuring(mAudioFileUrl);
+            mTvSoundDuration.setText(String.valueOf(mSoundDuringTime) +"″");
+        }
+
+    }
     @Override
     public void onAnimationStart(Animation animation) {
         isAnimation = true;
@@ -435,5 +465,89 @@ public class ExpandButtonLayout extends RelativeLayout implements Animation.Anim
         };
     }
 
+
+    /**
+     * 继承 CountDownTimer 防范
+     *
+     * 重写 父类的方法 onTick() 、 onFinish()
+     */
+
+    class MyCountDownTimer extends CountDownTimer {
+        /**
+         *
+         * @param millisInFuture
+         *            表示以毫秒为单位 倒计时的总数
+         *
+         *            例如 millisInFuture=1000 表示1秒
+         *
+         * @param countDownInterval
+         *            表示 间隔 多少微秒 调用一次 onTick 方法
+         *
+         *            例如: countDownInterval =1000 ; 表示每1000毫秒调用一次onTick()
+         *
+         */
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish(long millisUntilFinished) {
+           /* SimpleDateFormat formatter = new SimpleDateFormat("s");//初始化Formatter的转换格式。
+            formatter.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
+            String hms = formatter.format(millisUntilFinished);
+            mTvSoundDuration.setText(hms);*/
+            isExpand = false;
+            close();
+            mTvSoundDuration.setText(String.valueOf(mSoundDuringTime) +"″");
+            stopPlaying();
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.i("MainActivity", millisUntilFinished + "");
+            int time = (int)millisUntilFinished / 1000;
+            int remaindTime = (int)mSoundDuringTime - time;
+            mTvSoundDuration.setText(String.valueOf(remaindTime) +"s");
+        }
+    }
+
+
+    public void getMediaPlayer(String audioFileUrl) {
+        mMediaPlayer = new MediaPlayer();
+
+        try {
+            mMediaPlayer.setDataSource(audioFileUrl);
+            mMediaPlayer.prepare();
+
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mMediaPlayer.start();
+                }
+            });
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                stopPlaying();
+            }
+        });
+    }
+
+
+    public void stopPlaying() {
+
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+
+        }
+    }
 
 }

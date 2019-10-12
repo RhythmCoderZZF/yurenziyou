@@ -103,7 +103,6 @@ public class WebActivity extends BaseActivity<LoginPresenter, LoginModel> implem
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-                view.loadUrl(url);
                 Uri uri = Uri.parse(url);
                 LogUtil.e("打印Scheme", uri.getScheme() + "==" + url);
                 if (!"http".equals(uri.getScheme()) || !"https".equals(uri.getScheme())) {

@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/dp_15"
-        android:text="海洋世界大酒店"
+        android:text=""
         android:textColor="@color/txt_font_black2"
         android:textSize="@dimen/text_size_xnormal"
         android:textStyle="normal" />
@@ -36,5 +36,5 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
         android:alpha="0.25"
-        android:background="@color/color_text_gray6"></View>
+        android:background="@color/color_text_gray25"></View>
 </RelativeLayout>

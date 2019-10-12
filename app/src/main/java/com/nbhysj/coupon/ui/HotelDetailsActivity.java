@@ -27,9 +27,11 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.dialog.HotelDetailsSupplementDialog;
 import com.nbhysj.coupon.model.HotelModel;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.LabelEntity;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
@@ -199,6 +201,20 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
     private HotelDetailsSupplementDialog hotelDetailsSupplementDialog;
 
+    //设施详情h5
+    private String allFacilityDetailsH5Url;
+
+    //订房必读h5
+    private String bookingInformationDetailsH5Url;
+
+    //纬度
+    private String latitude;
+    //经度
+    private String longitude;
+
+    //收藏状态
+    private int collectionStatus;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -322,7 +338,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.llyt_hotel_location})
+    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.llyt_hotel_location,R.id.rlyt_all_facility_details,R.id.rlyt_booking_information
+            ,R.id.rlyt_nearby_hotel,R.id.img_collection})
     public void onClick(View v) {
         Typeface normalFont = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
         mTvEntertainment.setTypeface(normalFont);
@@ -391,6 +408,37 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 intent.setClass(HotelDetailsActivity.this, ScenicSpotsDetailLocationMapActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.rlyt_all_facility_details:
+                if(!TextUtils.isEmpty(allFacilityDetailsH5Url)) {
+
+                    intent.putExtra("url", allFacilityDetailsH5Url);
+                    intent.putExtra("title", Constants.All_FACILITY_DETAIL_H5_TITEL);
+                    intent.setClass(HotelDetailsActivity.this, WebActivity.class);
+                    startActivity(intent);
+
+                }
+                break;
+            case R.id.rlyt_booking_information:
+                if(!TextUtils.isEmpty(bookingInformationDetailsH5Url)) {
+
+                    intent.putExtra("url", bookingInformationDetailsH5Url);
+                    intent.putExtra("title", Constants.RESERVATION_MUST_BE_READ_H5_TITEL);
+                    intent.setClass(HotelDetailsActivity.this, WebActivity.class);
+                    startActivity(intent);
+
+                }
+                break;
+            case R.id.rlyt_nearby_hotel:
+                intent.setClass(HotelDetailsActivity.this,NearbyHotelListActivity.class);
+                intent.putExtra("longitude",longitude);
+                intent.putExtra("latitude",latitude);
+                startActivity(intent);
+                break;
+            case R.id.img_collection:
+
+                mchCollection();
+
+                break;
             default:
                 break;
 
@@ -418,6 +466,37 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     }
 
     @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    MchCollectionResponse mchCollectionResponse = res.getData();
+                     collectionStatus = mchCollectionResponse.getCollectionStatus();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HotelDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -430,8 +509,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     MchDetailsResponse.MchQuestionEntity mchQuestionEntity = mchDetailsResponse.getMchQuestion(); //问题
 
                     mchHotelGoodsList = mchDetailsResponse.getMchGoods();     //酒店商品展示列表
-                    //latitude = mchDetailsEntity.getLatitude();
-                    //longitude = mchDetailsEntity.getLongitude();
+                    latitude = mchDetailsEntity.getLatitude();
+                    longitude = mchDetailsEntity.getLongitude();
 
                     mchName = mchDetailsEntity.getMchName();
                     //A级
@@ -441,8 +520,22 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     double mConsumePrice = mchDetailsEntity.getConsumePrice();
                     float mCommentScore = mchDetailsEntity.getCommentScore();
 
+                    collectionStatus = mchDetailsEntity.getUserCollectState();
+
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
                     List<MchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
-                    mHotelName.setText(mchName);
+
                     mTvHotelCommentScore.setText(String.valueOf(mCommentScore));
                     mStarBarView.setIntegerMark(false);
 
@@ -452,7 +545,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     //banner
                     bannerList = mchDetailsEntity.getRecommendPhoto();
 
-                    if (bannerList.size() > 0) {
+                    if (bannerList != null &&bannerList.size() > 0) {
 
                         for (int i = 0; i < bannerList.size(); i++) {
                             ImageView image = new ImageView(HotelDetailsActivity.this);
@@ -465,14 +558,20 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     mBannerViewHotelDetail.startLoop(false);
                     mBannerViewHotelDetail.setViewList(HotelDetailsActivity.this, viewList, bannerList);
-
-
-                    //商户地址
+                    //酒店名称
+                    mHotelName.setText(mchName);
+                    //酒店地址
                     String address = mchDetailsEntity.getAddress();
-                    mTvMchAddress.setText(address);
+                    if(!TextUtils.isEmpty(address))
+                    {
+                        mTvMchAddress.setText(address);
+                    }
 
-                    hotelMealDetailAdapter.setMchHotelGoodsList(mchHotelGoodsList);
-                    hotelMealDetailAdapter.notifyDataSetChanged();
+                    if(mchHotelGoodsList != null) {
+
+                        hotelMealDetailAdapter.setMchHotelGoodsList(mchHotelGoodsList);
+                        hotelMealDetailAdapter.notifyDataSetChanged();
+                    }
 
                     MchDetailsResponse.CommentEntity commentEntity = mchDetailsResponse.getComment();
                     commentList = commentEntity.getComment();
@@ -540,6 +639,9 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                         mTvAnswerContent.setText(answerContent);
                     }
+                    bookingInformationDetailsH5Url = mchDetailsEntity.getBookingInformationDetails();
+
+                    allFacilityDetailsH5Url = mchDetailsEntity.getAllFacilityDetails();
 
                     //设备详情
                     List<MchDetailsResponse.ServiceEntity> tagsList = mchDetailsEntity.getServiceJson();
@@ -619,28 +721,47 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
     @Override
     public void onScroll(int y) {
-        if (y <= height && y >= 0) {
-            float scale = (float) y / height;
-            float alpha = (255 * scale);
 
-            mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-            mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-            mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-            mImgCollection.setImageResource(R.mipmap.icon_black_collection);
-            mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
-            if (y <= 300) {
-                mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-                mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
-                mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
-                mRlytScenicSpostsDetail.setBackgroundColor(Color.argb(0, 0, 0, 0));
-                mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
+            if (y <= height && y >= 0) {
+                float scale = (float) y / height;
+                float alpha = (255 * scale);
+
+                mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+                mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+                mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
+                if(collectionStatus == 0) {
+                    mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+                }
+                mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
+                if (y <= 300) {
+                    mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
+                    if(collectionStatus == 0) {
+                        mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
+                    }
+                    mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
+                    mRlytScenicSpostsDetail.setBackgroundColor(Color.argb(0, 0, 0, 0));
+                    mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
+                }
             }
         }
-    }
 
     //获取酒店详情
     public void getMchDetails() {
 
-        mPresenter.getMchDetails(mchId);
+        if(validateInternet()) {
+            showProgressDialog(HotelDetailsActivity.this);
+            mPresenter.getMchDetails(mchId);
+        }
+    }
+
+    //商户收藏
+    public void mchCollection(){
+
+        if(validateInternet()) {
+            showProgressDialog(HotelDetailsActivity.this);
+            MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
+            mchCollectionRequest.setDataId(mchId);
+            mPresenter.mchCollection(mchCollectionRequest);
+        }
     }
 }

@@ -123,7 +123,7 @@ public class MchHomestayDetailsResponse implements Serializable {
 
         private float commentScore;
 
-        private int consumePrice;
+        private double consumePrice;
 
         private String mchRanking;
 
@@ -203,11 +203,11 @@ public class MchHomestayDetailsResponse implements Serializable {
             this.photo = photo;
         }
 
-        public int getConsumePrice() {
+        public double getConsumePrice() {
             return consumePrice;
         }
 
-        public void setConsumePrice(int consumePrice) {
+        public void setConsumePrice(double consumePrice) {
             this.consumePrice = consumePrice;
         }
 

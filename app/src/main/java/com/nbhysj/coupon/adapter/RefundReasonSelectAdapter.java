@@ -22,6 +22,13 @@ public class RefundReasonSelectAdapter extends RecyclerView.Adapter<RefundReason
 
     private int mPosition;
 
+    private RefundReasonSelectListener refundReasonSelectListener;
+
+    private boolean isInitRefundReason = true;
+    public RefundReasonSelectAdapter(RefundReasonSelectListener refundReasonSelectListener) {
+        this.refundReasonSelectListener = refundReasonSelectListener;
+    }
+
     public void setRefundReasonList(List<String> mRefundReasonList) {
 
         this.mRefundReasonList = mRefundReasonList;
@@ -48,20 +55,26 @@ public class RefundReasonSelectAdapter extends RecyclerView.Adapter<RefundReason
                 public void onClick(View view) {
 
                     mPosition = itemPosition;
-                    notifyDataSetChanged();
+                 //
+                    refundReasonSelectListener.setRefundReasonSelectListener(refundReason);
 
+
+                    notifyDataSetChanged();
+                    isInitRefundReason = false;
                 }
             });
 
-            if (itemPosition == mPosition) {
+            if (itemPosition == mPosition && !isInitRefundReason) {
 
                 holder.mImgRefundReasonSelect.setBackgroundResource(R.mipmap.icon_refund_reason_select);
 
             } else {
 
-                holder.mImgRefundReasonSelect.setBackgroundResource(R.drawable.bg_stroke_radius_five_gray_shape);
+                holder.mImgRefundReasonSelect.setBackgroundResource(R.mipmap.icon_refund_reason_unselect);
 
             }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,5 +108,10 @@ public class RefundReasonSelectAdapter extends RecyclerView.Adapter<RefundReason
             mImgRefundReasonSelect = itemView.findViewById(R.id.img_refund_reason_select);
 
         }
+    }
+
+    public interface RefundReasonSelectListener{
+
+        void setRefundReasonSelectListener(String reason);
     }
 }

@@ -21,8 +21,10 @@ import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
+import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
@@ -143,6 +145,16 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
     @Override
     public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
+
+    }
+
+    @Override
+    public void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res) {
+
+    }
+
+    @Override
+    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

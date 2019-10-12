@@ -24,11 +24,14 @@ public class OrderRefundInitResponse {
     //可退数
     private int validNum;
 
+    //商品总数
+    private int sumNum;
+
     //单价
-    private double price;
+    private String price;
 
     //扣款额
-    private double deductPrice;
+    private String deductPrice;
 
     //扣款原因
     private String deductNote;
@@ -45,7 +48,15 @@ public class OrderRefundInitResponse {
     private String goodsType;
 
     //总金额
-    private double totalPrice;
+    private String totalPrice;
+
+    public int getSumNum() {
+        return sumNum;
+    }
+
+    public void setSumNum(int sumNum) {
+        this.sumNum = sumNum;
+    }
 
     public String getOrderNo() {
         return orderNo;
@@ -103,20 +114,24 @@ public class OrderRefundInitResponse {
         this.validNum = validNum;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public double getDeductPrice() {
+    public String getDeductPrice() {
         return deductPrice;
     }
 
-    public void setDeductPrice(double deductPrice) {
+    public void setDeductPrice(String deductPrice) {
         this.deductPrice = deductPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getDeductNote() {
@@ -159,11 +174,7 @@ public class OrderRefundInitResponse {
         this.goodsType = goodsType;
     }
 
-    public double getTotalPrice() {
+    public String getTotalPrice() {
         return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 }

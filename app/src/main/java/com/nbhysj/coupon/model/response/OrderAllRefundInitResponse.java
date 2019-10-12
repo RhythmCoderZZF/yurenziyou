@@ -10,19 +10,17 @@ public class OrderAllRefundInitResponse {
 
     private String orderNo;
 
-    //退款商品总价
-    private int price;
+    private double price;
 
     //总扣除价格
-    private int totalDeductPrice;
+    private double totalDeductPrice;
 
     //退款价格
-    private int refundPrice;
+    private double refundPrice;
 
-    //折扣价格
-    private int discountPrice;
+    private double discountPrice;
 
-    private List<OrderRefundInitResponse> goods;
+    public List<OrderRefundInitResponse> goods;
 
     public String getOrderNo() {
         return orderNo;
@@ -32,35 +30,35 @@ public class OrderAllRefundInitResponse {
         this.orderNo = orderNo;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public int getTotalDeductPrice() {
+    public double getTotalDeductPrice() {
         return totalDeductPrice;
     }
 
-    public void setTotalDeductPrice(int totalDeductPrice) {
+    public void setTotalDeductPrice(double totalDeductPrice) {
         this.totalDeductPrice = totalDeductPrice;
     }
 
-    public int getRefundPrice() {
+    public double getRefundPrice() {
         return refundPrice;
     }
 
-    public void setRefundPrice(int refundPrice) {
+    public void setRefundPrice(double refundPrice) {
         this.refundPrice = refundPrice;
     }
 
-    public int getDiscountPrice() {
+    public double getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(int discountPrice) {
+    public void setDiscountPrice(double discountPrice) {
         this.discountPrice = discountPrice;
     }
 

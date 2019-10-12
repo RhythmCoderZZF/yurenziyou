@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * @auther：hysj created on 2019/9/26
- * description：部分退款
+ * description：全部退款
  */
 public class OrderAllRefundRequest {
 
@@ -15,7 +15,7 @@ public class OrderAllRefundRequest {
     private List<RefundGoodsEntity> refundGoods;
 
     //折扣金额
-    private double discountPrice;
+    private String discountPrice;
 
     public String getNote() {
         return note;
@@ -33,11 +33,11 @@ public class OrderAllRefundRequest {
         this.refundGoods = refundGoods;
     }
 
-    public double getDiscountPrice() {
+    public String getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(double discountPrice) {
+    public void setDiscountPrice(String discountPrice) {
         this.discountPrice = discountPrice;
     }
 
@@ -50,7 +50,7 @@ public class OrderAllRefundRequest {
         private String goodsType;
 
         //该商品的退款价格
-        private double goodsRefundPrice;
+        private String goodsRefundPrice;
 
         //退款数量
         private int num;
@@ -71,11 +71,11 @@ public class OrderAllRefundRequest {
             this.goodsType = goodsType;
         }
 
-        public double getGoodsRefundPrice() {
+        public String getGoodsRefundPrice() {
             return goodsRefundPrice;
         }
 
-        public void setGoodsRefundPrice(double goodsRefundPrice) {
+        public void setGoodsRefundPrice(String goodsRefundPrice) {
             this.goodsRefundPrice = goodsRefundPrice;
         }
 

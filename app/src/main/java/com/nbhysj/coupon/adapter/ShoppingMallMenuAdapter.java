@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -80,7 +81,7 @@ public class ShoppingMallMenuAdapter extends RecyclerView.Adapter<ShoppingMallMe
         @BindView(R.id.llyt_shopping_mall_item)
         LinearLayout mLlytShoppingMallItem;
         @BindView(R.id.img_shopping_mall_item)
-        CircleImageView mImgShoppingMallItem;
+        ImageView mImgShoppingMallItem;
         @BindView(R.id.tv_shopping_mall_item)
         TextView mTvShoppingMallItem;
 

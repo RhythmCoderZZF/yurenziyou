@@ -74,8 +74,8 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
     @BindView(R.id.tv_get_verification_code)
     TextView mTvGetVerificationCode;
     //查看和隐藏密码
-    @BindView(R.id.btn_toggle_pwd)
-    ToggleButton mBtnTogglePwd;
+    @BindView(R.id.img_password_is_invisible)
+    ImageView mImgPwdIsInvisible;
 
     private Timer mTimer;
     Handler handler;
@@ -89,6 +89,8 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
     //手机验证码
     private String verifyCode;
+
+    private boolean isSeePasswordOprate = true;
 
     @Override
     public int getLayoutId() {
@@ -229,20 +231,25 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
         /**
          * 查看密码
          */
-        mBtnTogglePwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mImgPwdIsInvisible.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //如果选中，显示密码
-                    mBtnTogglePwd.setBackgroundResource(R.mipmap.icon_see_password);
+            public void onClick(View view) {
+                if(isSeePasswordOprate)
+                {
+                    mImgPwdIsInvisible.setImageResource(R.mipmap.icon_see_password);
+                    isSeePasswordOprate = false;
+
                     mEdtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
                 } else {
-                    //否则隐藏密码
-                    mBtnTogglePwd.setBackgroundResource(R.mipmap.icon_invisible_password);
+
+                    mImgPwdIsInvisible.setImageResource(R.mipmap.icon_invisible_password);
+                    isSeePasswordOprate = true;
                     mEdtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
             }
         });
+
     }
 
     private void showTimer() {
@@ -443,6 +450,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                 return;
             }
             showProgressDialog(UserRegistrationActivity.this);
+            mDialog.setTitle("");
             mPresenter.getSalt(phoneNum);
         }
     }

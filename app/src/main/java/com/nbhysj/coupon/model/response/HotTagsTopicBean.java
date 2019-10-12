@@ -1,25 +1,33 @@
 package com.nbhysj.coupon.model.response;
 
 
+import java.io.Serializable;
+
 /**
  * @auther：hysj created on 2019/4/1
  * description：热门标签
  */
-public class HotTagsTopicBean {
+public class HotTagsTopicBean implements Serializable {
 
-    private int count;
+    //标签id
+    private int id;
 
+    //标签主题
     private String title;
 
-    //主题id
-    private int topicId;
+    private int postsCount;
 
-    public int getCount() {
-        return count;
+    private int ctime;
+
+    //标签是否选择
+    private boolean isHotTagsTopicSelect;
+
+    public int getId() {
+        return id;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -30,12 +38,27 @@ public class HotTagsTopicBean {
         this.title = title;
     }
 
-    public int getTopicId() {
-        return topicId;
+    public int getPostsCount() {
+        return postsCount;
     }
 
-    public void setTopicId(int topicId) {
-        this.topicId = topicId;
+    public void setPostsCount(int postsCount) {
+        this.postsCount = postsCount;
     }
 
+    public int getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(int ctime) {
+        this.ctime = ctime;
+    }
+
+    public boolean isHotTagsTopicSelect() {
+        return isHotTagsTopicSelect;
+    }
+
+    public void setHotTagsTopicSelect(boolean hotTagsTopicSelect) {
+        isHotTagsTopicSelect = hotTagsTopicSelect;
+    }
 }

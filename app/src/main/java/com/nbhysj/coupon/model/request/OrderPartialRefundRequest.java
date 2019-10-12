@@ -10,10 +10,10 @@ public class OrderPartialRefundRequest {
     private int orderGoodsId;
 
     //折扣金额
-    private double discountPrice;
+    private String discountPrice;
 
     //总金额  由用户勾选前端计算 pricenumrefundPercentage/100 保留两位小数)
-    private double goodsRefundPrice;
+    private String goodsRefundPrice;
 
     //商品类型
     private String goodsType;
@@ -35,20 +35,20 @@ public class OrderPartialRefundRequest {
         this.orderGoodsId = orderGoodsId;
     }
 
-    public double getDiscountPrice() {
+    public String getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(double discountPrice) {
+    public void setDiscountPrice(String discountPrice) {
         this.discountPrice = discountPrice;
     }
 
-    public double getGoodsRefundPrice() {
-        return goodsRefundPrice;
+    public void setGoodsRefundPrice(String goodsRefundPrice) {
+        this.goodsRefundPrice = goodsRefundPrice;
     }
 
-    public void setGoodsRefundPrice(double goodsRefundPrice) {
-        this.goodsRefundPrice = goodsRefundPrice;
+    public String getGoodsRefundPrice() {
+        return goodsRefundPrice;
     }
 
     public String getGoodsType() {

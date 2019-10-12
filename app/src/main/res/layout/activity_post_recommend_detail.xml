@@ -304,6 +304,7 @@
                     android:hint="添加评论..."
                     android:textColor="@color/text_grey"
                     android:textColorHint="@color/text_grey"
+                    android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                     android:imeOptions="actionSend"
                     android:singleLine="true"
                     android:inputType="text"

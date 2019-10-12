@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.NearbyTypeResponse;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
 import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
@@ -76,7 +78,7 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
                 GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
             }
 
-            holder.mLlytScenicSpotNearbyItem.setOnClickListener(new View.OnClickListener() {
+            holder.mRlytScenicSpotNearbyItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent();
@@ -89,6 +91,7 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
                     if (mchType.equals(mchScenicSpot)) {
 
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId", mchId);
                         mContext.startActivity(intent);
 
                     } else if (mchType.equals(mchRecreation)) {
@@ -97,7 +100,7 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
                         mContext.startActivity(intent);
                     }else if (mchType.equals(mchFood)) {
 
-                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.setClass(mContext, FoodDetailActivity.class);
                         intent.putExtra("mchId", mchId);
                         mContext.startActivity(intent);
 
@@ -153,7 +156,7 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
         //人均价格
         TextView mTvPerCapitaPrice;
 
-        LinearLayout mLlytScenicSpotNearbyItem;
+        RelativeLayout mRlytScenicSpotNearbyItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -164,7 +167,7 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
             mStarBarScenicSpots = itemView.findViewById(R.id.starbar_scenic_spots);
             mTvScenicSpotsDistance = itemView.findViewById(R.id.tv_scenic_spots_distance);
             mTvPerCapitaPrice = itemView.findViewById(R.id.tv_per_capita_price);
-            mLlytScenicSpotNearbyItem = itemView.findViewById(R.id.llyt_scenic_spot_nearby_item);
+            mRlytScenicSpotNearbyItem = itemView.findViewById(R.id.rlyt_scenic_spot_nearby_item);
         }
     }
 }

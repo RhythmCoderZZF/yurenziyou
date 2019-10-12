@@ -29,10 +29,12 @@ import com.nbhysj.coupon.adapter.HomestayResourcesAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomestayContract;
 import com.nbhysj.coupon.model.HomestayModel;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CommentUserEntity;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -288,6 +290,9 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
     //设备详情h5
     private String allFacilityH5Url;
+
+    //收藏状态
+    private int collectionStatus;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -496,7 +501,7 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.ibtn_back,R.id.llyt_house_info})
+    @OnClick({R.id.ibtn_back,R.id.llyt_house_info,R.id.img_collection})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_back:
@@ -515,6 +520,11 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     startActivity(intent);
 
                 }
+
+                break;
+            case R.id.img_collection:
+
+                mchCollection();
 
                 break;
             default:
@@ -539,8 +549,34 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     }
 
     @Override
-    public void mchCollectionResult(BackResult res) {
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                    MchCollectionResponse mchCollectionResponse = res.getData();
+                    collectionStatus = mchCollectionResponse.getCollectionStatus();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HomestayDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -555,7 +591,7 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     mchDetailsEntity = homestayDetailsResponse.getMchDetails();
                     MchHomestayDetailsResponse.MchQuestionEntity mchQuestionEntity = homestayDetailsResponse.getMchQuestion(); //问题
                     bannerList = mchDetailsEntity.getRecommendPhoto();
-                    int consumePrice = mchDetailsEntity.getConsumePrice();
+                    double consumePrice = mchDetailsEntity.getConsumePrice();
                     String buildInfo = mchDetailsEntity.getBuildInfo();
                     MchHomestayDetailsResponse.LandlorEntity landlorEntity = homestayDetailsResponse.getLandlor();
                     String nickName = landlorEntity.getNickname();
@@ -580,7 +616,7 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     mBannerViewHotelDetail.startLoop(false);
                     mBannerViewHotelDetail.setViewList(HomestayDetailActivity.this, viewList, bannerList);
 
-                    mTvHomestayPrice.setText(String.valueOf(consumePrice));
+                    mTvHomestayPrice.setText(Tools.getTwoDecimalPoint(consumePrice));
 
                     mchHomestayGoodsList = homestayDetailsResponse.getMchGoods();     //酒店商品展示列表
 
@@ -878,6 +914,19 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     homestayResourcesAdapter.setHomestayResourcesList(homestayResourcesList);
                     homestayResourcesAdapter.notifyDataSetChanged();
 
+
+                    collectionStatus = mchDetailsEntity.getUserCollectState();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -904,11 +953,15 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
             mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-            mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            if(collectionStatus == 0) {
+                mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            }
             mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
             if (y <= 300) {
                 mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-                mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
+                if(collectionStatus == 0) {
+                    mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
+                }
                 mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
                 mRlytScenicSpostsDetail.setBackgroundColor(Color.argb(0, 0, 0, 0));
                 mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
@@ -925,4 +978,14 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         }
     }
 
+    //商户收藏
+    public void mchCollection(){
+
+        if(validateInternet()) {
+            showProgressDialog(HomestayDetailActivity.this);
+            MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
+            mchCollectionRequest.setDataId(mchId);
+            mPresenter.mchCollection(mchCollectionRequest);
+        }
+    }
 }

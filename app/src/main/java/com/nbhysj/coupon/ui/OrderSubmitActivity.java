@@ -190,6 +190,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //游客删除
     @BindView(R.id.tv_delete_frequently_used_tourists)
     TextView mTvTouristDelete;
+    //开启用车
+    @BindView(R.id.rlyt_open_car_status)
+    RelativeLayout mRlytOpenCarStatus;
 
     //购买数量
     private int mPurchaseNum = 1;
@@ -301,7 +304,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //购买须知h5
     private String mchByNotesH5Url;
 
+    //总价格
+    private double mTotalPrice;
+
     private PurchaseInstructionsBrowseDialog mPurchaseInstructionsDialog;
+
     @Override
     public int getLayoutId() {
 
@@ -386,7 +393,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             carsBeanList.clear();
         }
 
-        if(goodsPriceDatesList == null){
+        if (goodsPriceDatesList == null) {
 
             goodsPriceDatesList = new ArrayList<>();
         } else {
@@ -417,8 +424,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                     mCkbOrderDetailLook.setCompoundDrawables(null, null, nav_up, null);
 
-                    if (goodsPriceDetailList != null)
-                    {
+                    if (goodsPriceDetailList != null) {
                         goodsPriceDetailList.clear();
                     }
 
@@ -474,13 +480,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         @Override
                         public void setTickeDatePickerSelectListener(GoodsPriceDatesResponse goodsPriceDatesResponse) {
 
-                            for(int i = 0; i < orderSubmitDateList.size();i++)
-                            {
+                            for (int i = 0; i < orderSubmitDateList.size(); i++) {
                                 orderSubmitDateList.get(i).setSelectDatePrice(false);
                                 String date = orderSubmitDateList.get(i).getDate();
                                 String goodsPriceDatesSelect = goodsPriceDatesResponse.getDate();
-                                if(date.equals(goodsPriceDatesSelect))
-                                {
+                                if (date.equals(goodsPriceDatesSelect)) {
                                     orderSubmitDateList.get(i).setSelectDatePrice(true);
                                 } else {
 
@@ -492,9 +496,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                             orderUseDateSelectAdapter.setOrderUseDateSelectList(orderSubmitDateList);
                             orderUseDateSelectAdapter.notifyDataSetChanged();
-                         //   showToast(OrderSubmitActivity.this,ticketDateSelect);
+                            //   showToast(OrderSubmitActivity.this,ticketDateSelect);
                         }
-                    },goodsPriceDatesList);
+                    }, goodsPriceDatesList);
                     orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
                 } else {
                     orderSubmitDatePickerDialog.show(getFragmentManager(), "数据日期选择");
@@ -560,11 +564,25 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             @Override
             public void setPurchaseNumListener(int position, double purchasePrice, int mAddTicketPurchaseNum) { //mAddTicketPurchaseNum 增加门票数量
                 increaseTicketPrice = purchasePrice;
-                double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;  //mPurchaseNum
-                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-                if (goodsPriceTicketAddList.size() > 0) {
+                //
+                //  mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+               /* if (goodsPriceTicketAddList.size() > 0) {
                     goodsPriceTicketAddList.get(position).setTicketPurchaseNum(mAddTicketPurchaseNum);
+                }*/
+                double mIncreaseTicketTotalPrice = 0;
+                for (int i = 0; i < goodsPriceList.size(); i++) {
+
+                    OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(i);
+                    int mTicketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
+                    double mDefaultPrice = goodsPriceEntity.getDefaultPrice();
+
+                    double totalPrice = mTicketPurchaseNum * mDefaultPrice;
+
+                    mIncreaseTicketTotalPrice = mIncreaseTicketTotalPrice + totalPrice;
                 }
+
+                double totalPrice = mIncreaseTicketTotalPrice + mTotalPrice;  //mPurchaseNum
+                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
             }
         });
         increaseTicketAdapter.setIncreaseTicketList(goodsPriceList);
@@ -646,7 +664,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
             R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
             R.id.img_tourist_mobile_input_cancel,
-            R.id.tv_tourist_edit_confirm,R.id.tv_tourists_info_edit,R.id.tv_delete_frequently_used_tourists,R.id.img_tourist_add_username_input_cancel,R.id.img_tourist_add_mobile_input_cancel,R.id.tv_add_tourists_confirm,R.id.tv_add_tourists_cancel})
+            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm, R.id.tv_add_tourists_cancel})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -666,8 +684,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 mLlytAddTourists.setVisibility(View.VISIBLE);
                 mLlytAddTourists.startAnimation(inAnimation);
                 int visibility = mLlytAddTourists.getVisibility();
-                if (visibility == 8)
-                {
+                if (visibility == 8) {
                     mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
                 }
 
@@ -676,7 +693,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 setTouristInfoDialog();
 
-            break;
+                break;
             case R.id.rlyt_ticket:
 
                 break;
@@ -703,8 +720,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     if (goodsPriceList.size() > 0) {
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
-                        double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                        mTotalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
                     }
                 } else {
 
@@ -716,13 +733,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             case R.id.img_add_purchase_num:
                 mPurchaseNum++;
                 mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
-                if (goodsPriceList.size() > 0)
-                {
+                if (goodsPriceList.size() > 0) {
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
-                double totalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                mTotalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
+                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
                 break;
             case R.id.tv_add_vehicle_more:
 
@@ -792,11 +808,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                   // mPosition++;
+                    // mPosition++;
                     TravellerInfoResponse travellerInfoResponse = res.getData();
                     travellersList = travellerInfoResponse.getResult();
-                    if(travellersList.size() > 0)
-                    {
+                    if (travellersList.size() > 0) {
                         TravellerBean travellerBean = travellersList.get(0);
                         travellerBean.setTravellerSelect(true);
                         realname = travellerBean.getRealname();
@@ -898,8 +913,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             case Constants.SUCCESS_CODE:
                 try {
 
-                    if(travellersList != null) {
-                        if(travellersList.size() > 0) {
+                    if (travellersList != null) {
+                        if (travellersList.size() > 0) {
                             TravellerBean travellersEntity = travellersList.get(mPosition);
 
                             travellersList.remove(travellersEntity);
@@ -939,10 +954,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     long payExprireTime = ticketOrderSubmitResponse.getPayExprireTime();
                     String orderNo = ticketOrderSubmitResponse.getOrderNo();
                     intent.setClass(OrderSubmitActivity.this, OrderPaymentActivity.class);
-                    intent.putExtra("price",price);
-                    intent.putExtra("title",title);
-                    intent.putExtra("payExprireTime",payExprireTime);
-                    intent.putExtra("orderNo",orderNo);
+                    intent.putExtra("price", price);
+                    intent.putExtra("title", title);
+                    intent.putExtra("payExprireTime", payExprireTime);
+                    intent.putExtra("orderNo", orderNo);
                     startActivity(intent);
 
                 } catch (Exception e) {
@@ -966,6 +981,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     travellersList = orderSubmitInitResponse.getTravellers();
 
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
+
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(1);
                     String title = goodsPriceEntity.getTitle();
@@ -995,15 +1011,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     orderUseDateSelectAdapter.notifyDataSetChanged();
 
                     //增加门票
-                    if (goodsPriceList != null)
-                    {
-                        if (goodsPriceList.size() > 0) {
-
-                            for (int i = 0; i < goodsPriceList.size(); i++) {
-                                if (i > 0) {
-                                    OrderSubmitInitResponse.GoodsPriceEntity goodsPriceBean = goodsPriceList.get(i);
-                                    goodsPriceTicketAddList.add(goodsPriceBean);
-                                }
+                    if (goodsPriceList != null && goodsPriceList.size() > 0) {
+                        for (int i = 0; i < goodsPriceList.size(); i++) {
+                            if (i > 0) {
+                                OrderSubmitInitResponse.GoodsPriceEntity goodsPriceBean = goodsPriceList.get(i);
+                                goodsPriceTicketAddList.add(goodsPriceBean);
                             }
                         }
                     }
@@ -1019,16 +1031,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     }
 
                     if (travellersList != null) {
-                        if (travellersList.size() > 0){
+                        if (travellersList.size() > 0) {
                             TravellerBean travellersEntity = travellersList.get(0);
                             userTravelerId = travellersEntity.getId();
                             mRlytTouristInfoItem.setVisibility(View.VISIBLE);
 
-                                travellersEntity.setTravellerSelect(true);
-                                realname = travellersEntity.getRealname();
-                                mobile = travellersEntity.getMobile();
-                                mTvTouristName.setText(realname);
-                                mTvTouristMobile.setText(mobile);
+                            travellersEntity.setTravellerSelect(true);
+                            realname = travellersEntity.getRealname();
+                            mobile = travellersEntity.getMobile();
+                            mTvTouristName.setText(realname);
+                            mTvTouristMobile.setText(mobile);
                         } else {
                             mRlytTouristInfoItem.setVisibility(View.GONE);
                         }
@@ -1046,6 +1058,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     mTvTicketTitle.setText(title);
 
                     mchByNotesH5Url = orderSubmitInitResponse.getGoodsBuyNotes();
+
+                    //用车是否开启状态
+                    int openCarStatus = orderSubmitInitResponse.getOpenCarStatus();
+
+                    if (openCarStatus == 0) {
+                        mRlytOpenCarStatus.setVisibility(View.GONE);
+                    } else if (openCarStatus == 1) {
+                        mRlytOpenCarStatus.setVisibility(View.VISIBLE);
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1097,11 +1119,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
             String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
 
-            if(mchType.equals(mchScenic))
-            {
+            if (mchType.equals(mchScenic)) {
                 mPresenter.getOrderSubmitInit(goodsId);
-            } else if(mchType.equals(mchRecreation))
-            {
+            } else if (mchType.equals(mchRecreation)) {
                 mPresenter.getRecreationDatePriceInit(goodsId);
             }
         }
@@ -1192,9 +1212,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             goodsList.clear();
             TicketOrderSubmitRequest ticketOrderSubmitRequest = new TicketOrderSubmitRequest();
 
-            if(userTravelerId == 0){
+            if (userTravelerId == 0) {
 
-                showToast(OrderSubmitActivity.this,"请填写顾客信息");
+                showToast(OrderSubmitActivity.this, "请填写顾客信息");
                 return;
             }
 
@@ -1208,8 +1228,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             goodsBean.setPriceDate(goodsPriceDateSelect);
             goodsList.add(goodsBean);
 
-            for (int i = 0; i < goodsPriceTicketAddList.size(); i++)
-            {
+            for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
 
                 OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
                 int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
@@ -1227,8 +1246,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             ticketOrderSubmitRequest.setCars(carsBeanList);
 
             //是否用车 1:用 || 0:不用
-            if (mCkbIsNeedUseCar.isChecked())
-            {
+            if (mCkbIsNeedUseCar.isChecked()) {
                 ticketOrderSubmitRequest.setCarStatus(1);
             } else {
                 ticketOrderSubmitRequest.setCarStatus(0);
@@ -1237,11 +1255,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             mDialog.setTitle("正在提交订单...");
             String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
             String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
-            if(mchType.equals(mchScenic))
-            {
+            if (mchType.equals(mchScenic)) {
                 mPresenter.ticketOrderSubmit(ticketOrderSubmitRequest);
-            } else if(mchType.equals(mchRecreation))
-            {
+            } else if (mchType.equals(mchRecreation)) {
                 mPresenter.recreationOrderSubmit(ticketOrderSubmitRequest);
             }
 
@@ -1290,7 +1306,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     //增加游客
-    public void addTraveller(){
+    public void addTraveller() {
 
         if (validateInternet()) {
 
@@ -1330,10 +1346,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     //删除游客信息
-    public void deleteTravellerInfo(){
+    public void deleteTravellerInfo() {
 
-        if(validateInternet())
-        {
+        if (validateInternet()) {
             showProgressDialog(OrderSubmitActivity.this);
             mDialog.setTitle("正在删除...");
             DeleteTravellerInfoRequest deleteTravellerInfoRequest = new DeleteTravellerInfoRequest();
@@ -1342,10 +1357,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
     }
 
-    public void getTravellerList(){
+    public void getTravellerList() {
 
         showProgressDialog(OrderSubmitActivity.this);
-        mPresenter.getUserTravellerList(getSharedPreferencesUserId(),mPage,mPageSize);
+        mPresenter.getUserTravellerList(getSharedPreferencesUserId(), mPage, mPageSize);
     }
 
     /**
@@ -1485,7 +1500,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         vehicleUseAddDialog.show(getFragmentManager(), "");
     }
 
-    public void setTouristInfoDialog(){
+    public void setTouristInfoDialog() {
         int addTouristsVisibility1 = mLlytAddTourists.getVisibility();
         int editTouristsVisibility1 = mLlytEditTourists.getVisibility();
         if (addTouristsVisibility1 == 8 && editTouristsVisibility1 == 8) {

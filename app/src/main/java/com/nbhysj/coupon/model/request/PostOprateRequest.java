@@ -15,7 +15,7 @@ public class PostOprateRequest {
     //帖子ID/评论ID
     private int postsId;
 
-    //帖子类型  postKey	是	String	near是附近,recomm是推荐
+    //1帖子点赞，2帖子收藏，3.帖子评论 postsType
     private int postsType;
 
     public int getUserId() {

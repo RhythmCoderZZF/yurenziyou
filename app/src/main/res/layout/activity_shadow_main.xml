@@ -56,6 +56,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:hint="左上"
                 android:inputType="numberDecimal"
                 android:text="200" />
@@ -84,6 +85,7 @@
                 android:layout_weight="1"
                 android:hint="左下"
                 android:inputType="numberDecimal"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:text="" />
 
             <EditText

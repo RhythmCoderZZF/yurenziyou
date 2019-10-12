@@ -16,6 +16,7 @@ import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.ViewHolder> 
 
         try {
             MchTypeBean hotelResponse = hotelList.get(itemPosition);
-            double commentScore = hotelResponse.getCommentScore();
+            float commentScore = hotelResponse.getCommentScore();
             String intro = hotelResponse.getIntro();
             int level = hotelResponse.getLevel();
             int commentNum = hotelResponse.getCommentNum();

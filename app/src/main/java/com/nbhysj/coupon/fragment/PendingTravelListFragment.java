@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,21 +11,27 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MyOrderListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OrderListContract;
+import com.nbhysj.coupon.dialog.OprateDialog;
 import com.nbhysj.coupon.model.OrderListModel;
 import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.presenter.OrderListPresenter;
+import com.nbhysj.coupon.ui.AllRefundApplyActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * created by hysj on 2018/09/27.
@@ -46,6 +53,8 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
     int mTotalPageCount;
     private boolean isOnLoadMore = false;
+    private final static int ORDER_ALL_REFUND_REQUEST_CODE = 0;
+    private boolean visibleToUser;
     public static PendingTravelListFragment newInstance(String content) {
         PendingTravelListFragment fragment = new PendingTravelListFragment();
 
@@ -81,16 +90,47 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
 
         myOrderListAdapter = new MyOrderListAdapter(getActivity(), new MyOrderListAdapter.MyOrderListener() {
             @Override
-            public void setMyOrderListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderDeleteListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
 
                 mOrderTypeEntity = orderTypeEntity;
-                orderDelete();
+                OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
+                oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+                oprateDialog.setPositiveButton(getResources().getString(R.string.str_confirm), getResources().getColor(R.color.color_blue2), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        orderDelete();
+                    }
+                });
+
+                oprateDialog.show();
             }
 
+            @Override
+            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+
+            }
 
             @Override
-            public void setOrderPendingPaymentListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {  //待付款
+            public void setOrderAllRefundListener(String orderNo) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), AllRefundApplyActivity.class);
+                intent.putExtra("orderNo",orderNo);
+                startActivityForResult(intent,ORDER_ALL_REFUND_REQUEST_CODE);
+            }
 
+            @Override
+            public void setGroupOrderCommentListener(String orderNo) {
+
+            }
+
+            @Override
+            public void setPartialOrderCommentListener(int orderGoodsId) {
 
             }
         });
@@ -109,6 +149,7 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
                     @Override
                     public void run() {
                         mPage = 1;
+                        isOnLoadMore = false;
                         pendingTravelOrderTypeList.clear();
                         myOrderListAdapter.notifyDataSetChanged();
                        // showProgressDialog(getActivity());
@@ -318,6 +359,44 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
             OrderDeleteRequest deleteOrderRequest = new OrderDeleteRequest();
             deleteOrderRequest.setOrderNo(orderNo);
             mPresenter.deleteOrder(deleteOrderRequest);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK)
+        {
+            switch (requestCode) {
+                case ORDER_ALL_REFUND_REQUEST_CODE:
+
+                    isOnLoadMore = false;
+                    mPage = 1;
+                    pendingTravelOrderTypeList.clear();
+                    if(myOrderListAdapter != null)
+                    {
+                        myOrderListAdapter.notifyDataSetChanged();
+                    }
+                    showProgressDialog(getActivity());
+                    getPendingTravelOrderList();
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        visibleToUser = isVisibleToUser;
+    }
+
+    @Subscribe
+    public void onEvent(String commentOprate) {
+
+        if(visibleToUser) {
+            getPendingTravelOrderList();
         }
     }
 }

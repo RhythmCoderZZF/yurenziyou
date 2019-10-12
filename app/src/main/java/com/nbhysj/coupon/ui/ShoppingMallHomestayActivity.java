@@ -145,7 +145,12 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallHomestayActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHomestayActivity.this,MchTypeEnum.MCH_HOMESTAY.getValue());
+        mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHomestayActivity.this, MchTypeEnum.MCH_HOMESTAY.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
+            @Override
+            public void setMchRankingClassificationListener(int cateId, String photoUrl) {
+
+            }
+        });
         mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(mchRankingClassificationAdapter);
 

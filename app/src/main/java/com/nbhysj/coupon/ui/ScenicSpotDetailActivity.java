@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AdmissionTicketExpandableAdapter;
-import com.nbhysj.coupon.adapter.GroupListAdapter;
+import com.nbhysj.coupon.adapter.NearbyGroupListAdapter;
 import com.nbhysj.coupon.adapter.NearbyScenicSpotAdapter;
 import com.nbhysj.coupon.adapter.PlayGuideAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
@@ -36,11 +36,13 @@ import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.ScenicSpotModel;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
@@ -53,6 +55,7 @@ import com.nbhysj.coupon.presenter.ScenicSpotPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.PopupWindowUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
@@ -158,6 +161,15 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     //门票
     @BindView(R.id.llyt_ticket_info)
     LinearLayout mLlytTicketInfo;
+    //景点附近
+    @BindView(R.id.tv_scenic_spot_nearby)
+    TextView mTvScenicSpotNearby;
+    //问答
+    @BindView(R.id.llyt_answer_and_question)
+    LinearLayout mLlytAnswerAndQuestion;
+    //用户评论
+    @BindView(R.id.llyt_user_comment)
+    LinearLayout mLlytUserComment;
     private int height;
     private List<ImageView> viewList;
     private List<String> bannerList;
@@ -178,7 +190,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     //景点
     private NearbyScenicSpotAdapter nearbyScenicSpotAdapter;
     private ScenicSpotDetailUserCommentAdapter scenicSpotDetailUserCommentAdapter;
-    private GroupListAdapter groupListAdapter;
+    private NearbyGroupListAdapter groupListAdapter;
     //商户名
     private int mchId;
     //商户类型
@@ -192,8 +204,13 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     //经度
     String longitude;
 
+    //收藏状态
+    private int collectionStatus;
+
     //查看全部景点信息
     private String mchByNotesH5Url;
+
+    private int mPosition;
 
     @Override
     public int getLayoutId() {
@@ -320,6 +337,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
             @Override
             public void onPageSelected(int position) {
+                mPosition = position;
                 MchDetailsResponse.NearbyEntity nearbyEntity = mchDetailsResponse.getNearby();
                 List<NearbyTypeResponse> groupGoodsList = nearbyEntity.getGroup();
                 List<NearbyTypeResponse> scenicSpotList = nearbyEntity.getScenic();
@@ -327,21 +345,28 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 List<NearbyTypeResponse> hotelList = nearbyEntity.getHotel();
                 if (position == 0) {
                     if (hotelList != null) {
+                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
+                        mTvScenicSpotNearby.setText("查看附近全部酒店");
                         nearbyScenicSpotAdapter.setNearbyScenicSpotsList(hotelList);
                         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
                     }
                 } else if (position == 1) {
                     if (groupGoodsList != null) {
+                        mTvScenicSpotNearby.setVisibility(View.GONE);
                         groupListAdapter.setGroupList(groupGoodsList);
                         mRvNearScenicSpot.setAdapter(groupListAdapter);
                     }
                 } else if (position == 2) {
                     if (scenicSpotList != null) {
+                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
+                        mTvScenicSpotNearby.setText("查看附近全部景点");
                         nearbyScenicSpotAdapter.setNearbyScenicSpotsList(scenicSpotList);
                         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
                     }
                 } else if (position == 3) {
                     if (foodList != null) {
+                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
+                        mTvScenicSpotNearby.setText("查看附近全部美食");
                         nearbyScenicSpotAdapter.setNearbyScenicSpotsList(foodList);
                         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
                     }
@@ -372,7 +397,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvNearScenicSpot.setLayoutManager(layoutManager);
 
-        groupListAdapter = new GroupListAdapter(ScenicSpotDetailActivity.this);
+        groupListAdapter = new NearbyGroupListAdapter(ScenicSpotDetailActivity.this);
         groupListAdapter.setGroupList(groupGoodsList);
         mRvNearScenicSpot.setAdapter(groupListAdapter);
 
@@ -426,19 +451,33 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     MchDetailsResponse.CommentEntity commentEntity = mchDetailsResponse.getComment();
                     MchDetailsResponse.NearbyEntity nearbyEntity = mchDetailsResponse.getNearby();  //附近
                     List<MchGoodsBean> mchGoodsList = mchDetailsResponse.getMchGoods();     //商品展示列表
-                    //latitude = mchDetailsEntity.getLatitude();
-                    //longitude = mchDetailsEntity.getLongitude();
+                    latitude = mchDetailsEntity.getLatitude();
+                    longitude = mchDetailsEntity.getLongitude();
                     commentList = commentEntity.getComment();
                     mchName = mchDetailsEntity.getMchName();
+                    mchType = mchDetailsEntity.getMchType();
                     //A级
                     int level = mchDetailsEntity.getLevel();
                     //评价
                     int commentNum = mchDetailsEntity.getCommentNum();
                     double mConsumePrice = mchDetailsEntity.getConsumePrice();
                     float mCommentScore = mchDetailsEntity.getCommentScore();
-                    List<MchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
+
+                    collectionStatus = mchDetailsEntity.getUserCollectState();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
                     mTvScenicSpotName.setText(mchName + "(" + level + "A)");
-                    mTvPerCapitaPrice.setText(String.valueOf(mConsumePrice));
+                    mTvPerCapitaPrice.setText(Tools.getTwoDecimalPoint(mConsumePrice));
                     mTvCommentScore.setText(String.valueOf(mCommentScore));
                     mStarBarView.setIntegerMark(false);
 
@@ -450,15 +489,25 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     MchDetailsResponse.ScoreEntity scoreEntity = commentEntity.getScore();
                     labelEntityList = commentEntity.getLabel();
                     int mCommentNum = scoreEntity.getCommentNum();
-                    mTvUserCommentNum.setText("用户评论(" + mCommentNum + ")");
+                    if(mCommentNum > 0){
 
-                    userCommentAdapter.setLabelList(labelEntityList);
-                    userCommentAdapter.notifyDataSetChanged();
+                        mLlytUserComment.setVisibility(View.VISIBLE);
+                        mTvUserCommentNum.setText("用户评论(" + mCommentNum + ")");
+                        if(labelEntityList != null)
+                        {
+                            userCommentAdapter.setLabelList(labelEntityList);
+                        }
+                        if (commentList != null)
+                        {
+                            scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
+                            scenicSpotDetailUserCommentAdapter.notifyDataSetChanged();
+                        }
+                        userCommentAdapter.notifyDataSetChanged();
 
-                    if (commentList != null) {
-                        scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
-                        scenicSpotDetailUserCommentAdapter.notifyDataSetChanged();
+                    } else {
+                        mLlytUserComment.setVisibility(View.GONE);
                     }
+
                     //banner
                     List<String> bannerList = mchDetailsEntity.getRecommendPhoto();
 
@@ -499,6 +548,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         }
                     });
 
+                    List<MchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
                     if (tagsEntityList != null) {
 
                         mTagFlowlayoutScenicSpotLabel.setAdapter(new TagAdapter<MchDetailsResponse.TagsEntity>(tagsEntityList) {
@@ -518,14 +568,28 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvScenicSpotLocation.setText(address);
                     mTvOpeningHours.setText(mchDetailsEntity.getOpenTime());
                     mTvMchRanking.setText(mchDetailsEntity.getMchRanking());
-                    mTvQuestionNum.setText(String.valueOf(mchQuestionEntity.getQuestionCount()) + "个问题>");
-                    String questionContent = mchQuestionEntity.getQuestionContent();
-                    if(!TextUtils.isEmpty(questionContent))
-                    {
-                        mTvQuestionContent.setText(questionContent);
-                    }
+                    int mQuestionCount = mchQuestionEntity.getQuestionCount();
 
-                    mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
+
+                    if(mQuestionCount > 0)
+                    {
+
+                        mLlytAnswerAndQuestion.setVisibility(View.VISIBLE);
+
+                        mTvQuestionNum.setText(String.valueOf(mQuestionCount) + "个问题>");
+
+                        String questionContent = mchQuestionEntity.getQuestionContent();
+                        if(!TextUtils.isEmpty(questionContent))
+                        {
+                            mTvQuestionContent.setText(questionContent);
+                        }
+
+                        mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
+
+                    } else {
+                        mLlytAnswerAndQuestion.setVisibility(View.GONE);
+
+                    }
 
                     List<MchDetailsResponse.VisitGuideEntity> visitGuideList = mchDetailsResponse.getVisitGuide();
                     if (visitGuideList != null) {
@@ -585,6 +649,37 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     }
 
     @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    MchCollectionResponse mchCollectionResponse = res.getData();
+                    collectionStatus = mchCollectionResponse.getCollectionStatus();
+
+                    if(collectionStatus == 0)
+                    {
+                        mImgCollection.setImageResource(R.mipmap.icon_white_collection);
+
+
+                    } else if(collectionStatus == 1){
+
+                        mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(ScenicSpotDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(ScenicSpotDetailActivity.this, Constants.getResultMsg(msg));
@@ -603,12 +698,16 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-            mImgCollection.setImageResource(R.mipmap.icon_black_fine_food_collection);
+            if(collectionStatus == 0) {
+                mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            }
             mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
             mImgScenicSpotForward.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_share));
             if (y <= 100) {
                 mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-                mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_fine_food_collection));
+                if(collectionStatus == 0) {
+                    mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
+                }
                 mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
                 mImgScenicSpotForward.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_share));
                 mRlytScenicSpostsDetail.getBackground().setAlpha(255);
@@ -618,7 +717,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     }
 
     @OnClick({R.id.ibtn_back, R.id.rlyt_scenic_spots_ranking_list, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.rlyt_view_more_tour_guide,
-            R.id.tv_question_num, R.id.tv_look_all_scenic_spot_info})
+            R.id.tv_question_num, R.id.tv_look_all_scenic_spot_info,R.id.tv_scenic_spot_nearby,R.id.tv_look_user_all_comment,R.id.img_collection})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -629,13 +728,14 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 String mchTypeScenic = MchTypeEnum.MCH_SCENIC.getValue();
                 String mchTypeRecreation = MchTypeEnum.MCH_RECREATION.getValue();
 
-                if(mchType.equals(mchTypeScenic))
-                {
-                    toActivity(ScenicSpotBangDanListActivity.class);
+                if(mchType != null) {
 
-                } else if(mchType.equals(mchTypeRecreation))
-                {
-                    toActivity(RecreationBangDanListActivity.class);
+                    if (mchType.equals(mchTypeScenic)) {
+                        toActivity(ScenicSpotBangDanListActivity.class);
+
+                    } else if (mchType.equals(mchTypeRecreation)) {
+                        toActivity(RecreationBangDanListActivity.class);
+                    }
                 }
 
                 break;
@@ -693,6 +793,38 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 }
 
                 break;
+            case R.id.tv_scenic_spot_nearby:
+                if (mPosition == 0) {
+                    intent.setClass(ScenicSpotDetailActivity.this,NearbyHotelListActivity.class);
+                    intent.putExtra("longitude",longitude);
+                    intent.putExtra("latitude",latitude);
+                    startActivity(intent);
+                } else if (mPosition == 2) {
+                    intent.setClass(ScenicSpotDetailActivity.this,NearbyScenicSpotListActivity.class);
+                    intent.putExtra("longitude",longitude);
+                    intent.putExtra("latitude",latitude);
+                    startActivity(intent);
+                } else if (mPosition == 3) {
+
+                    intent.setClass(ScenicSpotDetailActivity.this,NearbyFoodListActivity.class);
+                    intent.putExtra("longitude",longitude);
+                    intent.putExtra("latitude",latitude);
+                    startActivity(intent);
+
+                }
+                break;
+            case R.id.tv_look_user_all_comment:
+
+                intent.setClass(ScenicSpotDetailActivity.this,MchCommentActivity.class);
+                startActivity(intent);
+
+                break;
+
+            case R.id.img_collection:
+
+                mchCollection();
+
+                break;
             default:
                 break;
 
@@ -737,8 +869,20 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         return contentView;
     }
 
+    //获取景点详情
     public void getMchDetails() {
 
         mPresenter.getMchDetails(mchId);
+    }
+
+    //商户收藏
+    public void mchCollection(){
+
+        if(validateInternet()) {
+            showProgressDialog(ScenicSpotDetailActivity.this);
+            MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
+            mchCollectionRequest.setDataId(mchId);
+            mPresenter.mchCollection(mchCollectionRequest);
+        }
     }
 }

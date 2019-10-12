@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
@@ -66,13 +68,22 @@ public class HotelBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ViewHolder holder1 = (ViewHolder) holder;
                 try {
                     MchTypeBean hotelResponse = hotelList.get(pos);
+                    int id = hotelResponse.getId();
+                    int dataId = hotelResponse.getDataId();
+                    String mchName = hotelResponse.getMchName();
+                    String dataName = hotelResponse.getDataName();
                     double commentScore = hotelResponse.getCommentScore();
                     String intro = hotelResponse.getIntro();
                     int level = hotelResponse.getLevel();
                     int commentNum = hotelResponse.getCommentNum();
                     int consumePrice = hotelResponse.getConsumePrice();
                     String photo = hotelResponse.getPhoto();
-                    holder1.mTvHotelName.setText(hotelResponse.getDataName());
+                    if(!TextUtils.isEmpty(mchName)){
+                        holder1.mTvHotelName.setText(mchName);
+                    } else {
+                        holder1.mTvHotelName.setText(dataName);
+                    }
+
                     holder1.mTvHotelReputationScore.setText(String.valueOf(commentScore));
                     if (intro != null) {
 
@@ -116,6 +127,7 @@ public class HotelBangDanListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                             Intent intent = new Intent();
                             intent.setClass(mContext, HotelDetailsActivity.class);
+                            intent.putExtra("mchId",id);
                             mContext.startActivity(intent);
                         }
                     });

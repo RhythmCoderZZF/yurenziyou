@@ -84,9 +84,6 @@ public class AskQuestionListFragment extends BaseFragment{
     @Override
     protected void initView(View v) {
 
-
-
-        // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity()) {
             @Override
             public RecyclerView.LayoutParams generateDefaultLayoutParams() {

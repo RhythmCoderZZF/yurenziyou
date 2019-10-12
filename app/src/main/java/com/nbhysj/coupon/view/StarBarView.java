@@ -156,11 +156,11 @@ public class StarBarView extends View {
         if (x > getMeasuredWidth()) x = getMeasuredWidth();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                // setStarMark(x * 1.0f / (getMeasuredWidth() * 1.0f / starCount));
+               //  setStarMark(x * 1.0f / (getMeasuredWidth() * 1.0f / starCount));
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                //  setStarMark(x * 1.0f / (getMeasuredWidth() * 1.0f / starCount));
+                 // setStarMark(x * 1.0f / (getMeasuredWidth() * 1.0f / starCount));
                 break;
             }
             case MotionEvent.ACTION_UP: {

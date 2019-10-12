@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools"
-    android:id="@+id/llyt_scenic_spot_nearby_item"
+    android:id="@+id/rlyt_scenic_spot_nearby_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_10"
@@ -23,7 +23,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_toRightOf="@+id/image_scenic_spots"
         android:orientation="vertical">
 
         <LinearLayout
@@ -128,4 +129,4 @@
     </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

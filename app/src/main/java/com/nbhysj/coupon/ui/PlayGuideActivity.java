@@ -16,6 +16,7 @@ import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -146,6 +147,11 @@ public class PlayGuideActivity extends BaseActivity<ScenicSpotPresenter, ScenicS
 
     @Override
     public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
 
     }
 

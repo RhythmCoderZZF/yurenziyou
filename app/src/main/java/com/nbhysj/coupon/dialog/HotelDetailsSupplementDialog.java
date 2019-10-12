@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,8 @@ import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
 import com.nbhysj.coupon.ui.HotelOrderActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
+import com.nbhysj.coupon.util.LogUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.HotelDetailSupplementBannerView;
 import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
@@ -113,8 +116,8 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
         String title = mchHotelGoodsBean.getTitle();
         double marketPrice = mchHotelGoodsBean.getMarketPrice();
         mTvHotelTitle.setText(title);
-        mTvPrice.setText(String.valueOf(marketPrice));
-        String goodsBuyNotes = mchHotelGoodsBean.getGoodsBuyNotes();
+        mTvPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
+        String roomDetailsH5Url = mchHotelGoodsBean.getRoomDetails();
 
         mRlytNewTourists.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +171,7 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
             }
         });
 
-        setWebView(goodsBuyNotes);
+        setWebView(roomDetailsH5Url);
 
     }
     public void setWebView(String url) {
@@ -202,9 +205,14 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-                view.loadUrl(url);
-
-                return true;
+                Uri uri = Uri.parse(url);
+                LogUtil.e("打印Scheme", uri.getScheme() + "==" + url);
+                if (!"http".equals(uri.getScheme()) || !"https".equals(uri.getScheme())) {
+                    return false;
+                } else {
+                    view.loadUrl(url);
+                    return false;
+                }
             }
 
             @Override

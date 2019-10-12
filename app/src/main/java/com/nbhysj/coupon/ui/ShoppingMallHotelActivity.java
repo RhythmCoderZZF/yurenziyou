@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -23,6 +24,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
@@ -146,7 +148,18 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallHotelActivity.this);
         scenicSpotClassificationLinearLayout.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvScenicSpotClassification.setLayoutManager(scenicSpotClassificationLinearLayout);
-        scenicSpotClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHotelActivity.this, MchTypeEnum.MCH_HOTEL.getValue());
+        scenicSpotClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHotelActivity.this, MchTypeEnum.MCH_HOTEL.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
+            @Override
+            public void setMchRankingClassificationListener(int cateId, String photoUrl) {
+
+                Intent intent = new Intent();
+                intent.putExtra("cateId",cateId);
+                intent.putExtra("photoUrl",photoUrl);
+                intent.putExtra("sortStr",mSortStr);
+                intent.setClass(mContext, HotelCateListActivity.class);
+                startActivity(intent);
+            }
+        });
         scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
         mRvScenicSpotClassification.setAdapter(scenicSpotClassificationAdapter);
 
@@ -305,6 +318,11 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
 
     @Override
     public void getHotelHomestayOrderInitResult(BackResult<HotelOrderInitResponse> res) {
+
+    }
+
+    @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
 
     }
 

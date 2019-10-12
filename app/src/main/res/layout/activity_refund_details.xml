@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.RefundDetailsActivity"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar"></include>
@@ -32,13 +33,14 @@
             android:text="退款入账"
             android:textColor="@color/color_text_black7"
             android:textSize="@dimen/text_size_xmedium"
+            android:layout_marginRight="@dimen/dp_5"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/tv_accounting_channel"
+            android:id="@+id/tv_payment_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="（支付宝）"
+            android:text=""
             android:textColor="@color/color_text_black7"
             android:textSize="@dimen/text_size_xmedium"
             android:textStyle="bold"/>
@@ -46,10 +48,10 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_payment_date"
+        android:id="@+id/tv_account_later_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="（预计最晚2019-05-20日到账"
+        android:text=""
         android:textColor="@color/color_text_gray35"
         android:textSize="@dimen/text_size_small"
         android:layout_marginLeft="@dimen/dp_15"
@@ -80,6 +82,7 @@
        />
 
     <TextView
+        android:id="@+id/tv_refund_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="¥0.00"
@@ -89,7 +92,7 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/dp_15"
-        android:textStyle="bold"/>
+      />
 
    </RelativeLayout>
 
@@ -108,9 +111,10 @@
          />
 
         <TextView
+            android:id="@+id/tv_account_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="支付宝支付账户"
+            android:text=""
             android:textColor="@color/color_text_black7"
             android:textSize="@dimen/text_size_xnormal"
             android:layout_centerVertical="true"
@@ -126,6 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_14">
         <TextView
+            android:id="@+id/tv_transaction_no_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退款流水号"
@@ -133,19 +138,22 @@
             android:textSize="@dimen/text_size_xnormal"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_15"
-            android:textStyle="bold"/>
+          />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_transaction_no"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="¥0.00"
+            android:text=""
             android:textColor="@color/color_text_black7"
+            android:layout_toRightOf="@+id/tv_transaction_no_tag"
             android:textSize="@dimen/text_size_xnormal"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_alignParentRight="true"
+            android:gravity="right"
             android:layout_marginRight="@dimen/dp_15"
-            android:textStyle="bold"/>
+          />
 
     </RelativeLayout>
 
@@ -160,20 +168,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_19">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_refund_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
 
         <ImageView
+            android:id="@+id/img_refund_success_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_refund_success_tag"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_10"/>
+            android:layout_marginRight="@dimen/dp_10"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
@@ -188,18 +200,22 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_30"
             android:layout_marginRight="@dimen/dp_30"
-            android:layout_marginTop="@dimen/dp_19"
-            android:text="预计支付宝会在1日内处理完成，详细进度可使用交易号"/>
+            android:layout_marginTop="@dimen/dp_18"
+            android:textColor="@color/color_text_gray17"
+            android:textSize="@dimen/text_size_small"
+            android:text=""/>
+
 
         <TextView
+            android:id="@+id/tv_customer_service_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_stroke_radius_five_light_gray_shape"
             android:text="联系客服"
-            android:paddingLeft="@dimen/dp_40"
-            android:paddingRight="@dimen/dp_40"
-            android:paddingTop="@dimen/dp_10"
-            android:paddingBottom="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_45"
+            android:paddingRight="@dimen/dp_45"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_43"
             android:drawableLeft="@mipmap/icon_phone_tag"
             android:drawablePadding="@dimen/dp_10"

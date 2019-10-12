@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -24,10 +25,12 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
 
     List<UserOrderListResponse.MchsEntity> mchsEntityList;
     private Context mContext;
+    private OrderOnclickListener orderOnclickListener;
 
-    public MyOrderTicketListAdapter(Context mContext) {
+    public MyOrderTicketListAdapter(Context mContext,OrderOnclickListener orderOnclickListener) {
 
         this.mContext = mContext;
+        this.orderOnclickListener = orderOnclickListener;
     }
 
     public void setMchsEntityList(List<UserOrderListResponse.MchsEntity> mchsEntityList) {
@@ -75,6 +78,15 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
                 }
             });
 
+            holder.mLlytMyOrderItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    orderOnclickListener.setLookMyOrderDetailListener();
+
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,6 +121,8 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
         //订单评价
         TextView mTvOrderToComment;
 
+        LinearLayout mLlytMyOrderItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -121,11 +135,12 @@ public class MyOrderTicketListAdapter extends RecyclerView.Adapter<MyOrderTicket
             mTvMchName = itemView.findViewById(R.id.tv_mch_name);
             mTvAddress = itemView.findViewById(R.id.tv_address);
             mTvOrderToComment = itemView.findViewById(R.id.tv_order_to_comment);
+            mLlytMyOrderItem = itemView.findViewById(R.id.llyt_my_order_item);
         }
     }
 
     public interface OrderOnclickListener{
 
-        void setOrderOnclickListener();
+        void setLookMyOrderDetailListener();
     }
 }

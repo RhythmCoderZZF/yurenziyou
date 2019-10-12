@@ -41,6 +41,7 @@
             android:singleLine="true"
             android:textColor="@color/color_text_black7"
             android:textColorHint="@color/color_text_gray30"
+            android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:hint="@string/str_where_are_you_going"
             android:textSize="@dimen/text_size_normal"
             android:background="@null"

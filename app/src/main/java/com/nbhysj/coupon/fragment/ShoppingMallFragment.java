@@ -43,6 +43,7 @@ import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.GroupMchListActivity;
+import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
 import com.nbhysj.coupon.ui.ShoppingMallFineFoodActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHomestayActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHotelActivity;
@@ -392,7 +393,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 } else if (position == 5) {
                     toActivity(ShoppingMallInteractionActivity.class);  //互动
                 } else if (position == 6) {
-                    toActivity(GroupMchListActivity.class);
+                    toActivity(GroupMchListActivity.class);          //组合
                 } else if (position == 7) {                              //用车
 
                     // toActivity(IntroductionOfLandlordActivity.class);
@@ -409,7 +410,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         shopMallIndexSmallBannerAdapter = new ShopMallIndexSmallBannerAdapter(getActivity());
         shopMallIndexSmallBannerAdapter.setShopMallIndexSmallBannerList(shopMallIndexSmallList);
         mRvShoppingMallSmallBanner.setAdapter(shopMallIndexSmallBannerAdapter);
-
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getActivity());
         linearLayoutManager1.setOrientation(linearLayoutManager1.HORIZONTAL);
@@ -557,10 +557,12 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     mHotelAdapter.setHotelList(hotelList);
                     mHotelAdapter.notifyDataSetChanged();
 
-                    //目的地
-                    mchCities = res.getData().getMchCities();
-                    scenicSpotClassificationAdapter.setScenicSpotMchCitiesDestinationList(mchCities);
-                    scenicSpotClassificationAdapter.notifyDataSetChanged();
+                    if(mchCities != null) {
+                        //目的地
+                        mchCities = res.getData().getMchCities();
+                        scenicSpotClassificationAdapter.setScenicSpotMchCitiesDestinationList(mchCities);
+                        scenicSpotClassificationAdapter.notifyDataSetChanged();
+                    }
 
                     //旅行主题
                     List<ShopMallHomePageResponse.TravelBannersEntity> travelBannersList = res.getData().getTravelBanners();
@@ -600,9 +602,12 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     mTvTravelThemeFiveDes.setText(travelThemeFive.getIntro());
 
                     //自由行
-                    groupGoodsList = res.getData().getGroupGoodsVO();
-                    independentTravelAdapter.setIndependentTravelList(groupGoodsList);
-                    independentTravelAdapter.notifyDataSetChanged();
+                    if(groupGoodsList != null)
+                    {
+                        groupGoodsList = res.getData().getGroupGoodsVO();
+                        independentTravelAdapter.setIndependentTravelList(groupGoodsList);
+                        independentTravelAdapter.notifyDataSetChanged();
+                    }
 
                     //猜你喜欢
                     guessEntityList = res.getData().getGuess();
@@ -645,7 +650,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 break;
             case R.id.tv_view_more_popular_scenic_spots:
 
-                toActivity(ShoppingMallScreeningActivity.class);
+                toActivity(ScenicSpotBangDanListActivity.class);
 
                 break;
             case R.id.tv_view_more_delicious_food:

@@ -6,12 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.HotelListActivity">
-
-    <View
-        android:id="@+id/toolbar_space"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"></View>
+   >
 
     <include layout="@layout/layout_header"></include>
 
@@ -26,22 +21,37 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         app:srlAccentColor="#00000000"
-        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableHeaderTranslationContent="true"
         app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
 
-        <com.scwang.smartrefresh.header.MaterialHeader
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_hotels_near_scenic_spots"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"></android.support.v7.widget.RecyclerView>
+
+        <include
+            layout="@layout/layout_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+          ></include>
+
+        </RelativeLayout>
 
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"

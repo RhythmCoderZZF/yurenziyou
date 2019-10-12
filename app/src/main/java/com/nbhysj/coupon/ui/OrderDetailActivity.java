@@ -1,6 +1,8 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,7 @@ import com.nbhysj.coupon.adapter.OrderDetailProblemAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailVehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
+import com.nbhysj.coupon.common.Enum.OrderDetailStatusEnum;
 import com.nbhysj.coupon.contract.OrderDetailContract;
 import com.nbhysj.coupon.dialog.OrderPriceDetailsDialog;
 import com.nbhysj.coupon.dialog.OrderVerificationCodeDialog;
@@ -39,6 +43,8 @@ import com.nbhysj.coupon.model.OrderDetailModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderDetailGuessBean;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
+import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.presenter.OrderDetailPresenter;
 import com.nbhysj.coupon.widget.MyViewPager;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -61,9 +67,23 @@ import butterknife.OnClick;
 public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, OrderDetailModel> implements OrderDetailContract.View {
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
+    //订单详情头部背景
+    @BindView(R.id.rlyt_header_bg_order_detail)
+    RelativeLayout mRlytHeaderBgOrderDetail;
+    //订单状态背景
+    @BindView(R.id.llyt_order_status)
+    LinearLayout mLlytOrderStatus;
+    //订单状态背景三角
+    @BindView(R.id.img_order_status_triangle)
+    ImageView mImgOrderStatusTriangle;
+
+    //订单支付
+    @BindView(R.id.tv_go_order_payment)
+    TextView mTvOrderPayment;
+
     //评价
-    @BindView(R.id.tv_evaluate)
-    TextView mTvEvaluate;
+    @BindView(R.id.tv_order_evaluate)
+    TextView mTvOrderEvaluate;
     //再次预定
     @BindView(R.id.tv_rebook_goods)
     TextView mTvRebookGoods;
@@ -110,10 +130,9 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
 
     @BindView(R.id.tv_explain)
     TextView mTvExplain;
-
     //总金额
-    @BindView(R.id.tv_total_fee)
-    TextView mTvTotalFee;
+    @BindView(R.id.tv_actual_payment_fee)
+    TextView mTvActualPaymentFee;
     //二维码订单号
     @BindView(R.id.tv_qr_order_no)
     TextView mTvQROrderNo;
@@ -156,10 +175,17 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
     //商品总金额
     @BindView(R.id.tv_goods_total_price)
     TextView mTvGoodsTotalPrice;
+    //推荐预定
+    @BindView(R.id.llyt_order_recommended_book_goods)
+    LinearLayout mLlytOrderRecommendBookGoods;
 
     //申请全部退款
     @BindView(R.id.tv_apply_for_all_order_refund)
     TextView mTvApplyForAllOrderRefund;
+
+    //发票明细
+    @BindView(R.id.tv_invoice_detail)
+    TextView mTvInvoiceDetail;
 
     private String tel;
 
@@ -209,11 +235,19 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
     private int dataId;
 
     //商户类型
-    private String goodType;
+    private String goodsType;
 
     OrderDetailResponse orderDetailResponse;
 
     HotelQuestionAndAnswerAdapter hotelQuestionAndAnswerAdapter;
+
+    //商品标题
+    private String goodsTitle;
+
+    //实付金额
+    private String payFee;
+
+    private final int PARTIAL_APPLY_For_REfUND_REQUEST_CODE = 0;
 
     @Override
     public int getLayoutId() {
@@ -282,8 +316,9 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
         } else {
             answerList.clear();
         }
-        mTvEvaluate.getBackground().setAlpha(20);
+        mTvOrderEvaluate.getBackground().setAlpha(20);
         mTvRebookGoods.getBackground().setAlpha(20);
+        mTvOrderPayment.getBackground().setAlpha(20);
 
         mRvCommonProblem.setHasFixedSize(true);
         mRvCommonProblem.setLayoutManager(new GridLayoutManager(mContext, 3));
@@ -291,9 +326,6 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
         orderDetailProblemAdapter.setOrderDetailProblemList(problemList);
         mRvCommonProblem.setAdapter(orderDetailProblemAdapter);
 
-   /*     List<String> questionList = new ArrayList<>();
-        questionList.add("隔音如何，晚上安静吗，睡觉会不会被影...");
-        questionList.add("基础设施如何?");*/
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(OrderDetailActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRvHotelQuestionAndAnswers.setLayoutManager(linearLayoutManager);
@@ -309,6 +341,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
         gussYouLikeAdapter.setGuessYouLikeList(guessYouLikeList);
         mRvGuessYouLike.setAdapter(gussYouLikeAdapter);
         mRvGuessYouLike.addItemDecoration(new RecyclerItemDecoration(20, 2));
+
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
@@ -379,7 +412,17 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
         LinearLayoutManager linearLayout = new LinearLayoutManager(mContext);
         linearLayout.setOrientation(linearLayout.VERTICAL);
         mRvPackageDetails.setLayoutManager(linearLayout);
-        goodMealDetailAdapter = new GoodsMealDetailAdapter(OrderDetailActivity.this);
+        goodMealDetailAdapter = new GoodsMealDetailAdapter(OrderDetailActivity.this, new GoodsMealDetailAdapter.PartialApplyForRefundListener() {
+            @Override
+            public void setPartialApplyForRefundListener(int orderGoodsId, String goodsType) {
+
+                Intent intent = new Intent();
+                intent.setClass(mContext, PartialApplyForRefundActivity.class);
+                intent.putExtra("orderGoodsId", orderGoodsId);
+                intent.putExtra("goodsType", goodsType);
+                startActivityForResult(intent, PARTIAL_APPLY_For_REfUND_REQUEST_CODE);
+            }
+        });
         goodMealDetailAdapter.setOrderMealList(orderGoodsList);
         mRvPackageDetails.setAdapter(goodMealDetailAdapter);
 
@@ -388,7 +431,17 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
         LinearLayoutManager orderDetailVehicleLinearLayout = new LinearLayoutManager(mContext);
         orderDetailVehicleLinearLayout.setOrientation(LinearLayoutManager.VERTICAL);
         mRvVehicleUse.setLayoutManager(orderDetailVehicleLinearLayout);
-        orderDetailVehicleUseAdapter = new OrderDetailVehicleUseAdapter();
+        orderDetailVehicleUseAdapter = new OrderDetailVehicleUseAdapter(OrderDetailActivity.this, new OrderDetailVehicleUseAdapter.PartialApplyForRefundListener() {
+            @Override
+            public void setPartialApplyForRefundListener(int orderGoodsId, String goodsType) {
+
+                Intent intent = new Intent();
+                intent.setClass(mContext, PartialApplyForRefundActivity.class);
+                intent.putExtra("orderGoodsId", orderGoodsId);
+                intent.putExtra("goodsType", goodsType);
+                startActivityForResult(intent, PARTIAL_APPLY_For_REfUND_REQUEST_CODE);
+            }
+        });
         orderDetailVehicleUseAdapter.setVehicleUseList(orderCarList);
         mRvVehicleUse.setAdapter(orderDetailVehicleUseAdapter);
 
@@ -447,8 +500,9 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
     }
 
     @OnClick({R.id.image_qr_code, R.id.tv_price_details, R.id.iv_back, R.id.tv_view_more, R.id.tv_contact_businessmen,
-            R.id.tv_rebook_goods, R.id.tv_apply_for_all_order_refund})
+            R.id.tv_rebook_goods, R.id.tv_apply_for_all_order_refund, R.id.tv_go_order_payment, R.id.tv_order_evaluate})
     public void onClick(View view) {
+        Intent mIntent = new Intent();
         switch (view.getId()) {
             case R.id.image_qr_code:
 
@@ -491,25 +545,85 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                 }
                 break;
             case R.id.tv_rebook_goods:
-                Intent mIntent = new Intent();
-                mIntent.putExtra("mchId", dataId);
-                if (goodType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {  //景点
+                String goodsTypeTicket = GoodsTypeEnum.GOODS_TICKET.getValue();
+                String goodsTypeHotel = GoodsTypeEnum.MCH_HOTEL1.getValue();
+                String goodsTypeHotelHomestay = GoodsTypeEnum.MCH_HOTEL2.getValue();
+                String goodsTypeRecreation = GoodsTypeEnum.GOODS_RECREATION.getValue();
+                String goodsTypeGroup = GoodsTypeEnum.GROUP_GOODS.getValue();
+
+                if (goodsType.equals(goodsTypeTicket)) {  //景点
 
                     mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    mIntent.putExtra("mchId", dataId);
                     mContext.startActivity(mIntent);
 
-                } else if (goodType.equals(GoodsTypeEnum.getEnumByKey(4).getValue())) { //组合
+                } else if (goodsType.equals(goodsTypeRecreation)) {  //互动
+
+                    mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    mIntent.putExtra("mchId", dataId);
+                    mContext.startActivity(mIntent);
+
+                } else if (goodsType.equals(goodsTypeGroup)) { //组合
 
                     mIntent.setClass(mContext, GroupMchDetailsActivity.class);
+                    mIntent.putExtra("packageId", dataId);
                     mContext.startActivity(mIntent);
+
+                } else if (goodsType.equals(goodsTypeHotel)) {  //酒店
+
+                    mIntent.setClass(mContext, HotelDetailsActivity.class);
+                    mIntent.putExtra("mchId", dataId);
+                    mContext.startActivity(mIntent);
+
+                }else if (goodsType.equals(goodsTypeHotelHomestay)) {  //民宿
+
+                    mIntent.setClass(mContext, HomestayDetailActivity.class);
+                    mIntent.putExtra("mchId", dataId);
+                    mContext.startActivity(mIntent);
+
                 }
 
                 break;
             case R.id.tv_apply_for_all_order_refund:
 
+                mIntent.setClass(OrderDetailActivity.this, AllRefundApplyActivity.class);
+                startActivity(mIntent);
+                break;
+            case R.id.tv_go_order_payment:
+
                 Intent intent = new Intent();
-                intent.setClass(OrderDetailActivity.this, AllRefundApplyActivity.class);
+
+                intent.setClass(OrderDetailActivity.this, OrderPaymentActivity.class);
+                intent.putExtra("price", payFee);
+                intent.putExtra("title", goodsTitle);
+                intent.putExtra("payExprireTime", 0);
+                intent.putExtra("orderNo", orderNo);
                 startActivity(intent);
+
+                break;
+            case R.id.tv_order_evaluate:
+                if (!TextUtils.isEmpty(goodsType)) {
+                    String mchGroupType = GoodsTypeEnum.GROUP_GOODS.getValue();
+                    if (goodsType.equals(mchGroupType))
+                    {
+                        mIntent.setClass(OrderDetailActivity.this, OrderGroupEvaluateActivity.class);
+                        mIntent.putExtra("orderNo", orderNo);
+                        mContext.startActivity(mIntent);
+                    } else {
+
+                        if (orderGoodsList != null && orderGoodsList.size() > 0) {
+
+                            OrderDetailResponse.OrderGoodsEntity goodsEntity = orderGoodsList.get(0);
+                            if (goodsEntity != null) {
+                                int orderGoodsId = goodsEntity.getOrderGoodsId();
+                                mIntent.setClass(OrderDetailActivity.this, OrderEvaluateActivity.class);
+                                mIntent.putExtra("orderGoodsId", orderGoodsId);
+                                startActivityForResult(mIntent, 0);
+                            }
+                        }
+                    }
+                }
+
                 break;
             default:
                 break;
@@ -530,132 +644,201 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                 try {
 
                     orderDetailResponse = res.getData();
-                    String moneySum = orderDetailResponse.getMoneySum();
-                    int goodsSum = orderDetailResponse.getGoodSum();
-                    tel = orderDetailResponse.getTel();
-                    int delAllOrderRefundStatus = orderDetailResponse.getDelAllStatus();
-                    mTvGoodsTotalNum.setText(String.valueOf(goodsSum));
-                    mTvGoodsTotalPrice.setText(moneySum);
+                    if (orderDetailResponse != null) {
+                        goodsTitle = orderDetailResponse.getTitle();
+                        String moneySum = orderDetailResponse.getMoneySum();
+                        int goodsSum = orderDetailResponse.getGoodSum();
+                        tel = orderDetailResponse.getTel();
+                        int delAllOrderRefundStatus = orderDetailResponse.getDelAllStatus();
+                        mTvGoodsTotalNum.setText(String.valueOf(goodsSum));
 
-                    if (delAllOrderRefundStatus == 0) {
-                        mTvApplyForAllOrderRefund.setVisibility(View.GONE);
-                    }
-                    if (delAllOrderRefundStatus == 1) {
-                        mTvApplyForAllOrderRefund.setVisibility(View.VISIBLE);
-                    }
+                        //   mTvGoodsTotalPrice.setText(moneySum);
 
-                    String orderStatus = orderDetailResponse.getOrderStatus();
-                    OrderDetailResponse.OrderEntity orderEntity = orderDetailResponse.getOrder();
-                    //商品列表
-                    orderGoodsList = orderDetailResponse.getOrderGoods();
-                    if (orderGoodsList != null) {
-
-                        goodMealDetailAdapter.setOrderMealList(orderGoodsList);
-                        goodMealDetailAdapter.notifyDataSetChanged();
-                    }
-                    FragmentPagerAdapter adapter = new OrderDetailScenicFragmentManager(getSupportFragmentManager(), orderGoodsList);
-                    mViewPagerScenicSpot.setAdapter(adapter);
-                    mViewPagerScenicSpot.setOffscreenPageLimit(2);
-                    mViewPagerScenicSpot.setOnPageChangeListener(new MyPageChangeListener());
-                    mLlytDotView.removeAllViews();
-                    dotViewsList.clear();
-                    for (int i = 0; i < orderGoodsList.size(); i++) {
-
-                        ImageView dotView = new ImageView(OrderDetailActivity.this);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                        params.leftMargin = 4;
-                        params.rightMargin = 4;
-                        if (i == 0) {
-                            dotView.setBackgroundResource(R.mipmap.icon_point_select);
-                        } else {
-                            dotView.setBackgroundResource(R.mipmap.icon_point_unselect);
+                        if (delAllOrderRefundStatus == 0) {
+                            mTvApplyForAllOrderRefund.setVisibility(View.GONE);
                         }
-                        mLlytDotView.addView(dotView, params);
-                        dotViewsList.add(dotView);
-                    }
+                        if (delAllOrderRefundStatus == 1) {
+                            mTvApplyForAllOrderRefund.setVisibility(View.VISIBLE);
+                        }
 
-                    String orderNo = orderEntity.getOrderNo();
-                    dataId = orderEntity.getDataId();
-                    String explain = orderEntity.getExplain();
-                    String totalFee = orderEntity.getTotalFee();  //总金额
-                    String payFee = orderEntity.getPayFee();   //在线支付金额
-                    String discountFee = orderEntity.getDiscountFee(); //折扣金额
-                    String code = orderEntity.getCode();
+                        String orderStatus = orderDetailResponse.getOrderStatus();
+                        OrderDetailResponse.OrderEntity orderEntity = orderDetailResponse.getOrder();
+                        //商品列表
+                        orderGoodsList = orderDetailResponse.getOrderGoods();
+                        if (orderGoodsList != null) {
 
-                    goodType = orderEntity.getGoodType();
+                            goodMealDetailAdapter.setOrderMealList(orderGoodsList);
+                            goodMealDetailAdapter.notifyDataSetChanged();
+                        }
+                        FragmentPagerAdapter adapter = new OrderDetailScenicFragmentManager(getSupportFragmentManager(), orderGoodsList);
+                        mViewPagerScenicSpot.setAdapter(adapter);
+                        mViewPagerScenicSpot.setOffscreenPageLimit(2);
+                        mViewPagerScenicSpot.setOnPageChangeListener(new MyPageChangeListener());
+                        mLlytDotView.removeAllViews();
+                        dotViewsList.clear();
+                        for (int i = 0; i < orderGoodsList.size(); i++) {
 
-                    mTvOrderStatus.setText(orderStatus);
-                    mTvOrderNo.setText("订单号 " + orderNo);
-                    mTvExplain.setText(explain);
-                    mTvQROrderNo.setText(code);
-                    mTvTotalFee.setText(payFee);  //在线总支付
-                    int goodSum = orderDetailResponse.getGoodSum();
-                    String goodsTime = orderDetailResponse.getGoodsTime();
-                    mTvGoodsValidNum.setText(goodSum + "件商品可用");
-                    mTvGoodsTime.setText(goodsTime + "到期");
+                            ImageView dotView = new ImageView(OrderDetailActivity.this);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                    FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                            params.leftMargin = 4;
+                            params.rightMargin = 4;
+                            if (i == 0) {
+                                dotView.setBackgroundResource(R.mipmap.icon_point_select);
+                            } else {
+                                dotView.setBackgroundResource(R.mipmap.icon_point_unselect);
+                            }
+                            mLlytDotView.addView(dotView, params);
+                            dotViewsList.add(dotView);
+                        }
 
-                    //订单用户
-                    OrderDetailResponse.OrderUserEntity orderUserEntity = orderDetailResponse.getOrderUser();
-                    String realName = orderUserEntity.getRealname();
-                    String mobile = orderUserEntity.getMobile();
+                        String orderNo = orderEntity.getOrderNo();
+                        dataId = orderEntity.getDataId();
+                        String explain = orderEntity.getExplain();
+                        String totalFee = orderEntity.getTotalFee();  //总金额
+                        payFee = orderEntity.getPayFee();   //在线支付金额
+                        String discountFee = orderEntity.getDiscountFee(); //折扣金额
+                        String code = orderEntity.getCode();
 
-                    if (goodType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
-                        mTvContacts.setText("联系人");
+                        goodsType = orderEntity.getGoodType();
 
-                    } else if (goodType.equals(GoodsTypeEnum.getEnumByKey(2).getValue())) {
-                        mTvContacts.setText("入住人");
-                    }
+                        mTvOrderStatus.setText(orderStatus);
+                        mTvOrderNo.setText("订单号 " + orderNo);
+                        mTvExplain.setText(explain);
+                        mTvQROrderNo.setText(code);
+                        mTvActualPaymentFee.setText(payFee);   //在线支付金额
+                        mTvGoodsTotalPrice.setText(totalFee);  //总金额
+                        String orderSuccessFulTradeValue = OrderDetailStatusEnum.ORDER_SUCCESSFUL_TRADE.getValue();
+                        String orderPendingPaymentValue = OrderDetailStatusEnum.ORDER_PENDING_PAYMENT.getValue();
+                        String orderPaymentTimeoutValue = OrderDetailStatusEnum.ORDER_PAYMENT_TIMEOUT.getValue();
+                        String orderTradeCancelValue = OrderDetailStatusEnum.ORDER_PAYMENT_CANCEL.getValue();
+                        if (!TextUtils.isEmpty(orderStatus)) {
 
-                    mTvContactsName.setText(realName);
-                    mTvContactsPhone.setText(mobile);
+                            if (orderStatus.equals(orderSuccessFulTradeValue)) {  //交易成功
 
-                    //发票抬头信息
-                    OrderDetailResponse.OrderInvoiceEntity orderInvoiceEntity = orderDetailResponse.getOrderInvoice();
-                    if (orderInvoiceEntity != null) {
-                        mLlytOrderInvoice.setVisibility(View.VISIBLE);
-                        String title = orderInvoiceEntity.getTitle();
-                        String invoiceNo = orderInvoiceEntity.getNo();
-                        mTvInvoicePayable.setText(title);
-                        mTvTaxpayerIdentificationNumber.setText(invoiceNo);
-                    } else {
-                        mLlytOrderInvoice.setVisibility(View.GONE);
-                    }
+                                mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_green_my_order_detail);
+                                mToolbarSpace.setBackgroundResource(R.drawable.bg_gradient_green_my_order_detail);
+                                mLlytOrderStatus.setBackgroundResource(R.drawable.bg_gradient_green_my_order_detail);
+                                mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_green);
 
-                    //可能遇到的问题
-                    List<OrderDetailResponse.AnswerEntity> answerList = orderDetailResponse.getAnswer();
-                    answerList = null;
-                    if (answerList != null && answerList.size() > 0) {
+                                mTvRebookGoods.setVisibility(View.VISIBLE);
+                                mTvOrderEvaluate.setVisibility(View.VISIBLE);
+                                mTvOrderPayment.setVisibility(View.GONE);
+                                mLlytOrderRecommendBookGoods.setVisibility(View.VISIBLE);
+
+                            } else if (orderStatus.equals(orderPendingPaymentValue)) {  //交易待支付
+
+                                mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_blue_my_order_detail);
+                                mToolbarSpace.setBackgroundResource(R.drawable.bg_gradient_blue_my_order_detail);
+                                mLlytOrderStatus.setBackgroundResource(R.drawable.bg_gradient_blue_my_order_detail);
+                                mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_blue);
+
+                                mTvRebookGoods.setVisibility(View.GONE);
+                                mTvOrderEvaluate.setVisibility(View.GONE);
+                                mTvOrderPayment.setVisibility(View.VISIBLE);
+                                mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
+
+                            } else if (orderStatus.equals(orderPaymentTimeoutValue)) {  //支付超时
+                                mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_red_my_order_detail);
+                                mToolbarSpace.setBackgroundResource(R.drawable.bg_gradient_red_my_order_detail);
+                                mLlytOrderStatus.setBackgroundResource(R.drawable.bg_gradient_red_my_order_detail);
+                                mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_red);
+
+                                mTvRebookGoods.setVisibility(View.VISIBLE);
+                                mTvOrderEvaluate.setVisibility(View.GONE);
+                                mTvOrderPayment.setVisibility(View.GONE);
+                                mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
+
+                            } else if (orderStatus.equals(orderTradeCancelValue)) {    //交易取消
+
+                                mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_yellow_my_order_detail);
+                                mToolbarSpace.setBackgroundResource(R.drawable.bg_gradient_yellow_my_order_detail);
+                                mLlytOrderStatus.setBackgroundResource(R.drawable.bg_gradient_yellow_my_order_detail);
+                                mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_yellow);
+
+                                mTvRebookGoods.setVisibility(View.VISIBLE);
+                                mTvOrderEvaluate.setVisibility(View.GONE);
+                                mTvOrderPayment.setVisibility(View.GONE);
+                                mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
+                            }
+                        }
+
+                        int goodSum = orderDetailResponse.getGoodSum();
+                        String goodsTime = orderDetailResponse.getGoodsTime();
+                        mTvGoodsValidNum.setText(goodSum + "件商品可用");
+                        mTvGoodsTime.setText(goodsTime + "到期");
+
+                        //订单用户
+                        OrderDetailResponse.OrderUserEntity orderUserEntity = orderDetailResponse.getOrderUser();
+                        String realName = orderUserEntity.getRealname();
+                        String mobile = orderUserEntity.getMobile();
+
+                        if (goodsType.equals(GoodsTypeEnum.getEnumByKey(0).getValue())) {
+                            mTvContacts.setText("联系人");
+
+                        } else if (goodsType.equals(GoodsTypeEnum.getEnumByKey(2).getValue())) {
+                            mTvContacts.setText("入住人");
+                        }
+
+                        mTvContactsName.setText(realName);
+                        mTvContactsPhone.setText(mobile);
+
+                        //发票抬头信息
+                        OrderDetailResponse.OrderInvoiceEntity orderInvoiceEntity = orderDetailResponse.getOrderInvoice();
+                        if (orderInvoiceEntity != null) {
+                            String title = orderInvoiceEntity.getTitle();
+                            if (!TextUtils.isEmpty(title)) {
+
+                                mLlytOrderInvoice.setVisibility(View.VISIBLE);
+                                String invoiceNo = orderInvoiceEntity.getNo();
+                                mTvInvoicePayable.setText(title);
+                                mTvTaxpayerIdentificationNumber.setText(invoiceNo);
+                            } else {
+
+                                mLlytOrderInvoice.setVisibility(View.GONE);
+                            }
+                        } else {
+                            mLlytOrderInvoice.setVisibility(View.GONE);
+                        }
+
+                        //可能遇到的问题
+                        List<OrderDetailResponse.AnswerEntity> answerList = orderDetailResponse.getAnswer();
+                        if (answerList != null && answerList.size() > 0) {
 
                             mLlytCommonProblem.setVisibility(View.VISIBLE);
                             orderDetailProblemAdapter.setOrderDetailProblemList(answerList);
                             orderDetailProblemAdapter.notifyDataSetChanged();
 
-                    } else {
-                        mLlytCommonProblem.setVisibility(View.GONE);
+                        } else {
+                            mLlytCommonProblem.setVisibility(View.GONE);
+                        }
+
+                        //问答
+                        List<OrderDetailResponse.AnswerEntity> notAnswerList = orderDetailResponse.getNotAnswer();
+                        if (notAnswerList != null && notAnswerList.size() > 0) {
+                            mLlytQuestionAndAnswer.setVisibility(View.VISIBLE);
+                            hotelQuestionAndAnswerAdapter.setQuestionContentList(notAnswerList);
+                            hotelQuestionAndAnswerAdapter.notifyDataSetChanged();
+
+                        } else {
+                            mLlytQuestionAndAnswer.setVisibility(View.GONE);
+                        }
+
+                        //用车列表
+                        orderCarList = orderDetailResponse.getOrderCar();
+                        if (orderCarList != null && orderCarList.size() > 0) {
+                            orderDetailVehicleUseAdapter.setVehicleUseList(orderCarList);
+                            orderDetailVehicleUseAdapter.notifyDataSetChanged();
+                        }
+
+                        //猜你喜欢
+                        guessYouLikeList = orderDetailResponse.getGuess();
+                        if (guessYouLikeList != null && guessYouLikeList.size() > 0) {
+                            gussYouLikeAdapter.setGuessYouLikeList(guessYouLikeList);
+                            gussYouLikeAdapter.notifyDataSetChanged();
+
+                        }
                     }
-
-                    //问答
-                    List<OrderDetailResponse.AnswerEntity> notAnswerList = orderDetailResponse.getNotAnswer();
-                    if (notAnswerList != null) {
-                        mLlytQuestionAndAnswer.setVisibility(View.VISIBLE);
-                        hotelQuestionAndAnswerAdapter.setQuestionContentList(notAnswerList);
-                        hotelQuestionAndAnswerAdapter.notifyDataSetChanged();
-
-                    } else {
-                        mLlytQuestionAndAnswer.setVisibility(View.GONE);
-                    }
-
-                    //用车列表
-                    orderCarList = orderDetailResponse.getOrderCar();
-                    orderDetailVehicleUseAdapter.setVehicleUseList(orderCarList);
-                    orderDetailVehicleUseAdapter.notifyDataSetChanged();
-
-                    //猜你喜欢
-                    guessYouLikeList = orderDetailResponse.getGuess();
-                    gussYouLikeAdapter.setGuessYouLikeList(guessYouLikeList);
-                    gussYouLikeAdapter.notifyDataSetChanged();
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -707,6 +890,22 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
 
             showProgressDialog(OrderDetailActivity.this);
             mPresenter.willingToRecommendScore(orderNo, hotelRecommendScore);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case PARTIAL_APPLY_For_REfUND_REQUEST_CODE:
+
+                if (resultCode == RESULT_OK) {
+
+
+                }
+                break;
+            default:
+                break;
         }
     }
 }

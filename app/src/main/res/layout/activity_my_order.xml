@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:src="@mipmap/nav_ico_back_black"
+            android:layout_marginLeft="@dimen/dp_10"
             android:padding="@dimen/dp_10"
          />
 
@@ -41,7 +42,8 @@
             android:textColor="@color/color_text_gray11"
             android:layout_marginRight="@dimen/dp_16"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <RelativeLayout

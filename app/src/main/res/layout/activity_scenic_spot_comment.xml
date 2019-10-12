@@ -8,12 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.ScenicSpotCommentActivity">
-
-    <View
-        android:id="@+id/toolbar_space"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"></View>
+    tools:context=".ui.MchCommentActivity">
 
     <include layout="@layout/layout_header"></include>
 

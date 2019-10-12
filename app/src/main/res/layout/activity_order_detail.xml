@@ -13,7 +13,6 @@
         android:id="@+id/llyt_order_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_gradient_green_my_order_detail"
         android:orientation="vertical">
 
         <View
@@ -22,6 +21,7 @@
             android:layout_height="0dp"></View>
 
         <RelativeLayout
+            android:id="@+id/rlyt_header_bg_order_detail"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50">
 
@@ -54,7 +54,8 @@
                 android:text="···"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"/>
         </RelativeLayout>
 
 
@@ -75,7 +76,6 @@
                 android:id="@+id/llyt_order_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_gradient_green_my_order_detail"
                 android:orientation="vertical">
 
                 <TextView
@@ -101,10 +101,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dp_17">
+                    android:layout_marginTop="@dimen/dp_17"
+                    >
 
                     <TextView
-                        android:id="@+id/tv_evaluate"
+                        android:id="@+id/tv_go_order_payment"
+                        android:layout_width="@dimen/dp_98"
+                        android:layout_height="@dimen/dp_34"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/bg_shape_my_order_detail_oprate"
+                        android:gravity="center"
+                        android:text="@string/str_go_order_payment"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_xnormal" />
+
+
+                    <TextView
+                        android:id="@+id/tv_order_evaluate"
                         android:layout_width="@dimen/dp_98"
                         android:layout_height="@dimen/dp_34"
                         android:layout_gravity="center_horizontal"
@@ -113,6 +126,7 @@
                         android:gravity="center"
                         android:text="@string/str_evaluate"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         android:textSize="@dimen/text_size_xnormal" />
 
                     <TextView
@@ -125,6 +139,7 @@
                         android:gravity="center"
                         android:text="@string/str_rebook"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         android:textSize="@dimen/text_size_xnormal" />
                 </LinearLayout>
 
@@ -149,7 +164,7 @@
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
                     android:layout_marginLeft="@dimen/dp_20"
-                    android:src="@drawable/shape_inverted_triangle_green" />
+                   />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -177,7 +192,7 @@
                         android:textSize="@dimen/text_size_large" />
 
                     <TextView
-                        android:id="@+id/tv_total_fee"
+                        android:id="@+id/tv_actual_payment_fee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -364,7 +379,7 @@
                     android:layout_height="match_parent"
                     android:alpha="0.11"
                     android:layout_toRightOf="@+id/tv_good_name"
-                    android:background="@color/color_text_gray6"></View>
+                    android:background="@color/color_text_gray38"></View>
 
                 <TextView
                     android:id="@+id/tv_ticket_already_used"
@@ -387,7 +402,7 @@
                     android:layout_height="match_parent"
                     android:alpha="0.25"
                     android:layout_toRightOf="@+id/tv_ticket_already_used"
-                    android:background="@color/color_text_gray6"></View>
+                    android:background="@color/color_text_gray38"></View>
 
                 <TextView
                     android:id="@+id/tv_ticket_remainder"
@@ -410,7 +425,7 @@
                     android:layout_height="match_parent"
                     android:alpha="0.25"
                     android:layout_toRightOf="@+id/tv_ticket_remainder"
-                    android:background="@color/color_text_gray6"></View>
+                    android:background="@color/color_text_gray38"></View>
 
                 <TextView
                     android:id="@+id/tv_amount_of_money"
@@ -568,7 +583,7 @@
                 android:layout_marginLeft="@dimen/dp_15"
                 android:layout_marginRight="@dimen/dp_15"
                 android:alpha="0.25"
-                android:background="@color/color_text_gray6"></View>
+                android:background="@color/line_bg"></View>
 
             <TextView
                 android:id="@+id/tv_apply_for_all_order_refund"
@@ -702,27 +717,13 @@
                                 android:textColor="@color/color_text_black3"
                                 android:textSize="@dimen/text_size_normal" />
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
                                 <TextView
+                                    android:id="@+id/tv_invoice_detail"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="订房费"
+                                    android:text=""
                                     android:textColor="@color/color_text_black3"
                                     android:textSize="@dimen/text_size_small" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/dp_20"
-                                    android:text="156元"
-                                    android:textColor="@color/color_text_black3"
-                                    android:textSize="@dimen/text_size_normal" />
-
-                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -846,12 +847,18 @@
                     android:layout_height="@dimen/dp_15"
                     android:background="@color/line_bg" />
 
+                <LinearLayout
+                    android:id="@+id/llyt_order_recommended_book_goods"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_18"
                     android:layout_marginTop="@dimen/dp_12"
-                    android:text="您愿意推荐他人使用鱼人自游预定酒店吗？"
+                    android:text="您愿意推荐他人使用鱼人自游预定吗？"
                     android:textColor="@color/txt_font_black2"
                     android:textSize="@dimen/text_size_small" />
 
@@ -870,7 +877,7 @@
                     style="@style/line"
                     android:layout_height="@dimen/dp_15"
                     android:background="@color/line_bg" />
-
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/llyt_question_and_answer"
                     android:layout_width="match_parent"

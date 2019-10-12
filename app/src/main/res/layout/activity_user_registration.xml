@@ -59,6 +59,7 @@
                 android:layout_marginBottom="@dimen/dp_15"
                 android:layout_toRightOf="@+id/img_account"
                 android:background="@null"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:gravity="center_vertical"
                 android:hint="@string/str_input_phone_number"
                 android:maxLines="1"
@@ -83,7 +84,7 @@
 
             <EditText
                 android:id="@+id/edt_verification_code"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_2"
@@ -93,6 +94,8 @@
                 android:maxLength="6"
                 android:inputType="number"
                 android:textColor="@color/color_text_gray"
+                android:layout_toLeftOf="@+id/tv_get_verification_code"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="@dimen/text_size_medium" />
 
             <TextView
@@ -128,36 +131,28 @@
 
             <EditText
                 android:id="@+id/edt_password"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_2"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="15dp"
                 android:background="@null"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:hint="密码长度6-20位"
                 android:textColor="@color/color_text_gray"
+                android:layout_toLeftOf="@+id/iv_see_password"
                 android:maxLength="20"
                 android:textSize="@dimen/text_size_medium" />
 
             <ImageView
-                android:id="@+id/iv_see_password"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_6"
+                android:id="@+id/img_password_is_invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/selector_password_bg"
-                android:visibility="invisible" />
-
-            <ToggleButton
-                android:id="@+id/btn_toggle_pwd"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_6"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@mipmap/icon_invisible_password"
-                android:padding="10dp"
+                android:src="@mipmap/icon_invisible_password"
                 android:textOff=""
+                android:padding="@dimen/dp_10"
                 android:textOn="" />
 
         </RelativeLayout>

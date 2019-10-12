@@ -1,5 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,20 +13,26 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.request.CarsBean;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
+import com.nbhysj.coupon.ui.PartialApplyForRefundActivity;
 import com.nbhysj.coupon.util.Tools;
 
 import java.util.List;
 
 /**
  * @author hysj created at 2019/08/19.
- * description:用车信息适配器
+ * description:订单用车信息适配器
  */
 public class OrderDetailVehicleUseAdapter extends RecyclerView.Adapter<OrderDetailVehicleUseAdapter.ViewHolder> {
 
     List<OrderDetailResponse.OrderCarEntity> carList;
 
-    public OrderDetailVehicleUseAdapter() {
+    private Context mContext;
 
+    private PartialApplyForRefundListener applyForRefundListener;
+    public OrderDetailVehicleUseAdapter(Context mContext,PartialApplyForRefundListener partialApplyForRefundListener) {
+
+        this.mContext = mContext;
+        this.applyForRefundListener = partialApplyForRefundListener;
     }
 
     public void setVehicleUseList(List<OrderDetailResponse.OrderCarEntity> carList) {
@@ -45,6 +53,8 @@ public class OrderDetailVehicleUseAdapter extends RecyclerView.Adapter<OrderDeta
 
         try {
             OrderDetailResponse.OrderCarEntity carsBean = carList.get(itemPosition);
+            int orderGoodsId = carsBean.getOrderId();
+            String goodsType = carsBean.getGoodsType();
             String departureTime = carsBean.getDepartureTime();
             String estimatePrice = carsBean.getEstimatePrice();
             String startAddressName = carsBean.getStartAddress();
@@ -61,7 +71,15 @@ public class OrderDetailVehicleUseAdapter extends RecyclerView.Adapter<OrderDeta
             if (TextUtils.isEmpty(isRefund) && TextUtils.isEmpty(cancelNote)) {   //可申请退款
                 holder.mTvApplyForRefund.setVisibility(View.VISIBLE);
                 holder.mTvTipsForTravel.setVisibility(View.GONE);
+
                 holder.mTvOrderVehicleStatus.setVisibility(View.GONE);
+                holder.mTvApplyForRefund.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        applyForRefundListener.setPartialApplyForRefundListener(orderGoodsId,goodsType);
+                    }
+                });
             } else if (TextUtils.isEmpty(isRefund) && !TextUtils.isEmpty(cancelNote)) {  //不可申请退款
                 holder.mTvOrderVehicleStatus.setVisibility(View.VISIBLE);
                 holder.mTvApplyForRefund.setVisibility(View.GONE);
@@ -73,6 +91,9 @@ public class OrderDetailVehicleUseAdapter extends RecyclerView.Adapter<OrderDeta
                 holder.mTvApplyForRefund.setVisibility(View.GONE);
                 holder.mTvTipsForTravel.setText(isRefund);
             }
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,5 +139,11 @@ public class OrderDetailVehicleUseAdapter extends RecyclerView.Adapter<OrderDeta
             mTvApplyForRefund = itemView.findViewById(R.id.tv_apply_for_refund);
             mTvOrderVehicleStatus = itemView.findViewById(R.id.tv_order_vehicle_status);
         }
+    }
+
+    //部分商品申请退款
+    public interface PartialApplyForRefundListener{
+
+        void setPartialApplyForRefundListener(int orderGoodsId,String goodsType);
     }
 }

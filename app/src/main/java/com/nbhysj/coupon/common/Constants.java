@@ -33,15 +33,19 @@ public class Constants {
     public static final String HOUSE_INFO_H5_TITEL = "房源详情";
     //更多设备
     public static final String All_FACILITY_H5_TITEL = "更多设备";
-    //更多设备
+    //攻略
     public static final String STRATEGY_H5_TITEL = "攻略";
-    //更多设备
+    //购买须知
     public static final String ORDER_PURCHASE_INSTRUCTIONS_H5_TITEL = "购买须知";
+    //订房必读
+    public static final String RESERVATION_MUST_BE_READ_H5_TITEL = "订房必读";
+    //设施详情
+    public static final String All_FACILITY_DETAIL_H5_TITEL = "设施详情";
 
     /**********************************************/
 
     /********************    支付code    ********************/
-    public static final String PAYMENT_SUCCESS_CODE_ALIPAY = "10000";
+    public static final String PAYMENT_SUCCESS_CODE_ALIPAY = "9000";
 
     public static final String PAYMENT_CANCEL_CODE_ALIPAY = "6001";
 
@@ -67,7 +71,7 @@ public class Constants {
 
         if (msg != null) {
 
-            if (msg.contains(CONNECT_TIMED_OUT) || msg.contains("failed to connect")) {
+            if (msg.contains(CONNECT_TIMED_OUT) || msg.toLowerCase().contains("failed to connect")) {
                 return "服务器连接超时";
 
             } else if (msg.contains("HTTP") && !msg.equals("HTTP 401 Unauthorized")) {   //404 502 500
