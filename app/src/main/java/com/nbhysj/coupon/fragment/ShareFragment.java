@@ -3,39 +3,61 @@ package com.nbhysj.coupon.fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.google.gson.JsonArray;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.FollowListAdapter;
 import com.nbhysj.coupon.adapter.ShareAdapter;
 import com.nbhysj.coupon.common.Constants;
-import com.nbhysj.coupon.contract.HomePageContract;
-import com.nbhysj.coupon.model.HomePageModel;
+import com.nbhysj.coupon.contract.MineContract;
+import com.nbhysj.coupon.model.MineModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.BannerUrlBO;
-import com.nbhysj.coupon.model.response.FollowDetailBean;
-import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
-import com.nbhysj.coupon.model.response.HomePageResponse;
-import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
-import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
-import com.nbhysj.coupon.model.response.ShareResponse;
-import com.nbhysj.coupon.presenter.HomePagePresenter;
+import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
+import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
+import com.nbhysj.coupon.model.response.MinePostZanListResponse;
+import com.nbhysj.coupon.model.response.MyPostShareBean;
+import com.nbhysj.coupon.model.response.MyPostShareResponse;
+import com.nbhysj.coupon.presenter.MinePresenter;
+import com.nbhysj.coupon.view.MyRecycleView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import okhttp3.MediaType;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
+
+import static com.alibaba.fastjson.util.IOUtils.UTF8;
 
 /**
  * @auther：hysj created on 2019/04/14
  * description：分享
  */
-public class ShareFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
+public class ShareFragment extends BaseFragment<MinePresenter, MineModel> implements MineContract.View {
 
     @BindView(R.id.rv_share)
     RecyclerView mRvShare;
 
-    private List<ShareResponse> shareList;
+    //暂无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
+    private List<MyPostShareResponse> myPostShareList;
     private ShareAdapter shareAdapter;
+
+    private boolean visibleToUser;
 
     @Override
     public int getLayoutId() {
@@ -50,61 +72,23 @@ public class ShareFragment extends BaseFragment<HomePagePresenter, HomePageModel
 
     @Override
     public void initView(View v) {
-
+        EventBus.getDefault().register(this);
         //getHomeAttention();
-        if (shareList == null) {
+        if (myPostShareList == null) {
 
-            shareList = new ArrayList<>();
+            myPostShareList = new ArrayList<>();
         } else {
-            shareList.clear();
+            myPostShareList.clear();
         }
 
-        ShareResponse share = new ShareResponse();
-        List<ShareResponse.ShareEntity> shareEntityList = new ArrayList<>();
-
-        ShareResponse.ShareEntity shareResponse = new ShareResponse().new ShareEntity();
-        ShareResponse.ShareEntity shareResponse1 = new ShareResponse().new ShareEntity();
-        ShareResponse.ShareEntity shareResponse2 = new ShareResponse().new ShareEntity();
-        List<String> image = new ArrayList<>();
-        image.add("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
-        image.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        List<String> image1 = new ArrayList<>();
-        image1.add("http://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/lvpics/w=1000/sign=a669f57d3a12b31bc76cc929b628377a/503d269759ee3d6d801feef140166d224f4ade2b.jpg");
-        List<String> image2 = new ArrayList<>();
-        image2.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        image2.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        image2.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        image2.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        image2.add("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-        shareResponse.setTitle("四明湖红杉林");
-        shareResponse.setContent("宁波沙发啥双方都委曲求全");
-        shareResponse.setImageList(image);
-
-        shareResponse1.setTitle("四明湖红杉林1");
-        shareResponse1.setContent("宁波沙发啥双方都委曲求全1");
-        shareResponse1.setImageList(image1);
-
-        shareResponse2.setTitle("四明湖红杉林2");
-        shareResponse2.setContent("宁波沙发啥双方都委曲求全2");
-        shareResponse2.setImageList(image2);
-
-        shareEntityList.add(shareResponse);
-        shareEntityList.add(shareResponse1);
-        shareEntityList.add(shareResponse2);
-
-        share.setShareList(shareEntityList);
-        share.setTime(121213131L);
-
-
-        shareList.add(share);
-
+        getMyPostShareList();
         // 创建一个线性布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         // 设置布局管理器
         mRvShare.setLayoutManager(layoutManager);
 
         shareAdapter = new ShareAdapter(getActivity());
-        shareAdapter.setShareList(shareList);
+        shareAdapter.setShareList(myPostShareList);
         mRvShare.setAdapter(shareAdapter);
     }
 
@@ -114,56 +98,62 @@ public class ShareFragment extends BaseFragment<HomePagePresenter, HomePageModel
     }
 
     @Override
-    public void getHomePageIndexResult(BackResult<HomePageResponse> res) {
+    public void getMinePostZanListResult(BackResult<MinePostZanListResponse> res) {
 
     }
 
     @Override
-    public void queryByTopicResult(BackResult<HomePageResponse> res) {
-
-    }
-
-    @Override
-    public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
-
-    }
-
-    @Override
-    public void postOprateResult(BackResult res) {
-
-    }
-
-    @Override
-    public void postsCommentResult(BackResult res) {
-
-    }
-
-    @Override
-    public void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res) {
-
-    }
-
-    @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
-
-    }
-
-    @Override
-    public void getHomeAttentionResult(BackResult<HomePageResponse> res) {
-        switch (res.getCode()) {
+    public void getMyPostShareListResult(ResponseBody response) {
+        String json = getResponseBody(response);
+        JSONObject jsonObject = JSONObject.parseObject(json);
+        int code = jsonObject.getInteger("code");
+        String msg = jsonObject.getString("msg");
+        switch (code) {
             case Constants.SUCCESS_CODE:
                 try {
 
-                    System.out.print(res);
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    String JSONStr = JSON.toJSONString(data);
+                    myPostShareList = JSON.parseObject(JSONStr,new TypeReference<List<MyPostShareResponse>>(){});
+
+                    if(myPostShareList != null)
+                    {
+                        mRlytNoData.setVisibility(View.GONE);
+                        shareAdapter.setShareList(myPostShareList);
+                        shareAdapter.notifyDataSetChanged();
+                    } else {
+
+                        mRlytNoData.setVisibility(View.VISIBLE);
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             default:
-                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                showToast(getActivity(), Constants.getResultMsg(msg));
                 break;
         }
+    }
+
+    @Override
+    public void getMineCollectionAllListResult(BackResult<List<MineCollectionAllResponse>> res) {
+
+    }
+
+    @Override
+    public void getMineCollectionDetailResult(BackResult<MineCollectionDetailResponse> res) {
+
+    }
+
+    @Override
+    public void collectionMchBatchDeleteContentResult(BackResult res) {
+
+    }
+
+    @Override
+    public void collectionPostsBatchDeleteResult(BackResult res) {
+
     }
 
     @Override
@@ -173,16 +163,65 @@ public class ShareFragment extends BaseFragment<HomePagePresenter, HomePageModel
         showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
-    public void getHomeAttention() {
+    public void getMyPostShareList() {
 
         if (validateInternet()) {
 
-            mPresenter.getHomeAttention(1, 10);
+            mPresenter.getMyPostShareList();
         }
     }
 
     @Override
     public void lazyInitView(View view) {
 
+    }
+
+    public static String getResponseBody(ResponseBody responseBody) {
+
+        BufferedSource source = responseBody.source();
+        try {
+            source.request(Long.MAX_VALUE); // Buffer the entire body.
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Buffer buffer = source.buffer();
+
+        Charset charset = UTF8;
+        MediaType contentType = responseBody.contentType();
+        if (contentType != null) {
+            try {
+                charset = contentType.charset(UTF8);
+            } catch (UnsupportedCharsetException e) {
+                e.printStackTrace();
+            }
+        }
+        return buffer.clone().readString(charset);
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        visibleToUser = isVisibleToUser;
+    }
+
+    @Subscribe
+    public void onEvent(String mineFragmentRefresh) {
+
+        if(visibleToUser)
+        {
+            if(mineFragmentRefresh.equals("mineFragmentRefresh"))
+            {
+                myPostShareList.clear();
+                shareAdapter.notifyDataSetChanged();
+                getMyPostShareList();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -14,7 +14,7 @@ public class AppRegister extends BroadcastReceiver {
 		final IWXAPI msgApi = WXAPIFactory.createWXAPI(context, null);
 
 		// 将该app注册到微信
-		boolean registerApp = msgApi.registerApp(Constants.APP_ID);
+		boolean registerApp = msgApi.registerApp(PayConstants.APP_ID);
 		System.out.print(registerApp);
 	}
 }

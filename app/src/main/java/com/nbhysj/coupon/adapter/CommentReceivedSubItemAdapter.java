@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
+import com.nbhysj.coupon.model.response.CommentSubBean;
+import com.nbhysj.coupon.model.response.CommentUserEntity;
+import com.nbhysj.coupon.model.response.PostsCommentResponse;
+import com.nbhysj.coupon.util.DateUtil;
 
 import java.util.List;
 
@@ -24,9 +28,9 @@ import butterknife.ButterKnife;
 public class CommentReceivedSubItemAdapter extends RecyclerView.Adapter<CommentReceivedSubItemAdapter.ViewHolder> {
 
     /**
-     * 图片列表数据
+     * 评论子级列表
      */
-    private List<CommentReceiveResponse.CommentEntity> commentSubList;
+    private List<CommentSubBean> commentSubList;
 
     private Context mContext;
 
@@ -36,7 +40,7 @@ public class CommentReceivedSubItemAdapter extends RecyclerView.Adapter<CommentR
         this.mContext = mContext;
     }
 
-    public void setCommentReceivedSubItemList(List<CommentReceiveResponse.CommentEntity> commentSubList) {
+    public void setCommentReceivedSubItemList(List<CommentSubBean> commentSubList) {
 
         this.commentSubList = commentSubList;
     }
@@ -54,11 +58,13 @@ public class CommentReceivedSubItemAdapter extends RecyclerView.Adapter<CommentR
     public void onBindViewHolder(ViewHolder holder, final int position) {
         try {
 
-            CommentReceiveResponse.CommentEntity commentEntity = commentSubList.get(position);
-            String comment = commentEntity.getComment();
-            boolean isMyComment = commentEntity.isMyComment();
+            CommentSubBean commentEntity = commentSubList.get(position);
+            CommentUserEntity commentUserEntity = commentEntity.getUser();
+            String nickName = commentUserEntity.getNickname();
+            String content = commentEntity.getContent();
+            holder.mTvCommentAuthorNickName.setText(nickName + ":");
+            holder.mTvCommentContent.setText(content);
 
-            holder.mTvCommentContent.setText(comment);
 
             if (commentSubList.size() - 1 == position) {
                 holder.mLineView.setVisibility(View.GONE);
@@ -76,7 +82,9 @@ public class CommentReceivedSubItemAdapter extends RecyclerView.Adapter<CommentR
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
+        //评论者名称
+        @BindView(R.id.tv_author_nickname)
+        TextView mTvCommentAuthorNickName;
         //评论内容
         @BindView(R.id.tv_comment_content)
         TextView mTvCommentContent;

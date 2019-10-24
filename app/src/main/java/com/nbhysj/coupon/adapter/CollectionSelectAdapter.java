@@ -43,6 +43,6 @@ public class CollectionSelectAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titleTagList.get(position).getTagName() + "." + titleTagList.get(position).getNum();
+        return titleTagList.get(position).getTagName();
     }
 }

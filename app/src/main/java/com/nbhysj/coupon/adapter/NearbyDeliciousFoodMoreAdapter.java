@@ -14,6 +14,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.GroupMchDetailsActivity;
 import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.HotelDetailsActivity;
@@ -81,13 +82,11 @@ public class NearbyDeliciousFoodMoreAdapter extends RecyclerView.Adapter<NearbyD
                         @Override
                         public View getView(FlowLayout parent, int position, MchTypeBean.TagsEntity tagsEntity) {
                             TextView tagName = null;
-                            if(position < 2) {
 
                                 LayoutInflater mInflater = LayoutInflater.from(mContext);
                                  tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_interaction,
                                         holder.mTagFlowlayoutDeliciousFoodLabel, false);
                                 tagName.setText(tagsEntity.getTitle());
-                            }
                             return tagName;
 
                         }
@@ -108,7 +107,7 @@ public class NearbyDeliciousFoodMoreAdapter extends RecyclerView.Adapter<NearbyD
                     String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
                    if (mchType.equals(mchFood)) {
 
-                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.setClass(mContext, FoodDetailActivity.class);
                         intent.putExtra("mchId", mchId);
                         mContext.startActivity(intent);
 

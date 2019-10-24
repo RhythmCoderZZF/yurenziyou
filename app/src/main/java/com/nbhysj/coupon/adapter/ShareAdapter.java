@@ -3,16 +3,16 @@ package com.nbhysj.coupon.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.ShareResponse;
-import com.nbhysj.coupon.view.GlideImageView;
-
+import com.nbhysj.coupon.model.response.MyPostShareBean;
+import com.nbhysj.coupon.model.response.MyPostShareResponse;
+import com.nbhysj.coupon.view.MyRecycleView;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
 
 
-    List<ShareResponse> shareList;
+    List<MyPostShareResponse> myPostShareList;
     private Context mContext;
 
     public ShareAdapter(Context mContext) {
@@ -31,9 +31,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         this.mContext = mContext;
     }
 
-    public void setShareList(List<ShareResponse> shareList) {
+    public void setShareList(List<MyPostShareResponse> myPostShareList) {
 
-        this.shareList = shareList;
+        this.myPostShareList = myPostShareList;
     }
 
     @Override
@@ -49,14 +49,28 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         try {
 
-            List<ShareResponse.ShareEntity> shareEntityList = shareList.get(itemPosition).getShareList();
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-            holder.mRvShare.setLayoutManager(linearLayoutManager);
-            SubShareAdapter shareAdapter = new SubShareAdapter(mContext);
-            shareAdapter.setShareList(shareEntityList);
-            holder.mRvShare.setAdapter(shareAdapter);
+            MyPostShareResponse myPostShareBean = myPostShareList.get(itemPosition);
+            List<MyPostShareBean> myPostShareList = myPostShareBean.getMyPosts();
 
+            String year = myPostShareBean.getYear();
+            if(!TextUtils.isEmpty(year))
+            {
+                holder.mTvShareYear.setText(year + "年");
+            }
 
+            if(myPostShareList != null)
+            {
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+                holder.mRvPostShare.setLayoutManager(linearLayoutManager);
+                SubShareAdapter subShareAdapter = new SubShareAdapter(mContext, new SubShareAdapter.SubShareListener() {
+                    @Override
+                    public void setSubShareListener(int mPostId) {
+
+                    }
+                });
+                subShareAdapter.setPostShareList(myPostShareList);
+                holder.mRvPostShare.setAdapter(subShareAdapter);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,13 +78,17 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return shareList.size();
+        return myPostShareList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        //分享的年份
+        @BindView(R.id.tv_share_year)
+        TextView mTvShareYear;
+
         @BindView(R.id.rv_share)
-        RecyclerView mRvShare;
+        MyRecycleView mRvPostShare;
 
         public ViewHolder(View itemView) {
             super(itemView);

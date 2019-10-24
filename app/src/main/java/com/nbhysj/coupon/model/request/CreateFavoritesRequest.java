@@ -13,7 +13,7 @@ public class CreateFavoritesRequest {
     private String intro;
 
     //他人是否可见 1可见 0不可见
-    private String visibleStatus;
+    private int visibleStatus;
 
     public String getTitle() {
         return title;
@@ -31,11 +31,11 @@ public class CreateFavoritesRequest {
         this.intro = intro;
     }
 
-    public String getVisibleStatus() {
+    public int getVisibleStatus() {
         return visibleStatus;
     }
 
-    public void setVisibleStatus(String visibleStatus) {
+    public void setVisibleStatus(int visibleStatus) {
         this.visibleStatus = visibleStatus;
     }
 }

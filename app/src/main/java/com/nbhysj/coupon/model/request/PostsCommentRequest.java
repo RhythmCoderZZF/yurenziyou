@@ -1,16 +1,17 @@
 package com.nbhysj.coupon.model.request;
 
 /**
- * @auther：hysj created on 2019/8/12
+ * @auther：hysj created on 2019/10/14
  * description：帖子评论
  */
 public class PostsCommentRequest {
 
+    private String content;
+
     //帖子id
     private int articleId;
 
-    //评论内容
-    private String content;
+    private int authorId;
 
     //评论id,0为评论帖子
     private int pid;
@@ -38,4 +39,13 @@ public class PostsCommentRequest {
     public int getPid() {
         return pid;
     }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
 }

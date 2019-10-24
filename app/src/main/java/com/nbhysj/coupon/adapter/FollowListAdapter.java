@@ -23,20 +23,13 @@ import com.nbhysj.coupon.model.response.PostCommentBean;
 import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
 import com.nbhysj.coupon.model.response.TopicsBean;
 import com.nbhysj.coupon.model.response.ZanAvatersBean;
-import com.nbhysj.coupon.ui.FoodRecommendationActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
-import com.nbhysj.coupon.view.GlideImageView;
-import com.nbhysj.coupon.view.MyBannerView;
-import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
-import com.nbhysj.coupon.view.SlideShowView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

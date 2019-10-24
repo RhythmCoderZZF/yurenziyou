@@ -30,6 +30,11 @@ public class UserInfoPresenter extends UserInfoContract.Presenter {
     }
 
     @Override
+    public void getMyCard(int userId) {
+        mRxManager.add(mModel.getMyCard(userId).subscribe(res -> mView.getMyCardResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

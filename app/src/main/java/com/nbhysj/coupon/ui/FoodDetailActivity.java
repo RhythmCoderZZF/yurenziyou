@@ -22,27 +22,25 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FoodNearbyMoreAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
+import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.adapter.ShopRecommendDeliciousFoodAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.FineFoodModel;
+import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
-import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodBean;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
-import com.nbhysj.coupon.model.response.MchGoodsBean;
-import com.nbhysj.coupon.model.response.NearbyTypeResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.FineFoodPresenter;
@@ -151,16 +149,18 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     private UserCommentAdapter userCommentLabelAdapter;
     //附近商户
     private  FoodNearbyMoreAdapter foodNearbyMoreAdapter;
-    private ScenicSpotDetailUserCommentAdapter userCommentAdapter;
+    private MchCommentAdapter userCommentAdapter;
     //商户名
     private int mchId;
     private String address;
     //商户名
     private String mchName;
+
     //纬度
-    String latitude;
+    private String mLatitude;
+
     //经度
-    String longitude;
+    private String mLongitude;
 
     //收藏状态
     private int collectionStatus;
@@ -172,7 +172,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         StatusBarCompat.translucentStatusBar(this, false);
         //修改状态栏字体颜色
         StatusBarUtil.setImmersiveStatusBar(this, true);
-        return R.layout.activity_food_recommendation;
+        return R.layout.activity_food_detail;
     }
 
     @Override
@@ -247,7 +247,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(FoodDetailActivity.this);
         userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
         mRvUserComment.setLayoutManager(userCommentLayoutManager);
-        userCommentAdapter = new ScenicSpotDetailUserCommentAdapter(FoodDetailActivity.this);
+        userCommentAdapter = new MchCommentAdapter(FoodDetailActivity.this);
         userCommentAdapter.setScenicSpotsUserCommentList(userCommentList);
         mRvUserComment.setAdapter(userCommentAdapter);
 
@@ -323,6 +323,9 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                     float commentScore = mchDetailsEntity.getCommentScore();
                     double consumePrice = mchDetailsEntity.getConsumePrice();
                     int mchCommentNum = mchDetailsEntity.getCommentNum();
+
+                    mLatitude = mchDetailsEntity.getLatitude();
+                    mLongitude = mchDetailsEntity.getLongitude();
 
                     mTvMchName.setText(mchName);
                     bannerList.add(photoUrl);
@@ -445,6 +448,11 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     }
 
     @Override
+    public void getGoodsFoodRecommendList(BackResult<FoodRecommendListResponse> res) {
+
+    }
+
+    @Override
     public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -457,10 +465,11 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                     if(collectionStatus == 0)
                     {
                         mImgCollection.setImageResource(R.mipmap.icon_white_collection);
-
+                        showToast(FoodDetailActivity.this,getResources().getString(R.string.str_collection_cancel));
 
                     } else if(collectionStatus == 1){
 
+                        showToast(FoodDetailActivity.this,getResources().getString(R.string.str_collection_success));
                         mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
 
                     }
@@ -513,8 +522,8 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         }
     }
 
-    @OnClick({R.id.ibtn_back, R.id.rlyt_mch_ranking, R.id.img_menu, R.id.tv_mch_address, R.id.img_scenic_spot_forward,R.id.tv_see_user_comment_all
-    })
+    @OnClick({R.id.ibtn_back, R.id.rlyt_mch_ranking, R.id.img_menu, R.id.tv_mch_address, R.id.img_scenic_spot_forward
+    ,R.id.tv_more_businesses_nearby, R.id.img_collection,R.id.tv_recommend_delicious_food_look_more,R.id.tv_look_user_all_comment})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -534,7 +543,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
 
                 bundle.putSerializable("mchDetailsEntity", mchDetailsEntity);
                 intent.putExtras(bundle);
-                intent.setClass(FoodDetailActivity.this, ScenicSpotsDetailLocationMapActivity.class);
+                intent.setClass(FoodDetailActivity.this, FoodDetailLocationMapActivity.class);
                 startActivity(intent);
                 break;
             case R.id.img_scenic_spot_forward:
@@ -557,6 +566,33 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
 
                 break;
 
+            case R.id.tv_more_businesses_nearby:
+
+                intent.setClass(FoodDetailActivity.this,NearbyFoodListActivity.class);
+                intent.putExtra("longitude",mLongitude);
+                intent.putExtra("latitude",mLatitude);
+                startActivity(intent);
+
+                break;
+            case R.id.img_collection:
+
+                mchCollection();
+
+                break;
+            case R.id.tv_recommend_delicious_food_look_more:
+
+                intent.setClass(FoodDetailActivity.this,FoodRecommendationListActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
+
+                break;
+            case R.id.tv_look_user_all_comment:
+
+                intent.setClass(FoodDetailActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
+
+                break;
             default:
                 break;
 
@@ -588,7 +624,47 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         View.OnClickListener menuItemOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Click " + ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+
+                String itemStr = ((TextView) v).getText().toString();
+                String backHomePage = getResources().getString(R.string.str_back_home_page);
+                String backMyCollection = getResources().getString(R.string.str_back_my_collection);
+                String backMyOrder = getResources().getString(R.string.str_back_my_order);
+                String backMyMessage = getResources().getString(R.string.str_back_my_message);
+
+                Intent intent = new Intent();
+                if(itemStr.equals(backHomePage))
+                {
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+                    //  EventBus.getDefault().post("backHomePage");
+
+                } else if(itemStr.equals(backMyCollection))
+                {
+                    //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
+                    //intent.putExtra("currentItem",3);
+
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+
+                    //  EventBus.getDefault().post("backMyCollection");
+
+                } else if(itemStr.equals(backMyOrder))
+                {
+                    intent.setClass(FoodDetailActivity.this, MyOrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                } else if(itemStr.equals(backMyMessage))
+                {
+                    intent.setClass(FoodDetailActivity.this, MessageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
@@ -628,8 +704,20 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         }
     }
 
+    //获取美食详情
     public void getMchFoodDetails() {
 
         mPresenter.getFoodDetail(mchId);
+    }
+
+    //商户收藏
+    public void mchCollection(){
+
+        if(validateInternet()) {
+            showProgressDialog(FoodDetailActivity.this);
+            MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
+            mchCollectionRequest.setDataId(mchId);
+            mPresenter.mchCollection(mchCollectionRequest);
+        }
     }
 }

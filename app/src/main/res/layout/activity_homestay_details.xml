@@ -1357,6 +1357,14 @@
                     android:src="@mipmap/icon_white_collection" />
 
                 <ImageView
+                    android:id="@+id/img_scenic_spot_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dp_10"
+                    android:src="@mipmap/icon_white_share" />
+
+                <ImageView
                     android:id="@+id/img_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

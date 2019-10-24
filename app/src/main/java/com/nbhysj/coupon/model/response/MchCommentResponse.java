@@ -10,7 +10,7 @@ public class MchCommentResponse {
 
     private ScoreEntity score;
 
-    private List<MchCommentEntity> comment;
+    private CommentEntity comment;
 
     private List<LabelEntity> label;
 
@@ -22,11 +22,11 @@ public class MchCommentResponse {
         this.score = score;
     }
 
-    public List<MchCommentEntity> getComment() {
+    public CommentEntity getComment() {
         return comment;
     }
 
-    public void setComment(List<MchCommentEntity> comment) {
+    public void setComment(CommentEntity comment) {
         this.comment = comment;
     }
 
@@ -42,11 +42,13 @@ public class MchCommentResponse {
 
         private int commentNum;
 
-        private int commentScore;
+        private float commentScore;
 
-        private int commentScore2;
+        private float commentScore1;
 
-        private int commentScore3;
+        private float commentScore2;
+
+        private float commentScore3;
 
         public int getCommentNum() {
             return commentNum;
@@ -56,28 +58,49 @@ public class MchCommentResponse {
             this.commentNum = commentNum;
         }
 
-        public int getCommentScore() {
+        public float getCommentScore() {
             return commentScore;
         }
 
-        public void setCommentScore(int commentScore) {
+        public void setCommentScore(float commentScore) {
             this.commentScore = commentScore;
         }
 
-        public int getCommentScore2() {
+        public float getCommentScore1() {
+            return commentScore1;
+        }
+
+        public void setCommentScore1(float commentScore1) {
+            this.commentScore1 = commentScore1;
+        }
+
+        public float getCommentScore2() {
             return commentScore2;
         }
 
-        public void setCommentScore2(int commentScore2) {
+        public void setCommentScore2(float commentScore2) {
             this.commentScore2 = commentScore2;
         }
 
-        public int getCommentScore3() {
+        public float getCommentScore3() {
             return commentScore3;
         }
 
-        public void setCommentScore3(int commentScore3) {
+        public void setCommentScore3(float commentScore3) {
             this.commentScore3 = commentScore3;
+        }
+    }
+
+    public class CommentEntity{
+
+        private List<MchCommentEntity> result;
+
+        public List<MchCommentEntity> getResult() {
+            return result;
+        }
+
+        public void setResult(List<MchCommentEntity> result) {
+            this.result = result;
         }
     }
 }

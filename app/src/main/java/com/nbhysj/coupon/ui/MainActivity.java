@@ -42,7 +42,6 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.fragment.CameraFragment;
 import com.nbhysj.coupon.fragment.HomeFragment;
 import com.nbhysj.coupon.fragment.MineFragment;
-import com.nbhysj.coupon.fragment.MineTestFragment;
 import com.nbhysj.coupon.fragment.ShoppingMallFragment;
 import com.nbhysj.coupon.fragment.TravelAssistantFragment;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
@@ -50,6 +49,7 @@ import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.BottomNavigationViewHelper;
 import com.umeng.socialize.UMShareAPI;
+
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -64,11 +64,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private FragmentTransaction ft;
     private Fragment CURRENT_FRAGMENT;
     private List<Fragment> fragments;
-    private Fragment fragment;
-    private long exitTime = 0;
     /* @BindView(R.id.llyt_main)
      LinearLayout mLlytMain;*/
-    private TextView mTvCount;
     private int NOTIFI_ID = 1007;
     //Jpush注册id
     private String uid;
@@ -85,7 +82,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         house(R.id.navigation_house, ShoppingMallFragment.class),
         camera(R.id.navigation_camera, CameraFragment.class),
         footprint(R.id.navigation_footprint, TravelAssistantFragment.class),
-        mine(R.id.navigation_mine, MineTestFragment.class),
+        mine(R.id.navigation_mine, MineFragment.class),
         ;
 
         private Fragment fragment;
@@ -153,6 +150,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     public void initView() {
 
+       int currentItem = getIntent().getIntExtra("currentItem",0);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -165,7 +163,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         fragments.add(new ShoppingMallFragment());
         fragments.add(new CameraFragment());
         fragments.add(new TravelAssistantFragment());
-        fragments.add(new MineTestFragment());
+        fragments.add(new MineFragment());
         //  msgListCountResult();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -189,6 +187,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                     Manifest.permission.RECORD_AUDIO};
             ActivityCompat.requestPermissions(this, mPermissionList, 123);
         }
+      //  EventBus.getDefault().register(this);
+
     }
 
     @Override
@@ -632,4 +632,17 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
     };
 
+   /* @Subscribe
+    public void onEvent(String oprate) {
+
+         if(oprate.equals("backHomePage"))
+         {
+             goFragment(0);
+             navigation.setSelectedItemId(TabFragment.values()[0].menuId);
+         } else if(oprate.equals("backMyCollection"))
+         {
+             goFragment(4);
+             navigation.setSelectedItemId(TabFragment.values()[4].menuId);
+         }
+    }*/
 }

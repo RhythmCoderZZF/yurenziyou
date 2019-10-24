@@ -53,6 +53,7 @@
     <color name="btn_alert_press">#e74c3c</color>
     <color name="tab_unchecked">#757575</color>
     <color name="color_red">#FF0000</color>
+    <color name="color_red2">#FE2C4A</color>
     <color name="color_green">#FF52C41A</color>
     <color name="color_light_orange">#1AFA8C16</color>
     <color name="drop_down_selected">#FA8C16</color>

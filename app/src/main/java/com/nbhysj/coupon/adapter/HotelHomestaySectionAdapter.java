@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
-import com.nbhysj.coupon.ui.FoodRecommendationActivity;
 import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 

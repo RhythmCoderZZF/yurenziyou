@@ -43,7 +43,10 @@ public class OrderDetailResponse implements Serializable{
     private List<OrderGoodsEntity> orderGoods;
 
     //0//全部退款 0不可退 1可退
-    private int delAllStatus;
+    private int canRefundAllStatus;
+
+    //commentStatus 1可评论 0不可评论
+    private int commentStatus;
 
     public String getTitle() {
         return title;
@@ -165,12 +168,20 @@ public class OrderDetailResponse implements Serializable{
         this.tel = tel;
     }
 
-    public int getDelAllStatus() {
-        return delAllStatus;
+    public int getCanRefundAllStatus() {
+        return canRefundAllStatus;
     }
 
-    public void setDelAllStatus(int delAllStatus) {
-        this.delAllStatus = delAllStatus;
+    public void setCanRefundAllStatus(int canRefundAllStatus) {
+        this.canRefundAllStatus = canRefundAllStatus;
+    }
+
+    public int getCommentStatus() {
+        return commentStatus;
+    }
+
+    public void setCommentStatus(int commentStatus) {
+        this.commentStatus = commentStatus;
     }
 
     public class AnswerEntity implements Serializable{

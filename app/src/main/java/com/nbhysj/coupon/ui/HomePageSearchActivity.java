@@ -9,6 +9,8 @@ import android.view.View;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.fragment.HomeSearchComprehensiveFragment;
+import com.nbhysj.coupon.fragment.HomeSearchHotelFragment;
+import com.nbhysj.coupon.fragment.HomeSearchPostsFragment;
 import com.nbhysj.coupon.fragment.MyAllOrderListFragment;
 import com.nbhysj.coupon.fragment.MyOrderFragmentManager;
 import com.nbhysj.coupon.fragment.PendingCommentOrderListFragment;
@@ -57,8 +59,8 @@ public class HomePageSearchActivity extends BaseActivity {
         }
 
         fragmentList.add(new HomeSearchComprehensiveFragment());
-        fragmentList.add(new PendingPaymentListFragment());
-        fragmentList.add(new PendingTravelListFragment());
+        fragmentList.add(new HomeSearchPostsFragment());
+        fragmentList.add(new HomeSearchHotelFragment());
         fragmentList.add(new PendingCommentOrderListFragment());
         fragmentList.add(new RefundOrderListFragment());
         fragmentList.add(new PendingCommentOrderListFragment());

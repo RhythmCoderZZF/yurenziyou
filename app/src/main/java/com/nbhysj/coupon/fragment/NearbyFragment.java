@@ -22,13 +22,15 @@ import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
-import com.nbhysj.coupon.util.MapUtils;
 import com.nbhysj.coupon.widget.NearbyTabIndicator;
 
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     private AMapLocationClientOption locationOption = null;
     private String mLatitude = "";
     private String mLongitude = "";
+    private HomePageSubTopicTagBean mHomePageSubTopicTagBean;
 
     @Override
     public int getLayoutId() {
@@ -134,39 +137,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
         } else {
             nearbyCardList.clear();
         }
-
-     /*   List labelList3 = new ArrayList();
-        labelList3.add("春天在哪儿");
-        labelList3.add("网红餐厅");
-        labelList3.add("翁老板牛");
-        labelList3.add("翁老板");
-        labelList3.add("翁老板");
-        labelList3.add("亲子游");*/
-
-
-    /*    adapter = new NearbyFragmentManager(getChildFragmentManager());
-        mIndicator.setMyOnPageChangeListener(new MyIndicator.MyOnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-               // MyRecommendFragment.setTagId(position);
-                // ((MyFragmentManager) adapter).setData(smallTagList,recommendList);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
-
-
         mRecyclerView = (RecyclerView) v.findViewById(R.id.list);
-        //  List<CardBean> list = CardMaker.initCards();
         CardSetting setting = new CardSetting();
         setting.setSwipeListener(new OnSwipeCardListener<HomePageSubTopicTagBean>() {
             @Override
@@ -234,7 +205,13 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
         mReItemTouchHelper = new ReItemTouchHelper(helperCallback);
         CardLayoutManager layoutManager = new CardLayoutManager(mReItemTouchHelper, setting);
         mRecyclerView.setLayoutManager(layoutManager);
-        nearbyCardAdapter = new CardAdapter(getActivity());
+        nearbyCardAdapter = new CardAdapter(getActivity(), new CardAdapter.PostFollowListener() {
+            @Override
+            public void setPostFollowListener(HomePageSubTopicTagBean homePageSubTopicTagBean,int userId) {
+                mHomePageSubTopicTagBean = homePageSubTopicTagBean;
+                userFollow(userId);
+            }
+        });
         nearbyCardAdapter.setNearbyCardList(nearbyCardList);
         mRecyclerView.setAdapter(nearbyCardAdapter);
     }
@@ -305,6 +282,48 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @Override
     public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
 
+    }
+
+    @Override
+    public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
+    }
+
+    @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+        dismissProgressDialog();
+
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    FollowUserStatusResponse followStatusResponse = res.getData();
+                    int attentionStatus = followStatusResponse.getFollowStatus();
+
+                    if(attentionStatus == 0)
+                    {
+                        mHomePageSubTopicTagBean.setLove(false);
+
+                    } else if(attentionStatus == 1)
+                    {
+                        mHomePageSubTopicTagBean.setLove(true);
+                    }
+
+                    nearbyCardAdapter.setNearbyCardList(nearbyCardList);
+                    nearbyCardAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -492,5 +511,15 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @Override
     public void lazyInitView(View view) {
 
+    }
+
+
+    public void userFollow(int userId){
+
+        if(validateInternet()){
+
+            showProgressDialog(getActivity());
+            mPresenter.userFollow(userId);
+        }
     }
 }

@@ -15,11 +15,13 @@ import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CollectionTagResponse;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
-import com.nbhysj.coupon.model.response.ShareResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.widget.MyIndicator;
 
@@ -71,28 +73,22 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
         fragments = new ArrayList<>();
         List<CollectionTagResponse> tagList = new ArrayList<>();
         CollectionTagResponse share = new CollectionTagResponse();
-        share.setNum(12);
+       // share.setNum(12);
         share.setTagName("全部");
 
-        CollectionTagResponse travels = new CollectionTagResponse();
-        travels.setNum(3);
-        travels.setTagName("游记");
-
-        CollectionTagResponse tag = new CollectionTagResponse();
-        tag.setNum(10);
-        tag.setTagName("标签");
-
+     /*   CollectionTagResponse travels = new CollectionTagResponse();
+       // travels.setNum(3);
+        travels.setTagName("攻略");
+*/
         CollectionTagResponse album = new CollectionTagResponse();
-        album.setNum(5);
+       // album.setNum(5);
         album.setTagName("专辑");
 
         tagList.add(share);
-        tagList.add(travels);
-        tagList.add(tag);
+      //  tagList.add(travels);
         tagList.add(album);
         fragments.add(new MineCollectionAllFragment());
-        fragments.add(new MineCollectTravelsFragment());
-        fragments.add(new MineCollectTagFragment());
+        //fragments.add(new MineCollectTravelsFragment());
         fragments.add(new MineCollectAlbumFragment());
 
         collectionSelectAdapter = new CollectionSelectAdapter(getChildFragmentManager(), fragments, tagList);
@@ -100,6 +96,14 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
         mViewPagerCollection.setAdapter(collectionSelectAdapter);
         mViewPagerCollection.setCurrentItem(0, false);
         mIndicatorCollectionSelectOption.setViewPager(mViewPagerCollection);
+
+
+        mIndicatorCollectionSelectOption.setOnClickListenerCallbackListener(new MyIndicator.OnClickListenerCallbackListener() {
+            @Override
+            public void setOnClickListenerCallback(int position) {
+
+            }
+        });
 
     }
 
@@ -115,6 +119,11 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
 
     @Override
     public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
+
+    }
+
+    @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
 
     }
 
@@ -154,6 +163,16 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
     }
 
     @Override

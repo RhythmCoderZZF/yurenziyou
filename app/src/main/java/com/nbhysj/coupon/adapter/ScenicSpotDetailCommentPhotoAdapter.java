@@ -13,6 +13,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
+import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
@@ -50,13 +52,8 @@ public class ScenicSpotDetailCommentPhotoAdapter extends RecyclerView.Adapter<Sc
 
         try {
             String photoUrl = userCommentPhotoList.get(itemPosition);
-            RequestOptions myOptions = new RequestOptions()
-                    .transform(new GlideRoundTransform(mContext, 5));
 
-            Glide.with(mContext)
-                    .load(photoUrl)
-                    .apply(myOptions)
-                    .into(holder.mImgUserCommentPhoto);
+            GlideUtil.loadImage(mContext,photoUrl,holder.mImgUserCommentPhoto);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,7 +68,7 @@ public class ScenicSpotDetailCommentPhotoAdapter extends RecyclerView.Adapter<Sc
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //用户评论图片
-        ImageView mImgUserCommentPhoto;
+        RoundedImageView mImgUserCommentPhoto;
 
         public ViewHolder(View itemView) {
             super(itemView);

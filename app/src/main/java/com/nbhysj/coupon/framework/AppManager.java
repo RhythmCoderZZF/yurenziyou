@@ -2,9 +2,13 @@ package com.nbhysj.coupon.framework;
 
 import android.app.Activity;
 
+import com.nbhysj.coupon.ui.BaseActivity;
 import com.nbhysj.coupon.util.LogUtil;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -56,33 +60,31 @@ public class AppManager {
      */
     public void finishActivity() {
         Activity activity = activityStack.lastElement();
-        finishActivity(activity);
+        finishSingleActivity(activity);
     }
 
     /**
      * 结束指定的Activity
      */
-    public void finishActivity(Activity activity) {
+    public void finishSingleActivity(Activity activity) {
         if (activity != null) {
-            activityStack.remove(activity);
             activity.finish();
-            activity = null;
+            activityStack.remove(activity);
         }
     }
 
     /**
-     * 结束指定类名的Activity
+     * 结束指定的Activity
+     *
+     * @param activity
      */
-    public void finishActivity(Class<?> cls) {
-        try {
-            for (Activity activity : activityStack) {
-                if (activity.getClass().equals(cls)) {
-                    finishActivity(activity);
-                }
+    public void finishActivity(Activity activity) {
+
+        if (activity != null) {
+            if (activityStack != null && activityStack.contains(activity)) {// 兼容未使用AppManager管理的实例
+                activityStack.remove(activity);
             }
-        } catch (ConcurrentModificationException e) {
-            //捕获ConcurrentModificationException
-            LogUtil.e("", e.getMessage());
+            activity.finish();
         }
     }
 
@@ -97,6 +99,34 @@ public class AppManager {
         }
         activityStack.clear();
     }
+
+
+
+    /**
+     * 结束指定类名的Activity
+     *
+     * @param cls
+     */
+    public void finishActivity(Class<?> cls) {
+        List<Activity> removeList = new ArrayList<Activity>();
+        if (activityStack != null) {
+            for(int i= 0;i < activityStack.size();i++){
+                //如果字符串包含“1”，则 remove
+                Activity activity = activityStack.get(i);
+                if(!activity.getClass().equals(cls)){
+                    removeList.add(activity);
+                        activity.finish();
+                    activity = null;
+                }
+
+            }
+
+            activityStack.removeAll(removeList);
+
+
+        }
+    }
+
 
     /**
      * 退出应用程序

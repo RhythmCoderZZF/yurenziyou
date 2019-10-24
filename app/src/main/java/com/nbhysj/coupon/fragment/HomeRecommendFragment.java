@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.RecommendFriendsPictureAdapter;
 import com.nbhysj.coupon.common.Constants;
@@ -21,6 +23,9 @@ import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
@@ -31,8 +36,10 @@ import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 
 public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
@@ -43,6 +50,8 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     @BindView(R.id.scroll_view)
     JudgeNestedScrollView setNeedScroll;
 
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
     //加载
     @BindView(R.id.llyt_progress_bar_loading)
     LinearLayout mLlytProgressBarLoading;
@@ -59,38 +68,13 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     private boolean isVisible = false;
     public static int currentFragment = 0;
     private int hasNext;
-    MyBroadcastReceiver receiver;
-
     public int mCollectPostPosition;
 
-    public void setTagId(int tagId) {
-        //mTagId = tagId;
-        //queryByTopic();
-        Log.e("tagId>>>>>>>>>>>>>", tagId + "");
-    }
-
-    public void newInstance(Context context) {
-        receiver = new MyBroadcastReceiver();  //(这里可以写系统的广播接收者重写onReceiver方法就可以)
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.BROCAST_ACTION_RECOMMEND);
-        //注册receiver
-        context.registerReceiver(receiver, filter);
-        // MyRecommendFragment fragment = new MyRecommendFragment();
-        // Bundle bundle = new Bundle();
-        //  bundle.putSerializable("recommendList", (Serializable) recommendList);
-        //bundle.putInt("position", position);
-        //fragment.setArguments(bundle);
-        // return fragment;
-    }
 
     public void newInstance(int position, int tagId) {
         mTagId = tagId;
         mPosition = position;
-      /*  MyRecommendFragment fragment = new MyRecommendFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("position",position);
-        fragment.setArguments(bundle);*/
-        // queryByTopic();
+
     }
 
 
@@ -125,11 +109,23 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
                         recommendFriendsAdapter.notifyDataSetChanged();
                     }*/
 
+                    if (mPage == 1) {
+
+                        mLlytProgressBarLoading.setVisibility(View.GONE);
+                    }
+
+
                     HomePageResponse.ResultBean result = res.getData().getResult();
                     List<HomePageSubTopicTagBean> postsTagsBeanList = result.getList();
                     HomePageResponse.PageBean pageBean = res.getData().getPage();
                     hasNext = pageBean.getHasNext();
                     recommendFriendsList.addAll(postsTagsBeanList);
+                    if(recommendFriendsList.size() == 0){
+
+                        mRlytNoData.setVisibility(View.VISIBLE);
+                    } else{
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
                     recommendFriendsAdapter.setRecommendFriendsPictureList(recommendFriendsList);
                     recommendFriendsAdapter.notifyDataSetChanged();
 
@@ -159,6 +155,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     }
 
     @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -176,19 +177,17 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         }
 
         isInitView = true;
+
         isCanLoadData();
 
-      /* LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRvRecommendFriends.setLayoutManager(linearLayoutManager);*/
-        /*mRvRecommendFriends.setHasFixedSize(true);*/
         StaggeredGridLayoutManager staggeredGridLayoutManager =
                 new StaggeredGridLayoutManager(2,
                         StaggeredGridLayoutManager.VERTICAL);
         mRvRecommendFriends.setLayoutManager(staggeredGridLayoutManager);
         mRvRecommendFriends.setHasFixedSize(true);
         mRvRecommendFriends.setItemViewCacheSize(10);
-      //  mRvRecommendFriends.setDrawingCacheEnabled(true);
+        //  mRvRecommendFriends.setDrawingCacheEnabled(true);
+
         mRvRecommendFriends.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         // linearLayoutManager.setAutoMeasureEnabled(true);
         recommendFriendsAdapter = new RecommendFriendsPictureAdapter(getActivity(), new RecommendFriendsPictureAdapter.RecommendPostsDetailListener() {
@@ -198,8 +197,8 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
                 HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mPosition);
                 int postId = homePageSubTopicTagBean.getId();
                 Intent intent = new Intent();
-                intent.putExtra("postId",postId);
-                intent.setClass(getActivity(),PostRecommendDetailActivity.class);
+                intent.putExtra("postId", postId);
+                intent.setClass(getActivity(), PostRecommendDetailActivity.class);
                 startActivity(intent);
 
             }
@@ -209,7 +208,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
                 mCollectPostPosition = mPosition;
                 HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mPosition);
 
-             //   showToast(getActivity(),mPosition + "");
+                //   showToast(getActivity(),mPosition + "");
                 postIsCollection(homePageSubTopicTagBean);
 
             }
@@ -233,16 +232,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     Log.i("TAG", "BOTTOM SCROLL");
-                   /* if (hasNext == 1) {
-                        mPage++;
-                        //isOnLoadMore = true;
-                        showProgressDialog(getActivity());
-                        queryByTopic();
-                    } else {
-                        mProgressBarLoadMore.setVisibility(View.GONE);
-                        mTvLoadMore.setText(getResources().getString(R.string.str_pull_up_loading));
-                        showToast(getActivity(), "已加载全部数据...");
-                    }*/
+
                     loadData();
                 }
             }
@@ -275,24 +265,14 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                /*    if (isOnLoadMore) {
-
-                        // mSmartRefreshLayout.finishLoadMore();
-                    } else {
-
-                        recommendFriendsList.clear();
-                        recommendFriendsAdapter.notifyDataSetChanged();
-                    }*/
 
                     PraiseOrCollectResponse praiseOrCollectResponse = res.getData();
                     int zanStatus = praiseOrCollectResponse.getZanStatus();
 
                     HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mCollectPostPosition);
-                    if(zanStatus == 0)
-                    {
+                    if (zanStatus == 0) {
                         homePageSubTopicTagBean.setLove(false);
-                    } else if(zanStatus == 1)
-                    {
+                    } else if (zanStatus == 1) {
                         homePageSubTopicTagBean.setLove(true);
                     }
                     recommendFriendsAdapter.setRecommendFriendsPictureList(recommendFriendsList);
@@ -309,27 +289,18 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     }
 
     @Override
-    public void postsCommentResult(BackResult res) {
+    public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
 
     }
 
-    public class MyBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            String action = intent.getAction();
-            if (Constants.BROCAST_ACTION_RECOMMEND.equals(action)) {
-                isInitView = true;
-                mPage = 1;
+    @Override
+    public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
 
-                if (currentFragment == mPosition) {
-                    recommendFriendsList.clear();
-                    //recommendFriendsAdapter.notifyDataSetChanged();
-                    queryByTopic();
-                }
-                currentFragment++;
-            }
-        }
+    }
+
+    @Override
+    public void postsCommentResult(BackResult res) {
+
     }
 
     @Override
@@ -460,7 +431,21 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
     private void isCanLoadData() {
         //所以条件是view初始化完成并且对用户可见
-        if (isInitView && isVisible) {
+        if (isInitView && isVisible)
+        {
+            if (recommendFriendsList != null) {
+                recommendFriendsList.clear();
+            }
+
+            if(recommendFriendsAdapter != null)
+            {
+                recommendFriendsAdapter.notifyDataSetChanged();
+            }
+            mPage = 1;
+            if(mRlytNoData != null)
+            {
+                mRlytNoData.setVisibility(View.GONE);
+            }
             queryByTopic();
 
             //防止重复加载数据
@@ -486,28 +471,25 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getActivity().unregisterReceiver(receiver);
+       /* if(receiver != null)
+        {
+            getActivity().unregisterReceiver(receiver);
+        }*/
     }
 
     @Override
     public void lazyInitView(View view) {
-
+        // queryByTopic();
     }
 
-    public void postIsCollection(HomePageSubTopicTagBean homePageSubTopicTagBean)
-    {
-        if(validateInternet())
-        {
+    public void postIsCollection(HomePageSubTopicTagBean homePageSubTopicTagBean) {
+        if (validateInternet()) {
             showProgressDialog(getActivity());
             mDialog.setTitle("正在点赞...");
-            int authorId = homePageSubTopicTagBean.getUserId();
-            int userId = (int)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID,0);
             int mPostId = homePageSubTopicTagBean.getId();
             PostOprateRequest postOprateRequest = new PostOprateRequest();
-            postOprateRequest.setAuthorId(authorId);
-            postOprateRequest.setUserId(userId);
             postOprateRequest.setPostsId(mPostId);
-            postOprateRequest.setPostsType(1);
+            postOprateRequest.setPostsType(0);
             mPresenter.postOprate(postOprateRequest);
         }
     }

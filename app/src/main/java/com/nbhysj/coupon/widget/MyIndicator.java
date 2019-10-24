@@ -14,6 +14,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.nbhysj.coupon.R;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 @SuppressLint("NewApi")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -33,6 +34,7 @@ public class MyIndicator extends HorizontalScrollView implements ViewPager.OnPag
     int newSelected;
     private boolean isIndicatorTabClick = true;
 
+    private OnClickListenerCallbackListener onClickListenerCallbackListener;
     public interface MyOnPageChangeListener {
         void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
 
@@ -50,8 +52,11 @@ public class MyIndicator extends HorizontalScrollView implements ViewPager.OnPag
             tabView = (MyTabView) view;
             oldSelected = mViewPager.getCurrentItem();
             newSelected = tabView.index;
-            //if (mListener != null) mListener.onPageSelected(newSelected);
+            onClickListenerCallbackListener.setOnClickListenerCallback(newSelected);
+
             setCurrentItem(newSelected, true);
+           // if (mListener != null) mListener.onPageSelected(newSelected);
+           // setCurrentItem(newSelected, true);
         }
     };
 
@@ -71,6 +76,11 @@ public class MyIndicator extends HorizontalScrollView implements ViewPager.OnPag
 
     }
 
+    public void setOnClickListenerCallbackListener(OnClickListenerCallbackListener onClickListenerCallbackListener) {
+
+        this.onClickListenerCallbackListener = onClickListenerCallbackListener;
+    }
+
     private void init(Context context) {
         this.mContext = context;
         setHorizontalScrollBarEnabled(false);//隐藏自带的滚动条
@@ -78,7 +88,7 @@ public class MyIndicator extends HorizontalScrollView implements ViewPager.OnPag
         myLinearLayout = new LinearLayout(context);
         params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         myLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        params.setMargins(20, 0, 30, 0);
+        params.setMargins(DensityUtil.dp2px(5), 0, DensityUtil.dp2px(5), 0);
         addView(myLinearLayout, params);
 
         setMyOnPageChangeListener(mListener);
@@ -131,12 +141,12 @@ public class MyIndicator extends HorizontalScrollView implements ViewPager.OnPag
         tabView.setText(text);
         tabView.setTextSize(13);
         tabView.setTextColor(getContext().getResources().getColor(R.color.black));
-        tabView.setPadding(25, 8, 25, 8);
+        tabView.setPadding(DensityUtil.dp2px(15), DensityUtil.dp2px(6), DensityUtil.dp2px(15), DensityUtil.dp2px(6));
         tabView.setBackgroundResource(R.drawable.bg_recommend_tablayout_unselect);
         tabView.getBackground().setAlpha(80);
         params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         myLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        params.setMargins(20, 0, 20, 0);
+        params.setMargins(DensityUtil.dp2px(5), 0, DensityUtil.dp2px(5), 0);
         myLinearLayout.addView(tabView, params);
         myLinearLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
     }
@@ -252,5 +262,10 @@ public class MyIndicator extends HorizontalScrollView implements ViewPager.OnPag
     protected int dp2px(float dp) {
         final float scale = mContext.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+
+    public interface OnClickListenerCallbackListener{
+
+        void setOnClickListenerCallback(int position);
     }
 }

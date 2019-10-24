@@ -10,6 +10,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.fragment.BroadcastFragment;
 import com.nbhysj.coupon.fragment.MessageFragment;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_message;
     }
 

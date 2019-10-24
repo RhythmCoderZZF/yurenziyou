@@ -402,4 +402,10 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
             getPendingCommentOrderList();
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

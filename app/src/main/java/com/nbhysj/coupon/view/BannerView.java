@@ -34,7 +34,7 @@ public class BannerView extends FrameLayout {
     private static final int MSG_LOOP = 1000;
     private static long LOOP_INTERVAL = 5000L;
     private LinearLayout mLinearPosition = null;
-    private ViewPager mViewPager = null;
+    private MyScrollViewPager mViewPager = null;
     private BannerView.BannerHandler mBannerHandler = null;
     private List<ImageView> viewList;
     private int viewSize;
@@ -81,7 +81,7 @@ public class BannerView extends FrameLayout {
     }
 
     private void initViewPager() {
-        this.mViewPager = new ViewPager(this.getContext());
+        this.mViewPager = new MyScrollViewPager(this.getContext());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, -2);
         this.mViewPager.setLayoutParams(layoutParams);
         this.mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -172,7 +172,9 @@ public class BannerView extends FrameLayout {
             viewList = new ArrayList<ImageView>();
         } else {
             this.viewList.clear();
+
         }
+
         if (bannerUrlList.size() > 0) {
 
             for (int i = 0; i < bannerUrlList.size(); i++) {
@@ -183,9 +185,16 @@ public class BannerView extends FrameLayout {
                 viewList.add(image);
             }
         }
+
+
         this.mContext = mContext;
         if (viewList != null && viewList.size() != 0) {
             this.viewSize = viewList.size();
+            if(bannerUrlList.size() > 1) {
+                this.mViewPager.setScroll(true);
+            }else {
+                this.mViewPager.setScroll(false);
+            }
             BannerAdapter bannerAdapter = new BannerAdapter(mContext, viewList, bannerUrlList);
             this.setAdapter(bannerAdapter);
         }

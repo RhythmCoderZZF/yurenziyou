@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -386,6 +387,45 @@ public class DateUtil {
         }
         return null;
     }
+
+    /**
+     * 月日
+     * @param dateStr
+     * @return
+     * @throws java.text.ParseException
+     */
+    public static String toMMStr(String dateStr) throws java.text.ParseException {
+        try {
+            if (!TextUtils.isEmpty(dateStr)) {
+                String[] dateArray = dateStr.split("-");
+                String month = dateArray[1];
+                return month;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 日
+     * @param dateStr
+     * @return
+     * @throws java.text.ParseException
+     */
+    public static String toDDStr(String dateStr) throws java.text.ParseException {
+        try {
+            if (!TextUtils.isEmpty(dateStr)) {
+                String[] dateArray = dateStr.split("-");
+                String day = dateArray[2];
+                return day;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String dateToWeek(String datetime) throws java.text.ParseException {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         String[] weekDays = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
@@ -672,5 +712,44 @@ public class DateUtil {
             strBuilder.append(temp / sper).append("秒");
         }
         return strBuilder.toString();
+    }
+
+
+    /**
+     * 活动倒计时
+     * @param end_time
+     * @return
+     */
+    public static HashMap<Object,Object> activitiesCountdownTime(long end_time){
+        HashMap<Object,Object> map=new HashMap<>();
+        long start_time = new Date().getTime() / 1000;
+
+        long d_time=end_time-start_time;
+        if(d_time>0){
+            long h=d_time/1000/60/60;//时
+            long s=d_time/1000%60;//秒
+            long m=d_time/1000/60%60;//分
+            if(h<10){
+                map.put("hour","0"+h);
+            }else {
+                map.put("hour",h);
+            }
+            if(m<10){
+                map.put("minute","0"+m);
+            }else {
+                map.put("minute",m);
+            }
+            if(s<10){
+                map.put("second","0"+s);
+            }else {
+                map.put("second",s);
+            }
+        }else {//防止显示负数
+            map.put("hour","00");
+            map.put("minute","00");
+            map.put("second","00");
+        }
+
+        return map;
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
 
@@ -25,9 +26,9 @@ import butterknife.ButterKnife;
 public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCollectionAllSubItemAdapter.ViewHolder> {
 
     /**
-     * 图片列表数据
+     * 我的收藏图片
      */
-    private List<CommentReceiveResponse.CommentEntity> commentSubList;
+    private List<String>  mineCollectionPhotoUrlList;
 
     private Context mContext;
 
@@ -37,11 +38,10 @@ public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCo
         this.mContext = mContext;
     }
 
-    public void setCommentReceivedSubItemList(List<CommentReceiveResponse.CommentEntity> commentSubList) {
+    public void setMineCollectionPhotoUrlList(List<String> mineCollectionPhotoUrlList) {
 
-        this.commentSubList = commentSubList;
+        this.mineCollectionPhotoUrlList = mineCollectionPhotoUrlList;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,9 +55,10 @@ public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCo
     public void onBindViewHolder(ViewHolder holder, final int position) {
         try {
 
-            GlideUtil.loadCornersTransformImage(mContext, "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3093674761,1038215453&fm=26&gp=0.jpg", 5, holder.mImageCollectionAll);
+           String photoUrl = mineCollectionPhotoUrlList.get(position);
+           GlideUtil.loadImage(mContext, photoUrl, holder.mImageCollectionAll);
 
-            if (position == 5) {
+            if (position == mineCollectionPhotoUrlList.size()) {
 
                 holder.mViewMineCollectionAllSubPictureFoot.setVisibility(View.VISIBLE);
             } else {
@@ -77,14 +78,14 @@ public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCo
 
     @Override
     public int getItemCount() {
-        return 6;
+        return mineCollectionPhotoUrlList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //收藏有图片
         @BindView(R.id.image_collection_all)
-        ImageView mImageCollectionAll;
+        RoundedImageView mImageCollectionAll;
         @BindView(R.id.view_mine_collection_all_sub_picture_foot)
         View mViewMineCollectionAllSubPictureFoot;
         @BindView(R.id.view_mine_collection_all_sub_picture_header)

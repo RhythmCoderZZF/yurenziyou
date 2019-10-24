@@ -6,18 +6,19 @@ import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCollectionRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
-import com.nbhysj.coupon.model.response.HomePageSubTopicTagReponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
-import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
-import com.nbhysj.coupon.model.response.UserInfoResponse;
 
 import io.reactivex.Observable;
 
@@ -64,8 +65,21 @@ public class HomePageModel implements HomePageContract.Model {
         }
 
     @Override
-    public Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(String queryType, String keyword) {
-        return Api.getInstance().apiService.getHomePageSearchByType(queryType,keyword).compose(RxSchedulers.io_main());
+    public Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(String queryType, String keyword,int page, int pageSize) {
+        return Api.getInstance().apiService.getHomePageSearchByType(queryType,keyword,page,pageSize).compose(RxSchedulers.io_main());
     }
 
+    @Override
+    public Observable<BackResult<FavoritesCollectionResponse>> postsCollection(PostsCollectionRequest postsCollectionRequest) {
+        return Api.getInstance().apiService.postsCollection(postsCollectionRequest).compose(RxSchedulers.io_main());
+    }
+    @Override
+    public Observable<BackResult<FavoritesListResponse>> getFavoritesList(int page, int pageSize) {
+        return Api.getInstance().apiService.getUserFindFavoritesList(page,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<FollowUserStatusResponse>> userFollow(int userId) {
+        return Api.getInstance().apiService.userFollow(userId).compose(RxSchedulers.io_main());
+    }
 }

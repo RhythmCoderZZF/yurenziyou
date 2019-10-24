@@ -49,7 +49,6 @@ public class StrategyActivity extends BaseActivity<StrategyPresenter, StrategyMo
     private StrategyListAdapter strategyListAdapter;
 
     private List<StrategyBean> mStrategyList;
-    private boolean isOnRefresh;
     private boolean isOnLoadMore = false;
 
     //总条数
@@ -103,7 +102,7 @@ public class StrategyActivity extends BaseActivity<StrategyPresenter, StrategyMo
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        isOnRefresh = true;
+                        isOnLoadMore = false;
                         mPageNo = 1;
                         mStrategyList.clear();
                         strategyListAdapter.notifyDataSetChanged();

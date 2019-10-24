@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +45,7 @@ import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.GroupMchListActivity;
+import com.nbhysj.coupon.ui.MessageActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
 import com.nbhysj.coupon.ui.ShoppingMallFineFoodActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHomestayActivity;
@@ -54,6 +57,7 @@ import com.nbhysj.coupon.ui.ShoppingMallSpecialSaleActivity;
 import com.nbhysj.coupon.ui.StrategyActivity;
 import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.WebActivity;
+import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.RadiusGradientSpanUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
@@ -67,6 +71,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -211,6 +217,18 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     @BindView(R.id.img_weather)
     ImageView mImgWeather;
 
+    //限时特卖小时
+    @BindView(R.id.tv_limited_sale_hour)
+    TextView mTvLimitedSaleHour;
+
+    //限时特卖分
+    @BindView(R.id.tv_limited_sale_minute)
+    TextView mTvLimitedSaleMinute;
+
+    //限时特卖秒
+    @BindView(R.id.tv_limited_sale_second)
+    TextView mTvLimitedSaleSecond;
+
     private ShoppingMallMenuAdapter shoppingMallMenuAdapter;
     //热门景点
     private PopularScenicSpotsAdapter popularScenicSpotsAdapter;
@@ -246,6 +264,42 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
     List<ShoppingMallMenuBean> shoppingMallMenuList;
 
+    private Runnable r;//定时器线程
+    private boolean timerIsInit=false;//判断数据是否初始化
+
+    private long endTime; Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            endTime--;
+            if(endTime>0){
+            String formatLongToTimeStr = formatLongToTimeStr(endTime);
+            String[] split = formatLongToTimeStr.split("：");
+            for (int i = 0; i < split.length; i++) {
+                if(i==0){
+                    mTvLimitedSaleHour.setText
+                            (split[0]);
+                }
+                if(i==1){
+                    mTvLimitedSaleMinute.setText(split[1]);
+                }
+                if(i==2){
+                    mTvLimitedSaleSecond.setText(split[2]);
+                }
+            }
+                handler.postDelayed(this, 1000);
+            } else {
+
+                mTvLimitedSaleHour.setText("00");
+
+                mTvLimitedSaleMinute.setText("00");
+
+                mTvLimitedSaleSecond.setText("00");
+            }
+        }
+    };
+
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_shopping_mall;
@@ -274,11 +328,9 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
             mToolbarSpace.setVisibility(View.GONE);
         }
 
-
         bannerList = new ArrayList<>();
         getWeather(Constants.CITY_CODE);
         getShopMallHomePageData();
-
 
         //  mBannerview = (BannerView) v.findViewById(R.id.banner);
         // mBannerview.startLoop(true);
@@ -290,13 +342,55 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        handler.removeCallbacks(runnable);
                         getShopMallHomePageData();
 
                     }
                 }, 100);
             }
         });
+    }
+    public String formatLongToTimeStr(Long l) {
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        String hourStr;
+        String minuteStr;
+        String secondStr;
+        second = l.intValue() ;
+        if (second > 60) {
+            minute = second / 60;   //取整
+            second = second % 60;   //取余
+        }
+
+        if (minute > 60) {
+            hour = minute / 60;
+            minute = minute % 60;
+        }
+        if(hour < 10){
+
+            hourStr =  "0" + hour;
+        } else {
+            hourStr = String.valueOf(hour);
+        }
+
+        if(minute < 10){
+
+            minuteStr =  "0" + minute;
+        } else {
+            minuteStr = String.valueOf(minute);
+        }
+
+        if(second < 10){
+
+            secondStr =  "0" + second;
+        } else {
+            secondStr = String.valueOf(second);
+        }
+
+        String strtime = hourStr+"："+minuteStr+"："+secondStr;
+        return strtime;
+
     }
 
     @Override
@@ -490,6 +584,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
+
                     mSmartRefreshLayout.finishRefresh();
                     ShopMallHomePageResponse shopMallHomePageResponse = res.getData();
                     bannerList = shopMallHomePageResponse.getBigBanners();
@@ -548,24 +643,24 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     }
 
                     //美食列表
-                    deliciousFoodList = res.getData().getFoodList();
+                    deliciousFoodList = shopMallHomePageResponse.getFoodList();
                     deliciousFoodRecommendAdapter.setDeliciousFoodRecommendList(deliciousFoodList);
                     deliciousFoodRecommendAdapter.notifyDataSetChanged();
 
                     //民宿
-                    hotelList = res.getData().getHotelList();
+                    hotelList = shopMallHomePageResponse.getHotelList();
                     mHotelAdapter.setHotelList(hotelList);
                     mHotelAdapter.notifyDataSetChanged();
 
                     if(mchCities != null) {
                         //目的地
-                        mchCities = res.getData().getMchCities();
+                        mchCities = shopMallHomePageResponse.getMchCities();
                         scenicSpotClassificationAdapter.setScenicSpotMchCitiesDestinationList(mchCities);
                         scenicSpotClassificationAdapter.notifyDataSetChanged();
                     }
 
                     //旅行主题
-                    List<ShopMallHomePageResponse.TravelBannersEntity> travelBannersList = res.getData().getTravelBanners();
+                    List<ShopMallHomePageResponse.TravelBannersEntity> travelBannersList = shopMallHomePageResponse.getTravelBanners();
                     //旅行主题1
                     ShopMallHomePageResponse.TravelBannersEntity travelThemeOne = travelBannersList.get(0);
                     String travelThemeOnePhotoUrl = travelThemeOne.getPhoto();
@@ -604,17 +699,34 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     //自由行
                     if(groupGoodsList != null)
                     {
-                        groupGoodsList = res.getData().getGroupGoodsVO();
+                        groupGoodsList = shopMallHomePageResponse.getGroupGoodsVO();
                         independentTravelAdapter.setIndependentTravelList(groupGoodsList);
                         independentTravelAdapter.notifyDataSetChanged();
                     }
 
                     //猜你喜欢
-                    guessEntityList = res.getData().getGuess();
+                    guessEntityList = shopMallHomePageResponse.getGuess();
                     mallGuessYouLikeAdapter.setGuessYouLikeList(guessEntityList);
                     mallGuessYouLikeAdapter.notifyDataSetChanged();
 
+                    long endTimeLong = limitedSaleBean.getEndTime();
+                    long start_time = new Date().getTime() / 1000;
 
+                    endTime = endTimeLong-start_time;
+                  /*  r = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            mHandler.sendEmptyMessage(200);
+                            if(timerIsInit){//数据初始化成功，则延迟1秒
+                                mHandler.postDelayed(this, 1000);
+                            }else {
+                                mHandler.post(this);
+                            }
+                        }
+                    };
+                    mHandler.post(r);*/
+                    handler.postDelayed(runnable, 1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -640,7 +752,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         }
     }
 
-    @OnClick({R.id.ll_search, R.id.tv_view_more_popular_scenic_spots, R.id.tv_view_more_delicious_food, R.id.rlyt_flash_sale})
+    @OnClick({R.id.ll_search, R.id.tv_view_more_popular_scenic_spots, R.id.tv_view_more_delicious_food, R.id.rlyt_flash_sale,R.id.tv_view_more_independent_travel,R.id.tv_message_tag})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_search:
@@ -661,8 +773,12 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
             case R.id.rlyt_flash_sale:
                 toActivity(ShoppingMallSpecialSaleActivity.class);
                 break;
-
-
+            case R.id.tv_view_more_independent_travel:
+                toActivity(GroupMchListActivity.class);          //组合
+                break;
+            case R.id.tv_message_tag:
+                toActivity(MessageActivity.class);
+                break;
             default:
                 break;
         }
@@ -790,5 +906,16 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
             mPresenter.getWeather(cityCode);
 
         }
+    }
+
+
+    //页面销毁时，销毁线程
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+/*
+        if (mHandler != null && r != null) {
+            mHandler.removeCallbacks(r);
+        }*/
     }
 }

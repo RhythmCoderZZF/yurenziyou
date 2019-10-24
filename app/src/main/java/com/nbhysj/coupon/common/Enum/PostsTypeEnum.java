@@ -6,8 +6,8 @@ package com.nbhysj.coupon.common.Enum;
  */
 public enum PostsTypeEnum {
 
-    //1帖子点赞，2帖子收藏，3.帖子评论 postsType
-    POST_PRAISE(1, "POST_PRAISE"), POST_COLLECT(2, "POST_COLLECT"), POST_COMMENT(3, "POST_COMMENT");
+    //帖子类型 1点赞帖子 2点赞帖子的评论
+    POST_PRAISE(1, "POST_PRAISE"),POST_COMMENT(2, "POST_COMMENT");
 
     private final int key;
     private final String value;

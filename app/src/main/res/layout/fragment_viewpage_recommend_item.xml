@@ -26,6 +26,10 @@
                 android:layout_marginRight="@dimen/dp_5"
                 android:nestedScrollingEnabled="false" />
 
+            <include layout="@layout/layout_nodata"
+                android:visibility="gone"
+             ></include>
+
             <LinearLayout
                 android:id="@+id/llyt_progress_bar_loading"
                 android:layout_width="match_parent"

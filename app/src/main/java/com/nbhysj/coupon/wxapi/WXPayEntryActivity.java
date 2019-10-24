@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-import com.nbhysj.coupon.pay.wechat.Constants;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.ui.MyOrderActivity;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -26,7 +26,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.pay_result);
 
-        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+        api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID);
         api.handleIntent(getIntent(), this);
     }
 

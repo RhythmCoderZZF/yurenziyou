@@ -2,6 +2,7 @@ package com.nbhysj.coupon.ui;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,19 +11,31 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ComFragmentAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.OthersHomePageContract;
+import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.fragment.LocalFoodFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
+import com.nbhysj.coupon.model.OthersHomePageModel;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
+import com.nbhysj.coupon.presenter.OthersHomePagePresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -46,19 +59,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @auther：hysj created on 2019/07/31
  * description：个人主页
  */
-public class UserPersonalHomePageActivity extends BaseActivity {
+public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePresenter, OthersHomePageModel> implements OthersHomePageContract.View, JudgeNestedScrollView.OnScrollChangeListener {
+
 
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     @BindView(R.id.llyt_header)
     LinearLayout mLlytHeaderToolbar;
-    @BindView(R.id.scrollView)
-    JudgeNestedScrollView scrollView;
+    @BindView(R.id.scroll_view_personal_home_page)
+    JudgeNestedScrollView mScrollViewPersonalHomePage;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     @BindView(R.id.magic_indicator)
@@ -69,10 +85,42 @@ public class UserPersonalHomePageActivity extends BaseActivity {
     CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.img_bg_avatar_blur)
     ImageView mImgBgAvatarBlur;
+    @BindView(R.id.img_post_publisher_avatar)
+    CircleImageView mImgPostPublisherAvatar;
+    @BindView(R.id.img_menu)
+    ImageView mImageMenu;
+    @BindView(R.id.ibtn_back)
+    ImageButton mIBtnBack;
+    //粉丝数量
+    @BindView(R.id.tv_fans_num)
+    TextView mTvFansNum;
+    //关注数量
+    @BindView(R.id.tv_follow_num)
+    TextView mTvFollowNum;
+    //收藏数量
+    @BindView(R.id.tv_collection_num)
+    TextView mTvCollectionNum;
+    //赞数量
+    @BindView(R.id.tv_zan_num)
+    TextView mTvZanNum;
+    @BindView(R.id.tv_follow)
+    TextView mTvFollow;
+    @BindView(R.id.tv_nickname)
+    TextView mTvNickName;
+    //用户简介
+    @BindView(R.id.tv_user_profile)
+    TextView mTvUserProfile;
+
+    @BindView(R.id.llyt_chat_with_others)
+    LinearLayout mLlytChatWithOthers;
     int toolBarPositionY = 0;
     private int mScrollY = 0;
     private String[] mTitles = new String[]{"游记", "收藏", "赞过"};
     private List<String> mDataList = Arrays.asList(mTitles);
+    private String publisherAvatarUrl;
+
+    //帖子发布者id
+    private int authorId;
 
     @Override
     public int getLayoutId() {
@@ -99,17 +147,39 @@ public class UserPersonalHomePageActivity extends BaseActivity {
         } else {
             mToolbarSpace.setVisibility(View.GONE);
         }
+
+        publisherAvatarUrl = getIntent().getStringExtra("publisherAvatarUrl");
+        authorId = getIntent().getIntExtra("authorId",0);
+        GlideUtil.loadImage(UserPersonalHomePageActivity.this, publisherAvatarUrl, mImgPostPublisherAvatar);
+
+        GlideUtil.loadBlurImageUrl(UserPersonalHomePageActivity.this, publisherAvatarUrl, mImgBgAvatarBlur);
+
+        //获取顶部图片高度后，设置滚动监听
+        ViewTreeObserver vto = mImgBgAvatarBlur.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mImgBgAvatarBlur.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+               // height = mImgBgAvatarBlur.getHeight();
+                mScrollViewPersonalHomePage.setOnScrollChangeListener(UserPersonalHomePageActivity.this);
+            }
+        });
+
+        mLlytChatWithOthers.getBackground().setAlpha(30);
     }
 
     @Override
     public void initData() {
+
+        getOthersHomePageInfo();
+
         mLlytHeaderToolbar.post(new Runnable() {
             @Override
             public void run() {
                 dealWithViewPager();
             }
         });
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        mScrollViewPersonalHomePage.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             int lastScrollY = 0;
             int h = DensityUtil.dp2px(170);
             int color = ContextCompat.getColor(getApplicationContext(), R.color.white) & 0x00ffffff;
@@ -122,10 +192,10 @@ public class UserPersonalHomePageActivity extends BaseActivity {
                 int yPosition = location[1];
                 if (yPosition < toolBarPositionY) {
                     magicIndicatorTitle.setVisibility(View.VISIBLE);
-                    scrollView.setNeedScroll(false);
+                    mScrollViewPersonalHomePage.setNeedScroll(false);
                 } else {
                     magicIndicatorTitle.setVisibility(View.GONE);
-                    scrollView.setNeedScroll(true);
+                    mScrollViewPersonalHomePage.setNeedScroll(true);
 
                 }
 
@@ -137,11 +207,17 @@ public class UserPersonalHomePageActivity extends BaseActivity {
                     // mLlytHeaderBg.setTranslationY(mOffset - mScrollY);
                 }
                 if (scrollY == 0) {
-                    //ivBack.setImageResource(R.drawable.back_white);
-                    // ivMenu.setImageResource(R.drawable.icon_menu_white);
+
+                    mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
+
+                    mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
+                    mLlytHeaderToolbar.setBackgroundColor(Color.argb(((255 * mScrollY / h) << 24) | color, 0, 0, 0));
+                    mToolbarSpace.setBackgroundColor(Color.argb(((255 * mScrollY / h) << 24) | color, 0, 0, 0));
                 } else {
-                    // ivBack.setImageResource(R.drawable.back_black);
-                    // ivMenu.setImageResource(R.drawable.icon_menu_black);
+                    mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
+                    mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
+                    mLlytHeaderToolbar.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
                 }
 
                 lastScrollY = scrollY;
@@ -155,7 +231,6 @@ public class UserPersonalHomePageActivity extends BaseActivity {
         initMagicIndicator();
         initMagicIndicatorTitle();
 
-        GlideUtil.loadBlurImage(UserPersonalHomePageActivity.this, "https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg", mImgBgAvatarBlur);
     }
 
     private void dealWithViewPager() {
@@ -168,6 +243,7 @@ public class UserPersonalHomePageActivity extends BaseActivity {
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this, mModel);
     }
 
     private List<Fragment> getFragments() {
@@ -198,7 +274,7 @@ public class UserPersonalHomePageActivity extends BaseActivity {
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        scrollView.scrollTo(0, 2835);
+                        mScrollViewPersonalHomePage.scrollTo(0, 2835);
                         viewPager.setCurrentItem(index, false);
                     }
                 });
@@ -244,7 +320,7 @@ public class UserPersonalHomePageActivity extends BaseActivity {
                     public void onClick(View v) {
                         //int[] location = new int[2];
                         //magicIndicator.getLocationOnScreen(location);
-                        scrollView.scrollTo(0, 2835);
+                        mScrollViewPersonalHomePage.scrollTo(0, 2835);
                         int hight = mCollapsingToolbarLayout.getHeight();
                         System.out.print(hight + "");
                         viewPager.setCurrentItem(index, false);
@@ -268,5 +344,109 @@ public class UserPersonalHomePageActivity extends BaseActivity {
         });
         magicIndicatorTitle.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicatorTitle, viewPager);
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        int lastScrollY = 0;
+        int h = DensityUtil.dp2px(170);
+        int color = ContextCompat.getColor(getApplicationContext(), R.color.white) & 0x00ffffff;
+        if (lastScrollY < h) {
+            scrollY = Math.min(h, scrollY);
+            mScrollY = scrollY > h ? h : scrollY;
+            //    buttonBarLayout.setAlpha(1f * mScrollY / h);
+            mLlytHeaderToolbar.setBackgroundColor(((255 * mScrollY / h) << 24) | color);
+            // mLlytHeaderBg.setTranslationY(mOffset - mScrollY);
+        }
+        if (scrollY == 0) {
+
+            mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
+            mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
+            mLlytHeaderToolbar.setBackgroundColor(Color.argb(0, 0, 0, 0));
+            mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
+        } else {
+            mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
+            mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
+            mLlytHeaderToolbar.setBackgroundColor(Color.argb(255, 255, 255, 255));
+            mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
+        }
+
+        lastScrollY = scrollY;
+    }
+
+    @OnClick({R.id.ibtn_back})
+    public void onClick(View v) {
+        Intent intent = new Intent();
+        switch (v.getId()) {
+            case R.id.ibtn_back:
+
+                UserPersonalHomePageActivity.this.finish();
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void getOthersHomePageInfoResult(BackResult<UserPersonalHomePageResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    UserPersonalHomePageResponse userPersonalHomePageResponse = res.getData();
+                    String nickName = userPersonalHomePageResponse.getNickname();
+                    int followNum = userPersonalHomePageResponse.getFollowNum();
+                    int followStatus = userPersonalHomePageResponse.getFollowStatus();
+                    int collectionNum = userPersonalHomePageResponse.getCollectionNum();
+                    String profile = userPersonalHomePageResponse.getProfile();
+                    int fansNum = userPersonalHomePageResponse.getFansNum();
+                    int zanNum = userPersonalHomePageResponse.getZanNum();
+
+                    mTvNickName.setText(nickName);
+
+                    if(!TextUtils.isEmpty(profile))
+                    {
+                        mTvUserProfile.setText(profile);
+                    }
+                    mTvFansNum.setText(String.valueOf(zanNum));
+                    mTvCollectionNum.setText(String.valueOf(collectionNum));
+                    mTvFollowNum.setText(String.valueOf(followNum));
+                    mTvFansNum.setText(String.valueOf(fansNum));
+
+                    if (followStatus == 0) {
+                        mTvFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_five);
+
+                    } else if (followStatus == 1) {
+
+                        mTvFollow.setBackgroundResource(R.drawable.bg_stroke_radius_five_black_shape_white_edge);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(msg));
+    }
+
+    public void getOthersHomePageInfo(){
+
+        if(validateInternet()){
+
+            showProgressDialog(UserPersonalHomePageActivity.this);
+            mPresenter.getOthersHomePageInfo(authorId);
+        }
     }
 }

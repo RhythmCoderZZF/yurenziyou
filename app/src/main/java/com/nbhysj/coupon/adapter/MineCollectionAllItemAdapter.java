@@ -1,8 +1,10 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MineCollectionTypeEnum;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
+import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
+import com.nbhysj.coupon.ui.CollectionDetailsActivity;
 import com.nbhysj.coupon.view.GlideImageView;
 
 import java.util.List;
@@ -29,7 +34,7 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
     /**
      * 图片列表数据
      */
-    private List<CommentReceiveResponse> commentReceiveList;
+    private List<MineCollectionAllResponse> mineCollectionAllList;
 
     private Context mContext;
 
@@ -39,9 +44,9 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
         this.mContext = mContext;
     }
 
-    public void setCollectionAllList(List<CommentReceiveResponse> commentReceiveList) {
+    public void setCollectionAllList(List<MineCollectionAllResponse> mineCollectionAllList) {
 
-        this.commentReceiveList = commentReceiveList;
+        this.mineCollectionAllList = mineCollectionAllList;
     }
 
     @Override
@@ -56,16 +61,34 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         try {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-            linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
-            holder.mRvMineCollectionAll.setLayoutManager(linearLayoutManager);
-            MineCollectionAllSubItemAdapter mineCollectionAllSubItemAdapter = new MineCollectionAllSubItemAdapter(mContext);
-            holder.mRvMineCollectionAll.setAdapter(mineCollectionAllSubItemAdapter);
-            holder.mTvCollectionTitle.setText("分享");
+
+            MineCollectionAllResponse mineCollectionAllResponse = mineCollectionAllList.get(position);
+            String type = mineCollectionAllResponse.getType();
+            List<String> photosUrl = mineCollectionAllResponse.getPhotos();
+
+            if(photosUrl != null) {
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+                linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
+                holder.mRvMineCollectionAll.setLayoutManager(linearLayoutManager);
+                MineCollectionAllSubItemAdapter mineCollectionAllSubItemAdapter = new MineCollectionAllSubItemAdapter(mContext);
+                mineCollectionAllSubItemAdapter.setMineCollectionPhotoUrlList(photosUrl);
+                holder.mRvMineCollectionAll.setAdapter(mineCollectionAllSubItemAdapter);
+            }
+
+            if(!TextUtils.isEmpty(type))
+            {
+              String collectionType = MineCollectionTypeEnum.getEnumByKey(type).getValue();
+                holder.mTvCollectionTitle.setText(collectionType);
+            }
+
             holder.mTvLookAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
+                    Intent intent = new Intent();
+                    intent.putExtra("type",type);
+                    intent.setClass(mContext, CollectionDetailsActivity.class);
+                    mContext.startActivity(intent);
 
                 }
             });
@@ -77,7 +100,7 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mineCollectionAllList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

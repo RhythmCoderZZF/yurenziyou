@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -21,6 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.amap.api.maps.model.LatLng;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.framework.AppManager;
 import com.nbhysj.coupon.framework.BaseModel;
@@ -34,6 +36,8 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.dialog.LoadingDialog;
 import com.nbhysj.coupon.view.MyToastView;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -103,7 +107,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
             mPresenter.onDestroy();//取消注册，以避免内存泄露
         }
         if (appManager != null) {
-            appManager.finishActivity(this);
+            appManager.finishSingleActivity(this);
         }
 
         dismissProgressDialog();
@@ -390,6 +394,117 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         userId = (Integer) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
 
         return userId;
+    }
+
+    /**
+     * 跳转百度地图
+     */
+    public void goToBaiduMap(String mchName,String mLatitude,String mLongitude) {
+       /* if (!isInstalled("com.baidu.BaiduMap")) {
+            showToast(getActivity(), "请先安装百度地图客户端");
+            return;
+        }*/
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("baidumap://map/direction?destination=latlng:"
+                + mLatitude + ","
+                + mLongitude + "|name:" + mchName + // 终点
+                "&mode=driving" + // 导航路线方式
+                "&src=" + getPackageName()));
+        startActivity(intent); // 启动调用
+    }
+
+
+    /**
+     * 跳转高德地图
+     */
+    public void goToGaodeMap(String mchName,String mLatitude,String mLongitude) {
+      /*  if (!isInstalled("com.autonavi.minimap")) {
+            //showToast(getActivity(), "请先安装高德地图客户端");
+            return;
+        }*/
+        double latitude = Double.parseDouble(mLatitude);
+        double longitude = Double.parseDouble(mLongitude);
+        LatLng endPoint = BD2GCJ(new LatLng(latitude, longitude));//坐标转换
+        StringBuffer stringBuffer = new StringBuffer("androidamap://navi?sourceApplication=").append("amap");
+        stringBuffer.append("&lat=").append(endPoint.latitude)
+                .append("&lon=").append(endPoint.longitude).append("&keywords=" + mchName)
+                .append("&dev=").append(0)
+                .append("&style=").append(2);
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(stringBuffer.toString()));
+        intent.setPackage("com.autonavi.minimap");
+        startActivity(intent);
+    }
+    /**
+     * 打开高德地图
+     * https://lbs.amap.com/api/amap-mobile/guide/android/route
+     */
+    public void openGaodeMapToGuide(String mchName,String mLatitude,String mLongitude) {
+        String url;
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        String curLatitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
+        String curLongitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
+        Log.i("高德定位：","经度："+curLatitude+" ,纬度："+curLongitude);
+        if (Double.parseDouble(curLatitude) == 0.0 || Double.parseDouble(curLongitude) == 0.0){
+            url = "androidamap://route?sourceApplication=amap&dlat="+mLatitude+"&dlon="+mLongitude+"&dname="+mchName+"&dev=0&t=1";
+        }else {
+            url = "androidamap://route?sourceApplication=amap&slat="+curLatitude+"&slon="+curLongitude
+                    +"&dlat="+mLatitude+"&dlon="+mLongitude+"&dname="+mchName+"&dev=0&t=1";
+        }
+
+
+        Uri uri = Uri.parse(url);
+        //将功能Scheme以URI的方式传入data
+        intent.setData(uri);
+        //启动该页面即可
+        startActivity(intent);
+    }
+
+
+    /**
+     * BD-09 坐标转换成 GCJ-02 坐标
+     */
+    public static LatLng BD2GCJ(LatLng bd) {
+        double x = bd.longitude - 0.0065, y = bd.latitude - 0.006;
+        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * Math.PI);
+        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * Math.PI);
+
+        double lng = z * Math.cos(theta);//lng
+        double lat = z * Math.sin(theta);//lat
+        return new LatLng(lat, lng);
+    }
+
+    /**
+     * GCJ-02 坐标转换成 BD-09 坐标
+     */
+    public static LatLng GCJ2BD(LatLng bd) {
+        double x = bd.longitude, y = bd.latitude;
+        double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * Math.PI);
+        double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * Math.PI);
+        double tempLon = z * Math.cos(theta) + 0.0065;
+        double tempLat = z * Math.sin(theta) + 0.006;
+        return new LatLng(tempLat, tempLon);
+    }
+
+
+    /**
+     * 检测程序是否安装
+     *
+     * @param packageName
+     * @return
+     */
+    public boolean isInstalled(String packageName) {
+        PackageManager manager = mContext.getPackageManager();
+        //获取所有已安装程序的包信息
+        List<PackageInfo> installedPackages = manager.getInstalledPackages(0);
+        if (installedPackages != null) {
+            for (PackageInfo info : installedPackages) {
+                if (info.packageName.equals(packageName))
+                    return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/img_fine_food_header"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_50"
+    android:scaleType="fitXY"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_xmedium"
+        android:textColor="@color/txt_font_black2"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:textStyle="bold"
+        android:text="网友推荐菜品"/>
+
+    <TextView
+        android:id="@+id/tv_food_recommend_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/txt_font_black2"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:text="(0)"/>
+
+</LinearLayout>

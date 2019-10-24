@@ -124,7 +124,7 @@
                                 android:layout_width="@dimen/dp_14"
                                 android:layout_height="@dimen/dp_14"
                                 android:layout_gravity="center_vertical"
-                                android:src="@mipmap/icon_comment_num" />
+                                android:src="@mipmap/icon_nearby_post_comment" />
 
                             <TextView
                                 android:id="@+id/tv_comment_num"

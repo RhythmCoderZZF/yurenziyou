@@ -10,12 +10,16 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.NewFansBean;
 import com.nbhysj.coupon.model.response.SupportedUserBean;
+import com.nbhysj.coupon.model.response.UserFansFollowBean;
+import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * created by hysj on 2019/03/21
@@ -35,14 +39,15 @@ public class NewFansListAdapter extends RecyclerView.Adapter<NewFansListAdapter.
     private int mEmptyType = 0;
 
     private Context mContext;
-    private List<NewFansBean> newFansList;
-    private HouseDetailListener mListener;
+    private List<UserFansFollowBean> newFansList;
+    private NewFansFollowListener newFansFollowListener;
 
-    public NewFansListAdapter(Context mContext) {
+    public NewFansListAdapter(Context mContext,NewFansFollowListener newFansFollowListener) {
         this.mContext = mContext;
+        this.newFansFollowListener = newFansFollowListener;
     }
 
-    public void setNewFansList(List<NewFansBean> newFansList) {
+    public void setNewFansList(List<UserFansFollowBean> newFansList) {
 
         this.newFansList = newFansList;
     }
@@ -58,19 +63,33 @@ public class NewFansListAdapter extends RecyclerView.Adapter<NewFansListAdapter.
     public void onBindViewHolder(NewFansListAdapter.ViewHolder holder, int position) {
 
         try {
-            NewFansBean newFansBean = newFansList.get(position);
-            holder.mTvTitle.setText(newFansBean.getTitle());
-            holder.mTvContent.setText(newFansBean.getTime());
-            String url = newFansBean.getUrl();
-            holder.mImgUserAvatar.loadCircle(url);
-            if (newFansBean.isReturnPowderStatus() == false) {
+            UserFansFollowBean newFansBean = newFansList.get(position);
+            String fansName = newFansBean.getFansName();
+            long followTime = newFansBean.getCtime();   //关注时间
+            String followTimeStr = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat,followTime);
+            holder.mTvUsername.setText(fansName);
+            holder.mTvFollowTime.setText(followTimeStr);
+            String avatarUrl = newFansBean.getAvater();
+            GlideUtil.loadImage(mContext,avatarUrl,holder.mImgUserAvatar);
+            if (newFansBean.getAttentionStatus() == 0) {
                 holder.mTvFollow.setBackgroundResource(R.drawable.bg_new_fans_stroke_radius_red_shape);
-                holder.mTvFollow.setTextColor(mContext.getResources().getColor(R.color.btn_alert_press));
+                holder.mTvFollow.setTextColor(mContext.getResources().getColor(R.color.color_red2));
+                holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_return_powder));
 
-            } else if (newFansBean.isReturnPowderStatus() == true) {
-                holder.mTvFollow.setBackgroundResource(R.drawable.bg_new_fans_stroke_radius_green_shape);
-                holder.mTvFollow.setTextColor(mContext.getResources().getColor(R.color.color_green2));
+            } else if (newFansBean.getAttentionStatus() == 1) {
+                holder.mTvFollow.setBackgroundResource(R.drawable.bg_gray_radius_thirteen_shape);
+                holder.mTvFollow.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_already_concerned));
             }
+
+            holder.mTvFollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    newFansFollowListener.setNewFansFollowListener(newFansBean);
+
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,11 +116,11 @@ public class NewFansListAdapter extends RecyclerView.Adapter<NewFansListAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_user_avatar)
-        GlideImageView mImgUserAvatar;
-        @BindView(R.id.tv_title)
-        TextView mTvTitle;
-        @BindView(R.id.tv_content)
-        TextView mTvContent;
+        CircleImageView mImgUserAvatar;
+        @BindView(R.id.tv_username)
+        TextView mTvUsername;
+        @BindView(R.id.tv_follow_time)
+        TextView mTvFollowTime;
         @BindView(R.id.tv_follow)
         TextView mTvFollow;
 
@@ -112,10 +131,9 @@ public class NewFansListAdapter extends RecyclerView.Adapter<NewFansListAdapter.
         }
     }
 
-    public interface HouseDetailListener {
+    public interface NewFansFollowListener {
 
-        public void setcheckItemListener(int position);
+        public void setNewFansFollowListener(UserFansFollowBean newFansBean);
 
-        public void setDeleteItemListener(int position);
     }
 }

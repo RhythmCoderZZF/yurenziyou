@@ -55,21 +55,23 @@ public class ScenicSpotsDetailLocationMapActivity extends BaseActivity implement
     public void initView(Bundle savedInstanceState) {
 
         MchDetailsResponse.MchDetailsEntity mchDetailsEntity = (MchDetailsResponse.MchDetailsEntity) getIntent().getSerializableExtra("mchDetailsEntity");
-        mLatitude = mchDetailsEntity.getLatitude();
-        mLongitude = mchDetailsEntity.getLongitude();
-        mchName = mchDetailsEntity.getMchName();
-        address = mchDetailsEntity.getAddress();
-        //初始化地图控件
-        mapView = (MapView) findViewById(R.id.map);
-        //必须要写
-        mapView.onCreate(savedInstanceState);
+        if(mchDetailsEntity != null) {
+            mLatitude = mchDetailsEntity.getLatitude();
+            mLongitude = mchDetailsEntity.getLongitude();
+            mchName = mchDetailsEntity.getMchName();
+            address = mchDetailsEntity.getAddress();
+            //初始化地图控件
+            mapView = (MapView) findViewById(R.id.map);
+            //必须要写
+            mapView.onCreate(savedInstanceState);
 
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(mLocationListener);
+            //初始化定位
+            mLocationClient = new AMapLocationClient(getApplicationContext());
+            //设置定位回调监听
+            mLocationClient.setLocationListener(mLocationListener);
 
-        init();
+            init();
+        }
     }
 
     @Override
@@ -317,7 +319,7 @@ public class ScenicSpotsDetailLocationMapActivity extends BaseActivity implement
         mLocationClient.onDestroy();//销毁定位客户端。
     }
 
-    @OnClick({R.id.img_back})
+    @OnClick({R.id.img_back,R.id.rlyt_operations_detail_view,R.id.rlyt_navigation_operations_detail_view})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_back:
@@ -332,6 +334,30 @@ public class ScenicSpotsDetailLocationMapActivity extends BaseActivity implement
                 BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_location_blue));
                 markerOptions.icon(bitmapDescriptor);
                 aMap.addMarker(markerOptions);*/
+                break;
+            case R.id.rlyt_operations_detail_view:
+
+                if(!TextUtils.isEmpty(mLatitude) &&
+                        !TextUtils.isEmpty(mLongitude) && !TextUtils.isEmpty(mchName))
+                {
+                    if (isInstalled("com.autonavi.minimap"))
+                    {
+                        openGaodeMapToGuide(mchName,mLatitude, mLongitude);
+
+                    } else if(isInstalled("com.baidu.BaiduMap"))
+                    {
+                        goToBaiduMap(mchName,mLatitude, mLongitude);
+
+                    } else {
+                        showToast(ScenicSpotsDetailLocationMapActivity.this, "请先安装高德地图客户端");
+                    }
+
+                }
+                break;
+            case R.id.rlyt_navigation_operations_detail_view:
+
+                ScenicSpotsDetailLocationMapActivity.this.finish();
+
                 break;
             default:
                 break;

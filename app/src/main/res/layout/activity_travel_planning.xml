@@ -16,7 +16,7 @@
         android:layout_height="@dimen/dp_139"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_85"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/icon_yrzy_app_logo" />
 
     <TextView
         android:layout_width="192dp"

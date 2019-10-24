@@ -9,7 +9,7 @@ import com.nbhysj.coupon.greendao.DaoMaster;
 import com.nbhysj.coupon.greendao.DaoSession;
 import com.nbhysj.coupon.oss.audio.AndroidAudioConverter;
 import com.nbhysj.coupon.oss.audio.ILoadCallback;
-import com.nbhysj.coupon.pay.wechat.Constants;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -38,7 +38,7 @@ public class BasicApplication extends Application {
         super.onCreate();
         sApp = this;
         IWXAPI api  = WXAPIFactory.createWXAPI(this, null,false);
-        boolean register = api.registerApp(Constants.APP_ID);
+        boolean register = api.registerApp(PayConstants.APP_ID);
         System.out.print(register);
         initImageLoader();
         initGreenDao();

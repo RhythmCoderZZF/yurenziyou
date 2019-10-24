@@ -31,7 +31,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static android.view.View.VISIBLE;
-import static com.nbhysj.coupon.ui.CommentsListActivity.showSoftInputFromWindow;
 
 /**
  * @auther：hysj created on 2019/08/02
@@ -300,7 +299,7 @@ public class QuestionsAndAnswersDetailActivity extends BaseActivity {
                     mLlytMainEmoji.setVisibility(View.GONE);
                     mImgEmojie.setSelected(false);
                     mEdtComment.setFocusable(true);
-                    showSoftInputFromWindow(QuestionsAndAnswersDetailActivity.this, mEdtComment);
+                  ///  showSoftInputFromWindow(QuestionsAndAnswersDetailActivity.this, mEdtComment);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

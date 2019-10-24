@@ -649,17 +649,19 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                         String moneySum = orderDetailResponse.getMoneySum();
                         int goodsSum = orderDetailResponse.getGoodSum();
                         tel = orderDetailResponse.getTel();
-                        int delAllOrderRefundStatus = orderDetailResponse.getDelAllStatus();
+                        int canRefundAllStatus = orderDetailResponse.getCanRefundAllStatus();
+                        int commentStatus = orderDetailResponse.getCommentStatus();
                         mTvGoodsTotalNum.setText(String.valueOf(goodsSum));
 
                         //   mTvGoodsTotalPrice.setText(moneySum);
 
-                        if (delAllOrderRefundStatus == 0) {
+                        if (canRefundAllStatus == 0) {
                             mTvApplyForAllOrderRefund.setVisibility(View.GONE);
                         }
-                        if (delAllOrderRefundStatus == 1) {
+                        if (canRefundAllStatus == 1) {
                             mTvApplyForAllOrderRefund.setVisibility(View.VISIBLE);
                         }
+
 
                         String orderStatus = orderDetailResponse.getOrderStatus();
                         OrderDetailResponse.OrderEntity orderEntity = orderDetailResponse.getOrder();
@@ -722,9 +724,16 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_green);
 
                                 mTvRebookGoods.setVisibility(View.VISIBLE);
-                                mTvOrderEvaluate.setVisibility(View.VISIBLE);
                                 mTvOrderPayment.setVisibility(View.GONE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.VISIBLE);
+
+                                //0:不可评论 1:可评论
+                                if (commentStatus == 0) {
+                                    mTvOrderEvaluate.setVisibility(View.GONE);
+                                }
+                                if (commentStatus == 1) {
+                                    mTvOrderEvaluate.setVisibility(View.VISIBLE);
+                                }
 
                             } else if (orderStatus.equals(orderPendingPaymentValue)) {  //交易待支付
 

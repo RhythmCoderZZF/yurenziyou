@@ -31,13 +31,6 @@ public class RecommendFragment extends BaseFragment {
     private List<HomePageResponse.SmallTagEntity> tagList;
     private ArrayList<Fragment> fragments = new ArrayList<>();
     HomeRecommendFragment myRecommendFragment;
-    /*  @Override
-      public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-          super.onActivityCreated(savedInstanceState);
-          recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-          recycler.setAdapter(new RecyclerAdapter());
-      }*/
-
 
     @Override
     public int getLayoutId() {
@@ -58,29 +51,13 @@ public class RecommendFragment extends BaseFragment {
         }
 
         tagList = postsTagsBean.getSmallTagList();
-     /*   HomePageResponse.SmallTagEntity smallTag = new HomePageResponse().new SmallTagEntity();
-        tagList.add(smallTag);
-        tagList.addAll(smallTagList);*/
-        // ((RecommendFragmentManager) adapter).setData(tagList, recommendList);
+
         for (int i = 0; i < tagList.size(); i++) {
             myRecommendFragment = new HomeRecommendFragment();
-            myRecommendFragment.newInstance(getActivity());
             fragments.add(myRecommendFragment);
         }
         pager.setAdapter(new FmPagerAdapter(fragments, tagList, getActivity().getSupportFragmentManager()));
-        //  pager.setAdapter(adapter);
         mIndicator.setViewPager(pager);
-        // pager.setOffscreenPageLimit(0);
-   /*     //            创建一个 bundle 传递 数据
-        Bundle bundle = new Bundle();
-        //使用bundle合适的put方法传递数据
-        bundle.putSerializable("postsTagsBean", (Serializable) postsTagsBean);
-//             新建一个 fragment
-        RecommendFragment fragment = new RecommendFragment();
-
-        fragment.setArguments(bundle);
-
-        return fragment;*/
     }
 
     @Override
@@ -93,7 +70,7 @@ public class RecommendFragment extends BaseFragment {
         }
 
         adapter = new RecommendFragmentManager(getChildFragmentManager());
-
+       // mIndicator.onPageSelected(1);
         mIndicator.setMyOnPageChangeListener(new MyIndicator.MyOnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -114,6 +91,14 @@ public class RecommendFragment extends BaseFragment {
 
             }
         });
+        mIndicator.setOnClickListenerCallbackListener(new MyIndicator.OnClickListenerCallbackListener() {
+            @Override
+            public void setOnClickListenerCallback(int position) {
+
+                myRecommendFragment.newInstance(position, tagList.get(position).getId());
+            }
+        });
+
     }
 
     @Override

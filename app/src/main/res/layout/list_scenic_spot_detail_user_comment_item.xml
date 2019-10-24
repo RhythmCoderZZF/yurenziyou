@@ -100,12 +100,12 @@
             android:textSize="@dimen/text_size_small" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.nbhysj.coupon.view.MyRecycleView
         android:id="@+id/rv_user_comment_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginLeft="56dp"></android.support.v7.widget.RecyclerView>
+        android:layout_marginLeft="56dp"></com.nbhysj.coupon.view.MyRecycleView>
 
     <View
         android:layout_width="match_parent"

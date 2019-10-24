@@ -25,6 +25,9 @@ import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
@@ -186,6 +189,13 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     public void postOprateResult(BackResult res) {
 
     }
+
+    @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+
+    }
+
+
 
     @Override
     public void showMsg(String msg) {
@@ -363,6 +373,16 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
                 }, 100);
             }
         });
+    }
+
+    @Override
+    public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
     }
 
     @OnClick({R.id.rlyt_message_num,R.id.ll_search})

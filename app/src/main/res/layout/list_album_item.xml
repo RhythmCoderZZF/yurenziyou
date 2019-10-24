@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_photo" />
+             />
 
             <ImageView
                 android:id="@+id/img_is_select_edit_tag"

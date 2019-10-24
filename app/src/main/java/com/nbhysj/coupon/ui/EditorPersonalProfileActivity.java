@@ -14,6 +14,7 @@ import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.UserInfoModel;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
@@ -116,6 +117,11 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
                 showToast(EditorPersonalProfileActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getMyCardResult(BackResult<MyCardResponse> res) {
+
     }
 
     @Override

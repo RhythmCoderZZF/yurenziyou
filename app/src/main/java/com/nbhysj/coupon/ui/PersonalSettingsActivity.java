@@ -1,7 +1,13 @@
 package com.nbhysj.coupon.ui;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,14 +17,20 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.UserInfoModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.AppMarketUtil;
+import com.nbhysj.coupon.util.MemerryClear;
 import com.nbhysj.coupon.util.MemerryClearUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.nbhysj.coupon.util.AppMarketUtil.isIntentSafe;
 
 /**
  * @auther：hysj created on 2019/03/02
@@ -31,11 +43,14 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
     RelativeLayout mRlytEditPersonalData;
 
     //缓存
-    @BindView(R.id.tv_cache)
-    TextView mTvCache;
+    @BindView(R.id.tv_cache_size)
+    TextView mTvCacheSize;
+    //缓存大小
+    String mTotalCacheSize;
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_personal_settings;
     }
 
@@ -48,8 +63,8 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
     public void initData() {
 
         try {
-            String cacheSize = MemerryClearUtil.getTotalCacheSize(PersonalSettingsActivity.this);
-            mTvCache.setText(cacheSize);
+            mTotalCacheSize = MemerryClear.getTotalCacheSize(this);
+            mTvCacheSize.setText(mTotalCacheSize);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,12 +130,17 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
     }
 
     @Override
+    public void getMyCardResult(BackResult<MyCardResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(PersonalSettingsActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout})
+    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache, R.id.rlyt_evaluate_murloc_travel})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_bind_account_and_setting:
@@ -138,9 +158,62 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
             case R.id.tv_logout:
                 logout();
                 break;
+            case R.id.rlyt_clear_cache:
+                try {
+                    cacheClearDialog(PersonalSettingsActivity.this, mTotalCacheSize);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.rlyt_evaluate_murloc_travel:
+
+                startMarket(PersonalSettingsActivity.this);
+
+                break;
             default:
                 break;
         }
+    }
+
+    //3.跳转应用市场的本应用详情页：
+    public void startMarket(Activity activity) {
+        Uri uri = Uri.parse(String.format("market://details?id=%s", AppMarketUtil.getAppProcessName(activity)));
+        if (AppMarketUtil.isIntentSafe(activity, uri))    //  设备已安装应用市场
+        {
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+        } else // 没有安装市场
+        {
+            showToast(PersonalSettingsActivity.this, "无法打开应用市场");
+        }
+    }
+
+    public void cacheClearDialog(final Activity activity, final String msg) {
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("清除缓存")
+                .setMessage(msg + "缓存")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MemerryClear.clearAllCache(activity);
+                        try {
+                            mTvCacheSize.setText(MemerryClear.getTotalCacheSize(activity));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
     }
 
     //登出

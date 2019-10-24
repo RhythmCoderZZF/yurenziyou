@@ -165,9 +165,10 @@
                                         android:layout_marginRight="@dimen/dp_8"
                                         android:background="@drawable/shape_round_red_small"
                                         android:gravity="center"
-                                        android:text="6"
+                                        android:text="0"
                                         android:textColor="@color/white"
-                                        android:textSize="5sp" />
+                                        android:textSize="5sp"
+                                        android:visibility="invisible"/>
 
                                 </RelativeLayout>
 

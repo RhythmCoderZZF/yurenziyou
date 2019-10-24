@@ -1,12 +1,16 @@
 package com.nbhysj.coupon.ui;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,6 +37,7 @@ import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.UserInfoModel;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.oss.Config;
 import com.nbhysj.coupon.oss.service.ImageService;
@@ -42,6 +47,7 @@ import com.nbhysj.coupon.presenter.UserInfoPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
+import com.nbhysj.coupon.util.MemerryClear;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.view.GlideImageView;
@@ -350,6 +356,11 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
 
     @Override
     public void getThirdPartyLoginStatusResult(BackResult<ThirdPartyLoginStatusResponse> res) {
+
+    }
+
+    @Override
+    public void getMyCardResult(BackResult<MyCardResponse> res) {
 
     }
 

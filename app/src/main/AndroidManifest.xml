@@ -74,9 +74,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
-        <activity
-            android:name=".ui.RecreationDetailActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.CollectionDetailsActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.FoodDetailActivity"
             android:screenOrientation="portrait"></activity>
@@ -186,10 +185,13 @@
         <activity
             android:name=".ui.HomestayDetailActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.FoodDetailLocationMapActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -264,7 +266,7 @@
             android:name=".ui.RecommendFoodLookMoreActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.FoodRecommendationActivity"
+            android:name=".ui.FoodRecommendationListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.HotelOrderActivity"

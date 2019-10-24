@@ -4,18 +4,20 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCollectionRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FavoritesResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
-import com.nbhysj.coupon.model.response.HomePageSubTopicTagReponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
-import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
-import com.nbhysj.coupon.model.response.UserInfoResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Query;
@@ -43,7 +45,7 @@ public interface HomePageContract {
         //帖子详情
         Observable<BackResult<PostInfoDetailResponse>> getPostInfo(int id,String postKey,String latitude,String longitude);
 
-        //帖子操作: 1帖子点赞，2帖子收藏，3.帖子评论 postsType
+        //帖子操作: 1点赞帖子 2点赞帖子的评论 postsType
         Observable<BackResult<PraiseOrCollectResponse>> postOprate(PostOprateRequest postOprateRequest);
 
         //帖子评论
@@ -53,7 +55,16 @@ public interface HomePageContract {
         Observable<BackResult<HomePageAllSearchResponse>> getHomePageSearchAll(String queryType,String keyword);
 
         //首页搜索根据商户类型
-        Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(String queryType, String keyword);
+        Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(String queryType, String keyword,int page, int pageSize);
+
+        //帖子收藏
+        Observable<BackResult<FavoritesCollectionResponse>> postsCollection(PostsCollectionRequest postsCollectionRequest);
+
+        //专辑列表
+        Observable<BackResult<FavoritesListResponse>> getFavoritesList(int page, int pageSize);
+
+        //关注
+        Observable<BackResult<FollowUserStatusResponse>> userFollow(int userId);
     }
 
     interface View extends BaseView {
@@ -68,11 +79,18 @@ public interface HomePageContract {
 
         void postOprateResult(BackResult<PraiseOrCollectResponse> res);
 
+        void postCollectionResult(BackResult<FavoritesCollectionResponse> res);
+
+        //专辑列表
+        void getFavoritesListResult(BackResult<FavoritesListResponse> res);
+
         void postsCommentResult(BackResult res);
 
         void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res);
 
         void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res);
+
+        void userFollowResult(BackResult<FollowUserStatusResponse> res);
 
         void showMsg(String msg);
     }
@@ -98,7 +116,15 @@ public interface HomePageContract {
         public abstract void getHomePageSearchAll(String queryType,String keyword);
 
         //首页根据类型搜索
-        public abstract void getHomePageSearchByType(String queryType,String keyword);
+        public abstract void getHomePageSearchByType(String queryType,String keyword,int page, int pageSize);
 
+        //帖子收藏
+        public abstract void postCollection(PostsCollectionRequest postsCollectionRequest);
+
+        //专辑列表
+        public abstract void getFavoritesList(int page, int pageSize);
+
+        //关注
+        public abstract void userFollow(int userId);
     }
 }

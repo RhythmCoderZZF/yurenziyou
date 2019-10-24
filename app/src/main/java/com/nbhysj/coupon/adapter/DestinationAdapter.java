@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.ShareResponse;
-
 import java.util.List;
 
 import butterknife.BindView;

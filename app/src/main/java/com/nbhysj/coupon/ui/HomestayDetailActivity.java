@@ -1,15 +1,21 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +24,19 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.maps.model.LatLng;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HomestayEquipmentAdapter;
 import com.nbhysj.coupon.adapter.HomestayReservationAdapter;
 import com.nbhysj.coupon.adapter.HomestayResourcesAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomestayContract;
+import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HomestayModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -45,6 +54,8 @@ import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.PopupWindowUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
@@ -252,7 +263,7 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     //接待贵宾
     @BindView(R.id.tv_receive_foreign_guests_rule)
     TextView mTvReceiveForeignGuestsRule;
-
+    private PopupWindow mPopupWindow;
 
     private int height;
     private List<ImageView> viewList;
@@ -293,6 +304,12 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
     //收藏状态
     private int collectionStatus;
+
+    //纬度
+    private String mLatitude;
+
+    //经度
+    private String mLongitude;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -501,8 +518,9 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.ibtn_back,R.id.llyt_house_info,R.id.img_collection})
+    @OnClick({R.id.ibtn_back,R.id.llyt_house_info,R.id.img_collection,R.id.img_static_map,R.id.img_menu,R.id.img_scenic_spot_forward,R.id.llyt_evaluate,R.id.tv_total_comment_num})
     public void onClick(View v) {
+        Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.ibtn_back:
 
@@ -513,7 +531,6 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
                 if(!TextUtils.isEmpty(houseDetailsH5Url)) {
 
-                    Intent intent = new Intent();
                     intent.putExtra("url", houseDetailsH5Url);
                     intent.putExtra("title", Constants.HOUSE_INFO_H5_TITEL);
                     intent.setClass(HomestayDetailActivity.this, WebActivity.class);
@@ -526,6 +543,57 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
                 mchCollection();
 
+                break;
+            case R.id.img_static_map:
+                    if(!TextUtils.isEmpty(mLatitude) &&
+                            !TextUtils.isEmpty(mLongitude) && !TextUtils.isEmpty(mchName))
+                    {
+                        if (isInstalled("com.autonavi.minimap"))
+                        {
+                            openGaodeMapToGuide(mchName,mLatitude, mLongitude);
+
+                        } else if(isInstalled("com.baidu.BaiduMap"))
+                        {
+                            goToBaiduMap(mchName,mLatitude, mLongitude);
+
+                        } else {
+                            showToast(HomestayDetailActivity.this, "请先安装高德地图客户端");
+                        }
+
+                }
+                break;
+            case R.id.img_menu:
+                showPopupWindow(mImageMenu);
+                break;
+            case R.id.img_scenic_spot_forward:
+
+                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(HomestayDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                    @Override
+                    public void onSharePlatformItemClick(String sharePlatform) {
+
+                        //   showToast(getActivity(),sharePlatform);
+
+                       /* new ShareAction(ScenicSpotDetailActivity.this)
+                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
+                                .withText("hello")//分享内容
+                                .setCallback(umShareListener)//回调监听器
+                                .share();*/
+
+                    }
+                }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                shareOprateDialog.show();
+
+                break;
+            case R.id.llyt_evaluate:
+
+                intent.setClass(HomestayDetailActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
+                break;
+            case R.id.tv_total_comment_num:
+                intent.setClass(HomestayDetailActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -601,7 +669,8 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     int homestayRoomNum = landlorEntity.getHomestayRoomNum(); //民宿房源数
                     int landorScore = landlorEntity.getScore();
                     int bookingSuccessRate = landlorEntity.getBookingSuccess();
-
+                    mLatitude = mchDetailsEntity.getLatitude();
+                    mLongitude = mchDetailsEntity.getLongitude();
                     if (bannerList.size() > 0) {
 
                         for (int i = 0; i < bannerList.size(); i++) {
@@ -619,7 +688,6 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     mTvHomestayPrice.setText(Tools.getTwoDecimalPoint(consumePrice));
 
                     mchHomestayGoodsList = homestayDetailsResponse.getMchGoods();     //酒店商品展示列表
-
                     mchName = mchDetailsEntity.getMchName();
                     //A级
                     int level = mchDetailsEntity.getLevel();
@@ -942,6 +1010,82 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
         dismissProgressDialog();
         showToast(HomestayDetailActivity.this, Constants.getResultMsg(msg));
+    }
+    private void showPopupWindow(View anchorView) {
+        View contentView = getPopupWindowContentView();
+        mPopupWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 如果不设置PopupWindow的背景，有些版本就会出现一个问题：无论是点击外部区域还是Back键都无法dismiss弹框
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable());
+        // 设置pop出入动画
+        mPopupWindow.setAnimationStyle(R.style.pop_animation);
+        // 设置好参数之后再show
+        int windowPos[] = PopupWindowUtil.calculatePopWindowPos(anchorView, contentView);
+        int xOff = 20; // 可以自己调整偏移
+        int yOff = 2; // 可以自己调整偏移
+        windowPos[0] -= xOff;
+        // windowPos[1] = yOff;
+        mPopupWindow.showAtLocation(anchorView, Gravity.TOP | Gravity.START, windowPos[0], windowPos[1]);
+    }
+
+    private View getPopupWindowContentView() {
+        // 一个自定义的布局，作为显示的内容
+        int layoutId = R.layout.layout_popup_scenic_spot_detail_menu;   // 布局ID
+        View contentView = LayoutInflater.from(this).inflate(layoutId, null);
+        View.OnClickListener menuItemOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String itemStr = ((TextView) v).getText().toString();
+                String backHomePage = getResources().getString(R.string.str_back_home_page);
+                String backMyCollection = getResources().getString(R.string.str_back_my_collection);
+                String backMyOrder = getResources().getString(R.string.str_back_my_order);
+                String backMyMessage = getResources().getString(R.string.str_back_my_message);
+
+                Intent intent = new Intent();
+                if(itemStr.equals(backHomePage))
+                {
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+                    //  EventBus.getDefault().post("backHomePage");
+
+                } else if(itemStr.equals(backMyCollection))
+                {
+                    //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
+                    //intent.putExtra("currentItem",3);
+
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+
+                    //  EventBus.getDefault().post("backMyCollection");
+
+                } else if(itemStr.equals(backMyOrder))
+                {
+                    intent.setClass(HomestayDetailActivity.this, MyOrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                } else if(itemStr.equals(backMyMessage))
+                {
+                    intent.setClass(HomestayDetailActivity.this, MessageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+            }
+        };
+        contentView.findViewById(R.id.menu_item1).setOnClickListener(menuItemOnClickListener);
+        contentView.findViewById(R.id.menu_item2).setOnClickListener(menuItemOnClickListener);
+        contentView.findViewById(R.id.menu_item3).setOnClickListener(menuItemOnClickListener);
+        contentView.findViewById(R.id.menu_item4).setOnClickListener(menuItemOnClickListener);
+        return contentView;
     }
 
     @Override

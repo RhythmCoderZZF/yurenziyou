@@ -3,11 +3,13 @@ package com.nbhysj.coupon.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +29,7 @@ import com.nbhysj.coupon.adapter.NearbyHotSellHotelsAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.dialog.HotelDetailsSupplementDialog;
+import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -45,6 +49,7 @@ import com.nbhysj.coupon.presenter.HotelPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.PopupWindowUtil;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
@@ -106,6 +111,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     //评论数
     @BindView(R.id.tv_comment_num)
     TextView mTvCommentNum;
+    @BindView(R.id.tv_user_comment_num)
+    TextView mTvUserCommentNum;
     //商户地址
     @BindView(R.id.tv_mch_address)
     TextView mTvMchAddress;
@@ -215,6 +222,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     //收藏状态
     private int collectionStatus;
 
+    private PopupWindow mPopupWindow;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -338,8 +346,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.llyt_hotel_location,R.id.rlyt_all_facility_details,R.id.rlyt_booking_information
-            ,R.id.rlyt_nearby_hotel,R.id.img_collection})
+    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.rlyt_hotel_location,R.id.rlyt_all_facility_details,R.id.rlyt_booking_information
+            ,R.id.rlyt_nearby_hotel,R.id.img_collection,R.id.rlyt_look_user_all_comment,R.id.img_menu,R.id.img_scenic_spot_forward})
     public void onClick(View v) {
         Typeface normalFont = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
         mTvEntertainment.setTypeface(normalFont);
@@ -401,7 +409,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 HotelDetailsActivity.this.finish();
 
                 break;
-            case R.id.llyt_hotel_location:
+            case R.id.rlyt_hotel_location:
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("mchDetailsEntity", mchDetailsEntity);
                 intent.putExtras(bundle);
@@ -437,6 +445,35 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
             case R.id.img_collection:
 
                 mchCollection();
+
+                break;
+            case R.id.rlyt_look_user_all_comment:
+
+                intent.setClass(HotelDetailsActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
+
+                break;
+            case R.id.img_menu:
+                showPopupWindow(mImageMenu);
+                break;
+            case R.id.img_scenic_spot_forward:
+
+                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(HotelDetailsActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                    @Override
+                    public void onSharePlatformItemClick(String sharePlatform) {
+
+                        //   showToast(getActivity(),sharePlatform);
+
+                       /* new ShareAction(ScenicSpotDetailActivity.this)
+                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
+                                .withText("hello")//分享内容
+                                .setCallback(umShareListener)//回调监听器
+                                .share();*/
+
+                    }
+                }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                shareOprateDialog.show();
 
                 break;
             default:
@@ -522,7 +559,6 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     collectionStatus = mchDetailsEntity.getUserCollectState();
 
-
                     if(collectionStatus == 0)
                     {
                         mImgCollection.setImageResource(R.mipmap.icon_white_collection);
@@ -541,7 +577,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     mStarBarView.setStarMark(mCommentScore);
                     mTvCommentNum.setText(commentNum + "评论");
-
+                    mTvUserCommentNum.setText( commentNum + "评论");
                     //banner
                     bannerList = mchDetailsEntity.getRecommendPhoto();
 
@@ -744,7 +780,82 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 }
             }
         }
+    private void showPopupWindow(View anchorView) {
+        View contentView = getPopupWindowContentView();
+        mPopupWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 如果不设置PopupWindow的背景，有些版本就会出现一个问题：无论是点击外部区域还是Back键都无法dismiss弹框
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable());
+        // 设置pop出入动画
+        mPopupWindow.setAnimationStyle(R.style.pop_animation);
+        // 设置好参数之后再show
+        int windowPos[] = PopupWindowUtil.calculatePopWindowPos(anchorView, contentView);
+        int xOff = 20; // 可以自己调整偏移
+        int yOff = 2; // 可以自己调整偏移
+        windowPos[0] -= xOff;
+        // windowPos[1] = yOff;
+        mPopupWindow.showAtLocation(anchorView, Gravity.TOP | Gravity.START, windowPos[0], windowPos[1]);
+    }
 
+    private View getPopupWindowContentView() {
+        // 一个自定义的布局，作为显示的内容
+        int layoutId = R.layout.layout_popup_scenic_spot_detail_menu;   // 布局ID
+        View contentView = LayoutInflater.from(this).inflate(layoutId, null);
+        View.OnClickListener menuItemOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String itemStr = ((TextView) v).getText().toString();
+                String backHomePage = getResources().getString(R.string.str_back_home_page);
+                String backMyCollection = getResources().getString(R.string.str_back_my_collection);
+                String backMyOrder = getResources().getString(R.string.str_back_my_order);
+                String backMyMessage = getResources().getString(R.string.str_back_my_message);
+
+                Intent intent = new Intent();
+                if(itemStr.equals(backHomePage))
+                {
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+                    //  EventBus.getDefault().post("backHomePage");
+
+                } else if(itemStr.equals(backMyCollection))
+                {
+                    //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
+                    //intent.putExtra("currentItem",3);
+
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+
+                    //  EventBus.getDefault().post("backMyCollection");
+
+                } else if(itemStr.equals(backMyOrder))
+                {
+                    intent.setClass(HotelDetailsActivity.this, MyOrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                } else if(itemStr.equals(backMyMessage))
+                {
+                    intent.setClass(HotelDetailsActivity.this, MessageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+            }
+        };
+        contentView.findViewById(R.id.menu_item1).setOnClickListener(menuItemOnClickListener);
+        contentView.findViewById(R.id.menu_item2).setOnClickListener(menuItemOnClickListener);
+        contentView.findViewById(R.id.menu_item3).setOnClickListener(menuItemOnClickListener);
+        contentView.findViewById(R.id.menu_item4).setOnClickListener(menuItemOnClickListener);
+        return contentView;
+    }
     //获取酒店详情
     public void getMchDetails() {
 

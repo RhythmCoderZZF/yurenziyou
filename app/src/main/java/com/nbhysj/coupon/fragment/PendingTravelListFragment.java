@@ -24,6 +24,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -395,8 +396,15 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
     @Subscribe
     public void onEvent(String commentOprate) {
 
-        if(visibleToUser) {
+        if(visibleToUser)
+        {
             getPendingTravelOrderList();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

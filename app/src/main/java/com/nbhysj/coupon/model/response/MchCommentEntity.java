@@ -11,7 +11,7 @@ public class MchCommentEntity implements Serializable {
 
     private int id;
 
-    private int score;
+    private float score;
 
     private String content;
 
@@ -45,11 +45,11 @@ public class MchCommentEntity implements Serializable {
         this.id = id;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(float score) {
         this.score = score;
     }
 

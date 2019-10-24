@@ -97,6 +97,11 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
         EventBus.getDefault().register(this);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public int getLayoutId() {
@@ -496,6 +501,8 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
         super.setUserVisibleHint(isVisibleToUser);
         visibleToUser = isVisibleToUser;
     }
+
+
 
     @Subscribe
     public void onEvent(String commentOprate) {

@@ -16,6 +16,7 @@ import com.nbhysj.coupon.adapter.HotelAdapter;
 import com.nbhysj.coupon.adapter.PopularScenicSpotsAdapter;
 import com.nbhysj.coupon.adapter.ScenicSpotsListAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.HomeSearchMchTypeEnum;
 import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.model.DestinationModel;
@@ -23,6 +24,9 @@ import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.DestinationResponse;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
@@ -58,7 +62,6 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
     //景点列表
     List<HomeSearchMchTypeBean> mHotScenicSpotList;
 
-
     //酒店列表
     private List<HomeSearchMchTypeBean> hotelList;
     //城市名
@@ -85,7 +88,7 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
     RoundedImageView mImgCity;
 
     //商品类型
-    private String mchType = "ALL";
+    private String mchType = HomeSearchMchTypeEnum.ALL.getValue();
     //关键字
     private String keyWord = "宁波";
     int mTotalPageCount;
@@ -219,6 +222,21 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
     @Override
     public void postsCommentResult(BackResult res) {
+
+    }
+
+    @Override
+    public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
+    }
+
+    @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
 
     }
 

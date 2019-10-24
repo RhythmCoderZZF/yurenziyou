@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 
@@ -36,5 +37,10 @@ public class UserInfoModel implements UserInfoContract.Model {
     @Override
     public Observable<BackResult<ThirdPartyLoginStatusResponse>> getThirdPartyLoginStatus(int userId) {
         return Api.getInstance().apiService.getThirdPartyLoginStatus(userId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<MyCardResponse>> getMyCard(int userId) {
+        return Api.getInstance().apiService.getMyCard(userId).compose(RxSchedulers.io_main());
     }
 }

@@ -1,40 +1,66 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.AppBarLayout;
+import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.UserInfoModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
-import com.nbhysj.coupon.ui.AccountAndPersonalDataActivity;
-import com.nbhysj.coupon.ui.BezierViewDemoActivity;
-import com.nbhysj.coupon.ui.LoginActivity;
+import com.nbhysj.coupon.ui.AlbumDetailsActivity;
 import com.nbhysj.coupon.ui.MyBusinessCardActivity;
 import com.nbhysj.coupon.ui.MyOrderActivity;
 import com.nbhysj.coupon.ui.PersonalSettingsActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
+import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
+import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
 import com.nbhysj.coupon.view.GlideImageView;
+import com.nbhysj.coupon.view.JudgeNestedScrollView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
+
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,14 +70,10 @@ import butterknife.OnClick;
  * description: 我的
  */
 public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel> implements UserInfoContract.View {
+    @BindView(R.id.toolbar_space)
+    View mToolbarSpace;
     @BindView(R.id.image_avatar)
     GlideImageView mImgAvatar;
-    @BindView(R.id.tab_layout)
-    SlidingTabLayout tabLayout;
-    @BindView(R.id.viewpager)
-    ViewPager viewpager;
-    @BindView(R.id.app_barlayout)
-    AppBarLayout appBarlayout;
     @BindView(R.id.rlyt_toolbar)
     RelativeLayout mRlytToolbar;
     @BindView(R.id.llyt_order)
@@ -68,15 +90,47 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
     //简介
     @BindView(R.id.tv_user_profile)
     TextView mTvUserProfile;
-    @BindView(R.id.toolbar_collapsing)
+    @BindView(R.id.llyt_header)
+    LinearLayout mLlytHeaderToolbar;
+    //指示器
+    @BindView(R.id.magic_indicator)
+    MagicIndicator magicIndicator;
+    @BindView(R.id.magic_indicator_title)
+    MagicIndicator magicIndicatorTitle;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
+    @BindView(R.id.scrollView)
+    JudgeNestedScrollView scrollView;
+    @BindView(R.id.collapse)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
+    //粉丝数量
+    @BindView(R.id.tv_fans_num)
+    TextView mTvFansNum;
+    //关注数量
+    @BindView(R.id.tv_follow_num)
+    TextView mTvFollowNum;
+    //收藏数量
+    @BindView(R.id.tv_collection_num)
+    TextView mTvCollectionNum;
+    //赞数量
+    @BindView(R.id.tv_zan_num)
+    TextView mTvZanNum;
 
+    @BindView(R.id.refresh_layout)
+    SmartRefreshLayout mSmartRefreshLayout;
     private int userId;
     private boolean isFristCreate = true;
     private boolean isLoginFristCreate = true;
 
+    int toolBarPositionY = 0;
+    private int mScrollY = 0;
+    private String[] mTitles = new String[]{"分享", "收藏", "赞过"};
+    private List<String> mDataList = Arrays.asList(mTitles);
+
+
     @Override
     public int getLayoutId() {
+
         return R.layout.fragment_mine;
     }
 
@@ -93,109 +147,116 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
 
     @Override
     public void initView(View v) {
-
+        //沉浸式
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getActivity().getWindow().getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
+        layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
+        mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbarSpace.setVisibility(View.VISIBLE);
+        } else {
+            mToolbarSpace.setVisibility(View.GONE);
+        }
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
         if (!TextUtils.isEmpty(avatar)) {
             mImgAvatar.loadCircle(avatar);
         }
-      /* ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
-        layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
-        mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbarSpace.setVisibility(View.VISIBLE);        } else {
-            mToolbarSpace.setVisibility(View.GONE);
-        }*/
-
-        viewpager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
-            private String[] mTitles = new String[]{"分享", "收藏", "赞过"};
-
-            @Override
-            public Fragment getItem(int position) {
-                if (position == 0) {
-                    return new ShareFragment();
-                } else if (position == 1) {
-                    return new CollectionFragment();
-                } else if (position == 2) {
-                    return new RecommendFragment();
-                }
-
-                return null;
-            }
-
-            @Override
-            public int getCount() {
-                return mTitles.length;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return mTitles[position];
-            }
-
-        });
-
-        //  fragments.add(nearbyFragment);
-
-        tabLayout.setViewPager(viewpager);
-        // getChildFragmentManager().beginTransaction().add(R.id.fl_mine, followFragment).commit();
     }
 
     @Override
     public void initData() {
-        /*appBarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset == 0) {
-                    mRlytToolbar.setBackgroundColor(Color.argb(0, 0, 0, 0));
-                    mLlytOrder.setVisibility(View.VISIBLE);
-                    mLlytDataStatistics.setVisibility(View.VISIBLE);
-                  *//*  ivLeftHotBtn.setBackground(getResources().getDrawable(R.drawable.shap_left_btn_bg));
-                    ivSearchBtn.setVisibility(View.VISIBLE);
-                    ivSearchBtn.setBackground(getResources().getDrawable(R.drawable.shap_left_btn_bg));
-                    llSearch.setVisibility(View.VISIBLE);*//*
-                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
-                    mRlytToolbar.setBackgroundColor(Color.argb(255, 29, 235, 150));
-                    mLlytOrder.setVisibility(View.GONE);
-                    mLlytDataStatistics.setVisibility(View.GONE);
-                   *//* ivLeftHotBtn.setBackground(null);
-                    llSearch.setVisibility(View.VISIBLE);
-                    ivSearchBtn.setBackground(null);*//*
-                } else {
-                    int alpha = (int) (255 - verticalOffset / (float) appBarLayout.getTotalScrollRange() * 255);
-                    mRlytToolbar.setBackgroundColor(Color.argb(alpha, 29, 235, 150));
-                    mLlytOrder.setVisibility(View.VISIBLE);
-                    mLlytDataStatistics.setVisibility(View.VISIBLE);
-                  *//*  llSearch.setVisibility(View.VISIBLE);
-                    ivSearchBtn.setVisibility(View.VISIBLE);*//*
-                }
-            }
-        });*/
 
-        /**
-         * 监听滑动状态
-         */
-      /*  appBarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
-        {
+        mLlytHeaderToolbar.post(new Runnable() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset)
-            {
-                if (verticalOffset == 0)
-                {
-                    showToast(getActivity(),"展开状态");
-                }
-                else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange())
-                {
-                    showToast(getActivity(),"折叠状态");
-                }
-                else
-                {
-                    showToast(getActivity(),"中间状态");
-                }
+            public void run() {
+                dealWithViewPager();
             }
-        });*/
+        });
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            int lastScrollY = 0;
+            int h = DensityUtil.dp2px(170);
+            int color = ContextCompat.getColor(getActivity(), R.color.color_blue3) & 0x00ffffff;
+
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Log.e(">>>>>>>>>>>>>>", scrollY + "");
+                int[] location = new int[2];
+                magicIndicator.getLocationOnScreen(location);
+                int yPosition = location[1];
+                if (yPosition < toolBarPositionY) {
+                    magicIndicatorTitle.setVisibility(View.VISIBLE);
+                    scrollView.setNeedScroll(false);
+                } else {
+                    magicIndicatorTitle.setVisibility(View.GONE);
+                   scrollView.setNeedScroll(true);
+
+                }
+
+                if (lastScrollY < h) {
+                    scrollY = Math.min(h, scrollY);
+                    mScrollY = scrollY > h ? h : scrollY;
+                    //    buttonBarLayout.setAlpha(1f * mScrollY / h);
+                    mLlytHeaderToolbar.setBackgroundColor(((255 * mScrollY / h) << 24) | color);
+                    // mLlytHeaderBg.setTranslationY(mOffset - mScrollY);
+                }
+                if (scrollY == 0) {
+                   // mLlytHeaderToolbar.setBackgroundColor(0);
+                    //ivBack.setImageResource(R.drawable.back_white);
+                    // ivMenu.setImageResource(R.drawable.icon_menu_white);
+                } else {
+                    // ivBack.setImageResource(R.drawable.back_black);
+                    // ivMenu.setImageResource(R.drawable.icon_menu_black);
+                }
+
+                lastScrollY = scrollY;
+            }
+        });
+         //mLlytHeaderToolbar.setBackgroundColor(0);
+
+        viewPager.setAdapter(new ComFragmentAdapter(getChildFragmentManager(), getFragments()));
+        viewPager.setOffscreenPageLimit(3);
+        initMagicIndicator();
+        initMagicIndicatorTitle();
+
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        EventBus.getDefault().post("mineFragmentRefresh");
+                        if(mSmartRefreshLayout != null)
+                        {
+                            mSmartRefreshLayout.finishRefresh();
+                        }
+
+                    }
+                }, 100);
+            }
+        });
+
     }
 
-    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order, R.id.rlyt_my_business_card,R.id.llyt_pending_payment,R.id.llyt_pending_travel,R.id.llyt_pending_comment,R.id.llyt_order_refund})
+    private List<Fragment> getFragments() {
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(new ShareFragment());
+        fragments.add(new CollectionFragment());
+        fragments.add(new MinePostZanListFragment());
+        return fragments;
+    }
+
+    private void dealWithViewPager() {
+        toolBarPositionY = mLlytHeaderToolbar.getHeight();
+        ViewGroup.LayoutParams params = viewPager.getLayoutParams();
+        params.height = ScreenUtil.getScreenHeightPx(getActivity().getApplicationContext()) - toolBarPositionY - magicIndicator.getHeight() + 1;
+        viewPager.setLayoutParams(params);
+    }
+    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order, R.id.rlyt_my_business_card,R.id.llyt_pending_payment,R.id.llyt_pending_travel,R.id.llyt_pending_comment,R.id.llyt_order_refund,R.id.img_qr_my_card})
     public void onClick(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -215,19 +276,6 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 intent.setClass(getActivity(), MyOrderActivity.class);
                 getActivity().startActivity(intent);
 
-                break;
-            case R.id.rlyt_my_business_card:
-
-                BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
-                    @Override
-                    public void onBlurComplete() {
-
-                        Intent intent = new Intent(getActivity(), MyBusinessCardActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                        startActivity(intent);
-                    }
-                });
                 break;
             case R.id.llyt_pending_payment:
 
@@ -253,6 +301,21 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 intent.putExtra("orderStatus", 4);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
                 intent.setClass(getActivity(), MyOrderActivity.class);
                 getActivity().startActivity(intent);
+                break;
+            case R.id.rlyt_my_business_card:
+
+                break;
+            case R.id.img_qr_my_card:
+                BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
+                    @Override
+                    public void onBlurComplete() {
+
+                        Intent intent = new Intent(getActivity(), MyBusinessCardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        startActivity(intent);
+                    }
+                });
                 break;
             default:
                 break;
@@ -287,10 +350,8 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     }
                     if (!TextUtils.isEmpty(avatar)) {
                         mImgAvatar.loadCircle(avatar);
-                    } else {
-
-                        mImgAvatar.loadCircle("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -313,6 +374,11 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
 
     @Override
     public void getThirdPartyLoginStatusResult(BackResult<ThirdPartyLoginStatusResponse> res) {
+
+    }
+
+    @Override
+    public void getMyCardResult(BackResult<MyCardResponse> res) {
 
     }
 
@@ -356,9 +422,6 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
                 if (!TextUtils.isEmpty(avatar)) {
                     mImgAvatar.loadCircle(avatar);
-                } else {
-
-                    mImgAvatar.loadCircle("https://img5.duitang.com/uploads/item/201410/05/20141005190442_nuceP.thumb.700_0.jpeg");
                 }
                 isLoginFristCreate = false;
             }
@@ -382,7 +445,97 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
             }
         }
     }
+    private void initMagicIndicator() {
+        CommonNavigator commonNavigator = new CommonNavigator(getActivity());
+        commonNavigator.setScrollPivotX(0.65f);
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+            @Override
+            public int getCount() {
+                return mDataList == null ? 0 : mDataList.size();
+            }
 
+            @Override
+            public IPagerTitleView getTitleView(Context context, final int index) {
+                SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
+                simplePagerTitleView.setText(mDataList.get(index));
+                simplePagerTitleView.setNormalColor(ContextCompat.getColor(getActivity(), R.color.color_text_gray24));
+                simplePagerTitleView.setSelectedColor(ContextCompat.getColor(getActivity(), R.color.black));
+                simplePagerTitleView.setTextSize(16);
+                simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       // scrollView.scrollTo(0, 2835);
+                        viewPager.setCurrentItem(index, false);
+                      //  simplePagerTitleView.setTypeface(Typeface.DEFAULT_BOLD);
+                    }
+                });
+                return simplePagerTitleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setMode(LinePagerIndicator.MODE_EXACTLY);
+                indicator.setLineHeight(UIUtil.dip2px(context, 4));
+                indicator.setLineWidth(UIUtil.dip2px(context, 18));
+                indicator.setRoundRadius(UIUtil.dip2px(context, 3));
+                indicator.setStartInterpolator(new AccelerateInterpolator());
+                indicator.setEndInterpolator(new DecelerateInterpolator(2.0f));
+                indicator.setColors(ContextCompat.getColor(getActivity(), R.color.color_high_light_green));
+                return indicator;
+            }
+        });
+        magicIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(magicIndicator, viewPager);
+    }
+
+    private void initMagicIndicatorTitle() {
+        CommonNavigator commonNavigator = new CommonNavigator(getActivity());
+        commonNavigator.setScrollPivotX(0.65f);
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+            @Override
+            public int getCount() {
+                return mDataList == null ? 0 : mDataList.size();
+            }
+
+            @Override
+            public IPagerTitleView getTitleView(Context context, final int index) {
+                SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
+                simplePagerTitleView.setText(mDataList.get(index));
+                simplePagerTitleView.setNormalColor(ContextCompat.getColor(getActivity(), R.color.color_text_gray24));
+                simplePagerTitleView.setSelectedColor(ContextCompat.getColor(getActivity(), R.color.black));
+                simplePagerTitleView.setTextSize(16);
+                simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //int[] location = new int[2];
+                        //magicIndicator.getLocationOnScreen(location);
+                      //  scrollView.scrollTo(0, 2835);
+                        int hight = mCollapsingToolbarLayout.getHeight();
+                        viewPager.setCurrentItem(index, false);
+                    }
+                });
+                return simplePagerTitleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setMode(LinePagerIndicator.MODE_EXACTLY);
+                indicator.setLineHeight(UIUtil.dip2px(context, 4));
+                indicator.setLineWidth(UIUtil.dip2px(context, 18));
+                indicator.setRoundRadius(UIUtil.dip2px(context, 3));
+                indicator.setStartInterpolator(new AccelerateInterpolator());
+                indicator.setEndInterpolator(new DecelerateInterpolator(2.0f));
+                indicator.setColors(ContextCompat.getColor(getActivity(), R.color.color_high_light_green));
+                return indicator;
+            }
+        });
+        magicIndicatorTitle.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(magicIndicatorTitle, viewPager);
+    }
     @Override
     public boolean getUserVisibleHint() {
         System.out.print("112");

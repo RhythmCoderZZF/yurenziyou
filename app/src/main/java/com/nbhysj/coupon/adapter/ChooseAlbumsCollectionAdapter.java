@@ -8,31 +8,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.CardBean;
-import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
+import com.nbhysj.coupon.model.response.FavoritesBean;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.view.GlideImageView;
-import com.nbhysj.coupon.widget.glide.GlideApp;
-import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
+import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
 
 public class ChooseAlbumsCollectionAdapter extends RecyclerView.Adapter<ChooseAlbumsCollectionAdapter.CardHolder> {
 
-    private List<CollectionAlbumListResponse> collectionAlbumList;
+    private List<FavoritesBean> collectionAlbumList;
     private Context mContext;
     private ChooseAlbumsCollectionListener chooseAlbumsCollectionListener;
 
-    public ChooseAlbumsCollectionAdapter(Context mContext, List<CollectionAlbumListResponse> collectionAlbumList, ChooseAlbumsCollectionListener chooseAlbumsCollectionListener) {
+    public ChooseAlbumsCollectionAdapter(Context mContext, ChooseAlbumsCollectionListener chooseAlbumsCollectionListener) {
         this.mContext = mContext;
-        this.collectionAlbumList = collectionAlbumList;
+
         this.chooseAlbumsCollectionListener = chooseAlbumsCollectionListener;
+    }
+
+    public void setChooseAlbumsCollectionList(List<FavoritesBean> collectionAlbumList){
+
+        this.collectionAlbumList = collectionAlbumList;
     }
 
     @Override
@@ -43,11 +41,11 @@ public class ChooseAlbumsCollectionAdapter extends RecyclerView.Adapter<ChooseAl
 
     @Override
     public void onBindViewHolder(final CardHolder holder, final int position) {
-        CollectionAlbumListResponse collectionAlbum = collectionAlbumList.get(position);
-        String imageUrl = collectionAlbum.getAlbumImage();
-        String albumName = collectionAlbum.getAlbumName();
+        FavoritesBean collectionAlbum = collectionAlbumList.get(position);
+        String imageUrl = collectionAlbum.getPhoto();
+        String albumName = collectionAlbum.getTitle();
 
-        GlideUtil.loadCornersTransformImage(mContext, imageUrl, 5, holder.mImgChooseAlbum);
+        GlideUtil.loadImage(mContext, imageUrl,  holder.mImgChooseAlbum);
         holder.mTvAlbumName.setText(albumName);
 
         holder.mLlytChooseAlbumItem.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +70,7 @@ public class ChooseAlbumsCollectionAdapter extends RecyclerView.Adapter<ChooseAl
     }
 
     static class CardHolder extends RecyclerView.ViewHolder {
-        ImageView mImgChooseAlbum;
+        RoundedImageView mImgChooseAlbum;
         TextView mTvAlbumName;
         LinearLayout mLlytChooseAlbumItem;
 
@@ -87,6 +85,6 @@ public class ChooseAlbumsCollectionAdapter extends RecyclerView.Adapter<ChooseAl
 
     public interface ChooseAlbumsCollectionListener {
 
-        void setChooseAlbumsCollectionListener(CollectionAlbumListResponse collectionAlbum);
+        void setChooseAlbumsCollectionListener(FavoritesBean collectionAlbum);
     }
 }

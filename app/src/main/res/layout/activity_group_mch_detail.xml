@@ -83,7 +83,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="￥"
+                            android:text="¥"
                             android:textColor="@color/color_text_orange2"
                             android:textSize="@dimen/text_size_xtiny" />
 
@@ -192,7 +192,6 @@
                     android:background="@color/color_text_gray16"></View>
 
                 <RelativeLayout
-                    android:id="@+id/rlyt_scenic_spot_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -226,7 +225,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dp_16"
                         android:layout_marginRight="@dimen/dp_17"
-                        android:src="@mipmap/icon_blue_right_arrow" />
+                        android:src="@mipmap/icon_blue_right_arrow"
+                        android:visibility="gone"/>
 
                 </RelativeLayout>
 

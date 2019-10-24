@@ -26,7 +26,7 @@
 
         <!--<android.support.v4.widget.NestedScrollView-->
         <com.nbhysj.coupon.view.JudgeNestedScrollView
-            android:id="@+id/scrollView"
+            android:id="@+id/scroll_view_personal_home_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -63,7 +63,8 @@
                                     android:id="@+id/img_bg_avatar_blur"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@mipmap/bg_main_top" />
+                                    android:scaleType="fitXY"
+                                   />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -72,21 +73,26 @@
                                     android:orientation="vertical">
 
 
-                                    <RelativeLayout
+                                  <!--  <RelativeLayout
                                         android:layout_width="@dimen/dp_78"
                                         android:layout_height="@dimen/dp_78"
                                         android:layout_marginTop="@dimen/dp_77"
-                                        android:background="@drawable/shape_round_white">
+                                        android:background="@drawable/shape_round_white">-->
 
-                                        <ImageView
+                                        <de.hdodenhof.circleimageview.CircleImageView
+                                            android:id="@+id/img_post_publisher_avatar"
                                             android:layout_width="@dimen/dp_75"
                                             android:layout_height="@dimen/dp_75"
                                             android:layout_centerInParent="true"
-                                            android:src="@mipmap/icon_travel_assistant_place_delete" />
+                                            app:civ_border_width="@dimen/dp_3"
+                                            app:civ_border_color="@color/white"
+                                            android:layout_marginTop="@dimen/dp_77"
+                                            ></de.hdodenhof.circleimageview.CircleImageView>
 
-                                    </RelativeLayout>
+                                <!--    </RelativeLayout>-->
 
                                     <TextView
+                                        android:id="@+id/tv_nickname"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/dp_17"
@@ -96,13 +102,14 @@
                                         android:textStyle="bold" />
 
                                     <TextView
+                                        android:id="@+id/tv_user_profile"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/dp_12"
-                                        android:text="鱼香肉丝要了解一下吗？"
+                                        android:text=""
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/text_size_small"
-                                        android:textStyle="bold" />
+                                       />
 
                                     <LinearLayout
                                         android:id="@+id/llyt_data_statistics"
@@ -127,7 +134,7 @@
                                                 android:layout_gravity="center_horizontal"
                                                 android:text="0"
                                                 android:textColor="@color/white"
-                                                android:textSize="18sp" />
+                                                android:textSize="@dimen/text_size_medium" />
 
                                             <TextView
                                                 android:id="@+id/tv_fans"
@@ -154,7 +161,7 @@
                                                 android:layout_gravity="center_horizontal"
                                                 android:text="0"
                                                 android:textColor="@color/white"
-                                                android:textSize="18sp" />
+                                                android:textSize="@dimen/text_size_medium" />
 
                                             <TextView
                                                 android:layout_width="wrap_content"
@@ -174,15 +181,15 @@
                                             android:orientation="vertical">
 
                                             <TextView
+                                                android:id="@+id/tv_collection_num"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal"
                                                 android:text="0"
                                                 android:textColor="@color/white"
-                                                android:textSize="18sp" />
+                                                android:textSize="@dimen/text_size_medium" />
 
                                             <TextView
-                                                android:id="@+id/tv_collection_num"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal"
@@ -201,15 +208,15 @@
                                             android:orientation="vertical">
 
                                             <TextView
+                                                android:id="@+id/tv_zan_num"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal"
                                                 android:text="0"
                                                 android:textColor="@color/white"
-                                                android:textSize="18sp" />
+                                                android:textSize="@dimen/text_size_medium" />
 
                                             <TextView
-                                                android:id="@+id/tv_zan_num"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal"
@@ -220,19 +227,51 @@
                                         </LinearLayout>
                                     </LinearLayout>
 
-
-                                    <TextView
-                                        android:layout_width="121dp"
-                                        android:layout_height="@dimen/dp_30"
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
                                         android:layout_marginTop="@dimen/dp_21"
-                                        android:background="@drawable/bg_blue_green_gradient_radius_five"
-                                        android:gravity="center"
-                                        android:text="@string/str_attention"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text_size_normal"
-                                        android:textStyle="bold" />
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/tv_follow"
+                                            android:layout_width="121dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:background="@drawable/bg_blue_green_gradient_radius_five"
+                                            android:gravity="center"
+                                            android:paddingTop="@dimen/dp_7"
+                                            android:paddingBottom="@dimen/dp_7"
+                                            android:text="@string/str_attention"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_normal"
+                                            android:textStyle="bold" />
+
+                                        <LinearLayout
+                                            android:id="@+id/llyt_chat_with_others"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginLeft="@dimen/dp_10"
+                                            android:background="@drawable/bg_stroke_radius_five_black_shape_white_edge"
+                                            android:paddingLeft="@dimen/dp_15"
+                                            android:paddingRight="@dimen/dp_15"
+                                            android:paddingTop="@dimen/dp_7"
+                                            android:paddingBottom="@dimen/dp_7"
+
+                                            >
+
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:gravity="center"
+                                                android:src="@mipmap/icon_private_letter" />
+
+                                        </LinearLayout>
 
 
+                                    </LinearLayout>
                                 </LinearLayout>
 
                             </RelativeLayout>
@@ -285,7 +324,7 @@
                 android:layout_height="0dp"></View>
 
             <RelativeLayout
-                android:id="@+id/rlyt_scenic_spots_detail_header"
+                android:id="@+id/rlyt_personal_profile_header"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:gravity="center_vertical"
@@ -298,7 +337,7 @@
                     android:layout_centerVertical="true"
                     android:background="@null"
                     android:padding="@dimen/dp_18"
-                    android:src="@mipmap/icon_left_arrow_white" />
+                   />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -313,7 +352,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/dp_5"
                         android:padding="@dimen/dp_10"
-                        android:src="@mipmap/icon_white_menu_more" />
+                     />
 
                 </LinearLayout>
             </RelativeLayout>

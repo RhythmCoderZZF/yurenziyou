@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.util.blurbehind.BitmapBlurTransformation;
 import com.nbhysj.coupon.widget.glide.CornersTransform;
 import com.nbhysj.coupon.widget.glide.GlideApp;
 import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
@@ -119,6 +120,15 @@ public class GlideUtil {
                 apply(bitmapTransform(new BlurTransformation(0)))
                 .into(image);
     }
+
+    public static void loadBlurImageUrl(Context mContext, String imageUrl, ImageView image) {
+        Glide.with(mContext)
+                .load(imageUrl)
+                .apply(RequestOptions.bitmapTransform(new BitmapBlurTransformation(25,8)))
+                .into(image);
+    }
+
+
 
     public static void loadRoundedCornersImage(String url, ImageView image, float radius,
                                                GlideRoundedCornersTransform.CornerType cornerType) {

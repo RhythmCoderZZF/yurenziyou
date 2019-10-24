@@ -23,6 +23,10 @@ import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
+import com.nbhysj.coupon.model.response.FavoritesBean;
+import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
@@ -191,7 +195,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
             public void setCollectionPostToAlbumsListener(HomePageSubTopicTagBean followDetailBean) {
 
 
-                List<CollectionAlbumListResponse> collectionAlbumList = new ArrayList<>();
+              /*  List<CollectionAlbumListResponse> collectionAlbumList = new ArrayList<>();
 
                 CollectionAlbumListResponse collectionAlbumListResponse = new CollectionAlbumListResponse();
                 collectionAlbumListResponse.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
@@ -226,19 +230,16 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
                 CollectEnterAlbumsDialog collectEnterAlbumsDialog = new CollectEnterAlbumsDialog(collectionAlbumList, new CollectEnterAlbumsDialog.ChooseAlbumsCollectionListener() {
                     @Override
-                    public void setChooseAlbumsCollectionListener(CollectionAlbumListResponse collectionAlbum) {
+                    public void setChooseAlbumsCollectionListener(FavoritesBean collectionAlbum) {
 
-                        showToast(getActivity(), collectionAlbum.getAlbumName());
                     }
 
                     @Override
                     public void setNewAlbumCollectionListener() {
 
-                        toActivity(NewAlbumActivity.class);
-
                     }
                 });
-                collectEnterAlbumsDialog.show(getActivity().getFragmentManager(), "收藏专辑");
+                collectEnterAlbumsDialog.show(getActivity().getFragmentManager(), "收藏专辑");*/
             }
 
             @Override
@@ -359,6 +360,11 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+
+    }
+
+    @Override
     public void postOprateResult(BackResult res) {
 
     }
@@ -467,9 +473,21 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getActivity().unregisterReceiver(receiver);
+        if(receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+        }
     }
 
     @Override

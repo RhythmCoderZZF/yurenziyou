@@ -18,6 +18,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -216,12 +217,13 @@ public class FineFoodBangDanListActivity extends BaseActivity<FineFoodPresenter,
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-
+                    mRecreationList.clear();
                     List<MchTypeBean> scenicSpotList = res.getData().getMchs();
-                    mRecreationList.addAll(scenicSpotList);
-                    fineFoodBangDanListAdapter.setFineFoodList(mRecreationList);
-                    fineFoodBangDanListAdapter.notifyDataSetChanged();
-
+                    if(scenicSpotList != null && scenicSpotList.size() > 0) {
+                        mRecreationList.addAll(scenicSpotList);
+                        fineFoodBangDanListAdapter.setFineFoodList(mRecreationList);
+                        fineFoodBangDanListAdapter.notifyDataSetChanged();
+                    }
                     MchBangDanRankingResponse.BannerEntity banner = res.getData().getBanner();
                     if (banner != null) {
                         String photoUrl = banner.getPhoto();
@@ -247,6 +249,11 @@ public class FineFoodBangDanListActivity extends BaseActivity<FineFoodPresenter,
 
     @Override
     public void getFoodDetailResult(BackResult<MchFoodDetailResponse> res) {
+
+    }
+
+    @Override
+    public void getGoodsFoodRecommendList(BackResult<FoodRecommendListResponse> res) {
 
     }
 

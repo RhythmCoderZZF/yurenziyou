@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llyt_user_comment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <include layout="@layout/toolbar" />
 
@@ -18,22 +20,35 @@
         android:layout_weight="1"
         android:background="@color/white"
         app:srlAccentColor="#00000000"
-        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableHeaderTranslationContent="true"
         app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
 
-        <com.scwang.smartrefresh.header.MaterialHeader
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_comment_received"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"
+         >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"></android.support.v7.widget.RecyclerView>
+
+            <include
+                layout="@layout/layout_nodata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"></include>
+        </RelativeLayout>
 
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"
@@ -42,13 +57,6 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-
-    <!--   <LinearLayout
-           android:id="@+id/llyt_comment_show"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_alignParentBottom="true"
-           android:orientation="vertical">-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -68,7 +76,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="7dp"
-            android:layout_toLeftOf="@+id/enSure"
+            android:layout_toLeftOf="@+id/tv_comment_sure_send"
             android:background="@drawable/bg_rect_light_gray_shape">
 
             <EditText
@@ -97,19 +105,21 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="2dp"
-                android:src="@drawable/keyboard_selector" />
+                android:src="@drawable/keyboard_selector"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/enSure"
+            android:id="@+id/tv_comment_sure_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_14"
+            android:layout_marginLeft="@dimen/dp_4"
             android:layout_marginRight="@dimen/dp_14"
-            android:text="发送"
+            android:text="@string/app_send"
+            android:padding="@dimen/dp_10"
             android:textColor="@color/color_text_blue7" />
     </RelativeLayout>
 
@@ -136,6 +146,5 @@
             android:orientation="horizontal"
             android:paddingBottom="10dp" />
     </LinearLayout>
-    <!-- </LinearLayout>-->
 
 </LinearLayout>

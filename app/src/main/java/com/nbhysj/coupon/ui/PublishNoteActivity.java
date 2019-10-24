@@ -369,7 +369,7 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                                 .capture(capture)
                                 .captureStrategy(
                                         new CaptureStrategy(true, "com.nbhysj.coupon.fileprovider"))
-                                .maxSelectable(1)
+                                .maxSelectable(9)
 
                                 .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                 .gridExpectedSize(

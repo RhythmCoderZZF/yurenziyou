@@ -25,6 +25,7 @@
         app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
+        android:layout_marginTop="@dimen/dp_10"
         app:srlPrimaryColor="#00000000">
 
         <com.scwang.smartrefresh.layout.header.ClassicsHeader

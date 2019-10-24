@@ -5,6 +5,7 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -42,6 +43,8 @@ public interface FineFoodContract {
         //商户收藏
         Observable<BackResult<MchCollectionResponse>> mchCollection(MchCollectionRequest mchCollectionRequest);
 
+        //获取美食推荐
+        Observable<BackResult<FoodRecommendListResponse>> getGoodsFoodRecommendList(int mchId);
     }
 
     interface View extends BaseView {
@@ -55,6 +58,8 @@ public interface FineFoodContract {
         void getFoodDetailResult(BackResult<MchFoodDetailResponse> res);
 
         void mchCollectionResult(BackResult<MchCollectionResponse> res);
+
+        void getGoodsFoodRecommendList(BackResult<FoodRecommendListResponse> res);
 
         void showMsg(String msg);
     }
@@ -71,5 +76,7 @@ public interface FineFoodContract {
         public abstract void getFoodDetail(int mchId);
 
         public abstract void mchCollection(MchCollectionRequest mchCollectionRequest);
+
+        public abstract void getGoodsFoodRecommendList(int mchId);
     }
 }

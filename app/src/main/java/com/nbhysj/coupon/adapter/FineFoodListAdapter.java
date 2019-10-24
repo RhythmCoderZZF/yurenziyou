@@ -160,7 +160,7 @@ public class FineFoodListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return mHeaderView == null ? mFineFoodList.size() : mFineFoodList.size();
+        return mHeaderView != null ? mFineFoodList.size() + 1 : mFineFoodList.size();
     }
 
     @Override

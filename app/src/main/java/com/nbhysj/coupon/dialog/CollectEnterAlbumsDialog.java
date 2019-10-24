@@ -21,37 +21,54 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ChooseAlbumsCollectionAdapter;
 import com.nbhysj.coupon.adapter.RecommendDeliciousFoodAdapter;
 import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
+import com.nbhysj.coupon.model.response.FavoritesBean;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
 import com.nbhysj.coupon.ui.RecommendFoodLookMoreActivity;
+import com.nbhysj.coupon.ui.StrategyActivity;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @auther：hysj created on 2019/5/7
- * description：新增游客
+ * @auther：hysj created on 2019/10/15
+ * description：收藏专辑
  */
 public class CollectEnterAlbumsDialog extends DialogFragment {
     private Context context;
     private View view;
-    private List<CollectionAlbumListResponse> collectionAlbumList;
+    private List<FavoritesBean> collectionAlbumList;
     ChooseAlbumsCollectionListener chooseAlbumsCollectionListener;
+    ChooseAlbumsCollectionAdapter chooseAlbumsCollectionAdapter;
+    RecyclerView mRvCollectEnterAlbums;
+    Dialog dialog;
+    //暂无数据
+    private TextView mTvNoData;
+    //暂无数据
+    RelativeLayout mRlytNoData;
 
+    SmartRefreshLayout mSmartRefreshLayout;
     public CollectEnterAlbumsDialog() {
 
     }
 
     @SuppressLint("ValidFragment")
-    public CollectEnterAlbumsDialog(List<CollectionAlbumListResponse> collectionAlbumList, ChooseAlbumsCollectionListener chooseAlbumsCollectionListener) {
+    public CollectEnterAlbumsDialog(List<FavoritesBean> collectionAlbumList,ChooseAlbumsCollectionListener chooseAlbumsCollectionListener) {
 
-        this.collectionAlbumList = collectionAlbumList;
         this.chooseAlbumsCollectionListener = chooseAlbumsCollectionListener;
+        this.collectionAlbumList = collectionAlbumList;
+
+
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         context = getActivity();
         initView();
-        Dialog dialog = new Dialog(context, R.style.CustomDatePickerDialog);
+        dialog = new Dialog(context, R.style.CustomDatePickerDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // must be called before set content
         dialog.setContentView(view);
         dialog.setCanceledOnTouchOutside(true);
@@ -66,6 +83,7 @@ public class CollectEnterAlbumsDialog extends DialogFragment {
       /*  window.setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
 
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND);*/
+
         return dialog;
     }
 
@@ -76,21 +94,33 @@ public class CollectEnterAlbumsDialog extends DialogFragment {
 
     private void initView() {
         view = LayoutInflater.from(context).inflate(R.layout.layout_collect_enter_albums_dialog, null);
-        RecyclerView mRvCollectEnterAlbums = view.findViewById(R.id.rv_collect_enter_albums);
+        mRvCollectEnterAlbums = view.findViewById(R.id.rv_collect_enter_albums);
         TextView mTvNewAlbum = view.findViewById(R.id.tv_new_album);
+        mRlytNoData = view.findViewById(R.id.rlyt_no_data); //暂无数据
+        mTvNoData = view.findViewById(R.id.tv_nodata); //暂无数据
+        mSmartRefreshLayout = view.findViewById(R.id.refresh_layout);
+        mTvNoData.setText("暂无收藏数据");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         mRvCollectEnterAlbums.setLayoutManager(linearLayoutManager);
 
-        ChooseAlbumsCollectionAdapter chooseAlbumsCollectionAdapter = new ChooseAlbumsCollectionAdapter(context, collectionAlbumList, new ChooseAlbumsCollectionAdapter.ChooseAlbumsCollectionListener() {
+        chooseAlbumsCollectionAdapter = new ChooseAlbumsCollectionAdapter(context,new ChooseAlbumsCollectionAdapter.ChooseAlbumsCollectionListener() {
             @Override
-            public void setChooseAlbumsCollectionListener(CollectionAlbumListResponse collectionAlbum) {
+            public void setChooseAlbumsCollectionListener(FavoritesBean collectionAlbum) {
 
                 chooseAlbumsCollectionListener.setChooseAlbumsCollectionListener(collectionAlbum);
 
             }
         });
+        chooseAlbumsCollectionAdapter.setChooseAlbumsCollectionList(collectionAlbumList);
         mRvCollectEnterAlbums.setAdapter(chooseAlbumsCollectionAdapter);
+        if(collectionAlbumList != null && collectionAlbumList.size() > 0){
+
+            mRlytNoData.setVisibility(View.GONE);
+        } else{
+            mRlytNoData.setVisibility(View.VISIBLE);
+        }
+
 
         mTvNewAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +138,43 @@ public class CollectEnterAlbumsDialog extends DialogFragment {
                 dismiss();
             }
         });
+
+        mSmartRefreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
+
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        chooseAlbumsCollectionListener.setNewAlbumOnRefreshListener();
+                    }
+                }, 100);
+            }
+        });
+
+        mSmartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(final RefreshLayout refreshLayout) {
+
+                chooseAlbumsCollectionListener.setNewAlbumOnLoadMoreListener(refreshLayout);
+
+            }
+        });
+    }
+
+    public void setAlbumCollectList(List<FavoritesBean> collectionAlbumList){
+
+        this.collectionAlbumList = collectionAlbumList;
+        if(collectionAlbumList != null && collectionAlbumList.size() > 0){
+
+            mRlytNoData.setVisibility(View.GONE);
+        } else{
+            mRlytNoData.setVisibility(View.VISIBLE);
+        }
+        chooseAlbumsCollectionAdapter.setChooseAlbumsCollectionList(collectionAlbumList);
+        chooseAlbumsCollectionAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -116,11 +183,48 @@ public class CollectEnterAlbumsDialog extends DialogFragment {
         super.show(manager, tag);
     }
 
-    public interface ChooseAlbumsCollectionListener {
+    public void show() {
+        //KeyBoardUtils.closeKeybord((Activity) context);
 
-        void setChooseAlbumsCollectionListener(CollectionAlbumListResponse collectionAlbum);
-
-        void setNewAlbumCollectionListener();
+       dialog.show();
     }
 
+    public void dismiss() {
+        //KeyBoardUtils.closeKeybord((Activity) context);
+
+        dialog.dismiss();
+    }
+
+    public void setSmartRefreshLayoutLoadMoreFinish() {
+        //KeyBoardUtils.closeKeybord((Activity) context);
+
+       if(mSmartRefreshLayout != null){
+
+           mSmartRefreshLayout.finishLoadMore();
+       }
+    }
+
+    public void setSmartRefreshLayoutRefreshFinish() {
+        //KeyBoardUtils.closeKeybord((Activity) context);
+
+        if(mSmartRefreshLayout != null){
+
+            collectionAlbumList.clear();
+            chooseAlbumsCollectionAdapter.notifyDataSetChanged();
+            mSmartRefreshLayout.finishRefresh();
+            mSmartRefreshLayout.setNoMoreData(false);
+        }
+    }
+
+        public interface ChooseAlbumsCollectionListener {
+
+        void setChooseAlbumsCollectionListener(FavoritesBean collectionAlbum);
+
+        void setNewAlbumCollectionListener();
+
+        void setNewAlbumOnRefreshListener();
+
+        void setNewAlbumOnLoadMoreListener(RefreshLayout refreshLayout);
+
+    }
 }

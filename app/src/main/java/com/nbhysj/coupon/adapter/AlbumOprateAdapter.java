@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.FavoritesBean;
+import com.nbhysj.coupon.model.response.FavoritesResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.ui.AlbumDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -36,14 +38,16 @@ public class AlbumOprateAdapter extends RecyclerView.Adapter<AlbumOprateAdapter.
     /**
      * 文件类型列表
      */
-    List<HomePageSubTopicTagBean> mRecommendFriendsList;
+    List<FavoritesBean> mRecommendFriendsList;
     private Context mContext;
-    private List<HomePageSubTopicTagBean> mSelectAlbumEditList;
+    private List<FavoritesBean> mSelectAlbumEditList;
     private int oprate = 1;
 
-    public AlbumOprateAdapter(Context mContext) {
+    private AlbumOprateListener albumOprateListener;
+    public AlbumOprateAdapter(Context mContext,AlbumOprateListener albumOprateListener) {
 
         this.mContext = mContext;
+        this.albumOprateListener = albumOprateListener;
 
         if (mSelectAlbumEditList == null) {
 
@@ -53,7 +57,7 @@ public class AlbumOprateAdapter extends RecyclerView.Adapter<AlbumOprateAdapter.
         }
     }
 
-    public void setAlbumOprateList(List<HomePageSubTopicTagBean> recommendFriendsPictureList) {
+    public void setAlbumOprateList(List<FavoritesBean> recommendFriendsPictureList) {
 
         this.mRecommendFriendsList = recommendFriendsPictureList;
     }
@@ -77,46 +81,22 @@ public class AlbumOprateAdapter extends RecyclerView.Adapter<AlbumOprateAdapter.
 
         try {
 
-            HomePageSubTopicTagBean recommendFriends = mRecommendFriendsList.get(itemPosition);
+            FavoritesBean recommendFriends = mRecommendFriendsList.get(itemPosition);
             String avatar = recommendFriends.getAvater();
             String name = recommendFriends.getNickname();
             String imageUrl = recommendFriends.getPhoto();
+            int hits = recommendFriends.getHits();
             GlideUtil.loadImage(mContext, avatar, holder.mImageAvatar);
             holder.mTvDes.setText(recommendFriends.getContent());
-            holder.mImgRecommendFriends.setAdjustViewBounds(true);
-            int photoWidth = recommendFriends.getPhotoWidth();
-            int photoHeight = recommendFriends.getPhotoHeight();
-            ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+
             holder.mTvName.setText(name);
-/*
-           GlideApp.with(mContext)
-                    .load(imageUrl)
-            *//* .placeholder(R.mipmap.icon_placeholder_image)
-                    .error(R.mipmap.icon_placeholder_image)*//*
-                   .skipMemoryCache(false)
-                   .thumbnail(0.5f) //加载缩略图
-                    .dontAnimate()
-                   .diskCacheStrategy(DiskCacheStrategy.ALL)
-                   .override(photoWidth, photoHeight) //对图片进行压缩
-                    .transform(new GlideRoundCornersTransUtils(mContext, 15, GlideRoundCornersTransUtils.CornerType.TOP))
-                    .into(holder.mImgRecommendFriends);*/
+            holder.mTvLookNum.setText(String.valueOf(hits));
 
-            GlideUtil.loadImageWithProportion(mContext, imageUrl, photoWidth, photoHeight, holder.mImgRecommendFriends);
-
-          /*  ImageLoaderUtil.getImageLoader(mContext)
-                    .displayImage(imageUrl, holder.mImgRecommendFriends, ImageLoaderUtil.getPhotoImageOption());*/
-           /*    scenicSpotOptions = new RequestOptions()
-                 .transform(new GlideRoundTransform(mContext, 20));
-
-            Glide.with(mContext)
-                    .load("http://k.zol-img.com.cn/sjbbs/7692/a7691515_s.jpg")
-                    .apply(scenicSpotOptions)
-                    .into(holder.mImgScenicSpotPhoto);*/
+            GlideUtil.loadImage(mContext, imageUrl, holder.mImgRecommendFriends);
 
             if (oprate == 0) {
                 holder.mImgIsSelectEditTag.setVisibility(View.VISIBLE);
-                if (recommendFriends.isLove()) {
+                if (recommendFriends.getIsAlbumSelect() == 1) {
 
                     holder.mImgIsSelectEditTag.setBackgroundResource(R.mipmap.icon_album_edit_item_select);
                 } else {
@@ -136,16 +116,18 @@ public class AlbumOprateAdapter extends RecyclerView.Adapter<AlbumOprateAdapter.
                 @Override
                 public void onClick(View view) {
                     if (oprate == 0) {
-                        if (recommendFriends.isLove()) {
-                            recommendFriends.setLove(false);
+                        if (recommendFriends.getIsAlbumSelect() == 1) {
+                            recommendFriends.setIsAlbumSelect(0);
                             mSelectAlbumEditList.remove(recommendFriends);
                             // holder.mImgIsSelectEditTag.setBackgroundResource(R.mipmap.icon_album_edit_item_unselect);
                         } else {
-                            recommendFriends.setLove(true);
+                            recommendFriends.setIsAlbumSelect(1);
 
                             mSelectAlbumEditList.add(recommendFriends);
                             //holder.mImgIsSelectEditTag.setBackgroundResource(R.mipmap.icon_album_edit_item_select);
                         }
+
+                        albumOprateListener.setAlbumOprateListener(mSelectAlbumEditList.size());
                     }
 
                     notifyDataSetChanged();
@@ -167,7 +149,7 @@ public class AlbumOprateAdapter extends RecyclerView.Adapter<AlbumOprateAdapter.
     }
 
 
-    public List<HomePageSubTopicTagBean> getSelectAlbumEditList() {
+    public List<FavoritesBean> getSelectAlbumEditList() {
 
         return mSelectAlbumEditList;
 
@@ -210,5 +192,10 @@ public class AlbumOprateAdapter extends RecyclerView.Adapter<AlbumOprateAdapter.
             mCardViewAlbum = itemView.findViewById(R.id.card_view_album);
 
         }
+    }
+
+    public interface AlbumOprateListener{
+
+        void setAlbumOprateListener(int mSelectAlbumNum);
     }
 }

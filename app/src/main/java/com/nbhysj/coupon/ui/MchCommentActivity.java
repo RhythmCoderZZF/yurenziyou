@@ -1,82 +1,110 @@
 package com.nbhysj.coupon.ui;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
+import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.CommentContract;
 import com.nbhysj.coupon.model.CommentModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.LabelEntity;
+import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchCommentResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
+import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.PostsCommentResponse;
+import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.presenter.CommentPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
+import com.nbhysj.coupon.view.MyRecycleView;
+import com.nbhysj.coupon.view.StarBarView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 
 /**
- * @auther：hysj created on 2019/05/09
- * description：景区评论
+ * @auther：hysj created on 2019/10/14
+ * description：商户评论
  */
 public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentModel> implements CommentContract.View {
 
     @BindView(R.id.flowlayout_comment)
     TagFlowLayout mTagFlowComment;
     @BindView(R.id.rv_user_comment)
-    RecyclerView mRvUserComment;
+    MyRecycleView mRvUserComment;
+    //商户评分
+    @BindView(R.id.tv_mch_score)
+    TextView mTvMchScore;
 
+    //星级
+    @BindView(R.id.starbar)
+    StarBarView mStarBarView;
+
+    //景色评分
+    @BindView(R.id.tv_scenic_spot_score)
+    TextView mTvScenicSpotScore;
+
+    @BindView(R.id.pb_scenic_spot_progressbar)
+    ProgressBar mProgressScenicSpot;
+
+    //趣味评分
+    @BindView(R.id.tv_interest_score)
+    TextView mTvInterestScore;
+
+    @BindView(R.id.pb_interest_progressbar)
+    ProgressBar mProgressInterest;
+
+    //性价比评分
+    @BindView(R.id.tv_cost_performancet_score)
+    TextView mTvCostPerformancetScore;
+
+    @BindView(R.id.pb_cost_performancet_progressbar)
+    ProgressBar mProgressCostPerformancet;
+
+    //评论数
+    @BindView(R.id.tv_comment_num)
+    TextView mTvCommentNum;
+
+    private List<MchCommentEntity> mchCommentList;
+
+    MchCommentAdapter mchCommentAdapter;
+
+    //商户Id
+    private int mchId;
     @Override
     public int getLayoutId() {
-        return R.layout.activity_scenic_spot_comment;
+        StatusBarCompat.setStatusBarColor(this, -131077);
+        return R.layout.activity_mch_comment;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
         ToolbarHelper.setHeadBar(MchCommentActivity.this, "评论", R.mipmap.icon_left_arrow_black, "");
+        mchId = getIntent().getIntExtra("mchId",0);
+
+        if (mchCommentList == null){
+            mchCommentList = new ArrayList<>();
+        } else {
+            mchCommentList.clear();
+        }
     }
 
     @Override
     public void initData() {
-        List<String> fineFoodTagList = new ArrayList<>();
-        fineFoodTagList.add("全部");
-        fineFoodTagList.add("家庭亲子77");
-        fineFoodTagList.add("价格高19");
-        fineFoodTagList.add("人气旺19");
-        fineFoodTagList.add("性价比低77");
-        fineFoodTagList.add("地方赞19");
-        fineFoodTagList.add("设施完善19");
-        TagAdapter tagAdapter = new TagAdapter<String>(fineFoodTagList) {
-            @Override
-            public View getView(FlowLayout parent, int position, String option) {
-                View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_comment,
-                        mTagFlowComment, false);
-                TextView tv = view.findViewById(R.id.tv_flowlayout);
-                tv.setText(option);
-
-                return view;
-            }
-        };
-        mTagFlowComment.setMaxSelectCount(1);
-        mTagFlowComment.setAdapter(tagAdapter);
-
+/*
 
         mTagFlowComment.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
@@ -95,68 +123,16 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
             }
         });
         tagAdapter.setSelectedList(0);
+*/
 
+        getMchCommentList();
 
-        List<ScenicSpotsUserCommentResponse> spotsUserCommentResponseList = new ArrayList<>();
-        List<String> userCommentPhotoList = new ArrayList<>();
-        userCommentPhotoList.add("http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg");
-        userCommentPhotoList.add("http://d.hiphotos.baidu.com/lvpics/w=1000/sign=e2347e78217f9e2f703519082f00eb24/730e0cf3d7ca7bcb49f90bb1b8096b63f724a8aa.jpg");
-        userCommentPhotoList.add("http://i0.hexunimg.cn/2011-08-18/132587770.jpg");
-        userCommentPhotoList.add("http://pic34.nipic.com/20131102/11840161_135433676377_2.jpg");
-        userCommentPhotoList.add("http://i2.hexunimg.cn/2015-11-16/180589438.jpg");
-        userCommentPhotoList.add("http://photocdn.sohu.com/20120216/Img334903378.jpg");
-        ScenicSpotsUserCommentResponse userCommentResponse = new ScenicSpotsUserCommentResponse();
-        userCommentResponse.setId(1);
-        userCommentResponse.setUsername("飞飞飞");
-        userCommentResponse.setCommentPublishTime("2019-04-29");
-        userCommentResponse.setContent("第一次去海洋馆真的超级幸运,先去看的是剧场表扬 互动环节的时候很幸运被抽中和白鲸接触来了一个深海之吻超级感动,后面又到水族参观,最喜欢的是哒哒哒哒哒哒多多");
-        userCommentResponse.setStarLevel(3);
-        userCommentResponse.setUserAvatarPhoto("http://pic9.nipic.com/20100901/4753218_163400058451_2.jpg");
-        userCommentResponse.setUserCommentPhotoList(userCommentPhotoList);
-
-        List<String> userCommentPhotoList1 = new ArrayList<>();
-        userCommentPhotoList1.add("http://pic34.nipic.com/20131102/11840161_135433676377_2.jpg");
-        userCommentPhotoList1.add("http://i2.hexunimg.cn/2015-11-16/180589438.jpg");
-        userCommentPhotoList1.add("http://photocdn.sohu.com/20120216/Img334903378.jpg");
-        userCommentPhotoList1.add("http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg");
-        userCommentPhotoList1.add("http://d.hiphotos.baidu.com/lvpics/w=1000/sign=e2347e78217f9e2f703519082f00eb24/730e0cf3d7ca7bcb49f90bb1b8096b63f724a8aa.jpg");
-        userCommentPhotoList1.add("http://i0.hexunimg.cn/2011-08-18/132587770.jpg");
-        ScenicSpotsUserCommentResponse userCommentResponse1 = new ScenicSpotsUserCommentResponse();
-        userCommentResponse1.setId(2);
-        userCommentResponse1.setUsername("哒哒滴");
-        userCommentResponse1.setCommentPublishTime("2019-04-23");
-        userCommentResponse1.setContent("第一次去海洋馆真的超级幸运,先去看的是剧场表扬 互动环节的时候很幸运被抽中和白鲸接触来了一个深海之吻超级感动,后面又到水族参观,最喜欢的是哒哒哒哒哒哒多多");
-        userCommentResponse1.setStarLevel(4);
-        userCommentResponse1.setUserAvatarPhoto("https://b-ssl.duitang.com/uploads/item/201512/08/20151208130909_SiFP5.jpeg");
-        userCommentResponse1.setUserCommentPhotoList(userCommentPhotoList1);
-        spotsUserCommentResponseList.add(userCommentResponse);
-        spotsUserCommentResponseList.add(userCommentResponse1);
-
-        List<String> userCommentPhotoList2 = new ArrayList<>();
-        userCommentPhotoList2.add("http://pic34.nipic.com/20131102/11840161_135433676377_2.jpg");
-        userCommentPhotoList2.add("http://i2.hexunimg.cn/2015-11-16/180589438.jpg");
-        userCommentPhotoList2.add("http://photocdn.sohu.com/20120216/Img334903378.jpg");
-        userCommentPhotoList2.add("http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg");
-        userCommentPhotoList2.add("http://d.hiphotos.baidu.com/lvpics/w=1000/sign=e2347e78217f9e2f703519082f00eb24/730e0cf3d7ca7bcb49f90bb1b8096b63f724a8aa.jpg");
-        userCommentPhotoList2.add("http://i0.hexunimg.cn/2011-08-18/132587770.jpg");
-        ScenicSpotsUserCommentResponse userCommentResponse2 = new ScenicSpotsUserCommentResponse();
-        userCommentResponse2.setId(3);
-        userCommentResponse2.setUsername("哒哒滴");
-        userCommentResponse2.setCommentPublishTime("2019-04-23");
-        userCommentResponse2.setContent("第一次去海洋馆真的超级幸运,先去看的是剧场表扬 互动环节的时候很幸运被抽中和白鲸接触来了一个深海之吻超级感动,后面又到水族参观,最喜欢的是哒哒哒哒哒哒多多");
-        userCommentResponse2.setStarLevel(4);
-        userCommentResponse2.setUserAvatarPhoto("https://b-ssl.duitang.com/uploads/item/201512/08/20151208130909_SiFP5.jpeg");
-        userCommentResponse2.setUserCommentPhotoList(userCommentPhotoList1);
-        spotsUserCommentResponseList.add(userCommentResponse);
-        spotsUserCommentResponseList.add(userCommentResponse1);
-        spotsUserCommentResponseList.add(userCommentResponse2);
-
-        LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(MchCommentActivity.this);
-        userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
-       /* mRvUserComment.setLayoutManager(userCommentLayoutManager);
-        ScenicSpotDetailUserCommentAdapter scenicSpotDetailUserCommentAdapter = new ScenicSpotDetailUserCommentAdapter(ScenicSpotCommentActivity.this);
-         scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(spotsUserCommentResponseList);
-        mRvUserComment.setAdapter(scenicSpotDetailUserCommentAdapter);*/
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MchCommentActivity.this);
+        linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
+        mRvUserComment.setLayoutManager(linearLayoutManager);
+        mchCommentAdapter = new MchCommentAdapter(MchCommentActivity.this);
+        mchCommentAdapter.setScenicSpotsUserCommentList(mchCommentList);
+        mRvUserComment.setAdapter(mchCommentAdapter);
     }
 
     @Override
@@ -173,8 +149,55 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
 
                     MchCommentResponse mchCollectionResponse = res.getData();
                     MchCommentResponse.ScoreEntity scoreEntity = mchCollectionResponse.getScore();
-                    scoreEntity.getCommentNum();
+                    int commentNum = scoreEntity.getCommentNum();
+                    float commentScore = scoreEntity.getCommentScore();
+                    float commentScore1 = scoreEntity.getCommentScore1();
+                    float commentScore2 = scoreEntity.getCommentScore2();
+                    float commentScore3 = scoreEntity.getCommentScore3();
 
+                    mTvMchScore.setText(String.valueOf(commentScore));
+                    mStarBarView.setIntegerMark(false);
+                            mStarBarView.setStarMark(commentScore);
+
+                    mTvScenicSpotScore.setText(commentScore1 + "分");
+                    mProgressScenicSpot.setProgress((int)commentScore1);
+
+                    mTvInterestScore.setText(commentScore2 + "分");
+                    mProgressInterest.setProgress((int)commentScore2);
+
+                    mTvCostPerformancetScore.setText(commentScore3 + "分");
+                    mProgressCostPerformancet.setProgress((int)commentScore3);
+
+                    mTvCommentNum.setText("共" + commentNum + "条评论");
+
+                    List<LabelEntity> labelList = mchCollectionResponse.getLabel();
+
+                    if(labelList != null)
+                    {
+                        TagAdapter tagAdapter = new TagAdapter<LabelEntity>(labelList) {
+                            @Override
+                            public View getView(FlowLayout parent, int position, LabelEntity labelEntity) {
+                                View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_comment,
+                                        mTagFlowComment, false);
+                                TextView tv = view.findViewById(R.id.tv_flowlayout);
+                                String title = labelEntity.getTitle();
+                                tv.setText(title);
+                                return view;
+                            }
+                        };
+                        mTagFlowComment.setMaxSelectCount(1);
+                        mTagFlowComment.setAdapter(tagAdapter);
+                    }
+
+                    //评论列表
+                    MchCommentResponse.CommentEntity commentEntity = mchCollectionResponse.getComment();
+                    mchCommentList = commentEntity.getResult();
+
+                     if(mchCommentList != null)
+                     {
+                         mchCommentAdapter.setScenicSpotsUserCommentList(mchCommentList);
+                         mchCommentAdapter.notifyDataSetChanged();
+                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -184,6 +207,16 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
                 showToast(MchCommentActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getAllPostsCommentListByArticleIdResult(BackResult<PostsCommentResponse> res) {
+
+    }
+
+    @Override
+    public void postOprateResult(BackResult<PraiseOrCollectResponse> res) {
+
     }
 
     @Override
@@ -197,5 +230,14 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
     public void initPresenter() {
 
         mPresenter.setVM(this,mModel);
+    }
+
+    public void getMchCommentList(){
+
+        if(validateInternet()){
+
+            showProgressDialog(MchCommentActivity.this);
+            mPresenter.getMchCommentList(mchId);
+        }
     }
 }

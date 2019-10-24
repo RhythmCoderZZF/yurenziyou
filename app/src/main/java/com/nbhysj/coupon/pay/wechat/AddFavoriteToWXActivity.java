@@ -45,7 +45,7 @@ public class AddFavoriteToWXActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+		api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID);
 		
 		setContentView(R.layout.add_fav_to_wx);
 		initView();

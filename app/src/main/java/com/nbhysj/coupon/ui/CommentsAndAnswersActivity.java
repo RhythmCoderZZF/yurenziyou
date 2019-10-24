@@ -71,9 +71,9 @@ public class CommentsAndAnswersActivity extends BaseActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CommentsAndAnswersActivity.this);
         mRvCommentReceivedList.setLayoutManager(linearLayoutManager);
-        CommentReceivedItemAdapter commentReceivedItemAdapter = new CommentReceivedItemAdapter(CommentsAndAnswersActivity.this);
+       /* CommentReceivedItemAdapter commentReceivedItemAdapter = new CommentReceivedItemAdapter(CommentsAndAnswersActivity.this);
         commentReceivedItemAdapter.setCommentReceivedList(commentReceiveList);
-        mRvCommentReceivedList.setAdapter(commentReceivedItemAdapter);
+        mRvCommentReceivedList.setAdapter(commentReceivedItemAdapter);*/
     }
 
     @Override

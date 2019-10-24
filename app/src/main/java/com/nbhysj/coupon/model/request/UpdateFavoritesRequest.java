@@ -16,7 +16,7 @@ public class UpdateFavoritesRequest {
     private String intro;
 
     //他人是否可见 1可见 0不可见
-    private String visibleStatus;
+    private int visibleStatus;
 
     public int getId() {
         return id;
@@ -42,11 +42,11 @@ public class UpdateFavoritesRequest {
         this.intro = intro;
     }
 
-    public String getVisibleStatus() {
+    public int getVisibleStatus() {
         return visibleStatus;
     }
 
-    public void setVisibleStatus(String visibleStatus) {
+    public void setVisibleStatus(int visibleStatus) {
         this.visibleStatus = visibleStatus;
     }
 }

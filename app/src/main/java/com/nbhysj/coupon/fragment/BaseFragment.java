@@ -58,8 +58,8 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         binder = ButterKnife.bind(this, view);
         mPresenter = TUtil.getT(this, 0);
         mModel = TUtil.getT(this, 1);
-        appManager = AppManager.getInstance();
-        appManager.addActivity(getActivity());
+       // appManager = AppManager.getInstance();
+     //   appManager.addActivity(getActivity());
         isCreated = true;
         this.view = view;
 

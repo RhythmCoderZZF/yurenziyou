@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -98,11 +99,11 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
             String title = goodsPriceEntity.getTitle();
 
             if (itemPosition == 1) {
-                holder.mLlytIncreaseTicketItem.setBackgroundResource(R.drawable.bg_order_date_select_bottom_shape);
+                holder.mRlytIncreaseTicketItem.setBackgroundResource(R.drawable.bg_order_date_select_bottom_shape);
 
             } else {
 
-                holder.mLlytIncreaseTicketItem.setBackgroundResource(R.color.white);
+                holder.mRlytIncreaseTicketItem.setBackgroundResource(R.color.white);
             }
 
             GlideUtil.loadImage(mContext, photoUrl,holder.mImgScenicSpots);
@@ -198,8 +199,8 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
         @BindView(R.id.tag_flowlayout_ticket)
         TagFlowLayout mTagFlowLayout;
         //增加门票
-        @BindView(R.id.llyt_increase_ticket_item)
-        LinearLayout mLlytIncreaseTicketItem;
+        @BindView(R.id.rlyt_increase_ticket_item)
+        RelativeLayout mRlytIncreaseTicketItem;
         //购买减少数量
         @BindView(R.id.img_purchase_num_reduce)
         ImageView mImgPurchaseNumReduce;

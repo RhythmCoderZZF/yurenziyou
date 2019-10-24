@@ -70,9 +70,9 @@ public class PraiseAndCollectionActivity extends BaseActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PraiseAndCollectionActivity.this);
         mRvCommentReceivedList.setLayoutManager(linearLayoutManager);
-        CommentReceivedItemAdapter commentReceivedItemAdapter = new CommentReceivedItemAdapter(PraiseAndCollectionActivity.this);
+      /*  CommentReceivedItemAdapter commentReceivedItemAdapter = new CommentReceivedItemAdapter(PraiseAndCollectionActivity.this);
         commentReceivedItemAdapter.setCommentReceivedList(commentReceiveList);
-        mRvCommentReceivedList.setAdapter(commentReceivedItemAdapter);
+        mRvCommentReceivedList.setAdapter(commentReceivedItemAdapter);*/
     }
 
     @Override

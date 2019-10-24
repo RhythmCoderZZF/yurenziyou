@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -32,6 +33,7 @@ import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.ui.GroupMchOrderSubmitActivity;
 import com.nbhysj.coupon.ui.HotelOrderActivity;
 import com.nbhysj.coupon.ui.OrderSubmitActivity;
+import com.nbhysj.coupon.util.LogUtil;
 import com.nbhysj.coupon.view.HotelDetailSupplementBannerView;
 
 import java.util.ArrayList;
@@ -148,18 +150,22 @@ public class PurchaseInstructionsDialog extends DialogFragment {
                 String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
                 String mchGroupType = MchTypeEnum.MCH_GROUP.getValue();
                 Intent intent = new Intent();
+
+                int goodsId = 0;
                 if(mchType.equals(mchScenicType) || mchType.equals(mchRecreationType))
                 {
                     intent.putExtra("mchType", mchType);
+                    goodsId = mchHotelGoodsBean.getGoodsId();
                     intent.setClass(context, OrderSubmitActivity.class);
 
                 } else if(mchType.equals(mchGroupType))
                 {
+                    goodsId = mchHotelGoodsBean.getId();
                     intent.setClass(context, GroupMchOrderSubmitActivity.class);
                 }
-                int goodId = mchHotelGoodsBean.getId();
-                intent.putExtra("goodsId", goodId);
 
+              ;
+                intent.putExtra("goodsId", goodsId);
                 startActivity(intent);
             }
         });
@@ -199,9 +205,14 @@ public class PurchaseInstructionsDialog extends DialogFragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-                view.loadUrl(url);
-
-                return true;
+                Uri uri = Uri.parse(url);
+                LogUtil.e("打印Scheme", uri.getScheme() + "==" + url);
+                if (!"http".equals(uri.getScheme()) || !"https".equals(uri.getScheme())) {
+                    return false;
+                } else {
+                    view.loadUrl(url);
+                    return false;
+                }
             }
 
             @Override

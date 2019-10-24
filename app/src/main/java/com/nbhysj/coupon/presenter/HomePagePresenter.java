@@ -3,6 +3,7 @@ package com.nbhysj.coupon.presenter;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCollectionRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
@@ -49,8 +50,24 @@ public class HomePagePresenter extends HomePageContract.Presenter {
     }
 
     @Override
-    public void getHomePageSearchByType(String queryType, String keyword) {
-        mRxManager.add(mModel.getHomePageSearchByType(queryType,keyword).subscribe(res -> mView.getHomePageSearchByType(res), e -> mView.showMsg(e.getMessage())));
+    public void getHomePageSearchByType(String queryType, String keyword,int pageNo,int pageSize) {
+        mRxManager.add(mModel.getHomePageSearchByType(queryType,keyword,pageNo,pageSize).subscribe(res -> mView.getHomePageSearchByType(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void postCollection(PostsCollectionRequest postsCollectionRequest) {
+        mRxManager.add(mModel.postsCollection(postsCollectionRequest).subscribe(res -> mView.postCollectionResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getFavoritesList(int page, int pageSize) {
+        mRxManager.add(mModel.getFavoritesList(page,pageSize).subscribe(res -> mView.getFavoritesListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void userFollow(int userId) {
+
+        mRxManager.add(mModel.userFollow(userId).subscribe(res -> mView.userFollowResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

@@ -239,6 +239,9 @@
     <string name="str_interest">趣 味</string>
     <string name="str_cost_performance">性价比</string>
     <string name="str_order_comment_publish">发表评论</string>
+    <string name="str_navigation">导航</string>
+    <string name="str_food_recommend">推荐菜</string>
+    <string name="str_already_concerned">已关注</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -291,6 +294,12 @@
     <string name="str_immediate_pre_order">立即预购</string>
     <string name="str_purchase_instructions">购买须知</string>
     <string name="str_reduction_and_exemption">减免优惠</string>
+    <string name="str_back_home_page">返回首页</string>
+    <string name="str_back_my_collection">我的收藏</string>
+    <string name="str_back_my_order">我的订单</string>
+    <string name="str_back_my_message">我的消息</string>
+    <string name="str_collection_success">收藏成功</string>
+    <string name="str_collection_cancel">取消收藏</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>
@@ -347,11 +356,6 @@
         <item quantity="one">You can only select one media file</item>
         <item quantity="many">You can only select up to %1$d media files</item>
     </plurals>
-
-
-
-
-
 
     <string name="app_back">返回</string>
     <string name="app_ok">确定</string>

@@ -16,12 +16,18 @@ public class NineGridLayoutView extends NineGridLayout {
 
     protected static final int MAX_W_H_RATIO = 3;
 
+    private NineGridLayoutViewListener nineGridLayoutViewListener;
     public NineGridLayoutView(Context context) {
         super(context);
     }
 
     public NineGridLayoutView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setNineGridLayoutView(NineGridLayoutViewListener nineGridLayoutViewListener) {
+
+        this.nineGridLayoutViewListener = nineGridLayoutViewListener;
     }
 
     @Override
@@ -73,6 +79,12 @@ public class NineGridLayoutView extends NineGridLayout {
 
     @Override
     protected void onClickImage(int i, String url, List<String> urlList) {
-        Toast.makeText(mContext, "点击了图片" + url, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, "点击了图片" + url, Toast.LENGTH_SHORT).show();
+        nineGridLayoutViewListener.setNineGridLayoutView();
+    }
+
+    public interface NineGridLayoutViewListener{
+
+        void setNineGridLayoutView();
     }
 }

@@ -21,19 +21,17 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AdmissionTicketExpandableAdapter;
+import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.adapter.NearbyGroupListAdapter;
 import com.nbhysj.coupon.adapter.NearbyScenicSpotAdapter;
 import com.nbhysj.coupon.adapter.PlayGuideAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
-import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
+import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
@@ -65,6 +63,8 @@ import com.nbhysj.coupon.widget.NestedExpandaleListView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,7 +189,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     private UserCommentAdapter userCommentAdapter;
     //景点
     private NearbyScenicSpotAdapter nearbyScenicSpotAdapter;
-    private ScenicSpotDetailUserCommentAdapter scenicSpotDetailUserCommentAdapter;
+    private MchCommentAdapter scenicSpotDetailUserCommentAdapter;
     private NearbyGroupListAdapter groupListAdapter;
     //商户名
     private int mchId;
@@ -212,6 +212,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
     private int mPosition;
 
+    //购买须知弹框
+    private PurchaseInstructionsDialog mPurchaseInstructionsDialog;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -396,7 +398,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvNearScenicSpot.setLayoutManager(layoutManager);
-
         groupListAdapter = new NearbyGroupListAdapter(ScenicSpotDetailActivity.this);
         groupListAdapter.setGroupList(groupGoodsList);
         mRvNearScenicSpot.setAdapter(groupListAdapter);
@@ -408,7 +409,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(ScenicSpotDetailActivity.this);
         userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
         mRvUserComment.setLayoutManager(userCommentLayoutManager);
-        scenicSpotDetailUserCommentAdapter = new ScenicSpotDetailUserCommentAdapter(ScenicSpotDetailActivity.this);
+        scenicSpotDetailUserCommentAdapter = new MchCommentAdapter(ScenicSpotDetailActivity.this);
         scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
         mRvUserComment.setAdapter(scenicSpotDetailUserCommentAdapter);
 
@@ -570,7 +571,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvMchRanking.setText(mchDetailsEntity.getMchRanking());
                     int mQuestionCount = mchQuestionEntity.getQuestionCount();
 
-
                     if(mQuestionCount > 0)
                     {
 
@@ -603,7 +603,21 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         if(mchGoodsList.size() > 0) {
                             mLlytTicketInfo.setVisibility(View.VISIBLE);
 
-                            AdmissionTicketExpandableAdapter myExpandableAdapter = new AdmissionTicketExpandableAdapter(this, mchType, mchGoodsList);
+                            AdmissionTicketExpandableAdapter myExpandableAdapter = new AdmissionTicketExpandableAdapter(this, mchType, mchGoodsList, new AdmissionTicketExpandableAdapter.MchTicketListener() {
+
+                                @Override
+                                public void setMchTicketCallback(int groupPosition, int childPosition,String goodsBuyNotes) {
+
+                                    if (mPurchaseInstructionsDialog == null)
+                                    {
+                                        MchGoodsBean mchGoodsBean = mchGoodsList.get(childPosition);
+                                        String mchName = mchDetailsEntity.getMchName();
+
+                                        mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(mchGoodsBean,mchType,mchName);
+                                    }
+                                    mPurchaseInstructionsDialog.show(getFragmentManager(), "商品购票须知");
+                                }
+                            });
                             mExpandableListTicket.setAdapter(myExpandableAdapter);
                         } else {
 
@@ -816,6 +830,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             case R.id.tv_look_user_all_comment:
 
                 intent.setClass(ScenicSpotDetailActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
                 startActivity(intent);
 
                 break;
@@ -825,12 +840,12 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 mchCollection();
 
                 break;
+
             default:
                 break;
 
         }
     }
-
 
     private void showPopupWindow(View anchorView) {
         View contentView = getPopupWindowContentView();
@@ -856,7 +871,47 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         View.OnClickListener menuItemOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Click " + ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+
+                String itemStr = ((TextView) v).getText().toString();
+                String backHomePage = getResources().getString(R.string.str_back_home_page);
+                String backMyCollection = getResources().getString(R.string.str_back_my_collection);
+                String backMyOrder = getResources().getString(R.string.str_back_my_order);
+                String backMyMessage = getResources().getString(R.string.str_back_my_message);
+
+                Intent intent = new Intent();
+                if(itemStr.equals(backHomePage))
+                {
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+                  //  EventBus.getDefault().post("backHomePage");
+
+                } else if(itemStr.equals(backMyCollection))
+                {
+                  //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
+                    //intent.putExtra("currentItem",3);
+
+                    if(appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+
+                  //  EventBus.getDefault().post("backMyCollection");
+
+                } else if(itemStr.equals(backMyOrder))
+                {
+                    intent.setClass(ScenicSpotDetailActivity.this, MyOrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                } else if(itemStr.equals(backMyMessage))
+                {
+                    intent.setClass(ScenicSpotDetailActivity.this, MessageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
@@ -884,5 +939,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             mchCollectionRequest.setDataId(mchId);
             mPresenter.mchCollection(mchCollectionRequest);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+       // EventBus.getDefault().unregister(this);
     }
 }

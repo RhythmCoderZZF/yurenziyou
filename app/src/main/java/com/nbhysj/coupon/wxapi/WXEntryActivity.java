@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.pay.wechat.AddFavoriteToWXActivity;
-import com.nbhysj.coupon.pay.wechat.Constants;
 import com.nbhysj.coupon.pay.wechat.GetFromWXActivity;
 import com.nbhysj.coupon.pay.wechat.PayActivity;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.pay.wechat.SendToWXActivity;
 import com.nbhysj.coupon.pay.wechat.ShowFromWXActivity;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -40,7 +40,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         setContentView(R.layout.entry);
         
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
-    	api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, false);
+    	api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID, false);
 
     	regBtn = (Button) findViewById(R.id.reg_btn);
     	regBtn.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +48,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 			@Override
 			public void onClick(View v) {
 				// 将该app注册到微信
-			    api.registerApp(Constants.APP_ID);    	
+			    api.registerApp(PayConstants.APP_ID);    	
 			}
 		});
     	
@@ -191,9 +191,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		msg.append(obj.filePath);
 		
 		Intent intent = new Intent(this, ShowFromWXActivity.class);
-		intent.putExtra(Constants.ShowMsgActivity.STitle, wxMsg.title);
-		intent.putExtra(Constants.ShowMsgActivity.SMessage, msg.toString());
-		intent.putExtra(Constants.ShowMsgActivity.BAThumbData, wxMsg.thumbData);
+		intent.putExtra(PayConstants.ShowMsgActivity.STitle, wxMsg.title);
+		intent.putExtra(PayConstants.ShowMsgActivity.SMessage, msg.toString());
+		intent.putExtra(PayConstants.ShowMsgActivity.BAThumbData, wxMsg.thumbData);
 		startActivity(intent);
 		finish();
 	}

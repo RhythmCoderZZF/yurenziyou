@@ -12,6 +12,24 @@
 
     <include layout="@layout/toolbar"></include>
 
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="true"
+        app:srlEnableLoadMore="false"
+        app:srlEnableRefresh="true"
+        app:srlEnableNestedScrolling="true"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="#00000000">
+
+    <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <com.nbhysj.coupon.view.RecyclerScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -234,7 +252,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/dp_5"
-                        android:background="@mipmap/icon_gray_collection_posts" />
+                        android:src="@mipmap/icon_gray_collection_posts" />
 
                     <TextView
                         android:id="@+id/tv_post_collection_num"
@@ -291,8 +309,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp_16" />
 
-                <EditText
-                    android:id="@+id/edt_post_comment"
+                <TextView
+                    android:id="@+id/tv_post_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -307,7 +325,6 @@
                     android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                     android:imeOptions="actionSend"
                     android:singleLine="true"
-                    android:inputType="text"
                     android:textSize="@dimen/text_size_xsmall" />
             </LinearLayout>
 
@@ -383,4 +400,10 @@
                 android:background="@color/white"></View>
         </LinearLayout>
     </com.nbhysj.coupon.view.RecyclerScrollView>
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

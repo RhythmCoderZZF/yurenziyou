@@ -10,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -22,16 +23,37 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.CommentReceivedItemAdapter;
 import com.nbhysj.coupon.adapter.ExpressionAdapter;
+import com.nbhysj.coupon.adapter.PostCommentItemAdapter;
+import com.nbhysj.coupon.adapter.StrategyListAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.PostsTypeEnum;
+import com.nbhysj.coupon.contract.CommentContract;
+import com.nbhysj.coupon.model.CommentModel;
+import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
+import com.nbhysj.coupon.model.response.MchCommentResponse;
+import com.nbhysj.coupon.model.response.PostsCommentResponse;
+import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
+import com.nbhysj.coupon.model.response.StrategyBean;
+import com.nbhysj.coupon.presenter.CommentPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.SmileyParser;
 import com.nbhysj.coupon.util.ToolbarHelper;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,14 +69,20 @@ import static android.view.View.VISIBLE;
  * @auther：hysj created on 2019/05/28
  * description：评论列表
  */
-public class CommentsListActivity extends BaseActivity implements View.OnClickListener {
+public class CommentsListActivity extends BaseActivity<CommentPresenter, CommentModel> implements CommentContract.View,View.OnClickListener {
 
-    //收到的评论
-    @BindView(R.id.rv_comment_received)
-    RecyclerView mRvCommentReceivedList;
-    /* @BindView(R.id.toolbar_space)
-     View mToolbarSpace;*/
-    private List<CommentReceiveResponse> commentReceiveList;
+    @BindView(R.id.refresh_layout)
+    SmartRefreshLayout mSmartRefreshLayout;
+    //赞无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
+    //评论列表
+    @BindView(R.id.rv_comment)
+    RecyclerView mRvCommentList;
+    //用户评论
+    @BindView(R.id.llyt_user_comment)
+    LinearLayout mLlytUserComment;
+    private List<PostsCommentResponse.PostsCommentEntity> postCommentList;
     private SmileyParser mParser;
     private Activity activity;
     private ImageView emojie_tv;
@@ -66,18 +94,27 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
     private ViewPager vViewPager;
     private LinearLayout vLl_dots;
     private LinearLayout main_emoji_layout;
-    private int keyBoardState = 1;//0为键盘为弹出，1为弹出
+    private int keyBoardState = 0;//0为键盘收缩，1为弹出
     private InputMethodManager imm;
     private EditText mEdtComment;
 
-    /*   @Override
-       protected void onCreate(@Nullable Bundle savedInstanceState) {
-           super.onCreate(savedInstanceState);
-           setContentView();
-           initView();
-           initData();
-       }
-   */
+    //帖子id
+    private int mPostId;
+
+    private int mPageNo = 1;
+    private int mPageSize = 10;
+
+    private PostCommentItemAdapter postCommentItemAdapter;
+
+    private boolean isOnLoadMore = false;
+
+    //总条数
+    private int mTotalPageCount;
+
+    private PostsCommentResponse.PostsCommentEntity mPostsCommentEntity;
+
+    //(0:评论帖子 1:评论) 帖子的评论
+    private int mPid = 0;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -87,88 +124,43 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this,mModel);
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
 
-       /* ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
-        layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
-        mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbarSpace.setVisibility(View.VISIBLE);
-        } else {
-            mToolbarSpace.setVisibility(View.GONE);
-        }*/
         ToolbarHelper.setBar(CommentsListActivity.this, getResources().getString(R.string.str_comments_list), R.mipmap.nav_ico_back_black, "");
 
+        mPostId = getIntent().getIntExtra("mPostId",0);
 
-        if (commentReceiveList == null) {
-            commentReceiveList = new ArrayList<>();
+        if (postCommentList == null)
+        {
+            postCommentList = new ArrayList<>();
 
         } else {
-            commentReceiveList.clear();
+            postCommentList.clear();
         }
 
-
-        List<CommentReceiveResponse.CommentEntity> commentSubList = new ArrayList<>();
-        CommentReceiveResponse commentReceiveResponse = new CommentReceiveResponse();
-        commentReceiveResponse.setAvatar("http://img3.imgtn.bdimg.com/it/u=2584422743,1020351689&fm=214&gp=0.jpg");
-        commentReceiveResponse.setCommentOprate("开始关注你了");
-        commentReceiveResponse.setCommentTime("2019-08-09");
-        commentReceiveResponse.setCommentUser("陈开开");
-        commentReceiveResponse.setCommentPictrue("https://img3.duitang.com/uploads/blog/201407/10/20140710152857_Puy5M.jpeg");
-
-        CommentReceiveResponse.CommentEntity commentEntity = commentReceiveResponse.new CommentEntity();
-        commentEntity.setComment("很好吃啊");
-        commentEntity.setMyComment(false);
-
-        CommentReceiveResponse.CommentEntity commentEntity1 = commentReceiveResponse.new CommentEntity();
-        commentEntity1.setComment("我的评论：看着很好吃啊");
-        commentEntity1.setMyComment(true);
-
-        CommentReceiveResponse.CommentEntity commentEntity2 = commentReceiveResponse.new CommentEntity();
-        commentEntity2.setComment("看着很好吃啊");
-        commentEntity2.setMyComment(false);
-        commentSubList.add(commentEntity);
-        commentSubList.add(commentEntity1);
-        commentSubList.add(commentEntity2);
-
-        commentReceiveResponse.setCommentList(commentSubList);
-
-        CommentReceiveResponse commentReceiveResponse1 = new CommentReceiveResponse();
-        commentReceiveResponse1.setAvatar("http://img3.imgtn.bdimg.com/it/u=2584422743,1020351689&fm=214&gp=0.jpg");
-        commentReceiveResponse1.setCommentOprate("开始关注你了");
-        commentReceiveResponse1.setCommentTime("2019-08-09");
-        commentReceiveResponse1.setCommentUser("陈开开");
-        commentReceiveResponse1.setCommentPictrue("https://img3.duitang.com/uploads/blog/201407/10/20140710152857_Puy5M.jpeg");
-
-        CommentReceiveResponse.CommentEntity commentEntity3 = commentReceiveResponse.new CommentEntity();
-        commentEntity3.setComment("很好吃啊");
-        commentEntity3.setMyComment(false);
-
-        CommentReceiveResponse.CommentEntity commentEntity4 = commentReceiveResponse.new CommentEntity();
-        commentEntity4.setComment("我的评论：看着很好吃啊");
-        commentEntity4.setMyComment(true);
-
-        CommentReceiveResponse.CommentEntity commentEntity5 = commentReceiveResponse.new CommentEntity();
-        commentEntity5.setComment("看着很好吃啊");
-        commentEntity5.setMyComment(false);
-        commentSubList.add(commentEntity3);
-        commentSubList.add(commentEntity4);
-        commentSubList.add(commentEntity5);
-
-        commentReceiveResponse1.setCommentList(commentSubList);
-
-        commentReceiveList.add(commentReceiveResponse);
-        commentReceiveList.add(commentReceiveResponse1);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CommentsListActivity.this);
-        mRvCommentReceivedList.setLayoutManager(linearLayoutManager);
-        CommentReceivedItemAdapter commentReceivedItemAdapter = new CommentReceivedItemAdapter(CommentsListActivity.this);
-        commentReceivedItemAdapter.setCommentReceivedList(commentReceiveList);
-        mRvCommentReceivedList.setAdapter(commentReceivedItemAdapter);
+        mRvCommentList.setLayoutManager(linearLayoutManager);
+        postCommentItemAdapter = new PostCommentItemAdapter(CommentsListActivity.this, new PostCommentItemAdapter.PostCommentPraiseListener() {
+            @Override
+            public void setPostCommentPraiseListener(int position, PostsCommentResponse.PostsCommentEntity postsCommentEntity) {
+                mPostsCommentEntity =  postsCommentEntity;
+                mPid = postsCommentEntity.getId();
+                postOprate();
+            }
 
+            @Override
+            public void setPostCommentListener(int position, PostsCommentResponse.PostsCommentEntity postsCommentEntity) {
+
+                mPid = postsCommentEntity.getId();
+                softInputFromWindowOprate();
+            }
+        });
+        postCommentItemAdapter.setPostCommentList(postCommentList);
+        mRvCommentList.setAdapter(postCommentItemAdapter);
 
         activity = this;
         imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -176,8 +168,9 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
         mParser = SmileyParser.getInstance();
         emojie_tv = (ImageView) findViewById(R.id.emojie_tv);
         emojie_tv.setOnClickListener(this);
-        TextView mTvSure = findViewById(R.id.enSure);
+        TextView mTvSure = findViewById(R.id.tv_comment_sure_send);
         mTvSure.setOnClickListener(this);
+        mLlytUserComment.setOnClickListener(this);
         vViewPager = (ViewPager) findViewById(R.id.viwepager_expression);//viewPager
         vLl_dots = (LinearLayout) findViewById(R.id.ll_dot_container);//圆点容器
         main_emoji_layout = (LinearLayout) findViewById(R.id.main_emoji_layout);
@@ -198,6 +191,52 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void initData() {
 
+        showProgressDialog(CommentsListActivity.this);
+        getAllPostsCommentListByArticleId();
+
+        mSmartRefreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
+
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnLoadMore = false;
+                        mPageNo = 1;
+                        postCommentList.clear();
+                        postCommentItemAdapter.notifyDataSetChanged();
+                        showProgressDialog(CommentsListActivity.this);
+                        getAllPostsCommentListByArticleId();
+
+                    }
+                }, 100);
+            }
+        });
+
+        mSmartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        isOnLoadMore = true;
+                        try {
+                            if (mTotalPageCount == postCommentList.size()) {
+                                refreshLayout.finishLoadMoreWithNoMoreData();
+                            } else {
+                                mPageNo++;
+                                getAllPostsCommentListByArticleId();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 200);
+            }
+        });
+
         List<Integer> data2 = new ArrayList<>();
         for (int i = 0; i < mParser.CAICAI_SMILEY_RES_IDS.length; i++) {
             data2.add(mParser.CAICAI_SMILEY_RES_IDS[i]);
@@ -211,47 +250,96 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
         initEmojiAdapter(caicaiList.size());
     }
 
-   /* @Override
-    public void initPresenter() {
-
-    }*/
-
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.enSure://确定
-                // Toast.makeText(activity, mParser.addSmileySpans(ev1.getText()), Toast.LENGTH_SHORT).show();
-                //Log.i("TAG", "onClick: 输入内容"+ev1.getText());
-                break;
-            case R.id.emojie_tv://表情
-
-                if (keyBoardState == 0) {//弹出键盘
-                    keyBoardState = 1;
-                    main_emoji_layout.setVisibility(View.GONE);
-                    emojie_tv.setSelected(false);
-                    mEdtComment.setFocusable(true);
-                    showSoftInputFromWindow(CommentsListActivity.this, mEdtComment);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            imm.showSoftInput(mEdtComment, 0);
-                        }
-                    }, 50);
-
-                } else {//关闭键盘
-                    keyBoardState = 0;
-                    imm.hideSoftInputFromWindow(mEdtComment.getWindowToken(), 0);
-                    emojie_tv.setSelected(true);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            main_emoji_layout.setVisibility(View.VISIBLE);
-                        }
-                    }, 50);
+    @Override
+    public void postOprateResult(BackResult<PraiseOrCollectResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    PraiseOrCollectResponse praiseOrCollectResponse = res.getData();
+                    if(praiseOrCollectResponse != null)
+                    {
+                        int zanStatus = praiseOrCollectResponse.getZanStatus();
+                        int zanCount = praiseOrCollectResponse.getZanNum();
+                        mPostsCommentEntity.setZanStatus(zanStatus);
+                        mPostsCommentEntity.setZanCount(zanCount);
+                        postCommentItemAdapter.setPostCommentList(postCommentList);
+                        postCommentItemAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                break;
+            default:
+                showToast(CommentsListActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
 
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_comment_sure_send://确定
+                postCommentRequest();
+                break;
+            case R.id.emojie_tv://表情
+
+                softInputFromWindowOprate();
+
+            case R.id.llyt_user_comment:
+
+                softInputFromWindowOprate();
+
+                break;
+                default:break;
+        }
+    }
+
+    public void softInputFromWindowOprate(){
+
+        if (keyBoardState == 0) {//弹出键盘
+            showSoftInputFromWindow();
+
+        } else {//关闭键盘
+            hideSoftInputFromWindow();
+        }
+    }
+
+    public void hideSoftInputFromWindow(){
+
+        keyBoardState = 0;
+        imm.hideSoftInputFromWindow(mEdtComment.getWindowToken(), 0);
+        emojie_tv.setSelected(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                main_emoji_layout.setVisibility(View.GONE);
+            }
+        }, 50);
+
+        mPid = 0;
+    }
+
+
+    public void showSoftInputFromWindow(){
+
+        keyBoardState = 1;
+        main_emoji_layout.setVisibility(View.GONE);
+        mEdtComment.setFocusable(true);
+        mEdtComment.setFocusableInTouchMode(true);
+        mEdtComment.requestFocus();
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+      //  showSoftInputFromWindow(CommentsListActivity.this, mEdtComment);
+    /*    new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imm.showSoftInput(mEdtComment, 0);
+            }
+        }, 50);
+*/
+
+        imm.showSoftInput(mEdtComment, 0);
+        emojie_tv.setSelected(false);
+    }
 
     /**
      * 把lista按固定长度分割成若干list
@@ -423,15 +511,139 @@ public class CommentsListActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-    /**
-     * EditText获取焦点并显示软键盘
-     */
-    public static void showSoftInputFromWindow(Activity activity, EditText editText) {
-        editText.setFocusable(true);
-        editText.setFocusableInTouchMode(true);
-        editText.requestFocus();
-        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+
+    @Override
+    public void postsCommentResult(BackResult res) {
+
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    hideSoftInputFromWindow();
+                    mEdtComment.setText("");
+                    mPageNo = 1;
+                    postCommentList.clear();
+                    getAllPostsCommentListByArticleId();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(CommentsListActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+
     }
 
+    @Override
+    public void getMchCommentListResult(BackResult<MchCommentResponse> res) {
 
+    }
+
+    @Override
+    public void getAllPostsCommentListByArticleIdResult(BackResult<PostsCommentResponse> res) {
+        dismissProgressDialog();
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    if (isOnLoadMore) {
+
+                        mSmartRefreshLayout.finishLoadMore();
+
+                    } else {
+
+                        postCommentList.clear();
+                        postCommentItemAdapter.notifyDataSetChanged();
+                        mSmartRefreshLayout.finishRefresh();
+                        mSmartRefreshLayout.setNoMoreData(false);
+                    }
+
+                    BasePaginationResult paginationResult = res.getData().getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+                    List<PostsCommentResponse.PostsCommentEntity> postsCommentEntityList = res.getData().getResult();
+
+                    if (mTotalPageCount == 0)
+                    {
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                    } else {
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
+
+                    if (postsCommentEntityList != null)
+                    {
+                        postCommentList.addAll(postsCommentEntityList);
+                    }
+
+                    postCommentItemAdapter.setPostCommentList(postCommentList);
+                    postCommentItemAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(CommentsListActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(CommentsListActivity.this, Constants.getResultMsg(msg));
+    }
+
+    //获取帖子评论列表
+    public void getAllPostsCommentListByArticleId(){
+
+        if(validateInternet()){
+
+            showProgressDialog(CommentsListActivity.this);
+            mPresenter.getAllPostsCommentListByArticleId(mPostId,mPageNo,mPageSize);
+        }
+
+    }
+
+    //点赞帖子评论操作
+    public void postOprate(){
+
+        if(validateInternet()){
+
+            showProgressDialog(CommentsListActivity.this);
+            PostOprateRequest postOprateRequest = new PostOprateRequest();
+            int commentId = mPostsCommentEntity.getId();
+            postOprateRequest.setPostsId(commentId);
+            int postsType = PostsTypeEnum.POST_COMMENT.getKey();
+            postOprateRequest.setPostsType(postsType);
+            mPresenter.postOprate(postOprateRequest);
+        }
+    }
+
+    //帖子评论
+    public void postCommentRequest() {
+
+        if (validateInternet()) {
+
+            String postCommentContent = mEdtComment.getText().toString().trim();
+
+            if (TextUtils.isEmpty(postCommentContent)) {
+                dismissProgressDialog();
+                showToast(CommentsListActivity.this, "请填写评论");
+                return;
+            }
+            PostsCommentRequest postsCommentRequest = new PostsCommentRequest();
+            postsCommentRequest.setArticleId(mPostId);
+            postsCommentRequest.setContent(postCommentContent);
+            postsCommentRequest.setPid(mPid);
+            mPresenter.postsCommentRequest(postsCommentRequest);
+
+        }
+    }
 }

@@ -27,7 +27,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.GroupMchListMoreAdapter;
 import com.nbhysj.coupon.adapter.GroupMchPackageMealItemAdapter;
 import com.nbhysj.coupon.adapter.GroupMchTicketAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotDetailUserCommentAdapter;
+import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
@@ -153,7 +153,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
     private String mchName;
     private UserCommentAdapter userCommentAdapter;
 
-    private ScenicSpotDetailUserCommentAdapter scenicSpotDetailUserCommentAdapter;
+    private MchCommentAdapter scenicSpotDetailUserCommentAdapter;
 
     private List<ImageView> viewList;
     private List<String> bannerList;
@@ -264,7 +264,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
         LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(GroupMchDetailsActivity.this);
         userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
         mRvUserComment.setLayoutManager(userCommentLayoutManager);
-        scenicSpotDetailUserCommentAdapter = new ScenicSpotDetailUserCommentAdapter(GroupMchDetailsActivity.this);
+        scenicSpotDetailUserCommentAdapter = new MchCommentAdapter(GroupMchDetailsActivity.this);
         scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
         mRvUserComment.setAdapter(scenicSpotDetailUserCommentAdapter);
 
@@ -546,7 +546,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
         showToast(GroupMchDetailsActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.ibtn_back, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.tv_question_num})
+    @OnClick({R.id.ibtn_back, R.id.img_menu, R.id.img_scenic_spot_forward, R.id.tv_question_num})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -557,14 +557,14 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
             case R.id.img_menu:
                 showPopupWindow(mImageMenu);
                 break;
-            case R.id.rlyt_scenic_spot_location:
+           /* case R.id.rlyt_scenic_spot_location:
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable("mchDetailsEntity", mchDetailsEntity);
                 intent.putExtras(bundle);
                 intent.setClass(GroupMchDetailsActivity.this, ScenicSpotsDetailLocationMapActivity.class);
                 startActivity(intent);
-                break;
+                break;*/
             case R.id.img_scenic_spot_forward:
 
                 ShareOprateDialog shareOprateDialog = new ShareOprateDialog(GroupMchDetailsActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
@@ -589,7 +589,13 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                 toActivity(MoreQuestionsActivity.class);
 
                 break;
+          /*  case R.id.tv_look_user_all_comment:
 
+                intent.setClass(GroupMchDetailsActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
+
+                break;*/
             default:
                 break;
 

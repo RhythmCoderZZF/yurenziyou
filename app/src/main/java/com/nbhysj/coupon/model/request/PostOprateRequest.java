@@ -6,33 +6,11 @@ package com.nbhysj.coupon.model.request;
  */
 public class PostOprateRequest {
 
-    //用户id
-    private int userId;
-
-    //作者Id
-    private int authorId;
-
     //帖子ID/评论ID
     private int postsId;
 
-    //1帖子点赞，2帖子收藏，3.帖子评论 postsType
+    //1帖子点赞，2.对帖子已评论的点赞 postsType
     private int postsType;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
 
     public int getPostsId() {
         return postsId;

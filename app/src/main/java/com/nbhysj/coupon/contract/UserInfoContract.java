@@ -8,6 +8,7 @@ import com.nbhysj.coupon.model.request.RegisterUserRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.LoginResponse;
+import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 
@@ -35,6 +36,9 @@ public interface UserInfoContract {
 
         //第三方绑定状态
         Observable<BackResult<ThirdPartyLoginStatusResponse>> getThirdPartyLoginStatus(int userId);
+
+        //我的名片
+        Observable<BackResult<MyCardResponse>> getMyCard(int userId);
     }
 
     interface View extends BaseView {
@@ -48,6 +52,9 @@ public interface UserInfoContract {
         //第三方绑定状态返回
         void getThirdPartyLoginStatusResult(BackResult<ThirdPartyLoginStatusResponse> res);
 
+        void getMyCardResult(BackResult<MyCardResponse> res);
+
+
         void showMsg(String msg);
     }
 
@@ -60,5 +67,7 @@ public interface UserInfoContract {
         public abstract void userLogout();
 
         public abstract void getThirdPartyLoginStatus(int userId);
+
+        public abstract void getMyCard(int userId);
     }
 }

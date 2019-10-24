@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
+import com.nbhysj.coupon.model.response.PostsCommentResponse;
 import com.nbhysj.coupon.view.GlideImageView;
 
 import java.util.List;
@@ -21,27 +22,23 @@ import butterknife.ButterKnife;
 
 
 /**
- * @author hysj created on 2019/04/14.
- * description: 收到的评论适配器
+ * @author hysj created on 2019/10/13.
+ * description: 评论适配器
  */
 public class CommentReceivedItemAdapter extends RecyclerView.Adapter<CommentReceivedItemAdapter.ViewHolder> {
 
-    /**
-     * 图片列表数据
-     */
-    private List<CommentReceiveResponse> commentReceiveList;
+    private List<PostsCommentResponse> postsCommentList;
 
     private Context mContext;
-
 
     public CommentReceivedItemAdapter(Context mContext) {
 
         this.mContext = mContext;
     }
 
-    public void setCommentReceivedList(List<CommentReceiveResponse> commentReceiveList) {
+    public void setCommentReceivedList(List<PostsCommentResponse> postsCommentList) {
 
-        this.commentReceiveList = commentReceiveList;
+        this.postsCommentList = postsCommentList;
     }
 
     @Override
@@ -58,16 +55,15 @@ public class CommentReceivedItemAdapter extends RecyclerView.Adapter<CommentRece
         try {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
             holder.mRvCommentContent.setLayoutManager(linearLayoutManager);
-            CommentReceiveResponse commentReceive = commentReceiveList.get(position);
-            List<CommentReceiveResponse.CommentEntity> commentEntityList = commentReceive.getCommentList();
+            PostsCommentResponse postsCommentResponse = postsCommentList.get(position);
             CommentReceivedSubItemAdapter commentReceivedSubItemAdapter = new CommentReceivedSubItemAdapter(mContext);
-            commentReceivedSubItemAdapter.setCommentReceivedSubItemList(commentEntityList);
+           /* commentReceivedSubItemAdapter.setCommentReceivedSubItemList(commentEntityList);
             holder.mRvCommentContent.setAdapter(commentReceivedSubItemAdapter);
             String avatarUrl = commentReceive.getAvatar();
             String commentPictrueUrl = commentReceive.getCommentPictrue();
             holder.mImgUserAvatar.loadCircle(avatarUrl, R.mipmap.icon_placeholder_image);
             Glide.with(mContext).load(commentPictrueUrl).into(holder.mImgCommentPictrue);
-
+*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,7 +71,7 @@ public class CommentReceivedItemAdapter extends RecyclerView.Adapter<CommentRece
 
     @Override
     public int getItemCount() {
-        return commentReceiveList.size();
+        return postsCommentList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

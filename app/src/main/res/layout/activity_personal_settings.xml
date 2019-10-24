@@ -289,7 +289,7 @@
                     android:textSize="@dimen/text_size_xnormal" />
 
                 <TextView
-                    android:id="@+id/tv_cache"
+                    android:id="@+id/tv_cache_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

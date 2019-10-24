@@ -115,7 +115,6 @@
                 android:id="@+id/tv_message_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_21"
-
                 android:background="@mipmap/icon_order_message_bells" />
 
             <TextView
@@ -176,8 +175,8 @@
                         android:id="@+id/banner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
-                        android:background="@drawable/bg_home_search">
+                        android:background="@drawable/bg_home_search"
+                        >
 
 
                     </com.nbhysj.coupon.view.BannerView>
@@ -262,13 +261,14 @@
                             android:textSize="@dimen/text_size_xsmall" />
 
                         <TextView
+                            android:id="@+id/tv_limited_sale_hour"
                             android:layout_width="@dimen/dp_27"
                             android:layout_height="@dimen/dp_21"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/dp_5"
                             android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                             android:gravity="center"
-                            android:text="08"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
@@ -285,13 +285,14 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_limited_sale_minute"
                             android:layout_width="@dimen/dp_27"
                             android:layout_height="@dimen/dp_21"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/dp_3"
                             android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                             android:gravity="center"
-                            android:text="08"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
@@ -308,13 +309,14 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_limited_sale_second"
                             android:layout_width="@dimen/dp_27"
                             android:layout_height="@dimen/dp_21"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/dp_3"
                             android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                             android:gravity="center"
-                            android:text="08"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />

@@ -39,6 +39,7 @@
             android:text="@string/str_title" />
 
         <EditText
+            android:id="@+id/edt_album_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="为你的专辑起一个好听的名字吧~"
@@ -78,6 +79,7 @@
 
 
         <EditText
+            android:id="@+id/edt_album_intro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="为你的专辑起一个好听的名字吧~"
@@ -128,7 +130,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/tv_third_party_login"
+        android:id="@+id/tv_album_delete"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_41"
         android:layout_below="@+id/llyt_login_input"

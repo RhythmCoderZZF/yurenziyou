@@ -10,7 +10,7 @@ import com.nbhysj.coupon.util.RegularExpressionUtil;
  * description：常量类
  */
 public class Constants {
-
+    public static final String APP_ID = "wx5359dc62a45ef0b3";
     //请求pwd加盐
     public static final String saltEncryptKey = "nbhysj_";
 

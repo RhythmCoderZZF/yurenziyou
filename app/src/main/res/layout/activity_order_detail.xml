@@ -115,7 +115,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_xnormal" />
 
-
                     <TextView
                         android:id="@+id/tv_order_evaluate"
                         android:layout_width="@dimen/dp_98"

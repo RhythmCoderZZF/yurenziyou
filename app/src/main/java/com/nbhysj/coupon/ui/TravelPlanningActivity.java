@@ -169,7 +169,7 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
         showToast(TravelPlanningActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_help_me_planning})
+    @OnClick({R.id.iv_back, R.id.tv_help_me_planning,R.id.tv_self_planning})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
@@ -180,6 +180,10 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
 
             case R.id.tv_help_me_planning:
 
+
+                createTrip();
+                break;
+            case R.id.tv_self_planning:
 
                 createTrip();
                 break;

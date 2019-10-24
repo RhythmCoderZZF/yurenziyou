@@ -11,8 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.FavoritesBean;
 import com.nbhysj.coupon.model.response.MineCollectionAlbumResponse;
+import com.nbhysj.coupon.ui.AlbumDetailsActivity;
+import com.nbhysj.coupon.ui.EditAlbumActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.view.RoundedImageView;
 
 import java.util.List;
 
@@ -22,18 +26,19 @@ import java.util.List;
  */
 public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollectionAlbumAdapter.ViewHolder> {
 
-    List<MineCollectionAlbumResponse> collectionAlbumResponseList;
+    List<FavoritesBean> collectionAlbumResponseList;
     private Context mContext;
     private NewCollectionAlbumListener newCollectionAlbumListener;
-
-
+    FavoritesBean mineCollectionAlbumResponse;
+    //专辑id
+    private int favoritesId;
     public MineCollectionAlbumAdapter(Context mContext, NewCollectionAlbumListener newCollectionAlbumListener) {
 
         this.mContext = mContext;
         this.newCollectionAlbumListener = newCollectionAlbumListener;
     }
 
-    public void setCollectionAlbumList(List<MineCollectionAlbumResponse> collectionAlbumResponseList) {
+    public void setCollectionAlbumList(List<FavoritesBean> collectionAlbumResponseList) {
 
         this.collectionAlbumResponseList = collectionAlbumResponseList;
     }
@@ -50,20 +55,26 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
     public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
 
         try {
-            MineCollectionAlbumResponse mineCollectionAlbumResponse = collectionAlbumResponseList.get(itemPosition);
-            ;
+
+
             if (itemPosition == collectionAlbumResponseList.size()) {
 
                 holder.mLlytNewAlbum.setVisibility(View.VISIBLE);
                 holder.mLlytAlbum.setVisibility(View.GONE);
             } else {
+                mineCollectionAlbumResponse = collectionAlbumResponseList.get(itemPosition);
+
                 holder.mLlytNewAlbum.setVisibility(View.GONE);
                 holder.mLlytAlbum.setVisibility(View.VISIBLE);
 
-                String imageUrl = mineCollectionAlbumResponse.getAlbumImage();
-                GlideUtil.loadCornersTransformImage(mContext, imageUrl, 2, holder.mImageAlbumPhoto);
-                holder.mTvAlbumName.setText(mineCollectionAlbumResponse.getAlbumName());
-                holder.mTvAlbumDescription.setText(mineCollectionAlbumResponse.getAlbumDes());
+                String title = mineCollectionAlbumResponse.getTitle();
+                int albumNum = mineCollectionAlbumResponse.getNum();
+
+                String imageUrl = mineCollectionAlbumResponse.getPhoto();
+                GlideUtil.loadImage(mContext, imageUrl,holder.mImageAlbumPhoto);
+                holder.mTvAlbumName.setText(title);
+                holder.mTvAlbumCollectionNum.setText(String.valueOf(albumNum));
+
             }
 
             holder.mLlytNewAlbum.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +92,24 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
                 }
             });
 
+            holder.mLlytCollectionAlbum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(itemPosition == collectionAlbumResponseList.size()) {
+
+                        newCollectionAlbumListener.setNewCollectionAlbumListener();
+
+                    } else {
+                        favoritesId = collectionAlbumResponseList.get(itemPosition).getId();
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, AlbumDetailsActivity.class);
+                        intent.putExtra("favoritesId",favoritesId);
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,34 +122,37 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
 
     @Override
     public int getItemCount() {
-        return collectionAlbumResponseList.size() + 1;
+        return collectionAlbumResponseList.size() > 0 ? collectionAlbumResponseList.size() + 1 : collectionAlbumResponseList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         //专辑图片
-        public ImageView mImageAlbumPhoto;
+        public RoundedImageView mImageAlbumPhoto;
 
         //专辑名字
         public TextView mTvAlbumName;
 
         //专辑描述
-        public TextView mTvAlbumDescription;
+        public TextView mTvAlbumCollectionNum;
 
         public TextView mTvAlbumEditTag;
 
         private LinearLayout mLlytNewAlbum, mLlytAlbum;
+
+        private LinearLayout mLlytCollectionAlbum;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             mImageAlbumPhoto = itemView.findViewById(R.id.img_album_photo);
             mTvAlbumName = itemView.findViewById(R.id.tv_album_name);
-            mTvAlbumDescription = itemView.findViewById(R.id.tv_album_description);
+            mTvAlbumCollectionNum = itemView.findViewById(R.id.tv_album_collect_num);
             mTvAlbumEditTag = itemView.findViewById(R.id.tv_album_edit_tag);
 
             mLlytNewAlbum = itemView.findViewById(R.id.llyt_new_album);
             mLlytAlbum = itemView.findViewById(R.id.llyt_album);
+            mLlytCollectionAlbum = itemView.findViewById(R.id.llyt_collection_album);
 
         }
     }
@@ -129,6 +161,6 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
 
         void setNewCollectionAlbumListener();
 
-        void setEditCollectionAlbumListener(MineCollectionAlbumResponse mineCollectionAlbumResponse);
+        void setEditCollectionAlbumListener(FavoritesBean mineCollectionAlbumResponse);
     }
 }
