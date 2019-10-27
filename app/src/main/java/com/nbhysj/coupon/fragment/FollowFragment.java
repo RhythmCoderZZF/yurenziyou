@@ -17,13 +17,10 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FollowListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomePageContract;
-import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
-import com.nbhysj.coupon.model.response.CollectionAlbumListResponse;
-import com.nbhysj.coupon.model.response.FavoritesBean;
 import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
 import com.nbhysj.coupon.model.response.FavoritesListResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
@@ -36,7 +33,6 @@ import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.CommentsListActivity;
 import com.nbhysj.coupon.ui.FindFriendsActivity;
-import com.nbhysj.coupon.ui.NewAlbumActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.umeng.socialize.ShareAction;
@@ -468,7 +464,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

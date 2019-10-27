@@ -33,8 +33,10 @@ import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
 
 import java.util.ArrayList;
@@ -150,7 +152,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 
@@ -186,6 +188,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         mRvRecommendFriends.setLayoutManager(staggeredGridLayoutManager);
         mRvRecommendFriends.setHasFixedSize(true);
         mRvRecommendFriends.setItemViewCacheSize(10);
+        mRvRecommendFriends.addItemDecoration(new RecyclerViewItemDecoration(Tools.dip2px(getActivity(), 10)));
         //  mRvRecommendFriends.setDrawingCacheEnabled(true);
 
         mRvRecommendFriends.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -493,4 +496,40 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
             mPresenter.postOprate(postOprateRequest);
         }
     }
+    /**
+     * 为RecyclerView增加间距
+     * 预设2列，如果是3列，则左右值不同
+     */
+    public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
+        private int space = 0;
+        private int pos;
+
+        public RecyclerViewItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+            outRect.top = space;
+
+            //该View在整个RecyclerView中位置。
+            pos = parent.getChildAdapterPosition(view);
+
+            //取模
+
+            //两列的左边一列
+            if (pos % 2 == 0) {
+                outRect.left = space;
+                outRect.right = space / 2;
+            }
+
+            //两列的右边一列
+            if (pos % 2 == 1) {
+                outRect.left = space / 2;
+                outRect.right = space;
+            }
+        }
+    }
+
 }

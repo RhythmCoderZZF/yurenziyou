@@ -237,7 +237,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

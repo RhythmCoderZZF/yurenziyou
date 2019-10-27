@@ -46,6 +46,9 @@ public class SharedPreferencesUtils {
     public static final String LATITUDE = "latitude";        //纬度
     public static final String LONGITUDE = "longitude";      //经度
 
+    public static final String SEARCH_KEYWORD = "searchKeyWord";      //搜索关键字
+
+
     private SharedPreferencesUtils(Context context, String name) {
         sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }

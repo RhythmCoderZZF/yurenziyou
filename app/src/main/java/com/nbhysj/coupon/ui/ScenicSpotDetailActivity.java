@@ -477,7 +477,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                     }
 
-                    mTvScenicSpotName.setText(mchName + "(" + level + "A)");
+                    if(level == 0){
+                        mTvScenicSpotName.setText(mchName);
+                    } else {
+                        mTvScenicSpotName.setText(mchName + "(" + level + "A)");
+                    }
                     mTvPerCapitaPrice.setText(Tools.getTwoDecimalPoint(mConsumePrice));
                     mTvCommentScore.setText(String.valueOf(mCommentScore));
                     mStarBarView.setIntegerMark(false);

@@ -3,15 +3,16 @@ package com.nbhysj.coupon.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
+import com.nbhysj.coupon.model.response.HomeSearchMchTypeBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -27,21 +28,21 @@ import butterknife.ButterKnife;
 
 /**
  * @author hysj created at 2019/10/21.
- * description : 首页搜索互动列表适配器
+ * description : 互动列表适配器
  */
-public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAdapter.ViewHolder> {
+public class HomePageSearchRecreationAdapter extends RecyclerView.Adapter<HomePageSearchRecreationAdapter.ViewHolder> {
 
-    List<MchTypeBean> popularScenicSpotsList;
+    List<HomeSearchMchTypeBean> mRecreationMchList;
     private Context mContext;
 
-    public RecreationListAdapter(Context mContext) {
+    public HomePageSearchRecreationAdapter(Context mContext) {
 
         this.mContext = mContext;
     }
 
-    public void setRecreationList(List<MchTypeBean> popularScenicSpotsList) {
+    public void setRecreationList(List<HomeSearchMchTypeBean> recreationMchList) {
 
-        this.popularScenicSpotsList = popularScenicSpotsList;
+        this.mRecreationMchList = recreationMchList;
     }
 
     @Override
@@ -57,31 +58,40 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
 
         try {
 
-            MchTypeBean popularScenicSpots = popularScenicSpotsList.get(itemPosition);
+            HomeSearchMchTypeBean popularScenicSpots = mRecreationMchList.get(itemPosition);
             String photoUrl = popularScenicSpots.getPhoto();
-            int mchId = popularScenicSpots.getId();
+            int mchId = Integer.parseInt(popularScenicSpots.getId());
+            String distance = popularScenicSpots.getDistance();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(popularScenicSpots.getConsumePrice()));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(popularScenicSpots.getCommentScore()));
             holder.mTvScenicSpotCommentNum.setText(popularScenicSpots.getCommentNum() + "条点评数");
             holder.mTvMchName.setText(popularScenicSpots.getMchName());
-            holder.mTvScenicSpotsDistance.setText("距您" + popularScenicSpots.getDistance() + "公里");
+            if(!TextUtils.isEmpty(distance)) {
+                holder.mTvScenicSpotsDistance.setText("距您" + distance + "公里");
+            }
             String city = popularScenicSpots.getCity();
             String country = popularScenicSpots.getCounty();
-            holder.mTvLocation.setText(city + "." + country);
-            List<MchTypeBean.TagsEntity> tagsEntityList = popularScenicSpots.getTags();
+            if(TextUtils.isEmpty(city)){
+                holder.mTvLocation.setText(country);
+            } else if(!TextUtils.isEmpty(city) && TextUtils.isEmpty(country))
+            {
+                holder.mTvLocation.setText(city + "." + country);
+            }
+
+            List<String> tagsEntityList = popularScenicSpots.getTags();
 
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
 
             if (tagsEntityList != null) {
                 if (tagsEntityList.size() > 0) {
-                    holder.mTagFlowlayoutFineFood.setAdapter(new TagAdapter<MchTypeBean.TagsEntity>(tagsEntityList) {
+                    holder.mTagFlowlayoutFineFood.setAdapter(new TagAdapter<String>(tagsEntityList) {
 
                         @Override
-                        public View getView(FlowLayout parent, int position, MchTypeBean.TagsEntity tagsEntity) {
+                        public View getView(FlowLayout parent, int position, String tagsTitle) {
                             LayoutInflater mInflater = LayoutInflater.from(mContext);
                             TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_interaction,
                                     holder.mTagFlowlayoutFineFood, false);
-                            tagName.setText(tagsEntity.getTitle());
+                            tagName.setText(tagsTitle);
                             return tagName;
                         }
                     });
@@ -108,7 +118,7 @@ public class RecreationListAdapter extends RecyclerView.Adapter<RecreationListAd
 
     @Override
     public int getItemCount() {
-        return popularScenicSpotsList.size();
+        return mRecreationMchList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

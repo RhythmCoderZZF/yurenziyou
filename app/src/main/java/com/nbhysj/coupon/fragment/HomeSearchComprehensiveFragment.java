@@ -4,50 +4,57 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nbhysj.coupon.BasicApplication;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.adapter.FineFoodListAdapter;
+import com.nbhysj.coupon.adapter.HomePageSearchFoodAdapter;
 import com.nbhysj.coupon.adapter.HomePageSearchHotelAdapter;
+import com.nbhysj.coupon.adapter.HomePageSearchStrategyAdapter;
 import com.nbhysj.coupon.adapter.HomeSearchScenicSpotsListAdapter;
-import com.nbhysj.coupon.adapter.HotelAdapter;
-import com.nbhysj.coupon.adapter.PopularScenicSpotsAdapter;
-import com.nbhysj.coupon.adapter.ScenicSpotsListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.HomeSearchMchTypeEnum;
-import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.contract.HomePageContract;
-import com.nbhysj.coupon.model.DestinationModel;
+import com.nbhysj.coupon.greendao.DaoSession;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.BasePaginationResult;
-import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
 import com.nbhysj.coupon.model.response.FavoritesListResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
+import com.nbhysj.coupon.model.response.HomeSearchComprehensiveBean;
 import com.nbhysj.coupon.model.response.HomeSearchMchTypeBean;
-import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
-import com.nbhysj.coupon.presenter.DestinationPresenter;
+import com.nbhysj.coupon.model.response.SearchBean;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
+import com.nbhysj.coupon.ui.ScenicSpotDestinationActivity;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.RoundedImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @auther：hysj created on 2019/06/05
@@ -64,6 +71,12 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
     //酒店列表
     private List<HomeSearchMchTypeBean> hotelList;
+
+    //美食列表
+    private List<HomeSearchMchTypeBean> fineFoodList;
+
+    //攻略列表
+    List<HomeSearchMchTypeBean> strategysList;
     //城市名
     @BindView(R.id.tv_city_name)
     TextView mTvCityName;
@@ -80,6 +93,15 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
     //当地热门景点
     @BindView(R.id.llyt_hotel)
     LinearLayout mLlytHotel;
+    //美食
+    @BindView(R.id.llyt_delicious_food)
+    LinearLayout mLlytDeliciousFood;
+    //攻略
+    @BindView(R.id.llyt_strategy)
+    LinearLayout mLlytStrategy;
+    //城市
+    @BindView(R.id.rlyt_city)
+    RelativeLayout mRlytCity;
     //酒店
     @BindView(R.id.rv_hotel)
     RecyclerView mRvHotel;
@@ -87,13 +109,45 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
     @BindView(R.id.img_city)
     RoundedImageView mImgCity;
 
+    //美食列表
+    @BindView(R.id.rv_delicious_food)
+    RecyclerView mRvDeliciousFood;
+
+    //攻略列表
+    @BindView(R.id.rv_strategy)
+    RecyclerView mRvStrategy;
+
+    //历史记录标签
+    @BindView(R.id.llyt_historical_label)
+    LinearLayout mLlytHistoricalLabel;
+
+    //历史标签
+    @BindView(R.id.flowlayout_historical_label)
+    TagFlowLayout mTagHistoryLabel;
+
+    //搜索结果
+    @BindView(R.id.llyt_search_result)
+    LinearLayout mLlytSearchResult;
+
+    //暂无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
+
     //商品类型
     private String mchType = HomeSearchMchTypeEnum.ALL.getValue();
     //关键字
-    private String keyWord = "宁波";
+    private String keyWord = HomeSearchMchTypeEnum.ALL.getValue();
     int mTotalPageCount;
 
+    private boolean visibleToUser;
+
+    //搜索关键字
+    String searchKeyWord;
     private HomePageSearchHotelAdapter mHotelAdapter;
+
+    private HomePageSearchFoodAdapter fineFoodListAdapter;
+
+    private HomePageSearchStrategyAdapter homeSearchStrategyListAdapter;
 
     public HomeSearchComprehensiveFragment() {
         // Required empty public constructor
@@ -113,6 +167,8 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -129,14 +185,14 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
     @Override
     public void initView(View v) {
-
+        keyWord = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.SEARCH_KEYWORD,"");
         if (mHotScenicSpotList == null) {
             mHotScenicSpotList = new ArrayList<>();
         } else {
             mHotScenicSpotList.clear();
         }
 
-        if(hotelList == null){
+        if (hotelList == null) {
 
             hotelList = new ArrayList<>();
         } else {
@@ -144,11 +200,26 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
             hotelList.clear();
         }
 
+        if (fineFoodList == null) {
+            fineFoodList = new ArrayList<>();
+        } else {
+
+            fineFoodList.clear();
+        }
+
+        if (strategysList == null) {
+            strategysList = new ArrayList<>();
+        } else {
+
+            strategysList.clear();
+        }
+
       /*  isInitView = true;
         isCanLoadData();*/
 
         mTvCityTag.getBackground().setAlpha(50);
 
+        //风景
         LinearLayoutManager scenicSpotsLinearLayoutManager = new LinearLayoutManager(getActivity());
         scenicSpotsLinearLayoutManager.setOrientation(scenicSpotsLinearLayoutManager.HORIZONTAL);
         mRvPopularScenicSpots.setLayoutManager(scenicSpotsLinearLayoutManager);
@@ -156,18 +227,35 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
         popularScenicSpotsAdapter.setPopularScenicSpotsList(mHotScenicSpotList);
         mRvPopularScenicSpots.setAdapter(popularScenicSpotsAdapter);
 
+        //美食
         LinearLayoutManager hotelReputationLinearLayout = new LinearLayoutManager(getActivity());
         hotelReputationLinearLayout.setOrientation(hotelReputationLinearLayout.VERTICAL);
         mRvHotel.setLayoutManager(hotelReputationLinearLayout);
         mHotelAdapter = new HomePageSearchHotelAdapter(getActivity());
         mHotelAdapter.setHotelList(hotelList);
         mRvHotel.setAdapter(mHotelAdapter);
+
+        //美食
+        LinearLayoutManager deliciousFoodLinearLayout = new LinearLayoutManager(getActivity());
+        deliciousFoodLinearLayout.setOrientation(deliciousFoodLinearLayout.VERTICAL);
+        mRvDeliciousFood.setLayoutManager(deliciousFoodLinearLayout);
+        fineFoodListAdapter = new HomePageSearchFoodAdapter(getActivity());
+        fineFoodListAdapter.setFineFoodList(fineFoodList);
+        mRvDeliciousFood.setAdapter(fineFoodListAdapter);
+
+        //攻略
+        LinearLayoutManager strategyLinearLayout = new LinearLayoutManager(getActivity());
+        strategyLinearLayout.setOrientation(strategyLinearLayout.VERTICAL);
+        mRvStrategy.setLayoutManager(strategyLinearLayout);
+        homeSearchStrategyListAdapter = new HomePageSearchStrategyAdapter(getActivity());
+        homeSearchStrategyListAdapter.setStrategyList(strategysList);
+        mRvStrategy.setAdapter(homeSearchStrategyListAdapter);
+
     }
 
     @Override
     public void initData() {
-        showProgressDialog(getActivity());
-        getHomePageSearchAll();
+
         mSmartRefreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
 
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -180,7 +268,7 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                     public void run() {
                         try {
 
-                                getHomePageSearchAll();
+                            getHomePageSearchAll();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -192,6 +280,9 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
     @Override
     public void lazyInitView(View view) {
+        keyWord = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.SEARCH_KEYWORD,"");
+        showProgressDialog(getActivity());
+        getHomePageSearchAll();
 
     }
 
@@ -250,17 +341,19 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                     mHotScenicSpotList = homePageAllSearchResponse.getScenics();
                     List<HomePageAllSearchResponse.CityEntity> cityEntityList = homePageAllSearchResponse.getCitys();
 
-                    if(cityEntityList != null)
-                    {
+                    if (cityEntityList != null && cityEntityList.size() > 0) {
+                        mRlytCity.setVisibility(View.VISIBLE);
                         HomePageAllSearchResponse.CityEntity cityEntity = cityEntityList.get(0);
                         String bannerUrl = cityEntity.getBanner();
                         String name = cityEntity.getName();
                         mTvCityName.setText(name);
                         GlideUtil.loadImage(getActivity(), bannerUrl, mImgCity);
+
+                    } else {
+                        mRlytCity.setVisibility(View.GONE);
                     }
 
-                    if(mHotScenicSpotList != null)
-                    {
+                    if (mHotScenicSpotList != null && mHotScenicSpotList.size() > 0) {
                         mLlytPopularScenicSpots.setVisibility(View.VISIBLE);
                         popularScenicSpotsAdapter.setPopularScenicSpotsList(mHotScenicSpotList);
                         popularScenicSpotsAdapter.notifyDataSetChanged();
@@ -269,7 +362,7 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                     }
 
                     hotelList = homePageAllSearchResponse.getHotels();
-                    if(hotelList != null) {
+                    if (hotelList != null && hotelList.size() > 0) {
                         mLlytHotel.setVisibility(View.VISIBLE);
                         mHotelAdapter.setHotelList(hotelList);
                         mHotelAdapter.notifyDataSetChanged();
@@ -277,18 +370,90 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                         mLlytHotel.setVisibility(View.GONE);
                     }
 
+                    fineFoodList = homePageAllSearchResponse.getFoods();
+                    if (fineFoodList != null && fineFoodList.size() > 0) {
+                        mLlytDeliciousFood.setVisibility(View.VISIBLE);
+                        fineFoodListAdapter.setFineFoodList(fineFoodList);
+                        fineFoodListAdapter.notifyDataSetChanged();
+                    } else {
+                        mLlytDeliciousFood.setVisibility(View.GONE);
+                    }
+
+                    strategysList = homePageAllSearchResponse.getStrategys();
+                    if (strategysList != null && strategysList.size() > 0) {
+                        mLlytStrategy.setVisibility(View.VISIBLE);
+                        homeSearchStrategyListAdapter.setStrategyList(strategysList);
+                        homeSearchStrategyListAdapter.notifyDataSetChanged();
+                    } else {
+                        mLlytStrategy.setVisibility(View.GONE);
+                    }
+
+                    if (cityEntityList.size() == 0 && mHotScenicSpotList.size() == 0 && hotelList.size() == 0 && fineFoodList.size() == 0 && strategysList.size() == 0) {
+
+                        mLlytSearchResult.setVisibility(View.GONE);
+                        mLlytHistoricalLabel.setVisibility(View.GONE);
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                        if (!TextUtils.isEmpty(keyWord))
+                        {
+                           String all = HomeSearchMchTypeEnum.ALL.getValue();
+                            if(keyWord.equals(all)) {
+                                mRlytNoData.setVisibility(View.GONE);
+                                mLlytHistoricalLabel.setVisibility(View.VISIBLE);
+                                mLlytSearchResult.setVisibility(View.GONE);
+                                List<HomeSearchComprehensiveBean> homeSearchComprehensiveList = queryAll();
+
+                                if (homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 0) {
+
+                                    mTagHistoryLabel.setAdapter(new TagAdapter<HomeSearchComprehensiveBean>(homeSearchComprehensiveList) {
+
+                                        @Override
+                                        public View getView(FlowLayout parent, int position, HomeSearchComprehensiveBean homeSearchComprehensiveBean) {
+                                            LayoutInflater mInflater = LayoutInflater.from(getActivity());
+                                            TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
+                                                    mTagHistoryLabel, false);
+                                            String homeSearchComprehensiveStr = homeSearchComprehensiveBean.getSearch();
+                                            tagName.setText(homeSearchComprehensiveStr);
+                                            return tagName;
+                                        }
+                                    });
+
+                                    mTagHistoryLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                                        @Override
+                                        public boolean onTagClick(View view, int position, FlowLayout parent) {
+                                            //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
+                                            //toActivity(ScenicSpotDestinationActivity.class);
+                                            HomeSearchComprehensiveBean homeSearchComprehensive = homeSearchComprehensiveList.get(position);
+                                            String searchRecordData = homeSearchComprehensive.getSearch();
+
+                                            return false;
+                                        }
+                                    });
+                                }
+                            }
+
+                    }
+               }else if (mHotScenicSpotList != null && mHotScenicSpotList.size() > 0 || hotelList != null && hotelList.size() > 0 || fineFoodList != null && fineFoodList.size() > 0 || strategysList != null && strategysList.size() > 0) {
+
+                        mLlytSearchResult.setVisibility(View.VISIBLE);
+                        mLlytHistoricalLabel.setVisibility(View.GONE);
+                        mRlytNoData.setVisibility(View.GONE);
+
+
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-                default:
-                    showToast(getActivity(),res.getMsg());
-                    break;
+            default:
+                showToast(getActivity(), res.getMsg());
+                break;
         }
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 
@@ -304,8 +469,99 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
         if (validateInternet()) {
 
-            mPresenter.getHomePageSearchAll(mchType,keyWord);
+            if(TextUtils.isEmpty(keyWord))
+            {
+                keyWord = HomeSearchMchTypeEnum.ALL.getValue();
+            }
+            mPresenter.getHomePageSearchAll(mchType, keyWord);
         }
     }
 
+    private void addSearchRecordData(String keyword) {
+        DaoSession daoSession = ((BasicApplication) getActivity().getApplication()).getDaoSession();
+        HomeSearchComprehensiveBean searchBean = new HomeSearchComprehensiveBean();
+        searchBean.setSearch(keyword);
+        daoSession.insert(searchBean);
+    }
+
+    public void deleteAll() {
+        DaoSession daoSession = ((BasicApplication) getActivity().getApplication()).getDaoSession();
+        daoSession.deleteAll(HomeSearchComprehensiveBean.class);
+    }
+
+    //查询全部搜索记录
+    public List<HomeSearchComprehensiveBean> queryAll() {
+        List<HomeSearchComprehensiveBean> searchs = ((BasicApplication) getActivity().getApplication()).getDaoSession().loadAll(HomeSearchComprehensiveBean.class);
+        return searchs;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        visibleToUser = isVisibleToUser;
+    }
+
+    @Subscribe
+    public void onEvent(String searchkeyWordStr) {
+
+        if (visibleToUser) {
+            keyWord = searchkeyWordStr;
+            if(!TextUtils.isEmpty(keyWord)) {
+                getHomePageSearchAll();
+            } else {
+                mRlytNoData.setVisibility(View.GONE);
+                mLlytHistoricalLabel.setVisibility(View.VISIBLE);
+                mLlytSearchResult.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick({R.id.image_history_record_clear})
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.image_history_record_clear:
+                deleteAll();
+                List<HomeSearchComprehensiveBean> homeSearchComprehensiveList = queryAll();
+                if (homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 0) {
+
+                    mTagHistoryLabel.setVisibility(View.VISIBLE);
+                    mTagHistoryLabel.setAdapter(new TagAdapter<HomeSearchComprehensiveBean>(homeSearchComprehensiveList) {
+
+                        @Override
+                        public View getView(FlowLayout parent, int position, HomeSearchComprehensiveBean homeSearchComprehensiveBean) {
+                            LayoutInflater mInflater = LayoutInflater.from(getActivity());
+                            TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
+                                    mTagHistoryLabel, false);
+                            String homeSearchComprehensiveStr = homeSearchComprehensiveBean.getSearch();
+                            tagName.setText(homeSearchComprehensiveStr);
+                            return tagName;
+                        }
+                    });
+
+                    mTagHistoryLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                        @Override
+                        public boolean onTagClick(View view, int position, FlowLayout parent) {
+                            //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
+                            //toActivity(ScenicSpotDestinationActivity.class);
+                            HomeSearchComprehensiveBean homeSearchComprehensive = homeSearchComprehensiveList.get(position);
+                            String searchRecordData = homeSearchComprehensive.getSearch();
+
+                            return false;
+                        }
+                    });
+                } else {
+                    mTagHistoryLabel.setVisibility(View.GONE);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

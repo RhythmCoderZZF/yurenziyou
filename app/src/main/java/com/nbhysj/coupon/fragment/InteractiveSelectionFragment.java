@@ -97,7 +97,7 @@ public class InteractiveSelectionFragment extends BaseFragment<DestinationPresen
         scenicSpotsLinearLayoutManager.setOrientation(scenicSpotsLinearLayoutManager.VERTICAL);
         mRvInteractiveSelection.setLayoutManager(scenicSpotsLinearLayoutManager);
         recreationListAdapter = new RecreationListAdapter(getActivity());
-        recreationListAdapter.setRecreationListList(mHotScenicSpotList);
+        recreationListAdapter.setRecreationList(mHotScenicSpotList);
         mRvInteractiveSelection.setAdapter(recreationListAdapter);
 
     }
@@ -152,7 +152,7 @@ public class InteractiveSelectionFragment extends BaseFragment<DestinationPresen
         if (hotScenicSpotList != null) {
             mHotScenicSpotList.addAll(hotScenicSpotList);
         }
-        recreationListAdapter.setRecreationListList(mHotScenicSpotList);
+        recreationListAdapter.setRecreationList(mHotScenicSpotList);
         recreationListAdapter.notifyDataSetChanged();
     }
 

@@ -143,7 +143,7 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

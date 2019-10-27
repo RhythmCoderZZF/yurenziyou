@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:zhy="http://schemas.android.com/apk/res-auto">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refresh_layout"
@@ -28,20 +29,83 @@
         <com.nbhysj.coupon.view.RecyclerScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+            <LinearLayout
+                android:id="@+id/llyt_historical_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:text="@string/str_historical_record"
+                    android:textColor="@color/txt_font_black2"
+                    android:textSize="@dimen/text_size_xsmall"
+                    android:paddingTop="@dimen/dp_10"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:id="@+id/image_history_record_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:src="@mipmap/icon_delete_history_record"
+                    android:text="@string/str_historical_record"
+                    android:textSize="@dimen/text_size_xsmall" />
+
+            </RelativeLayout>
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/flowlayout_historical_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_15"
+                zhy:max_select="-1" />
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llyt_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:id="@+id/rlyt_city"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_136"
                 android:layout_marginLeft="@dimen/dp_15"
                 android:layout_marginTop="@dimen/dp_13"
                 android:layout_marginRight="@dimen/dp_15">
-
 
                 <com.nbhysj.coupon.view.RoundedImageView
                     android:id="@+id/img_city"
@@ -149,7 +213,63 @@
                     android:layout_height="@dimen/dp_56"
                     android:textColor="@color/color_text_black7"
                     android:gravity="center"
-                    android:text="查看更多相关商品"
+                    android:text="查看更多相关酒店"
+                    android:drawablePadding="@dimen/dp_8"
+                    android:layout_gravity="center_horizontal"
+                    android:drawableRight="@mipmap/icon_right_black_arrow"
+                    android:textSize="@dimen/text_size_xsmall"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_4"
+                    android:background="@color/color_text_gray37"></View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llyt_delicious_food"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="@string/str_delicious_food"
+                    android:textColor="@color/color_text_black4"
+                    android:textSize="@dimen/text_size_xlarge"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/color_text_gray25"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:alpha="0.25"></View>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_delicious_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"></android.support.v7.widget.RecyclerView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/color_text_gray25"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:alpha="0.25"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_56"
+                    android:textColor="@color/color_text_black7"
+                    android:gravity="center"
+                    android:text="查看更多相关美食"
                     android:drawablePadding="@dimen/dp_8"
                     android:layout_gravity="center_horizontal"
                     android:drawableRight="@mipmap/icon_right_black_arrow"
@@ -162,7 +282,67 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/llyt_strategy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="@string/str_strategy"
+                    android:textColor="@color/color_text_black4"
+                    android:textSize="@dimen/text_size_xlarge"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/color_text_gray25"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:alpha="0.25"></View>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_strategy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"></android.support.v7.widget.RecyclerView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/color_text_gray25"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:alpha="0.25"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_56"
+                    android:textColor="@color/color_text_black7"
+                    android:gravity="center"
+                    android:text="查看更多相关攻略"
+                    android:drawablePadding="@dimen/dp_8"
+                    android:layout_gravity="center_horizontal"
+                    android:drawableRight="@mipmap/icon_right_black_arrow"
+                    android:textSize="@dimen/text_size_xsmall"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_4"
+                    android:background="@color/color_text_gray37"></View>
+            </LinearLayout>
         </LinearLayout>
+
+                <include layout="@layout/layout_nodata"
+                    android:visibility="gone"></include>
+
+            </LinearLayout>
         </com.nbhysj.coupon.view.RecyclerScrollView>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

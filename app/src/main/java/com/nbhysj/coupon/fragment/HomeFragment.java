@@ -181,7 +181,7 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

@@ -422,7 +422,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     }
 
     @Override
-    public void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res) {
+    public void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res) {
 
     }
 

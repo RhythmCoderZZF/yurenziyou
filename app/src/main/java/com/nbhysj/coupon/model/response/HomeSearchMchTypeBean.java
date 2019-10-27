@@ -110,6 +110,12 @@ public class HomeSearchMchTypeBean implements Serializable {
 
     private String marketPrice;
 
+    /*************    帖子    **********************/
+
+    private String resourceUrl;
+
+    private String postsType;
+
     public int getLoveStatus() {
         return loveStatus;
     }
@@ -191,7 +197,6 @@ public class HomeSearchMchTypeBean implements Serializable {
     }
 
     /************************/
-
 
 
     public int getDataId() {
@@ -602,5 +607,21 @@ public class HomeSearchMchTypeBean implements Serializable {
 
     public void setHotelType1(String hotelType1) {
         this.hotelType1 = hotelType1;
+    }
+
+    public String getResourceUrl() {
+        return resourceUrl;
+    }
+
+    public void setResourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
+    }
+
+    public String getPostsType() {
+        return postsType;
+    }
+
+    public void setPostsType(String postsType) {
+        this.postsType = postsType;
     }
 }

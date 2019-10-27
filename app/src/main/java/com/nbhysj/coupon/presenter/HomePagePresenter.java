@@ -51,7 +51,7 @@ public class HomePagePresenter extends HomePageContract.Presenter {
 
     @Override
     public void getHomePageSearchByType(String queryType, String keyword,int pageNo,int pageSize) {
-        mRxManager.add(mModel.getHomePageSearchByType(queryType,keyword,pageNo,pageSize).subscribe(res -> mView.getHomePageSearchByType(res), e -> mView.showMsg(e.getMessage())));
+        mRxManager.add(mModel.getHomePageSearchByType(queryType,keyword,pageNo,pageSize).subscribe(res -> mView.getHomePageSearchByTypeResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

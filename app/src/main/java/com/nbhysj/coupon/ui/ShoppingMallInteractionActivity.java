@@ -159,7 +159,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
         scenicSpotsLinearLayoutManager.setOrientation(scenicSpotsLinearLayoutManager.VERTICAL);
         mRvHotScenicSpot.setLayoutManager(scenicSpotsLinearLayoutManager);
         recreationListAdapter = new RecreationListAdapter(ShoppingMallInteractionActivity.this);
-        recreationListAdapter.setRecreationListList(mScenicSpotList);
+        recreationListAdapter.setRecreationList(mScenicSpotList);
         mRvHotScenicSpot.setAdapter(recreationListAdapter);
 
     }
@@ -254,7 +254,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
 
                     List<MchTypeBean> scenicSpotList = res.getData().getMch().getNearby().getResult();
                     mScenicSpotList.addAll(scenicSpotList);
-                    recreationListAdapter.setRecreationListList(mScenicSpotList);
+                    recreationListAdapter.setRecreationList(mScenicSpotList);
                     recreationListAdapter.notifyDataSetChanged();
                     BasePaginationResult pageBean = res.getData().getMch().getNearby().getPage();
                     mTotalPageCount = pageBean.getPageCount();
@@ -287,7 +287,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
                     BasePaginationResult pageBean = res.getData().getPage();
                     mTotalPageCount = pageBean.getPageCount();
                     mScenicSpotList.addAll(scenicSpotList);
-                    recreationListAdapter.setRecreationListList(mScenicSpotList);
+                    recreationListAdapter.setRecreationList(mScenicSpotList);
                     recreationListAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();

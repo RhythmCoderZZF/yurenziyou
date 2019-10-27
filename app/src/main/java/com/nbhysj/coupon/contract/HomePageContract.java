@@ -88,7 +88,7 @@ public interface HomePageContract {
 
         void getHomePageSearchAllResult(BackResult<HomePageAllSearchResponse> res);
 
-        void getHomePageSearchByType(BackResult<HomePageTypeSearchResponse> res);
+        void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res);
 
         void userFollowResult(BackResult<FollowUserStatusResponse> res);
 

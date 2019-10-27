@@ -242,6 +242,7 @@
     <string name="str_navigation">导航</string>
     <string name="str_food_recommend">推荐菜</string>
     <string name="str_already_concerned">已关注</string>
+    <string name="str_delicious_food" translatable="false">美食</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>

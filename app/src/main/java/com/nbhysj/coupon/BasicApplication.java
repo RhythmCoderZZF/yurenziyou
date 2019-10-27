@@ -98,6 +98,7 @@ public class BasicApplication extends Application {
 
     }
 
+
     /**
      * 解决androidP 第一次打开程序出现莫名弹窗
      * 弹窗内容“detected problems with api ”

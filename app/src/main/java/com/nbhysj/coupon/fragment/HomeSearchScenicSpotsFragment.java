@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HomePageSearchHotelAdapter;
+import com.nbhysj.coupon.adapter.HomePageSearchScenicSpotsAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.HomeSearchMchTypeEnum;
 import com.nbhysj.coupon.contract.HomePageContract;
@@ -40,10 +41,10 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * @auther：hysj created on 2019/10/21
- * description：景点首页搜索酒店
+ * @auther：hysj created on 2019/10/27
+ * description：景点首页搜索景点
  */
-public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
+public class HomeSearchScenicSpotsFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private boolean isOnLoadMore = false;
@@ -66,20 +67,20 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoData;
 
-    //商品类型
-    private String mchType = HomeSearchMchTypeEnum.MCH_HOTEL.getValue();
+    //商品(景点)类型
+    private String mchType = HomeSearchMchTypeEnum.MCH_SCENIC.getValue();
     //关键字
     private String keyWord = HomeSearchMchTypeEnum.ALL.getValue();
 
-    private HomePageSearchHotelAdapter homePageSearchHotelAdapter;
+    private HomePageSearchScenicSpotsAdapter homePageSearchScenicSpotsAdapter;
 
     private boolean visibleToUser;
-    public HomeSearchHotelFragment() {
+    public HomeSearchScenicSpotsFragment() {
         // Required empty public constructor
     }
 
-    public static HomeSearchHotelFragment newInstance(String param1, String param2) {
-        HomeSearchHotelFragment fragment = new HomeSearchHotelFragment();
+    public static HomeSearchScenicSpotsFragment newInstance(String param1, String param2) {
+        HomeSearchScenicSpotsFragment fragment = new HomeSearchScenicSpotsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -121,9 +122,9 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
         LinearLayoutManager hotelReputationLinearLayout = new LinearLayoutManager(getActivity());
         hotelReputationLinearLayout.setOrientation(hotelReputationLinearLayout.VERTICAL);
         mRvMchTypeList.setLayoutManager(hotelReputationLinearLayout);
-        homePageSearchHotelAdapter = new HomePageSearchHotelAdapter(getActivity());
-        homePageSearchHotelAdapter.setHotelList(homeSearchMchTypeList);
-        mRvMchTypeList.setAdapter(homePageSearchHotelAdapter);
+        homePageSearchScenicSpotsAdapter = new HomePageSearchScenicSpotsAdapter(getActivity());
+        homePageSearchScenicSpotsAdapter.setPopularScenicSpotsList(homeSearchMchTypeList);
+        mRvMchTypeList.setAdapter(homePageSearchScenicSpotsAdapter);
     }
 
     @Override
@@ -140,7 +141,7 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
                         isOnLoadMore = false;
                         mPageNo = 1;
                         homeSearchMchTypeList.clear();
-                        homePageSearchHotelAdapter.notifyDataSetChanged();
+                        homePageSearchScenicSpotsAdapter.notifyDataSetChanged();
                         showProgressDialog(getActivity());
                         getHomePageSearchByType();
 
@@ -247,7 +248,7 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
                     } else {
 
                         homeSearchMchTypeList.clear();
-                        homePageSearchHotelAdapter.notifyDataSetChanged();
+                        homePageSearchScenicSpotsAdapter.notifyDataSetChanged();
                         mSmartRefreshLayout.finishRefresh();
                         mSmartRefreshLayout.setNoMoreData(false);
                     }
@@ -271,8 +272,8 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
                         homeSearchMchTypeList.addAll(hotelList);
                     }
 
-                    homePageSearchHotelAdapter.setHotelList(homeSearchMchTypeList);
-                    homePageSearchHotelAdapter.notifyDataSetChanged();
+                    homePageSearchScenicSpotsAdapter.setPopularScenicSpotsList(homeSearchMchTypeList);
+                    homePageSearchScenicSpotsAdapter.notifyDataSetChanged();
 
 
                 } catch (Exception e) {
@@ -307,6 +308,7 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
             mPresenter.getHomePageSearchByType(mchType,keyWord,mPageNo,mPageSize);
         }
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -331,4 +333,5 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 }
