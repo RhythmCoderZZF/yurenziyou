@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.BroadcastActivity"
-    android:background="@color/background_l_grey"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
@@ -14,9 +14,10 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/line_bg"
+        android:background="@color/white"
         app:srlAccentColor="#00000000"
-        app:srlEnableLoadMore="true"
+        app:srlEnableLoadMore="false"
+        app:srlEnableRefresh="false"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000"
         app:srlEnableHeaderTranslationContent="false"
@@ -27,10 +28,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_stroke_dynamics"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_stroke_dynamics"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+            <include
+                layout="@layout/layout_nodata"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+            ></include>
+        </RelativeLayout>
 
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"

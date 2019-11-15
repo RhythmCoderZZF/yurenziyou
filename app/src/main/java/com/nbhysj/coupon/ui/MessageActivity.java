@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.flyco.tablayout.SlidingTabLayout;
@@ -22,8 +23,8 @@ public class MessageActivity extends BaseActivity {
     SlidingTabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
-    @BindView(R.id.rlyt_back)
-    RelativeLayout mRlytBack;
+    @BindView(R.id.img_back)
+    ImageView mImgBack;
     private ArrayList<Fragment> fragments;
     private MessageFragment messageFragment;
     private BroadcastFragment notifyFragment;
@@ -57,7 +58,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     public void initData() {
 
-        mRlytBack.setOnClickListener(new View.OnClickListener() {
+        mImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

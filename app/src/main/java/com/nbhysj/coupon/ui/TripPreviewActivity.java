@@ -183,6 +183,11 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
     }
 
     @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void getTripDetailsResult(BackResult<TripDetailsResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -243,6 +248,11 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
 
     @Override
     public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
 
     }
 

@@ -5,9 +5,11 @@ import com.nbhysj.coupon.contract.UserInfoContract;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
 import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 
 import java.util.Map;
 
@@ -70,6 +72,16 @@ public class OrderSubmitPresenter extends OrderSubmitContract.Presenter {
     @Override
     public void recreationOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
         mRxManager.add(mModel.recreationOrderSubmit(ticketOrderSubmitRequest).subscribe(res -> mView.ticketOrderSubmitResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void queryByTicket(QueryByTicketRequest queryByTicketRequest) {
+        mRxManager.add(mModel.queryByTicket(queryByTicketRequest).subscribe(res -> mView.queryByTicketResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest) {
+        mRxManager.add(mModel.useCouponTicketRequest(useCouponTicketRequest).subscribe(res -> mView.useCouponTicketResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

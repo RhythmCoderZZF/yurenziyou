@@ -11,11 +11,16 @@ import com.nbhysj.coupon.adapter.NewFansListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MessageContract;
 import com.nbhysj.coupon.model.MessageModel;
+import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
+import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
+import com.nbhysj.coupon.model.response.UserFollowResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.presenter.MessagePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
@@ -175,6 +180,21 @@ public class NewFansActivity extends BaseActivity<MessagePresenter, MessageModel
     }
 
     @Override
+    public void getAttentionInitResult(BackResult<AttentionResponse> res) {
+
+    }
+
+    @Override
+    public void getUserFollowResult(BackResult<UserFollowResponse> res) {
+
+    }
+
+    @Override
+    public void getPostsCommentAndAnswerResult(BackResult<CommentAndAnswerResponse> res) {
+
+    }
+
+    @Override
     public void getUserFansListResult(BackResult<UserFansFollowResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
@@ -222,6 +242,16 @@ public class NewFansActivity extends BaseActivity<MessagePresenter, MessageModel
                 showToast(NewFansActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getMessageListResult(BackResult<MessageResponse> res) {
+
+    }
+
+    @Override
+    public void getZanAndCollectionMsgResult(BackResult<ZanAndCollectionResponse> res) {
+
     }
 
     @Override

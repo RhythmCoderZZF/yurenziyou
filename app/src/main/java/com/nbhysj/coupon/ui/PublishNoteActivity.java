@@ -1089,14 +1089,14 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                     getNotePhotoPicker(MimeType.ofImage(),true);
                 }
             });
-            cameraCapturePromptDialog.addSheetItem(getResources().getString(R.string.str_video_shooting), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+           /* cameraCapturePromptDialog.addSheetItem(getResources().getString(R.string.str_video_shooting), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
                 @Override
                 public void onClick(int which) {
 
                     isPhotoSelect = false;
                     showToast(PublishNoteActivity.this,"此功能正在开发中...");
                 }
-            });
+            });*/
             cameraCapturePromptDialog.addSheetItem(getResources().getString(R.string.str_select_local_video), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
                 @Override
                 public void onClick(int which) {

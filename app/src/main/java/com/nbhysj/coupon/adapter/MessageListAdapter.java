@@ -9,13 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.MessageBean;
+import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UserFansFollowBean;
+import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * created by hysj on 2019/02/20.
@@ -35,13 +39,13 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     private int mEmptyType = 0;
 
     private Context mContext;
-    private List<MessageBean> messageList;
+    private List<MessageResponse.MessageEntity> messageList;
 
     public MessageListAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setMessageList(List<MessageBean> messageList) {
+    public void setMessageList(List<MessageResponse.MessageEntity> messageList) {
 
         this.messageList = messageList;
     }
@@ -57,17 +61,25 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     public void onBindViewHolder(MessageListAdapter.ViewHolder holder, int position) {
 
         try {
-            MessageBean messageBean = messageList.get(position);
-            holder.mTvTitle.setText(messageBean.getTitle());
-            holder.mTvMessageTime.setText(messageBean.getTime());
-            holder.mTvMessageContent.setText(messageBean.getContent());
-            String url = messageBean.getUrl();
+            MessageResponse.MessageEntity userFansFollowBean = messageList.get(position);
+            String fansName = userFansFollowBean.getNickname();
+             long chatTime = userFansFollowBean.getCtime();
+            String avatar = userFansFollowBean.getAvater();
+            String messageContent = userFansFollowBean.getMessage();
+           String time =  DateUtil.transferLongToDate(DateUtil.sDateYMDHHMMSSFormat,chatTime);
+            holder.mTvUsername.setText(fansName);
+            holder.mTvMessageTime.setText(time);
+            GlideUtil.loadImage(mContext,avatar,holder.mImgUserAvatar);
+            holder.mTvMessageContent.setText(messageContent);
+
+          //  holder.mTvMessageContent.setText(messageBean.getContent());
+           /* String url = messageBean.getUrl();
             holder.mImgMessageType.loadCircle(url);
             if (messageBean.isRead() == false) {
                 holder.mImageMessageDot.setVisibility(View.VISIBLE);
             } else if (messageBean.isRead() == true) {
                 holder.mImageMessageDot.setVisibility(View.GONE);
-            }
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,10 +105,11 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.image_message_type)
-        GlideImageView mImgMessageType;
-        @BindView(R.id.tv_title)
-        TextView mTvTitle;
+        //头像
+        @BindView(R.id.img_user_avatar)
+        CircleImageView mImgUserAvatar;
+        @BindView(R.id.tv_username)
+        TextView mTvUsername;
         @BindView(R.id.tv_message_time)
         TextView mTvMessageTime;
         @BindView(R.id.tv_message_content)

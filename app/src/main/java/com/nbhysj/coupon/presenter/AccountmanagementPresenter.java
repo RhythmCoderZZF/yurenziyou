@@ -30,6 +30,10 @@ public class AccountmanagementPresenter extends AccountManagementContract.Presen
         mRxManager.add(mModel.getUserInfo(userId).subscribe(res -> mView.getUserInfoResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
+    @Override
+    public void thirdPartyLogin(ThirdPartyLoginRequest thirdPartyLoginRequest) {
+        mRxManager.add(mModel.thirdPartyLogin(thirdPartyLoginRequest).subscribe(res -> mView.thirdPartyLoginResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 
     @Override
     public void onStart() {

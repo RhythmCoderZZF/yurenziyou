@@ -53,12 +53,12 @@
 
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/tab_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:background="@color/white"
-            app:tl_indicator_color="@color/color_line_view"
+            app:tl_indicator_color="@color/color_green3"
             app:tl_indicator_corner_radius="30dp"
             app:tl_indicator_height="3dp"
             app:tl_indicator_margin_top="@dimen/dp_18"

@@ -3,10 +3,12 @@ package com.nbhysj.coupon.presenter;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
+import com.nbhysj.coupon.model.request.AddTrafficRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
+import com.nbhysj.coupon.model.request.IntelligentTripRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 
 import java.util.HashMap;
@@ -86,6 +88,17 @@ public class TravelAssistantPresenter extends TravelAssistantContract.Presenter 
     public void getWeather(int cityCode) {
         mRxManager.add(mModel.getWeather(cityCode).subscribe(res -> mView.getWeatherResult(res), e -> mView.showMsg(e.getMessage())));
     }
+
+    @Override
+    public void intelligentProject(IntelligentTripRequest intelligentTripRequest) {
+        mRxManager.add(mModel.intelligentProject(intelligentTripRequest).subscribe(res -> mView.intelligentProjectResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void insertTraffic(AddTrafficRequest addTrafficRequest) {
+        mRxManager.add(mModel.insertTraffic(addTrafficRequest).subscribe(res -> mView.insertTrafficResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
 
     @Override
     public void onStart() {

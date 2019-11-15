@@ -6,12 +6,16 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import java.util.HashMap;
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**
@@ -44,5 +48,15 @@ public class HomestayModel implements HomestayContract.Model {
     @Override
     public Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(int mchId) {
         return Api.getInstance().apiService.getMchHomestayDetail(mchId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<List<MchCouponResponse>>> queryMchCouponList(int mchId) {
+        return Api.getInstance().apiService.queryMchCouponList(mchId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<CouponsGetBean>> getCoupon(int couponId) {
+        return Api.getInstance().apiService.getCoupon(couponId).compose(RxSchedulers.io_main());
     }
 }

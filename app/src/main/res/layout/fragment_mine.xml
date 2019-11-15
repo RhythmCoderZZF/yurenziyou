@@ -129,7 +129,7 @@
                                 </LinearLayout>
 
                                 <RelativeLayout
-                                    android:id="@+id/rlyt_my_business_card"
+                                    android:id="@+id/rlyt_my_coupon"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
@@ -175,6 +175,7 @@
                                 android:weightSum="4">
 
                                 <LinearLayout
+                                    android:id="@+id/llyt_fans_num"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"

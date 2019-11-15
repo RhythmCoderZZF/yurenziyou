@@ -38,33 +38,30 @@ import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
-import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
 import com.nbhysj.coupon.model.request.CarsBean;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
-import com.nbhysj.coupon.model.request.GoodsBean;
+import com.nbhysj.coupon.model.request.GoodsBeanRequest;
 import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
-import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
-import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.TravellerBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
-import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.MyRecycleView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -261,7 +258,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     private PoiResult poiResult; // poi返回的结果
 
     //商品列表
-    private List<GoodsBean> goodsList;
+    private List<GoodsBeanRequest> goodsList;
 
     private List<CarsBean> carsBeanList;
 
@@ -867,6 +864,11 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     }
 
     @Override
+    public void useCouponTicketResult(BackResult<UseCouponTicketResponse> res) {
+
+    }
+
+    @Override
     public void getEstimatedPriceResult(BackResult<EstimatedPriceResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -1095,7 +1097,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceList.get(i);
                 String goodsType = goodsPrice.getGoodsType();
                 List<GoodsPriceDatesResponse> goodsPriceEntityList = goodsPrice.getGoodsPriceSelectList();
-                GoodsBean goodsTicket = null;
+                GoodsBeanRequest goodsTicket = null;
                 for (int j = 0; j < goodsPriceEntityList.size(); j++) {
 
                     GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceEntityList.get(j);
@@ -1105,7 +1107,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     int goodId = goodsPrice.getGoodsId();
                     if (isSelectDatePrice)
                     {
-                        goodsTicket = new GoodsBean();
+                        goodsTicket = new GoodsBeanRequest();
                         goodsTicket.setGoodsId(goodId);
                        // goodsAddTicket.setNum(mPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
                         goodsTicket.setDate(date);
@@ -1171,6 +1173,11 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
             mPresenter.updateUserTraveller(updateTravellerRequest);
         }
+    }
+
+    @Override
+    public void queryByTicketResult(BackResult<QueryByTicketResponse> res) {
+
     }
 
     //增加游客

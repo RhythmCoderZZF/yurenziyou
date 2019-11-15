@@ -31,9 +31,11 @@ public class TagTopicSearchAdapter extends RecyclerView.Adapter<TagTopicSearchAd
 
     private List<HotTagsTopicBean> tagTopicSearchList;
     private Context mContent;
+    private TagTopicListener tagTopicListener;
 
-    public TagTopicSearchAdapter(Context mContent) {
+    public TagTopicSearchAdapter(Context mContent,TagTopicListener tagTopicListener) {
         this.mContent = mContent;
+        this.tagTopicListener = tagTopicListener;
     }
 
     public void setTagTopicList(List<HotTagsTopicBean> tagTopicSearchList) {
@@ -52,6 +54,15 @@ public class TagTopicSearchAdapter extends RecyclerView.Adapter<TagTopicSearchAd
 
         HotTagsTopicBean topicSearchEntity = tagTopicSearchList.get(position);
         holder.mTvTagTopic.setText(topicSearchEntity.getTitle());
+
+        holder.mLlytCreateTopicItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                tagTopicListener.setTagTopicListener(topicSearchEntity);
+
+            }
+        });
     }
 
     @Override
@@ -68,5 +79,11 @@ public class TagTopicSearchAdapter extends RecyclerView.Adapter<TagTopicSearchAd
             mTvTagTopic = itemView.findViewById(R.id.tv_topic);
             mLlytCreateTopicItem = itemView.findViewById(R.id.llyt_create_topic_item);
         }
+    }
+
+    public interface TagTopicListener{
+
+        void setTagTopicListener(HotTagsTopicBean hotTagsTopicBean);
+
     }
 }

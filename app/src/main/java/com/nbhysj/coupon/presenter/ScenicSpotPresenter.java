@@ -50,9 +50,21 @@ public class ScenicSpotPresenter extends ScenicSpotContract.Presenter {
     public void mchCollection(MchCollectionRequest mchCollectionRequest) {
         mRxManager.add(mModel.mchCollection(mchCollectionRequest).subscribe(res -> mView.mchCollectionResult(res), e -> mView.showMsg(e.getMessage())));
     }
+    @Override
+    public void queryMchCouponList(int mchId) {
+        mRxManager.add(mModel.queryMchCouponList(mchId).subscribe(res -> mView.queryMchCouponListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getCoupon(int couponId) {
+        mRxManager.add(mModel.getCoupon(couponId).subscribe(res -> mView.getCouponResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 
     @Override
     public void onStart() {
 
     }
+
+
+
 }

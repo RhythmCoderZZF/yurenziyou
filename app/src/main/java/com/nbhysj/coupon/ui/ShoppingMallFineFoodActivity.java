@@ -329,7 +329,7 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
     }
 
 
-    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first})
+    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first,R.id.toolbar})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.tv_popular_nearby:
@@ -395,9 +395,13 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
                 mPage = 1;
                 mScenicSpotList.clear();
                 // scenicSpotsListAdapter.notifyDataSetChanged();
-                mSortStr = "cz";
+                mSortStr = "FJ";
                 showProgressDialog(ShoppingMallFineFoodActivity.this);
                 findFineFoodByCate();
+                break;
+            case R.id.toolbar:
+
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;

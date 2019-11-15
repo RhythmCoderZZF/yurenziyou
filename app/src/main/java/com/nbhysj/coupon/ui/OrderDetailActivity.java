@@ -33,6 +33,7 @@ import com.nbhysj.coupon.adapter.OrderDetailProblemAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailVehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.common.Enum.OrderDetailStatusEnum;
 import com.nbhysj.coupon.contract.OrderDetailContract;
 import com.nbhysj.coupon.dialog.OrderPriceDetailsDialog;
@@ -552,15 +553,18 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                 String goodsTypeGroup = GoodsTypeEnum.GROUP_GOODS.getValue();
 
                 if (goodsType.equals(goodsTypeTicket)) {  //景点
-
+                    String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
                     mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
                     mIntent.putExtra("mchId", dataId);
+                    mIntent.putExtra("mchType", mchScenicType);
                     mContext.startActivity(mIntent);
 
                 } else if (goodsType.equals(goodsTypeRecreation)) {  //互动
 
                     mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
                     mIntent.putExtra("mchId", dataId);
+                    mIntent.putExtra("mchType", mchRecreationType);
                     mContext.startActivity(mIntent);
 
                 } else if (goodsType.equals(goodsTypeGroup)) { //组合
@@ -594,7 +598,9 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                 Intent intent = new Intent();
 
                 intent.setClass(OrderDetailActivity.this, OrderPaymentActivity.class);
-                intent.putExtra("price", payFee);
+                if(!TextUtils.isEmpty(payFee)) {
+                    intent.putExtra("price", Double.valueOf(payFee));
+                }
                 intent.putExtra("title", goodsTitle);
                 intent.putExtra("payExprireTime", 0);
                 intent.putExtra("orderNo", orderNo);

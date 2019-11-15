@@ -54,11 +54,13 @@ public class TravelAssistantDestionationsListAdapter extends RecyclerView.Adapte
 
         try {
 
-            GlideUtil.loadImage(mContext, "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1557554460&di=587cccfcf79487fa86575a004a4785fd&src=http://seopic.699pic.com/photo/50014/4961.jpg_wh1200.jpg", holder.mImgScenicSpots);
+
 
             TravelAssistantDetailCountryBean travelAssistantDetailCountryBean = nearbyScenicSpotsList.get(itemPosition);
             String destinationName = travelAssistantDetailCountryBean.getCountyName();
             holder.mTvDestinationName.setText(destinationName);
+            String bannerUrl = travelAssistantDetailCountryBean.getBanner();
+            GlideUtil.loadImage(mContext, bannerUrl, holder.mImgScenicSpots);
 
             holder.mTvAddMyTravel.setOnClickListener(new View.OnClickListener() {
                 @Override

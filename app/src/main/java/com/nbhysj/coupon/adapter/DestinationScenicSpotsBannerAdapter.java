@@ -1,18 +1,22 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.PopularScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -57,6 +61,7 @@ public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<De
         try {
 
             MchTypeBean scenicSpotBean = popularScenicSpotsList.get(itemPosition);
+            int mchId = scenicSpotBean.getDataId();
             holder.mTvPopularScenicSpotName.setText(scenicSpotBean.getDataName());
             List<MchTypeBean.TagsEntity> tagsEntityList = scenicSpotBean.getTags();
             String photoUrl = scenicSpotBean.getPhoto();
@@ -98,6 +103,21 @@ public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<De
             } else {
                 holder.mFooter.setVisibility(View.GONE);
             }
+
+            holder.mLlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent mIntent = new Intent();
+                    String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
+                    mIntent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    mIntent.putExtra("mchId", mchId);
+                    mIntent.putExtra("mchType", mchScenicType);
+                    mContext.startActivity(mIntent);
+
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,7 +125,7 @@ public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<De
 
     @Override
     public int getItemCount() {
-        return 3;
+        return popularScenicSpotsList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,6 +142,8 @@ public class DestinationScenicSpotsBannerAdapter extends RecyclerView.Adapter<De
         View mHeader;
         @BindView(R.id.view_footer)
         View mFooter;
+        @BindView(R.id.llyt_scenic_spot_item)
+        LinearLayout mLlytScenicSpotItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

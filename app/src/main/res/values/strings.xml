@@ -111,7 +111,7 @@
     <string name="str_broadcast">广播</string>
     <string name="str_stroke_dynamics">行程动态</string>
     <string name="str_comments_received" translatable="false">收到的评论</string>
-    <string name="str_praise_and_collection" translatable="false">赞和收藏</string>
+    <string name="str_praise_and_collection" translatable="false">收到的赞与收藏</string>
     <string name="str_comments_list" translatable="false">评论列表</string>
     <string name="str_passenger_name_telephone">旅客姓名电话</string>
     <string name="str_chinese_name">中文名字</string>
@@ -225,6 +225,7 @@
     <string name="str_un_bookable">不可订</string>
     <string name="str_fill_in_vehicle_info">填写用车信息</string>
     <string name="str_sure_to_delete_the_order">确认删除该订单吗</string>
+    <string name="str_sure_to_cancel_the_order">确认取消该订单吗</string>
     <string name="str_house_details">房源信息</string>
     <string name="str_strategy">攻略</string>
     <string name="str_package_meal">组合套餐</string>
@@ -243,6 +244,14 @@
     <string name="str_food_recommend">推荐菜</string>
     <string name="str_already_concerned">已关注</string>
     <string name="str_delicious_food" translatable="false">美食</string>
+    <string name="str_coupon" translatable="false">优惠券</string>
+    <string name="str_ticket_center" translatable="false">票券中心</string>
+    <string name="str_to_use_ticket" translatable="false">去使用</string>
+    <string name="str_receive" translatable="false">领取</string>
+    <string name="str_collect_immediately">立即领取</string>
+    <string name="str_use_immediately">立即使用</string>
+    <string name="str_close">关闭</string>
+    <string name="string_privacy">点击注册即表示接受鱼人自游的《隐私政策》和《用户协议》</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -301,6 +310,7 @@
     <string name="str_back_my_message">我的消息</string>
     <string name="str_collection_success">收藏成功</string>
     <string name="str_collection_cancel">取消收藏</string>
+
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>
@@ -518,6 +528,13 @@
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
 
 
-
     <string name="app_tip">提示</string>
+    <string name="str_location_permission">位置权限</string>
+    <string name="str_location_authority_description">"获取设备所在的经纬度."</string>
+    <string name="str_camra_permission">相机权限</string>
+    <string name="str_camra_authority_description">相机拍摄,照片相册选择授权.</string>
+    <string name="str_read_phone_state_permission">手机/电话</string>
+    <string name="str_read_phone_state_authority_description">校验IMEI/IMSI码,防止账号被盗.</string>
+    <string name="str_storage_permission">存储权限</string>
+    <string name="str_storage_authority_description">缓存图片和视频,降低流量消耗.</string>
 </resources>

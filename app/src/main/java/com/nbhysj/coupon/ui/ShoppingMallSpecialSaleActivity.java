@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,6 +43,7 @@ import com.nbhysj.coupon.presenter.LimitedTimeSalePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -85,6 +87,49 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
     //限时特卖
     private List<GoodsBean> mLimitedSaleGoodsList;
     ConscienceRecommendationListAdapter conscienceRecommendationListAdapter;
+    private long endTime;
+    //限时特卖小时
+    @BindView(R.id.tv_limited_sale_hour)
+    TextView mTvLimitedSaleHour;
+
+    //限时特卖分
+    @BindView(R.id.tv_limited_sale_minute)
+    TextView mTvLimitedSaleMinute;
+
+    //限时特卖秒
+    @BindView(R.id.tv_limited_sale_second)
+    TextView mTvLimitedSaleSecond;
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            endTime--;
+            if(endTime>0){
+                String formatLongToTimeStr = formatLongToTimeStr(endTime);
+                String[] split = formatLongToTimeStr.split("：");
+                for (int i = 0; i < split.length; i++) {
+                    if(i==0){
+                        mTvLimitedSaleHour.setText
+                                (split[0]);
+                    }
+                    if(i==1){
+                        mTvLimitedSaleMinute.setText(split[1]);
+                    }
+                    if(i==2){
+                        mTvLimitedSaleSecond.setText(split[2]);
+                    }
+                }
+                handler.postDelayed(this, 1000);
+            } else {
+
+                mTvLimitedSaleHour.setText("00");
+
+                mTvLimitedSaleMinute.setText("00");
+
+                mTvLimitedSaleSecond.setText("00");
+            }
+        }
+    };
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -131,6 +176,48 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
     @Override
     public void initData() {
 
+
+    }
+    public String formatLongToTimeStr(Long l) {
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        String hourStr;
+        String minuteStr;
+        String secondStr;
+        second = l.intValue() ;
+        if (second > 60) {
+            minute = second / 60;   //取整
+            second = second % 60;   //取余
+        }
+
+        if (minute > 60) {
+            hour = minute / 60;
+            minute = minute % 60;
+        }
+        if(hour < 10){
+
+            hourStr =  "0" + hour;
+        } else {
+            hourStr = String.valueOf(hour);
+        }
+
+        if(minute < 10){
+
+            minuteStr =  "0" + minute;
+        } else {
+            minuteStr = String.valueOf(minute);
+        }
+
+        if(second < 10){
+
+            secondStr =  "0" + second;
+        } else {
+            secondStr = String.valueOf(second);
+        }
+
+        String strtime = hourStr+"："+minuteStr+"："+secondStr;
+        return strtime;
 
     }
 
@@ -197,7 +284,24 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
                     viewPager.setOffscreenPageLimit(10);
                     initMagicIndicator();
                     initMagicIndicatorTitle();*/
+                    long endTimeLong = endTime;
+                    long start_time = new Date().getTime() / 1000;
 
+                    endTime = endTimeLong-start_time;
+                  /*  r = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            mHandler.sendEmptyMessage(200);
+                            if(timerIsInit){//数据初始化成功，则延迟1秒
+                                mHandler.postDelayed(this, 1000);
+                            }else {
+                                mHandler.post(this);
+                            }
+                        }
+                    };
+                    mHandler.post(r);*/
+                    handler.postDelayed(runnable, 1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

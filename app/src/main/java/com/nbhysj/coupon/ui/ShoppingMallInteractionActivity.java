@@ -323,7 +323,7 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
     }
 
 
-    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first})
+    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first,R.id.toolbar})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.tv_popular_nearby:
@@ -389,9 +389,13 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
                 mPage = 1;
                 mScenicSpotList.clear();
                 // scenicSpotsListAdapter.notifyDataSetChanged();
-                mSortStr = "cz";
+                mSortStr = "FJ";
                 showProgressDialog(ShoppingMallInteractionActivity.this);
                 findScenicByCate();
+                break;
+            case R.id.toolbar:
+
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;

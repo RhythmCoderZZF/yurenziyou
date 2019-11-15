@@ -6,12 +6,12 @@ package com.nbhysj.coupon.common.Enum;
  */
 public enum HotTagsTypeEnum {
 
-    CITY(1, "image"), TOPIC(2, "topic");
+    CITY(1, "city"), TOPIC(2, "topic");
 
     private final int key;
     private final String value;
 
-    private HotTagsTypeEnum(int key, String value) {
+     HotTagsTypeEnum(int key, String value) {
         this.key = key;
         this.value = value;
     }

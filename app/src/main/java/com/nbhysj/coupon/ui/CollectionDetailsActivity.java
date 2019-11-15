@@ -234,7 +234,7 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
     }
 
     @Override
-    public void getMineCollectionAllListResult(BackResult<List<MineCollectionAllResponse>> res) {
+    public void getMineCollectionAllListResult(ResponseBody res) {
 
     }
 

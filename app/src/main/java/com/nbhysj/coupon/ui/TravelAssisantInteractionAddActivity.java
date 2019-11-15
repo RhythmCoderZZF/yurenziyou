@@ -188,7 +188,17 @@ public class TravelAssisantInteractionAddActivity extends BaseActivity<TravelAss
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void getWeatherResult(BackResult<WeatherResponse> res) {
+
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
 
     }
 

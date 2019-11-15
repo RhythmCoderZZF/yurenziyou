@@ -272,6 +272,11 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
     }
 
     @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -298,6 +303,11 @@ public class TravelAssisantAddScenicSpotFragment extends BaseFragment<TravelAssi
 
     @Override
     public void delTripPlaceResult(BackResult res) {
+
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
 
     }
 

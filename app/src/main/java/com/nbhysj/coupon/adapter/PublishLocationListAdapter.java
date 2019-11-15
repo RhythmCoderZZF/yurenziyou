@@ -11,10 +11,6 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
-import com.nbhysj.coupon.model.response.MessageBean;
-import com.nbhysj.coupon.model.response.PublishRecommendLocation;
-import com.nbhysj.coupon.view.GlideImageView;
-
 import java.util.List;
 
 import butterknife.BindView;

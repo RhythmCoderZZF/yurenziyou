@@ -42,6 +42,11 @@ public class Constants {
     //设施详情
     public static final String All_FACILITY_DETAIL_H5_TITEL = "设施详情";
 
+    //用户协议
+    public static final String USER_AGREEMENT_H5_TITEL = "用户协议";
+    //隐私政策
+    public static final String PRAVACY_POLICY_H5_TITEL = "隐私政策";
+
     /**********************************************/
 
     /********************    支付code    ********************/
@@ -54,10 +59,6 @@ public class Constants {
     public static final String CONNECT_TIMED_OUT = "timeout";
 
     public static final String HTTP_UNAUTHORIZED_401 = "HTTP 401 Unauthorized";
-
-    public static final String BROCAST_ACTION_FOLLOW = "android.intent.action.follow";
-    public static final String BROCAST_ACTION_RECOMMEND = "android.intent.action.recommend";
-    public static final String BROCAST_ACTION_NEARBY = "android.intent.action.nearby";
 
     public static final String BROCAST_ACTION_TRIP_ASSISANT = "android.intent.action.trip.assisant";
 

@@ -19,6 +19,12 @@ public class DestinationPresenter extends DestinationContract.Presenter {
     }
 
     @Override
+    public void getDestinationCityTagsList(String type) {
+
+     mRxManager.add(mModel.getDestinationCityTagsList(type).subscribe(res -> mView.getDestinationCityTagsListResult(res), e -> mView.showMsg(e.getMessage())));
+}
+
+    @Override
     public void onStart() {
 
     }

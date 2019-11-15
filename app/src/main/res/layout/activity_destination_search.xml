@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp_15"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_20"
         android:text="@string/str_destination"
         android:textColor="@color/txt_font_black2"
         android:textSize="@dimen/text_size_xsmall"

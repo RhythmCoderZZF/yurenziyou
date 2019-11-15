@@ -1,12 +1,14 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nbhysj.coupon.model.response.DestinationResponse;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.util.List;
@@ -47,6 +49,16 @@ public class DestinationHomeBannerAdapter extends PagerAdapter {
         String imageUrl = bannerUrlList.get(position % this.size).getPhoto();
         GlideUtil.loadCornersTransformImage(mContext, imageUrl, 5, view);
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int mchId = bannerUrlList.get(position - 1).getMchId();
+                Intent mIntent = new Intent();
+                mIntent.setClass(mContext, HomestayDetailActivity.class);
+                mIntent.putExtra("mchId", mchId);
+                mContext.startActivity(mIntent);
+            }
+        });
         return view;
     }
 

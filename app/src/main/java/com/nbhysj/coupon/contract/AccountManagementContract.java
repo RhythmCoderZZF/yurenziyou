@@ -36,6 +36,10 @@ public interface AccountManagementContract {
 
         //三方绑定验证码发送
         Observable<BackResult> getRegisterverifyCode(String mobile);
+
+        //第三方绑定判断(1.未绑定跳转到绑定页面 2.已绑定直接进入)
+        Observable<BackResult<LoginResponse>> thirdPartyLogin(ThirdPartyLoginRequest thirdPartyLoginRequest);
+
     }
 
     interface View extends BaseView {
@@ -50,6 +54,9 @@ public interface AccountManagementContract {
 
         void getRegisterVerifyCodeResult(BackResult res);
 
+        //第三方绑定
+        void thirdPartyLoginResult(BackResult<LoginResponse> res);
+
         void showMsg(String msg);
     }
 
@@ -63,5 +70,7 @@ public interface AccountManagementContract {
         public abstract void getThirdPartyLoginCreateUser(ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind);
 
         public abstract void getRegisterVerifyCode(String mobile);
+
+        public abstract void thirdPartyLogin(ThirdPartyLoginRequest thirdPartyLoginRequest);
     }
 }

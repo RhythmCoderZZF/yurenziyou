@@ -18,4 +18,8 @@ public class OthersHomePagePresenter extends OthersHomePageContract.Presenter {
         mRxManager.add(mModel.getOthersHomePageInfo(userId).subscribe(res -> mView.getOthersHomePageInfoResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
+    @Override
+    public void userFollow(int userId) {
+        mRxManager.add(mModel.userFollow(userId).subscribe(res -> mView.userFollowResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 }

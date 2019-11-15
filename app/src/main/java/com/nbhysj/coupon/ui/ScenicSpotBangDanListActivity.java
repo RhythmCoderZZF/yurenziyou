@@ -17,9 +17,11 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
@@ -256,6 +258,16 @@ public class ScenicSpotBangDanListActivity extends BaseActivity<ScenicSpotPresen
 
     @Override
     public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
 
     }
 

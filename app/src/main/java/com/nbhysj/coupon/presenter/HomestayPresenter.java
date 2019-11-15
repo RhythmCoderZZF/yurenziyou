@@ -37,6 +37,15 @@ public class HomestayPresenter extends HomestayContract.Presenter {
     public void getMchHomestayDetail(int mchId) {
         mRxManager.add(mModel.getMchHomestayDetail(mchId).subscribe(res -> mView.getMchHomestayDetailResult(res), e -> mView.showMsg(e.getMessage())));
     }
+    @Override
+    public void queryMchCouponList(int mchId) {
+        mRxManager.add(mModel.queryMchCouponList(mchId).subscribe(res -> mView.queryMchCouponListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getCoupon(int couponId) {
+        mRxManager.add(mModel.getCoupon(couponId).subscribe(res -> mView.getCouponResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 
     @Override
     public void onStart() {

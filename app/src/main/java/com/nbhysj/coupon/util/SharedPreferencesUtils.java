@@ -93,6 +93,29 @@ public class SharedPreferencesUtils {
         editor.apply();
         return result;
     }
+    /**
+     * 得到当前忽略版本
+     *
+     * @param context
+     * @return
+     */
+    public static int getSkippedVersionCode(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return sp.getInt("skipped_version_code", 0);
+    }
+
+    /**
+     * 设置当前版本
+     *
+     * @param context
+     * @param versionName
+     */
+    public static void setVersionName(Context context, String versionName) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("version_name", versionName);
+        editor.commit();
+    }
 
     /**
      * 保存登录数据

@@ -33,6 +33,7 @@ import com.nbhysj.coupon.fragment.LocalFoodFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
 import com.nbhysj.coupon.model.OthersHomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
 import com.nbhysj.coupon.presenter.OthersHomePagePresenter;
@@ -115,7 +116,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
     LinearLayout mLlytChatWithOthers;
     int toolBarPositionY = 0;
     private int mScrollY = 0;
-    private String[] mTitles = new String[]{"游记", "收藏", "赞过"};
+    private String[] mTitles = new String[]{"分享", "收藏", "赞过"};
     private List<String> mDataList = Arrays.asList(mTitles);
     private String publisherAvatarUrl;
 
@@ -374,7 +375,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
         lastScrollY = scrollY;
     }
 
-    @OnClick({R.id.ibtn_back})
+    @OnClick({R.id.ibtn_back,R.id.tv_follow})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -382,6 +383,9 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
 
                 UserPersonalHomePageActivity.this.finish();
 
+                break;
+            case R.id.tv_follow:
+                userFollow();
                 break;
             default:
                 break;
@@ -435,6 +439,35 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
     }
 
     @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+        dismissProgressDialog();
+
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    FollowUserStatusResponse followUserStatusResponse = res.getData();
+                    int followStatus = followUserStatusResponse.getFollowStatus();
+
+                    if (followStatus == 0) {
+                        mTvFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_five);
+
+                    } else if (followStatus == 1) {
+
+                        mTvFollow.setBackgroundResource(R.drawable.bg_stroke_radius_five_black_shape_white_edge);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -448,5 +481,11 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
             showProgressDialog(UserPersonalHomePageActivity.this);
             mPresenter.getOthersHomePageInfo(authorId);
         }
+    }
+
+    public void userFollow()
+    {
+        showProgressDialog(UserPersonalHomePageActivity.this);
+        mPresenter.userFollow(authorId);
     }
 }

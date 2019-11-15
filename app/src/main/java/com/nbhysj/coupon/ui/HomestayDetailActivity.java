@@ -36,15 +36,19 @@ import com.nbhysj.coupon.adapter.HomestayReservationAdapter;
 import com.nbhysj.coupon.adapter.HomestayResourcesAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomestayContract;
+import com.nbhysj.coupon.dialog.MchCouponReceiveDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HomestayModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CommentUserEntity;
+import com.nbhysj.coupon.model.response.CouponsBean;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -60,6 +64,7 @@ import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.StarBarView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -310,6 +315,20 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
     //经度
     private String mLongitude;
+
+    List<MchCouponResponse> mchCouponResponseList;
+
+    private MchCouponReceiveDialog mchCouponReceiveDialog;
+
+    //优惠券选择位置
+    private int mGroupPosition;
+
+    //优惠券选择位置
+    private int mChildPosition;
+
+    //优惠券id
+    private int couponId;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -518,7 +537,7 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.ibtn_back,R.id.llyt_house_info,R.id.img_collection,R.id.img_static_map,R.id.img_menu,R.id.img_scenic_spot_forward,R.id.llyt_evaluate,R.id.tv_total_comment_num})
+    @OnClick({R.id.ibtn_back,R.id.llyt_house_info,R.id.img_collection,R.id.img_static_map,R.id.img_menu,R.id.img_scenic_spot_forward,R.id.llyt_evaluate,R.id.tv_total_comment_num,R.id.tv_coupon_receive})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -594,6 +613,11 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                 intent.setClass(HomestayDetailActivity.this,MchCommentActivity.class);
                 intent.putExtra("mchId",mchId);
                 startActivity(intent);
+                break;
+            case R.id.tv_coupon_receive:
+
+                queryMchCouponList();
+
                 break;
             default:
                 break;
@@ -1006,6 +1030,76 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     }
 
     @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    mchCouponResponseList = res.getData();
+                    if(mchCouponResponseList != null) {
+                        if (mchCouponReceiveDialog == null)
+                        {
+                            mchCouponReceiveDialog = new MchCouponReceiveDialog(mchCouponResponseList, new MchCouponReceiveDialog.MchCouponReceiveListener() {
+
+                                @Override
+                                public void setMchCouponReceiveCallback(int groupPosition, int childPosition, CouponsBean couponsBean) {
+                                    mGroupPosition = groupPosition;
+                                    mChildPosition = childPosition;
+                                    couponId = couponsBean.getId();
+                                    getCoupon();
+                                }
+
+                                @Override
+                                public void setCouponListRefreshListener(RefreshLayout refreshLayout) {
+
+                                    //   queryMchCouponList();
+                                    // mchCouponReceiveDialog.setSmartRefreshLayoutLoadMoreFinish();
+                                }
+                            });
+
+                            mchCouponReceiveDialog.show(getFragmentManager(), "优惠券领取");
+
+                        } else {
+                            mchCouponReceiveDialog.setAlbumCollectList(mchCouponResponseList);
+                            mchCouponReceiveDialog.show();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HomestayDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    CouponsGetBean couponsGetBean = res.getData();
+                    int canGetAgainStatus = couponsGetBean.getCanGetAgainStatus();
+                    MchCouponResponse mchCouponResponse = mchCouponResponseList.get(mGroupPosition);
+                    CouponsBean couponsBean = mchCouponResponse.getCoupons().get(mChildPosition);
+                    couponsBean.setCanGetAgainStatus(canGetAgainStatus);
+
+                    mchCouponReceiveDialog.setAlbumCollectList(mchCouponResponseList);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HomestayDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -1130,6 +1224,24 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
             MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
             mchCollectionRequest.setDataId(mchId);
             mPresenter.mchCollection(mchCollectionRequest);
+        }
+    }
+
+    //查询商户券列表
+    public void queryMchCouponList(){
+
+        if (validateInternet()) {
+            showProgressDialog(HomestayDetailActivity.this);
+            mPresenter.queryMchCouponList(mchId);
+        }
+    }
+
+    //获取优惠券
+    public void getCoupon(){
+
+        if (validateInternet()) {
+            showProgressDialog(HomestayDetailActivity.this);
+            mPresenter.getCoupon(couponId);
         }
     }
 }

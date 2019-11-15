@@ -10,10 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,27 +22,24 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.adapter.DeliciousFoodSectionAdapter;
 import com.nbhysj.coupon.adapter.DestinationScenicSpotsBannerAdapter;
-import com.nbhysj.coupon.adapter.FineFoodListAdapter;
+import com.nbhysj.coupon.adapter.DestinationStrategyListAdapter;
 import com.nbhysj.coupon.adapter.InteractiveSelectionAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.fragment.HotelSelectionFragment;
 import com.nbhysj.coupon.fragment.InteractiveSelectionFragment;
 import com.nbhysj.coupon.fragment.LocalFoodFragment;
-import com.nbhysj.coupon.fragment.NearbyFragment;
-import com.nbhysj.coupon.fragment.RecommendFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
 import com.nbhysj.coupon.model.DestinationModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BannerBean;
-import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.BaseTagsBean;
+import com.nbhysj.coupon.model.response.DestinationCityResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
@@ -53,19 +48,15 @@ import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.ScreenUtil;
-import com.nbhysj.coupon.view.BannerView;
 import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
 import com.nbhysj.coupon.view.DestinationBannerView;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
-import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnMultiPurposeListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -122,30 +113,18 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
     //美食推荐
     @BindView(R.id.rv_delicious_food_recommendation)
     RecyclerView mRvDeliciousFoodRecommendation;
-    //攻略1标题
-    @BindView(R.id.tv_strategys_one_title)
-    TextView mTvStrategysOneTitle;
-    //攻略1描述
-    @BindView(R.id.tv_strategys_one_des)
-    TextView mTvStrategysOneDes;
-    //攻略1图片
-    @BindView(R.id.img_strategys_one)
-    ImageView mImageStrategysOne;
-    //攻略2标题
-    @BindView(R.id.tv_strategys_two_title)
-    TextView mTvStrategysTwoTitle;
-    //攻略2描述
-    @BindView(R.id.tv_strategys_two_des)
-    TextView mTvStrategysTwoDes;
-    //攻略2图片
-    @BindView(R.id.img_strategys_two)
-    ImageView mImageStrategysTwo;
+    //目的地攻略
+    @BindView(R.id.rv_destination_strategys)
+    RecyclerView mRvDestinationStrategys;
     //欢迎来到
     @BindView(R.id.tv_welcome_to_location)
     TextView mTvWelcomeToLocation;
     //位置
     @BindView(R.id.tv_location)
     TextView mTvLocation;
+    //美食推荐
+    @BindView(R.id.llyt_delicious_food_recommendation)
+    LinearLayout mLlytDeliciousFoodRecommendation;
 
     int toolBarPositionY = 0;
     private int mOffset = 0;
@@ -160,15 +139,24 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
     private List<MchTypeBean> interactiveSelectionList;
     //美食精选
     private List<MchTypeBean> fineFoodList;
+    //攻略列表
+    List<MchTypeBean> strategysList;
     DestinationScenicSpotsBannerAdapter destinationScenicSpotsBannerAdapter;
+
+    //目的地攻略
+    DestinationStrategyListAdapter destinationStrategyListAdapter;
+
     //酒店精选
     InteractiveSelectionAdapter interactiveSelectionAdapter;
     //美食精选
     DeliciousFoodSectionAdapter deliciousFoodSectionAdapter;
+
+
     StringBuffer stringBuffer = new StringBuffer();
 
     //城市ID
-    private String cityId = String.valueOf(Constants.CITY_CODE);
+    private int cityId = Constants.CITY_CODE;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -187,7 +175,7 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
 
     @Override
     public void initData() {
-        cityId = getIntent().getStringExtra("cityId");
+        cityId = getIntent().getIntExtra("cityId", 0);
         getDestinationHomePage();
 
         if (scenicSpotBeanList == null) {
@@ -225,6 +213,14 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
         } else {
             fineFoodList.clear();
         }
+
+        if (strategysList == null) {
+
+            strategysList = new ArrayList<>();
+        } else {
+            strategysList.clear();
+        }
+
         //目的地景点切换
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ScenicSpotDestinationActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
@@ -233,6 +229,13 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
         destinationScenicSpotsBannerAdapter.setPopularScenicSpotsList(scenicSpotBeanList);
         mRvScenicSpotBanner.setAdapter(destinationScenicSpotsBannerAdapter);
 
+        //目的地攻略
+        LinearLayoutManager destinationStrategyLinearLayoutManager = new LinearLayoutManager(ScenicSpotDestinationActivity.this);
+        destinationStrategyLinearLayoutManager.setOrientation(destinationStrategyLinearLayoutManager.HORIZONTAL);
+        mRvDestinationStrategys.setLayoutManager(destinationStrategyLinearLayoutManager);
+        destinationStrategyListAdapter = new DestinationStrategyListAdapter(ScenicSpotDestinationActivity.this);
+        destinationStrategyListAdapter.setDestinationStrategyList(strategysList);
+        mRvDestinationStrategys.setAdapter(destinationStrategyListAdapter);
 
         LinearLayoutManager interactiveSelectionLinearLayoutManager = new LinearLayoutManager(ScenicSpotDestinationActivity.this);
         interactiveSelectionLinearLayoutManager.setOrientation(interactiveSelectionLinearLayoutManager.HORIZONTAL);
@@ -527,25 +530,11 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
                     mTvWelcomeToLocation.setText("欢迎来到" + city);
                     mTvLocation.setText(province + county + city);
                     scenicSpotBeanList = destinationResponse.getMches();//景点
-                    List<MchTypeBean> strategysList = destinationResponse.getStrategys();
-                    if (strategysList != null) {
-                        MchTypeBean strategysOne = strategysList.get(0);
-                        MchTypeBean strategysTwo = strategysList.get(1);
-                        String strategysOneTitle = strategysOne.getDataName();
-                        String strategysOneIntro = strategysOne.getIntro();
-                        String strategysOnePhotoUrl = strategysOne.getPhoto();
-                        mTvStrategysOneTitle.setText(strategysOneTitle);
-                        mTvStrategysOneDes.setText(strategysOneIntro);
-                        GlideUtil.loadImage(ScenicSpotDestinationActivity.this, strategysOnePhotoUrl, mImageStrategysOne);
+                    strategysList = destinationResponse.getStrategys();
 
-                        if (strategysList.size() > 1) {
-                            String strategysTwoTitle = strategysTwo.getDataName();
-                            String strategysTwoIntro = strategysTwo.getIntro();
-                            String strategysTwoPhotoUrl = strategysTwo.getPhoto();
-                            mTvStrategysTwoTitle.setText(strategysTwoTitle);
-                            mTvStrategysTwoDes.setText(strategysTwoIntro);
-                            GlideUtil.loadImage(ScenicSpotDestinationActivity.this, strategysTwoPhotoUrl, mImageStrategysTwo);
-                        }
+                    if (strategysList != null && strategysList.size() > 0) {
+                        destinationStrategyListAdapter.setDestinationStrategyList(strategysList);
+                        destinationStrategyListAdapter.notifyDataSetChanged();
                     }
 
                     interactiveSelectionList = destinationResponse.getInteraction();
@@ -559,7 +548,6 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
                     destinationScenicSpotsBannerAdapter.notifyDataSetChanged();
 
                     if (homestaysEntityList != null) {
-
 
                         if (homestaysEntityList.size() > 0) {
 
@@ -610,15 +598,19 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
                         interactiveSelectionAdapter.notifyDataSetChanged();
                     }
 
-                    if (fineFoodList != null) {
+                    if (fineFoodList != null && fineFoodList.size() > 0) {
+                        mLlytDeliciousFoodRecommendation.setVisibility(View.VISIBLE);
                         deliciousFoodSectionAdapter.setDeliciousFoodRecommendList(fineFoodList);
                         deliciousFoodSectionAdapter.notifyDataSetChanged();
+                    } else {
+                        mLlytDeliciousFoodRecommendation.setVisibility(View.GONE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            default:break;
+            default:
+                break;
         }
 
     }
@@ -645,28 +637,24 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
     }
 
     @Override
+    public void getDestinationCityTagsListResult(BackResult<List<DestinationCityResponse>> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(ScenicSpotDestinationActivity.this, Constants.getResultMsg(msg));
     }
 
-    /**
-     * 处理华为虚拟键显示隐藏问题导致屏幕高度变化，ViewPager的高度也需要重新测量
-     */
-//    private void dealWithHuaWei() {
-//        flActivity.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                dealWithViewPager();
-//                flActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//            }
-//        });
-//    }
-    @OnClick({R.id.rlyt_back})
+    @OnClick({R.id.rlyt_back, R.id.ll_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rlyt_back:
                 ScenicSpotDestinationActivity.this.finish();
+                break;
+            case R.id.ll_search:
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;
@@ -677,11 +665,8 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
 
         if (validateInternet()) {
 
-            if (!TextUtils.isEmpty(cityId))
-            {
-                showProgressDialog(ScenicSpotDestinationActivity.this);
-                mPresenter.getDestinationHomePage(Integer.parseInt(cityId));
-            }
+            showProgressDialog(ScenicSpotDestinationActivity.this);
+            mPresenter.getDestinationHomePage(cityId);
         }
     }
 }

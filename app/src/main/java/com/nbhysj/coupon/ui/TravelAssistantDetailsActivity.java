@@ -182,6 +182,11 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     }
 
     @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void getTravelAssistantMchListResult(BackResult<TripScenicSpotAddCountryBean> res) {
 
     }
@@ -286,6 +291,11 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
     @Override
     public void insertNoteResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
 
     }
 

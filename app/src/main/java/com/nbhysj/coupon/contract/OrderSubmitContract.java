@@ -5,13 +5,17 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 
 import java.util.Map;
 
@@ -62,6 +66,12 @@ public interface OrderSubmitContract {
         //组合订单下单
         Observable<BackResult<OrderSubmitResponse>> groupMchOrderSubmit(GroupMchOrderSubmitRequest groupMchOrderSubmitRequest);
 
+        //查询日历价格下可选的所有优惠券
+        Observable<BackResult<QueryByTicketResponse>> queryByTicket(QueryByTicketRequest queryByTicketRequest);
+
+        //选择使用优惠券
+        Observable<BackResult<UseCouponTicketResponse>> useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest);
+
     }
 
     interface View extends BaseView {
@@ -92,6 +102,11 @@ public interface OrderSubmitContract {
         //订单提交返回
         void groupMchOrderSubmitResult(BackResult<OrderSubmitResponse> res);
 
+        //订单提交返回
+        void queryByTicketResult(BackResult<QueryByTicketResponse> res);
+
+        void useCouponTicketResult(BackResult<UseCouponTicketResponse> res);
+
         void showMsg(String msg);
     }
 
@@ -118,5 +133,9 @@ public interface OrderSubmitContract {
         public abstract void getGroupMchOrderSubmitInit(int groupId);
 
         public abstract void groupMchOrderSubmit(GroupMchOrderSubmitRequest groupMchOrderSubmitRequest);
+
+        public abstract void queryByTicket(QueryByTicketRequest queryByTicketRequest);
+
+        public abstract void useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest);
     }
 }

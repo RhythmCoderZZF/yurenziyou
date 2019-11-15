@@ -5,10 +5,12 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
+import com.nbhysj.coupon.model.request.AddTrafficRequest;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
+import com.nbhysj.coupon.model.request.IntelligentTripRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
@@ -47,6 +49,9 @@ public interface TravelAssistantContract {
         //创建行程
         Observable<BackResult<CreateTripResponse>> createTrip(CreateTripRequest createTripRequest);
 
+        //智能规划
+        Observable<BackResult<CreateTripResponse>> intelligentProject(IntelligentTripRequest intelligentTripRequest);
+
         //行程详情
         Observable<BackResult<TripDetailsResponse>> getTripDetails(int tripId);
 
@@ -58,6 +63,9 @@ public interface TravelAssistantContract {
 
         //(行程助手)增加一天
         Observable<BackResult> travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest);
+
+        //添加交通
+        Observable<BackResult<CreateTripResponse>> insertTraffic(AddTrafficRequest addTrafficRequest);
 
         //添加备注
         Observable<BackResult<CreateTripResponse>> insertNote(AddRemarksRequest addRemarksRequest);
@@ -95,11 +103,16 @@ public interface TravelAssistantContract {
 
         void insertPlaceMchResult(BackResult<CreateTripResponse> res);
 
+        void intelligentProjectResult(BackResult<CreateTripResponse> res);
+
         //增加一天
         void travelAssistantPlusADay(BackResult res);
 
         //添加备注
         void insertNoteResult(BackResult<CreateTripResponse> res);
+
+        //添加交通
+        void insertTrafficResult(BackResult<CreateTripResponse> res);
 
         //行程详情行程点删除
         void delTripPlaceResult(BackResult res);
@@ -131,6 +144,9 @@ public interface TravelAssistantContract {
 
         public abstract void createTrip(CreateTripRequest createTripRequest);
 
+        //只能规划
+        public abstract void intelligentProject(IntelligentTripRequest intelligentTripRequest);
+
         public abstract void getTripDetails(int tripId);
 
         public abstract void getTravelAssistantMchList(int tripId, String countyId, String mchType, int page, int pageSize);
@@ -142,6 +158,9 @@ public interface TravelAssistantContract {
 
         //添加备注
         public abstract void insertRemarks(AddRemarksRequest addRemarksRequest);
+
+        //添加交通
+        public abstract void insertTraffic(AddTrafficRequest addTrafficRequest);
 
         //行程点删除
         public abstract void delTripPlace(DeleteTripPlaceRequest deleteTripPlaceRequest);
@@ -157,5 +176,6 @@ public interface TravelAssistantContract {
 
         //获取天气接口
         public abstract void getWeather(int cityCode);
+
     }
 }

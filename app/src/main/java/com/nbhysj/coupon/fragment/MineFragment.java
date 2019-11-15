@@ -30,6 +30,8 @@ import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
 import com.nbhysj.coupon.ui.AlbumDetailsActivity;
+import com.nbhysj.coupon.ui.CouponListActivity;
+import com.nbhysj.coupon.ui.FollowAndFansActivity;
 import com.nbhysj.coupon.ui.MyBusinessCardActivity;
 import com.nbhysj.coupon.ui.MyOrderActivity;
 import com.nbhysj.coupon.ui.PersonalSettingsActivity;
@@ -82,8 +84,6 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
     LinearLayout mLlytDataStatistics;
     @BindView(R.id.rlyt_user_info)
     RelativeLayout mRlytUserInfo;
-    @BindView(R.id.rlyt_my_business_card)
-    RelativeLayout mRlytMyBusinessCard;
     //昵称
     @BindView(R.id.tv_nickname)
     TextView mTvNickname;
@@ -256,7 +256,8 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         params.height = ScreenUtil.getScreenHeightPx(getActivity().getApplicationContext()) - toolBarPositionY - magicIndicator.getHeight() + 1;
         viewPager.setLayoutParams(params);
     }
-    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order, R.id.rlyt_my_business_card,R.id.llyt_pending_payment,R.id.llyt_pending_travel,R.id.llyt_pending_comment,R.id.llyt_order_refund,R.id.img_qr_my_card})
+    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order,R.id.llyt_pending_payment,R.id.llyt_pending_travel,R.id.llyt_pending_comment,R.id.llyt_order_refund,
+            R.id.img_qr_my_card,R.id.rlyt_my_coupon,R.id.llyt_fans_num})
     public void onClick(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -302,9 +303,6 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 intent.setClass(getActivity(), MyOrderActivity.class);
                 getActivity().startActivity(intent);
                 break;
-            case R.id.rlyt_my_business_card:
-
-                break;
             case R.id.img_qr_my_card:
                 BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
                     @Override
@@ -316,6 +314,14 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                         startActivity(intent);
                     }
                 });
+                break;
+                case R.id.rlyt_my_coupon:
+
+                    toActivity(CouponListActivity.class);
+
+                    break;
+            case R.id.llyt_fans_num:
+                toActivity(FollowAndFansActivity.class);
                 break;
             default:
                 break;
@@ -340,6 +346,10 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     String zanNum = String.valueOf(userInfoResponse.getZanNum()); //点赞数
                     SharedPreferencesUtils.saveUserInfoData(avatar, sex, birthday, profile, fansNum, followNum, collectionNum, zanNum);
                     mTvNickname.setText(nickname);
+                    mTvFansNum.setText(fansNum);
+                    mTvFollowNum.setText(followNum);
+                    mTvCollectionNum.setText(collectionNum);
+                    mTvZanNum.setText(zanNum);
                     if (TextUtils.isEmpty(profile)) {
                         mTvUserProfile.setVisibility(View.GONE);
 

@@ -10,6 +10,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
+import com.nbhysj.coupon.model.request.IntelligentTripRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -34,7 +35,10 @@ import butterknife.OnClick;
 public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
 
     private List<Integer> countyIdList;
+    //开始时间和结束时间
     private String startDate, endDate;
+    //0:智能规划 1:自己规划
+    private int mPlanningTripFlag = 0;
 
     @Override
     public int getLayoutId() {
@@ -97,23 +101,32 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
     public void getCreateTripResult(BackResult<CreateTripResponse> res) {
         try {
 
-            dismissProgressDialog();
+
             switch (res.getCode()) {
                 case Constants.SUCCESS_CODE:
                     try {
 
                         CreateTripResponse createTripResponse = res.getData();
                         int tripId = createTripResponse.getTripId();
-                        Intent intent = new Intent();
-                        intent.putExtra("tripId", tripId);
-                        intent.setClass(TravelPlanningActivity.this, TravelAssistantDetailsActivity.class);
-                        startActivity(intent);
+                        if (mPlanningTripFlag == 0) {  //智能规划
+
+                            intelligentTripRequest(tripId);
+
+                        } else if (mPlanningTripFlag == 1) { //自己规划
+                            dismissProgressDialog();
+                            Intent intent = new Intent();
+                            intent.putExtra("tripId", tripId);
+                            intent.setClass(TravelPlanningActivity.this, TravelAssistantDetailsActivity.class);
+                            startActivity(intent);
+                        }
 
                     } catch (Exception e) {
+                        dismissProgressDialog();
                         e.printStackTrace();
                     }
                     break;
                 default:
+                    dismissProgressDialog();
                     showToast(TravelPlanningActivity.this, Constants.getResultMsg(res.getMsg()));
                     break;
             }
@@ -164,12 +177,47 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
     }
 
     @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+        dismissProgressDialog();
+        try {
+            switch (res.getCode()) {
+                case Constants.SUCCESS_CODE:
+                    try {
+
+                        CreateTripResponse createTripResponse = res.getData();
+                        int tripId = createTripResponse.getTripId();
+
+                        Intent intent = new Intent();
+                        intent.putExtra("tripId", tripId);
+                        intent.setClass(TravelPlanningActivity.this, TravelAssistantDetailsActivity.class);
+                        startActivity(intent);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    showToast(TravelPlanningActivity.this, Constants.getResultMsg(res.getMsg()));
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(TravelPlanningActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_help_me_planning,R.id.tv_self_planning})
+    @OnClick({R.id.iv_back, R.id.tv_help_me_planning, R.id.tv_self_planning})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
@@ -179,12 +227,11 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
                 break;
 
             case R.id.tv_help_me_planning:
-
-
+                mPlanningTripFlag = 0;
                 createTrip();
                 break;
             case R.id.tv_self_planning:
-
+                mPlanningTripFlag = 1;
                 createTrip();
                 break;
             default:
@@ -196,11 +243,25 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
 
         if (validateInternet()) {
 
+            showProgressDialog(TravelPlanningActivity.this);
             CreateTripRequest createTripRequest = new CreateTripRequest();
             createTripRequest.setCountyId(countyIdList);
             createTripRequest.setStartDate(startDate);
             createTripRequest.setEndDate(endDate);
             mPresenter.createTrip(createTripRequest);
+
+        }
+    }
+
+    //智能规划
+    public void intelligentTripRequest(int mTripId) {
+
+        if (validateInternet()) {
+
+            IntelligentTripRequest intelligentTripRequest = new IntelligentTripRequest();
+            intelligentTripRequest.setCountyId(countyIdList);
+            intelligentTripRequest.setTripId(mTripId);
+            mPresenter.intelligentProject(intelligentTripRequest);
 
         }
     }

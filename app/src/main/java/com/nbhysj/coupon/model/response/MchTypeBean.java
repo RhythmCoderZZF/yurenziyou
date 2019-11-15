@@ -88,6 +88,8 @@ public class MchTypeBean implements Serializable {
 
     private String strategyH5Url;
 
+    private String h5;
+
     private String searchType;
 
     private String hotelType2;
@@ -374,6 +376,14 @@ public class MchTypeBean implements Serializable {
 
     public void setCtime(long ctime) {
         this.ctime = ctime;
+    }
+
+    public String getH5() {
+        return h5;
+    }
+
+    public void setH5(String h5) {
+        this.h5 = h5;
     }
 
     public class TagsEntity {

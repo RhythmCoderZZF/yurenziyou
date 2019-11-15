@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lLayout_bg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,7 +20,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp_50"
             android:textStyle="bold"
-            android:text="购买成功" />
+            android:text="出示使用" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +29,7 @@
             android:textSize="@dimen/text_size_medium"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="宁波海洋世界成人票x1" />
+            android:text="" />
     </LinearLayout>
 
     <RelativeLayout
@@ -42,7 +43,7 @@
             android:layout_width="6dp"
             android:layout_height="12dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/shape_bg_semi_circle_top" />
+            android:background="@drawable/shape_bg_semi_circle_right" />
 
         <View
             android:id="@+id/view_dotted_line"
@@ -61,7 +62,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="right"
-            android:background="@drawable/shape_bg_semi_circle_bottom" />
+            android:background="@drawable/shape_bg_semi_circle_left" />
 
     </RelativeLayout>
 
@@ -93,12 +94,13 @@
                     android:text="验证码" />
 
                 <TextView
+                    android:id="@+id/tv_qr_order_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_normal"
                     android:layout_marginLeft="@dimen/dp_20"
                     android:textColor="@color/text_grey"
-                    android:text="1234 1234 1234 1234" />
+                    android:text="" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -126,7 +128,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_ticket_used"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                />
         </RelativeLayout>
 
 

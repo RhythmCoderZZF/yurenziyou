@@ -166,9 +166,16 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
 
         int goodsId = ticketEntity.getGoodsId();
         goodsPriceTagList.clear();
-        goodsPriceTagList.add("官方");
-        goodsPriceTagList.add(refundSettingsValue);
-        goodsPriceTagList.add(ticketIntoTypeValue);
+
+        if(!TextUtils.isEmpty(refundSettingsValue))
+        {
+            goodsPriceTagList.add(refundSettingsValue);
+        }
+
+        if(!TextUtils.isEmpty(ticketIntoTypeValue))
+        {
+            goodsPriceTagList.add(ticketIntoTypeValue);
+        }
 
         if (goodsPriceTagList != null) {
             TagAdapter tagAdapter = new TagAdapter<String>(goodsPriceTagList) {

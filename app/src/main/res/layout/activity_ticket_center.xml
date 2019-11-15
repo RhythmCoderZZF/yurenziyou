@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:background="@color/background_l_grey"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"></include>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_l_grey"
+        app:srlAccentColor="#00000000"
+        app:srlEnableHeaderTranslationContent="true"
+        app:srlEnableLoadMore="true"
+        app:srlEnableNestedScrolling="false"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlEnableRefresh="true"
+        app:srlPrimaryColor="#00000000">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_coupon_center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_l_grey"
+                android:clickable="false"
+                ></android.support.v7.widget.RecyclerView>
+
+            <include layout="@layout/layout_order_no_data"
+                android:visibility="invisible"></include>
+        </RelativeLayout>
+        <!--  </com.nbhysj.coupon.view.JudgeNestedScrollView>-->
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate" />
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

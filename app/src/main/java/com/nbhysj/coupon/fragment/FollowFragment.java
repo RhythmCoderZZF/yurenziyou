@@ -39,6 +39,9 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +61,11 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     private FollowListAdapter followListAdapter;
     private int mPage = 1;
     private int mPageSize = 10;
-    MyBroadcastReceiver receiver;
 
+    private boolean visibleToUser;
+
+    private boolean isInitView = false;
+    private boolean isVisible = false;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_follow;
@@ -73,12 +79,9 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     @Override
     public void initView(View v) {
-        receiver = new MyBroadcastReceiver();  //(这里可以写系统的广播接收者重写onReceiver方法就可以)
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.BROCAST_ACTION_FOLLOW);
-        //注册receiver
-        getActivity().registerReceiver(receiver, filter);
-        getHomeAttention();
+        EventBus.getDefault().register(this);
+        isInitView = true;
+        isCanLoadData();
         if (followDetailList == null) {
 
             followDetailList = new ArrayList<>();
@@ -420,15 +423,6 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         }
     }
 
-    public class MyBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Constants.BROCAST_ACTION_FOLLOW.equals(action)) {
-                getHomeAttention();
-            }
-        }
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -441,13 +435,30 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
             }
 
         }
+    }
 
+    private void isCanLoadData() {
+        //所以条件是view初始化完成并且对用户可见
+        if (isInitView && isVisible) {
+            getHomeAttention();
 
+            //防止重复加载数据
+            isInitView = false;
+            isVisible = false;
+        }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
+        visibleToUser = isVisibleToUser;
+        if (isVisibleToUser) {
+            isVisible = true;
+            isCanLoadData();
+        } else {
+            isVisible = false;
+        }
         if (isVisibleToUser) {
 
             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
@@ -481,13 +492,43 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(receiver != null) {
-            getActivity().unregisterReceiver(receiver);
-        }
+
     }
 
     @Override
     public void lazyInitView(View view) {
 
     }
+
+    @Subscribe
+    public void onEvent(String mineFragmentRefresh) {
+
+        if(visibleToUser)
+        {
+            if(mineFragmentRefresh.equals("homeFragmentRefresh"))
+            {
+                if (followDetailList != null) {
+                    followDetailList.clear();
+                }
+
+                /*if(recommendFriendsAdapter != null)
+                {
+                    recommendFriendsAdapter.notifyDataSetChanged();
+                }*/
+                mPage = 1;
+                if(mRlytNoData != null)
+                {
+                    mRlytNoData.setVisibility(View.GONE);
+                }
+            //    showProgressDialog(getActivity());
+                getHomeAttention();
+            }
+        }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

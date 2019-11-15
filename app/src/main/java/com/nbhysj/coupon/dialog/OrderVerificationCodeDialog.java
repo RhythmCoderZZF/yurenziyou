@@ -3,6 +3,7 @@ package com.nbhysj.coupon.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,32 +45,8 @@ public class OrderVerificationCodeDialog {
     /**
      * 内容
      */
-    private TextView mTvContent;
+    private TextView mTvQrOrderNo;
 
-    /**
-     * 标题
-     */
-    private TextView mTvTitle;
-
-    /**
-     * 控件布局
-     **/
-    private LinearLayout layoutBg;
-
-    /**
-     * 取消
-     **/
-    private TextView btnNeg;
-
-    /**
-     * 确定
-     **/
-    private TextView btnPos;
-
-    /**
-     * 上下文
-     **/
-    private ImageView imgLine;
 
     /**
      * 弹框占屏幕大小尺寸
@@ -114,6 +91,7 @@ public class OrderVerificationCodeDialog {
         dialog.setContentView(view);
         //订单二维码展示
         mImgQRCodeOrder = (ImageView) view.findViewById(R.id.img_qr_order);
+        mTvQrOrderNo = view.findViewById(R.id.tv_qr_order_no);
 
         return this;
     }
@@ -121,24 +99,15 @@ public class OrderVerificationCodeDialog {
     /**
      * 设置标题
      */
-    public OrderVerificationCodeDialog setContent(String url) {
-        showQRCode(url);
-        return this;
-    }
-
-    /**
-     * 设置标题
-     */
-    public OrderVerificationCodeDialog setTitle(String title) {
-
-        if (title.equals("")) {
-            mTvTitle.setVisibility(View.GONE);
-        } else {
-            mTvTitle.setVisibility(View.VISIBLE);
-            mTvTitle.setText(title);
+    public OrderVerificationCodeDialog setContent(String orderNo) {
+        if(!TextUtils.isEmpty(orderNo))
+        {
+            mTvQrOrderNo.setText(orderNo);
         }
+        showQRCode(orderNo);
         return this;
     }
+
 
     /**
      * 设置布局
@@ -162,94 +131,6 @@ public class OrderVerificationCodeDialog {
     public OrderVerificationCodeDialog setCancelable(boolean cancel) {
         dialog.setCancelable(cancel);
         return this;
-    }
-
-    /**
-     * 监听确定按钮
-     *
-     * @param text
-     * @param listener
-     * @return
-     */
-    public OrderVerificationCodeDialog setPositiveButton(String text, int color,
-                                                   final OnClickListener listener) {
-        showPosBtn = true;
-        if ("".equals(text)) {
-            btnPos.setText("确定");
-        } else {
-
-            btnPos.setTextColor(color);
-            btnPos.setText(text);
-        }
-        btnPos.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(v);
-                dialog.dismiss();
-            }
-        });
-        return this;
-    }
-
-    /**
-     * 监听取消按钮
-     *
-     * @param text
-     * @param listener
-     * @return
-     */
-    public OrderVerificationCodeDialog setNegativeButton(String text,
-                                                   final OnClickListener listener) {
-        showNegBtn = true;
-        if ("".equals(text)) {
-            btnNeg.setText("取消");
-        } else {
-            btnNeg.setText(text);
-        }
-        btnNeg.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(v);
-                dialog.dismiss();
-            }
-        });
-        return this;
-    }
-
-    /**
-     * 设置默认布局
-     */
-    private void setLayout() {
-
-        if (!showPosBtn && !showNegBtn) {
-            btnPos.setText("确定");
-            btnPos.setVisibility(View.VISIBLE);
-            btnPos.setBackgroundResource(R.drawable.alertdialog_single_selector);
-            btnPos.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-        }
-
-        if (showPosBtn && showNegBtn) {
-            btnPos.setVisibility(View.VISIBLE);
-            btnPos.setBackgroundResource(R.drawable.alertdialog_right_selector);
-            btnNeg.setVisibility(View.VISIBLE);
-            btnNeg.setBackgroundResource(R.drawable.alertdialog_left_selector);
-            imgLine.setVisibility(View.VISIBLE);
-        }
-
-        if (showPosBtn && !showNegBtn) {
-            btnPos.setVisibility(View.VISIBLE);
-            btnPos.setBackgroundResource(R.drawable.alertdialog_single_selector);
-        }
-
-        if (!showPosBtn && showNegBtn) {
-            btnNeg.setVisibility(View.VISIBLE);
-            btnNeg.setBackgroundResource(R.drawable.alertdialog_single_selector);
-        }
     }
 
     /**

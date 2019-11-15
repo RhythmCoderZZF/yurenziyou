@@ -46,7 +46,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
                 int widthSpace = getWidth() - getDecoratedMeasuredWidth(layout);
                 int heightSpace = getHeight() - getDecoratedMeasuredHeight(layout);
                 layoutDecoratedWithMargins(layout,
-                        widthSpace / 2, 23,
+                        widthSpace / 2, 2,
                         widthSpace / 2 + getDecoratedMeasuredWidth(layout),
                         heightSpace / 2 + getDecoratedMeasuredHeight(layout));
 
@@ -98,7 +98,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
                 measureChildWithMargins(view, 0, 0);
                 int widthSpace = getWidth() - getDecoratedMeasuredWidth(view);
                 int heightSpace = getHeight() - getDecoratedMeasuredHeight(view);
-                layoutDecoratedWithMargins(view, widthSpace / 2, heightSpace / 2,
+                layoutDecoratedWithMargins(view, widthSpace / 2, 10,
                         widthSpace / 2 + getDecoratedMeasuredWidth(view),
                         heightSpace / 2 + getDecoratedMeasuredHeight(view));
 

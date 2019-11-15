@@ -186,35 +186,6 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     }
 
     /**
-     * 获取版本号
-     *
-     * @return 当前应用的版本号
-     */
-    public String getCurrentVersionName() {
-        try {
-            PackageManager manager = mContext.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(
-                    mContext.getPackageName(), 0);
-            String version = info.versionName;
-            return version;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    public int getLocalVersionCode() {
-        PackageManager pm = getPackageManager();
-        try {
-            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    /**
      * 隐藏输入法
      */
     public void hiddenIME() {
@@ -507,4 +478,32 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         return false;
     }
 
+    /**
+     * 获取版本号
+     *
+     * @return 当前应用的版本号
+     */
+    public String getCurrentVersionName() {
+        try {
+            PackageManager manager = mContext.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(
+                    mContext.getPackageName(), 0);
+            String version = info.versionName;
+            return version;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public int getLocalVersionCode() {
+        PackageManager pm = getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

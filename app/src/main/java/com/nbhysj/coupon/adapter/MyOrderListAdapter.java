@@ -188,7 +188,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                 holder.mRlytPendingOrder.setVisibility(View.VISIBLE);
                 long payExprireTime = orderTypeEntity.getPayExprireTime();
                 String payExprireTimeStr = DateUtil.millisToStringShort(payExprireTime);
-                holder.mTvPayExprireTime.setText(payExprireTimeStr + "后取消订单");
+                holder.mTvPayExprireTime.setText("订单将在"+payExprireTimeStr + "后关闭");
             }
 
             //再次购买

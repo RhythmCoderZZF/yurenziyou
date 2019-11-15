@@ -4,6 +4,7 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
 
@@ -22,11 +23,16 @@ public interface OthersHomePageContract {
 
         //获取他人信息
         Observable<BackResult<UserPersonalHomePageResponse>> getOthersHomePageInfo(int userId);
+
+        //关注
+        Observable<BackResult<FollowUserStatusResponse>> userFollow(int userId);
     }
 
     interface View extends BaseView {
 
         void getOthersHomePageInfoResult(BackResult<UserPersonalHomePageResponse> res);
+
+        void userFollowResult(BackResult<FollowUserStatusResponse> res);
 
         void showMsg(String msg);
     }
@@ -35,5 +41,7 @@ public interface OthersHomePageContract {
 
         public abstract void getOthersHomePageInfo(int userId);
 
+        //关注
+        public abstract void userFollow(int userId);
     }
 }

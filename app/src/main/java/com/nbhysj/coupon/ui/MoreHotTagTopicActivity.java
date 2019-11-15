@@ -108,7 +108,19 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MoreHotTagTopicActivity.this);
         mRvRecommendTopic.setLayoutManager(linearLayoutManager);
 
-        tagTopicSearchAdapter = new TagTopicSearchAdapter(MoreHotTagTopicActivity.this);
+        tagTopicSearchAdapter = new TagTopicSearchAdapter(MoreHotTagTopicActivity.this, new TagTopicSearchAdapter.TagTopicListener() {
+            @Override
+            public void setTagTopicListener(HotTagsTopicBean hotTagsTopicBean) {
+
+                Bundle bundle = new Bundle();
+                Intent intent = new Intent();
+                bundle.putSerializable("topicResponse",hotTagsTopicBean);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK,intent);
+                finish();
+
+            }
+        });
         tagTopicSearchAdapter.setTagTopicList(tagTopicSearchList);
         mRvRecommendTopic.setAdapter(tagTopicSearchAdapter);
 

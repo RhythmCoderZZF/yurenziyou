@@ -3,6 +3,8 @@ package com.nbhysj.coupon.presenter;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 
 import java.util.HashMap;
 
@@ -49,7 +51,24 @@ public class HotelPresenter extends HotelContract.Presenter {
         mRxManager.add(mModel.mchCollection(mchCollectionRequest).subscribe(res -> mView.mchCollectionResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
+    @Override
+    public void queryByTicket(QueryByTicketRequest queryByTicketRequest) {
+        mRxManager.add(mModel.queryByTicket(queryByTicketRequest).subscribe(res -> mView.queryByTicketResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 
+    @Override
+    public void useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest) {
+        mRxManager.add(mModel.useCouponTicketRequest(useCouponTicketRequest).subscribe(res -> mView.useCouponTicketResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+    @Override
+    public void queryMchCouponList(int mchId) {
+        mRxManager.add(mModel.queryMchCouponList(mchId).subscribe(res -> mView.queryMchCouponListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getCoupon(int couponId) {
+        mRxManager.add(mModel.getCoupon(couponId).subscribe(res -> mView.getCouponResult(res), e -> mView.showMsg(e.getMessage())));
+    }
     @Override
     public void onStart() {
 

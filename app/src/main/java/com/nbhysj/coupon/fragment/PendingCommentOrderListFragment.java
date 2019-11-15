@@ -125,7 +125,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
             public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {  //待付款
 
                 mOrderTypeEntity = orderTypeEntity;
-                OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
+                OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_cancel_the_order));
                 oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

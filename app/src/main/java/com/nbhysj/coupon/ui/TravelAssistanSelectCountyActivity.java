@@ -257,6 +257,11 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
     }
 
     @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void getTripRouteMapResult(BackResult res) {
 
     }
@@ -295,6 +300,11 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
     }
     @Override
     public void travelAssistantPlusADay(BackResult res) {
+
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
 
     }
 

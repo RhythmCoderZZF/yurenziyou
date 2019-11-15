@@ -14,9 +14,11 @@ import com.nbhysj.coupon.common.Enum.TourProjectTypeEnum;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -156,6 +158,11 @@ public class PlayGuideActivity extends BaseActivity<ScenicSpotPresenter, ScenicS
     }
 
     @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
     public void getTourGuideListResult(BackResult<List<TourGuideBean>> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -178,6 +185,11 @@ public class PlayGuideActivity extends BaseActivity<ScenicSpotPresenter, ScenicS
                 showToast(PlayGuideActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+
     }
 
     @Override

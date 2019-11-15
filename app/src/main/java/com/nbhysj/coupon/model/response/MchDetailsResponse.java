@@ -14,6 +14,9 @@ public class MchDetailsResponse implements Serializable {
 
     private String mchByNotes;
 
+    //优惠券
+    private List<CouponsBean> coupons;
+
     //商户详情
     private MchDetailsEntity mchDetails;
 
@@ -101,6 +104,14 @@ public class MchDetailsResponse implements Serializable {
 
     public void setNearbyFood(List<NearbyFoodEntity> nearbyFood) {
         this.nearbyFood = nearbyFood;
+    }
+
+    public List<CouponsBean> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(List<CouponsBean> coupons) {
+        this.coupons = coupons;
     }
 
     public class VisitGuideEntity implements Serializable {

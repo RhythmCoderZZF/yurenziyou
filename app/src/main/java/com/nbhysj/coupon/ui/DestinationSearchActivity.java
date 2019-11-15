@@ -1,9 +1,11 @@
 package com.nbhysj.coupon.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +13,17 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DestinationAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.HotTagsTypeEnum;
+import com.nbhysj.coupon.contract.DestinationContract;
+import com.nbhysj.coupon.model.DestinationModel;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CarH5UrlResponse;
+import com.nbhysj.coupon.model.response.DestinationCityResponse;
+import com.nbhysj.coupon.model.response.DestinationResponse;
+import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
+import com.nbhysj.coupon.model.response.HotTagsTopicBean;
+import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -26,7 +39,7 @@ import butterknife.OnClick;
  * @auther：hysj created on 2019/03/08
  * description：目的地搜索
  */
-public class DestinationSearchActivity extends BaseActivity {
+public class DestinationSearchActivity extends BaseActivity<DestinationPresenter, DestinationModel> implements DestinationContract.View {
 
     //历史标签
     @BindView(R.id.flowlayout_historical_label)
@@ -47,6 +60,9 @@ public class DestinationSearchActivity extends BaseActivity {
     @BindView(R.id.image_history_record_clear)
     ImageView mImgHistoryRecordClear;
 
+    private DestinationAdapter destinationAdapter;
+
+    private List<DestinationCityResponse> hotTagsTopicList;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -56,127 +72,71 @@ public class DestinationSearchActivity extends BaseActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        List<String> historyLabelList = new ArrayList<>();
-        historyLabelList.add("宁波海洋世界");
-        historyLabelList.add("有猫的咖啡店");
-        historyLabelList.add("蛋糕甜点");
-        historyLabelList.add("美食");
-        historyLabelList.add("附近美术馆");
-        historyLabelList.add("赏花好去处");
-        historyLabelList.add("亲子互动");
+        if(hotTagsTopicList == null){
 
-        mTagHistoryLabel.setAdapter(new TagAdapter<String>(historyLabelList) {
-
-            @Override
-            public View getView(FlowLayout parent, int position, String historyLabel) {
-                LayoutInflater mInflater = LayoutInflater.from(mContext);
-                TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
-                        mTagHistoryLabel, false);
-                tagName.setText(historyLabel);
-                return tagName;
-            }
-        });
-
-        mTagHistoryLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-            @Override
-            public boolean onTagClick(View view, int position, FlowLayout parent) {
-                //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
-                toActivity(ScenicSpotDestinationActivity.class);
-                return false;
-            }
-        });
-
-        List<String> destinationList = new ArrayList<>();
-        destinationList.add("北仑");
-        destinationList.add("镇海");
-        destinationList.add("余姚");
-        destinationList.add("慈溪");
-        destinationList.add("象山");
-        destinationList.add("宁海");
-        destinationList.add("奉化");
-        destinationList.add("海曙");
-        destinationList.add("江北");
-        destinationList.add("鄞州");
+            hotTagsTopicList = new ArrayList<>();
+        } else {
+            hotTagsTopicList.clear();
+        }
 
         GridLayoutManager layoutManager = new GridLayoutManager(DestinationSearchActivity.this, 5);
         layoutManager.setOrientation(layoutManager.VERTICAL);
         mRvDestination.setLayoutManager(layoutManager);
-        DestinationAdapter destinationAdapter = new DestinationAdapter(DestinationSearchActivity.this);
-        destinationAdapter.setDestinationList(destinationList);
+        destinationAdapter = new DestinationAdapter(DestinationSearchActivity.this);
+        destinationAdapter.setDestinationList(hotTagsTopicList);
         mRvDestination.setAdapter(destinationAdapter);
 
-
-        List<String> scenicSpotLabelList = new ArrayList<>();
-        scenicSpotLabelList.add("宁波海洋世界");
-        scenicSpotLabelList.add("有猫的咖啡店");
-        scenicSpotLabelList.add("蛋糕甜点");
-        scenicSpotLabelList.add("美食");
-        scenicSpotLabelList.add("附近美术馆");
-        scenicSpotLabelList.add("赏花好去处");
-        scenicSpotLabelList.add("亲子互动");
-
-        mTagScenicSpotLabel.setAdapter(new TagAdapter<String>(scenicSpotLabelList) {
-
-            @Override
-            public View getView(FlowLayout parent, int position, String historyLabel) {
-                LayoutInflater mInflater = LayoutInflater.from(mContext);
-                TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
-                        mTagHistoryLabel, false);
-                tagName.setText(historyLabel);
-                return tagName;
-            }
-        });
-
-        List<String> scenicHotelLabelList = new ArrayList<>();
-        scenicHotelLabelList.add("南苑环球酒店");
-        scenicHotelLabelList.add("东港喜来登");
-        scenicHotelLabelList.add("宁波万豪");
-
-        mTagDestinationLabel.setAdapter(new TagAdapter<String>(scenicHotelLabelList) {
-
-            @Override
-            public View getView(FlowLayout parent, int position, String historyLabel) {
-                LayoutInflater mInflater = LayoutInflater.from(mContext);
-                TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
-                        mTagDestinationLabel, false);
-                tagName.setText(historyLabel);
-                return tagName;
-            }
-        });
-
-        List<String> parentChildInteractionLabelList = new ArrayList<>();
-        parentChildInteractionLabelList.add("奉化奶油草莓采摘");
-        parentChildInteractionLabelList.add("溪口水蜜桃");
-        parentChildInteractionLabelList.add("手工年糕");
-        parentChildInteractionLabelList.add("农家乐采摘园");
-        parentChildInteractionLabelList.add("罗门环球城");
-        parentChildInteractionLabelList.add("赏花好去处");
-        parentChildInteractionLabelList.add("亲子互动");
-
-        mTagParentChildInteractionLabel.setAdapter(new TagAdapter<String>(parentChildInteractionLabelList) {
-
-            @Override
-            public View getView(FlowLayout parent, int position, String historyLabel) {
-                LayoutInflater mInflater = LayoutInflater.from(mContext);
-                TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
-                        mTagParentChildInteractionLabel, false);
-                tagName.setText(historyLabel);
-                return tagName;
-            }
-        });
     }
-
     @Override
     public void initData() {
-
+        getHotTagsTopicList();
     }
 
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this,mModel);
     }
 
-    @OnClick({R.id.image_history_record_clear, R.id.rlyt_back})
+    @Override
+    public void findMchBycityNameResult(BackResult<HotScenicSpotResponse> res) {
+
+    }
+
+    @Override
+    public void getDestinationHomePageResult(BackResult<DestinationResponse> res) {
+
+    }
+
+    @Override
+    public void getDestinationCityTagsListResult(BackResult<List<DestinationCityResponse>> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    hotTagsTopicList = res.getData();
+                    destinationAdapter.setDestinationList(hotTagsTopicList);
+                    destinationAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(DestinationSearchActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(DestinationSearchActivity.this, Constants.getResultMsg(msg));
+
+    }
+
+    @OnClick({R.id.image_history_record_clear, R.id.rlyt_back,R.id.ll_search})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_history_record_clear:
@@ -189,9 +149,21 @@ public class DestinationSearchActivity extends BaseActivity {
                 finish();
 
                 break;
+            case R.id.ll_search:
+                toActivity(HomePageSearchActivity.class);
+                break;
             default:
                 break;
         }
-
     }
+
+    //获取热门标签(主题搜索 热门标签)
+    public void getHotTagsTopicList() {
+
+        if (validateInternet()) {
+
+            mPresenter.getDestinationCityTagsList(HotTagsTypeEnum.CITY.getValue());
+        }
+    }
+
 }

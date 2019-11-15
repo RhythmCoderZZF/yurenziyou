@@ -33,6 +33,9 @@ import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.widget.NearbyTabIndicator;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +72,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     private String mLatitude = "";
     private String mLongitude = "";
     private HomePageSubTopicTagBean mHomePageSubTopicTagBean;
-
+    private boolean visibleToUser;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_nearby;
@@ -130,6 +133,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     @Override
     public void initView(View v) {
+        EventBus.getDefault().register(this);
         initLocation();
         if (nearbyCardList == null) {
 
@@ -351,10 +355,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        //isVisibleToUser这个boolean值表示:该Fragment的UI 用户是否可见，获取该标志记录下来
-       /* if(isRefrsh){
-            queryByTopic();
-        }*/
+        visibleToUser = isVisibleToUser;
         if (isVisibleToUser) {
             isVisible = true;
             isCanLoadData();
@@ -521,5 +522,37 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
             showProgressDialog(getActivity());
             mPresenter.userFollow(userId);
         }
+    }
+
+    @Subscribe
+    public void onEvent(String mineFragmentRefresh) {
+
+        if(visibleToUser)
+        {
+            if(mineFragmentRefresh.equals("homeFragmentRefresh"))
+            {
+                if (nearbyCardList != null) {
+                    nearbyCardList.clear();
+                }
+
+                /*if(recommendFriendsAdapter != null)
+                {
+                    recommendFriendsAdapter.notifyDataSetChanged();
+                }*/
+                mPage = 1;
+                if(mRlytNoData != null)
+                {
+                    mRlytNoData.setVisibility(View.GONE);
+                }
+              //  showProgressDialog(getActivity());
+                queryByTopic();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

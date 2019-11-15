@@ -220,6 +220,7 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
                 intent.setClass(PhoneQuickLoginActivity.this, BindPhoneActivity.class);
                 bundle.putSerializable("thirdPartyMap", thirdPartyMap);
                 bundle.putString("thirdPartyLoginType", mThirdPartyLoginType);
+                bundle.putInt("bind", 0); //1等于绑定 0等于注册
                 intent.putExtras(bundle);
                 startActivityForResult(intent, THIRD_PARTY_LOGIN_REQUEST_CODE);
                 break;
@@ -540,5 +541,8 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
 
             PhoneQuickLoginActivity.this.finish();
         }
+
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
 }

@@ -32,6 +32,8 @@
     <color name="top">#FF9503</color>
     <color name="btn_enable">#c2c2c1</color>
     <color name="login_back">#EBEBEA</color>
+    <color name="color_yellow">#F5C04A</color>
+    <color name="color_yellow1">#fff2e6</color>
     <color name="color_orange">#FA8C16</color>
     <color name="color_orange2">#FE9F1C</color>
     <color name="color_orange3">#FFFF7221</color>
@@ -74,10 +76,10 @@
     <color name="color_text_black8">#FF2F2E2E</color>
     <color name="color_text_black9">#FF323232</color>
     <color name="color_text_black10">#FF000000</color>
+    <color name="color_text_black11">#323232</color>
     <color name="color_line_view">#0DDDF6</color>
     <color name="color_blue">#00C7DA</color>
     <color name="color_blue2">#2C75D3</color>
-
     <color name="blue">#06CFCC</color>
     <color name="blue1">#0DD</color>
     <color name="color_blue3">#15E4C6</color>
@@ -89,6 +91,7 @@
     <color name="color_green5">#FF1DEB96</color>
     <color name="color_green6">#FF15BD97</color>
     <color name="color_green7">#FF88B373</color>
+    <color name="color_green8">#74B93A</color>
     <color name="color_high_light_green">#12E1D5</color>
     <color name="transparent_white">#00ffffff</color>
     <color name="transparent10_white">#1Affffff</color>
@@ -143,6 +146,10 @@
     <color name="color_text_gray40">#FF9A9A9A</color>
     <color name="color_text_gray41">#FFE6E6E6</color>
     <color name="color_text_gray42">#FF585858</color>
+    <color name="color_text_gray43">#535353</color>
+    <color name="color_text_gray44">#888888</color>
+    <color name="color_text_gray45">#BBBBBB</color>
+    <color name="color_text_gray46">#BEC1C4</color>
     <color name="color_text_orange">#FEB143</color>
     <color name="color_text_orange2">#FF7221</color>
     <color name="color_text_orange3">#FF7E3C</color>
@@ -163,6 +170,7 @@
     <color name="color_dark_red">#FF4970</color>
     <color name="color_purplish_red">#F7418C</color>
     <color name="color_purplish_dark_red">#FFFF4970</color>
+    <color name="color_light_red">#FF7770</color>
     <color name="color_light_brown">#FBAB66</color>
     <color name="color_dark_green">#15BD97</color>
     <color name="color_drak_green2">#39CBAA</color>

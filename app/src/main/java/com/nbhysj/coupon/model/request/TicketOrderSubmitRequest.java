@@ -1,5 +1,7 @@
 package com.nbhysj.coupon.model.request;
 
+import com.nbhysj.coupon.model.response.GoodsBean;
+
 import java.util.List;
 
 /**
@@ -11,8 +13,11 @@ public class TicketOrderSubmitRequest {
     //旅客Id
     private int userTravelerId;
 
+    //优惠券
+    private List<Integer> couponIds;
+
     //商品列表
-    private List<GoodsBean> goods;
+    private List<GoodsBeanRequest> goods;
 
     //是否用车 1=用0=不用
     private int carStatus;
@@ -28,11 +33,11 @@ public class TicketOrderSubmitRequest {
         this.userTravelerId = userTravelerId;
     }
 
-    public List<GoodsBean> getGoods() {
+    public List<GoodsBeanRequest> getGoods() {
         return goods;
     }
 
-    public void setGoods(List<GoodsBean> goods) {
+    public void setGoods(List<GoodsBeanRequest> goods) {
         this.goods = goods;
     }
 
@@ -50,5 +55,13 @@ public class TicketOrderSubmitRequest {
 
     public void setCars(List<CarsBean> cars) {
         this.cars = cars;
+    }
+
+    public List<Integer> getCouponIds() {
+        return couponIds;
+    }
+
+    public void setCouponIds(List<Integer> couponIds) {
+        this.couponIds = couponIds;
     }
 }

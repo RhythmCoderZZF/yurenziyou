@@ -6,9 +6,11 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -63,5 +65,15 @@ public class ScenicSpotModel implements ScenicSpotContract.Model {
     @Override
     public Observable<BackResult<MchCollectionResponse>> mchCollection(MchCollectionRequest mchCollectionRequest) {
         return Api.getInstance().apiService.mchCollection(mchCollectionRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<List<MchCouponResponse>>> queryMchCouponList(int mchId) {
+        return Api.getInstance().apiService.queryMchCouponList(mchId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<CouponsGetBean>> getCoupon(int couponId) {
+        return Api.getInstance().apiService.getCoupon(couponId).compose(RxSchedulers.io_main());
     }
 }

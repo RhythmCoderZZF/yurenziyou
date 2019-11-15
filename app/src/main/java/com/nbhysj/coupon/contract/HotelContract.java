@@ -5,15 +5,24 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
+
 import java.util.HashMap;
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**
@@ -48,6 +57,18 @@ public interface HotelContract {
         //商户收藏
         Observable<BackResult<MchCollectionResponse>> mchCollection(MchCollectionRequest mchCollectionRequest);
 
+        //查询日历价格下可选的所有优惠券
+        Observable<BackResult<QueryByTicketResponse>> queryByTicket(QueryByTicketRequest queryByTicketRequest);
+
+        //选择使用优惠券
+        Observable<BackResult<UseCouponTicketResponse>> useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest);
+
+        //获取优惠券列表
+        Observable<BackResult<List<MchCouponResponse>>> queryMchCouponList(int mchId);
+
+        //领取优惠券
+        Observable<BackResult<CouponsGetBean>> getCoupon(int couponId);
+
     }
 
     interface View extends BaseView {
@@ -65,6 +86,16 @@ public interface HotelContract {
         void hotelHomestayOrderSubmitResult(BackResult<OrderSubmitResponse> res);
 
         void mchCollectionResult(BackResult<MchCollectionResponse> res);
+
+        //订单提交返回
+        void queryByTicketResult(BackResult<QueryByTicketResponse> res);
+
+        void useCouponTicketResult(BackResult<UseCouponTicketResponse> res);
+
+        void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res);
+
+        //领取优惠券
+        void getCouponResult(BackResult<CouponsGetBean> res);
 
         void showMsg(String msg);
     }
@@ -85,6 +116,14 @@ public interface HotelContract {
         public abstract void hotelHomestayOrderSubmit(HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest);
 
         public abstract void mchCollection(MchCollectionRequest mchCollectionRequest);
+
+        public abstract void queryByTicket(QueryByTicketRequest queryByTicketRequest);
+
+        public abstract void useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest);
+
+        public abstract void queryMchCouponList(int mchId);
+
+        public abstract void getCoupon(int couponId);
 
     }
 }

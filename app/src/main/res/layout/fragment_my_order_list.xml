@@ -19,7 +19,7 @@
         app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="false"
         app:srlEnablePreviewInEditMode="true"
-        app:srlEnableRefresh="false"
+        app:srlEnableRefresh="true"
         app:srlPrimaryColor="#00000000">
 
         <com.scwang.smartrefresh.layout.header.ClassicsHeader

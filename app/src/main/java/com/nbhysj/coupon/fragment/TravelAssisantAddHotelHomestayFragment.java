@@ -248,6 +248,11 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void delTripResult(BackResult res) {
 
     }
@@ -259,6 +264,11 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
 
     @Override
     public void getWeatherResult(BackResult<WeatherResponse> res) {
+
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
 
     }
 

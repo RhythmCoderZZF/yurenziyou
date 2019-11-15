@@ -8,11 +8,22 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MessageListAdapter;
-import com.nbhysj.coupon.model.response.MessageBean;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.MessageContract;
+import com.nbhysj.coupon.model.MessageModel;
+import com.nbhysj.coupon.model.response.AttentionResponse;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
+import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UserFansFollowResponse;
+import com.nbhysj.coupon.model.response.UserFollowResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
+import com.nbhysj.coupon.presenter.MessagePresenter;
 import com.nbhysj.coupon.ui.CommentsAndAnswersActivity;
 import com.nbhysj.coupon.ui.NewFansActivity;
-import com.nbhysj.coupon.ui.PraiseAndCollectionActivity;
 import com.nbhysj.coupon.ui.StrokeDynamicsActivity;
+import com.nbhysj.coupon.ui.ZanAndCollectionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +31,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MessageFragment extends BaseFragment {
+public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel> implements MessageContract.View {
 
     @BindView(R.id.rv_message)
     RecyclerView mRvMessageList;
     @BindView(R.id.tv_designate_me_tag)
     TextView mTvDesignateMeTag;
-    private List<MessageBean> messageList;
+    private List<MessageResponse.MessageEntity> messageList;
     @BindView(R.id.llyt_comment_and_answer)
     LinearLayout mLlytCommentAndAnswer;
 
+    MessageListAdapter messageListAdapter;
     public MessageFragment() {
     }
 
@@ -40,7 +52,7 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void initPresenter() {
-
+        mPresenter.setVM(this,mModel);
     }
 
     @Override
@@ -58,24 +70,7 @@ public class MessageFragment extends BaseFragment {
         // 设置布局管理器
         mRvMessageList.setLayoutManager(layoutManager);
 
-        MessageBean messageBean = new MessageBean();
-        messageBean.setContent("消息123");
-        messageBean.setRead(false);
-        messageBean.setTime("2019-02-20");
-        messageBean.setTitle("123");
-        messageBean.setUrl("http://img.bimg.126.net/photo/ZZ5EGyuUCp9hBPk6_s4Ehg==/5727171351132208489.jpg");
-
-        MessageBean messageBean1 = new MessageBean();
-        messageBean1.setContent("消息456");
-        messageBean1.setRead(false);
-        messageBean1.setTime("2019-02-20");
-        messageBean1.setTitle("456");
-        messageBean1.setUrl("http://www.zt5.com/uploadfile/2019/0127/20190127010112529.jpg");
-
-        messageList.add(messageBean);
-        messageList.add(messageBean1);
-
-        MessageListAdapter messageListAdapter = new MessageListAdapter(getActivity());
+        messageListAdapter = new MessageListAdapter(getActivity());
         messageListAdapter.setMessageList(messageList);
         mRvMessageList.setAdapter(messageListAdapter);
     }
@@ -83,6 +78,7 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void initData() {
 
+        getMessageList();
     }
 
     @OnClick({R.id.llyt_comment_and_answer, R.id.rlyt_stroke_dynamics, R.id.rlyt_question_and_answer, R.id.llyt_new_fans, R.id.llyt_praise_and_collection})
@@ -101,7 +97,7 @@ public class MessageFragment extends BaseFragment {
                 toActivity(NewFansActivity.class);
                 break;
             case R.id.llyt_praise_and_collection:   //赞和收藏
-                toActivity(PraiseAndCollectionActivity.class);
+                toActivity(ZanAndCollectionActivity.class);
                 break;
             default:
                 break;
@@ -111,5 +107,90 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void lazyInitView(View view) {
 
+    }
+
+    @Override
+    public void getUserFansListResult(BackResult<UserFansFollowResponse> res) {
+
+    }
+
+    @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+
+    }
+
+    @Override
+    public void getAttentionInitResult(BackResult<AttentionResponse> res) {
+
+    }
+
+    @Override
+    public void getUserFollowResult(BackResult<UserFollowResponse> res) {
+
+    }
+
+    @Override
+    public void getZanAndCollectionMsgResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getPostsCommentAndAnswerResult(BackResult<CommentAndAnswerResponse> res) {
+
+    }
+
+    @Override
+    public void getMessageListResult(BackResult<MessageResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    // mPosition++;
+                    MessageResponse messageResponse = res.getData();
+                    List<MessageResponse.MessageEntity> messageList = messageResponse.getResult();
+                    messageListAdapter.setMessageList(messageList);
+                    messageListAdapter.notifyDataSetChanged();
+                   /* if (userFollowResponseList.size() > 0) {
+                        TravellerBean travellerBean = travellersList.get(0);
+                        userTravelerId = travellerBean.getUserId();
+                        travellerBean.setTravellerSelect(true);
+                        realname = travellerBean.getRealname();
+                        mobile = travellerBean.getMobile();
+                        mTvTouristName.setText(realname);
+                        mTvTouristMobile.setText(mobile);
+                    }
+
+                    addTouristInformationAdapter.setTouristInfoList(travellersList);
+                    addTouristInformationAdapter.notifyDataSetChanged();
+
+                    touristInformationAdapter.setTouristInfoList(travellersList);
+                    touristInformationAdapter.notifyDataSetChanged();
+
+                    mLlytAddTourists.setVisibility(View.GONE);*/
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(getActivity(), Constants.getResultMsg(msg));
+    }
+
+    public void getMessageList(){
+
+        if(validateInternet()){
+
+            showProgressDialog(getActivity());
+            mPresenter.getMessageList();
+        }
     }
 }

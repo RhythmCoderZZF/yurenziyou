@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.ThirdPartyLoginTypeEnum;
 import com.nbhysj.coupon.contract.AccountManagementContract;
 import com.nbhysj.coupon.model.AccountManagementModel;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
@@ -23,8 +24,10 @@ import com.nbhysj.coupon.model.response.ThirdPartyLoginResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.AccountmanagementPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.Map;
 import java.util.Timer;
@@ -66,19 +69,22 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
 
     SerializableThirdPartyMap serializableThirdPartyMap;
     private String thirdPartyLoginType;
+    //1等于绑定 0等于注册
+    private int bind;
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_bind_phone;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        ToolbarHelper.setBar(BindPhoneActivity.this, "", R.mipmap.nav_ico_back_black, R.mipmap.icon_cancel);
+        ToolbarHelper.setLoginBar(BindPhoneActivity.this, "", R.mipmap.nav_ico_back_black, "");
         Bundle bundle = getIntent().getExtras();
         serializableThirdPartyMap = (SerializableThirdPartyMap) bundle.get("thirdPartyMap");
         thirdPartyLoginType = bundle.getString("thirdPartyLoginType");
-
+        bind = bundle.getInt("bind",0);
     }
 
     @Override
@@ -147,20 +153,28 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
 
     @Override
     public void getThirdPartyLoginCreateUserResult(BackResult<LoginResponse> res) {
+        dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
 
                 try {
-                    LoginResponse thirdPartyLoginResponse = res.getData();
+                    if(bind == 0){
+                        LoginResponse thirdPartyLoginResponse = res.getData();
 
-                    userId = thirdPartyLoginResponse.getId();                 //用户id
-                    String mobile = thirdPartyLoginResponse.getMobile();      //手机号
-                    String nickname = thirdPartyLoginResponse.getNickname();  //昵称
-                    String username = thirdPartyLoginResponse.getUsername();  //用户名
-                    String token = res.getToken();
-                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                        userId = thirdPartyLoginResponse.getId();                 //用户id
+                        String mobile = thirdPartyLoginResponse.getMobile();      //手机号
+                        String nickname = thirdPartyLoginResponse.getNickname();  //昵称
+                        String username = thirdPartyLoginResponse.getUsername();  //用户名
+                        String token = res.getToken();
+                        SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
 
-                    getUserInfo();
+                        getUserInfo();
+                    } else if(bind == 1){
+
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -212,6 +226,11 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
                 showToast(BindPhoneActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void thirdPartyLoginResult(BackResult<LoginResponse> res) {
+
     }
 
     @Override
@@ -301,6 +320,7 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
                 return;
             }
 
+            showProgressDialog(BindPhoneActivity.this);
             Map<String, String> thirdPartyMap = serializableThirdPartyMap.getMap();
             String unionid = thirdPartyMap.get("unionid");
             String openid = thirdPartyMap.get("openid");
@@ -336,6 +356,9 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
                 thirdPartyLoginCreateUserBind.setUnionid(unionid);
             }
 
+            //1:等于绑定 0:等于注册
+            thirdPartyLoginCreateUserBind.setBind(bind);
+
             mPresenter.getThirdPartyLoginCreateUser(thirdPartyLoginCreateUserBind);
 
         }
@@ -359,6 +382,7 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
             case R.id.llyt_bind_phone:
                 hideKeyboard(mLlytBindPhone);
                 break;
+
             default:
                 break;
         }

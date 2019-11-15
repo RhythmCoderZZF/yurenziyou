@@ -22,14 +22,18 @@ import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.HotelPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
@@ -327,6 +331,26 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     }
 
     @Override
+    public void queryByTicketResult(BackResult<QueryByTicketResponse> res) {
+
+    }
+
+    @Override
+    public void useCouponTicketResult(BackResult<UseCouponTicketResponse> res) {
+
+    }
+
+    @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(ShoppingMallHotelActivity.this, Constants.getResultMsg(msg));
@@ -340,7 +364,7 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     }
 
 
-    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first})
+    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first,R.id.toolbar})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.tv_popular_nearby:
@@ -406,9 +430,13 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
                 mPage = 1;
                 mScenicSpotList.clear();
                 // scenicSpotsListAdapter.notifyDataSetChanged();
-                mSortStr = "cz"; //距离优先
+                mSortStr = "FJ"; //距离优先
                 showProgressDialog(ShoppingMallHotelActivity.this);
                 findHotelHomestayByCate();
+                break;
+            case R.id.toolbar:
+
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;

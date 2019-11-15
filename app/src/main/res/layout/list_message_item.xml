@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.nbhysj.coupon.view.GlideImageView
-            android:id="@+id/image_message_type"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_user_avatar"
             android:layout_width="@dimen/dp_46"
             android:layout_height="@dimen/dp_46"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_16"
-            android:scaleType="fitXY" />
+          />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="@dimen/dp_10"
-            android:layout_toRightOf="@+id/image_message_type"
+            android:layout_toRightOf="@+id/img_user_avatar"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -34,13 +34,16 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_title"
+                    android:id="@+id/tv_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/dp_10"
                     android:layout_toLeftOf="@+id/tv_message_time"
-                    android:text="宁波哦"
+                    android:text=""
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
 
@@ -51,7 +54,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
-                    android:text="11:02"
+                    android:text=""
                     android:textColor="@color/color_font_gray"
                     android:textSize="13sp" />
 
@@ -69,7 +72,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/dp_10"
                     android:layout_toLeftOf="@+id/img_message_dot"
-                    android:text="宁波哦"
+                    android:text=""
+                    android:lines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/color_text_gray"
                     android:textSize="12sp" />
 
@@ -79,7 +84,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
-                    android:src="@mipmap/icon_unread_message_dot" />
+                    android:src="@mipmap/icon_unread_message_dot"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

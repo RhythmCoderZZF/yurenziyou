@@ -2,6 +2,7 @@ package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,30 +37,40 @@ import com.nbhysj.coupon.adapter.VehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
+import com.nbhysj.coupon.dialog.CouponSelectDialog;
+import com.nbhysj.coupon.dialog.MchCouponReceiveDialog;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
 import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
+import com.nbhysj.coupon.model.request.CarEstimatePriceBean;
 import com.nbhysj.coupon.model.request.CarsBean;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
-import com.nbhysj.coupon.model.request.GoodsBean;
+import com.nbhysj.coupon.model.request.EstimatedPriceRequest;
+import com.nbhysj.coupon.model.request.GoodsBeanRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarTypeBean;
+import com.nbhysj.coupon.model.response.CouponsBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.TravellerBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.Tools;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -194,6 +206,28 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @BindView(R.id.rlyt_open_car_status)
     RelativeLayout mRlytOpenCarStatus;
 
+    //优惠券
+    @BindView(R.id.tv_coupon)
+    TextView mTvCoupon;
+
+    //默认价格
+    @BindView(R.id.tv_default_ticket_price)
+    TextView mTvDefaultTicketPrice;
+
+    //已减价格
+    @BindView(R.id.tv_already_reduced_price)
+    TextView mTvAlreadyReducedPrice;
+
+    @BindView(R.id.rlyt_discount)
+    RelativeLayout mRlytDiscount;
+
+    //立减
+    @BindView(R.id.tv_order_discount_price)
+    TextView mTvOrderDiscountPrice;
+
+    @BindView(R.id.img_coupon_right_arrow)
+    ImageView mImgCouponRightArrow;
+
     //购买数量
     private int mPurchaseNum = 1;
 
@@ -270,9 +304,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private PoiResult poiResult; // poi返回的结果
 
     //商品列表
-    private List<GoodsBean> goodsList;
+    private List<GoodsBeanRequest> goodsList;
 
     private List<CarsBean> carsBeanList;
+
+    private List<CarEstimatePriceBean> carEstimatePriceList;
 
     //旅客id
     private int userTravelerId;
@@ -308,6 +344,23 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private double mTotalPrice;
 
     private PurchaseInstructionsBrowseDialog mPurchaseInstructionsDialog;
+
+    private CouponSelectDialog couponSelectDialog;
+
+    //优惠券
+    List<CouponsBean> couponList;
+
+    //选择的优惠券id
+    private List<Integer> chooseIds;
+
+    //新选择的优惠券id
+    private int newUseId;
+
+    //优惠价
+    private int mDisCountFee;
+
+    //优惠券标题
+    private String mCouponTitle;
 
     @Override
     public int getLayoutId() {
@@ -398,6 +451,27 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             goodsPriceDatesList = new ArrayList<>();
         } else {
             goodsPriceDatesList.clear();
+        }
+
+        if (carEstimatePriceList == null) {
+
+            carEstimatePriceList = new ArrayList<>();
+        } else {
+            carEstimatePriceList.clear();
+        }
+
+        if (couponList == null) {
+
+            couponList = new ArrayList<>();
+        } else {
+            couponList.clear();
+        }
+
+        if (chooseIds == null) {
+
+            chooseIds = new ArrayList<>();
+        } else {
+            chooseIds.clear();
         }
         inAnimation = new TranslateAnimation(
                 TranslateAnimation.RELATIVE_TO_SELF, 0, TranslateAnimation.RELATIVE_TO_SELF, 0,
@@ -515,7 +589,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
                 double totalPrice = increaseTicketPrice + datePrice;
                 mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-
+                queryByTicket();
             }
         });
         //订单提交日期
@@ -646,6 +720,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 } else {
                     mLlytVehicleUse.setVisibility(View.GONE);
                     carsBeanList.clear();
+                    carEstimatePriceList.clear();
                     vehicleUseAdapter.setVehicleUseList(carsBeanList);
                     vehicleUseAdapter.notifyDataSetChanged();
                 }
@@ -664,7 +739,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
             R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
             R.id.img_tourist_mobile_input_cancel,
-            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm, R.id.tv_add_tourists_cancel})
+            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm, R.id.tv_add_tourists_cancel, R.id.rlyt_coupon})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -795,8 +870,44 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 addTraveller();
 
                 break;
+            case R.id.rlyt_coupon:
 
+                if (couponSelectDialog == null) {
+                    couponSelectDialog = new CouponSelectDialog(couponList, new CouponSelectDialog.CouponSelectListener() {
+                        @Override
+                        public void setCouponSelectCallback(int couponId, boolean isCouponSelect,String couponTitle) {
 
+                            mCouponTitle = couponTitle;
+                            if(!mCouponTitle.equals("不使用优惠"))
+                            {
+                                getAndUseCoupon(couponId, isCouponSelect);
+
+                            } else {
+
+                                mTvCoupon.setText(mCouponTitle);
+                                mTvAlreadyReducedPrice.setVisibility(View.GONE);
+                                mTvDefaultTicketPrice.setVisibility(View.GONE);
+
+                                if (couponSelectDialog != null)
+                                {
+                                    couponSelectDialog.dismiss();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void setCouponListRefreshListener(RefreshLayout refreshLayout) {
+
+                        }
+                    });
+
+                    couponSelectDialog.show(getFragmentManager(), "优惠券领取");
+
+                } else {
+                    couponSelectDialog.setCouponSelectList(couponList);
+                    couponSelectDialog.show();
+                }
+                break;
             default:
                 break;
         }
@@ -813,6 +924,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     travellersList = travellerInfoResponse.getResult();
                     if (travellersList.size() > 0) {
                         TravellerBean travellerBean = travellersList.get(0);
+                        userTravelerId = travellerBean.getUserId();
                         travellerBean.setTravellerSelect(true);
                         realname = travellerBean.getRealname();
                         mobile = travellerBean.getMobile();
@@ -942,6 +1054,66 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     }
 
     @Override
+    public void useCouponTicketResult(BackResult<UseCouponTicketResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    UseCouponTicketResponse useCouponTicketResponse = res.getData();
+
+                    int disCount = useCouponTicketResponse.getDiscount();
+                    chooseIds.clear();
+                    chooseIds = useCouponTicketResponse.getChooseId();
+
+                    if (couponSelectDialog != null)
+                    {
+                        couponSelectDialog.dismiss();
+                    }
+
+                 /*   for (int i = 0; i < couponList.size();i++){
+
+                        CouponsBean couponsBean = couponList.get(i);
+                        boolean isCouponSelect = couponsBean.isCouponSelect();
+                        if(isCouponSelect){
+
+                            int disCountFee = couponsBean.getDiscountFee();
+                            mDisCountFee = mDisCountFee + disCountFee;
+                        }
+                    }*/
+
+                    if(disCount > 0) {
+
+                        mTvAlreadyReducedPrice.setVisibility(View.VISIBLE);
+                        mTvAlreadyReducedPrice.setText("已减" + disCount + "元");
+                        mTvDefaultTicketPrice.setVisibility(View.VISIBLE);
+
+                        double totalPrice = increaseTicketPrice + datePrice;
+                        double price = totalPrice - disCount;
+                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(price));
+                        mTvDefaultTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                        mTvDefaultTicketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        mRlytDiscount.setVisibility(View.VISIBLE);
+                        double disCountDouble = (double)disCount;
+                        mTvOrderDiscountPrice.setText("¥" + Tools.getTwoDecimalPoint(disCountDouble));
+                    } else {
+
+                        double totalPrice = increaseTicketPrice + datePrice;
+                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                        mTvAlreadyReducedPrice.setVisibility(View.GONE);
+                        mTvDefaultTicketPrice.setVisibility(View.GONE);
+                        mRlytDiscount.setVisibility(View.GONE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void ticketOrderSubmitResult(BackResult<OrderSubmitResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -972,7 +1144,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @Override
     public void getOrderSubmitInitResult(BackResult<OrderSubmitInitResponse> res) {
-        dismissProgressDialog();
+
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
@@ -988,6 +1160,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     //商品价格日期
                     goodsPriceDatesList = goodsPriceEntity.getGoodsPriceDates();
 
+                    if (goodsPriceDatesList != null && goodsPriceDatesList.size() > 0) {
+                        goodsPriceDateSelect = goodsPriceDatesList.get(0).getDate();
+                    }
                     for (int i = 0; i < orderSubmitDateList.size(); i++) {
                         GoodsPriceDatesResponse orderSubmitDateResponse = orderSubmitDateList.get(i);
                         String orderSubmitDate = orderSubmitDateResponse.getDate();
@@ -1068,12 +1243,13 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         mRlytOpenCarStatus.setVisibility(View.VISIBLE);
                     }
 
-
                 } catch (Exception e) {
+                    dismissProgressDialog();
                     e.printStackTrace();
                 }
                 break;
             default:
+                dismissProgressDialog();
                 showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
@@ -1097,6 +1273,43 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void queryByTicketResult(BackResult<QueryByTicketResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    QueryByTicketResponse queryByTicketResponse = res.getData();
+                    couponList = queryByTicketResponse.getCoupons();
+                    int couponNum = couponList.size();
+                    if (couponList != null && couponNum == 1) {
+                        CouponsBean couponsBean = couponList.get(0);
+                        String title = couponsBean.getTitle();
+                        mTvCoupon.setText(title);
+                        mTvCoupon.setTextColor(mContext.getResources().getColor(R.color.color_text_orange2));
+                        mImgCouponRightArrow.setVisibility(View.VISIBLE);
+                    } else if (couponNum > 1) {
+                        mTvCoupon.setTextColor(mContext.getResources().getColor(R.color.color_text_orange2));
+                        mTvCoupon.setText(couponNum + "张可用");
+                        mImgCouponRightArrow.setVisibility(View.VISIBLE);
+                    } else {
+
+                        mImgCouponRightArrow.setVisibility(View.GONE);
+                        mTvCoupon.setText("无优惠券");
+                        mTvCoupon.setTextColor(mContext.getResources().getColor(R.color.color_text_gray17));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+
     }
 
     @Override
@@ -1219,10 +1432,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             }
 
             ticketOrderSubmitRequest.setUserTravelerId(userTravelerId);
+            ticketOrderSubmitRequest.setCouponIds(chooseIds);
 
             OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
             int goodsId = goodsPriceEntity.getGoodsId();
-            GoodsBean goodsBean = new GoodsBean();
+            GoodsBeanRequest goodsBean = new GoodsBeanRequest();
             goodsBean.setGoodsId(goodsId);
             goodsBean.setNum(mPurchaseNum);
             goodsBean.setPriceDate(goodsPriceDateSelect);
@@ -1234,7 +1448,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
                 int goodId = goodsPrice.getGoodsId();
                 if (tcketPurchaseNum > 0) {
-                    GoodsBean goodsAddTicket = new GoodsBean();
+                    GoodsBeanRequest goodsAddTicket = new GoodsBeanRequest();
                     goodsAddTicket.setGoodsId(goodId);
                     goodsAddTicket.setNum(tcketPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
                     goodsAddTicket.setPriceDate(goodsPriceDateSelect);
@@ -1244,7 +1458,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
             ticketOrderSubmitRequest.setGoods(goodsList);
             ticketOrderSubmitRequest.setCars(carsBeanList);
-
             //是否用车 1:用 || 0:不用
             if (mCkbIsNeedUseCar.isChecked()) {
                 ticketOrderSubmitRequest.setCarStatus(1);
@@ -1363,6 +1576,15 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         mPresenter.getUserTravellerList(getSharedPreferencesUserId(), mPage, mPageSize);
     }
 
+    public void queryByTicket() {
+        //showProgressDialog(OrderSubmitActivity.this);
+        QueryByTicketRequest queryByTicketRequest = new QueryByTicketRequest();
+        getGoodsQueryByTicket();
+        queryByTicketRequest.setGoods(goodsList);
+        queryByTicketRequest.setCars(carEstimatePriceList);
+        mPresenter.queryByTicket(queryByTicketRequest);
+    }
+
     /**
      * 开始进行poi搜索
      */
@@ -1479,6 +1701,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     carsBean.setCityCode(cityCode);
                     carsBean.setLineType(lineType);
                     carsBeanList.add(carsBean);
+                    double price = carsBean.getPrice();
+                    CarEstimatePriceBean carEstimatePriceBean = new CarEstimatePriceBean();
+                    carEstimatePriceBean.setEstimatePrice(price);
+                    carEstimatePriceList.add(carEstimatePriceBean);
                     vehicleUseAdapter.setVehicleUseList(carsBeanList);
                     vehicleUseAdapter.notifyDataSetChanged();
 
@@ -1525,6 +1751,109 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             mLlytEditTourists.setVisibility(View.GONE);
             mLlytEditTourists.startAnimation(outAnimation);
 
+        }
+    }
+
+    public void getGoodsQueryByTicket() {
+        goodsList.clear();
+        OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+        int goodsId = goodsPriceEntity.getGoodsId();
+        String goodsType = goodsPriceEntity.getGoodsType();
+        GoodsBeanRequest goodsBean = new GoodsBeanRequest();
+        goodsBean.setGoodsId(goodsId);
+        goodsBean.setNum(mPurchaseNum);
+        goodsBean.setGoodsType(goodsType);
+        goodsBean.setDate(goodsPriceDateSelect);
+        goodsList.add(goodsBean);
+
+        for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
+
+            OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
+            int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
+            int goodId = goodsPrice.getGoodsId();
+            if (tcketPurchaseNum > 0) {
+                GoodsBeanRequest goodsAddTicket = new GoodsBeanRequest();
+                goodsAddTicket.setGoodsId(goodId);
+                goodsAddTicket.setNum(tcketPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
+                goodsAddTicket.setDate(goodsPriceDateSelect);
+                goodsList.add(goodsAddTicket);
+            }
+        }
+    }
+
+
+    public void getAndUseCoupon(int couponId, boolean isCouponSelect) {
+        goodsList.clear();
+        OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
+        int goodsId = goodsPriceEntity.getGoodsId();
+        String goodsType = goodsPriceEntity.getGoodsType();
+        GoodsBeanRequest goodsBean = new GoodsBeanRequest();
+        goodsBean.setGoodsId(goodsId);
+        goodsBean.setNum(mPurchaseNum);
+        goodsBean.setGoodsType(goodsType);
+        goodsBean.setDate(goodsPriceDateSelect);
+        goodsList.add(goodsBean);
+
+        for (int i = 0; i < goodsPriceTicketAddList.size(); i++) {
+
+            OrderSubmitInitResponse.GoodsPriceEntity goodsPrice = goodsPriceTicketAddList.get(i);
+            int tcketPurchaseNum = goodsPrice.getTicketPurchaseNum();
+            int goodId = goodsPrice.getGoodsId();
+            if (tcketPurchaseNum > 0) {
+                GoodsBeanRequest goodsAddTicket = new GoodsBeanRequest();
+                goodsAddTicket.setGoodsId(goodId);
+                goodsAddTicket.setNum(tcketPurchaseNum);    //1.增加门票模块 票数字段 采用ticketPurchaseNum 2.外层价格日历选择 票数字段 采用mPurchaseNum 默认为1
+                goodsAddTicket.setDate(goodsPriceDateSelect);
+                goodsList.add(goodsAddTicket);
+            }
+        }
+
+        if (isCouponSelect) {
+
+            /*for (int i = 0;i < chooseIds.size();i++){
+                int selectCouponId = chooseIds.get(i);
+                if(selectCouponId == couponId)
+                {
+                    chooseIds.add(couponId);
+                    newUseId = couponId;
+                }
+            }*/
+            boolean isCountainsCouponId = chooseIds.contains(couponId);
+            if (!isCountainsCouponId) {
+
+                chooseIds.add(couponId);
+                newUseId = couponId;
+            }
+
+        } else {
+            boolean isCountainsCouponId = chooseIds.contains(couponId);
+            if (isCountainsCouponId) {
+
+                for (int i = 0;i < chooseIds.size();i++){
+                    int selectCouponId = chooseIds.get(i);
+                    if(selectCouponId == couponId)
+                    {
+                        chooseIds.remove(i);
+                        newUseId = 0;
+                    }
+                }
+            }
+        }
+
+        useCouponTicket();
+    }
+
+    //使用优惠券校验
+    public void useCouponTicket(){
+
+        if(validateInternet()){
+            showProgressDialog(OrderSubmitActivity.this);
+            UseCouponTicketRequest useCouponTicketRequest = new UseCouponTicketRequest();
+            useCouponTicketRequest.setCars(carEstimatePriceList);
+            useCouponTicketRequest.setGoods(goodsList);
+            useCouponTicketRequest.setChooseIds(chooseIds);
+            useCouponTicketRequest.setNewUseId(newUseId);
+            mPresenter.useCouponTicketRequest(useCouponTicketRequest);
         }
     }
 }

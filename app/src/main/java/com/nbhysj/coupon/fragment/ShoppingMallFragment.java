@@ -267,7 +267,8 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     private Runnable r;//定时器线程
     private boolean timerIsInit=false;//判断数据是否初始化
 
-    private long endTime; Handler handler = new Handler();
+    private long endTime;
+    Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -854,7 +855,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     public List<ShoppingMallMenuBean> getShopMallMenuList() {
 
         ShoppingMallMenuBean shoppingMallFamousScenery = new ShoppingMallMenuBean();
-        shoppingMallFamousScenery.setTitle("风景名胜");
+        shoppingMallFamousScenery.setTitle("景点");
         shoppingMallFamousScenery.setIcon(R.mipmap.icon_tab_famous_scenery);
 
         ShoppingMallMenuBean shoppingMallFine = new ShoppingMallMenuBean();

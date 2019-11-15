@@ -1,5 +1,7 @@
 package com.nbhysj.coupon.model.request;
 
+import com.nbhysj.coupon.model.response.GoodsBean;
+
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ public class GroupMchOrderSubmitRequest {
     private int userTravelerId;
 
     //商品列表
-    private List<GoodsBean> goods;
+    private List<GoodsBeanRequest> goods;
 
     //用车参数
     private List<CarsBean> cars;
@@ -34,11 +36,11 @@ public class GroupMchOrderSubmitRequest {
         this.userTravelerId = userTravelerId;
     }
 
-    public List<GoodsBean> getGoods() {
+    public List<GoodsBeanRequest> getGoods() {
         return goods;
     }
 
-    public void setGoods(List<GoodsBean> goods) {
+    public void setGoods(List<GoodsBeanRequest> goods) {
         this.goods = goods;
     }
 

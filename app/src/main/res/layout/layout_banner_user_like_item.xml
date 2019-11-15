@@ -15,18 +15,20 @@
         android:layout_gravity="center_vertical" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/image_interest_user_avatar"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_toLeftOf="@+id/tv_follow"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="测试"
+            android:text=""
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black" />
@@ -35,7 +37,7 @@
             android:id="@+id/tv_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="测试"
+            android:text=""
             android:textSize="10sp"
             android:layout_marginTop="@dimen/dp_5"
             android:textColor="@color/color_text_gray3" />

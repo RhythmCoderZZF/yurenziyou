@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MineCollectionAllItemAdapter;
 import com.nbhysj.coupon.common.Constants;
@@ -15,6 +19,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
+import com.nbhysj.coupon.model.response.MyPostShareResponse;
 import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
 import com.nbhysj.coupon.presenter.MinePresenter;
 import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
@@ -22,11 +27,19 @@ import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import okhttp3.MediaType;
 import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
+
+import static com.alibaba.fastjson.util.IOUtils.UTF8;
 
 public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineModel> implements MineContract.View {
     private static final String ARG_PARAM1 = "param1";
@@ -57,6 +70,8 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -118,13 +133,19 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
     }
 
     @Override
-    public void getMineCollectionAllListResult(BackResult<List<MineCollectionAllResponse>> res) {
-        dismissProgressDialog();
-        switch (res.getCode()) {
+    public void getMineCollectionAllListResult(ResponseBody response) {
+
+        String json = getResponseBody(response);
+        JSONObject jsonObject = JSONObject.parseObject(json);
+        int code = jsonObject.getInteger("code");
+        String msg = jsonObject.getString("msg");
+        switch (code) {
             case Constants.SUCCESS_CODE:
                 try {
 
-                    mineCollectionAllList = res.getData();
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    String JSONStr = JSON.toJSONString(data);
+                     mineCollectionAllList = JSON.parseObject(JSONStr,new TypeReference<List<MineCollectionAllResponse>>(){});
 
                     if(mineCollectionAllList != null)
                     {
@@ -136,8 +157,11 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
                     e.printStackTrace();
                 }
                 break;
+            case 201:
+
+                break;
             default:
-                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                showToast(getActivity(), Constants.getResultMsg(msg));
                 break;
         }
     }
@@ -189,5 +213,27 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public static String getResponseBody(ResponseBody responseBody) {
+
+        BufferedSource source = responseBody.source();
+        try {
+            source.request(Long.MAX_VALUE); // Buffer the entire body.
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Buffer buffer = source.buffer();
+
+        Charset charset = UTF8;
+        MediaType contentType = responseBody.contentType();
+        if (contentType != null) {
+            try {
+                charset = contentType.charset(UTF8);
+            } catch (UnsupportedCharsetException e) {
+                e.printStackTrace();
+            }
+        }
+        return buffer.clone().readString(charset);
     }
 }

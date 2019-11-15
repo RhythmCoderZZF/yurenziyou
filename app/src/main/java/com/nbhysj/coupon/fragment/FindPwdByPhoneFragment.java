@@ -327,4 +327,16 @@ public class FindPwdByPhoneFragment extends BaseFragment<FindPwdPresenter, FindP
     public void lazyInitView(View view) {
 
     }
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+            if (mTimer != null) {
+                mTimer.cancel();
+        }
+        handler.removeMessages(VERIFY_CODE_MSG);
+    }
 }

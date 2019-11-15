@@ -19,14 +19,18 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.HotelPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
@@ -274,6 +278,26 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
 
     @Override
     public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void queryByTicketResult(BackResult<QueryByTicketResponse> res) {
+
+    }
+
+    @Override
+    public void useCouponTicketResult(BackResult<UseCouponTicketResponse> res) {
+
+    }
+
+    @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
 
     }
 

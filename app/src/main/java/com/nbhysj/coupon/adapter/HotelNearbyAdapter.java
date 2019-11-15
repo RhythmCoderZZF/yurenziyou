@@ -105,10 +105,12 @@ public class HotelNearbyAdapter extends RecyclerView.Adapter<HotelNearbyAdapter.
                     } else if (mchType.equals(mchScenicSpot)) {
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
                         intent.putExtra("mchId", mchId);
+                        intent.putExtra("mchType", mchType);
                         mContext.startActivity(intent);
                     } else if (mchType.equals(mchRecreation)) {
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
                         intent.putExtra("mchId", mchId);
+                        intent.putExtra("mchType", mchType);
                         mContext.startActivity(intent);
                     }else if (mchType.equals(mchHotel)) {
                         String mchHotelType = MchTypeEnum.MCH_HOTEL1.getValue();

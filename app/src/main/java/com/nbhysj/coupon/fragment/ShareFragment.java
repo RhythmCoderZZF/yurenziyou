@@ -137,7 +137,7 @@ public class ShareFragment extends BaseFragment<MinePresenter, MineModel> implem
     }
 
     @Override
-    public void getMineCollectionAllListResult(BackResult<List<MineCollectionAllResponse>> res) {
+    public void getMineCollectionAllListResult(ResponseBody res) {
 
     }
 

@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.TripDetailsResponse;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import java.util.List;
 
@@ -107,6 +111,7 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
             String playDurationTime = tripDetailsEntity.getPlayDuration();
             String distance = tripDetailsEntity.getDistance(); //距离
             String time = tripDetailsEntity.getTime();
+            int mchId = tripDetailsEntity.getMchId();
             if (holder instanceof ScenicSpotsViewHolder) {
 
                 int tripPlaceId = tripDetailsEntity.getTripPlaceId();
@@ -122,9 +127,24 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                     }
                 });
 
+                ((ScenicSpotsViewHolder) holder).mLlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                        intent.putExtra("mchId",mchId);
+                        String mchType = MchTypeEnum.MCH_SCENIC.getValue();
+                        intent.putExtra("mchType", mchType);
+                        mContext.startActivity(intent);
+                    }
+                });
+
                 ((ScenicSpotsViewHolder) holder).mTvScenicSpotsName.setText(title);
 
                 ((ScenicSpotsViewHolder) holder).mTvScenicSpotsIntro.setText(intro);
+
+                ((ScenicSpotsViewHolder) holder).mTvDistance.setText(distance);
 
             } else if (holder instanceof FineFoodViewHolder) {
 
@@ -140,6 +160,19 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                         return false;
                     }
                 });
+
+                ((FineFoodViewHolder) holder).mLlytFineFoodItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, FoodDetailActivity.class);
+                        intent.putExtra("mchId",mchId);
+                        mContext.startActivity(intent);
+                    }
+                });
+
+                ((FineFoodViewHolder) holder).mTvDistance.setText(distance);
             } else if (holder instanceof HotelViewHolder) {
 
                 ((HotelViewHolder) holder).mTvHotelName.setText(title);
@@ -155,6 +188,19 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                         return false;
                     }
                 });
+
+                ((HotelViewHolder) holder).mLlytHotelItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, HotelDetailsActivity.class);
+                        intent.putExtra("mchId",mchId);
+                        mContext.startActivity(intent);
+                    }
+                });
+
+                ((ScenicSpotsViewHolder) holder).mTvDistance.setText(distance);
             } else if (holder instanceof RemarksViewHolder) {
 
                 ((RemarksViewHolder) holder).mTvRemarksContent.setText(title);
@@ -175,6 +221,7 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                         return false;
                     }
                 });
+                ((ScenicSpotsViewHolder) holder).mTvDistance.setText(distance);
             } else if (holder instanceof TrafficViewHolder) {
 
                 ((TrafficViewHolder) holder).mTvLocationDistance.setText(distance);
@@ -191,6 +238,8 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
                         return false;
                     }
                 });
+
+                ((ScenicSpotsViewHolder) holder).mTvDistance.setText(distance);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,12 +296,16 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
         //景点简介
         TextView mTvScenicSpotsIntro;
 
+        //距离
+        TextView mTvDistance;
+
         public ScenicSpotsViewHolder(View itemView) {
             super(itemView);
             mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
             mLlytScenicSpotItem = itemView.findViewById(R.id.llyt_scenic_spot_item);
             mTvScenicSpotsName = itemView.findViewById(R.id.tv_scenic_spots_name);
             mTvScenicSpotsIntro = itemView.findViewById(R.id.tv_scenic_spots_des);
+            mTvDistance = itemView.findViewById(R.id.tv_distance);
         }
     }
 
@@ -270,12 +323,16 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
         //美食位置
         TextView mTvLocationName;
 
+        //距离
+        TextView mTvDistance;
+
         public FineFoodViewHolder(View itemView) {
             super(itemView);
             mImgFineFood = itemView.findViewById(R.id.image_fine_food);
             mLlytFineFoodItem = itemView.findViewById(R.id.llyt_fine_food_item);
             mTvStoreName = itemView.findViewById(R.id.tv_store_name);
             mTvLocationName = itemView.findViewById(R.id.tv_location_name);
+            mTvDistance = itemView.findViewById(R.id.tv_distance);
 
         }
     }
@@ -298,6 +355,8 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
         //建议游玩时间
         TextView mTvHotelSuggestedPlayTime;
 
+        //距离
+        TextView mTvDistance;
         public HotelViewHolder(View itemView) {
             super(itemView);
             mImgHotel = itemView.findViewById(R.id.image_hotel);
@@ -305,7 +364,7 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
             mTvHotelName = itemView.findViewById(R.id.tv_hotel_name);
             mTvHotelDes = itemView.findViewById(R.id.tv_hotel_des);
             mTvHotelSuggestedPlayTime = itemView.findViewById(R.id.tv_suggested_play_time);
-
+            mTvDistance = itemView.findViewById(R.id.tv_distance);
         }
     }
 
@@ -321,11 +380,14 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
         //备注内容
         TextView mTvRemarksContent;
 
+        //距离
+        TextView mTvDistance;
         public RemarksViewHolder(View itemView) {
             super(itemView);
             mTvRemarksEdit = itemView.findViewById(R.id.tv_edit_remark);
             mLlytRemarksItem = itemView.findViewById(R.id.llyt_remarks_item);
             mTvRemarksContent = itemView.findViewById(R.id.tv_remarks_content);
+            mTvDistance = itemView.findViewById(R.id.tv_distance);
         }
     }
 
@@ -345,6 +407,8 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
         //行程时长
         TextView mTvDuration;
 
+        //距离
+        TextView mTvDistance;
         public TrafficViewHolder(View itemView) {
             super(itemView);
             mTvLocationDistance = itemView.findViewById(R.id.tv_location_distance);
@@ -352,6 +416,7 @@ public class TravelAssistantDetailAdapter extends RecyclerView.Adapter<RecyclerV
             mTvTravelTime = itemView.findViewById(R.id.tv_travel_time);
             mTvTravelPath = itemView.findViewById(R.id.tv_travel_path);
             mTvDuration = itemView.findViewById(R.id.tv_duration);
+            mTvDistance = itemView.findViewById(R.id.tv_distance);
         }
     }
 

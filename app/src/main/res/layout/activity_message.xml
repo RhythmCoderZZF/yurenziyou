@@ -32,19 +32,15 @@
             app:tl_textUnselectColor="@color/color_text_gray"
             app:tl_textsize="18sp" />
 
-        <RelativeLayout
-            android:id="@+id/rlyt_back"
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="match_parent">
-
-            <ImageButton
+            <ImageView
+                android:id="@+id/img_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/selector_back_arrow" />
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/selector_back_arrow"
+                android:padding="@dimen/dp_10"/>
 
-        </RelativeLayout>
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager

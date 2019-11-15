@@ -23,7 +23,9 @@ import com.nbhysj.coupon.model.HomestayModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -311,6 +313,16 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
     }
 
     @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+
+    }
+
+    @Override
     public void mchCollectionResult(BackResult res) {
 
         dismissProgressDialog();
@@ -345,7 +357,7 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first})
+    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first,R.id.toolbar})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.tv_popular_nearby:
@@ -410,6 +422,10 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
                 mSorting = "";
                 showProgressDialog(ShoppingMallHomestayActivity.this);
                 findHomestayByCate();
+                break;
+            case R.id.toolbar:
+
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;

@@ -92,11 +92,13 @@ public class NearbyScenicSpotAdapter extends RecyclerView.Adapter<NearbyScenicSp
 
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
                         intent.putExtra("mchId", mchId);
+                        intent.putExtra("mchType", mchType);
                         mContext.startActivity(intent);
 
                     } else if (mchType.equals(mchRecreation)) {
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
                         intent.putExtra("mchId", mchId);
+                        intent.putExtra("mchType", mchType);
                         mContext.startActivity(intent);
                     }else if (mchType.equals(mchFood)) {
 

@@ -27,6 +27,9 @@ public class ThirdPartyLoginCreateUserBind {
     //用户信息uid(当使用微博注册openid为必选项)
     private String uid;
 
+    //1:等于绑定 0:等于注册
+    private int bind;
+
     public String getLoginType() {
         return loginType;
     }
@@ -81,5 +84,13 @@ public class ThirdPartyLoginCreateUserBind {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public int getBind() {
+        return bind;
+    }
+
+    public void setBind(int bind) {
+        this.bind = bind;
     }
 }

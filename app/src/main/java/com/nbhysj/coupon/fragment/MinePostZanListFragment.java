@@ -227,7 +227,7 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
     }
 
     @Override
-    public void getMineCollectionAllListResult(BackResult<List<MineCollectionAllResponse>> res) {
+    public void getMineCollectionAllListResult(ResponseBody res) {
 
     }
 

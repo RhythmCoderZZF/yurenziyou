@@ -42,4 +42,9 @@ public class AccountManagementModel implements AccountManagementContract.Model {
     public Observable<BackResult> getRegisterverifyCode(String mobile) {
         return Api.getInstance().apiService.getRegisterVerifyCode(mobile).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult<LoginResponse>> thirdPartyLogin(ThirdPartyLoginRequest thirdPartyLoginRequest) {
+        return Api.getInstance().apiService.thirdPartyLogin(thirdPartyLoginRequest).compose(RxSchedulers.io_main());
+    }
 }

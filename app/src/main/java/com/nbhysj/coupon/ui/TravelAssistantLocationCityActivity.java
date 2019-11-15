@@ -126,7 +126,7 @@ public class TravelAssistantLocationCityActivity extends BaseActivity<TravelAssi
 
         getCountyList();
 
-        //定位城市&历史选择城市
+    /*    //定位城市&历史选择城市
         GridLayoutManager gridLayoutManager1 = new GridLayoutManager(TravelAssistantLocationCityActivity.this,3);
         gridLayoutManager1.setOrientation(gridLayoutManager1.VERTICAL);
         mRvLocationCityAndHistoryDistrict.setLayoutManager(gridLayoutManager1);
@@ -138,7 +138,7 @@ public class TravelAssistantLocationCityActivity extends BaseActivity<TravelAssi
             }
         });
         travelAssistantLocationCityAdapter.setTravelAssistantLocationCityList(countryAllList);
-        mRvLocationCityAndHistoryDistrict.setAdapter(travelAssistantLocationCityAdapter);
+        mRvLocationCityAndHistoryDistrict.setAdapter(travelAssistantLocationCityAdapter);*/
 
 
         //城市选择
@@ -151,8 +151,9 @@ public class TravelAssistantLocationCityActivity extends BaseActivity<TravelAssi
 
                // DaoSession daoSession = ((BasicApplication) getApplication()).getDaoSession();
                // daoSession.insert(countryBean);
-                insertCountryData(countryBean);
+              //  insertCountryData(countryBean);
 
+                TravelAssistantLocationCityActivity.this.finish();
             }
         });
         trafficCitySelectAdapter.setTravelAssistantLocationCityList(countrySelectList);
@@ -247,6 +248,16 @@ public class TravelAssistantLocationCityActivity extends BaseActivity<TravelAssi
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -283,7 +294,7 @@ public class TravelAssistantLocationCityActivity extends BaseActivity<TravelAssi
                     longitude = amapLocation.getLongitude();
                     String city = amapLocation.getCity();
                     String adCode = amapLocation.getAdCode();
-                    getTravelAssistantLocationCity(adCode,city);
+                   // getTravelAssistantLocationCity(adCode,city);
 
                     Log.v("pcw", "lat : " + latitude + " lon : " + longitude);
                     Log.v("pcw", "Country : " + amapLocation.getCountry() + " province : " + amapLocation.getProvince() + " City : " + amapLocation.getCity() + " District : " + amapLocation.getDistrict());

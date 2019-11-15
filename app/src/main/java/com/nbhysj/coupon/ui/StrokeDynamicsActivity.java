@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.StrokeDynamicsItemAdapter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import butterknife.BindView;
@@ -21,6 +22,7 @@ public class StrokeDynamicsActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_stroke_dynamics;
     }
 
@@ -33,8 +35,8 @@ public class StrokeDynamicsActivity extends BaseActivity {
         // 设置布局管理器
         mRvStrokeDynamicsList.setLayoutManager(layoutManager);
 
-        StrokeDynamicsItemAdapter broadcastItemAdapter = new StrokeDynamicsItemAdapter(StrokeDynamicsActivity.this);
-        mRvStrokeDynamicsList.setAdapter(broadcastItemAdapter);
+       // StrokeDynamicsItemAdapter broadcastItemAdapter = new StrokeDynamicsItemAdapter(StrokeDynamicsActivity.this);
+        //mRvStrokeDynamicsList.setAdapter(broadcastItemAdapter);
     }
 
     @Override

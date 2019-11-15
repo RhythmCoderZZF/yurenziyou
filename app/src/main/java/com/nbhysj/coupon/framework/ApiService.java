@@ -20,6 +20,7 @@ import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
 import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.IntelligentTripRequest;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.request.MoveFavoritesContentRequest;
@@ -33,6 +34,7 @@ import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCollectionRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
 import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.QuestionAnsweringPublishRequest;
 import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
@@ -43,17 +45,23 @@ import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TopicRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
-import com.nbhysj.coupon.model.request.TripintelligentRequest;
 import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
 import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
+import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarH5UrlResponse;
+import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.ContactsInfoResponse;
 import com.nbhysj.coupon.model.response.CountryBean;
+import com.nbhysj.coupon.model.response.CouponListBean;
+import com.nbhysj.coupon.model.response.CouponsBean;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.CreateFavoritesResponse;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
+import com.nbhysj.coupon.model.response.DestinationCityResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
@@ -75,15 +83,15 @@ import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
-import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
+import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
 import com.nbhysj.coupon.model.response.MyCardResponse;
-import com.nbhysj.coupon.model.response.MyPostShareResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderDetailResponse;
@@ -94,10 +102,10 @@ import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
-import com.nbhysj.coupon.model.response.PostCommentBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PostsCommentResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
 import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -106,7 +114,6 @@ import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
 import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
-import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
 import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
@@ -114,12 +121,17 @@ import com.nbhysj.coupon.model.response.TripDetailsResponse;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
 import com.nbhysj.coupon.model.response.TripRouteMapResponse;
 import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
+import com.nbhysj.coupon.model.response.UserFollowResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
+import com.nbhysj.coupon.model.response.VersionUpdateResponse;
 import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
 import com.nbhysj.coupon.model.response.WeatherResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionBean;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -209,7 +221,7 @@ public interface ApiService {
     @POST("api/thirdPartyLogin/createUser")
     Observable<BackResult<LoginResponse>> thirdPartyLoginCreateUser(@Body ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind);
 
-     //名片
+    //名片
     @GET("api/index/myNameCard")
     Observable<BackResult<MyCardResponse>> getMyCard(@Query("userId") int userId);
 
@@ -285,6 +297,10 @@ public interface ApiService {
     @GET("api/topic/list")
     Observable<BackResult<List<HotTagsTopicBean>>> getHotTagsTopicList(@Query("type") String type);
 
+    //主题搜索(热门标签)
+    @GET("api/topic/list")
+    Observable<BackResult<List<DestinationCityResponse>>> getDestinationCityTagsList(@Query("type") String type);
+
     //主题搜索（标签查询）
     @GET("api/topic/search")
     Observable<BackResult<TagTopicSearchResponse>> topicSearch(@Query("type") String type, @Query("param") String param);
@@ -333,6 +349,27 @@ public interface ApiService {
     //他人主页
     @GET("api/index/homePageInfo")
     Observable<BackResult<UserPersonalHomePageResponse>> getOthershomePageInfo(@Query("userId") int userId);
+
+    //用户关注页面
+    @GET("api/userFollow/attention")
+    Observable<BackResult<AttentionResponse>> getAttentionInit();
+
+    //用户关注列表
+    @GET("api/userFollow")
+    Observable<BackResult<UserFollowResponse>> getUserFollow(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //赞与收藏
+    @GET("api/user/zanAndCollectionMsg")
+    Observable<BackResult<ZanAndCollectionResponse>> getZanAndCollectionMsg(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //收到的评论和收藏
+    @GET("api/postsComment")
+    Observable<BackResult<CommentAndAnswerResponse>> getPostsCommentAndAnswer(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //帖子删除
+    @GET("api/posts/deletePost")
+    Observable<BackResult<CommentAndAnswerResponse>> deletePost(@Query("page") int page, @Query("pageSize") int pageSize);
+
 
     /***********************************   商城   ****************************************/
 
@@ -468,7 +505,7 @@ public interface ApiService {
 
     //首页搜索
     @GET("api/search")
-    Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(@Query("queryType") String queryType, @Query("keyword") String keyword,@Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<BackResult<HomePageTypeSearchResponse>> getHomePageSearchByType(@Query("queryType") String queryType, @Query("keyword") String keyword, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //首页搜索全部
     @GET("api/search")
@@ -552,8 +589,8 @@ public interface ApiService {
     Observable<BackResult<TripRouteMapResponse>> getTripMap(@Query("tripId") int tripId);
 
     //智能规划接口
-    @GET("api/trip/intelligentProject")
-    Observable<BackResult<TripDetailsResponse>> intelligentProject(@Body TripintelligentRequest tripintelligentRequest);
+    @POST("api/trip/intelligentProject")
+    Observable<BackResult<CreateTripResponse>> intelligentProject(@Body IntelligentTripRequest intelligentTripRequest);
 
     //获取天气接口
     @GET("api/weather")
@@ -632,7 +669,8 @@ public interface ApiService {
     Observable<BackResult> deleteContactsInfo(@Body DeleteFavoritesRequest deleteFavoritesRequest);
 
     //查询专辑内容
-    @GET("api/userFavorites/query") //（这个接口暂无用到）
+    @GET("api/userFavorites/query")
+    //（这个接口暂无用到）
     Observable<BackResult<FavoritesResponse>> queryUserFavorites(@Query("id") int id, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //查询专辑详情
@@ -661,11 +699,11 @@ public interface ApiService {
 
     //我的收藏全部列表
     @GET("api/userCollectionShow")
-    Observable<BackResult<List<MineCollectionAllResponse>>> getMineCollectionAllList();
+    Observable<ResponseBody> getMineCollectionAllList();
 
     //我的收藏全部列表
     @GET("api/userCollectionShow")
-    Observable<BackResult<MineCollectionDetailResponse>> getMineCollectionDetail(@Query("type") String type,@Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<BackResult<MineCollectionDetailResponse>> getMineCollectionDetail(@Query("type") String type, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //批量移动专辑内容到另一个专辑
     @POST("api/userFavorites/batchMoveContent")
@@ -762,7 +800,7 @@ public interface ApiService {
 
     //商户界面商户问答列表
     @GET("api/mchQuestionAndAnswer")
-    Observable<BackResult<WaitMyAnswerResponse>> getMchQuestionAndAnswerList(@Query("mchId") int mchId,@Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<BackResult<WaitMyAnswerResponse>> getMchQuestionAndAnswerList(@Query("mchId") int mchId, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //待我来答列表
     @GET("api/questionAnswering/waitMyAnswer")
@@ -779,6 +817,45 @@ public interface ApiService {
     //我的提问列表
     @GET("api/questionAnswering/userQuestion")
     Observable<BackResult<WaitMyAnswerResponse>> getUserQuestionList(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //同问接口
+    @POST("api/questionAnswering/askTogether")
+    //questionId
+    Observable<BackResult<WaitMyAnswerResponse>> askTogether(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    /********************   优惠券    **********************/
+
+    //查询日历价格下可选的所有优惠券
+    @POST("api/coupon/queryByTicket")
+    Observable<BackResult<QueryByTicketResponse>> getTicketQueryByDate(@Body QueryByTicketRequest queryByTicketRequest);
+
+    //类型 优惠卷列表	ALREADYRECEIVED=已领取,USED=已使用,EXPIRED=已过期(不写默认已领取)
+    @GET("api/coupon/couponList")
+    Observable<BackResult<CouponListBean>> getCouponList(@Query("type") String type, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //获取优惠券
+    @GET("api/coupon/getCoupon")
+    Observable<BackResult<CouponsGetBean>> getCoupon(@Query("couponId") int couponId);
+
+    //票券中心
+    @GET("api/coupon/vouCenter")
+    Observable<BackResult<List<CouponsBean>>> getCouponCenter();
+
+    //商戶優惠卷 查询该商户可领取可使用的列表
+    @GET("api/coupon/queryMchCoupon")
+    Observable<BackResult<List<MchCouponResponse>>> queryMchCouponList(@Query("mchId") int mchId);
+
+    //选择使用优惠券
+    @POST("api/coupon/getAndUseCoupon")
+    Observable<BackResult<UseCouponTicketResponse>> useCouponTicketRequest(@Body UseCouponTicketRequest useCouponTicketRequest);
+
+    //版本更新接口
+    @POST("api/postsVersion/find")
+    Observable<BackResult<VersionUpdateResponse>> getVersion();
+
+    //获取消息列表
+    @GET("api/user/messageList")
+    Observable<BackResult<MessageResponse>> getMessageList();
 
 }
 

@@ -14,6 +14,8 @@ public class TravelAssistantDetailCountryBean {
 
     private String countyName;
 
+    private String banner;
+
     private int countyId;
 
     private boolean isSelect;
@@ -64,5 +66,13 @@ public class TravelAssistantDetailCountryBean {
 
     public void setSelect(boolean select) {
         isSelect = select;
+    }
+
+    public String getBanner() {
+        return banner;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 }

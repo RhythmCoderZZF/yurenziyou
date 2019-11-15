@@ -1,5 +1,7 @@
 package com.nbhysj.coupon.model.request;
 
+import java.util.List;
+
 /**
  * @auther：hysj created on 2019/9/19
  * description：酒店民宿下单
@@ -20,6 +22,9 @@ public class HotelHomestayOrderSubmitRequest {
 
     //房间数量
     private int num;
+
+    //优惠券
+    private List<Integer> couponIds;
 
     public int getGoodsId() {
         return goodsId;
@@ -59,5 +64,13 @@ public class HotelHomestayOrderSubmitRequest {
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    public List<Integer> getCouponIds() {
+        return couponIds;
+    }
+
+    public void setCouponIds(List<Integer> couponIds) {
+        this.couponIds = couponIds;
     }
 }

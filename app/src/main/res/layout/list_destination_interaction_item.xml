@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ratingbar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llyt_destination_interaction_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/dp_15"
+    android:layout_marginBottom="@dimen/dp_8"
+    android:layout_marginTop="@dimen/dp_7"
+   >
+
+        <RelativeLayout
+            android:layout_width="@dimen/dp_250"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_150"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/img_strategys"
+                android:layout_marginRight="@dimen/dp_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_strategys_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/color_text_black4"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_strategys_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text=""
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:textSize="@dimen/text_size_small" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_strategys"
+                android:layout_width="@dimen/dp_59"
+                android:layout_height="@dimen/dp_59"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_light_gray_radius_two_shape" />
+
+        </RelativeLayout>
+
+</LinearLayout>

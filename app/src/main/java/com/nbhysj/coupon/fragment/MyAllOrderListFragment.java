@@ -175,9 +175,10 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
 
             @Override
             public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+                mOrderTypeEntity = orderTypeEntity;
                 if(orderCancelOprateDialog == null)
                 {
-                    orderCancelOprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
+                    orderCancelOprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_cancel_the_order));
                     orderCancelOprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -396,7 +397,7 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
             case Constants.SUCCESS_CODE:
                 try {
 
-                    orderAllList.remove(mOrderTypeEntity);
+                        orderAllList.remove(mOrderTypeEntity);
                     if (orderAllList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
 

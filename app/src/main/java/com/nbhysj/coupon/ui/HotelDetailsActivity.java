@@ -25,26 +25,33 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HotelDetailRoomAdapter;
 import com.nbhysj.coupon.adapter.HotelNearbyAdapter;
+import com.nbhysj.coupon.adapter.MchDetailCouponListAdapter;
 import com.nbhysj.coupon.adapter.NearbyHotSellHotelsAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.dialog.HotelDetailsSupplementDialog;
+import com.nbhysj.coupon.dialog.MchCouponReceiveDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsBean;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyTypeResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.HotelPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
@@ -54,6 +61,7 @@ import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.StarBarView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -164,7 +172,12 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     //附近热销酒店
     @BindView(R.id.tv_nearby_sell_well_hotel_num)
     TextView mNearbySellWellHotelNum;
+    //优惠券领取
+    @BindView(R.id.rv_coupon_receive_tag)
+    RecyclerView mRvCouponReceiveTag;
 
+    @BindView(R.id.rlyt_coupon)
+    RelativeLayout mRlytCoupon;
     private List<ImageView> viewList;
     private List<String> bannerList;
 
@@ -223,6 +236,24 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     private int collectionStatus;
 
     private PopupWindow mPopupWindow;
+
+    private MchDetailCouponListAdapter mchDetailCouponListAdapter;
+
+    private List<CouponsBean> couponsList;
+
+    private MchCouponReceiveDialog mchCouponReceiveDialog;
+
+    List<MchCouponResponse> mchCouponResponseList;
+
+    //优惠券位置
+    private int mGroupPosition;
+
+    //优惠券位置
+    private int mChildPosition;
+
+    //优惠券id
+    private int couponId;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -289,6 +320,19 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
             hotSellingHotelsNearbyList.clear();
         }
 
+        if (couponsList == null) {
+
+            couponsList = new ArrayList<>();
+        } else {
+
+            couponsList.clear();
+        }
+
+        if (mchCouponResponseList == null) {
+            mchCouponResponseList = new ArrayList<>();
+        } else {
+            mchCouponResponseList.clear();
+        }
         LinearLayoutManager linearLayout = new LinearLayoutManager(HotelDetailsActivity.this);
         linearLayout.setOrientation(linearLayout.VERTICAL);
         mRvHotelRoom.setLayoutManager(linearLayout);
@@ -308,6 +352,19 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
         hotelMealDetailAdapter.setMchHotelGoodsList(mchHotelGoodsList);
         mRvHotelRoom.setAdapter(hotelMealDetailAdapter);
 
+
+        LinearLayoutManager couponReceiveLinearLayoutManager = new LinearLayoutManager(HotelDetailsActivity.this);
+        couponReceiveLinearLayoutManager.setOrientation(couponReceiveLinearLayoutManager.HORIZONTAL);
+        mRvCouponReceiveTag.setLayoutManager(couponReceiveLinearLayoutManager);
+        mchDetailCouponListAdapter = new MchDetailCouponListAdapter(HotelDetailsActivity.this, new MchDetailCouponListAdapter.CouponReceiveListener() {
+            @Override
+            public void setCouponReceiveCallback(int position) {
+
+                //  showToast(ScenicSpotDetailActivity.this," " + position);
+            }
+        });
+        mchDetailCouponListAdapter.setCouponList(couponsList);
+        mRvCouponReceiveTag.setAdapter(mchDetailCouponListAdapter);
     }
 
     @Override
@@ -346,8 +403,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
         mPresenter.setVM(this, mModel);
     }
 
-    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.rlyt_hotel_location,R.id.rlyt_all_facility_details,R.id.rlyt_booking_information
-            ,R.id.rlyt_nearby_hotel,R.id.img_collection,R.id.rlyt_look_user_all_comment,R.id.img_menu,R.id.img_scenic_spot_forward})
+    @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.rlyt_hotel_location, R.id.rlyt_all_facility_details, R.id.rlyt_booking_information
+            , R.id.rlyt_nearby_hotel, R.id.img_collection, R.id.rlyt_look_user_all_comment, R.id.img_menu, R.id.img_scenic_spot_forward,R.id.tv_coupon_receive})
     public void onClick(View v) {
         Typeface normalFont = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
         mTvEntertainment.setTypeface(normalFont);
@@ -417,7 +474,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 startActivity(intent);
                 break;
             case R.id.rlyt_all_facility_details:
-                if(!TextUtils.isEmpty(allFacilityDetailsH5Url)) {
+                if (!TextUtils.isEmpty(allFacilityDetailsH5Url)) {
 
                     intent.putExtra("url", allFacilityDetailsH5Url);
                     intent.putExtra("title", Constants.All_FACILITY_DETAIL_H5_TITEL);
@@ -427,7 +484,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 }
                 break;
             case R.id.rlyt_booking_information:
-                if(!TextUtils.isEmpty(bookingInformationDetailsH5Url)) {
+                if (!TextUtils.isEmpty(bookingInformationDetailsH5Url)) {
 
                     intent.putExtra("url", bookingInformationDetailsH5Url);
                     intent.putExtra("title", Constants.RESERVATION_MUST_BE_READ_H5_TITEL);
@@ -437,9 +494,9 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 }
                 break;
             case R.id.rlyt_nearby_hotel:
-                intent.setClass(HotelDetailsActivity.this,NearbyHotelListActivity.class);
-                intent.putExtra("longitude",longitude);
-                intent.putExtra("latitude",latitude);
+                intent.setClass(HotelDetailsActivity.this, NearbyHotelListActivity.class);
+                intent.putExtra("longitude", longitude);
+                intent.putExtra("latitude", latitude);
                 startActivity(intent);
                 break;
             case R.id.img_collection:
@@ -449,8 +506,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 break;
             case R.id.rlyt_look_user_all_comment:
 
-                intent.setClass(HotelDetailsActivity.this,MchCommentActivity.class);
-                intent.putExtra("mchId",mchId);
+                intent.setClass(HotelDetailsActivity.this, MchCommentActivity.class);
+                intent.putExtra("mchId", mchId);
                 startActivity(intent);
 
                 break;
@@ -474,6 +531,11 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     }
                 }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
                 shareOprateDialog.show();
+
+                break;
+            case R.id.tv_coupon_receive:
+
+                queryMchCouponList();
 
                 break;
             default:
@@ -510,14 +572,13 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 try {
 
                     MchCollectionResponse mchCollectionResponse = res.getData();
-                     collectionStatus = mchCollectionResponse.getCollectionStatus();
+                    collectionStatus = mchCollectionResponse.getCollectionStatus();
 
-                    if(collectionStatus == 0)
-                    {
+                    if (collectionStatus == 0) {
                         mImgCollection.setImageResource(R.mipmap.icon_white_collection);
 
 
-                    } else if(collectionStatus == 1){
+                    } else if (collectionStatus == 1) {
 
                         mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
 
@@ -534,6 +595,16 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     }
 
     @Override
+    public void queryByTicketResult(BackResult<QueryByTicketResponse> res) {
+
+    }
+
+    @Override
+    public void useCouponTicketResult(BackResult<UseCouponTicketResponse> res) {
+
+    }
+
+    @Override
     public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -544,7 +615,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     mchDetailsEntity = mchDetailsResponse.getMchDetails();
                     MchDetailsResponse.MchQuestionEntity mchQuestionEntity = mchDetailsResponse.getMchQuestion(); //问题
-
+                    couponsList = mchDetailsResponse.getCoupons();    //优惠券
                     mchHotelGoodsList = mchDetailsResponse.getMchGoods();     //酒店商品展示列表
                     latitude = mchDetailsEntity.getLatitude();
                     longitude = mchDetailsEntity.getLongitude();
@@ -559,12 +630,11 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     collectionStatus = mchDetailsEntity.getUserCollectState();
 
-                    if(collectionStatus == 0)
-                    {
+                    if (collectionStatus == 0) {
                         mImgCollection.setImageResource(R.mipmap.icon_white_collection);
 
 
-                    } else if(collectionStatus == 1){
+                    } else if (collectionStatus == 1) {
 
                         mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
 
@@ -577,11 +647,11 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     mStarBarView.setStarMark(mCommentScore);
                     mTvCommentNum.setText(commentNum + "评论");
-                    mTvUserCommentNum.setText( commentNum + "评论");
+                    mTvUserCommentNum.setText(commentNum + "评论");
                     //banner
                     bannerList = mchDetailsEntity.getRecommendPhoto();
 
-                    if (bannerList != null &&bannerList.size() > 0) {
+                    if (bannerList != null && bannerList.size() > 0) {
 
                         for (int i = 0; i < bannerList.size(); i++) {
                             ImageView image = new ImageView(HotelDetailsActivity.this);
@@ -598,12 +668,11 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     mHotelName.setText(mchName);
                     //酒店地址
                     String address = mchDetailsEntity.getAddress();
-                    if(!TextUtils.isEmpty(address))
-                    {
+                    if (!TextUtils.isEmpty(address)) {
                         mTvMchAddress.setText(address);
                     }
 
-                    if(mchHotelGoodsList != null) {
+                    if (mchHotelGoodsList != null) {
 
                         hotelMealDetailAdapter.setMchHotelGoodsList(mchHotelGoodsList);
                         hotelMealDetailAdapter.notifyDataSetChanged();
@@ -733,6 +802,13 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     nearbyHotSellHotelsAdapter.setHotSellHotelList(hotSellingHotelsNearbyList);
                     nearbyHotSellHotelsAdapter.notifyDataSetChanged();
 
+                    if (couponsList.size() > 0) {
+                        mRlytCoupon.setVisibility(View.VISIBLE);
+                        mchDetailCouponListAdapter.setCouponList(couponsList);
+                        mchDetailCouponListAdapter.notifyDataSetChanged();
+                    } else {
+                        mRlytCoupon.setVisibility(View.GONE);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -749,6 +825,75 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     }
 
     @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    mchCouponResponseList = res.getData();
+                    if (mchCouponResponseList != null) {
+                        if (mchCouponReceiveDialog == null) {
+                            mchCouponReceiveDialog = new MchCouponReceiveDialog(mchCouponResponseList, new MchCouponReceiveDialog.MchCouponReceiveListener() {
+
+                                @Override
+                                public void setMchCouponReceiveCallback(int groupPosition, int childPosition, CouponsBean couponsBean) {
+                                    mGroupPosition = groupPosition;
+                                    mChildPosition = childPosition;
+                                    couponId = couponsBean.getId();
+                                    getCoupon();
+                                }
+
+                                @Override
+                                public void setCouponListRefreshListener(RefreshLayout refreshLayout) {
+
+                                    //   queryMchCouponList();
+                                    // mchCouponReceiveDialog.setSmartRefreshLayoutLoadMoreFinish();
+                                }
+                            });
+
+                            mchCouponReceiveDialog.show(getFragmentManager(), "优惠券领取");
+
+                        } else {
+                            mchCouponReceiveDialog.setAlbumCollectList(mchCouponResponseList);
+                            mchCouponReceiveDialog.show();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HotelDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    CouponsGetBean couponsGetBean = res.getData();
+                    int canGetAgainStatus = couponsGetBean.getCanGetAgainStatus();
+                    MchCouponResponse mchCouponResponse = mchCouponResponseList.get(mGroupPosition);
+                    CouponsBean couponsBean = mchCouponResponse.getCoupons().get(mChildPosition);
+                    couponsBean.setCanGetAgainStatus(canGetAgainStatus);
+
+                    mchCouponReceiveDialog.setAlbumCollectList(mchCouponResponseList);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HotelDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -758,28 +903,29 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     @Override
     public void onScroll(int y) {
 
-            if (y <= height && y >= 0) {
-                float scale = (float) y / height;
-                float alpha = (255 * scale);
+        if (y <= height && y >= 0) {
+            float scale = (float) y / height;
+            float alpha = (255 * scale);
 
-                mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-                mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-                mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-                if(collectionStatus == 0) {
-                    mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            mRlytScenicSpostsDetail.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+            mToolbarSpace.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+            mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
+            if (collectionStatus == 0) {
+                mImgCollection.setImageResource(R.mipmap.icon_black_collection);
+            }
+            mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
+            if (y <= 300) {
+                mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
+                if (collectionStatus == 0) {
+                    mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
                 }
-                mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
-                if (y <= 300) {
-                    mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-                    if(collectionStatus == 0) {
-                        mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
-                    }
-                    mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
-                    mRlytScenicSpostsDetail.setBackgroundColor(Color.argb(0, 0, 0, 0));
-                    mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
-                }
+                mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
+                mRlytScenicSpostsDetail.setBackgroundColor(Color.argb(0, 0, 0, 0));
+                mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
             }
         }
+    }
+
     private void showPopupWindow(View anchorView) {
         View contentView = getPopupWindowContentView();
         mPopupWindow = new PopupWindow(contentView,
@@ -812,34 +958,28 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 String backMyMessage = getResources().getString(R.string.str_back_my_message);
 
                 Intent intent = new Intent();
-                if(itemStr.equals(backHomePage))
-                {
-                    if(appManager != null)
-                    {
+                if (itemStr.equals(backHomePage)) {
+                    if (appManager != null) {
                         appManager.finishActivity(MainActivity.class);
                     }
                     //  EventBus.getDefault().post("backHomePage");
 
-                } else if(itemStr.equals(backMyCollection))
-                {
+                } else if (itemStr.equals(backMyCollection)) {
                     //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
                     //intent.putExtra("currentItem",3);
 
-                    if(appManager != null)
-                    {
+                    if (appManager != null) {
                         appManager.finishActivity(MainActivity.class);
                     }
 
                     //  EventBus.getDefault().post("backMyCollection");
 
-                } else if(itemStr.equals(backMyOrder))
-                {
+                } else if (itemStr.equals(backMyOrder)) {
                     intent.setClass(HotelDetailsActivity.this, MyOrderActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
 
-                } else if(itemStr.equals(backMyMessage))
-                {
+                } else if (itemStr.equals(backMyMessage)) {
                     intent.setClass(HotelDetailsActivity.this, MessageActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -856,19 +996,38 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
         contentView.findViewById(R.id.menu_item4).setOnClickListener(menuItemOnClickListener);
         return contentView;
     }
+
     //获取酒店详情
     public void getMchDetails() {
 
-        if(validateInternet()) {
+        if (validateInternet()) {
             showProgressDialog(HotelDetailsActivity.this);
             mPresenter.getMchDetails(mchId);
         }
     }
 
-    //商户收藏
-    public void mchCollection(){
+    //查询商户券列表
+    public void queryMchCouponList() {
 
-        if(validateInternet()) {
+        if (validateInternet()) {
+            showProgressDialog(HotelDetailsActivity.this);
+            mPresenter.queryMchCouponList(mchId);
+        }
+    }
+
+    //获取优惠券
+    public void getCoupon() {
+
+        if (validateInternet()) {
+            showProgressDialog(HotelDetailsActivity.this);
+            mPresenter.getCoupon(couponId);
+        }
+    }
+
+    //商户收藏
+    public void mchCollection() {
+
+        if (validateInternet()) {
             showProgressDialog(HotelDetailsActivity.this);
             MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
             mchCollectionRequest.setDataId(mchId);

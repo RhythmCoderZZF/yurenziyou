@@ -289,6 +289,16 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void delTripPlaceResult(BackResult res) {
 
         dismissProgressDialog();

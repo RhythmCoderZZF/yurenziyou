@@ -1,7 +1,7 @@
 package com.nbhysj.coupon.oss;
 
 /**
- * Created by wangzheng on 2017/11/22.
+ * created by hysj on 2019/11/09.
  */
 
 public class Config {
@@ -11,14 +11,31 @@ public class Config {
 
     // 访问的endpoint地址
     public static final String OSS_ENDPOINT = "oss-cn-hangzhou.aliyuncs.com";
-    //callback 测试地址
-    public static final String OSS_CALLBACK_URL = "http://fx.nbhysj.com/oss/uploadInfo/callBack";
+
     // STS 鉴权服务器地址，使用前请参照文档 https://help.aliyun.com/document_detail/31920.html 介绍配置STS 鉴权服务器地址。
     // 或者根据工程sts_local_server目录中本地鉴权服务脚本代码启动本地STS 鉴权服务器。详情参见sts_local_server 中的脚本内容。
-    public static final String STS_SERVER_URL = "http://192.168.1.189:8085/api/sts";//STS 地址
 
-    public static final String BUCKET_NAME = "nurloc";
+    /**********************     测试环境oss    **************************/
+    // BUCKET_NAME
+    //public static final String BUCKET_NAME = "nurloc";
+    //callback 测试地址
+    // public static final String OSS_CALLBACK_URL = "http://fx.nbhysj.com/oss/uploadInfo/callBack";
+    //STS 地址
+   // public static final String STS_SERVER_URL = "http://fx.nbhysj.com/api/sts";
+
+
+    /**********************     正式环境oss    **************************/
+    // BUCKET_NAME
+    public static final String BUCKET_NAME = "murloc-release";
+    //callback 测试地址
+    public static final String OSS_CALLBACK_URL = " http://api.nbhysj.com/oss/uploadInfo/callBack";
+    //STS 地址
+    public static final String STS_SERVER_URL = "http://api.nbhysj.com/api/sts";
+
+
+    //OSS_ACCESS_KEY_ID
     public static final String OSS_ACCESS_KEY_ID = "STS.NHqDK5LwaLSWpipYjB9A8nv8E";
+    //OSS_ACCESS_KEY_SECRET
     public static final String OSS_ACCESS_KEY_SECRET = "71r6xwVGfmrhdwwU6bAuBiT3AbrVrwPKeRHFP8szkFyv";
 
     public static final int DOWNLOAD_SUC = 1;

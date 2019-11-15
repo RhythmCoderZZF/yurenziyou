@@ -192,6 +192,11 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
     }
 
     @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -217,6 +222,11 @@ public class TravelAssisantFineFoodAddActivity extends BaseActivity<TravelAssist
             default:
                 break;
         }
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
     }
 
     @Override

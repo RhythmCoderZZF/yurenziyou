@@ -189,7 +189,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_25"
-        android:text=""
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_marginRight="@dimen/dp_25"
+        android:text="点击注册即表示接受鱼人自游的《用户协议》和 《隐私政策》"
         android:textSize="@dimen/text_size_small" />
 
 </LinearLayout>

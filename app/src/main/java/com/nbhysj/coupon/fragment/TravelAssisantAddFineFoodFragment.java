@@ -145,6 +145,11 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void getTravelAssistantMchListResult(BackResult<TripScenicSpotAddCountryBean> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -300,7 +305,10 @@ public class TravelAssisantAddFineFoodFragment extends BaseFragment<TravelAssist
 
     }
 
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
 
+    }
 
     //根据城市获取美食
     public void getTravelAssisantAddFineFood() {

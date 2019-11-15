@@ -16,7 +16,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
                 // 设置manifest.xml中的变量
@@ -151,7 +151,7 @@ dependencies {
     implementation files('libs/umeng-share-wechat-full-6.9.4.jar')
     implementation files('libs/umeng-shareboard-widget-6.9.4.jar')
     implementation files('libs/umeng-sharetool-6.9.4.jar')
-   // implementation files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
+    // implementation files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
     implementation files('libs/weiboSDKCore.jar')
     implementation 'me.yokeyword:indexablerecyclerview:1.3.0'
     implementation files('libs/jcore-android-1.2.7.jar')
@@ -191,12 +191,11 @@ dependencies {
     //implementation 'com.amap.api:3dmap:latest.integration'
     //implementation 'com.amap.api:search:latest.integration'
     // 支付宝 SDK AAR 包所需的配置
-  //  api files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
-    api (name: 'alipaySdk-15.6.5-20190718211148', ext: 'aar')
+    //  api files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
+    api(name: 'alipaySdk-15.6.5-20190718211148', ext: 'aar')
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 
     api 'org.greenrobot:eventbus:3.0.0'
-
 
 
 }

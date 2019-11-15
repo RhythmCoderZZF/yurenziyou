@@ -39,6 +39,9 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +75,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     private int hasNext;
     public int mCollectPostPosition;
 
-
+    private boolean visibleToUser;
     public void newInstance(int position, int tagId) {
         mTagId = tagId;
         mPosition = position;
@@ -170,6 +173,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
     @Override
     public void initView(View v) {
+        EventBus.getDefault().register(this);
         if (recommendFriendsList == null) {
 
             recommendFriendsList = new ArrayList<>();
@@ -188,7 +192,8 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         mRvRecommendFriends.setLayoutManager(staggeredGridLayoutManager);
         mRvRecommendFriends.setHasFixedSize(true);
         mRvRecommendFriends.setItemViewCacheSize(10);
-        mRvRecommendFriends.addItemDecoration(new RecyclerViewItemDecoration(Tools.dip2px(getActivity(), 10)));
+        mRvRecommendFriends.addItemDecoration(new RecyclerItemDecoration(6, 2));
+   //     mRvRecommendFriends.addItemDecoration(new RecyclerViewItemDecoration(Tools.dip2px(getActivity(), 10)));
         //  mRvRecommendFriends.setDrawingCacheEnabled(true);
 
         mRvRecommendFriends.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -333,7 +338,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
                 //showToast(getActivity(),scrollY+""+setNeedScroll.getHeight());
             }
         });*/
-        mRvRecommendFriends.addItemDecoration(new RecyclerItemDecoration(6, 2));
+
 
        /* mSmartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -419,11 +424,9 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
+        visibleToUser = isVisibleToUser;
         //isVisibleToUser这个boolean值表示:该Fragment的UI 用户是否可见，获取该标志记录下来
-       /* if(isRefrsh){
-            queryByTopic();
-        }*/
+
         if (isVisibleToUser) {
             isVisible = true;
             isCanLoadData();
@@ -496,40 +499,38 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
             mPresenter.postOprate(postOprateRequest);
         }
     }
-    /**
-     * 为RecyclerView增加间距
-     * 预设2列，如果是3列，则左右值不同
-     */
-    public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
-        private int space = 0;
-        private int pos;
 
-        public RecyclerViewItemDecoration(int space) {
-            this.space = space;
-        }
 
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    @Subscribe
+    public void onEvent(String mineFragmentRefresh) {
 
-            outRect.top = space;
+        if(visibleToUser)
+        {
+            if(mineFragmentRefresh.equals("homeFragmentRefresh"))
+            {
+                if (recommendFriendsList != null) {
+                    recommendFriendsList.clear();
+                }
 
-            //该View在整个RecyclerView中位置。
-            pos = parent.getChildAdapterPosition(view);
-
-            //取模
-
-            //两列的左边一列
-            if (pos % 2 == 0) {
-                outRect.left = space;
-                outRect.right = space / 2;
-            }
-
-            //两列的右边一列
-            if (pos % 2 == 1) {
-                outRect.left = space / 2;
-                outRect.right = space;
+                /*if(recommendFriendsAdapter != null)
+                {
+                    recommendFriendsAdapter.notifyDataSetChanged();
+                }*/
+                mPage = 1;
+                if(mRlytNoData != null)
+                {
+                    mRlytNoData.setVisibility(View.GONE);
+                }
+                showProgressDialog(getActivity());
+                queryByTopic();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 }

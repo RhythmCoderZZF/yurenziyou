@@ -1,24 +1,35 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.RegisterContract;
+import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.RegisterModel;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
@@ -127,10 +138,85 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
             }
         };
     }
+    private class PrivacyPolicyClick extends ClickableSpan{
+        @Override
+        public void onClick(View widget) {
+            //            跳转隐私政策网址
+            Intent intent = new Intent();
+            intent.putExtra("url", Net.PRAVACY_POLICY_URL);
+            intent.putExtra("title", Constants.PRAVACY_POLICY_H5_TITEL);
+            intent.setClass(UserRegistrationActivity.this, WebActivity.class);
+            startActivity(intent);
 
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+//            ds.setColor(ds.linkColor);
+//            ds.setUnderlineText(true);
+        }
+    }
+
+    private class userAgreementClick extends ClickableSpan{
+        @Override
+        public void onClick(View widget) {
+            // 跳转用户协议网址
+            Intent intent = new Intent();
+            intent.putExtra("url", Net.USER_AGREEMENT_URL);
+            intent.putExtra("title", Constants.USER_AGREEMENT_H5_TITEL);
+            intent.setClass(UserRegistrationActivity.this, WebActivity.class);
+            startActivity(intent);
+
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+//            ds.setColor(ds.linkColor);
+//            ds.setUnderlineText(true);
+        }
+    }
     @Override
     public void initData() {
-        mTvUserAgreement.setText(Html.fromHtml("点击注册即表示接受鱼人自游的" + "<font color='#00C7DA'>" + "《用户协议》" + "</font>"));
+       // mTvUserAgreement.setText(Html.fromHtml("点击注册即表示接受鱼人自游的" + "<font color='#00C7DA'>" + "《用户协议》" + "</font>"));
+
+        //        我同意本DEMO的隐私政策和服务协议
+      /*  SpannableStringBuilder builder=new SpannableStringBuilder(getString(R.string.string_privacy));
+        ClickableSpan clickSpanPrivacy=new ClickableSpan() {
+            @Override
+            public void onClick( View widget) {
+//                跳转隐私政策网址
+                Toast.makeText(UserRegistrationActivity.this, "隐私政策", Toast.LENGTH_SHORT).show();
+            }
+        };
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.parseColor("#0000FF"));
+        builder.setSpan(foregroundColorSpan,15,18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(clickSpanPrivacy,15,18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+       // builder.setSpan(new ForegroundColorSpan(Color.parseColor("#009ad6")),13,18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ClickableSpan clickableSpanProtocol=new ClickableSpan() {
+            @Override
+            public void onClick( View widget) {
+//                跳转服务协议
+                Toast.makeText(UserRegistrationActivity.this, "用户协议", Toast.LENGTH_SHORT).show();
+            }
+        };
+        builder.setSpan(clickableSpanProtocol,21,24,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTvUserAgreement.setText(builder);
+        mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());//调用此方法时文字点击事件才有效*/
+
+        SpannableStringBuilder spannable = new SpannableStringBuilder(getString(R.string.string_privacy));
+        //设置文字的前景色
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_blu4)),14,20,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //这个一定要记得设置，不然点击不生效
+        mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+        spannable.setSpan(new PrivacyPolicyClick(),14,20 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //设置文字的前景色
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_blu4)),21,27,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //这个一定要记得设置，不然点击不生效
+        mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+        spannable.setSpan(new userAgreementClick(),23,26 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTvUserAgreement.setText(spannable);
+
+
         mEdtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -149,7 +235,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                     mLinePhone.setBackgroundResource(R.color.line_grey);
                     mTvLogin.setEnabled(false);
                     mTvLogin.setClickable(false);
-                } else if(!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)){
+                } else if (!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)) {
 
                     mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
                     mLinePhone.setBackgroundResource(R.drawable.btn_oprate_bg);
@@ -181,7 +267,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                     mLinePhone.setBackgroundResource(R.color.line_grey);
                     mTvLogin.setEnabled(false);
                     mTvLogin.setClickable(false);
-                } else if(!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)){
+                } else if (!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)) {
 
                     mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
                     mLinePhone.setBackgroundResource(R.drawable.btn_oprate_bg);
@@ -213,7 +299,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                     mTvLogin.setBackgroundResource(R.drawable.bg_rect_gray_shape);
                     mLinePhone.setBackgroundResource(R.color.line_grey);
                     mTvLogin.setEnabled(false);
-                } else if(!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)){
+                } else if (!TextUtils.isEmpty(verifyCode) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)) {
 
                     mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
                     mLinePhone.setBackgroundResource(R.drawable.btn_oprate_bg);
@@ -234,8 +320,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
         mImgPwdIsInvisible.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isSeePasswordOprate)
-                {
+                if (isSeePasswordOprate) {
                     mImgPwdIsInvisible.setImageResource(R.mipmap.icon_see_password);
                     isSeePasswordOprate = false;
 
@@ -273,7 +358,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
     }
 
 
-    @OnClick({R.id.tv_get_verification_code, R.id.tv_login,R.id.iv_toolbar_right})
+    @OnClick({R.id.tv_get_verification_code, R.id.tv_login, R.id.iv_toolbar_right, R.id.tv_user_agreement})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.tv_get_verification_code:
@@ -296,6 +381,16 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
                 UserRegistrationActivity.this.finish();
                 break;
+          /*  case R.id.tv_user_agreement:
+
+                Intent intent = new Intent();
+                intent.putExtra("url", Net.USER_AGREEMENT_URL);
+                intent.putExtra("title", Constants.USER_AGREEMENT_H5_TITEL);
+                intent.setClass(UserRegistrationActivity.this, WebActivity.class);
+                startActivity(intent);
+
+
+                break;*/
             default:
                 break;
         }
@@ -304,8 +399,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mTimer != null)
-        {
+        if (mTimer != null) {
             mTimer.cancel();
         }
     }
@@ -362,7 +456,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                     SharedPreferencesUtils.saveUserInfoData(avatar, sex, birthday, profile, fansNum, followNum, collectionNum, zanNum);
 
                     String currentVersionName = getCurrentVersionName();
-                    SharedPreferencesUtils.putData("version",currentVersionName);
+                    SharedPreferencesUtils.putData("version", currentVersionName);
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -444,9 +538,9 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
         if (validateInternet()) {
             phoneNum = mEdtPhone.getText().toString().trim();
-            if(TextUtils.isEmpty(phoneNum)){
+            if (TextUtils.isEmpty(phoneNum)) {
 
-                showToast(UserRegistrationActivity.this,getResources().getString(R.string.str_input_phone_number));
+                showToast(UserRegistrationActivity.this, getResources().getString(R.string.str_input_phone_number));
                 return;
             }
             showProgressDialog(UserRegistrationActivity.this);

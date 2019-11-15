@@ -59,6 +59,7 @@ import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.DonwloadSaveImgUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
@@ -260,6 +261,10 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     //昵称
     private String nickname;
+
+    List<String> resourcesPictureList;
+
+    private boolean isPostReFresh = false;
     @Override
     public int getLayoutId() {
 
@@ -296,6 +301,13 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             favoritesAlbumList.clear();
         }
 
+        if(resourcesPictureList == null){
+
+            resourcesPictureList = new ArrayList<>();
+        } else {
+            resourcesPictureList.clear();
+        }
+
         //点赞用户列表
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         layoutManager.setOrientation(layoutManager.HORIZONTAL);
@@ -305,6 +317,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         mRvPraisePeopleNum.setAdapter(praisePeopleAdapter);
 
         mRlytPraisePeopleNum.getBackground().setAlpha(40);
+
+        mBannerViewFriendDetailPicture.initUI(resourcesPictureList);
     }
 
     @Override
@@ -318,6 +332,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                     @Override
                     public void run() {
                       //  showProgressDialog(PostRecommendDetailActivity.this);
+                        isPostReFresh = true;
                         getPostInfo();
 
                     }
@@ -449,7 +464,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         mPostId = postInfoEntity.getId();
                         String photoUrl = postInfoEntity.getPhoto();          //拍视频生成 gif
                         publisherAvatarUrl = postInfoEntity.getAvater();
-                        List<String> resources = postInfoEntity.getResources(); //图片
+                        resourcesPictureList = postInfoEntity.getResources(); //图片
                         String resourceUrl = postInfoEntity.getResourceUrl();  //mp4
                         String content = postInfoEntity.getContent();
                         String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
@@ -487,7 +502,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
                             mJzvdPostVideo.setVisibility(View.GONE);
                             mBtnLayoutExpandSound.setVisibility(View.INVISIBLE);
-                            mBannerViewFriendDetailPicture.initUI(resources);
+                                mBannerViewFriendDetailPicture.setBannerList(resourcesPictureList);
                         } else if (postsType == 2) {  //音频+图片
 
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
@@ -501,8 +516,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                                     mBtnLayoutExpandSound.setAudioFileUrl(resourceUrl);
                                 }
                             }
-                            mBannerViewFriendDetailPicture.initUI(resources);
-
+                                mBannerViewFriendDetailPicture.setBannerList(resourcesPictureList);
                         } else if (postsType == 3) {  //视频
 
                             mJzvdPostVideo.setVisibility(View.VISIBLE);
@@ -837,6 +851,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 ShareOprateDialog shareOprateDialog = new ShareOprateDialog(PostRecommendDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
                     @Override
                     public void onSharePlatformItemClick(String sharePlatform) {
+
+                           //`     DonwloadSaveImgUtil.donwloadImg(PostRecommendDetailActivity.this,Path);//iPath
 
                         //   showToast(getActivity(),sharePlatform);
 

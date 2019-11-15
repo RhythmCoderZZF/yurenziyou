@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
  */
 public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularScenicSpotsAdapter.ViewHolder> {
 
-
     List<MchTypeBean> popularScenicSpotsList;
     private Context mContext;
 
@@ -64,6 +63,7 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
             int scenicSpotSequence = itemPosition + 1;
             holder.mTvPopularScenicSpotSequence.setText("No." + scenicSpotSequence);
             int mchId = popularScenicSpots.getId();
+            String mchName = popularScenicSpots.getMchName();
             int consumePrice = popularScenicSpots.getConsumePrice();
             double commentScore = popularScenicSpots.getCommentScore();
             String address = popularScenicSpots.getAddress();
@@ -72,7 +72,7 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(consumePrice));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(commentScore) + "分");
             holder.mTvPopularScenicSpotLocation.setText(address);
-            holder.mTvPopularScenicSpotName.setText(popularScenicSpots.getCompany());
+            holder.mTvPopularScenicSpotName.setText(mchName);
 
             GlideUtil.loadImage(mContext, scenicSpotsPhoto,  holder.mImgScenicSpots);
 

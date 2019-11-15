@@ -101,6 +101,7 @@ public class HomeSearchScenicSpotsListAdapter extends RecyclerView.Adapter<HomeS
                     {
                         Intent intent = new Intent();
                         intent.putExtra("mchId", Integer.parseInt(mchId));
+                        intent.putExtra("mchType", mchType);
                         intent.setClass(mContext, ScenicSpotDetailActivity.class);
                         mContext.startActivity(intent);
                     }

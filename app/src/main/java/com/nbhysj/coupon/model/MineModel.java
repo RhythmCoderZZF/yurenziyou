@@ -33,7 +33,7 @@ public class MineModel implements MineContract.Model {
     }
 
     @Override
-    public Observable<BackResult<List<MineCollectionAllResponse>>> getMineCollectionAllList() {
+    public Observable<ResponseBody> getMineCollectionAllList() {
         return Api.getInstance().apiService.getMineCollectionAllList().compose(RxSchedulers.io_main());
     }
 

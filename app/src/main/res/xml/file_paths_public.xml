@@ -15,7 +15,10 @@
   limitations under the License.
   -->
 <paths>
-    <external-path
+ <external-path
         name="my_images"
         path="Pictures"/>
+
+
+
 </paths>

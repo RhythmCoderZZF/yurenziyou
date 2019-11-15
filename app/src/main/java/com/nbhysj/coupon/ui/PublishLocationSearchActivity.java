@@ -74,7 +74,7 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
     RelativeLayout mRlytNoData;
     private boolean isOnLoadMore = false;
     List<MerchantListResponse.MerchantEntity> merchantEntityList;
-
+    MerchantListResponse.MerchantEntity merchant = new MerchantListResponse().new MerchantEntity();
     private String mchNameKey = "";
 
     private int mTotalCount;
@@ -192,17 +192,16 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
                 mTvTagHistoryLabel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showToast(PublishLocationSearchActivity.this, merchantName);
-                        //  SearchBean merchantEntity = merchantList.get(position);
-
-                  /*      merchant.setId(merchantEntity.getMerchantId());
-                        merchant.setMchName(merchantEntity.getSearch());
                         Bundle bundle = new Bundle();
                         Intent intent = new Intent();
-                        bundle.putSerializable("merchant", merchant);
+                        int mchId = searchBean.getMerchantId();
+                        String mchName = searchBean.getSearch();
+                        merchant.setMchId(mchId);
+                        merchant.setMchName(mchName);
+                        bundle.putSerializable("merchant",merchant);
                         intent.putExtras(bundle);
                         setResult(RESULT_OK, intent);
-                        finish();*/
+                        finish();
                     }
                 });
                 return mTvTagHistoryLabel;

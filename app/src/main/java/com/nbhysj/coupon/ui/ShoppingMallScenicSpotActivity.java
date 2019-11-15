@@ -25,9 +25,11 @@ import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
@@ -266,6 +268,11 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
     }
 
     @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+
+    }
+
+    @Override
     public void findScenicByCateResult(BackResult<ScenicSpotResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -327,6 +334,11 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
     }
 
     @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         dismissProgressDialog();
         showToast(ShoppingMallScenicSpotActivity.this, Constants.getResultMsg(msg));
@@ -340,7 +352,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
     }
 
 
-    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first})
+    @OnClick({R.id.tv_popular_nearby, R.id.tv_comprehensive_sorting, R.id.tv_super_value_reservation, R.id.tv_distance_first,R.id.toolbar})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.tv_popular_nearby:
@@ -406,9 +418,13 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
                 mPage = 1;
                 mScenicSpotList.clear();
                 // scenicSpotsListAdapter.notifyDataSetChanged();
-                mSortStr = "CZ";
+                mSortStr = "FJ";
                 showProgressDialog(ShoppingMallScenicSpotActivity.this);
                 findScenicByCate();
+                break;
+            case R.id.toolbar:
+
+                toActivity(HomePageSearchActivity.class);
                 break;
             default:
                 break;

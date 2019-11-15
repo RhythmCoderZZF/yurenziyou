@@ -207,6 +207,10 @@ public class TravelAssistantRemarksActivity extends BaseActivity<TravelAssistant
         showToast(TravelAssistantRemarksActivity.this, Constants.getResultMsg(msg));
     }
 
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
 
     //校验输入信息是否填写完成
     public void checkIsInputFill() {
@@ -238,6 +242,11 @@ public class TravelAssistantRemarksActivity extends BaseActivity<TravelAssistant
                 break;
 
         }
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
     }
 
     public void addTravelAssistantRemarks() {

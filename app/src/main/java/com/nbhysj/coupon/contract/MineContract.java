@@ -32,7 +32,7 @@ public interface MineContract {
         Observable<BackResult<MinePostZanListResponse>> getMinePostZanList(int pageNo,int pageSize);
 
         //获取赞列表
-        Observable<BackResult<List<MineCollectionAllResponse>>> getMineCollectionAllList();
+        Observable<ResponseBody> getMineCollectionAllList();
 
         //获取收藏详情
         Observable<BackResult<MineCollectionDetailResponse>> getMineCollectionDetail(String type,int pageNo,int pageSize);
@@ -51,7 +51,7 @@ public interface MineContract {
 
         void getMinePostZanListResult(BackResult<MinePostZanListResponse> res);
 
-        void getMineCollectionAllListResult(BackResult<List<MineCollectionAllResponse>> res);
+        void getMineCollectionAllListResult(ResponseBody res);
 
         void getMineCollectionDetailResult(BackResult<MineCollectionDetailResponse> res);
 

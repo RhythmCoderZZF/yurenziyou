@@ -487,12 +487,22 @@ public class TravelAssistantRoutePlanMapActivity extends BaseActivity<TravelAssi
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void updateTripInformationResult(BackResult res) {
 
     }
 
     @Override
     public void getWeatherResult(BackResult<WeatherResponse> res) {
+
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
 
     }
 

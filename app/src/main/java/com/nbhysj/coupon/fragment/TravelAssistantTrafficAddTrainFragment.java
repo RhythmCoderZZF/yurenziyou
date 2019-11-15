@@ -13,13 +13,24 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FineFoodListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.DestinationContract;
+import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.DestinationModel;
+import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.CountryBean;
+import com.nbhysj.coupon.model.response.CreateTripResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
+import com.nbhysj.coupon.model.response.TripDetailsResponse;
+import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.model.response.TripRouteMapResponse;
+import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
+import com.nbhysj.coupon.model.response.WeatherResponse;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
+import com.nbhysj.coupon.presenter.TravelAssistantPresenter;
 import com.nbhysj.coupon.ui.TravelAssistantLocationCityActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -37,7 +48,7 @@ import static android.app.Activity.RESULT_OK;
  * @auther：hysj created on 2019/07/07
  * description：行程助手添加交通(火车)
  */
-public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<DestinationPresenter, DestinationModel> implements DestinationContract.View {
+public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<TravelAssistantPresenter, TravelAssistantModel> implements TravelAssistantContract.View {
     private static final String ARG_PARAM_TRIPID = "tripId";
 
     //列车时间
@@ -103,12 +114,83 @@ public class TravelAssistantTrafficAddTrainFragment extends BaseFragment<Destina
     }
 
     @Override
-    public void getDestinationHomePageResult(BackResult<DestinationResponse> res) {
+    public void getTravelAssistantHomePageResult(BackResult<TripHomePageResponse> res) {
 
     }
 
     @Override
-    public void findMchBycityNameResult(BackResult<HotScenicSpotResponse> res) {
+    public void getCountyListResult(BackResult<List<CountryBean>> res) {
+
+    }
+
+    @Override
+    public void getCountyWebListResult(BackResult<List<TravelAssistantDetailCountryBean>> res) {
+
+    }
+
+    @Override
+    public void getCreateTripResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void getTripDetailsResult(BackResult<TripDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void getTravelAssistantMchListResult(BackResult<TripScenicSpotAddCountryBean> res) {
+
+    }
+
+    @Override
+    public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void travelAssistantPlusADay(BackResult res) {
+
+    }
+
+    @Override
+    public void insertNoteResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void delTripPlaceResult(BackResult res) {
+
+    }
+
+    @Override
+    public void delTripResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateTripInformationResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getTripRouteMapResult(BackResult<TripRouteMapResponse> res) {
+
+    }
+
+    @Override
+    public void getWeatherResult(BackResult<WeatherResponse> res) {
+
     }
 
     @Override

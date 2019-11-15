@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -79,6 +80,8 @@ public class InteractionSectionAdapter extends RecyclerView.Adapter<InteractionS
 
                     Intent intent = new Intent();
                     intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                    String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
+                    intent.putExtra("mchType", mchRecreationType);
                     intent.putExtra("mchId",mchId);
                     mContext.startActivity(intent);
                 }

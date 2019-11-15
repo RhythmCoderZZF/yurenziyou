@@ -82,6 +82,8 @@ public class BannerSlideShowView extends FrameLayout {
      * 是否重启倒计时
      **/
     boolean stat = false;
+
+    private MyPagerAdapter myPagerAdapter;
     /**
      * Handler
      **/
@@ -209,8 +211,8 @@ public class BannerSlideShowView extends FrameLayout {
 
         viewPager = (MyScrollViewPager) findViewById(R.id.viewPager);
         viewPager.setFocusable(true);
-
-        viewPager.setAdapter(new MyPagerAdapter());
+        myPagerAdapter = new MyPagerAdapter();
+        viewPager.setAdapter(myPagerAdapter);
         //TODO
         if (list.size() != 3) {
 
@@ -227,6 +229,49 @@ public class BannerSlideShowView extends FrameLayout {
             viewPager.setScroll(false);
 
         }
+
+    }
+
+    public void setBannerList(List<String> bannerList){
+        imageViewsList.clear();
+        dotViewsList.clear();
+        this.bannerList = bannerList;
+        dotCount = bannerList.size();
+        count = bannerList.size();
+        LinearLayout dotLayout = (LinearLayout) findViewById(R.id.dotLayout);
+        dotLayout.removeAllViews();
+        for (int i = 0; i < count; i++) {
+            ImageView view = new ImageView(context);
+            // view.setTag(Constant.URLIMG + banner.getImage());
+            //	if (i == 0)// 给一个默认图
+            view.setScaleType(ScaleType.FIT_XY);
+            imageViewsList.add(view);
+        }
+
+        for (int i = 0; i < dotCount; i++) {
+
+            ImageView dotView = new ImageView(context);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            params.leftMargin = 4;
+            params.rightMargin = 4;
+            if (i == 0) {
+                dotView.setBackgroundResource(R.mipmap.icon_point_select);
+            } else {
+                dotView.setBackgroundResource(R.mipmap.icon_point_unselect);
+            }
+            dotLayout.addView(dotView, params);
+            dotViewsList.add(dotView);
+        }
+
+        if (count > 1) {
+            //   startViewPager();
+            viewPager.setScroll(true);
+        } else {
+            viewPager.setScroll(false);
+        }
+
+        myPagerAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -242,12 +287,6 @@ public class BannerSlideShowView extends FrameLayout {
         @Override
         public Object instantiateItem(View container, int position) {
 
-		/*	position %= count;
-            if (position < 0) {
-				position = count + position;
-			}*/
-        /*	position %= count;
-            final int pos = position;*/
             ImageView view = imageViewsList.get(position % count);
             // 如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
             ViewParent vp = view.getParent();
@@ -295,6 +334,11 @@ public class BannerSlideShowView extends FrameLayout {
                 return 0;
             }
             return imageViewsList.size();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override

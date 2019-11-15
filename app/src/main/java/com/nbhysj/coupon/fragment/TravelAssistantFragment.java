@@ -133,7 +133,7 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
         } else {
             strategyList.clear();
         }
-        getTravelAssistantList();
+     //   getTravelAssistantList();
         //行程助手推荐  无行程
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(layoutManager.VERTICAL);
@@ -187,7 +187,8 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        tripEntityList.clear();
+                        myTravelListAdapter.notifyDataSetChanged();
                         getTravelAssistantList();
                     }
                 }, 100);
@@ -314,6 +315,11 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     }
 
     @Override
+    public void intelligentProjectResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -341,6 +347,11 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             default:
                 break;
         }
+    }
+
+    @Override
+    public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
     }
 
     @Override

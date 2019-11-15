@@ -18,8 +18,10 @@ import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.model.DestinationModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.DestinationCityResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
+import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -140,6 +142,11 @@ public class LocalFoodFragment extends BaseFragment<DestinationPresenter, Destin
     }
 
     @Override
+    public void getDestinationCityTagsListResult(BackResult<List<DestinationCityResponse>> res) {
+
+    }
+
+    @Override
     public void findMchBycityNameResult(BackResult<HotScenicSpotResponse> res) {
         mSmartRefreshLayout.finishLoadMore();
         mLlytProgressBarLoading.setVisibility(View.GONE);
@@ -162,6 +169,11 @@ public class LocalFoodFragment extends BaseFragment<DestinationPresenter, Destin
 
     @Override
     public void lazyInitView(View view) {
+        mPage = 1;
+        mHotScenicSpotList.clear();
+        fineFoodListAdapter.notifyDataSetChanged();
+        mSmartRefreshLayout.finishRefresh();
+        mSmartRefreshLayout.setNoMoreData(false);
         findMchBycityName();
     }
 

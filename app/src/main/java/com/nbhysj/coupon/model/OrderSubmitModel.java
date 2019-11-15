@@ -4,13 +4,17 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
 import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
+import com.nbhysj.coupon.model.request.QueryByTicketRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
+import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
+import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
+import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 
 import java.util.Map;
 
@@ -76,5 +80,15 @@ public class OrderSubmitModel implements OrderSubmitContract.Model {
     @Override
     public Observable<BackResult<OrderSubmitResponse>> recreationOrderSubmit(TicketOrderSubmitRequest ticketOrderSubmitRequest) {
         return Api.getInstance().apiService.recreationOrderSubmit(ticketOrderSubmitRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<QueryByTicketResponse>> queryByTicket(QueryByTicketRequest queryByTicketRequest) {
+        return Api.getInstance().apiService.getTicketQueryByDate(queryByTicketRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<UseCouponTicketResponse>> useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest) {
+        return Api.getInstance().apiService.useCouponTicketRequest(useCouponTicketRequest).compose(RxSchedulers.io_main());
     }
 }

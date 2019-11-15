@@ -32,7 +32,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -40,9 +40,10 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/llyt_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_centerHorizontal="true"
                         android:orientation="horizontal">
 
                         <TextView
@@ -66,7 +67,7 @@
                         android:id="@+id/starbar"
                         android:layout_width="5dp"
                         android:layout_height="5dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|center_horizontal"
                         android:layout_marginLeft="@dimen/dp_5"
                         android:clickable="false"
                         android:focusable="false"
@@ -75,6 +76,8 @@
                         ratingbar:starEmpty="@mipmap/icon_hollow_orange_star"
                         ratingbar:starFill="@mipmap/icon_solid_orange_star"
                         ratingbar:starSize="14dp"
+                        android:layout_below="@+id/llyt_score"
+                        android:layout_centerHorizontal="true"
                       />
 
                     <TextView
@@ -85,9 +88,11 @@
                         android:layout_marginLeft="@dimen/dp_4"
                         android:layout_marginTop="@dimen/dp_5"
                         android:text="共0条评论"
+                        android:layout_below="@+id/starbar"
+                        android:layout_centerHorizontal="true"
                         android:textColor="@color/txt_font_black2"
                         android:textSize="@dimen/text_size_tiny" />
-                </LinearLayout>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="1dp"

@@ -9,9 +9,13 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.DestinationContract;
 import com.nbhysj.coupon.model.DestinationModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.DestinationCityResponse;
 import com.nbhysj.coupon.model.response.DestinationResponse;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
+import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.presenter.DestinationPresenter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -97,6 +101,11 @@ public class TripTrafficAddPassengerTransportFragment extends BaseFragment<Desti
 
     @Override
     public void lazyInitView(View view) {
+
+    }
+
+    @Override
+    public void getDestinationCityTagsListResult(BackResult<List<DestinationCityResponse>> res) {
 
     }
 

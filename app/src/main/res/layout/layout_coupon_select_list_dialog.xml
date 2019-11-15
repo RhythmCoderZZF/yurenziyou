@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlyt_coupon_select"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+  >
+
+    <LinearLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="297dp"
+        android:layout_above="@+id/tv_coupon_select_close"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/bg_white_radius_fifteen_top_shape"
+        android:clickable="true"
+        android:focusableInTouchMode="false"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_19"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:textStyle="bold"
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_xmedium"
+            android:text="@string/str_coupon"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/color_text_gray46"
+            android:alpha="0.25"></View>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_coupon_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llyt_confirm_payment"
+            android:background="@color/white"></android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_coupon_select_close"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_text_gray40"
+        android:gravity="center"
+        android:text="@string/str_close"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_xnormal" />
+
+</RelativeLayout>

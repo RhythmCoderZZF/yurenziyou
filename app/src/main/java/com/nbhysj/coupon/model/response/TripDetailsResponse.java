@@ -145,6 +145,8 @@ public class TripDetailsResponse {
 
         private String address;
 
+        private int mchId;
+
         public int getTripPlaceId() {
             return tripPlaceId;
         }
@@ -271,6 +273,14 @@ public class TripDetailsResponse {
 
         public void setAddress(String address) {
             this.address = address;
+        }
+
+        public int getMchId() {
+            return mchId;
+        }
+
+        public void setMchId(int mchId) {
+            this.mchId = mchId;
         }
     }
 }

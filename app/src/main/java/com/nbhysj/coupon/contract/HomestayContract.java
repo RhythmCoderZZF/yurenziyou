@@ -5,12 +5,16 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import java.util.HashMap;
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**
@@ -39,6 +43,11 @@ public interface HomestayContract {
         //民宿收藏
         Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(int mchId);
 
+        //获取优惠券列表
+        Observable<BackResult<List<MchCouponResponse>>> queryMchCouponList(int mchId);
+
+        //领取优惠券
+        Observable<BackResult<CouponsGetBean>> getCoupon(int couponId);
     }
 
     interface View extends BaseView {
@@ -52,6 +61,11 @@ public interface HomestayContract {
         void mchCollectionResult(BackResult<MchCollectionResponse> res);
 
         void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res);
+
+        void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res);
+
+        //领取优惠券
+        void getCouponResult(BackResult<CouponsGetBean> res);
 
         void showMsg(String msg);
     }
@@ -70,5 +84,9 @@ public interface HomestayContract {
 
         //民宿详情
         public abstract void getMchHomestayDetail(int mchId);
+
+        public abstract void queryMchCouponList(int mchId);
+
+        public abstract void getCoupon(int couponId);
     }
 }

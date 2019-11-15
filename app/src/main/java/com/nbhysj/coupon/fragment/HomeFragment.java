@@ -43,6 +43,8 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -345,18 +347,12 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
                             getHomePageData();
                         } else {
 
-                            if (mCurrentItem == 0) {
-                                mBroadcastAction = Constants.BROCAST_ACTION_FOLLOW;
-                            } else if (mCurrentItem == 1) {
-                                mBroadcastAction = Constants.BROCAST_ACTION_RECOMMEND;
-                            } else if (mCurrentItem == 2) {
-                                mBroadcastAction = Constants.BROCAST_ACTION_NEARBY;
-                            }
-                            Intent intent = new Intent();
+                            EventBus.getDefault().post("homeFragmentRefresh");
+                          /*  Intent intent = new Intent();
                             //指定发送广播的频道
                             intent.setAction(mBroadcastAction);
                             //发送广播的数据
-                            getActivity().sendBroadcast(intent);
+                            getActivity().sendBroadcast(intent);*/
 
 
                         }
