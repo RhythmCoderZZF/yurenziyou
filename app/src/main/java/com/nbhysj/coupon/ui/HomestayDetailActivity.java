@@ -873,128 +873,123 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                         int ruleForeigner = noticeEntity.getRuleForeigner(); //接待外宾
 
                         //接待儿童
-                        if (ruleChild == 1) {
-
-                            mTvChildRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        if (ruleChild == 0) {
 
                             mTvChildRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgChildRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleChild == 0) {
+                            mTvChildRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                        } else if (ruleChild == 1) {
 
                             mTvChildRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                             mImgChildRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                         }
 
                         //抽烟
-                        if (ruleSmoking == 1) {
-
-                            mTvSmokingRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        if (ruleSmoking == 0) {
 
                             mTvSmokingRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgSmokingRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleSmoking == 0) {
-
+                            mTvSmokingRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        } else if (ruleSmoking == 1) {
                             mTvSmokingRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                             mImgSmokingRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                         }
 
                         //做饭
-                        if (ruleCook == 1) {
-
-                            mTvCookRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        if (ruleCook == 0) {
 
                             mTvCookRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgCookRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleCook == 0) {
+                            mTvCookRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        } else if (ruleCook == 1) {
+
                             mImgCookRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                             mTvCookRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                         }
 
                         //商业拍摄
-                        if (rulePhotograph == 1) {
+                        if (rulePhotograph == 0) {
                             mImgCommercialShooting.setImageResource(R.mipmap.icon_homestay_rule_false);
+                            mTvCommercialShooting.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mTvCommercialShooting.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        } else if (rulePhotograph == 1) {
 
-                            mTvCookRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
-
-                        } else if (rulePhotograph == 0) {
                             mImgCommercialShooting.setImageResource(R.mipmap.icon_homestay_rule_true);
                             mTvCommercialShooting.setTextColor(getResources().getColor(R.color.color_text_black7));
                         }
 
                         //额外加人
-                        if (rulePerson == 1) {
-
-                            mTvExtraPersonRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        if (rulePerson == 0) {
 
                             mTvExtraPersonRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgExtraPersonRule.setImageResource(R.mipmap.icon_homestay_rule_false);
+                            mTvExtraPersonRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        } else if (rulePerson == 1) {
 
-                        } else if (rulePerson == 0) {
                             mImgExtraPersonRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                             mTvExtraPersonRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                         }
 
                         //接待老人
-                        if (ruleElderly == 1) {
-
-                            mTvElderlyRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        if (ruleElderly == 0) {
 
                             mTvElderlyRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
-
                             mImgElderlyRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleElderly == 0) {
+                            mTvElderlyRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                        } else if (ruleElderly == 1) {
+
                             mImgElderlyRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                             mTvElderlyRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                         }
 
                         //携带宠物
-                        if (rulePets == 1) {
-
-                            mTvPetsRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                        if (rulePets == 0) {
 
                             mTvPetsRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgPetsRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (rulePets == 0) {
+                            mTvPetsRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                        } else if (rulePets == 1) {
+
                             mImgPetsRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                             mTvPetsRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                         }
 
                         //聚会
-                        if (ruleParty == 1) {
+                        if (ruleParty == 0) {
 
                             mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                            mTvPartyRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
                             mTvPartyRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
-                            mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleParty == 0) {
+                            mTvPartyRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+                        } else if (ruleParty == 1) {
 
                             mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                             mTvPartyRule.setTextColor(getResources().getColor(R.color.color_text_black7));
-                            mImgPartyRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                         }
 
                         //额外加床
-                        if (ruleBed == 1) {
+                        if (ruleBed == 0) {
 
                             mTvExtraBedRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-
                             mTvExtraBedRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgExtraBedRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleBed == 0) {
+                        } else if (ruleBed == 1) {
 
                             mTvExtraBedRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                             mImgExtraBedRule.setImageResource(R.mipmap.icon_homestay_rule_true);
                         }
 
                         //接待外宾
-                        if (ruleForeigner == 1) {
+                        if (ruleForeigner == 0) {
 
                             mTvReceiveForeignGuestsRule.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-
                             mTvReceiveForeignGuestsRule.setTextColor(getResources().getColor(R.color.color_text_gray24));
                             mImgReceiveForeignGuestsRule.setImageResource(R.mipmap.icon_homestay_rule_false);
-                        } else if (ruleForeigner == 0) {
+
+                        } else if (ruleForeigner == 1) {
 
                             mTvReceiveForeignGuestsRule.setTextColor(getResources().getColor(R.color.color_text_black7));
                             mImgReceiveForeignGuestsRule.setImageResource(R.mipmap.icon_homestay_rule_true);
@@ -1006,18 +1001,15 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     homestayResourcesAdapter.setHomestayResourcesList(homestayResourcesList);
                     homestayResourcesAdapter.notifyDataSetChanged();
 
-
                     collectionStatus = mchDetailsEntity.getUserCollectState();
 
                     if(collectionStatus == 0)
                     {
                         mImgCollection.setImageResource(R.mipmap.icon_white_collection);
 
-
-                    } else if(collectionStatus == 1){
-
+                    } else if(collectionStatus == 1)
+                    {
                         mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -10,6 +10,8 @@ public class ZanAndCollectionBean {
 
     private String flowType;
 
+    private String dataType;
+
     private int dataId;
 
     private String dataPhoto;
@@ -144,5 +146,13 @@ public class ZanAndCollectionBean {
 
     public void setCtime(long ctime) {
         this.ctime = ctime;
+    }
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 }

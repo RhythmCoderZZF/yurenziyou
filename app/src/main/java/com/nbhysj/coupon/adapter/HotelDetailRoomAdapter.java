@@ -59,13 +59,13 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
             MchGoodsBean mchGoodsBean = mchHotelGoodsList.get(itemPosition);
             String photoUrl = mchGoodsBean.getPhoto();
             String title = mchGoodsBean.getTitle();
-            double marketPrice = mchGoodsBean.getMarketPrice();
+            double defaultPrice = mchGoodsBean.getDefaultPrice();
             int breakfastStatus = mchGoodsBean.getBreakfastStatus();
             int windowStatus = mchGoodsBean.getWindowStatus();
             String bedInfo = mchGoodsBean.getBedInfo();
 
             holder.mTvHotelRoomTilte.setText(title);
-            holder.mTvHotelRoomPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
+            holder.mTvHotelRoomPrice.setText(Tools.getTwoDecimalPoint(defaultPrice));
             if(breakfastStatus == 0){
 
                 stringBuffer.append("不含早餐 ");

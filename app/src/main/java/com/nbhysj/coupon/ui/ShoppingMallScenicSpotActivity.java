@@ -28,6 +28,7 @@ import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -231,6 +232,11 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
             mProgressBarLoadMore.setVisibility(View.GONE);
             mTvLoadMore.setText(getResources().getString(R.string.str_loading_no_more));
         }
+    }
+
+    @Override
+    public void findScenicListByCateIdResult(BackResult<MchCateListResponse> res) {
+
     }
 
     @Override

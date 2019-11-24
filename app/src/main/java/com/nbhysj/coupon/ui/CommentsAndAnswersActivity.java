@@ -15,6 +15,7 @@ import com.nbhysj.coupon.model.MessageModel;
 import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerBean;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
@@ -169,6 +170,11 @@ public class CommentsAndAnswersActivity extends BaseActivity<MessagePresenter, M
 
     @Override
     public void getZanAndCollectionMsgResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getBroadcatMessageListResult(BackResult<BroadcastResponse> res) {
 
     }
 

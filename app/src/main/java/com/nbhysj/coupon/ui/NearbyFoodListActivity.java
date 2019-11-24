@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
@@ -149,6 +150,11 @@ public class NearbyFoodListActivity extends BaseActivity<FineFoodPresenter, Fine
 
     @Override
     public void getFineFoodHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
+
+    }
+
+    @Override
+    public void findFoodsListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

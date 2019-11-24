@@ -220,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="11:02"
+                android:text=""
                 android:textColor="@color/color_text_gray"
                 android:textSize="12sp" />
 
@@ -229,7 +229,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@mipmap/icon_unread_message_dot" />
+                android:src="@mipmap/icon_unread_message_dot"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -272,14 +273,15 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_centerVertical="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_question_and_answer_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="11:02"
+                android:text=""
                 android:textColor="@color/color_text_gray"
                 android:textSize="12sp" />
 
@@ -288,7 +290,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@mipmap/icon_unread_message_dot" />
+                android:src="@mipmap/icon_unread_message_dot"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -337,7 +340,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="宁波哦"
+                android:text=""
                 android:textColor="@color/color_text_gray"
                 android:textSize="12sp" />
 
@@ -346,7 +349,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@mipmap/icon_unread_message_dot" />
+                android:src="@mipmap/icon_unread_message_dot"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

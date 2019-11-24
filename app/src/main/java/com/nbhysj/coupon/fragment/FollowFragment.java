@@ -1,26 +1,33 @@
 package com.nbhysj.coupon.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FollowListAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.PostsTypeEnum;
 import com.nbhysj.coupon.contract.HomePageContract;
+import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HomePageModel;
+import com.nbhysj.coupon.model.request.PostOprateRequest;
+import com.nbhysj.coupon.model.request.PostsCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.FavoritesBean;
 import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
 import com.nbhysj.coupon.model.response.FavoritesListResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
@@ -29,12 +36,24 @@ import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
+import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.RecommendInterestUsersBean;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.CommentsListActivity;
 import com.nbhysj.coupon.ui.FindFriendsActivity;
+import com.nbhysj.coupon.ui.NewAlbumActivity;
+import com.nbhysj.coupon.ui.NewFansActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
+import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
+import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -42,12 +61,14 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
 public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageModel> implements HomePageContract.View {
+
     //暂无数据
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoData;
@@ -56,16 +77,48 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     RecyclerView mRvFollow;
     @BindView(R.id.scroll_view)
     NestedScrollView setNeedScroll;
+    //加载
+    @BindView(R.id.llyt_progress_bar_loading)
+    LinearLayout mLlytProgressBarLoading;
+    @BindView(R.id.progressbar_load_more)
+    ProgressBar mProgressBarLoadMore;
+    @BindView(R.id.tv_load_more)
+    TextView mTvLoadMore;
     private List<HomePageSubTopicTagBean> followDetailList;
     private List<BannerUrlBO> bannerUrlList;
     private FollowListAdapter followListAdapter;
-    private int mPage = 1;
+    private int mPageNo = 1;
     private int mPageSize = 10;
+
+    private int REQUEST_CODE_NEW_ALBUM = 0;
+
+    //专辑收藏
+    List<FavoritesBean> favoritesAlbumList;
 
     private boolean visibleToUser;
 
+    private int hasNext;
+
     private boolean isInitView = false;
     private boolean isVisible = false;
+
+    private int mPosition;
+
+    private int imageWidth, imageHight;
+
+    Bitmap bitmap = null;
+
+    private IWXAPI api;
+
+    //收藏弹框
+    CollectEnterAlbumsDialog collectEnterAlbumsDialog;
+
+    //总条数
+    private int mTotalPageCount;
+
+    private boolean isOnLoadMore = false;
+
+    private int mPostId;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_follow;
@@ -80,6 +133,8 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @Override
     public void initView(View v) {
         EventBus.getDefault().register(this);
+        api = WXAPIFactory.createWXAPI(getActivity(), PayConstants.APP_ID, false);
+
         isInitView = true;
         isCanLoadData();
         if (followDetailList == null) {
@@ -95,74 +150,15 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         } else {
             bannerUrlList.clear();
         }
-/*
-        List<FollowDetailBean.UserEntity> userEntityList = new ArrayList<>();
-        List<String> tagVal = new ArrayList<>();
-        tagVal.add("#必吃美食");
-        FollowDetailBean followDetailBean = new FollowDetailBean();
 
-        FollowDetailBean.UserEntity userEntity = followDetailBean.new UserEntity();
-        userEntity.setAvatar("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1378109966,2141209797&fm=26&gp=0.jpg");
-        userEntity.setDes("旅游达人");
-        userEntity.setUsername("小明");
+        if (favoritesAlbumList == null) {
 
-        FollowDetailBean.UserEntity userEntity1 = followDetailBean.new UserEntity();
-        userEntity1.setAvatar("https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1550729403&di=f0527daf7298a984971e13a621f2eb9f&src=http://img.duoziwang.com/2016/11/24/033907101039.jpg");
-        userEntity1.setDes("美食达人");
-        userEntity1.setUsername("小张");
-        userEntityList.add(userEntity);
-        userEntityList.add(userEntity1);
+            favoritesAlbumList = new ArrayList<>();
 
-        BannerUrlBO bannerUrlBO = new BannerUrlBO();
-        bannerUrlBO.setUrl("http://img.bimg.126.net/photo/ZZ5EGyuUCp9hBPk6_s4Ehg==/5727171351132208489.jpg");
+        } else {
 
-        BannerUrlBO bannerUrlBO1 = new BannerUrlBO();
-        bannerUrlBO1.setUrl("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-
-        BannerUrlBO bannerUrlBO2 = new BannerUrlBO();
-        bannerUrlBO2.setUrl("http://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/lvpics/w=1000/sign=a669f57d3a12b31bc76cc929b628377a/503d269759ee3d6d801feef140166d224f4ade2b.jpg");
-
-        bannerUrlList.add(bannerUrlBO);
-        bannerUrlList.add(bannerUrlBO1);
-        bannerUrlList.add(bannerUrlBO2);
-        followDetailBean.setBannerList(bannerUrlList);
-        followDetailBean.setName("测试");
-        followDetailBean.setTime("2019-02-21");
-        followDetailBean.setUrl("https://t1.hddhhn.com/uploads/tu/201611/168/st30.png");
-        followDetailBean.setTagFlowLayout(tagVal);
-        followDetailBean.setBannerList(bannerUrlList);
-        followDetailBean.setInterestUserEntity(userEntityList);
-
-        List<String> tagVal1 = new ArrayList<>();
-        tagVal1.add("#必吃美食");
-        tagVal1.add("#必玩景点");
-
-        List<String> interestUser = new ArrayList<>();
-
-
-        List<BannerUrlBO> bannerUrlList1 = new ArrayList<>();
-        FollowDetailBean followDetailBean1 = new FollowDetailBean();
-
-        BannerUrlBO bannerUrlBO3 = new BannerUrlBO();
-        bannerUrlBO.setUrl("http://img.bimg.126.net/photo/ZZ5EGyuUCp9hBPk6_s4Ehg==/5727171351132208489.jpg");
-
-        BannerUrlBO bannerUrlBO4 = new BannerUrlBO();
-        bannerUrlBO1.setUrl("https://t1.hddhhn.com/uploads/tu/201611/228/st87.png");
-
-        BannerUrlBO bannerUrlBO5 = new BannerUrlBO();
-        bannerUrlBO2.setUrl("http://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/lvpics/w=1000/sign=a669f57d3a12b31bc76cc929b628377a/503d269759ee3d6d801feef140166d224f4ade2b.jpg");
-
-        bannerUrlList1.add(bannerUrlBO3);
-        bannerUrlList1.add(bannerUrlBO4);
-        bannerUrlList1.add(bannerUrlBO5);
-        followDetailBean1.setBannerList(bannerUrlList1);
-        followDetailBean1.setName("测试");
-        followDetailBean1.setTime("2019-02-21");
-        followDetailBean1.setUrl("https://t1.hddhhn.com/uploads/tu/201611/168/st30.png");
-        followDetailBean1.setTagFlowLayout(tagVal1);
-        followDetailBean1.setBannerList(bannerUrlList);
-        followDetailList.add(followDetailBean);
-        followDetailList.add(followDetailBean1);*/
+            favoritesAlbumList.clear();
+        }
 
         // 创建一个线性布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -172,84 +168,50 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         followListAdapter = new FollowListAdapter(getActivity(), new FollowListAdapter.FollowListener() {
 
             @Override
+            public void setPostPraiseListener(int position,int postId) {
+
+                mPosition = position;
+                postOprate(postId);
+            }
+
+            @Override
             public void setUserOfInterestListener(RecommendInterestUsersBean userEntity) {
-                Toast.makeText(mContext, "关注" + userEntity.getNickname(), Toast.LENGTH_SHORT).show();
+                int userId = userEntity.getId();
+                userFollow(userId);
             }
 
             @Override
             public void setUserOfInterestLookMoreListener() {
 
                 toActivity(FindFriendsActivity.class);
-
             }
 
             @Override
-            public void setLookCommentListener() {
+            public void setLookCommentListener(int mPostId) {
 
-                toActivity(CommentsListActivity.class);
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), CommentsListActivity.class);
+                intent.putExtra("mPostId", mPostId);
+                startActivity(intent);
 
             }
 
             @Override
             public void setCollectionPostToAlbumsListener(HomePageSubTopicTagBean followDetailBean) {
-
-
-              /*  List<CollectionAlbumListResponse> collectionAlbumList = new ArrayList<>();
-
-                CollectionAlbumListResponse collectionAlbumListResponse = new CollectionAlbumListResponse();
-                collectionAlbumListResponse.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
-                collectionAlbumListResponse.setAlbumName("专辑1");
-
-                CollectionAlbumListResponse collectionAlbumListResponse1 = new CollectionAlbumListResponse();
-                collectionAlbumListResponse1.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
-                collectionAlbumListResponse1.setAlbumName("专辑2");
-
-                CollectionAlbumListResponse collectionAlbumListResponse2 = new CollectionAlbumListResponse();
-                collectionAlbumListResponse2.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
-                collectionAlbumListResponse2.setAlbumName("专辑3");
-
-                CollectionAlbumListResponse collectionAlbumListResponse3 = new CollectionAlbumListResponse();
-                collectionAlbumListResponse3.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
-                collectionAlbumListResponse3.setAlbumName("专辑4");
-
-                CollectionAlbumListResponse collectionAlbumListResponse4 = new CollectionAlbumListResponse();
-                collectionAlbumListResponse4.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
-                collectionAlbumListResponse4.setAlbumName("专辑5");
-
-                CollectionAlbumListResponse collectionAlbumListResponse5 = new CollectionAlbumListResponse();
-                collectionAlbumListResponse5.setAlbumImage("http://pic35.nipic.com/20131115/13972544_160943053001_2.jpg");
-                collectionAlbumListResponse5.setAlbumName("专辑6");
-
-                collectionAlbumList.add(collectionAlbumListResponse);
-                collectionAlbumList.add(collectionAlbumListResponse1);
-                collectionAlbumList.add(collectionAlbumListResponse2);
-                collectionAlbumList.add(collectionAlbumListResponse3);
-                collectionAlbumList.add(collectionAlbumListResponse4);
-                collectionAlbumList.add(collectionAlbumListResponse5);
-
-                CollectEnterAlbumsDialog collectEnterAlbumsDialog = new CollectEnterAlbumsDialog(collectionAlbumList, new CollectEnterAlbumsDialog.ChooseAlbumsCollectionListener() {
-                    @Override
-                    public void setChooseAlbumsCollectionListener(FavoritesBean collectionAlbum) {
-
-                    }
-
-                    @Override
-                    public void setNewAlbumCollectionListener() {
-
-                    }
-                });
-                collectEnterAlbumsDialog.show(getActivity().getFragmentManager(), "收藏专辑");*/
+                int postId = followDetailBean.getId();
+                // Toast.makeText(mContext, "关注" + userEntity.getNickname(), Toast.LENGTH_SHORT).show();
+                mPostId = postId;
+                getFavoritesList();
             }
 
             @Override
             public void setFollowItemOnClickListener() {
 
                 hiddenIME();
-
             }
 
             @Override
-            public void setFollowShareListener() {
+            public void setFollowShareListener(int mPostId) {
 
               /*  ShareDialog shareDialog = new ShareDialog();
                 shareDialog.show(getActivity().getFragmentManager(),"");*/
@@ -260,11 +222,26 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
                         //   showToast(getActivity(),sharePlatform);
 
-                        new ShareAction(getActivity())
-                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                                .withText("hello")//分享内容
-                                .setCallback(umShareListener)//回调监听器
-                                .share();
+                        WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
+                        miniProgramObj.webpageUrl = "http:192.168.1.140:8083/"; // 兼容低版本的网页链接
+                        miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPROGRAM_TYPE_PREVIEW;// 正式版:0，测试版:1，体验版:2
+                        miniProgramObj.userName = "gh_8f591c4ee659";     // 小程序原始id
+                        miniProgramObj.path = "pages/travel/travel?id=" + mPostId; //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
+                        WXMediaMessage msg = new WXMediaMessage(miniProgramObj);
+                        msg.title = getResources().getString(R.string.app_name);                    // 小程序消息title
+                        msg.description = "帖子分享";               // 小程序消息desc
+                        msg.thumbData = getImage("/storage/emulated/0/UCDownloads/pictures/4a90f603738da977d581be2cbf51f8198618e30f.jpg");                      // 小程序消息封面图片，小于128k
+
+                        SendMessageToWX.Req req = new SendMessageToWX.Req();
+                        req.transaction = buildTransaction("miniProgram");
+                        req.message = msg;
+                        req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前只支持会话
+                        api.sendReq(req);
+
+                        if (bitmap != null) {
+                            bitmap.recycle();
+                            bitmap = null;
+                        }
 
                     }
                 }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
@@ -275,6 +252,70 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         mRvFollow.setAdapter(followListAdapter);
     }
 
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    public byte[] getImage(String srcPath) {
+
+        try {
+            BitmapFactory.Options newOpts = new BitmapFactory.Options();
+            //开始读入图片，此时把options.inJustDecodeBounds 设回true了
+            newOpts.inJustDecodeBounds = true;
+            bitmap = BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
+
+            newOpts.inJustDecodeBounds = false;
+            int w = newOpts.outWidth;
+            int h = newOpts.outHeight;
+            // 现在主流手机比较多是800*480分辨率，所以高和宽我们设置为
+            float hh = 800f;// 这里设置高度为800f
+            float ww = 480f;// 这里设置宽度为480f
+            // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+            int be = 1;// be=1表示不缩放
+            if (w > h && w > ww) {// 如果宽度大的话根据宽度固定大小缩放
+                be = (int) (newOpts.outWidth / ww);
+            } else if (w < h && h > hh) {// 如果高度高的话根据宽度固定大小缩放
+                be = (int) (newOpts.outHeight / hh);
+            }
+            if (be <= 0)
+                be = 1;
+            newOpts.inSampleSize = be;// 设置缩放比例
+            //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+            bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+            // String type = newOpts.outMimeType;
+         /*   if (TextUtils.isEmpty(type)) {
+                type = "未能识别的图片";
+            } else {
+                type = type.substring(6, type.length());
+            }*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
+    }
+
+    private byte[] compressImage(Bitmap bitmapImage) {
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+            int options = 50;
+            while (baos.toByteArray().length / 1024 > 100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+                baos.reset();//重置baos即清空baos
+                options -= 10;//每次都减少10
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+
+            }
+            //ByteArrayInputStream isBm = new ByteArrayInputStream());//把压缩后的数据baos存放到ByteArrayInputStream中
+            //   bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        imageWidth = bitmapImage.getWidth();
+        imageHight = bitmapImage.getHeight();
+        return baos.toByteArray();
+    }
     private UMShareListener umShareListener = new UMShareListener() {
         /**
          * @descrption 分享开始的回调
@@ -333,16 +374,47 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     Log.i("TAG", "BOTTOM SCROLL");
 
-                    mPage++;
-                    showProgressDialog(getActivity());
-                    getHomeAttention();
+                    loadData();
 
                 }
             }
 
         });
     }
+    public void loadData() {
+        mLlytProgressBarLoading.setVisibility(View.VISIBLE);
+        if (hasNext == 1) {
+            mProgressBarLoadMore.setVisibility(View.VISIBLE);
+            mTvLoadMore.setText(getResources().getString(R.string.loading));
+            showProgressDialog(getActivity());
+            mPageNo++;
+            getHomeAttention();
+        } else {
+            mProgressBarLoadMore.setVisibility(View.GONE);
+            mTvLoadMore.setText(getResources().getString(R.string.str_loading_no_more));
+        }
+    }
 
+    //帖子点赞操作
+    public void postOprate(int mPostId) {
+
+        if (validateInternet()) {
+
+            showProgressDialog(getActivity());
+            PostOprateRequest postOprateRequest = new PostOprateRequest();
+            int postsType = PostsTypeEnum.POST_PRAISE.getKey();
+            postOprateRequest.setPostsType(postsType);
+            postOprateRequest.setPostsId(mPostId);
+            mPresenter.postOprate(postOprateRequest);
+        }
+    }
+
+    //关注
+    public void userFollow(int userId)
+    {
+        showProgressDialog(getActivity());
+        mPresenter.userFollow(userId);
+    }
     @Override
     public void getHomePageIndexResult(BackResult<HomePageResponse> res) {
 
@@ -360,12 +432,103 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     @Override
     public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+        dismissProgressDialog();
 
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    FollowUserStatusResponse followUserStatusResponse = res.getData();
+                    int attentionStatus = followUserStatusResponse.getFollowStatus();
+                    List<RecommendInterestUsersBean> recommendInterestUsersList = followDetailList.get(0).getRecommendUsers();
+                    recommendInterestUsersList.get(0).setAttentionStatus(attentionStatus);
+
+                    followListAdapter.setFollowDetailList(followDetailList);
+                    followListAdapter.notifyDataSetChanged();
+                    /*if(attentionStatus == 0){
+
+                        mNewFansBean.setAttentionStatus(1);
+                    } else if(attentionStatus == 1){
+                        mNewFansBean.setAttentionStatus(0);
+                    }
+
+                    newFansListAdapter.setNewFansList(userFansFollowList);
+                    newFansListAdapter.notifyDataSetChanged();*/
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
-    public void postOprateResult(BackResult res) {
+    public void postOprateResult(BackResult<PraiseOrCollectResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    PraiseOrCollectResponse praiseOrCollectResponse = res.getData();
+                    int zanStatus = praiseOrCollectResponse.getZanStatus();//是否点赞过 0:不赞 1:已点赞
+                    int zanNum = praiseOrCollectResponse.getZanNum();  //点赞的数量
 
+                    HomePageSubTopicTagBean homePageSubTopicTagBean = followDetailList.get(mPosition);
+
+                    homePageSubTopicTagBean.setZanStatus(zanStatus);
+                    homePageSubTopicTagBean.setZanCount(zanNum);
+
+                    followListAdapter.setFollowDetailList(followDetailList);
+                    followListAdapter.notifyDataSetChanged();
+                   /* if (zanStatus == 0) {
+
+                        mTvPostPraise.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_love_gray), null, null, null);
+                        mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.text_grey));
+                        mRlytPraise.setBackgroundResource(R.drawable.bg_rect_light_gray_shape_radius_five);
+
+                        for(int i = 0;i < zanAvatersList.size();i++){
+
+                            ZanAvatersBean zanAvatersBean = zanAvatersList.get(i);
+                            String avatarUrl = zanAvatersBean.getAvater();
+                            if(avatarUrl.equals(userAvatarUrl)){
+
+                                zanAvatersList.remove(zanAvatersBean);
+                            }
+                        }
+                    } else {
+
+                        zanAvatersBean.setNickname(nickname);
+                        zanAvatersBean.setAvater(userAvatarUrl);
+                        zanAvatersBean.setId(userId);
+                        zanAvatersList.add(zanAvatersBean);
+
+                        mTvPostPraise.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_note_heart_white), null, null, null);
+                        mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.white));
+                        mRlytPraise.setBackgroundResource(R.drawable.bg_praise_rect_dark_red_shape);
+                    }
+
+                    //点赞用户数量
+                    mTvPraisePeopleNum.setText(String.valueOf(zanNum));
+
+                    //用户点赞
+                    if (zanAvatersList != null) {
+
+                        praisePeopleAdapter.setPraisePeopleList(zanAvatersList);
+                        praisePeopleAdapter.notifyDataSetChanged();
+                    }*/
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -383,7 +546,9 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                     HomePageResponse attentionResponse = res.getData();
                     HomePageResponse.ResultBean resultBean = attentionResponse.getResult();
                     List<HomePageSubTopicTagBean> followList = resultBean.getList();
-                    if (followList == null) {
+                    HomePageResponse.PageBean pageBean = attentionResponse.getPage();
+                    hasNext = pageBean.getHasNext();
+                    if (followList.size() == 0) {
 
                         mRlytNoData.setVisibility(View.VISIBLE);
 
@@ -419,7 +584,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
         if (validateInternet()) {
 
-            mPresenter.getHomeAttention(mPage, mPageSize);
+            mPresenter.getHomeAttention(mPageNo, mPageSize);
         }
     }
 
@@ -459,13 +624,13 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         } else {
             isVisible = false;
         }
-        if (isVisibleToUser) {
+        /*if (isVisibleToUser) {
 
             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
             if (TextUtils.isEmpty(token)) {
                 toActivity(PhoneQuickLoginActivity.class);
             }
-        }
+        }*/
 
     }
 
@@ -481,12 +646,139 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     @Override
     public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    FavoritesCollectionResponse favoritesCollectionResponse = res.getData();
+                    int collectionStatus = favoritesCollectionResponse.getCollectionStatus();
+                   // HomePageSubTopicTagBean homePageSubTopicTagBean = followDetailList.get(0);
+                   /* if (collectionStatus == 0) {
 
+                        mImageIsCollectionPosts.setImageResource(R.mipmap.icon_gray_collection_posts);
+                    } else {
+
+                        mImageIsCollectionPosts.setImageResource(R.mipmap.icon_yellow_collection_posts);
+                        showToast(PostRecommendDetailActivity.this,"收藏成功");
+                    }*/
+
+                    if (collectEnterAlbumsDialog != null) {
+                        collectEnterAlbumsDialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
     public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    favoritesAlbumList.clear();
+                    if(collectEnterAlbumsDialog != null)
+                    {
+                        if (isOnLoadMore)
+                        {
+                            collectEnterAlbumsDialog.setSmartRefreshLayoutLoadMoreFinish();
+                        } else {
+                            collectEnterAlbumsDialog.setSmartRefreshLayoutRefreshFinish();
+                        }
+                    }
+                    FavoritesListResponse favoritesListResponse = res.getData();
 
+                    List<FavoritesBean> favoritesList = favoritesListResponse.getResult();
+
+                    BasePaginationResult paginationResult = res.getData().getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+                    if (favoritesList == null)
+                    {
+                        favoritesList = new ArrayList<>();
+                    }
+
+                    favoritesAlbumList.addAll(favoritesList);
+                    if (collectEnterAlbumsDialog == null) {
+                        collectEnterAlbumsDialog = new CollectEnterAlbumsDialog(favoritesAlbumList, new CollectEnterAlbumsDialog.ChooseAlbumsCollectionListener() {
+                            @Override
+                            public void setChooseAlbumsCollectionListener(FavoritesBean favoritesBean) {
+
+                                int favoritesId = favoritesBean.getId();
+                                postCollection(favoritesId);
+                            }
+
+                            @Override
+                            public void setNewAlbumCollectionListener() {
+
+                                Intent intent = new Intent();
+                                intent.setClass(getActivity(), NewAlbumActivity.class);
+                                startActivityForResult(intent, REQUEST_CODE_NEW_ALBUM);
+
+                            }
+
+                            @Override
+                            public void setNewAlbumOnRefreshListener() {
+
+                                isOnLoadMore = false;
+                                mPageNo = 1;
+                                favoritesAlbumList.clear();
+                                collectEnterAlbumsDialog.setAlbumCollectList(favoritesAlbumList);
+                                showProgressDialog(getActivity());
+                                getFavoritesList();
+                            }
+
+                            @Override
+                            public void setNewAlbumOnLoadMoreListener(RefreshLayout refreshLayout) {
+
+                                isOnLoadMore = true;
+                                refreshLayout.getLayout().postDelayed(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        isOnLoadMore = true;
+                                        try {
+                                            if (mTotalPageCount == favoritesAlbumList.size()) {
+                                                refreshLayout.finishLoadMoreWithNoMoreData();
+                                            } else {
+                                                mPageNo++;
+                                                getFavoritesList();
+                                            }
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, 200);
+
+                            }
+                        });
+
+                        collectEnterAlbumsDialog.show(getActivity().getFragmentManager(), "收藏专辑");
+
+                    } else {
+                        collectEnterAlbumsDialog.setAlbumCollectList(favoritesAlbumList);
+                        collectEnterAlbumsDialog.show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -510,21 +802,40 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 if (followDetailList != null) {
                     followDetailList.clear();
                 }
-
-                /*if(recommendFriendsAdapter != null)
-                {
-                    recommendFriendsAdapter.notifyDataSetChanged();
-                }*/
-                mPage = 1;
+                mPageNo = 1;
                 if(mRlytNoData != null)
                 {
                     mRlytNoData.setVisibility(View.GONE);
                 }
             //    showProgressDialog(getActivity());
+                if(followListAdapter != null)
+                {
+                    followListAdapter.notifyDataSetChanged();
+                }
                 getHomeAttention();
             }
         }
     }
+
+    //帖子收藏
+    public void postCollection(int favoritesId) {
+
+        showProgressDialog(getActivity());
+        PostsCollectionRequest postsCollectionRequest = new PostsCollectionRequest();
+        postsCollectionRequest.setDataId(mPostId);
+        postsCollectionRequest.setFavoritesId(favoritesId);
+        int userId = (int)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID,0);
+        postsCollectionRequest.setUserId(userId);
+        mPresenter.postCollection(postsCollectionRequest);
+    }
+
+    //获取专辑列表
+    public void getFavoritesList() {
+
+        showProgressDialog(getActivity());
+        mPresenter.getFavoritesList(mPageNo, mPageSize);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

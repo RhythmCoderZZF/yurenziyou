@@ -289,6 +289,9 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+
+                break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;

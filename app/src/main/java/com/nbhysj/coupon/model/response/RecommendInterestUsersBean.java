@@ -15,6 +15,9 @@ public class RecommendInterestUsersBean {
     //用户头像
     private String avater;
 
+    //关注状态
+    private int attentionStatus;
+
     public int getId() {
         return id;
     }
@@ -37,5 +40,13 @@ public class RecommendInterestUsersBean {
 
     public void setAvater(String avater) {
         this.avater = avater;
+    }
+
+    public int getAttentionStatus() {
+        return attentionStatus;
+    }
+
+    public void setAttentionStatus(int attentionStatus) {
+        this.attentionStatus = attentionStatus;
     }
 }

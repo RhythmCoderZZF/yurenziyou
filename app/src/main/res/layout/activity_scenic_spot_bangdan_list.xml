@@ -70,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="@dimen/dp_10"
-                android:src="@mipmap/icon_white_fine_food_collection" />
+                android:src="@mipmap/icon_white_fine_food_collection"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/img_fine_food_forward"

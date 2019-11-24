@@ -29,7 +29,7 @@ public class MyOrderActivity extends BaseActivity {
     SlidingTabLayout tabLayout;
     @BindView(R.id.iv_back)
     ImageView mImgBack;
-    private String[] titles = new String[]{"全部", "待付款", "待出行", "待评价", "退换/售后"};
+    private String[] titles = new String[]{"全部", "待付款", "待出行", "待评价", "售后"};
 
     private List<Fragment> fragmentList;
 

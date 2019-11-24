@@ -8,6 +8,7 @@ import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
@@ -53,5 +54,10 @@ public class FineFoodModel implements FineFoodContract.Model {
     @Override
     public Observable<BackResult<FoodRecommendListResponse>> getGoodsFoodRecommendList(int mchId) {
         return Api.getInstance().apiService.goodsFoodRecommendList(mchId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<MchCateListResponse>> findFoodListByCateId(HashMap<String, String> map) {
+        return Api.getInstance().apiService.findFoodListByCateId(map).compose(RxSchedulers.io_main());
     }
 }

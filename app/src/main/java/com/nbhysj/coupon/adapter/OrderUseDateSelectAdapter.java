@@ -145,13 +145,15 @@ public class OrderUseDateSelectAdapter extends RecyclerView.Adapter<OrderUseDate
                         int isCanBooking = goodsPriceDatesList.get(itemPosition).getIsCanBooking();
                         if (isCanBooking == TicketBookStatusEnum.BOOKABLE.getKey())  //0:不可预订 1:可预订
                         {
+
                             mSelectPosition = itemPosition;
+                         //   orderUseDateSelectListener.datePriceSelectCallBack(mSelectPosition);
                             for (int i = 0; i < goodsPriceDatesList.size(); i++) {
                                 goodsPriceDatesList.get(i).setSelectDatePrice(false);
                             }
                             goodsPriceDatesList.get(itemPosition).setSelectDatePrice(true);
                             notifyDataSetChanged();
-                            orderUseDateSelectListener.datePriceSelectCallBack(mSelectPosition);
+
                         }
                     }
                 }

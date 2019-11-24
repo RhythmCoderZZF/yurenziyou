@@ -30,12 +30,14 @@ import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
 import com.nbhysj.coupon.ui.AlbumDetailsActivity;
+import com.nbhysj.coupon.ui.CollectionActivity;
 import com.nbhysj.coupon.ui.CouponListActivity;
 import com.nbhysj.coupon.ui.FollowAndFansActivity;
 import com.nbhysj.coupon.ui.MyBusinessCardActivity;
 import com.nbhysj.coupon.ui.MyOrderActivity;
 import com.nbhysj.coupon.ui.PersonalSettingsActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
+import com.nbhysj.coupon.ui.ZanActivity;
 import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
@@ -165,7 +167,16 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         if (!TextUtils.isEmpty(avatar)) {
             mImgAvatar.loadCircle(avatar);
         }
-    }
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+        if (!TextUtils.isEmpty(token)) {
+
+                if (validateInternet()) {
+                    userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
+                    getUserInfo();
+                }
+
+            }
+        }
 
     @Override
     public void initData() {
@@ -192,7 +203,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     scrollView.setNeedScroll(false);
                 } else {
                     magicIndicatorTitle.setVisibility(View.GONE);
-                   scrollView.setNeedScroll(true);
+                    scrollView.setNeedScroll(true);
 
                 }
 
@@ -204,7 +215,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     // mLlytHeaderBg.setTranslationY(mOffset - mScrollY);
                 }
                 if (scrollY == 0) {
-                   // mLlytHeaderToolbar.setBackgroundColor(0);
+                    // mLlytHeaderToolbar.setBackgroundColor(0);
                     //ivBack.setImageResource(R.drawable.back_white);
                     // ivMenu.setImageResource(R.drawable.icon_menu_white);
                 } else {
@@ -215,7 +226,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 lastScrollY = scrollY;
             }
         });
-         //mLlytHeaderToolbar.setBackgroundColor(0);
+        //mLlytHeaderToolbar.setBackgroundColor(0);
 
         viewPager.setAdapter(new ComFragmentAdapter(getChildFragmentManager(), getFragments()));
         viewPager.setOffscreenPageLimit(3);
@@ -230,8 +241,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     public void run() {
 
                         EventBus.getDefault().post("mineFragmentRefresh");
-                        if(mSmartRefreshLayout != null)
-                        {
+                        if (mSmartRefreshLayout != null) {
                             mSmartRefreshLayout.finishRefresh();
                         }
 
@@ -256,8 +266,9 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         params.height = ScreenUtil.getScreenHeightPx(getActivity().getApplicationContext()) - toolBarPositionY - magicIndicator.getHeight() + 1;
         viewPager.setLayoutParams(params);
     }
-    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order,R.id.llyt_pending_payment,R.id.llyt_pending_travel,R.id.llyt_pending_comment,R.id.llyt_order_refund,
-            R.id.img_qr_my_card,R.id.rlyt_my_coupon,R.id.llyt_fans_num})
+
+    @OnClick({R.id.img_personal_setting, R.id.rlyt_avatar, R.id.llyt_user_info, R.id.llyt_all_order, R.id.llyt_pending_payment, R.id.llyt_pending_travel, R.id.llyt_pending_comment, R.id.llyt_order_refund,
+            R.id.img_qr_my_card, R.id.rlyt_my_coupon, R.id.llyt_fans_num, R.id.llyt_zan,R.id.llyt_collection,R.id.llyt_follow_num})
     public void onClick(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -315,14 +326,29 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     }
                 });
                 break;
-                case R.id.rlyt_my_coupon:
+            case R.id.rlyt_my_coupon:
 
-                    toActivity(CouponListActivity.class);
+                toActivity(CouponListActivity.class);
 
-                    break;
-            case R.id.llyt_fans_num:
-                toActivity(FollowAndFansActivity.class);
                 break;
+            case R.id.llyt_fans_num:
+                intent.putExtra("currentItem",0);
+                intent.setClass(getActivity(),FollowAndFansActivity.class);
+                startActivity(intent);
+
+                break;
+            case R.id.llyt_zan:
+                toActivity(ZanActivity.class);
+                break;
+            case R.id.llyt_collection:
+                toActivity(CollectionActivity.class);
+                break;
+            case R.id.llyt_follow_num:
+                intent.putExtra("currentItem",1);
+                intent.setClass(getActivity(),FollowAndFansActivity.class);
+                startActivity(intent);
+                break;
+
             default:
                 break;
         }
@@ -366,6 +392,9 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     e.printStackTrace();
                 }
                 break;
+                case Constants.USER_NOT_LOGIN_CODE:
+
+                    break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
@@ -411,11 +440,14 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         super.onResume();
         String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         if (!TextUtils.isEmpty(token)) {
+
             if (!isLoginFristCreate) {
-                userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
+
                 if (validateInternet()) {
+                    userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
                     getUserInfo();
                 }
+
             } else {
                 String userName = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.NICKNAME, "");
 
@@ -439,6 +471,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
             if (isFristCreate) {
                 toActivity(PhoneQuickLoginActivity.class);
                 isFristCreate = false;
+                isLoginFristCreate = false;
             }
         }
     }
@@ -455,6 +488,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
             }
         }
     }
+
     private void initMagicIndicator() {
         CommonNavigator commonNavigator = new CommonNavigator(getActivity());
         commonNavigator.setScrollPivotX(0.65f);
@@ -475,9 +509,9 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // scrollView.scrollTo(0, 2835);
+                        // scrollView.scrollTo(0, 2835);
                         viewPager.setCurrentItem(index, false);
-                      //  simplePagerTitleView.setTypeface(Typeface.DEFAULT_BOLD);
+                        //  simplePagerTitleView.setTypeface(Typeface.DEFAULT_BOLD);
                     }
                 });
                 return simplePagerTitleView;
@@ -522,7 +556,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                     public void onClick(View v) {
                         //int[] location = new int[2];
                         //magicIndicator.getLocationOnScreen(location);
-                      //  scrollView.scrollTo(0, 2835);
+                        //  scrollView.scrollTo(0, 2835);
                         int hight = mCollapsingToolbarLayout.getHeight();
                         viewPager.setCurrentItem(index, false);
                     }
@@ -546,6 +580,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         magicIndicatorTitle.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicatorTitle, viewPager);
     }
+
     @Override
     public boolean getUserVisibleHint() {
         System.out.print("112");

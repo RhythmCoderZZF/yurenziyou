@@ -23,6 +23,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
@@ -297,6 +298,11 @@ public class ShoppingMallFineFoodActivity extends BaseActivity<FineFoodPresenter
 
     @Override
     public void getFoodBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void findFoodsListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

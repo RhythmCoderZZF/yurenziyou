@@ -12,35 +12,56 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.adapter.WaitForMeToAnswerAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
+import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.request.IgnoreQuestionsAndAnswersRequest;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
+import com.nbhysj.coupon.model.response.QuestionDetailsBean;
+import com.nbhysj.coupon.model.response.WaitForMeToAnswerBean;
+import com.nbhysj.coupon.model.response.WaitForMeToAnswerResponse;
+import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
+import com.nbhysj.coupon.presenter.MchQuestionAndAnswerPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 
 /**
- * @auther：hysj created on 2019/06/18
+ * @auther：hysj created on 2019/11/18
  * description：我的回答(待我来答)列表
  */
-public class WaitForMeToAnswerListFragment extends BaseFragment{
-    private static final String ORDER_STATUS_CODE = "orderStatus";
+public class WaitForMeToAnswerListFragment extends BaseFragment<MchQuestionAndAnswerPresenter, MchQuestionAndAnswerModel> implements MchQuestionAndAnswerContract.View {
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout mSmartRefreshLayout;
     @BindView(R.id.rlyt_no_data)
     RelativeLayout mRlytNoData;
+    //待我来回答
+    @BindView(R.id.rv_wait_for_me_to_answer)
+    RecyclerView mRvWaitForMeToAnswer;
 
-    private int mPage = 1;
+    private int mPageNo = 1;
+
+    private int mPageSize = 10;
+
+    private boolean isOnLoadMore = false;
+
     int mTotalPageCount;
-    private boolean hasLoaded = false;
 
-    private boolean isCreated = false;
-
-    private boolean isVisibleToUser = false;
     public String TAG = "WaitForMeToAnswerListFragment.this";
+
+    private WaitForMeToAnswerAdapter waitForMeToAnswerAdapter;
+
+    private List<WaitForMeToAnswerBean> waitForMeToAnswerList;
 
     public WaitForMeToAnswerListFragment() {
         // Required empty public constructor
@@ -51,7 +72,6 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
 
         WaitForMeToAnswerListFragment fragment = new WaitForMeToAnswerListFragment();
         Bundle args = new Bundle();
-        args.putString(ORDER_STATUS_CODE, orderStatus);
         fragment.setArguments(args);
 
 
@@ -71,7 +91,7 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_follow_sub_list;
+        return R.layout.fragment_wait_for_me_to_answer;
     }
 
     @Override
@@ -84,9 +104,13 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
     @Override
     protected void initView(View v) {
 
+        if (waitForMeToAnswerList == null) {
 
+            waitForMeToAnswerList = new ArrayList<>();
+        } else {
+            waitForMeToAnswerList.clear();
+        }
 
-        // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity()) {
             @Override
             public RecyclerView.LayoutParams generateDefaultLayoutParams() {
@@ -95,19 +119,27 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
             }
         };
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
-      /*  mRvOrderListView.setLayoutManager(linearLayoutManager);
-        mOrderListItemAdapter = new OrderListSubItemAdapter(getActivity());
-        mOrderListItemAdapter.setOrderList(mchOrdersResponseList);
-        mOrderListItemAdapter.setOrderListItemListener(this);
-        mRvOrderListView.setAdapter(mOrderListItemAdapter);*/
+        mRvWaitForMeToAnswer.setLayoutManager(linearLayoutManager);
+        waitForMeToAnswerAdapter = new WaitForMeToAnswerAdapter(getActivity(), new WaitForMeToAnswerAdapter.WaitForMeToAnswerListener() {
+            @Override
+            public void setQuestionIgnoreListener(int position) {
 
-        isCreated = true;
-        lazyLoad();
+                questionIgnore();
+            }
+
+            @Override
+            public void setQuestionAnswerListener(int position) {
+
+            }
+        });
+        waitForMeToAnswerAdapter.setWaitForMeToAnswerList(waitForMeToAnswerList);
+        mRvWaitForMeToAnswer.setAdapter(waitForMeToAnswerAdapter);
+
     }
 
     @Override
     public void initData() {
-       // getOrderList();
+        // getOrderList();
         mSmartRefreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
 
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -116,12 +148,12 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //isOnRefresh = true;
-                        mPage = 1;
-                     /*   mchOrdersResponseList.clear();
-                        mOrderListItemAdapter.notifyDataSetChanged();
+                        isOnLoadMore = false;
+                        mPageNo = 1;
+                        waitForMeToAnswerList.clear();
+                        waitForMeToAnswerAdapter.notifyDataSetChanged();
                         showProgressDialog(getActivity());
-                        getOrderList();*/
+                        getWaitMyAnswerList();
 
                     }
                 }, 100);
@@ -135,14 +167,14 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
 
                     @Override
                     public void run() {
-                     //   isOnLoadMore = true;
+                        isOnLoadMore = true;
                         try {
-                          /*  if (mTotalPageCount == mchOrdersResponseList.size()) {
+                            if (mTotalPageCount == waitForMeToAnswerList.size()) {
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
-                                mPage++;
-                                getOrderList();
-                            }*/
+                                mPageNo++;
+                                getWaitMyAnswerList();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -153,9 +185,17 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
 
     }
 
-   /* @Override
-    public void getMchOrdersListResult(BackResult<List<MchOrdersResponse>> res) {
+    @Override
+    public void lazyInitView(View view) {
+        showProgressDialog(getActivity());
+        waitForMeToAnswerList.clear();
+        isOnLoadMore = false;
+        mPageNo = 1;
+        getWaitMyAnswerList();
+    }
 
+    @Override
+    public void getWaitMyAnswerListResult(BackResult<WaitForMeToAnswerResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
             mSmartRefreshLayout.finishRefresh();
@@ -163,66 +203,49 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
+
                     if (isOnLoadMore) {
 
                         mSmartRefreshLayout.finishLoadMore();
+
                     } else {
 
-                        mchOrdersResponseList.clear();
-                        mOrderListItemAdapter.notifyDataSetChanged();
+                        waitForMeToAnswerList.clear();
+                        waitForMeToAnswerAdapter.notifyDataSetChanged();
                         mSmartRefreshLayout.finishRefresh();
                         mSmartRefreshLayout.setNoMoreData(false);
                     }
 
-                    List<MchOrdersResponse> mchOrdersList = res.getData();
-                    mTotalPageCount = res.getTotalNumber();
+                    BasePaginationResult paginationResult = res.getData().getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+                    List<WaitForMeToAnswerBean> answerList = res.getData().getResult();
 
                     if (mTotalPageCount == 0) {
                         mRlytNoData.setVisibility(View.VISIBLE);
+
                     } else {
                         mRlytNoData.setVisibility(View.GONE);
                     }
-                    if (mchOrdersList != null) {
-                        mchOrdersResponseList.addAll(mchOrdersList);
+
+                    if (answerList != null) {
+                        waitForMeToAnswerList.addAll(answerList);
                     }
 
-                    if (mPage == 1 && isOnRefresh) {
+                    waitForMeToAnswerAdapter.setWaitForMeToAnswerList(waitForMeToAnswerList);
+                    waitForMeToAnswerAdapter.notifyDataSetChanged();
 
-                        mOrderListItemAdapter.setOrderList(mchOrdersResponseList);
-                        mRvOrderListView.setAdapter(mOrderListItemAdapter);
-                    } else {
-
-                        mOrderListItemAdapter.setOrderList(mchOrdersResponseList);
-                        mOrderListItemAdapter.notifyDataSetChanged();
-                    }
-                    isOnRefresh = false;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case Constants.USER_RELOGIN_CODE:
-                onReLogin(getResources().getString(R.string.str_token_invalid));
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
                 break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
         }
-
     }
-
-   */
-
-    @Override
-    public void lazyInitView(View view) {
-      /*  showProgressDialog(getActivity());
-        mchOrdersResponseList.clear();
-       // mOrderListItemAdapter.notifyDataSetChanged();
-        isOnRefresh = true;
-        isOnLoadMore = false;
-        mPage = 1;
-        getOrderList();*/
-    }
-
 
     public class MyBroadcastReceiver extends BroadcastReceiver {
         @Override
@@ -239,28 +262,11 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        this.isVisibleToUser = isVisibleToUser;//注：关键步骤
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            lazyLoad();
         }
     }
 
-    private void lazyLoad() {
-        if (!isVisibleToUser || hasLoaded || !isCreated) {
-            return;
-        }
-
-        showProgressDialog(getActivity());
-      //  mchOrdersResponseList.clear();
-        // mOrderListItemAdapter.notifyDataSetChanged();
-        //isOnRefresh = true;
-        //isOnLoadMore = false;
-        mPage = 1;
-       // getOrderList();
-        // lazyInitView();
-        //hasLoaded = true;//注：关键步骤，确保数据只加载一次
-    }
 
     @Override
     public void onAttachFragment(Fragment childFragment) {
@@ -269,16 +275,86 @@ public class WaitForMeToAnswerListFragment extends BaseFragment{
 
     }
 
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        OrderMainFragment orderMainFragment = (MainActivity)context;
-        orderMainFragment.updateActivityUIFromFragment(this);
-    }*/
+    @Override
+    public void questionAnsweringPublishResult(BackResult res) {
 
+    }
+
+    @Override
+    public void getMchQuestionAndAnswerListResult(BackResult<WaitMyAnswerResponse> res) {
+
+    }
+
+    @Override
+    public void getQuestionDetailsResult(BackResult<QuestionDetailsBean> res) {
+
+    }
+
+    @Override
+    public void answerPublishResult(BackResult res) {
+
+    }
+
+    @Override
+    public void askTogetherResult(BackResult res) {
+
+    }
+
+    @Override
+    public void answerZanResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getUserAskTogetherListResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getMyAnswerListResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getMyQuestionListResult(BackResult<QuestionAnsweringResponse> res) {
+
+    }
+
+    @Override
+    public void ignoreQuestionsAndAnswersResult(BackResult<QuestionAnsweringResponse> res) {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+
+        showToast(getActivity(), Constants.getResultMsg(msg));
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+
+    //待回答
+    public void getWaitMyAnswerList() {
+
+        if (validateInternet()) {
+
+            mPresenter.getWaitMyAnswerList(mPageNo, mPageSize);
+        }
+    }
+
+    //问题忽略
+    public void questionIgnore(){
+
+        if(validateInternet()) {
+            IgnoreQuestionsAndAnswersRequest ignoreQuestionsAndAnswersRequest = new IgnoreQuestionsAndAnswersRequest();
+            ignoreQuestionsAndAnswersRequest.setMchId(0);
+            mPresenter.ignoreQuestionsAndAnswers(ignoreQuestionsAndAnswersRequest);
+        }
     }
 }

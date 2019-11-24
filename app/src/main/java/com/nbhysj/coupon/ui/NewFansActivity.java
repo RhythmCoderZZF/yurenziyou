@@ -14,6 +14,7 @@ import com.nbhysj.coupon.model.MessageModel;
 import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
@@ -195,6 +196,11 @@ public class NewFansActivity extends BaseActivity<MessagePresenter, MessageModel
     }
 
     @Override
+    public void getBroadcatMessageListResult(BackResult<BroadcastResponse> res) {
+
+    }
+
+    @Override
     public void getUserFansListResult(BackResult<UserFansFollowResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
@@ -238,6 +244,9 @@ public class NewFansActivity extends BaseActivity<MessagePresenter, MessageModel
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
+                break;
             default:
                 showToast(NewFansActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -269,7 +278,7 @@ public class NewFansActivity extends BaseActivity<MessagePresenter, MessageModel
 
         if(validateInternet()){
 
-            mPresenter.getUserFansList();
+            mPresenter.getUserFansList(mPageNo,mPageSize);
         }
     }
 

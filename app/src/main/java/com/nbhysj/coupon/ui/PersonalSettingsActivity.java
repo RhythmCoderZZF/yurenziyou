@@ -117,11 +117,7 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 finish();
-                onReLogin();
-                break;
-            case Constants.USER_NOT_LOGIN_CODE:
-                finish();
-                onReLogin();
+                onReLogin("");
                 break;
             default:
                 showToast(PersonalSettingsActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -156,7 +152,9 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
                 toActivity(FrequentlyUsedInformationActivity.class);
                 break;
             case R.id.tv_logout:
-                logout();
+              //  logout();
+                finish();
+                onReLogin("");
                 break;
             case R.id.rlyt_clear_cache:
                 try {

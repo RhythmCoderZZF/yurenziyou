@@ -237,6 +237,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //增加门票价格
     private double increaseTicketPrice;
 
+    //优惠价格
+    private double discountPrice;
+
     //商品id
     private int goodsId;
 
@@ -355,9 +358,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     //新选择的优惠券id
     private int newUseId;
-
-    //优惠价
-    private int mDisCountFee;
 
     //优惠券标题
     private String mCouponTitle;
@@ -587,8 +587,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDatesList.get(position);
                 datePrice = goodsPriceDatesResponse.getPrice();
                 goodsPriceDateSelect = goodsPriceDatesResponse.getDate();
-                double totalPrice = increaseTicketPrice + datePrice;
-                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                discountPrice = 0;
+                getPriceSettlement();
                 queryByTicket();
             }
         });
@@ -655,8 +655,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     mIncreaseTicketTotalPrice = mIncreaseTicketTotalPrice + totalPrice;
                 }
 
-                double totalPrice = mIncreaseTicketTotalPrice + mTotalPrice;  //mPurchaseNum
-                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                getPriceSettlement();
             }
         });
         increaseTicketAdapter.setIncreaseTicketList(goodsPriceList);
@@ -795,8 +794,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     if (goodsPriceList.size() > 0) {
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
-                        mTotalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
+                        getPriceSettlement();
                     }
                 } else {
 
@@ -811,9 +809,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 if (goodsPriceList.size() > 0) {
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
+                    getPriceSettlement();
                 }
-                mTotalPrice = increaseTicketPrice + datePrice * mPurchaseNum;
-                mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
+
                 break;
             case R.id.tv_add_vehicle_more:
 
@@ -843,8 +841,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 mLlytAddAndUpdateTourists.setVisibility(View.VISIBLE);
                 mLlytAddAndUpdateTourists.startAnimation(inAnimation);
                 mRlytNewTouristsBgHalf.setVisibility(View.VISIBLE);
-              /*  mEdtTouristName.setText(realname);
-                mEdtTouristMobile.setText(mobile);*/
 
                 addTouristInformationAdapter.setTouristInfoList(travellersList);
                 addTouristInformationAdapter.notifyDataSetChanged();
@@ -885,9 +881,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                             } else {
 
                                 mTvCoupon.setText(mCouponTitle);
-                                mTvAlreadyReducedPrice.setVisibility(View.GONE);
-                                mTvDefaultTicketPrice.setVisibility(View.GONE);
-
                                 if (couponSelectDialog != null)
                                 {
                                     couponSelectDialog.dismiss();
@@ -1061,7 +1054,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 try {
                     UseCouponTicketResponse useCouponTicketResponse = res.getData();
 
-                    int disCount = useCouponTicketResponse.getDiscount();
+                    discountPrice = useCouponTicketResponse.getDiscount();
                     chooseIds.clear();
                     chooseIds = useCouponTicketResponse.getChooseId();
 
@@ -1070,38 +1063,17 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                         couponSelectDialog.dismiss();
                     }
 
-                 /*   for (int i = 0; i < couponList.size();i++){
-
-                        CouponsBean couponsBean = couponList.get(i);
-                        boolean isCouponSelect = couponsBean.isCouponSelect();
-                        if(isCouponSelect){
-
-                            int disCountFee = couponsBean.getDiscountFee();
-                            mDisCountFee = mDisCountFee + disCountFee;
-                        }
-                    }*/
-
-                    if(disCount > 0) {
-
-                        mTvAlreadyReducedPrice.setVisibility(View.VISIBLE);
-                        mTvAlreadyReducedPrice.setText("已减" + disCount + "元");
-                        mTvDefaultTicketPrice.setVisibility(View.VISIBLE);
-
-                        double totalPrice = increaseTicketPrice + datePrice;
-                        double price = totalPrice - disCount;
-                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(price));
-                        mTvDefaultTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-                        mTvDefaultTicketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+                    if(discountPrice > 0) {
+                        getPriceSettlement();
                         mRlytDiscount.setVisibility(View.VISIBLE);
-                        double disCountDouble = (double)disCount;
-                        mTvOrderDiscountPrice.setText("¥" + Tools.getTwoDecimalPoint(disCountDouble));
+                        mTvOrderDiscountPrice.setText("¥" + Tools.getTwoDecimalPoint(discountPrice));
+                        mTvCoupon.setText("-¥" + discountPrice);
+
                     } else {
 
-                        double totalPrice = increaseTicketPrice + datePrice;
-                        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-                        mTvAlreadyReducedPrice.setVisibility(View.GONE);
-                        mTvDefaultTicketPrice.setVisibility(View.GONE);
+                        getPriceSettlement();
                         mRlytDiscount.setVisibility(View.GONE);
+                        mTvCoupon.setText("不使用优惠券");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1136,6 +1108,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     e.printStackTrace();
                 }
                 break;
+                case Constants.USER_NOT_LOGIN_CODE:
+                    onReLogin("");
+                    break;
             default:
                 showToast(OrderSubmitActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -1855,5 +1830,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             useCouponTicketRequest.setNewUseId(newUseId);
             mPresenter.useCouponTicketRequest(useCouponTicketRequest);
         }
+    }
+
+    //价格结算
+    public void getPriceSettlement()
+    {
+        mTotalPrice = increaseTicketPrice + datePrice * mPurchaseNum - discountPrice;
+        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
     }
 }

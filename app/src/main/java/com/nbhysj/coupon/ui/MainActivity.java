@@ -470,11 +470,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     protected void onResume() {
         super.onResume();
 
-        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+     /*   String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         if (TextUtils.isEmpty(token)) {
             goFragment(0);
             navigation.setSelectedItemId(TabFragment.values()[0].menuId);
-        }
+        }*/
     }
 
 

@@ -97,8 +97,6 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
         if (tagList.size() > 0) {
             mTagId = tagList.get(0).getId();
 
-            isInitView = true;
-            isCanLoadData();
 
             mTabIndicator.setMyOnPageChangeListener(new NearbyTabIndicator.MyOnPageChangeListener() {
                 @Override
@@ -133,6 +131,8 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
     @Override
     public void initView(View v) {
+        isInitView = true;
+        isCanLoadData();
         EventBus.getDefault().register(this);
         initLocation();
         if (nearbyCardList == null) {

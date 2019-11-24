@@ -188,6 +188,10 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
     @BindView(R.id.tv_invoice_detail)
     TextView mTvInvoiceDetail;
 
+    //验证码信息
+    @BindView(R.id.llyt_verification_code_info)
+    LinearLayout mLlytVerificationCodeInfo;
+
     private String tel;
 
     /**
@@ -591,6 +595,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
             case R.id.tv_apply_for_all_order_refund:
 
                 mIntent.setClass(OrderDetailActivity.this, AllRefundApplyActivity.class);
+                mIntent.putExtra("orderNo",orderNo);
                 startActivity(mIntent);
                 break;
             case R.id.tv_go_order_payment:
@@ -700,7 +705,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                             dotViewsList.add(dotView);
                         }
 
-                        String orderNo = orderEntity.getOrderNo();
+                        orderNo = orderEntity.getOrderNo();
                         dataId = orderEntity.getDataId();
                         String explain = orderEntity.getExplain();
                         String totalFee = orderEntity.getTotalFee();  //总金额
@@ -741,6 +746,8 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                     mTvOrderEvaluate.setVisibility(View.VISIBLE);
                                 }
 
+                                mLlytVerificationCodeInfo.setVisibility(View.VISIBLE);
+
                             } else if (orderStatus.equals(orderPendingPaymentValue)) {  //交易待支付
 
                                 mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_blue_my_order_detail);
@@ -752,7 +759,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mTvOrderEvaluate.setVisibility(View.GONE);
                                 mTvOrderPayment.setVisibility(View.VISIBLE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
-
+                                mLlytVerificationCodeInfo.setVisibility(View.GONE);
                             } else if (orderStatus.equals(orderPaymentTimeoutValue)) {  //支付超时
                                 mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_red_my_order_detail);
                                 mToolbarSpace.setBackgroundResource(R.drawable.bg_gradient_red_my_order_detail);
@@ -763,7 +770,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mTvOrderEvaluate.setVisibility(View.GONE);
                                 mTvOrderPayment.setVisibility(View.GONE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
-
+                                mLlytVerificationCodeInfo.setVisibility(View.GONE);
                             } else if (orderStatus.equals(orderTradeCancelValue)) {    //交易取消
 
                                 mRlytHeaderBgOrderDetail.setBackgroundResource(R.drawable.bg_gradient_yellow_my_order_detail);
@@ -775,6 +782,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mTvOrderEvaluate.setVisibility(View.GONE);
                                 mTvOrderPayment.setVisibility(View.GONE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
+                                mLlytVerificationCodeInfo.setVisibility(View.GONE);
                             }
                         }
 

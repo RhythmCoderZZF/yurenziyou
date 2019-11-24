@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchFoodBean;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
@@ -229,6 +230,11 @@ public class FoodRecommendationListActivity extends BaseActivity<FineFoodPresent
 
     @Override
     public void findFoodByCateResult(BackResult<ScenicSpotResponse> res) {
+
+    }
+
+    @Override
+    public void findFoodsListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

@@ -11,11 +11,11 @@ import java.util.List;
  */
 public class UseCouponTicketResponse {
 
-    private int discount;
+    private double discount;
 
     private List<Integer> chooseId;
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 

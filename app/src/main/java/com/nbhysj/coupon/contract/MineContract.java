@@ -9,6 +9,8 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -43,6 +45,12 @@ public interface MineContract {
         //收藏批量删除帖子
         Observable<BackResult> collectionPostsBatchDeleteRequest(CollectionBatchPostsDeleteRequest collectionBatchDeleteRequest);
 
+        //获取赞
+        Observable<BackResult<ZanAndCollectionResponse>> getZanMsgList(int pageNo, int pageSize);
+
+        //获取收藏
+        Observable<BackResult<ZanAndCollectionResponse>> getCollectionMsgList(int pageNo, int pageSize);
+
     }
 
     interface View extends BaseView {
@@ -58,6 +66,10 @@ public interface MineContract {
         void collectionMchBatchDeleteContentResult(BackResult res);
 
         void collectionPostsBatchDeleteResult(BackResult res);
+
+        void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res);
+
+        void getCollectionMsgListResult(BackResult<ZanAndCollectionResponse> res);
 
         void showMsg(String msg);
     }
@@ -76,5 +88,8 @@ public interface MineContract {
 
         public abstract void collectionPostsBatchDeleteRequest(CollectionBatchPostsDeleteRequest  collectionBatchDeleteRequest);
 
+        public abstract void getZanMsgList(int pageNo,int pageSize);
+
+        public abstract void getCollectionMsgList(int pageNo,int pageSize);
     }
 }

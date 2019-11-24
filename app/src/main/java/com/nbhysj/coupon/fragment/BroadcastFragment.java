@@ -4,24 +4,58 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.BroadcastItemAdapter;
+import com.nbhysj.coupon.adapter.StrategyListAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.MessageContract;
+import com.nbhysj.coupon.model.MessageModel;
+import com.nbhysj.coupon.model.response.AttentionResponse;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.BroadcastBean;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
+import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
+import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.ImageData;
+import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.StrategyBean;
+import com.nbhysj.coupon.model.response.UserFansFollowResponse;
+import com.nbhysj.coupon.model.response.UserFollowResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
+import com.nbhysj.coupon.presenter.MessagePresenter;
+import com.nbhysj.coupon.ui.StrategyActivity;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class BroadcastFragment extends BaseFragment {
+public class BroadcastFragment extends BaseFragment<MessagePresenter, MessageModel> implements MessageContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    @BindView(R.id.refresh_layout)
+    SmartRefreshLayout mSmartRefreshLayout;
+    //赞无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
+    //广播
     @BindView(R.id.rv_broadcast)
     RecyclerView mRvBroadcastList;
-    private List<ImageData> imageDataList = new ArrayList<>();
 
+    private int mPageNo = 1;
+    private int mPageSize = 10;
+
+    private boolean isOnLoadMore = false;
+
+    private List<BroadcastBean> broadcastMessageList;
+
+    BroadcastItemAdapter mBroadcastItemAdapter;
+
+    private int mTotalPageCount;
     public BroadcastFragment() {
         // Required empty public constructor
     }
@@ -50,39 +84,32 @@ public class BroadcastFragment extends BaseFragment {
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this,mModel);
+
     }
 
     @Override
     public void initView(View v) {
 
+        getBroadcatMessageList();
 
-        if (imageDataList == null) {
+        if (broadcastMessageList == null) {
 
-            imageDataList = new ArrayList<>();
+            broadcastMessageList = new ArrayList<>();
         } else {
-            imageDataList.clear();
+            broadcastMessageList.clear();
         }
 
-        ImageData imageData = new ImageData();
-        imageData.setUrl("http://pic44.nipic.com/20140723/19276212_171901262000_2.jpg");
 
-        ImageData imageData1 = new ImageData();
-        imageData1.setUrl("http://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/lvpics/w=1000/sign=a669f57d3a12b31bc76cc929b628377a/503d269759ee3d6d801feef140166d224f4ade2b.jpg");
-
-        ImageData imageData2 = new ImageData();
-        imageData2.setUrl("http://img.juimg.com/tuku/yulantu/140818/330657-140QPJ62723.jpg");
-        imageDataList.add(imageData);
-        imageDataList.add(imageData1);
-        imageDataList.add(imageData2);
 
         // 创建一个线性布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         // 设置布局管理器
         mRvBroadcastList.setLayoutManager(layoutManager);
 
-        BroadcastItemAdapter broadcastItemAdapter = new BroadcastItemAdapter(getActivity());
-        broadcastItemAdapter.setBroadcastList(imageDataList);
-        mRvBroadcastList.setAdapter(broadcastItemAdapter);
+        mBroadcastItemAdapter = new BroadcastItemAdapter(getActivity());
+        mBroadcastItemAdapter.setBroadcastList(broadcastMessageList);
+        mRvBroadcastList.setAdapter(mBroadcastItemAdapter);
 
     }
 
@@ -96,4 +123,103 @@ public class BroadcastFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void getUserFansListResult(BackResult<UserFansFollowResponse> res) {
+
+    }
+
+    @Override
+    public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
+
+    }
+
+    @Override
+    public void getAttentionInitResult(BackResult<AttentionResponse> res) {
+
+    }
+
+    @Override
+    public void getUserFollowResult(BackResult<UserFollowResponse> res) {
+
+    }
+
+    @Override
+    public void getMessageListResult(BackResult<MessageResponse> res) {
+
+    }
+
+    @Override
+    public void getZanAndCollectionMsgResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getPostsCommentAndAnswerResult(BackResult<CommentAndAnswerResponse> res) {
+
+    }
+
+    @Override
+    public void getBroadcatMessageListResult(BackResult<BroadcastResponse> res) {
+        dismissProgressDialog();
+        if (mSmartRefreshLayout != null) {
+            mSmartRefreshLayout.finishRefresh();
+        }
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    if (isOnLoadMore) {
+
+                        mSmartRefreshLayout.finishLoadMore();
+                    } else {
+
+                        broadcastMessageList.clear();
+                        mBroadcastItemAdapter.notifyDataSetChanged();
+                        mSmartRefreshLayout.finishRefresh();
+                        mSmartRefreshLayout.setNoMoreData(false);
+                    }
+
+                    BasePaginationResult paginationResult = res.getData().getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+                    List<BroadcastBean> broadcastList = res.getData().getResult();
+
+                    if (mTotalPageCount == 0)
+                    {
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                    } else {
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
+
+                    if (broadcastList != null)
+                    {
+                        broadcastMessageList.addAll(broadcastList);
+                    }
+
+                    mBroadcastItemAdapter.setBroadcastList(broadcastMessageList);
+                    mBroadcastItemAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        dismissProgressDialog();
+        showToast(getActivity(), Constants.getResultMsg(msg));
+
+    }
+
+    public void getBroadcatMessageList(){
+
+        if(validateInternet()){
+
+            mPresenter.getBroadcatMessageList(mPageNo,mPageSize);
+        }
+    }
 }

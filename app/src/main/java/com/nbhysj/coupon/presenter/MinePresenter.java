@@ -44,4 +44,14 @@ public class MinePresenter extends MineContract.Presenter {
     public void collectionPostsBatchDeleteRequest(CollectionBatchPostsDeleteRequest collectionBatchDeleteRequest) {
         mRxManager.add(mModel.collectionPostsBatchDeleteRequest(collectionBatchDeleteRequest).subscribe(res -> mView.collectionPostsBatchDeleteResult(res), e -> mView.showMsg(e.getMessage())));
     }
+
+    @Override
+    public void getZanMsgList(int pageNo, int pageSize) {
+        mRxManager.add(mModel.getZanMsgList(pageNo,pageSize).subscribe(res -> mView.getZanMsgListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getCollectionMsgList(int pageNo, int pageSize) {
+        mRxManager.add(mModel.getCollectionMsgList(pageNo,pageSize).subscribe(res -> mView.getCollectionMsgListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 }

@@ -217,8 +217,6 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
         mRvNotePicture.setLayoutManager(linearLayoutManager);
 
         notePictureItemAdapter = new NotePictureItemAdapter(PublishNoteActivity.this);
-        //  selectedPhotos.add("");
-        //selectedPhotos.add("");
         notePictureItemAdapter.setNotePictureList(selectedPhotos, isPhotoSelect, null, 0);
         notePictureItemAdapter.setNotePictureListener(new NotePictureItemAdapter.NotePictureListener() {
             @Override

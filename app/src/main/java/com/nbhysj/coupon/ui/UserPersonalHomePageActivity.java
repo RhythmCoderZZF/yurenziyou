@@ -432,6 +432,9 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin(getResources().getString(R.string.str_login_token_invalid));
+                break;
             default:
                 showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -460,6 +463,9 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(res.getMsg()));

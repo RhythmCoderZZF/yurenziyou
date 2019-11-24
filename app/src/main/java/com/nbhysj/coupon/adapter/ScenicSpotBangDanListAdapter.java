@@ -155,7 +155,6 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-
         //景区评分
         TextView mTvPopularScenicSpotScore;
         //景区门票

@@ -24,7 +24,9 @@ import com.nbhysj.coupon.framework.AppManager;
 import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.TUtil;
+import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.util.LogUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.MyToastView;
 import com.nbhysj.coupon.dialog.LoadingDialog;
 
@@ -167,16 +169,18 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
      */
     public void onReLogin(String message) {
         try {
-            if (!TextUtils.isEmpty(message)) {
-                Toast.makeText(mContext, getResources().getString(R.string.str_login_token_invalid), Toast.LENGTH_SHORT).show();
+            if(TextUtils.isEmpty(message))
+            {
+                Intent intent = new Intent(mContext, PhoneQuickLoginActivity.class);
+                mContext.startActivity(intent);
             }
-
-            // Intent intent = new Intent(mContext, LoginActivity.class);
             // 如果这个activity已经启动了，就不产生新的activity
+
             //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             //context.startActivityForResult(intent, Constant.REQUEST_CODE_UPDATE_UI);
-            //  mContext.startActivity(intent);
-            appManager.exitApp();
+            String userName = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME,"");
+            SharedPreferencesUtils.clearSharePreference();
+            SharedPreferencesUtils.putData(SharedPreferencesUtils.USERNAME,userName);
         } catch (Exception e) {
             LogUtil.e("跳转登录页面失败", e.getMessage());
         }

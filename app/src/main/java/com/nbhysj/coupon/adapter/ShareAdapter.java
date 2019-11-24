@@ -26,9 +26,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     List<MyPostShareResponse> myPostShareList;
     private Context mContext;
 
-    public ShareAdapter(Context mContext) {
+    private ShareListener shareListener;
+
+    public ShareAdapter(Context mContext,ShareListener shareListener) {
 
         this.mContext = mContext;
+        this.shareListener = shareListener;
     }
 
     public void setShareList(List<MyPostShareResponse> myPostShareList) {
@@ -66,6 +69,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     @Override
                     public void setSubShareListener(int mPostId) {
 
+                        shareListener.setShareListener(mPostId);
+
                     }
                 });
                 subShareAdapter.setPostShareList(myPostShareList);
@@ -95,5 +100,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface ShareListener{
+
+        void setShareListener(int mPostId);
     }
 }

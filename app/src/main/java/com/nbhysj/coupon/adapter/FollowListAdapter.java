@@ -82,12 +82,13 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         try {
 
             HomePageSubTopicTagBean followDetailBean = followDetailList.get(position);
+            int postId = followDetailBean.getId();
             int commentCount = followDetailBean.getCommentCount();//评论数
             int collectionCount = followDetailBean.getCollectionCount();//收藏数
             int zanCount = followDetailBean.getZanCount();//点赞数
 
             holder.mTvUserName.setText(followDetailBean.getNickname());
-            String postPublishDateStr = DateUtil.transferLongToDateStr(DateUtil.sDateYMDHHMMSSFormat, followDetailBean.getCtime());
+            String postPublishDateStr = DateUtil.transferLongToDate(DateUtil.sDateYMDHHMMSSFormat, followDetailBean.getCtime());
             Date date = DateUtil.getDateStrToDate(postPublishDateStr, DateUtil.sDateYMDHHMMSSFormat);
             String postPublishDate = DateUtil.dateFormat(date);
             holder.mTvTime.setText(postPublishDate);
@@ -100,7 +101,6 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 holder.mSlideViewFriendDetailPictrue.initUI(bannerUrlList);
             }
             List<TopicsBean> topicsList = followDetailBean.getTopics();
-            // List<FollowDetailBean.UserEntity> interestUserList = followDetailBean.getInterestUserEntity();
             holder.mTagFlowLayout.setAdapter(new TagAdapter<TopicsBean>(topicsList) {
 
                 @Override
@@ -164,37 +164,15 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 holder.mLlytUserComment.setVisibility(View.GONE);
             }
 
-
             GlideUtil.loadImage(mContext, avaterUrl, holder.mCircleImageViewCommentUserAvatar);
             //帖子时间
-            String postPublishTime = DateUtil.transferLongToDateStr(DateUtil.sDateYMDFormat, followDetailBean.getCtime());
+            String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, followDetailBean.getCtime());
             holder.mTvPostTime.setText(postPublishTime);
 
             List<RecommendInterestUsersBean> recommendUsersList = followDetailBean.getRecommendUsers();
 
-            /*List<FollowDetailBean.UserEntity> followDetailList = new ArrayList<>();
-
-            FollowDetailBean.UserEntity usersOfInterestBean = new FollowDetailBean().new UserEntity();
-            usersOfInterestBean.setAvatar("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1558834720&di=00466ae558e13f6cf43fb17ce230e022&src=http://pic163.nipic.com/file/20180426/8737320_182218844088_2.jpg");
-            usersOfInterestBean.setUsername("宁波哦");
-            usersOfInterestBean.setDes("旅游达人");
-
-            FollowDetailBean.UserEntity usersOfInterestBean1 = new FollowDetailBean().new UserEntity();
-            usersOfInterestBean1.setAvatar("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1558834720&di=00466ae558e13f6cf43fb17ce230e022&src=http://pic163.nipic.com/file/20180426/8737320_182218844088_2.jpg");
-            usersOfInterestBean1.setUsername("宁波哦");
-            usersOfInterestBean1.setDes("旅游达人");
-
-            FollowDetailBean.UserEntity usersOfInterestBean2 = new FollowDetailBean().new UserEntity();
-            usersOfInterestBean2.setAvatar("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1558834720&di=00466ae558e13f6cf43fb17ce230e022&src=http://pic163.nipic.com/file/20180426/8737320_182218844088_2.jpg");
-            usersOfInterestBean2.setUsername("宁波哦");
-            usersOfInterestBean2.setDes("旅游达人");
-
-            followDetailList.add(usersOfInterestBean);
-            followDetailList.add(usersOfInterestBean1);
-            followDetailList.add(usersOfInterestBean2);*/
-
             if (recommendUsersList != null) {
-                holder.mRlytInterestUser.setVisibility(View.VISIBLE);
+                holder.mLlytInterestUser.setVisibility(View.VISIBLE);
                 //可能感兴趣列表
                 LinearLayoutManager userOfInterestLinearLayoutManager = new LinearLayoutManager(mContext);
                 userOfInterestLinearLayoutManager.setOrientation(userOfInterestLinearLayoutManager.HORIZONTAL);
@@ -212,7 +190,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
             } else {
 
-                holder.mRlytInterestUser.setVisibility(View.GONE);
+                holder.mLlytInterestUser.setVisibility(View.GONE);
             }
 
             holder.mTvInterestUserLookMore.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +205,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 @Override
                 public void onClick(View view) {
 
-                    followListener.setLookCommentListener();
+                    followListener.setLookCommentListener(postId);
 
                 }
             });
@@ -253,9 +231,19 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 @Override
                 public void onClick(View view) {
 
-                    followListener.setFollowShareListener();
+                    followListener.setFollowShareListener(postId);
                 }
             });
+
+
+            holder.mRlytPraise.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    followListener.setPostPraiseListener(position,postId);
+                }
+            });
+
            /* if (interestUserList == null || interestUserList.size() == 0) {
 
                 holder.mRlytInterestUser.setVisibility(View.GONE);
@@ -276,6 +264,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 webBannerAdapter.setWebBannerList(interestUserList);
                 holder.mBannerUserOfInterest.setAdapter(webBannerAdapter);
             }*/
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -312,8 +302,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         TagFlowLayout mTagFlowLayout;
         /*  @BindView(R.id.banner_users_of_interest)
           BannerLayout mBannerUserOfInterest;*/
-        @BindView(R.id.rlyt_interest_user)
-        RelativeLayout mRlytInterestUser;
+        @BindView(R.id.llyt_interest_user)
+        LinearLayout mLlytInterestUser;
         //点赞人数
         @BindView(R.id.rlyt_praise_people_num)
         RelativeLayout mRlytPraisePeopleNum;
@@ -372,11 +362,13 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
 
     public interface FollowListener {
+
+        //帖子点赞
+        void setPostPraiseListener(int position,int postId);
 
         //可能感兴趣的用户 点击关注
         void setUserOfInterestListener(RecommendInterestUsersBean userEntity);
@@ -385,7 +377,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         void setUserOfInterestLookMoreListener();
 
         //点击查看评论列表
-        void setLookCommentListener();
+        void setLookCommentListener(int mPostId);
 
         //点击收藏帖子到专辑
         void setCollectionPostToAlbumsListener(HomePageSubTopicTagBean followDetailBean);
@@ -394,6 +386,6 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         void setFollowItemOnClickListener();
 
         //分享
-        void setFollowShareListener();
+        void setFollowShareListener(int mPostId);
     }
 }

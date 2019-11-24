@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -150,6 +151,11 @@ public class NearbyScenicSpotListActivity extends BaseActivity<ScenicSpotPresent
 
     @Override
     public void getScenicSpotHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
+
+    }
+
+    @Override
+    public void findScenicListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

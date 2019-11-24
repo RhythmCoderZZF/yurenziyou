@@ -34,6 +34,7 @@ import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.presenter.MinePresenter;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
@@ -178,6 +179,15 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
         getMinePostZanList();
     }
 
+    @Override
+    public void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getCollectionMsgListResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
 
     @Override
     public void initData() {

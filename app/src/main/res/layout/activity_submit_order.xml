@@ -698,7 +698,8 @@
                         android:text="¥0.00"
                         android:layout_marginLeft="@dimen/dp_3"
                         android:textColor="@color/color_text_gray17"
-                        android:textSize="@dimen/text_size_tiny" />
+                        android:textSize="@dimen/text_size_tiny"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

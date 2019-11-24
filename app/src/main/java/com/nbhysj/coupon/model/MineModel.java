@@ -10,6 +10,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 
 import java.util.List;
 import io.reactivex.Observable;
@@ -50,5 +51,15 @@ public class MineModel implements MineContract.Model {
     @Override
     public Observable<BackResult> collectionPostsBatchDeleteRequest(CollectionBatchPostsDeleteRequest collectionBatchDeleteRequest) {
         return Api.getInstance().apiService.collectionPostsBatchDeleteRequest(collectionBatchDeleteRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<ZanAndCollectionResponse>> getZanMsgList(int pageNo, int pageSize) {
+        return Api.getInstance().apiService.getZanMsgList(pageNo,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<ZanAndCollectionResponse>> getCollectionMsgList(int pageNo, int pageSize) {
+        return Api.getInstance().apiService.getCollectionMsgList(pageNo,pageSize).compose(RxSchedulers.io_main());
     }
 }

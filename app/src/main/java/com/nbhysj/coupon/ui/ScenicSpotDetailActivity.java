@@ -48,6 +48,7 @@ import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
@@ -245,6 +246,12 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     private MchCouponReceiveDialog mchCouponReceiveDialog;
 
     List<MchCouponResponse> mchCouponResponseList;
+
+    //商户照片
+    private String mchPhotoUrl;
+
+    //问答id
+    private int questionId;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -470,7 +477,16 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         scenicSpotDetailUserCommentAdapter.setScenicSpotsUserCommentList(commentList);
         mRvUserComment.setAdapter(scenicSpotDetailUserCommentAdapter);
 
+        mTvAnswerNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent intent = new Intent();
+                intent.setClass(mContext, AskAndAnswerDetailActivity.class);
+                intent.putExtra("questionId", questionId);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -479,6 +495,10 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         mPresenter.setVM(this, mModel);
     }
 
+    @Override
+    public void findScenicListByCateIdResult(BackResult<MchCateListResponse> res) {
+
+    }
 
     @Override
     public void getScenicSpotHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
@@ -602,7 +622,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         nearbyScenicSpotAdapter.notifyDataSetChanged();
                     }
                     if (bannerList.size() > 0) {
-
+                        mchPhotoUrl = bannerList.get(0);
                         for (int i = 0; i < bannerList.size(); i++) {
                             ImageView image = new ImageView(ScenicSpotDetailActivity.this);
                             image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -662,12 +682,12 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         mTvQuestionNum.setText(String.valueOf(mQuestionCount) + "个问题>");
 
                         String questionContent = mchQuestionEntity.getQuestionContent();
+                        questionId = mchQuestionEntity.getQuestionId();
                         if (!TextUtils.isEmpty(questionContent)) {
                             mTvQuestionContent.setText(questionContent);
                         }
 
                         mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
-
                     } else {
                         mLlytAnswerAndQuestion.setVisibility(View.GONE);
 
@@ -727,8 +747,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
                 break;
             default:
                 showToast(ScenicSpotDetailActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -925,9 +946,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                 break;
             case R.id.tv_question_num:
-
-                toActivity(MoreQuestionsActivity.class);
-
+                intent.putExtra("mchId",mchId);
+                intent.putExtra("mchPhotoUrl",mchPhotoUrl);
+                intent.putExtra("address",address);
+                intent.setClass(ScenicSpotDetailActivity.this, MoreQuestionsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_look_all_scenic_spot_info:
 

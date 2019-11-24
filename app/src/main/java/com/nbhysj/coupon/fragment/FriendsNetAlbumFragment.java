@@ -17,6 +17,7 @@ import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -163,6 +164,11 @@ public class FriendsNetAlbumFragment extends BaseFragment<ScenicSpotPresenter, S
 
     @Override
     public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void findScenicListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

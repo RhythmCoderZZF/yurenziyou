@@ -8,6 +8,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -59,6 +60,10 @@ public interface ScenicSpotContract {
 
         //领取优惠券
         Observable<BackResult<CouponsGetBean>> getCoupon(int couponId);
+
+        //景点类目列表
+        Observable<BackResult<MchCateListResponse>> findScenicListByCateId(HashMap<String, String> map);
+
     }
 
     interface View extends BaseView {
@@ -83,6 +88,9 @@ public interface ScenicSpotContract {
 
         //领取优惠券
         void getCouponResult(BackResult<CouponsGetBean> res);
+
+        //景点类目列表
+        void findScenicListByCateIdResult(BackResult<MchCateListResponse> res);
 
         void showMsg(String msg);
     }
@@ -109,5 +117,7 @@ public interface ScenicSpotContract {
         public abstract void queryMchCouponList(int mchId);
 
         public abstract void getCoupon(int couponId);
+
+        public abstract void findScenicListByCateId(HashMap<String, String> map);
     }
 }

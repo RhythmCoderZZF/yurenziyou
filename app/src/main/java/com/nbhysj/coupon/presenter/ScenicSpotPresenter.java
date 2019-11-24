@@ -61,6 +61,11 @@ public class ScenicSpotPresenter extends ScenicSpotContract.Presenter {
     }
 
     @Override
+    public void findScenicListByCateId(HashMap<String, String> map) {
+        mRxManager.add(mModel.findScenicListByCateId(map).subscribe(res -> mView.findScenicListByCateIdResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

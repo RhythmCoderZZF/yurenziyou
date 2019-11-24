@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.ColorInt;
 import android.support.v4.graphics.ColorUtils;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -203,21 +204,26 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     /**
      * token失效重新登陆
      */
-    public void onReLogin() {
+    public void onReLogin(String message) {
         try {
            /* if (!TextUtils.isEmpty(message)) {
                 Toast.makeText(mContext, getResources().getString(R.string.str_login_token_invalid), Toast.LENGTH_SHORT).show();
             }*/
 
-           /*  Intent intent = new Intent(mContext, LoginActivity.class);
-             mContext.startActivity(intent);*/
+           if(TextUtils.isEmpty(message))
+           {
+               Intent intent = new Intent(mContext, PhoneQuickLoginActivity.class);
+               mContext.startActivity(intent);
+           }
             // 如果这个activity已经启动了，就不产生新的activity
 
             //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             //context.startActivityForResult(intent, Constant.REQUEST_CODE_UPDATE_UI);
+            String userName = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME,"");
             SharedPreferencesUtils.clearSharePreference();
+            SharedPreferencesUtils.putData(SharedPreferencesUtils.USERNAME,userName);
 
-            // appManager.exitApp(this);
+          //   appManager.exitApp();
         } catch (Exception e) {
             LogUtil.e("跳转登录页面失败", e.getMessage());
         }

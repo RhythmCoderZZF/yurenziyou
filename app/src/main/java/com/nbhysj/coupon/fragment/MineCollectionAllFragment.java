@@ -21,6 +21,7 @@ import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
 import com.nbhysj.coupon.model.response.MyPostShareResponse;
 import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.presenter.MinePresenter;
 import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 
@@ -160,6 +161,9 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
             case 201:
 
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+
+                break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(msg));
                 break;
@@ -173,6 +177,16 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
 
     @Override
     public void collectionPostsBatchDeleteResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getCollectionMsgListResult(BackResult<ZanAndCollectionResponse> res) {
 
     }
 

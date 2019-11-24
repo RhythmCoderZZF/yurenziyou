@@ -96,7 +96,7 @@ public class ShoppingMallGuessYouLikeAdapter extends RecyclerView.Adapter<Shoppi
                         mContext.startActivity(intent);
                     }else if (mchType.equals(mchHotel)) {
                         String mchHotelType = MchTypeEnum.MCH_HOTEL1.getValue();
-                        String mchHomestayType = MchTypeEnum.MCH_HOTEL1.getValue();
+                        String mchHomestayType = MchTypeEnum.MCH_HOTEL2.getValue();
                         String type2 = guessEntity.getMchType2();
                         if (type2.equals(mchHotelType)) {
 

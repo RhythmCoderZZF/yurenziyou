@@ -5,16 +5,10 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.OrderGroupCommentRequest;
 import com.nbhysj.coupon.model.request.OrderPartialCommentRequest;
-import com.nbhysj.coupon.model.request.QuestionAnsweringPublishRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderGoodsInitResponse;
 import com.nbhysj.coupon.model.response.OrderGroupGoodsInitResponse;
-import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
-
-import java.util.List;
-
 import io.reactivex.Observable;
-import retrofit2.http.Query;
 
 /**
  * @auther：hysj created on 2019/10/07

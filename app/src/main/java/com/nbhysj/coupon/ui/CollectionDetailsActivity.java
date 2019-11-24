@@ -38,6 +38,7 @@ import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
 import com.nbhysj.coupon.model.response.MinePostZanListResponse;
 import com.nbhysj.coupon.model.response.StrategyBean;
+import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.presenter.AlbumPresenter;
 import com.nbhysj.coupon.presenter.MinePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
@@ -239,6 +240,16 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
     }
 
     @Override
+    public void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getCollectionMsgListResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
     public void getMineCollectionDetailResult(BackResult<MineCollectionDetailResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
@@ -288,6 +299,9 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(CollectionDetailsActivity.this, Constants.getResultMsg(res.getMsg()));

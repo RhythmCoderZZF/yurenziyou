@@ -7,6 +7,7 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
@@ -24,8 +25,8 @@ import io.reactivex.Observable;
 public class MessageModel implements MessageContract.Model {
 
     @Override
-    public Observable<BackResult<UserFansFollowResponse>> getUserFansList() {
-        return Api.getInstance().apiService.getUserFansList().compose(RxSchedulers.io_main());
+    public Observable<BackResult<UserFansFollowResponse>> getUserFansList(int mPageNo,int mPageSize) {
+        return Api.getInstance().apiService.getUserFansList(mPageNo,mPageSize).compose(RxSchedulers.io_main());
     }
 
     @Override
@@ -56,5 +57,10 @@ public class MessageModel implements MessageContract.Model {
     @Override
     public Observable<BackResult<CommentAndAnswerResponse>> getPostsCommentAndAnswer(int pageNo, int pageSize) {
         return Api.getInstance().apiService.getPostsCommentAndAnswer(pageNo,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<BroadcastResponse>> getBroadcatMessageList(int pageNo, int pageSize) {
+        return Api.getInstance().apiService.getBroadcatMessageList(pageNo,pageSize).compose(RxSchedulers.io_main());
     }
 }

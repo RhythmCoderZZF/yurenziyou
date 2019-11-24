@@ -124,8 +124,11 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
     //折扣价格
     private String deductPrice;
 
-    //商品突出金额
-    private int goodsRefundPrice;
+    //商品金额
+    private double goodsRefundPrice;
+
+    //退款金额
+    private double deductPriceDouble;
 
     //订单号
     private String orderNo;
@@ -200,9 +203,10 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
         switch (view.getId()) {
             case R.id.img_reduce_refund_num:
 
-                if (refundNum > 0) {
+                if (refundNum > 1) {
                     refundNum--;
                     mTvCanRefundNumSelect.setText(String.valueOf(refundNum));
+                    getActualRefundAmount();
                 }
                 break;
             case R.id.img_add_refund_num:
@@ -215,6 +219,7 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
 
                     refundNum++;
                     mTvCanRefundNumSelect.setText(String.valueOf(refundNum));
+                    getActualRefundAmount();
                 }
                 break;
             case R.id.tv_apply_for_refund:
@@ -243,13 +248,14 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
                     goodsTotalNum = orderRefundInitResponse.getSumNum();  //商品总数量
                     unitPrice = orderRefundInitResponse.getPrice();  //商品单价
                     refundPercentage = orderRefundInitResponse.getRefundPercentage();
+                    refundNum = goodsTotalNum - usedNum;
                     //用车类型
                     String goodsCarType = GoodsTypeEnum.GOODS_CAR.getValue();
                     //普通商品类型
                     String goodsTicketType = GoodsTypeEnum.GOODS_TICKET.getValue();
 
                     String deductNote = orderRefundInitResponse.getDeductNote();  //折扣信息
-                    String deductPrice = orderRefundInitResponse.getDeductPrice();  //减免优惠
+                    deductPrice = orderRefundInitResponse.getDeductPrice();  //减免优惠
                     if (!goodsType.equals(goodsCarType) || goodsType.equals(goodsTicketType)) {
                         mRlytGoodsTicket.setVisibility(View.VISIBLE);
                         mLlytOrderRefundVehicleUseItem.setVisibility(View.GONE);
@@ -268,7 +274,8 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
                         }
                         mTvGoodsRefundNum.setText(String.valueOf(validNum));
                         mTvGoodsItemPrice.setText(unitPrice);
-                        mTvActualRefundAmount.setText("¥ " + deductPrice);
+                        getActualRefundAmount();
+
                         mTvHasBeenUsedNum.setText(String.valueOf(usedNum));
                         mTvCanRefundNumSelect.setText(String.valueOf(validNum));
                         GlideUtil.loadImage(PartialApplyForRefundActivity.this, photo, mImgGoodsTicket);
@@ -295,6 +302,9 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
+                break;
             default:
                 showToast(PartialApplyForRefundActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -303,23 +313,27 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
 
     @Override
     public void orderPartialRefundSubmitResult(BackResult res) {
-
-    }
-
-    @Override
-    public void getOrderAllRefundDataInitResult(BackResult<OrderAllRefundInitResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
 
+                showToast(PartialApplyForRefundActivity.this,"退款成功");
                 setResult(RESULT_OK);
                 finish();
 
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(PartialApplyForRefundActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+
+    }
+
+    @Override
+    public void getOrderAllRefundDataInitResult(BackResult<OrderAllRefundInitResponse> res) {
 
     }
 
@@ -371,14 +385,14 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
             partialApplyForRefundRequest.setOrderGoodsId(orderGoodsId);
             //扣款信息
             partialApplyForRefundRequest.setDiscountPrice(deductPrice);
-            double deductPriceDouble = Double.parseDouble(deductPrice);
-            double goodsRefundPrice = (goodsTotalPrice - deductPriceDouble) * refundPercentage / 100;
+            deductPriceDouble = Double.parseDouble(deductPrice);
+
             //商品退款总金额
             partialApplyForRefundRequest.setGoodsRefundPrice(String.valueOf(goodsRefundPrice));
             //商品类型
             partialApplyForRefundRequest.setGoodsType(goodsType);
             //退款数量
-            partialApplyForRefundRequest.setNum(validNum);
+            partialApplyForRefundRequest.setNum(refundNum);
             //订单号
             partialApplyForRefundRequest.setOrderNo(orderNo);
 
@@ -393,5 +407,12 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
             }
             mPresenter.orderPartialRefundSubmit(partialApplyForRefundRequest);
         }
+    }
+
+    //获取实际退款金额
+    public void getActualRefundAmount()
+    {
+        goodsRefundPrice = Double.parseDouble(unitPrice) * refundNum - deductPriceDouble;
+        mTvActualRefundAmount.setText("¥ " + goodsRefundPrice);
     }
 }

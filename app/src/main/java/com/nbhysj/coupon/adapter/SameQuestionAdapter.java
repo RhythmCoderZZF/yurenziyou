@@ -2,12 +2,15 @@ package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.AskTogetherBean;
+import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.TouristBean;
 import com.nbhysj.coupon.util.GlideUtil;
 
@@ -21,20 +24,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class SameQuestionAdapter extends RecyclerView.Adapter<SameQuestionAdapter.ViewHolder> {
 
-
-    List<TouristBean> touristInfoList;
+    List<AskTogetherBean> askTogetherList;
     private Context mContext;
-    private WaitForMeToAnswerListener waitForMeToAnswerListener;
 
-    public SameQuestionAdapter(Context mContext, WaitForMeToAnswerListener waitForMeToAnswerListener) {
+    public SameQuestionAdapter(Context mContext) {
 
         this.mContext = mContext;
-        this.waitForMeToAnswerListener = waitForMeToAnswerListener;
     }
 
-    public void setTouristInfoList(List<TouristBean> touristInfoList) {
+    public void setAskTogetherList(List<AskTogetherBean> askTogetherList) {
 
-        this.touristInfoList = touristInfoList;
+        this.askTogetherList = askTogetherList;
     }
 
 
@@ -51,14 +51,26 @@ public class SameQuestionAdapter extends RecyclerView.Adapter<SameQuestionAdapte
 
         try {
 
-            TouristBean touristBean = touristInfoList.get(itemPosition);
+            AskTogetherBean askTogetherBean = askTogetherList.get(itemPosition);
+            int followCount = askTogetherBean.getFollowCount();
+            int answerCount = askTogetherBean.getAnswerCount();
+            String nickName = askTogetherBean.getNickname();
+            String questionContent = askTogetherBean.getQuestionContent();
+            String avatar = askTogetherBean.getAvater();
 
-            GlideUtil.loadImage(mContext,"",holder.mImgUserAvatarPhoto);
+            if(!TextUtils.isEmpty(questionContent))
+            {
+                holder.mTvQuestion.setText(questionContent);
+            }
 
-            holder.mTvQuestion.setText("");
+            if(!TextUtils.isEmpty(nickName))
+            {
+                holder.mTvAnswererName.setText(nickName);
+            }
 
-            holder.mTvAnswererName.setText("");
+            holder.mTvFollowAndAnswerNum.setText(followCount + "人关注," + answerCount + "个回答");
 
+            GlideUtil.loadImage(mContext,avatar,holder.mImgUserAvatarPhoto);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +79,7 @@ public class SameQuestionAdapter extends RecyclerView.Adapter<SameQuestionAdapte
 
     @Override
     public int getItemCount() {
-        return touristInfoList.size();
+        return askTogetherList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,14 +99,6 @@ public class SameQuestionAdapter extends RecyclerView.Adapter<SameQuestionAdapte
             mTvQuestion = itemView.findViewById(R.id.tv_question);
             mTvFollowAndAnswerNum = itemView.findViewById(R.id.tv_follow_and_answer_num);
             mTvAnswererName = itemView.findViewById(R.id.tv_answerer_name);
-
         }
-    }
-
-    public interface WaitForMeToAnswerListener {
-
-        void setQesutionIgnoreListener(int position);
-
-        void setQuestionAnswerListener(int position);
     }
 }

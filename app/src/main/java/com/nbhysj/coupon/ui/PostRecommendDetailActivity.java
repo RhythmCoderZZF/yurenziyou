@@ -425,6 +425,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+               onReLogin("");
+                break;
             default:
                 showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -621,6 +624,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -954,6 +960,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+               onReLogin("");
+                break;
             default:
                 showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -1056,6 +1065,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
                 break;
             default:
                 showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));

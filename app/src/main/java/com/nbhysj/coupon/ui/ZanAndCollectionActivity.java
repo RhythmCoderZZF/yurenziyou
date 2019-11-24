@@ -14,6 +14,7 @@ import com.nbhysj.coupon.model.MessageModel;
 import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
@@ -165,6 +166,11 @@ public class ZanAndCollectionActivity extends BaseActivity<MessagePresenter, Mes
     }
 
     @Override
+    public void getBroadcatMessageListResult(BackResult<BroadcastResponse> res) {
+
+    }
+
+    @Override
     public void getZanAndCollectionMsgResult(BackResult<ZanAndCollectionResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
@@ -208,6 +214,9 @@ public class ZanAndCollectionActivity extends BaseActivity<MessagePresenter, Mes
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(ZanAndCollectionActivity.this, Constants.getResultMsg(res.getMsg()));

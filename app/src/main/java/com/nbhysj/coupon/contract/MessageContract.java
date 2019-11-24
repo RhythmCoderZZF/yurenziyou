@@ -5,6 +5,7 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
@@ -26,7 +27,7 @@ public interface MessageContract {
     interface Model extends BaseModel {
 
         //获取粉丝列表
-        Observable<BackResult<UserFansFollowResponse>> getUserFansList();
+        Observable<BackResult<UserFansFollowResponse>> getUserFansList(int mPageNo,int mPageSize);
 
         //关注
         Observable<BackResult<FollowUserStatusResponse>> userFollow(int userId);
@@ -34,7 +35,7 @@ public interface MessageContract {
         //获取关注页面初始化接口
         Observable<BackResult<AttentionResponse>> getAttentionInit();
 
-        //获取关注页面初始化接口
+        //获取用户关注接口
         Observable<BackResult<UserFollowResponse>> getUserFollow(int pageNo, int pageSize);
 
         //获取消息列表
@@ -45,6 +46,9 @@ public interface MessageContract {
 
         //获取评论和回答
         Observable<BackResult<CommentAndAnswerResponse>> getPostsCommentAndAnswer(int pageNo, int pageSize);
+
+        //广播列表
+        Observable<BackResult<BroadcastResponse>> getBroadcatMessageList(int pageNo, int pageSize);
     }
 
     interface View extends BaseView {
@@ -63,12 +67,14 @@ public interface MessageContract {
 
         void getPostsCommentAndAnswerResult(BackResult<CommentAndAnswerResponse> res);
 
+        void getBroadcatMessageListResult(BackResult<BroadcastResponse> res);
+
         void showMsg(String msg);
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {
 
-        public abstract void getUserFansList();
+        public abstract void getUserFansList(int mPageNo,int mPageSize);
 
         public abstract void userFollow(int userId);
 
@@ -81,5 +87,7 @@ public interface MessageContract {
         public abstract void getZanAndCollectionMsg(int pageNo, int pageSize);
 
         public abstract void getPostsCommentAndAnswer(int pageNo, int pageSize);
+
+        public abstract void getBroadcatMessageList(int pageNo, int pageSize);
     }
 }

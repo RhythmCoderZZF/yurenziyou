@@ -43,7 +43,11 @@ public class FineFoodPresenter extends FineFoodContract.Presenter {
         mRxManager.add(mModel.getGoodsFoodRecommendList(mchId).subscribe(res -> mView.getGoodsFoodRecommendList(res), e -> mView.showMsg(e.getMessage())));
     }
 
+    @Override
+    public void findFoodListByCateId(HashMap<String, String> map) {
 
+        mRxManager.add(mModel.findFoodListByCateId(map).subscribe(res -> mView.findFoodsListByCateIdResult(res), e -> mView.showMsg(e.getMessage())));
+    }
     @Override
     public void onStart() {
 

@@ -203,6 +203,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/llyt_follow_num"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -229,6 +230,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/llyt_collection"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -256,6 +258,7 @@
 
 
                                 <LinearLayout
+                                    android:id="@+id/llyt_zan"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -422,7 +425,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_horizontal"
                                             android:layout_marginTop="@dimen/dp_6"
-                                            android:text="退换/售后"
+                                            android:text="售后"
                                             android:textColor="@color/color_text_gray9"
                                             android:textSize="13sp" />
 

@@ -48,6 +48,9 @@ public class SharedPreferencesUtils {
 
     public static final String SEARCH_KEYWORD = "searchKeyWord";      //搜索关键字
 
+    public static final String VERSION_NAME = "version_name";  //版本名
+    public static final String VERSION_CODE = "version_code";  //版本code
+
 
     private SharedPreferencesUtils(Context context, String name) {
         sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
@@ -113,7 +116,7 @@ public class SharedPreferencesUtils {
     public static void setVersionName(Context context, String versionName) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("version_name", versionName);
+        editor.putString(VERSION_NAME, versionName);
         editor.commit();
     }
 

@@ -121,6 +121,15 @@ public class SubShareAdapter extends RecyclerView.Adapter<SubShareAdapter.ViewHo
                     mContext.startActivity(intent);
                 }
             });
+
+            holder.mImgShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    subShareListener.setSubShareListener(postId);
+
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,6 +179,9 @@ public class SubShareAdapter extends RecyclerView.Adapter<SubShareAdapter.ViewHo
         //我的分享
         @BindView(R.id.rlyt_my_share_item)
         RelativeLayout mRlytMyShareItem;
+
+        @BindView(R.id.img_share)
+        ImageView mImgShare;
         public ViewHolder(View itemView) {
             super(itemView);
 

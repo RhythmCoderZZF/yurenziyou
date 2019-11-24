@@ -2,6 +2,7 @@ package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.AnswerBean;
 import com.nbhysj.coupon.model.response.TouristBean;
+import com.nbhysj.coupon.model.response.WaitForMeToAnswerBean;
+import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.util.List;
@@ -17,13 +21,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * @author hysj created at 2019/08/01.
+ * @author hysj created at 2019/11/01.
  * description:待我回答适配器
  */
 public class WaitForMeToAnswerAdapter extends RecyclerView.Adapter<WaitForMeToAnswerAdapter.ViewHolder> {
 
-
-    List<TouristBean> touristInfoList;
+    List<WaitForMeToAnswerBean> waitForMeToAnswerList;
     private Context mContext;
     private WaitForMeToAnswerListener waitForMeToAnswerListener;
 
@@ -33,9 +36,9 @@ public class WaitForMeToAnswerAdapter extends RecyclerView.Adapter<WaitForMeToAn
         this.waitForMeToAnswerListener = waitForMeToAnswerListener;
     }
 
-    public void setTouristInfoList(List<TouristBean> touristInfoList) {
+    public void setWaitForMeToAnswerList(List<WaitForMeToAnswerBean> waitForMeToAnswerList) {
 
-        this.touristInfoList = touristInfoList;
+        this.waitForMeToAnswerList = waitForMeToAnswerList;
     }
 
 
@@ -52,19 +55,30 @@ public class WaitForMeToAnswerAdapter extends RecyclerView.Adapter<WaitForMeToAn
 
         try {
 
-            TouristBean touristBean = touristInfoList.get(itemPosition);
+            WaitForMeToAnswerBean waitForMeToAnswerBean = waitForMeToAnswerList.get(itemPosition);
+            String userName = waitForMeToAnswerBean.getUserName();
+            String avatarUrl = waitForMeToAnswerBean.getAvater();
+            String content = waitForMeToAnswerBean.getContent();
+            long cTime = waitForMeToAnswerBean.getCtime();
+            String questionDate = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat,cTime);
+            GlideUtil.loadImage(mContext,avatarUrl,holder.mImgUserAvatarPhoto);
+            if(!TextUtils.isEmpty(content)) {
+                holder.mTvQuestionContent.setText(content);
+            }
 
-            GlideUtil.loadImage(mContext,"",holder.mImgUserAvatarPhoto);
-
-            holder.mTvQuestion.setText("");
-
-            holder.mTvQuestionPublishDate.setText("");
+            if(!TextUtils.isEmpty(questionDate)) {
+                holder.mTvQuestionDate.setText(questionDate);
+            }
+            if(!TextUtils.isEmpty(userName))
+            {
+                holder.mTvAnswererName.setText(userName);
+            }
 
             holder.mTvQuestionIgnore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    waitForMeToAnswerListener.setQesutionIgnoreListener(itemPosition);
+                    waitForMeToAnswerListener.setQuestionIgnoreListener(itemPosition);
                 }
             });
 
@@ -83,7 +97,7 @@ public class WaitForMeToAnswerAdapter extends RecyclerView.Adapter<WaitForMeToAn
 
     @Override
     public int getItemCount() {
-        return touristInfoList.size();
+        return waitForMeToAnswerList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -91,29 +105,32 @@ public class WaitForMeToAnswerAdapter extends RecyclerView.Adapter<WaitForMeToAn
         //提问者头像
         CircleImageView mImgUserAvatarPhoto;
         //问题
-        TextView mTvQuestion;
+        TextView mTvQuestionContent;
         //问题发布时间
-        TextView mTvQuestionPublishDate;
+        TextView mTvQuestionDate;
         //问题忽略
         TextView mTvQuestionIgnore;
         //问题回答
         TextView mTvQuestionAnswer;
+        //回答者
+        TextView mTvAnswererName;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             mImgUserAvatarPhoto = itemView.findViewById(R.id.img_user_avatar_photo);
-            mTvQuestion = itemView.findViewById(R.id.tv_question);
-            mTvQuestionPublishDate = itemView.findViewById(R.id.tv_question_publish_date);
+            mTvQuestionContent = itemView.findViewById(R.id.tv_question);
+            mTvQuestionDate = itemView.findViewById(R.id.tv_question_date);
             mTvQuestionIgnore = itemView.findViewById(R.id.tv_question_ignore);
             mTvQuestionAnswer = itemView.findViewById(R.id.tv_question_answer);
+            mTvAnswererName = itemView.findViewById(R.id.tv_answerer_name);
 
         }
     }
 
     public interface WaitForMeToAnswerListener {
 
-        void setQesutionIgnoreListener(int position);
+        void setQuestionIgnoreListener(int position);
 
         void setQuestionAnswerListener(int position);
     }

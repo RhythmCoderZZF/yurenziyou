@@ -112,6 +112,8 @@
     <string name="str_stroke_dynamics">行程动态</string>
     <string name="str_comments_received" translatable="false">收到的评论</string>
     <string name="str_praise_and_collection" translatable="false">收到的赞与收藏</string>
+    <string name="str_zan" translatable="false">获赞</string>
+    <string name="str_collection" translatable="false">收藏</string>
     <string name="str_comments_list" translatable="false">评论列表</string>
     <string name="str_passenger_name_telephone">旅客姓名电话</string>
     <string name="str_chinese_name">中文名字</string>
@@ -166,6 +168,7 @@
     <string name="str_common_problem" translatable="false">常见问答</string>
     <string name="str_my_ask_question" translatable="false">我要提问</string>
     <string name="str_ask_question_detail" translatable="false">问题详情</string>
+    <string name="str_merchant_questions_and_answers">商户问答</string>
     <string name="str_delicious_food_recommendation" translatable="false">美食推荐</string>
     <string name="str_hotel_reputation" translatable="false">酒店民宿</string>
     <string name="str_travel_theme" translatable="false">旅行主题</string>
@@ -213,7 +216,6 @@
     <string name="str_place_of_arrival" translatable="false">到达地点</string>
     <string name="str_attention">关注</string>
     <string name="str_attention_and_fens">关注与粉丝</string>
-    <string name="str_collection" translatable="false">收藏</string>
     <string name="str_question_and_answers">我的问答</string>
     <string name="str_question_ignore">忽略</string>
     <string name="str_let_me_answer">我来回答</string>
@@ -252,6 +254,7 @@
     <string name="str_use_immediately">立即使用</string>
     <string name="str_close">关闭</string>
     <string name="string_privacy">点击注册即表示接受鱼人自游的《隐私政策》和《用户协议》</string>
+    <string name="str_same_question">同问</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -310,7 +313,7 @@
     <string name="str_back_my_message">我的消息</string>
     <string name="str_collection_success">收藏成功</string>
     <string name="str_collection_cancel">取消收藏</string>
-
+    <string name="str_no_one_has_answered_the_question_yet">暂时还没有人回答过该问题</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

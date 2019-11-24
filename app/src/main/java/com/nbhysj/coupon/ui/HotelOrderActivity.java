@@ -338,6 +338,9 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
+                break;
             default:
                 showToast(HotelOrderActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -409,7 +412,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                 try {
                         UseCouponTicketResponse useCouponTicketResponse = res.getData();
 
-                        int disCount = useCouponTicketResponse.getDiscount();
+                        double disCount = useCouponTicketResponse.getDiscount();
                         chooseIds.clear();
                         chooseIds = useCouponTicketResponse.getChooseId();
 

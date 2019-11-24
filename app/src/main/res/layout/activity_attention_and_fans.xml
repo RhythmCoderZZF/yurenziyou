@@ -8,7 +8,7 @@
     android:background="@color/white"
     tools:context=".ui.MessageActivity">
 
-    <include layout="@layout/toolbar"></include>
+    <include layout="@layout/layout_header"></include>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             app:tl_textBold="SELECT"
             app:tl_textSelectColor="@color/color_text_black"
             app:tl_textUnselectColor="@color/color_text_gray"
-            app:tl_textsize="18sp" />
+            app:tl_textsize="16sp" />
 
 
     </RelativeLayout>

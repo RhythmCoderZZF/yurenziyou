@@ -523,6 +523,9 @@ public class CommentsListActivity extends BaseActivity<CommentPresenter, Comment
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
+                break;
             default:
                 showToast(CommentsListActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -580,6 +583,9 @@ public class CommentsListActivity extends BaseActivity<CommentPresenter, Comment
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(CommentsListActivity.this, Constants.getResultMsg(res.getMsg()));

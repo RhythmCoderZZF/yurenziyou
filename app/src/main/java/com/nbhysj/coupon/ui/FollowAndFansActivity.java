@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.fragment.BroadcastFragment;
 import com.nbhysj.coupon.fragment.MessageFragment;
+import com.nbhysj.coupon.fragment.MineFansFollowListFragment;
+import com.nbhysj.coupon.fragment.MineFollowListFragment;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
@@ -23,11 +27,16 @@ public class FollowAndFansActivity extends BaseActivity {
     SlidingTabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.iv_back)
+    ImageButton mImgBack;
+    //标题
+    @BindView(R.id.tv_title)
+    TextView mTvTitle;
     private ArrayList<Fragment> fragments;
-    private MessageFragment messageFragment;
-    private BroadcastFragment notifyFragment;
+    private MineFollowListFragment mineFollowListFragment;
+    private MineFansFollowListFragment mineFansListFragment;
     private String[] titles = new String[]{"关注", "粉丝"};
-
+    private int currentItem;
 
     @Override
     public int getLayoutId() {
@@ -38,22 +47,34 @@ public class FollowAndFansActivity extends BaseActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setBar(FollowAndFansActivity.this,getResources().getString(R.string.str_attention_and_fens),R.mipmap.icon_left_arrow_black);
+        currentItem = getIntent().getIntExtra("currentItem",0);
+
+        mImgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FollowAndFansActivity.this.finish();
+            }
+        });
+
+        mTvTitle.setText(getResources().getString(R.string.str_attention_and_fens));
 
         fragments = new ArrayList<>();
         List<Fragment> fragments1 = getSupportFragmentManager().getFragments();
         if (fragments1 != null && fragments1.size() > 1) {
-            messageFragment = (MessageFragment) fragments1.get(0);
-            notifyFragment = (BroadcastFragment) fragments1.get(1);
+            mineFollowListFragment = (MineFollowListFragment) fragments1.get(0);
+            mineFansListFragment = (MineFansFollowListFragment) fragments1.get(1);
         } else {
-            messageFragment = new MessageFragment();
-            notifyFragment = new BroadcastFragment();
+            mineFollowListFragment = new MineFollowListFragment();
+            mineFansListFragment = new MineFansFollowListFragment();
         }
 
-        fragments.add(messageFragment);
-        fragments.add(notifyFragment);
+        fragments.add(mineFollowListFragment);
+        fragments.add(mineFansListFragment);
 
         tabLayout.setViewPager(viewpager, titles, this, fragments);
+
+        viewpager.setCurrentItem(currentItem);
     }
 
     @Override

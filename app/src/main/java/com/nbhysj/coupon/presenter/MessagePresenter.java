@@ -13,8 +13,8 @@ public class MessagePresenter extends MessageContract.Presenter {
 
     }
     @Override
-    public void getUserFansList() {
-        mRxManager.add(mModel.getUserFansList().subscribe(res -> mView.getUserFansListResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getUserFansList(int pageNo, int pageSize) {
+        mRxManager.add(mModel.getUserFansList(pageNo,pageSize).subscribe(res -> mView.getUserFansListResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override
@@ -45,4 +45,11 @@ public class MessagePresenter extends MessageContract.Presenter {
     public void getPostsCommentAndAnswer(int pageNo, int pageSize) {
         mRxManager.add(mModel.getPostsCommentAndAnswer(pageNo,pageSize).subscribe(res -> mView.getPostsCommentAndAnswerResult(res), e -> mView.showMsg(e.getMessage())));
     }
+
+    @Override
+    public void getBroadcatMessageList(int pageNo, int pageSize) {
+        mRxManager.add(mModel.getBroadcatMessageList(pageNo,pageSize).subscribe(res -> mView.getBroadcatMessageListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llyt_broadcast_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="@dimen/dp_16"
     android:layout_marginRight="@dimen/dp_16"
     android:layout_marginTop="@dimen/dp_10"
@@ -15,13 +17,15 @@
         android:textColor="@color/color_text_gray5"
         android:text="1天前" />
 
-    <ImageView
+    <com.nbhysj.coupon.view.RoundedImageView
         android:id="@+id/image_broadcast"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_centerVertical="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_10"
+        app:riv_corner_radius_top_left="@dimen/dp_10"
+        app:riv_corner_radius_top_right="@dimen/dp_10"
         android:scaleType="fitXY" />
 
     <LinearLayout
@@ -36,19 +40,22 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_10"
-            android:text="发牛Biu 赢奖金 上首页!"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_description"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginBottom="@dimen/dp_16"
-            android:text="今天不晒，更待何时! 在这个闪闪发光的日子里，晒出旅行中最美的你吧！"
+            android:lines="4"
+            android:ellipsize="end"
+            android:text=""
             android:textColor="@color/color_text_gray4"
             android:textSize="13sp" />
     </LinearLayout>

@@ -13,9 +13,11 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
+import com.nbhysj.coupon.ui.FineFoodCateListActivity;
 import com.nbhysj.coupon.ui.HomestayBangDanListActivity;
 import com.nbhysj.coupon.ui.RecreationBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
+import com.nbhysj.coupon.ui.ScenicSpotCateListActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
 
@@ -80,12 +82,15 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
                     Intent intent = new Intent();
                     if(mchType.equals(MchTypeEnum.MCH_SCENIC.getValue()))
                     {
-                        intent.setClass(mContext, ScenicSpotBangDanListActivity.class);
+                        intent.setClass(mContext, ScenicSpotCateListActivity.class);
+                        intent.putExtra("cateId",cateId);
                         mContext.startActivity(intent);
                     }  else if(mchType.equals(MchTypeEnum.MCH_FOOD.getValue())){
 
-                        intent.setClass(mContext, FineFoodBangDanListActivity.class);
+                        intent.setClass(mContext, FineFoodCateListActivity.class);
+                        intent.putExtra("cateId",cateId);
                         mContext.startActivity(intent);
+
                     }else if(mchType.equals(MchTypeEnum.MCH_HOTEL.getValue())){
 
                         mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);

@@ -13,6 +13,7 @@ import com.nbhysj.coupon.contract.MessageContract;
 import com.nbhysj.coupon.model.MessageModel;
 import com.nbhysj.coupon.model.response.AttentionResponse;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
@@ -22,6 +23,7 @@ import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.presenter.MessagePresenter;
 import com.nbhysj.coupon.ui.CommentsAndAnswersActivity;
 import com.nbhysj.coupon.ui.NewFansActivity;
+import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.ui.StrokeDynamicsActivity;
 import com.nbhysj.coupon.ui.ZanAndCollectionActivity;
 
@@ -42,6 +44,7 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
     LinearLayout mLlytCommentAndAnswer;
 
     MessageListAdapter messageListAdapter;
+
     public MessageFragment() {
     }
 
@@ -52,7 +55,7 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
 
     @Override
     public void initPresenter() {
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
@@ -172,10 +175,18 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
+                break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getBroadcatMessageListResult(BackResult<BroadcastResponse> res) {
+
     }
 
     @Override
@@ -185,9 +196,9 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
         showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
-    public void getMessageList(){
+    public void getMessageList() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
             showProgressDialog(getActivity());
             mPresenter.getMessageList();

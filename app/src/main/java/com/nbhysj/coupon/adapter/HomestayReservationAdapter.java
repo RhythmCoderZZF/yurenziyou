@@ -16,6 +16,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
 
 import java.util.List;
@@ -57,13 +58,13 @@ public class HomestayReservationAdapter extends RecyclerView.Adapter<HomestayRes
             MchGoodsBean mchGoodsBean = mchHomestayGoodsList.get(itemPosition);
             String photoUrl = mchGoodsBean.getPhoto();
             String title = mchGoodsBean.getTitle();
-            double marketPrice = mchGoodsBean.getMarketPrice();
+            double defaultPrice = mchGoodsBean.getDefaultPrice();
             int breakfastStatus = mchGoodsBean.getBreakfastStatus();
             int windowStatus = mchGoodsBean.getWindowStatus();
             String bedInfo = mchGoodsBean.getBedInfo();
 
             holder.mTvHomestayTitle.setText(title);
-            holder.mTvHomestayRoomPrice.setText("¥ " + String.valueOf(marketPrice));
+            holder.mTvHomestayRoomPrice.setText("¥ " + Tools.getTwoDecimalPoint(defaultPrice));
             if(breakfastStatus == 0){
 
                 stringBuffer.append("不含早餐 ");

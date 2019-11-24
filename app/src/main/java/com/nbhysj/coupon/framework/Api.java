@@ -60,7 +60,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import static android.support.constraint.Constraints.TAG;
 
-
 /**
  * created by hysj at 2019/01/23.
  * description : Okhttp网络访问层
@@ -210,7 +209,7 @@ public class Api {
             String nonce = MD5Util.md5(timestamp + uuid);
             String mStringSignTemp = timestamp + token + nonce;
 
-            String curVer = (String)SharedPreferencesUtils.getData("version","");
+            String curVer = (String) SharedPreferencesUtils.getData("version", "");
 
             if (parameters.size() > 0) {
 
