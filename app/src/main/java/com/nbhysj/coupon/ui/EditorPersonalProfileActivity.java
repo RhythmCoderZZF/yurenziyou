@@ -18,8 +18,12 @@ import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,6 +48,7 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_editor_personal_profile;
     }
 
@@ -60,7 +65,7 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
         if (!TextUtils.isEmpty(profile)) {
 
             mEdtPersonalProfile.setText(profile);
-            mTvProfileLength.setText(profile.length() + "/50");
+            mTvProfileLength.setText(profile.length() + "/15");
             checkIsInputFill();
         }
         mEdtPersonalProfile.addTextChangedListener(new TextWatcher() {
@@ -72,7 +77,7 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 int profileLength = charSequence.length();
-                mTvProfileLength.setText(profileLength + "/ 50");
+                mTvProfileLength.setText(profileLength + "/ 15");
                 checkIsInputFill();
             }
 
@@ -154,10 +159,10 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
     public void updatePersonalProfile(String profile) {
 
         if (validateInternet()) {
-
+            String profileStr = replaceBlank(profile);
             UpdateUserInfoRequest updateUserInfoRequest = new UpdateUserInfoRequest();
             updateUserInfoRequest.setId(userId);
-            updateUserInfoRequest.setProfile(profile);
+            updateUserInfoRequest.setProfile(profileStr);
             showProgressDialog(EditorPersonalProfileActivity.this);
             mDialog.setTitle("");
             mPresenter.updateInformation(updateUserInfoRequest);
@@ -179,5 +184,15 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
         } else {
             mTvSave.setBackgroundResource(R.drawable.btn_oprate_bg);
         }
+    }
+
+    public String replaceBlank(String str) {
+        String dest = "";
+        if (str!=null) {
+            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            Matcher m = p.matcher(str);
+            dest = m.replaceAll("");
+        }
+        return dest;
     }
 }

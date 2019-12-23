@@ -69,6 +69,12 @@ public class HotelPresenter extends HotelContract.Presenter {
     public void getCoupon(int couponId) {
         mRxManager.add(mModel.getCoupon(couponId).subscribe(res -> mView.getCouponResult(res), e -> mView.showMsg(e.getMessage())));
     }
+
+    @Override
+    public void getHotelListByCateId(HashMap<String, String> map) {
+        mRxManager.add(mModel.getHotelListByCateId(map).subscribe(res -> mView.getHotelListByCateIdResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
     @Override
     public void onStart() {
 

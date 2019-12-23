@@ -54,10 +54,6 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
     @BindView(R.id.tv_question_time)
     TextView mTvQuestionTime;
 
-    //同问接口
-    @BindView(R.id.tv_same_question)
-    TextView mTvSameQuestion;
-
     //问答数量
     @BindView(R.id.tv_answer_num)
     TextView mTvAnswerNum;
@@ -81,11 +77,13 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
     @BindView(R.id.rlyt_answer_detail_more_question)
     RelativeLayout mRlytAnswerDetailMoreQuestion;
 
-    @BindView(R.id.tv_answer)
-    TextView mTvAnswer;
-
+    //相关问题
     @BindView(R.id.llyt_correlation_question)
     LinearLayout mLlytCorrelationQuestion;
+
+    //回答
+    @BindView(R.id.llyt_answer)
+    LinearLayout mLlytAnswer;
 
     //问题id
     private int questionId;
@@ -181,29 +179,6 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
             }
         });
 
-
-        mTvSameQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(questionStatus == 0) {
-                    askTogether();
-                }
-            }
-        });
-
-        mTvAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent();
-                intent.putExtra("questionId",questionId);
-                intent.putExtra("questionContent",content);
-                intent.putExtra("mchName",mchName);
-                intent.setClass(MyAnswerDetailActivity.this, LetMeAnswerActivity.class);
-                startActivityForResult(intent,ANSWER_REQUEST_CODE);
-            }
-        });
     }
 
     @Override
@@ -238,31 +213,26 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
                     mTvMchName.setText(mchName);
 
-                    if(questionStatus == 0){
-                        mTvSameQuestion.setBackgroundResource(R.drawable.bg_stroke_light_blue_radius_thirteen_shape);
-                        mTvSameQuestion.setTextColor(getResources().getColor(R.color.color_blue2));
-                        mTvSameQuestion.setText(getResources().getString(R.string.str_same_question));
-                    } else  if(questionStatus == 1){
-
-                        mTvSameQuestion.setBackgroundResource(R.drawable.bg_stroke_radius_thirteen_light_gray_shape);
-                        mTvSameQuestion.setTextColor(getResources().getColor(R.color.color_text_gray28));
-                        mTvSameQuestion.setText("已同问");
-                    }
-
                     String answerTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat,ctime);
                     mTvQuestionTime.setText(answerTime);
                     answerList = questionDetailsBean.getAnswer();
 
                     if(answerList != null && answerList.size() > 0)
                     {
+                        mLlytAnswer.setVisibility(View.VISIBLE);
                         answerDetailSubAdapter.setAnswerList(answerList);
                         answerDetailSubAdapter.notifyDataSetChanged();
                         int answerNum = answerList.size();
                         mTvAnswerNum.setText("共" + answerNum + "个回答");
+
+                    } else {
+
+                        mLlytAnswer.setVisibility(View.GONE);
                     }
 
                     correlationList = questionDetailsBean.getCorrelation();
-                    if(correlationList != null && correlationList.size() > 0) {
+                    if(correlationList != null && correlationList.size() > 0)
+                    {
                         mLlytCorrelationQuestion.setVisibility(View.VISIBLE);
                         myQuestionCorrelationListAdapter.setMyQuestionList(correlationList);
                         myQuestionCorrelationListAdapter.notifyDataSetChanged();
@@ -315,16 +285,6 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
             case Constants.SUCCESS_CODE:
                 try {
 
-                    if(questionStatus == 0){
-                        mTvSameQuestion.setBackgroundResource(R.drawable.bg_stroke_light_blue_radius_thirteen_shape);
-                        mTvSameQuestion.setTextColor(getResources().getColor(R.color.color_blue2));
-                        mTvSameQuestion.setText(getResources().getString(R.string.str_same_question));
-                    } else  if(questionStatus == 1){
-
-                        mTvSameQuestion.setBackgroundResource(R.drawable.bg_stroke_radius_thirteen_light_gray_shape);
-                        mTvSameQuestion.setTextColor(getResources().getColor(R.color.color_text_gray28));
-                        mTvSameQuestion.setText("已同问");
-                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();

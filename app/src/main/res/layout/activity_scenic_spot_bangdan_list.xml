@@ -14,8 +14,8 @@
         android:background="@color/line_bg"
         app:srlAccentColor="#00000000"
         app:srlEnableHeaderTranslationContent="false"
-        app:srlEnableLoadMore="false"
-        app:srlEnableRefresh="false"
+        app:srlEnableLoadMore="true"
+        app:srlEnableRefresh="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
@@ -84,5 +84,10 @@
 
         </LinearLayout>
     </RelativeLayout>
+
+    <include layout="@layout/layout_nodata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlyt_fine_food_header"></include>
 
 </RelativeLayout>

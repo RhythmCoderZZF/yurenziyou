@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -142,7 +143,12 @@ public class CouponListFragment extends BaseFragment<CouponListPresenter, Coupon
             @Override
             public void setAllCouponUseCallback() {
 
+
                 getActivity().finish();
+
+                Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL);
+                getActivity().sendBroadcast(mIntent);
 
             }
 

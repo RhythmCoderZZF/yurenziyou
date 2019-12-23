@@ -42,9 +42,6 @@ import butterknife.OnClick;
  */
 public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, AccountManagementModel> implements AccountManagementContract.View {
 
-    //第三方绑定请求code
-    private int THIRD_PARTY_LOGIN_REQUEST_CODE = 0;
-
     private Timer mTimer;
     Handler handler;
     private int delaytime = 60;
@@ -162,11 +159,10 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
                         LoginResponse thirdPartyLoginResponse = res.getData();
 
                         userId = thirdPartyLoginResponse.getId();                 //用户id
-                        String mobile = thirdPartyLoginResponse.getMobile();      //手机号
+                        String mobile = thirdPartyLoginResponse.getMobile();      //手机号(用户账号)
                         String nickname = thirdPartyLoginResponse.getNickname();  //昵称
-                        String username = thirdPartyLoginResponse.getUsername();  //用户名
                         String token = res.getToken();
-                        SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                        SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, token);
 
                         getUserInfo();
                     } else if(bind == 1){

@@ -95,6 +95,8 @@ public class MchCommentResponse {
 
         private List<MchCommentEntity> result;
 
+        private BasePaginationResult page;
+
         public List<MchCommentEntity> getResult() {
             return result;
         }
@@ -102,5 +104,15 @@ public class MchCommentResponse {
         public void setResult(List<MchCommentEntity> result) {
             this.result = result;
         }
+
+        public BasePaginationResult getPage() {
+            return page;
+        }
+
+        public void setPage(BasePaginationResult page) {
+            this.page = page;
+        }
     }
+
+
 }

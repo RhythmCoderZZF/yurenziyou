@@ -12,6 +12,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -86,5 +87,10 @@ public class HotelModel implements HotelContract.Model {
     @Override
     public Observable<BackResult<CouponsGetBean>> getCoupon(int couponId) {
         return Api.getInstance().apiService.getCoupon(couponId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<MchCateListResponse>> getHotelListByCateId(HashMap<String, String> map) {
+        return Api.getInstance().apiService.getHotelListByCateId(map).compose(RxSchedulers.io_main());
     }
 }

@@ -42,7 +42,7 @@ public class HomeSearchComprehensiveBeanDao extends AbstractDao<HomeSearchCompre
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"HOME_SEARCH_COMPREHENSIVE_BEAN\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"SEARCH\" TEXT);"); // 1: search
+                "\"SEARCH\" TEXT UNIQUE );"); // 1: search
     }
 
     /** Drops the underlying database table. */

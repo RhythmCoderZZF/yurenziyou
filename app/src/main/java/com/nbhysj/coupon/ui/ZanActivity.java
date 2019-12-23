@@ -178,6 +178,11 @@ public class ZanActivity extends BaseActivity<MinePresenter, MineModel> implemen
     }
 
     @Override
+    public void deletePostResult(BackResult res) {
+
+    }
+
+    @Override
     public void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {

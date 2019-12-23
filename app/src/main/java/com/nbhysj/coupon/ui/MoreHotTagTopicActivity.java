@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.nbhysj.coupon.model.response.MerchantListResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.presenter.PublishPostPresenter;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 
 /**
  * @auther：hysj created on 2019/03/02
@@ -170,9 +173,8 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
 
     }
 
-
     @Override
-    public void getHotTagsTopicListResult(BackResult<List<HotTagsTopicBean>> res) {
+    public void getHotTagsTopicListResult(ResponseBody res) {
 
     }
 
@@ -250,6 +252,9 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
                     e.printStackTrace();
                 }
                 break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
+                break;
             default:
                 showToast(MoreHotTagTopicActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
@@ -270,6 +275,12 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
 
         if (validateInternet()) {
 
+            if(TextUtils.isEmpty(mTopicParam)){
+
+                showToast(MoreHotTagTopicActivity.this,"输入需要创建的话题");
+                return;
+            }
+
             showProgressDialog(MoreHotTagTopicActivity.this);
             mDialog.setTitle("正在创建主题...");
             TopicRequest topicRequest = new TopicRequest();
@@ -283,8 +294,14 @@ public class MoreHotTagTopicActivity extends BaseActivity<PublishPostPresenter, 
     public void onClick(View v){
         switch (v.getId()){
             case R.id.llyt_create_topic:
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                if (!TextUtils.isEmpty(token)) {
 
-                createTopic();
+                    createTopic();
+
+                } else {
+                    onReLogin("");
+                }
                 break;
             default:break;
         }

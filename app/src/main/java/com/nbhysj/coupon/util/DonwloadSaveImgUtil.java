@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,16 +31,18 @@ public class DonwloadSaveImgUtil {
 
     private static Context context;
     private static String filePath;
-    private static Bitmap mBitmap;
+    public static Bitmap mBitmap;
     private static String mSaveMessage = "失败";
     private final static String TAG = "PictureActivity";
     private static ProgressDialog mSaveDialog = null;
 
-    public static void donwloadImg(Context contexts, String filePaths) {
+    public static Bitmap donwloadImg(Context contexts, String filePaths) {
         context = contexts;
         filePath = filePaths;
-        mSaveDialog = ProgressDialog.show(context, "保存图片", "图片正在保存中，请稍等...", true);
+     //   mSaveDialog = ProgressDialog.show(context, "保存图片", "图片正在保存中，请稍等...", true);
         new Thread(saveFileRunnable).start();
+
+        return mBitmap;
     }
 
     private static Runnable saveFileRunnable = new Runnable() {
@@ -54,15 +58,16 @@ public class DonwloadSaveImgUtil {
                     mBitmap = BitmapFactory.decodeStream(inputStream);
                     inputStream.close();
                 }
-                saveFile(mBitmap);
-                mSaveMessage = "图片保存成功！";
+
+                        //saveFile(mBitmap);
+             //   mSaveMessage = "图片保存成功！";
             } catch (IOException e) {
                 mSaveMessage = "图片保存失败！";
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            messageHandler.sendMessage(messageHandler.obtainMessage());
+         //   messageHandler.sendMessage(messageHandler.obtainMessage());
         }
     };
 
@@ -95,5 +100,44 @@ public class DonwloadSaveImgUtil {
         Uri uri = Uri.fromFile(myCaptureFile);
         intent.setData(uri);
         context.sendBroadcast(intent);
+    }
+
+
+    /**
+     * 保存图片到相册
+     */
+    public void saveImageToGallery(Context mContext,Bitmap bitmap) {
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+            return;
+        }
+        // 首先保存图片
+        File appDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsoluteFile();
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // 其次把文件插入到系统图库
+        try {
+            MediaStore.Images.Media.insertImage(mContext.getContentResolver(), file.getAbsolutePath(), fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } // 最后通知图库更新
+
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + "")));
     }
 }

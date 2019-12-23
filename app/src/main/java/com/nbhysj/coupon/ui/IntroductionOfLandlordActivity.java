@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,35 @@ import android.view.Window;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ComFragmentAdapter;
+import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.contract.HomestayContract;
+import com.nbhysj.coupon.fragment.HouseResourceFragment;
 import com.nbhysj.coupon.fragment.LocalFoodFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
+import com.nbhysj.coupon.model.HomestayModel;
+import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HouseResouceResponse;
+import com.nbhysj.coupon.model.response.LandlordBean;
+import com.nbhysj.coupon.model.response.LandlordDetailResonse;
+import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MchCouponResponse;
+import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
+import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
+import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.presenter.HomestayPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
+
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
@@ -36,16 +56,19 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @auther：hysj created on 2019/05/09
  * description：房东介绍
  */
-public class IntroductionOfLandlordActivity extends BaseActivity {
+public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresenter, HomestayModel> implements HomestayContract.View {
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
     @BindView(R.id.llyt_header)
@@ -60,13 +83,34 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
     MagicIndicator magicIndicatorTitle;
     @BindView(R.id.collapse)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
+    //名字
+    @BindView(R.id.tv_nickname)
+    TextView mTvNickName;
+    //预定成功率
+    @BindView(R.id.tv_scheduled_success_rate)
+    TextView mTvScheduledSuccessRate;
+    //平均确认时长
+    @BindView(R.id.tv_average_confirmation_time)
+    TextView mTvAverageConfirmationTime;
+    //房源数
+    @BindView(R.id.tv_house_resources_num)
+    TextView mTvHouseResoucesNum;
+    //整体评分
+    @BindView(R.id.tv_overall_score)
+    TextView mTvOverallScore;
+    //房东语录
+    @BindView(R.id.llyt_landlord_motto)
+    LinearLayout mLlytMotto;
+    @BindView(R.id.tv_motto)
+    TextView mTvMotto;
+
     int toolBarPositionY = 0;
     private int mOffset = 0;
     private int mScrollY = 0;
-    private String[] mTitles = new String[]{"房源(20)", "评价(153)"};
+    private String[] mTitles = new String[]{"房源", "评价"};
     private List<String> mDataList = Arrays.asList(mTitles);
+    private int landlordId;
 
-    @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         StatusBarCompat.translucentStatusBar(this, false);
@@ -91,6 +135,9 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
         } else {
             mToolbarSpace.setVisibility(View.GONE);
         }
+
+        landlordId = getIntent().getIntExtra("landlordId", landlordId);
+        getHomeResourceList();
     }
 
     @Override
@@ -158,11 +205,12 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
     @Override
     public void initPresenter() {
 
+        mPresenter.setVM(this, mModel);
     }
 
     private List<Fragment> getFragments() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new LocalFoodFragment());
+        fragments.add(new HouseResourceFragment().newInstance(landlordId));
         fragments.add(new ScenicSpotFragment());
         return fragments;
     }
@@ -257,5 +305,109 @@ public class IntroductionOfLandlordActivity extends BaseActivity {
         });
         magicIndicatorTitle.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicatorTitle, viewPager);
+    }
+
+    @Override
+    public void getHomestayHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
+
+    }
+
+    @Override
+    public void findHomestayByCateResult(BackResult<ScenicSpotResponse> res) {
+
+    }
+
+    @Override
+    public void getHomestayBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void mchCollectionResult(BackResult<MchCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void queryMchCouponListResult(BackResult<List<MchCouponResponse>> res) {
+
+    }
+
+    @Override
+    public void getCouponResult(BackResult<CouponsGetBean> res) {
+
+    }
+
+    @Override
+    public void getLandlordHomePageResult(BackResult<LandlordDetailResonse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    LandlordDetailResonse landlordDetailResonse = res.getData();
+                    LandlordBean landlord = landlordDetailResonse.getLandlord();
+                    int bookingSuccessRate = landlord.getBookingSuccess();
+                    int homestayRoomNum = landlord.getHomestayRoomNum();
+                    int confirmTime = landlord.getConfirmTime();
+                    int score = landlord.getScore();
+                    String motto = landlord.getMotto();
+                    mTvScheduledSuccessRate.setText(bookingSuccessRate + "%");
+                    mTvAverageConfirmationTime.setText(confirmTime + "分钟");
+                    mTvHouseResoucesNum.setText(String.valueOf(homestayRoomNum));
+                    mTvOverallScore.setText(score + "分");
+                    if (!TextUtils.isEmpty(motto)) {
+                        mTvMotto.setText(motto);
+                        mLlytMotto.setVisibility(View.VISIBLE);
+                    } else {
+                        mLlytMotto.setVisibility(View.GONE);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(IntroductionOfLandlordActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
+    public void getLandlordHouseResourceListResult(BackResult<HouseResouceResponse> res) {
+
+    }
+
+    @OnClick({R.id.img_back})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_back:
+
+                IntroductionOfLandlordActivity.this.finish();
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+        dismissProgressDialog();
+        showToast(IntroductionOfLandlordActivity.this, Constants.getResultMsg(msg));
+    }
+
+    //房源信息
+    public void getHomeResourceList() {
+        if (validateInternet()) {
+
+            mPresenter.getLandlordHomePage(landlordId);
+        }
     }
 }

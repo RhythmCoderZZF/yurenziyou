@@ -17,9 +17,13 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FineFoodBangDanListAdapter;
 import com.nbhysj.coupon.adapter.FineFoodCateListAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.contract.FineFoodContract;
+import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
+import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -28,6 +32,7 @@ import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.ZanAndCollectionBean;
 import com.nbhysj.coupon.presenter.FineFoodPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
@@ -36,6 +41,8 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +73,8 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
     //互动榜单转发
     @BindView(R.id.img_fine_food_forward)
     ImageView mImgFineFoodForward;
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
     private FineFoodCateListAdapter fineFoodCateListAdapter;
     private LinearLayoutManager scenicSpotsLinearLayoutManager;
     //景点列表
@@ -81,6 +90,9 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
 
     private int mPage = 1;
     private int mPageSize = 10;
+
+    //总数量
+    private int mTotalPageCount;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -181,6 +193,26 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
             }
         });
 
+        mSmartRefreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
+
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPage = 1;
+                        /*isOnLoadMore = false;
+                        pendingTravelOrderTypeList.clear();
+                        myOrderListAdapter.notifyDataSetChanged();
+                        // showProgressDialog(getActivity());
+                        getPendingTravelOrderList();*/
+
+                    }
+                }, 100);
+            }
+        });
+
         mSmartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(final RefreshLayout refreshLayout) {
@@ -210,6 +242,16 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
     public void initPresenter() {
 
         mPresenter.setVM(this, mModel);
+    }
+
+    @Override
+    public void getFoodCommentIndexResult(BackResult<FineFoodCommentInitResponse> res) {
+
+    }
+
+    @Override
+    public void fineFoodCommentResult(BackResult res) {
+
     }
 
     @Override
@@ -250,6 +292,19 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
                     {
                         GlideUtil.loadImage(mContext, bannerUrl, mImgFineFoodHeader);
                     }
+
+                    BasePaginationResult paginationResult = res.getData().getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+
+                    if (mTotalPageCount == 0)
+                    {
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                    } else {
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
+
+
                     fineFoodCateListAdapter.setHeaderView(header);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -284,6 +339,36 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.img_fine_food_forward:
+
+              /*  if(shareOprateDialog == null)
+                {
+                    shareOprateDialog = new ShareOprateDialog(FineFoodCateListActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                        @Override
+                        public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
+
+                            try {
+                                if (bannerList != null && bannerList.size() > 0) {
+                                    String sharePlatformStr = sharePlatform.toString();
+                                    photoUrl = bannerList.get(0);
+                                    String wechatFriend = SharePlatformEnum.WECHAT_FRIEND.getValue();
+                                    if (sharePlatformStr.equals(wechatFriend)) {
+
+                                        new Thread(saveFileRunnable).start();
+
+                                    } else {
+
+                                        thirdShare(sharePlatform, photoUrl);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                }
+                shareOprateDialog.show();*/
+                break;
             default:
                 break;
         }
@@ -300,7 +385,7 @@ public class FineFoodCateListActivity extends BaseActivity<FineFoodPresenter, Fi
             scenicSpotByCateRequest.put("longitude",mLongitude);
             scenicSpotByCateRequest.put("latitude", mLatitude);
             scenicSpotByCateRequest.put("cateId",String.valueOf(mCateId));
-            mPresenter.findFoodByCate(scenicSpotByCateRequest);
+            mPresenter.findFoodListByCateId(scenicSpotByCateRequest);
         }
     }
 }

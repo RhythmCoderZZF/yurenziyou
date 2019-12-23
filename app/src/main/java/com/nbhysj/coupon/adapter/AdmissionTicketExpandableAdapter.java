@@ -11,6 +11,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Enum.TicketEntranceWayEnum;
 import com.nbhysj.coupon.common.Enum.TicketRefundSettingsEnum;
@@ -35,13 +36,13 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
     private String mchType;
     private List<String> goodsPriceTagList;
     private MchTicketListener mchTicketListener;
-    public AdmissionTicketExpandableAdapter(Context context, String mchType,List<MchGoodsBean> entranceTicketList,MchTicketListener mchTicketListener) {
+
+    public AdmissionTicketExpandableAdapter(Context context, String mchType, List<MchGoodsBean> entranceTicketList, MchTicketListener mchTicketListener) {
         this.context = context;
         this.entranceTicketList = entranceTicketList;
         this.mchType = mchType;
         this.mchTicketListener = mchTicketListener;
-        if(goodsPriceTagList == null)
-        {
+        if (goodsPriceTagList == null) {
             goodsPriceTagList = new ArrayList<>();
         } else {
             goodsPriceTagList.clear();
@@ -101,6 +102,7 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
             groupitem.mImgTicketExpandable = view.findViewById(R.id.img_admission_ticket_status);
             groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_per_capita_price); //价格
             groupitem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //默认价格
+            groupitem.mTvDiscountTag = view.findViewById(R.id.tv_discount);
 
             view.setTag(groupitem);
         } else {
@@ -110,10 +112,19 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         String title = mchGoodsBean.getTitle();
         double defaultPrice = mchGoodsBean.getDefaultPrice();
         double marketPrice = mchGoodsBean.getMarketPrice();
+        int timeLimitStatus = mchGoodsBean.getTimeLimitStatus();
         groupitem.mTvTicketType.setText(title);
         groupitem.mTvDefaultPrice.setText(Tools.getTwoDecimalPoint(defaultPrice));
         groupitem.mTvMarketPrice.setText("¥" + Tools.getTwoDecimalPoint(marketPrice));
-        groupitem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        groupitem.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+
+        if (timeLimitStatus == 0) {
+
+            groupitem.mTvDiscountTag.setVisibility(View.GONE);
+        } else if (timeLimitStatus == 1) {
+            groupitem.mTvDiscountTag.setVisibility(View.VISIBLE);
+        }
+
         if (isExpanded) {
             groupitem.mImgTicketExpandable.setImageResource(R.mipmap.icon_admission_ticket_expand);
         } else {
@@ -153,8 +164,7 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         int sellNum = ticketEntity.getSellNum();
         String refundSettings = ticketEntity.getRefundSettings();
         String goodsBuyNotes = ticketEntity.getGoodsBuyNotes();
-        if (!TextUtils.isEmpty(refundSettings))
-        {
+        if (!TextUtils.isEmpty(refundSettings)) {
             refundSettingsValue = TicketRefundSettingsEnum.getEnumValueByKey(refundSettings);
         }
 
@@ -167,13 +177,11 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         int goodsId = ticketEntity.getGoodsId();
         goodsPriceTagList.clear();
 
-        if(!TextUtils.isEmpty(refundSettingsValue))
-        {
+        if (!TextUtils.isEmpty(refundSettingsValue)) {
             goodsPriceTagList.add(refundSettingsValue);
         }
 
-        if(!TextUtils.isEmpty(ticketIntoTypeValue))
-        {
+        if (!TextUtils.isEmpty(ticketIntoTypeValue)) {
             goodsPriceTagList.add(ticketIntoTypeValue);
         }
 
@@ -204,22 +212,18 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
 
         chilItem.mTvTicketTitle.setText(ticketEntity.getTitle());
         chilItem.mTvBookTicketInfo.setText(bookingInfo);
-        chilItem.mTvSellNum.setText("已售"+ sellNum + " | 购买须知 >");
+        chilItem.mTvSellNum.setText("已售" + sellNum + " | 购买须知 >");
         chilItem.mTvMarketPrice.setText("¥" + Tools.getTwoDecimalPoint(marketPrice));
         double discountAmount = marketPrice - defaultPrice;
         chilItem.mTvDefaultPrice.setText("¥" + Tools.getTwoDecimalPoint(defaultPrice));
         chilItem.mTvAlreadyReduced.setText("已减" + Tools.getTwoDecimalPoint(discountAmount) + "元");
 
-        chilItem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        chilItem.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
         chilItem.mTvBookTicket.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                Intent mIntent = new Intent();
-                mIntent.setClass(context, OrderSubmitActivity.class);
-                mIntent.putExtra("goodsId",goodsId);
-                mIntent.putExtra("mchType",mchType);
-                context.startActivity(mIntent);
+            public void onClick(View view) {
+
+                mchTicketListener.setImmediateBookingCallback(goodsId);
             }
         });
 
@@ -227,7 +231,7 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
             @Override
             public void onClick(View view) {
 
-                mchTicketListener.setMchTicketCallback(groupPosition,childPosition,goodsBuyNotes);
+                mchTicketListener.setMchTicketCallback(groupPosition, childPosition, goodsBuyNotes);
             }
         });
         return view;
@@ -247,6 +251,8 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         TextView mTvDefaultPrice;
         //市场价格
         TextView mTvMarketPrice;
+        //优惠标识
+        TextView mTvDiscountTag;
     }
 
     class chilItem {
@@ -271,8 +277,11 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         RelativeLayout mRlytGroupMchTicketItem;
 
     }
-    public interface MchTicketListener{
 
-        void setMchTicketCallback(int groupPosition,int childPosition,String goodsBuyNotes);
+    public interface MchTicketListener {
+
+        void setMchTicketCallback(int groupPosition, int childPosition, String goodsBuyNotes);
+
+        void setImmediateBookingCallback(int goodsId);
     }
 }

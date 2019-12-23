@@ -89,7 +89,7 @@ public class ShareOprateDialog {
             @Override
             public void onClick(View view) {
 
-                onSharePlatformItemClickListener.onSharePlatformItemClick(SharePlatformEnum.getEnumByKey(0));
+                onSharePlatformItemClickListener.onSharePlatformItemClick(SHARE_MEDIA.WEIXIN);
 
             }
         });
@@ -98,7 +98,7 @@ public class ShareOprateDialog {
             @Override
             public void onClick(View view) {
 
-                onSharePlatformItemClickListener.onSharePlatformItemClick(SharePlatformEnum.getEnumByKey(1));
+                onSharePlatformItemClickListener.onSharePlatformItemClick(SHARE_MEDIA.WEIXIN_CIRCLE);
 
             }
         });
@@ -107,7 +107,7 @@ public class ShareOprateDialog {
             @Override
             public void onClick(View view) {
 
-                onSharePlatformItemClickListener.onSharePlatformItemClick(SharePlatformEnum.getEnumByKey(2));
+                onSharePlatformItemClickListener.onSharePlatformItemClick(SHARE_MEDIA.QQ);
 
             }
         });
@@ -116,7 +116,7 @@ public class ShareOprateDialog {
             @Override
             public void onClick(View view) {
 
-                onSharePlatformItemClickListener.onSharePlatformItemClick(SharePlatformEnum.getEnumByKey(3));
+                onSharePlatformItemClickListener.onSharePlatformItemClick(SHARE_MEDIA.QZONE);
 
             }
         });
@@ -125,19 +125,19 @@ public class ShareOprateDialog {
             @Override
             public void onClick(View view) {
 
-                onSharePlatformItemClickListener.onSharePlatformItemClick(SharePlatformEnum.getEnumByKey(4));
+                onSharePlatformItemClickListener.onSharePlatformItemClick(SHARE_MEDIA.SINA);
 
             }
         });
 
-        mLlytCopyLink.setOnClickListener(new OnClickListener() {
+      /*  mLlytCopyLink.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 onSharePlatformItemClickListener.onSharePlatformItemClick("复制链接");
 
             }
-        });
+        });*/
 
         return this;
     }
@@ -159,6 +159,6 @@ public class ShareOprateDialog {
 
     public interface OnSharePlatformItemClickListener {
 
-        void onSharePlatformItemClick(String sharePlatform);
+        void onSharePlatformItemClick(SHARE_MEDIA sharePlatform);
     }
 }

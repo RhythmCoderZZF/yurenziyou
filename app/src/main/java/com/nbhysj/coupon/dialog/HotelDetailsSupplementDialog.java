@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +32,12 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.RecipientAddressResponse;
+import com.nbhysj.coupon.ui.FineFoodEvaluateActivity;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.HotelOrderActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.LogUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
 import com.nbhysj.coupon.view.HotelDetailSupplementBannerView;
@@ -60,15 +64,17 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
     private TextView mTvPrice;
     private TextView mTvReservationImmdiate;
     private String mchName;
+    private ReservationImmdiateListener reservationImmdiateListener;
     public HotelDetailsSupplementDialog() {
 
     }
 
     @SuppressLint("ValidFragment")
-    public HotelDetailsSupplementDialog(MchGoodsBean mchHotelGoodsBean,String mchName) {
+    public HotelDetailsSupplementDialog(ReservationImmdiateListener reservationImmdiateListener,MchGoodsBean mchHotelGoodsBean,String mchName) {
 
         this.mchHotelGoodsBean = mchHotelGoodsBean;
         this.mchName = mchName;
+        this.reservationImmdiateListener = reservationImmdiateListener;
     }
 
     @Override
@@ -139,12 +145,7 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent();
-                intent.setClass(context, HotelOrderActivity.class);
-                int goodId = mchHotelGoodsBean.getId();
-                intent.putExtra("goodsId",goodId);
-                intent.putExtra("mchName",mchName);
-                startActivity(intent);
+                reservationImmdiateListener.setReservationImmdiateCallback();
             }
         });
 
@@ -249,5 +250,9 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
         super.show(manager, tag);
     }
 
+    public interface ReservationImmdiateListener{
+
+        void setReservationImmdiateCallback();
+    }
 
 }

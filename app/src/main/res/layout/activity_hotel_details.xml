@@ -586,6 +586,7 @@
                     android:layout_marginTop="@dimen/dp_5"></android.support.v7.widget.RecyclerView>
 
                 <RelativeLayout
+                    android:id="@+id/rlyt_question_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_16">

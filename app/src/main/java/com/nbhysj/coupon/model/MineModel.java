@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.CollectionBatchMchDeleteRequest;
 import com.nbhysj.coupon.model.request.CollectionBatchPostsDeleteRequest;
+import com.nbhysj.coupon.model.request.PostDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
@@ -62,4 +63,10 @@ public class MineModel implements MineContract.Model {
     public Observable<BackResult<ZanAndCollectionResponse>> getCollectionMsgList(int pageNo, int pageSize) {
         return Api.getInstance().apiService.getCollectionMsgList(pageNo,pageSize).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult> deletePost(PostDeleteRequest postDeleteRequest) {
+        return Api.getInstance().apiService.deletePost(postDeleteRequest).compose(RxSchedulers.io_main());
+    }
+
 }

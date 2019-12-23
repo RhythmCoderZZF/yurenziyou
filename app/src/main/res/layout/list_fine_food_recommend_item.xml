@@ -76,8 +76,8 @@
                 android:drawablePadding="@dimen/dp_4"
                 android:text=""
                 android:textColor="@color/text_grey"
-                android:textSize="@dimen/text_size_xsmall" />
-
+                android:textSize="@dimen/text_size_xsmall"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

@@ -37,7 +37,8 @@
             android:lines="3"
             android:textColor="@color/txt_font_black2"
             android:textSize="@dimen/text_size_xnormal"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/tv_strategy_praise_num"
@@ -51,7 +52,8 @@
             android:layout_marginTop="@dimen/dp_12"
             android:text="0"
             android:textColor="@color/color_text_gray27"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
 
         <TextView
@@ -67,7 +69,8 @@
             android:text="0"
             android:layout_marginBottom="@dimen/dp_13"
             android:textColor="@color/color_text_gray27"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"

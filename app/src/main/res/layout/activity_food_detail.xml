@@ -519,4 +519,33 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/rlyt_fine_food_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_45"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/dp_49"
+        android:layout_marginRight="@dimen/dp_53"
+        android:layout_marginBottom="@dimen/dp_29"
+        android:background="@drawable/btn_bg_fine_food_comment"
+        android:paddingLeft="@dimen/dp_34"
+        android:paddingRight="@dimen/dp_30"
+      >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@mipmap/icon_pen_ask_questions"
+            android:drawablePadding="@dimen/dp_14"
+            android:gravity="center"
+            android:text="添加你的评论..."
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

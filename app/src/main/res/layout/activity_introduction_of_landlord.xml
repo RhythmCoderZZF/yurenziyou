@@ -165,7 +165,7 @@
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_vertical"
                                                         android:layout_marginRight="@dimen/dp_10"
-                                                        android:text="用户名"
+                                                        android:text=""
                                                         android:textColor="@color/txt_font_black2"
                                                         android:textSize="@dimen/text_size_medium"
                                                         android:textStyle="bold" />
@@ -218,7 +218,8 @@
                                                 android:layout_centerInParent="true"
                                                 android:layout_gravity="center_vertical|center_horizontal"
                                                 android:layout_marginRight="@dimen/dp_14"
-                                                android:src="@mipmap/icon_gray_right_arrow" />
+                                                android:src="@mipmap/icon_gray_right_arrow"
+                                                android:visibility="gone"/>
 
                                         </RelativeLayout>
 
@@ -241,17 +242,16 @@
                                                 android:orientation="vertical">
 
                                                 <TextView
-                                                    android:id="@+id/tv_fans_num"
+                                                    android:id="@+id/tv_scheduled_success_rate"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_horizontal"
-                                                    android:text="100%"
+                                                    android:text="0%"
                                                     android:textColor="@color/txt_font_black2"
                                                     android:textSize="@dimen/text_size_xmedium"
                                                     android:textStyle="bold" />
 
                                                 <TextView
-                                                    android:id="@+id/tv_fans"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_horizontal"
@@ -269,10 +269,11 @@
                                                 android:orientation="vertical">
 
                                                 <TextView
+                                                    android:id="@+id/tv_average_confirmation_time"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_horizontal"
-                                                    android:text="1分钟"
+                                                    android:text="0分钟"
                                                     android:textColor="@color/txt_font_black2"
                                                     android:textSize="@dimen/text_size_xmedium"
                                                     android:textStyle="bold" />
@@ -295,10 +296,11 @@
                                                 android:orientation="vertical">
 
                                                 <TextView
+                                                    android:id="@+id/tv_house_resources_num"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_horizontal"
-                                                    android:text="2"
+                                                    android:text="0"
                                                     android:textColor="@color/txt_font_black2"
                                                     android:textSize="@dimen/text_size_xmedium"
                                                     android:textStyle="bold" />
@@ -322,10 +324,11 @@
                                                 android:orientation="vertical">
 
                                                 <TextView
+                                                    android:id="@+id/tv_overall_score"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_horizontal"
-                                                    android:text="5.0分"
+                                                    android:text="0.0分"
                                                     android:textColor="@color/txt_font_black2"
                                                     android:textSize="@dimen/text_size_xmedium"
                                                     android:textStyle="bold" />
@@ -354,6 +357,11 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/llyt_landlord_motto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -366,16 +374,17 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_motto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_12"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:text="房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话房东留下的一些话。"
+                    android:text=""
                     android:textColor="@color/color_text_black7"
                     android:textSize="@dimen/text_size_small" />
-
+                </LinearLayout>
 
                 <net.lucode.hackware.magicindicator.MagicIndicator
                     android:id="@+id/magic_indicator"
@@ -427,8 +436,8 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/ibtn_back"
+                <ImageView
+                    android:id="@+id/img_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -448,7 +457,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:padding="@dimen/dp_10"
-                        android:src="@mipmap/icon_black_fine_food_collection" />
+                        android:src="@mipmap/icon_black_fine_food_collection"
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/img_menu"

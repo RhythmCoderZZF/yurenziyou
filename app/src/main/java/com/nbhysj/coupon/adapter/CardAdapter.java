@@ -51,15 +51,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardHolder> {
         int commentCount = homePageSubTopicTagBean.getCommentCount();
         double distance = homePageSubTopicTagBean.getDistance();
 
-        boolean isLove = homePageSubTopicTagBean.isLove();
+        int isAttention = homePageSubTopicTagBean.getIsAttention();
 
-        if (!isLove) {
+        if (isAttention == 0) {
 
             holder.mTvFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_thirteen);
             holder.mTvFollow.setTextColor(mContext.getResources().getColor(R.color.white));
             holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_attention));
 
-        } else {
+        } else if(isAttention == 1){
             holder.mTvFollow.setBackgroundResource(R.drawable.bg_gray_radius_thirteen_shape);
             holder.mTvFollow.setTextColor(mContext.getResources().getColor(R.color.white));
             holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_already_concerned));

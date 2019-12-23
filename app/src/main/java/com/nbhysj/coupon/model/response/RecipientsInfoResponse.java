@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class RecipientsInfoResponse {
 
-    //旅客信息返回
+    //收件人信息返回
     private List<RecipientsBean> result;
 
     private BasePaginationResult page;

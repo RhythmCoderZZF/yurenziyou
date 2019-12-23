@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import okhttp3.ResponseBody;
 
 /**
  * @auther：hysj created on 2019/03/10
@@ -339,8 +340,7 @@ public class PublishLocationSearchActivity extends BaseActivity<PublishPostPrese
     }
 
     @Override
-    public void getHotTagsTopicListResult(BackResult<List<HotTagsTopicBean>> res) {
-
+    public void getHotTagsTopicListResult(ResponseBody res) {
 
     }
 

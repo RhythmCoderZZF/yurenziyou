@@ -208,7 +208,6 @@
     </style>
 
     <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@mipmap/bg_main_top</item>
         <!-- <item name="windowActionBar">false</item>
          <item name="windowNoTitle">true</item>
          <item name="android:windowActionBar">false</item>//无ActionBar
@@ -228,6 +227,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@mipmap/bg_app_launcher</item>
+        <item name="android:windowIsTranslucent">false</item>
 
         <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>

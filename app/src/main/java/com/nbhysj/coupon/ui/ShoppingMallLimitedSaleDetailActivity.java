@@ -440,6 +440,4 @@ public class ShoppingMallLimitedSaleDetailActivity extends BaseActivity<LimitedT
             mPresenter.getLimitedTimeSalePage();
         }
     }
-
-
 }

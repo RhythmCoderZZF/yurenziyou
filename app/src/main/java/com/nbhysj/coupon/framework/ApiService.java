@@ -19,8 +19,10 @@ import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchDeleteContentRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchMoveContentRequest;
+import com.nbhysj.coupon.model.request.FavoritesDeleteRequest;
 import com.nbhysj.coupon.model.request.FindPwdByEmailRequest;
 import com.nbhysj.coupon.model.request.FindPwdByPhoneRequest;
+import com.nbhysj.coupon.model.request.FineFoodCommentRequest;
 import com.nbhysj.coupon.model.request.GroupMchOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
 import com.nbhysj.coupon.model.request.IgnoreQuestionsAndAnswersRequest;
@@ -34,6 +36,7 @@ import com.nbhysj.coupon.model.request.OrderDeleteRequest;
 import com.nbhysj.coupon.model.request.OrderGroupCommentRequest;
 import com.nbhysj.coupon.model.request.OrderPartialCommentRequest;
 import com.nbhysj.coupon.model.request.OrderPartialRefundRequest;
+import com.nbhysj.coupon.model.request.PostDeleteRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostReportRequest;
 import com.nbhysj.coupon.model.request.PostsCollectionRequest;
@@ -53,6 +56,7 @@ import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
+import com.nbhysj.coupon.model.request.UserReportRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
 import com.nbhysj.coupon.model.response.AnswerResponse;
 import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
@@ -75,6 +79,7 @@ import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
 import com.nbhysj.coupon.model.response.FavoritesListResponse;
 import com.nbhysj.coupon.model.response.FavoritesResponse;
+import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
@@ -82,9 +87,12 @@ import com.nbhysj.coupon.model.response.GroupMchResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
+import com.nbhysj.coupon.model.response.HomestayBean;
 import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
+import com.nbhysj.coupon.model.response.HouseResouceResponse;
+import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.LimitedTimeSalePageBean;
 import com.nbhysj.coupon.model.response.LoginResponse;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
@@ -110,6 +118,7 @@ import com.nbhysj.coupon.model.response.OrderGroupGoodsInitResponse;
 import com.nbhysj.coupon.model.response.OrderPaymentResponse;
 import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
@@ -242,7 +251,9 @@ public interface ApiService {
     @POST("api/report/insertReport")
     Observable<BackResult> postReport(@Body PostReportRequest postReportRequest);
 
-
+    //用户举报
+    @POST("api/report/user")
+    Observable<BackResult> userReport(@Body UserReportRequest userReportRequest);
 
     /****************       1.旅客信息        *************/
     //15.查询旅客信息列表
@@ -281,7 +292,6 @@ public interface ApiService {
 
     /****************      3. 联系人信息       *************/
     //查询收件人列表
-
     /**
      * @param id       用户id
      * @param mobile
@@ -308,13 +318,15 @@ public interface ApiService {
     @GET("api/city")
     Observable<BackResult<List<RecipientAddressResponse>>> getRecipientsAddress();
 
+    /**************      首页      ****************/
+
     //搜索商户(发布帖子)
     @GET("api/mch")
     Observable<BackResult<MerchantListResponse>> getMerchantList(@Query("cityId") String cityId, @Query("mchName") String mchName, @Query("page") int page, @Query("pageSize") int pageSize);
 
     //主题搜索(热门标签)
     @GET("api/topic/list")
-    Observable<BackResult<List<HotTagsTopicBean>>> getHotTagsTopicList(@Query("type") String type);
+    Observable<ResponseBody> getHotTagsTopicList(@Query("type") String type);
 
     //主题搜索(热门标签)
     @GET("api/topic/list")
@@ -386,15 +398,18 @@ public interface ApiService {
     Observable<BackResult<CommentAndAnswerResponse>> getPostsCommentAndAnswer(@Query("page") int page, @Query("pageSize") int pageSize);
 
     //帖子删除
-    @GET("api/posts/deletePost")
-    Observable<BackResult<CommentAndAnswerResponse>> deletePost(@Query("page") int page, @Query("pageSize") int pageSize);
+    @HTTP(method = "DELETE", path = "api/posts/deletePost", hasBody = true)
+    Observable<BackResult> deletePost(@Body PostDeleteRequest postDeleteRequest);
 
+    //广播列表
     @GET("api/user/redio")
     Observable<BackResult<BroadcastResponse>> getBroadcatMessageList(@Query("page") int page, @Query("pageSize") int pageSize);
 
+    //赞列表
     @GET("api/user/zanMsg")
     Observable<BackResult<ZanAndCollectionResponse>> getZanMsgList(@Query("page") int page, @Query("pageSize") int pageSize);
 
+    //收藏
     @GET("api/user/collectionMsg")
     Observable<BackResult<ZanAndCollectionResponse>> getCollectionMsgList(@Query("page") int page, @Query("pageSize") int pageSize);
 
@@ -439,7 +454,6 @@ public interface ApiService {
     Observable<BackResult<MchCateListResponse>> findFoodListByCateId(@QueryMap HashMap<String, String> map);
     //@Query("longitude") String longitude, @Query("latitude") String latitude, @Query("cateId") String cateId, @Query("sorting") String sorting, @Query("page") int page, @Query("pageSize") int pageSize
 
-
     //酒店栏目首页
     @GET("api/store/hotel")
     Observable<BackResult<ScenicSpotHomePageResponse>> getHotelHomePage(@Query("longitude") String longitude, @Query("latitude") String latitude);
@@ -447,6 +461,10 @@ public interface ApiService {
     //酒店栏目筛选
     @GET("api/store/findHotelByCate")
     Observable<BackResult<ScenicSpotResponse>> findHotelByCate(@QueryMap HashMap<String, String> map);
+
+    //酒店类目列表
+    @GET("api/store/findHotelByCate")
+    Observable<BackResult<MchCateListResponse>> getHotelListByCateId(@QueryMap HashMap<String, String> map);
 
     //酒店榜单
     @GET("api/mchRank/wineshop")
@@ -463,6 +481,14 @@ public interface ApiService {
     //民宿榜单（仅民宿)
     @GET("api/mchRank/homestayRank")
     Observable<BackResult<MchBangDanRankingResponse>> getHomestayBangDanRank(@Query("cityId") int cityId);
+
+    //民宿房东主页
+    @GET("api/homestay")
+    Observable<BackResult<LandlordDetailResonse>> getLandlordHomePage(@Query("id") int id);
+
+    //(房源列表)房东主页
+    @GET("api/homestay/property")
+    Observable<BackResult<HouseResouceResponse>> getLandlordHouseResourceList(@Query("id") int id);
 
     //互动栏目首页
     @GET("api/store/recreation")
@@ -503,6 +529,14 @@ public interface ApiService {
     //美食推荐列表
     @GET("api/goodsFood/menu")
     Observable<BackResult<FoodRecommendListResponse>> goodsFoodRecommendList(@Query("mchId") int mchId);
+
+    //美食评价初始化接口
+    @GET("api/mchComment/foodCommentIndex")
+    Observable<BackResult<FineFoodCommentInitResponse>> getFoodCommentIndex(@Query("mchId") int mchId);
+
+    //美食评价
+    @POST("api/mchComment/foodComment")
+    Observable<BackResult> fineFoodComment(@Body FineFoodCommentRequest fineFoodCommentRequest);
 
     //商家相册
     @GET("api/mchPhoto/findByMchId")
@@ -550,7 +584,7 @@ public interface ApiService {
 
     //获取商户评论列表
     @GET("api/mchComment")
-    Observable<BackResult<MchCommentResponse>> getMchCommentList(@Query("mchId") int mchId);
+    Observable<BackResult<MchCommentResponse>> getMchCommentList(@QueryMap Map<String, Object> map);
 
     //帖子收藏
     @POST("api/posts/postsCollection")
@@ -672,7 +706,7 @@ public interface ApiService {
     Observable<BackResult<OrderDetailResponse>> getOrderDetail(@Query("orderNo") String orderNo);
 
     //订单取消
-    @GET("api/order/pay/cancelOrder")
+    @POST("api/order/pay/cancelOrder")
     Observable<BackResult<OrderDetailResponse>> cancelOrder(@Body OrderCancelRequest cancelOrderRequest);
 
     //推荐酒店评分
@@ -688,7 +722,6 @@ public interface ApiService {
     Observable<BackResult<OrderSubmitResponse>> hotelHomestayOrderSubmit(@Body HotelHomestayOrderSubmitRequest hotelHomestayOrderSubmitRequest);
 
     /****************  专辑   *****************/
-
     //专辑详情
     @POST("api/userFavorites/info")
     Observable<BackResult<AlbumFavoritesDetail>> userFavoritesInfo(@Query("favoritesId") int favoritesId);
@@ -738,9 +771,29 @@ public interface ApiService {
     @GET("api/userCollectionShow")
     Observable<ResponseBody> getMineCollectionAllList();
 
-    //我的收藏全部列表
+    //我的收藏全部列表(详情)
     @GET("api/userCollectionShow")
     Observable<BackResult<MineCollectionDetailResponse>> getMineCollectionDetail(@Query("type") String type, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //其他用户的帖子列表
+    @GET("api/posts/otherPost")
+    Observable<ResponseBody> getOthersPostShareList(@Query("userId") int userId);
+
+    //其他用户收藏(全部)列表
+    @GET("api/userCollectionShow/otherCollection")
+    Observable<ResponseBody> getOtherCollectionAllList(@Query("userId") int userId);
+
+    //其他用户赞过列表
+    @GET("api/userCollectionShow/otherBeforeZen")
+    Observable<BackResult<MinePostZanListResponse>> getOtherBeforeZan(@Query("userId") int userId);
+
+    //其他用户收藏的专辑列表
+    @GET("api/userCollectionShow/otherFindFavorites")
+    Observable<BackResult<FavoritesListResponse>> getOtherFindFavoritesList(@Query("type") String type,@Query("page") int page,@Query("pageSize") int pageSize,@Query("userId") int userId);
+
+    //删除专辑
+    @HTTP(method = "DELETE", path = "api/userFavorites/delFavorites", hasBody = true)
+    Observable<BackResult> delFavoritesRequest(@Body FavoritesDeleteRequest favoritesDeleteRequest);
 
     //批量移动专辑内容到另一个专辑
     @POST("api/userFavorites/batchMoveContent")
@@ -793,7 +846,7 @@ public interface ApiService {
 
     //部分退款提交
     @POST("api/orderRefund/one")
-    Observable<BackResult> orderPartialRefundSubmit(@Body OrderPartialRefundRequest orderPartialRefundRequest);
+    Observable<BackResult<OrderRefundResponse>> orderPartialRefundSubmit(@Body OrderPartialRefundRequest orderPartialRefundRequest);
 
     //全部退款页面初始化
     @GET("api/orderRefund/refundAllIndex")
@@ -801,7 +854,7 @@ public interface ApiService {
 
     //全部退款提交
     @POST("api/orderRefund/all")
-    Observable<BackResult> orderAllRefundSubmit(@Body OrderAllRefundRequest orderAllRefundRequest);
+    Observable<BackResult<OrderRefundResponse>> orderAllRefundSubmit(@Body OrderAllRefundRequest orderAllRefundRequest);
 
     //获取退款详情
     @GET("api/order/query/refund")
@@ -910,6 +963,8 @@ public interface ApiService {
     //获取消息列表
     @GET("api/user/messageList")
     Observable<BackResult<MessageResponse>> getMessageList();
+
+
 
 }
 

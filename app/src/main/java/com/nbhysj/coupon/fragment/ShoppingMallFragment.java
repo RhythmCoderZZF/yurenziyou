@@ -14,12 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DeliciousFoodRecommendAdapter;
-import com.nbhysj.coupon.adapter.HomestayAdapter;
 import com.nbhysj.coupon.adapter.HotelAdapter;
 import com.nbhysj.coupon.adapter.IndependentTravelAdapter;
 import com.nbhysj.coupon.adapter.PopularScenicSpotsAdapter;
@@ -264,7 +260,6 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
     List<ShoppingMallMenuBean> shoppingMallMenuList;
 
-    private Runnable r;//定时器线程
     private boolean timerIsInit=false;//判断数据是否初始化
 
     private long endTime;
@@ -477,6 +472,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 if (position == 0) {
 
                     toActivity(ShoppingMallScenicSpotActivity.class); //景点
+
                 } else if (position == 1) {
                     toActivity(ShoppingMallFineFoodActivity.class);  //美食
                 } else if (position == 2) {
@@ -606,7 +602,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     //限时特卖
                     LimitedSaleBean limitedSaleBean = shopMallHomePageResponse.getLimitedSale();
                     List<GoodsBean> limitedSaleGoodsList = limitedSaleBean.getGoods();
-                    if (limitedSaleGoodsList != null) {
+                    if (limitedSaleGoodsList != null && limitedSaleGoodsList.size() > 0) {
 
                         //限时特卖1
                         GoodsBean goodsBeanOne = limitedSaleGoodsList.get(0);
@@ -620,27 +616,32 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                         mTvLimitedSaleOneRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
                         mTvLimitedSaleOnePrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
 
-                        //限时特卖2
-                        GoodsBean goodsBeanTwo = limitedSaleGoodsList.get(1);
-                        String limitedSaleTwoGoodsPhoto = goodsBeanTwo.getGoodsPhoto();
-                        String limitedSaleTwoGoodsName = goodsBeanTwo.getGoodsName();
-                        String limitedSaleTwoSalesDiscount = goodsBeanTwo.getSalesDiscount();
-                        GlideUtil.loadImage(getActivity(), limitedSaleTwoGoodsPhoto, mImageFlashSaleTwo);
-                        mTvLimitedSaleTwoTitle.setText(limitedSaleTwoGoodsName);
-                        mTvLimitedSaleTwoDiscount.setText(limitedSaleTwoSalesDiscount + "折");
-                        mTvLimitedSaleTwoRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
-                        mTvLimitedSaleTwoPrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+                        if(limitedSaleGoodsList.size() > 1)
+                        {
+                            //限时特卖2
+                            GoodsBean goodsBeanTwo = limitedSaleGoodsList.get(1);
+                            String limitedSaleTwoGoodsPhoto = goodsBeanTwo.getGoodsPhoto();
+                            String limitedSaleTwoGoodsName = goodsBeanTwo.getGoodsName();
+                            String limitedSaleTwoSalesDiscount = goodsBeanTwo.getSalesDiscount();
+                            GlideUtil.loadImage(getActivity(), limitedSaleTwoGoodsPhoto, mImageFlashSaleTwo);
+                            mTvLimitedSaleTwoTitle.setText(limitedSaleTwoGoodsName);
+                            mTvLimitedSaleTwoDiscount.setText(limitedSaleTwoSalesDiscount + "折");
+                            mTvLimitedSaleTwoRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
+                            mTvLimitedSaleTwoPrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+                        }
 
-                        //限时特卖3
-                        GoodsBean goodsBeanThree = limitedSaleGoodsList.get(2);
-                        String limitedSaleThreeGoodsPhoto = goodsBeanThree.getGoodsPhoto();
-                        String limitedSaleThreeGoodsName = goodsBeanThree.getGoodsName();
-                        String limitedSaleThreeSalesDiscount = goodsBeanThree.getSalesDiscount();
-                        GlideUtil.loadImage(getActivity(), limitedSaleThreeGoodsPhoto, mImageFlashSaleThree);
-                        mTvLimitedSaleThreeTitle.setText(limitedSaleThreeGoodsName);
-                        mTvLimitedSaleThreeDiscount.setText(limitedSaleThreeSalesDiscount + "折");
-                        mTvLimitedSaleThreeRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
-                        mTvLimitedSaleThreePrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+                        if(limitedSaleGoodsList.size() > 2) {
+                            //限时特卖3
+                            GoodsBean goodsBeanThree = limitedSaleGoodsList.get(2);
+                            String limitedSaleThreeGoodsPhoto = goodsBeanThree.getGoodsPhoto();
+                            String limitedSaleThreeGoodsName = goodsBeanThree.getGoodsName();
+                            String limitedSaleThreeSalesDiscount = goodsBeanThree.getSalesDiscount();
+                            GlideUtil.loadImage(getActivity(), limitedSaleThreeGoodsPhoto, mImageFlashSaleThree);
+                            mTvLimitedSaleThreeTitle.setText(limitedSaleThreeGoodsName);
+                            mTvLimitedSaleThreeDiscount.setText(limitedSaleThreeSalesDiscount + "折");
+                            mTvLimitedSaleThreeRMBSymbol.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("¥", 0xFFF7418C, 0xFFFBAB66));
+                            mTvLimitedSaleThreePrice.setText(RadiusGradientSpanUtil.getRadiusGradientSpan(Tools.getTwoDecimalPoint(goodsPrice), 0xFFF7418C, 0xFFFBAB66));
+                        }
                     }
 
                     //美食列表
@@ -663,42 +664,54 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                     //旅行主题
                     List<ShopMallHomePageResponse.TravelBannersEntity> travelBannersList = shopMallHomePageResponse.getTravelBanners();
                     //旅行主题1
-                    ShopMallHomePageResponse.TravelBannersEntity travelThemeOne = travelBannersList.get(0);
-                    String travelThemeOnePhotoUrl = travelThemeOne.getPhoto();
-                    GlideUtil.loadImage(getActivity(), travelThemeOnePhotoUrl, mImgTravelThemeOne);
-                    mTvTravelThemeOneTitle.setText(travelThemeOne.getTitle());
-                    mTvTravelThemeOneDes.setText(travelThemeOne.getIntro());
+                    if(travelBannersList != null && travelBannersList.size() > 0)
+                    {
+                        ShopMallHomePageResponse.TravelBannersEntity travelThemeOne = travelBannersList.get(0);
+                        String travelThemeOnePhotoUrl = travelThemeOne.getPhoto();
+                        GlideUtil.loadImage(getActivity(), travelThemeOnePhotoUrl, mImgTravelThemeOne);
+                        mTvTravelThemeOneTitle.setText(travelThemeOne.getTitle());
+                        mTvTravelThemeOneDes.setText(travelThemeOne.getIntro());
+                    }
 
                     //旅行主题2
-                    ShopMallHomePageResponse.TravelBannersEntity travelThemeTwo = travelBannersList.get(1);
-                    String travelThemeTwoPhotoUrl = travelThemeTwo.getPhoto();
-                    GlideUtil.loadImage(getActivity(), travelThemeTwoPhotoUrl,  mImgTravelThemeTwo);
-                    mTvTravelThemeTwoTitle.setText(travelThemeTwo.getTitle());
-                    mTvTravelThemeTwoDes.setText(travelThemeOne.getIntro());
+                    if(travelBannersList != null && travelBannersList.size() > 1)
+                    {
+                        ShopMallHomePageResponse.TravelBannersEntity travelThemeTwo = travelBannersList.get(1);
+                        String travelThemeTwoPhotoUrl = travelThemeTwo.getPhoto();
+                        GlideUtil.loadImage(getActivity(), travelThemeTwoPhotoUrl, mImgTravelThemeTwo);
+                        mTvTravelThemeTwoTitle.setText(travelThemeTwo.getTitle());
+                        mTvTravelThemeTwoDes.setText(travelThemeTwo.getIntro());
+                    }
 
                     //旅行主题3
-                    ShopMallHomePageResponse.TravelBannersEntity travelThemeThree = travelBannersList.get(2);
-                    String travelThemeThreePhotoUrl = travelThemeThree.getPhoto();
-                    GlideUtil.loadImage(getActivity(), travelThemeThreePhotoUrl,  mImgTravelThemeThree);
-                    mTvTravelThemeThreeTitle.setText(travelThemeThree.getTitle());
-                    mTvTravelThemeThreeDes.setText(travelThemeThree.getIntro());
+                    if(travelBannersList != null && travelBannersList.size() > 2) {
+                        ShopMallHomePageResponse.TravelBannersEntity travelThemeThree = travelBannersList.get(2);
+                        String travelThemeThreePhotoUrl = travelThemeThree.getPhoto();
+                        GlideUtil.loadImage(getActivity(), travelThemeThreePhotoUrl, mImgTravelThemeThree);
+                        mTvTravelThemeThreeTitle.setText(travelThemeThree.getTitle());
+                        mTvTravelThemeThreeDes.setText(travelThemeThree.getIntro());
+                    }
 
                     //旅行主题4
-                    ShopMallHomePageResponse.TravelBannersEntity travelThemeFour = travelBannersList.get(3);
-                    String travelThemeFourPhotoUrl = travelThemeThree.getPhoto();
-                    GlideUtil.loadImage(getActivity(), travelThemeFourPhotoUrl, mImgTravelThemeFour);
-                    mTvTravelThemeFourTitle.setText(travelThemeFour.getTitle());
-                    mTvTravelThemeFourDes.setText(travelThemeFour.getIntro());
+                    if(travelBannersList != null && travelBannersList.size() > 3)
+                    {
+                        ShopMallHomePageResponse.TravelBannersEntity travelThemeFour = travelBannersList.get(3);
+                        String travelThemeFourPhotoUrl = travelThemeFour.getPhoto();
+                        GlideUtil.loadImage(getActivity(), travelThemeFourPhotoUrl, mImgTravelThemeFour);
+                        mTvTravelThemeFourTitle.setText(travelThemeFour.getTitle());
+                        mTvTravelThemeFourDes.setText(travelThemeFour.getIntro());
+                    }
 
                     //旅行主题5
-                    ShopMallHomePageResponse.TravelBannersEntity travelThemeFive = travelBannersList.get(4);
-                    String travelThemeFivePhotoUrl = travelThemeFive.getPhoto();
-                    GlideUtil.loadImage(getActivity(), travelThemeFivePhotoUrl, mImgTravelThemeFive);
-                    mTvTravelThemeFiveTitle.setText(travelThemeFive.getTitle());
-                    mTvTravelThemeFiveDes.setText(travelThemeFive.getIntro());
-
+                    if(travelBannersList != null && travelBannersList.size() > 4) {
+                        ShopMallHomePageResponse.TravelBannersEntity travelThemeFive = travelBannersList.get(4);
+                        String travelThemeFivePhotoUrl = travelThemeFive.getPhoto();
+                        GlideUtil.loadImage(getActivity(), travelThemeFivePhotoUrl, mImgTravelThemeFive);
+                        mTvTravelThemeFiveTitle.setText(travelThemeFive.getTitle());
+                        mTvTravelThemeFiveDes.setText(travelThemeFive.getIntro());
+                    }
                     //自由行
-                    if(groupGoodsList != null)
+                    if(groupGoodsList != null && groupGoodsList.size() > 0)
                     {
                         groupGoodsList = shopMallHomePageResponse.getGroupGoodsVO();
                         independentTravelAdapter.setIndependentTravelList(groupGoodsList);
@@ -707,26 +720,16 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
                     //猜你喜欢
                     guessEntityList = shopMallHomePageResponse.getGuess();
-                    mallGuessYouLikeAdapter.setGuessYouLikeList(guessEntityList);
-                    mallGuessYouLikeAdapter.notifyDataSetChanged();
+                    if(guessEntityList != null && guessEntityList.size() > 0)
+                    {
+                        mallGuessYouLikeAdapter.setGuessYouLikeList(guessEntityList);
+                        mallGuessYouLikeAdapter.notifyDataSetChanged();
+                    }
 
                     long endTimeLong = limitedSaleBean.getEndTime();
-                    long start_time = new Date().getTime() / 1000;
+                    long currentTime = System.currentTimeMillis() / 1000;
+                    endTime = endTimeLong - currentTime;
 
-                    endTime = endTimeLong-start_time;
-                  /*  r = new Runnable() {
-
-                        @Override
-                        public void run() {
-                            mHandler.sendEmptyMessage(200);
-                            if(timerIsInit){//数据初始化成功，则延迟1秒
-                                mHandler.postDelayed(this, 1000);
-                            }else {
-                                mHandler.post(this);
-                            }
-                        }
-                    };
-                    mHandler.post(r);*/
                     handler.postDelayed(runnable, 1000);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -909,14 +912,21 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+       /* if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }*/
+    }
 
     //页面销毁时，销毁线程
     @Override
     public void onDestroy() {
         super.onDestroy();
-/*
-        if (mHandler != null && r != null) {
-            mHandler.removeCallbacks(r);
-        }*/
+
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
     }
 }

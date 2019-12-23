@@ -142,6 +142,7 @@
                 android:textColor="@color/color_text_gray"
                 android:layout_toLeftOf="@+id/iv_see_password"
                 android:maxLength="20"
+                android:inputType="number"
                 android:textSize="@dimen/text_size_medium" />
 
             <ImageView

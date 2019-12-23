@@ -50,7 +50,7 @@
                 android:layout_toLeftOf="@+id/tv_input_limitation"
                 android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:background="@null"
-                android:maxLength="15"
+                android:maxLength="6"
                 android:textSize="@dimen/text_size_medium" />
 
             <TextView

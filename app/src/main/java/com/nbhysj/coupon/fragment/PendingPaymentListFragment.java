@@ -48,6 +48,9 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
     UserOrderListResponse.OrderTypeEntity mOrderTypeEntity;
     int mTotalPageCount;
     private boolean isOnLoadMore = false;
+    //订单取消弹框
+    OprateDialog orderCancelOprateDialog;
+    private int mPosition;
 
     public static PendingPaymentListFragment newInstance(String content) {
         PendingPaymentListFragment fragment = new PendingPaymentListFragment();
@@ -84,7 +87,7 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
         myOrderListAdapter = new MyOrderListAdapter(getActivity(), new MyOrderListAdapter.MyOrderListener() {
             @Override
-            public void setOrderDeleteListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderDeleteListener(int position, UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
 
                 mOrderTypeEntity = orderTypeEntity;
                 OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
@@ -106,8 +109,28 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
             }
 
             @Override
-            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderCancelListener(int position, UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+                mOrderTypeEntity = orderTypeEntity;
+                mPosition = position;
+                if (orderCancelOprateDialog == null) {
+                    orderCancelOprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_cancel_the_order));
+                    orderCancelOprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
+                        }
+                    });
+                    orderCancelOprateDialog.setPositiveButton(getResources().getString(R.string.str_confirm), getResources().getColor(R.color.color_blue2), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            orderCancel();
+                        }
+                    });
+
+
+                }
+                orderCancelOprateDialog.show();
             }
 
             @Override
@@ -181,7 +204,7 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
             mSmartRefreshLayout.finishRefresh();
         }
         dismissProgressDialog();
-        showToast(getActivity(),Constants.getResultMsg(msg));
+        showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
@@ -214,8 +237,7 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
     @Override
     public void lazyInitView(View view) {
-        if (pendingPayOrderList != null)
-        {
+        if (pendingPayOrderList != null) {
             pendingPayOrderList.clear();
         }
         showProgressDialog(getActivity());
@@ -319,7 +341,31 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
 
     @Override
     public void cancelOrderResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                    mOrderTypeEntity = pendingPayOrderList.get(mPosition);
+                    pendingPayOrderList.remove(mOrderTypeEntity);
+                    if (pendingPayOrderList.size() > 0) {
+                        mRlytNoOrderData.setVisibility(View.GONE);
+
+                    } else {
+
+                        mRlytNoOrderData.setVisibility(View.VISIBLE);
+                    }
+                    myOrderListAdapter.setMyOrderList(pendingPayOrderList);
+                    myOrderListAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     /**
@@ -347,10 +393,11 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
             mPresenter.deleteOrder(deleteOrderRequest);
         }
     }
+
     /**
      * 取消订单
      */
-    public void cancelOrder() {
+    public void orderCancel() {
         if (validateInternet()) {
             mDialog.setTitle(getResources().getString(R.string.str_order_canceling));
             String orderNo = mOrderTypeEntity.getOrderNo();
@@ -359,4 +406,6 @@ public class PendingPaymentListFragment extends BaseFragment<OrderListPresenter,
             mPresenter.cancelOrder(cancelOrderRequest);
         }
     }
+
+
 }

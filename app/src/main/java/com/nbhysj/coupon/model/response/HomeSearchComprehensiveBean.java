@@ -4,11 +4,13 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Unique;
 
 @Entity
 public class HomeSearchComprehensiveBean {
     @Id(autoincrement = true)
     Long id;
+    @Unique // 搜索记录(唯一)
     String search;//字段
     @Generated(hash = 1656305850)
     public HomeSearchComprehensiveBean(Long id, String search) {

@@ -54,7 +54,6 @@ public interface UserInfoContract {
 
         void getMyCardResult(BackResult<MyCardResponse> res);
 
-
         void showMsg(String msg);
     }
 

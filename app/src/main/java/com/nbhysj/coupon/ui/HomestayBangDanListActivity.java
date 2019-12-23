@@ -20,6 +20,8 @@ import com.nbhysj.coupon.contract.HomestayContract;
 import com.nbhysj.coupon.model.HomestayModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HouseResouceResponse;
+import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -251,6 +253,16 @@ public class HomestayBangDanListActivity extends BaseActivity<HomestayPresenter,
 
     @Override
     public void getMchHomestayDetailResult(BackResult<MchHomestayDetailsResponse> res) {
+
+    }
+
+    @Override
+    public void getLandlordHomePageResult(BackResult<LandlordDetailResonse> res) {
+
+    }
+
+    @Override
+    public void getLandlordHouseResourceListResult(BackResult<HouseResouceResponse> res) {
 
     }
 

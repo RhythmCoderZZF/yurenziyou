@@ -38,9 +38,8 @@ public class DistrictFragment implements AdapterView.OnItemClickListener {
         initView();
     }
 
-    public void setCode(int mProvinceSelectPosition, int mCitySelectPosition, List<RecipientAddressResponse> recipientAddressResponseList) {
-        //recipientsCityList.clear();
-        districtsList = recipientAddressResponseList.get(mProvinceSelectPosition).getCityVOs().get(mCitySelectPosition).getCities();
+    public void setCode(List<DistrictBean> recipientAddressResponseList) {
+        districtsList = recipientAddressResponseList;
         adapter.setRegionList(districtsList);
         adapter.notifyDataSetChanged();
 
@@ -103,6 +102,9 @@ public class DistrictFragment implements AdapterView.OnItemClickListener {
             view = LayoutInflater.from(context).inflate(R.layout.address_listiew_item_textview, null);
             TextView text = (TextView) view.findViewById(R.id.tvTextName);
             ImageView ivSelect = (ImageView) view.findViewById(R.id.ivSelect);
+            TextView mTvAlphabet = view.findViewById(R.id.tv_alphabet);
+            String letter = list.get(i).getLetter();
+            mTvAlphabet.setText(letter);
             text.setText(list.get(i).getName());
             if (list.get(i).getId().equals(code)) {
                 text.setTextColor(context.getResources().getColor(R.color.color_text_blue2));

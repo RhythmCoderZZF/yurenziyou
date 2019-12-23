@@ -72,7 +72,7 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
 
             } else if(breakfastStatus == 1){
 
-                stringBuffer.append("含早餐 ");
+                stringBuffer.append("不含早餐 ");
             }
 
             if(windowStatus == 0){

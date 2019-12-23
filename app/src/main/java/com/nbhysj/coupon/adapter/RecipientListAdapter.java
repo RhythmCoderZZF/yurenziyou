@@ -2,6 +2,7 @@ package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.RecipientsBean;
 import com.nbhysj.coupon.model.response.TravellerBean;
 
 import java.util.List;
@@ -34,17 +36,17 @@ public class RecipientListAdapter extends RecyclerView.Adapter<RecipientListAdap
     private int mEmptyType = 0;
 
     private Context mContext;
-    private List<TravellerBean> travellerList;
-    private TravellerInfoItemListener travellerInfoItemListener;
+    private List<RecipientsBean> recipientsList;
+    public RecipientInfoItemListener recipientInfoItemListener;
 
-    public RecipientListAdapter(Context mContext, TravellerInfoItemListener travellerInfoItemListener) {
+    public RecipientListAdapter(Context mContext, RecipientInfoItemListener recipientInfoItemListener) {
         this.mContext = mContext;
-        this.travellerInfoItemListener = travellerInfoItemListener;
+        this.recipientInfoItemListener = recipientInfoItemListener;
     }
 
-    public void setRecipientInfoList(List<TravellerBean> travellerList) {
+    public void setRecipientInfoList(List<RecipientsBean> recipientsList) {
 
-        this.travellerList = travellerList;
+        this.recipientsList = recipientsList;
     }
 
     @Override
@@ -59,23 +61,27 @@ public class RecipientListAdapter extends RecyclerView.Adapter<RecipientListAdap
 
         try {
 
-            TravellerBean travellerInfo = travellerList.get(position);
-            holder.mTvRecipientName.setText(travellerInfo.getRealname());
-            holder.mTvCertificateType.setText(travellerInfo.getIdentityType());
-            holder.mTvIdentificationCard.setText(travellerInfo.getIdentityNo());
+            RecipientsBean recipientInfo = recipientsList.get(position);
+            String consignee = recipientInfo.getConsignee();
+            String address = recipientInfo.getAddress();
+            if(!TextUtils.isEmpty(consignee))
+            {
+                holder.mTvConsigneeName.setText(consignee);
+            }
+            holder.mTvConsigneeAddress.setText(address);
 
-            holder.mLlytTravellerInfoItem.setOnClickListener(new View.OnClickListener() {
+            holder.mLlytRecipientInfoItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    travellerInfoItemListener.setTravellerInfoItemListener(travellerInfo);
+                    recipientInfoItemListener.setRecipientInfoItemListener(recipientInfo);
                 }
             });
 
-            holder.mLlytTravellerInfoItem.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.mLlytRecipientInfoItem.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    travellerInfoItemListener.setTravellerInfoDeleteListener(travellerInfo.getId());
+                    recipientInfoItemListener.setRecipientInfoDeleteListener(recipientInfo.getId());
                     return false;
                 }
             });
@@ -89,7 +95,7 @@ public class RecipientListAdapter extends RecyclerView.Adapter<RecipientListAdap
         //注意，空布局---> mEmptyType = 1 显示1个布局
         //            ---> mEmptyType = 0 所有布局都不显示的
         //   return dataList != null ? dataList.size() + mEmptyType : mEmptyType;
-        return travellerList.size();
+        return recipientsList.size();
     }
 
     @Override
@@ -103,17 +109,16 @@ public class RecipientListAdapter extends RecyclerView.Adapter<RecipientListAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         //收件人名字
-        @BindView(R.id.tv_recipient_name)
-        TextView mTvRecipientName;
-        //证件类型
-        @BindView(R.id.tv_certificate_type)
-        TextView mTvCertificateType;
-        //证件号
-        @BindView(R.id.tv_identification_card)
-        TextView mTvIdentificationCard;
-        @BindView(R.id.llyt_traveller_info_item)
-        LinearLayout mLlytTravellerInfoItem;
+        @BindView(R.id.tv_consignee_name)
+        TextView mTvConsigneeName;
+        //收件人地址
+        @BindView(R.id.tv_consignee_address)
+        TextView mTvConsigneeAddress;
+        //收件人
+        @BindView(R.id.llyt_recipient_info_item)
+        LinearLayout mLlytRecipientInfoItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -122,10 +127,10 @@ public class RecipientListAdapter extends RecyclerView.Adapter<RecipientListAdap
         }
     }
 
-    public interface TravellerInfoItemListener {
+    public interface RecipientInfoItemListener {
 
-        void setTravellerInfoItemListener(TravellerBean travellerInfo);
+        void setRecipientInfoItemListener(RecipientsBean recipientsBean);
 
-        void setTravellerInfoDeleteListener(int travellerId);
+        void setRecipientInfoDeleteListener(int recipientId);
     }
 }

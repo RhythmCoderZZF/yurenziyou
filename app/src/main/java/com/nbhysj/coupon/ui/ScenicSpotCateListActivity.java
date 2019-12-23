@@ -314,6 +314,7 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
     public void findScenicListByCateId() {
         if (validateInternet()) {
 
+            showProgressDialog(ScenicSpotCateListActivity.this);
             HashMap<String, String> scenicSpotByCateRequest = new HashMap<>();
 
             scenicSpotByCateRequest.put("Sorting", mSortStr);
@@ -325,6 +326,4 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
             mPresenter.findScenicListByCateId(scenicSpotByCateRequest);
         }
     }
-
-
 }

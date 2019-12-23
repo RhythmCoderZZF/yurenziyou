@@ -11,9 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.common.Enum.MineCollectionTypeEnum;
 import com.nbhysj.coupon.model.response.FavoritesBean;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
+import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.util.ArrayList;
@@ -37,7 +42,8 @@ public class CollectionOprateAdapter extends RecyclerView.Adapter<CollectionOpra
     private String collectionType;
 
     private AlbumOprateListener albumOprateListener;
-    public CollectionOprateAdapter(Context mContext,String collectionType, AlbumOprateListener albumOprateListener) {
+
+    public CollectionOprateAdapter(Context mContext, String collectionType, AlbumOprateListener albumOprateListener) {
 
         this.mContext = mContext;
         this.albumOprateListener = albumOprateListener;
@@ -77,11 +83,13 @@ public class CollectionOprateAdapter extends RecyclerView.Adapter<CollectionOpra
         try {
 
             FavoritesBean recommendFriends = mRecommendFriendsList.get(itemPosition);
+            int id = recommendFriends.getId();
             String avatar = recommendFriends.getAvater();
             String name = recommendFriends.getNickname();
             String imageUrl = recommendFriends.getPhoto();
             int hits = recommendFriends.getHits();
             GlideUtil.loadImage(mContext, avatar, holder.mImageAvatar);
+
             holder.mTvDes.setText(recommendFriends.getContent());
 
             holder.mTvName.setText(name);
@@ -127,15 +135,58 @@ public class CollectionOprateAdapter extends RecyclerView.Adapter<CollectionOpra
                     } else {
 
                         String postsType = MineCollectionTypeEnum.POSTS.getKey();
-                        if(collectionType.equals(postsType)){
+                        String mchType = MineCollectionTypeEnum.MCH.getKey();
+                        if (collectionType.equals(postsType)) {
 
-                            int collectionId = recommendFriends.getCollectionId();
                             Intent intent = new Intent();
-                            intent.putExtra("postId",collectionId);
+                            intent.putExtra("postId", id);
                             intent.setClass(mContext, PostRecommendDetailActivity.class);
                             mContext.startActivity(intent);
-                        }
 
+                        } else if (collectionType.equals(mchType)) {
+                            String type = recommendFriends.getMchType();
+                            Intent intent = new Intent();
+                            String mchFood = MchTypeEnum.MCH_FOOD.getValue();
+                            String mchScenicSpot = MchTypeEnum.MCH_SCENIC.getValue();
+                            String mchHotel = MchTypeEnum.MCH_HOTEL.getValue();
+                            String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+                            if (type.equals(mchFood)) {
+                                intent.setClass(mContext, FoodDetailActivity.class);
+                                intent.putExtra("mchId", id);
+                                mContext.startActivity(intent);
+
+                            } else if (type.equals(mchScenicSpot)) {
+                                intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                                String mchTypeScenic = MchTypeEnum.MCH_SCENIC.getValue();
+
+                                intent.putExtra("mchId", id);
+                                intent.putExtra("mchType", mchTypeScenic);
+                                mContext.startActivity(intent);
+                            } else if (type.equals(mchRecreation)) {
+                                String mchTypeRecreation = MchTypeEnum.MCH_RECREATION.getValue();
+                                intent.setClass(mContext, ScenicSpotDetailActivity.class);
+                                intent.putExtra("mchId", id);
+                                intent.putExtra("mchType", mchTypeRecreation);
+                                mContext.startActivity(intent);
+                            } else if (type.equals(mchHotel)) {
+                                String mchHotelType = MchTypeEnum.MCH_HOTEL1.getValue();
+                                String mchHomestayType = MchTypeEnum.MCH_HOTEL1.getValue();
+                                String mchType2 = recommendFriends.getMchType2();
+                                if (mchType2 != null) {
+                                    if (mchType2.equals(mchHotelType)) {
+
+                                        intent.setClass(mContext, HotelDetailsActivity.class);
+                                        intent.putExtra("mchId", id);
+                                        mContext.startActivity(intent);
+
+                                    } else if (mchType2.equals(mchHomestayType)) {
+                                        intent.setClass(mContext, HomestayDetailActivity.class);
+                                        intent.putExtra("mchId", id);
+                                        mContext.startActivity(intent);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -200,7 +251,7 @@ public class CollectionOprateAdapter extends RecyclerView.Adapter<CollectionOpra
         }
     }
 
-    public interface AlbumOprateListener{
+    public interface AlbumOprateListener {
 
         void setAlbumOprateListener(int mSelectAlbumNum);
     }

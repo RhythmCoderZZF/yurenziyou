@@ -44,7 +44,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     protected static Context mContext;
     public LoadingDialog mDialog;
     public AppManager appManager;
-    public String userId;
+    public int userId;
     private boolean hasLoaded = false;
 
     private boolean isCreated = false;

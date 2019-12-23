@@ -47,6 +47,7 @@ public class NewAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> i
     ToggleButton mToggleBtnSetUpAsSelf;
     //是否可见
     private int isVisibleStatus;
+
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -68,7 +69,7 @@ public class NewAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> i
             @Override
             public void onToggle(boolean isOnToggle) {
 
-                if(isOnToggle){
+                if (isOnToggle) {
 
                     isVisibleStatus = 1;
 
@@ -83,7 +84,7 @@ public class NewAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> i
     @Override
     public void initPresenter() {
 
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
@@ -104,8 +105,7 @@ public class NewAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> i
             case Constants.SUCCESS_CODE:
                 try {
                     CreateFavoritesResponse createFavoritesResponse = res.getData();
-                    if(createFavoritesResponse != null)
-                    {
+                    if (createFavoritesResponse != null) {
                         int albumId = createFavoritesResponse.getAlbumID();
                         setResult(RESULT_OK);
                         finish();
@@ -152,40 +152,42 @@ public class NewAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> i
 
     }
 
-    @OnClick({R.id.tv_save})
-    public void onClick(View v){
-      switch (v.getId()){
-          case R.id.tv_save:
+    @Override
+    public void delFavoritesRequest(BackResult res) {
 
-              createFavorites();
-
-              break;
-              default:break;
-      }
     }
 
-    public void createFavorites(){
+    @OnClick({R.id.tv_save})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_save:
 
-        if(validateInternet()){
+                createFavorites();
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void createFavorites() {
+
+        if (validateInternet()) {
 
             String albumTitle = mEdtAlbumTitle.getText().toString().trim();
             String albumIntro = mEdtAlbumIntro.getText().toString().trim();
-            if(TextUtils.isEmpty(albumTitle))
-            {
-                showToast(NewAlbumActivity.this,"请填写专辑标题");
-               return;
-            }
-
-            if(TextUtils.isEmpty(albumIntro))
-            {
-                showToast(NewAlbumActivity.this,"请填写专辑简介");
+            if (TextUtils.isEmpty(albumTitle)) {
+                showToast(NewAlbumActivity.this, "请填写专辑标题");
                 return;
             }
 
             showProgressDialog(NewAlbumActivity.this);
             CreateFavoritesRequest createFavoritesRequest = new CreateFavoritesRequest();
             createFavoritesRequest.setTitle(albumTitle);
-            createFavoritesRequest.setIntro(albumIntro);
+            if (!TextUtils.isEmpty(albumIntro))
+            {
+                createFavoritesRequest.setIntro(albumIntro);
+            }
             createFavoritesRequest.setVisibleStatus(isVisibleStatus);
             mPresenter.createFavorites(createFavoritesRequest);
         }

@@ -336,7 +336,7 @@
                     android:background="@color/color_text_gray21" />
 
                 <RelativeLayout
-                    android:id="@+id/rlyt_user_info"
+                    android:id="@+id/rlyt_landlord_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10">
@@ -499,7 +499,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_house_resouce_num"
+                            android:id="@+id/tv_house_resources_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -518,7 +518,6 @@
                             android:textSize="@dimen/text_size_small" />
 
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="wrap_content"

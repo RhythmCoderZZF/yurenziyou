@@ -8,10 +8,9 @@ import java.util.HashMap;
 
 /**
  * @auther：hysj created on 2019/06/05
- * description：酒店Presenter
+ * description：民宿Presenter
  */
 public class HomestayPresenter extends HomestayContract.Presenter {
-
 
     @Override
     public void getHomestayHomePage(String longitude, String latitude) {
@@ -45,6 +44,16 @@ public class HomestayPresenter extends HomestayContract.Presenter {
     @Override
     public void getCoupon(int couponId) {
         mRxManager.add(mModel.getCoupon(couponId).subscribe(res -> mView.getCouponResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getLandlordHomePage(int landlordId) {
+        mRxManager.add(mModel.getLandlordHomePage(landlordId).subscribe(res -> mView.getLandlordHomePageResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void getLandlordHouseResourceList(int landlordId) {
+        mRxManager.add(mModel.getLandlordHouseResourceList(landlordId).subscribe(res -> mView.getLandlordHouseResourceListResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

@@ -169,44 +169,48 @@ public class MerchantAlbumFragment extends BaseFragment<ScenicSpotPresenter, Sce
                     List<MchAlbumResponse.CatePhotoNumsEntity> catePhotoNumsList = mchDetailsResponse.getCatePhotoNums();
                     List<MchAlbumResponse.CateWithPhotosEntity> cateWithPhotosEntity = mchDetailsResponse.getCateWithPhotos();
 
-                    TagAdapter tagAdapter = new TagAdapter<MchAlbumResponse.CatePhotoNumsEntity>(catePhotoNumsList) {
-                        @Override
-                        public View getView(FlowLayout parent, int position, MchAlbumResponse.CatePhotoNumsEntity catePhotoNumsEntity) {
-                            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_merchant_album,
-                                    mTagFlowMerchantAlbum, false);
-                            TextView tv = view.findViewById(R.id.tv_flowlayout);
-                            String title = catePhotoNumsEntity.getTitle();
-                            int num = catePhotoNumsEntity.getNum();
-                            tv.setText(title + num);
+                    if (catePhotoNumsList != null && catePhotoNumsList.size() > 0){
+                TagAdapter tagAdapter = new TagAdapter<MchAlbumResponse.CatePhotoNumsEntity>(catePhotoNumsList) {
+                    @Override
+                    public View getView(FlowLayout parent, int position, MchAlbumResponse.CatePhotoNumsEntity catePhotoNumsEntity) {
+                        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_merchant_album,
+                                mTagFlowMerchantAlbum, false);
+                        TextView tv = view.findViewById(R.id.tv_flowlayout);
+                        String title = catePhotoNumsEntity.getTitle();
+                        int num = catePhotoNumsEntity.getNum();
+                        tv.setText(title + num);
 
-                            return view;
+                        return view;
+                    }
+                };
+                mTagFlowMerchantAlbum.setMaxSelectCount(1);
+                mTagFlowMerchantAlbum.setAdapter(tagAdapter);
+
+
+                mTagFlowMerchantAlbum.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                    @Override
+                    public boolean onTagClick(View view, int position, FlowLayout parent) {
+                        String content = "";
+                        Set<Integer> selectPosSet = mTagFlowMerchantAlbum.getSelectedList();
+                        Iterator it = selectPosSet.iterator();
+                        while (it.hasNext()) {
+                            int index = (int) it.next();
+                            //content = options[index];
+                            // MoveToPosition(layoutManager,index);
+
+
                         }
-                    };
-                    mTagFlowMerchantAlbum.setMaxSelectCount(1);
-                    mTagFlowMerchantAlbum.setAdapter(tagAdapter);
+                        return true;
+                    }
+                });
+                tagAdapter.setSelectedList(0);
+        }
 
-
-                    mTagFlowMerchantAlbum.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-                        @Override
-                        public boolean onTagClick(View view, int position, FlowLayout parent) {
-                            String content = "";
-                            Set<Integer> selectPosSet = mTagFlowMerchantAlbum.getSelectedList();
-                            Iterator it = selectPosSet.iterator();
-                            while (it.hasNext()) {
-                                int index = (int) it.next();
-                                //content = options[index];
-                                // MoveToPosition(layoutManager,index);
-
-
-                            }
-                            return true;
-                        }
-                    });
-                    tagAdapter.setSelectedList(0);
-
-
-                    merchentAlbumItemAdapter.setMerchantAlbumList(cateWithPhotosEntity);
-                    merchentAlbumItemAdapter.notifyDataSetChanged();
+        if(cateWithPhotosEntity != null && cateWithPhotosEntity.size() > 0)
+        {
+            merchentAlbumItemAdapter.setMerchantAlbumList(cateWithPhotosEntity);
+            merchentAlbumItemAdapter.notifyDataSetChanged();
+        }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

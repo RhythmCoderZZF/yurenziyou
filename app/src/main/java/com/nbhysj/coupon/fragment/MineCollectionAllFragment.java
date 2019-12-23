@@ -191,6 +191,11 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
     }
 
     @Override
+    public void deletePostResult(BackResult res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();

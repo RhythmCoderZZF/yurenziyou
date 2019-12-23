@@ -1,1 +1,1 @@
-include ':app', ':bannerlibrary', ':refresh-footer', ':refresh-layout', ':refresh-header', ':cardlib', ':oss-android-sdk', ':jiaozivideoplayer', ':matisse', ':PhotoPicker'
+include ':app', ':bannerlibrary', ':refresh-footer', ':refresh-layout', ':refresh-header', ':cardlib', ':oss-android-sdk', ':jiaozivideoplayer', ':matisse', ':PhotoPicker', ':universalvideoview'

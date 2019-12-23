@@ -23,7 +23,7 @@
             android:background="@color/white"
             android:gravity="top"
             android:hint="想要说点啥..."
-            android:maxLength="50"
+            android:maxLength="15"
             android:padding="@dimen/dp_16"
             android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
             android:textSize="@dimen/text_size_xnormal" />
@@ -40,7 +40,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_16"
                 android:layout_toLeftOf="@+id/tv_save"
-                android:text="0/50"
+                android:text="0/15"
                 android:textColor="@color/text_grey"
                 android:textSize="@dimen/text_size_xnormal" />
 

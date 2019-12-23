@@ -1,6 +1,8 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AdmissionTicketExpandableAdapter;
@@ -33,11 +36,13 @@ import com.nbhysj.coupon.adapter.PlayGuideAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
+import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
 import com.nbhysj.coupon.dialog.MchCouponReceiveDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
+import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -59,10 +64,12 @@ import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.model.response.TourGuideBean;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.ScenicSpotPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.PopupWindowUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
@@ -71,12 +78,26 @@ import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.NearbyTabIndicator;
 import com.nbhysj.coupon.widget.NestedExpandaleListView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,7 +232,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     private MchCommentAdapter scenicSpotDetailUserCommentAdapter;
     private NearbyGroupListAdapter groupListAdapter;
     //商户名
-    private int mchId;
+    private static int mchId;
     //商户类型
     private String mchType;
     //地址
@@ -252,6 +273,15 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
     //问答id
     private int questionId;
+
+    private static String photoUrl;
+
+    static Bitmap bitmap = null;
+
+    private static IWXAPI api;
+
+    ShareOprateDialog shareOprateDialog;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -265,6 +295,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     public void initView(Bundle savedInstanceState) {
         mchId = getIntent().getIntExtra("mchId", 0);
         mchType = getIntent().getStringExtra("mchType");
+
+        api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID, false);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -336,9 +368,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             couponsList.clear();
         }
 
-        if(mchCouponResponseList == null){
+        if (mchCouponResponseList == null) {
             mchCouponResponseList = new ArrayList<>();
-        }else {
+        } else {
             mchCouponResponseList.clear();
         }
     }
@@ -357,7 +389,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         GridLayoutManager linearLayoutManager1 = new GridLayoutManager(ScenicSpotDetailActivity.this, 3);
         linearLayoutManager1.setOrientation(linearLayoutManager1.VERTICAL);
         mRvUserCommentSearchTag.setLayoutManager(linearLayoutManager1);
-        userCommentAdapter = new UserCommentAdapter(ScenicSpotDetailActivity.this);
+        userCommentAdapter = new UserCommentAdapter(mchId, ScenicSpotDetailActivity.this);
         userCommentAdapter.setLabelList(labelEntityList);
         mRvUserCommentSearchTag.setAdapter(userCommentAdapter);
 
@@ -368,7 +400,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             @Override
             public void setCouponReceiveCallback(int position) {
 
-              //  showToast(ScenicSpotDetailActivity.this," " + position);
+                //  showToast(ScenicSpotDetailActivity.this," " + position);
             }
         });
         mchDetailCouponListAdapter.setCouponList(couponsList);
@@ -572,11 +604,9 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     if (collectionStatus == 0) {
                         mImgCollection.setImageResource(R.mipmap.icon_white_collection);
 
-
                     } else if (collectionStatus == 1) {
 
                         mImgCollection.setImageResource(R.mipmap.icon_green_has_collection);
-
                     }
 
                     if (level == 0) {
@@ -614,7 +644,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     }
 
                     //banner
-                    List<String> bannerList = mchDetailsEntity.getRecommendPhoto();
+                    bannerList = mchDetailsEntity.getRecommendPhoto();
 
                     nearbyScenicSpotsList = nearbyEntity.getHotel();
                     if (nearbyScenicSpotsList != null) {
@@ -674,24 +704,17 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvOpeningHours.setText(mchDetailsEntity.getOpenTime());
                     mTvMchRanking.setText(mchDetailsEntity.getMchRanking());
                     int mQuestionCount = mchQuestionEntity.getQuestionCount();
+                    //     mLlytAnswerAndQuestion.setVisibility(View.VISIBLE);
 
-                    if (mQuestionCount > 0) {
+                    mTvQuestionNum.setText(String.valueOf(mQuestionCount) + "个问题>");
 
-                        mLlytAnswerAndQuestion.setVisibility(View.VISIBLE);
-
-                        mTvQuestionNum.setText(String.valueOf(mQuestionCount) + "个问题>");
-
-                        String questionContent = mchQuestionEntity.getQuestionContent();
-                        questionId = mchQuestionEntity.getQuestionId();
-                        if (!TextUtils.isEmpty(questionContent)) {
-                            mTvQuestionContent.setText(questionContent);
-                        }
-
-                        mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
-                    } else {
-                        mLlytAnswerAndQuestion.setVisibility(View.GONE);
-
+                    String questionContent = mchQuestionEntity.getQuestionContent();
+                    questionId = mchQuestionEntity.getQuestionId();
+                    if (!TextUtils.isEmpty(questionContent)) {
+                        mTvQuestionContent.setText(questionContent);
                     }
+
+                    mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
 
                     List<MchDetailsResponse.VisitGuideEntity> visitGuideList = mchDetailsResponse.getVisitGuide();
                     if (visitGuideList != null) {
@@ -713,9 +736,57 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                                         MchGoodsBean mchGoodsBean = mchGoodsList.get(childPosition);
                                         String mchName = mchDetailsEntity.getMchName();
 
-                                        mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(mchGoodsBean, mchType, mchName);
+                                        mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(new PurchaseInstructionsDialog.PurchaseInstructionsListener() {
+                                            @Override
+                                            public void setPurchaseInstructionsCallback(MchGoodsBean mchHotelGoodsBean) {
+
+                                                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                                                if (!TextUtils.isEmpty(token)) {
+
+                                                    String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
+                                                    String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
+                                                    String mchGroupType = MchTypeEnum.MCH_GROUP.getValue();
+                                                    Intent intent = new Intent();
+
+                                                    int goodsId = 0;
+                                                    if (mchType.equals(mchScenicType) || mchType.equals(mchRecreationType)) {
+                                                        intent.putExtra("mchType", mchType);
+                                                        goodsId = mchHotelGoodsBean.getGoodsId();
+                                                        intent.setClass(ScenicSpotDetailActivity.this, OrderSubmitActivity.class);
+
+                                                    } else if (mchType.equals(mchGroupType)) {
+                                                        goodsId = mchHotelGoodsBean.getId();
+                                                        intent.setClass(ScenicSpotDetailActivity.this, GroupMchOrderSubmitActivity.class);
+                                                    }
+                                                    intent.putExtra("goodsId", goodsId);
+                                                    startActivity(intent);
+
+                                                } else {
+
+                                                    onReLogin("");
+                                                }
+                                            }
+                                        }, mchGoodsBean, mchType, mchName);
                                     }
                                     mPurchaseInstructionsDialog.show(getFragmentManager(), "商品购票须知");
+                                }
+
+                                @Override
+                                public void setImmediateBookingCallback(int goodsId) {
+
+                                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                                    if (!TextUtils.isEmpty(token)) {
+
+                                        Intent mIntent = new Intent();
+                                        mIntent.setClass(ScenicSpotDetailActivity.this, OrderSubmitActivity.class);
+                                        mIntent.putExtra("goodsId", goodsId);
+                                        mIntent.putExtra("mchType", mchType);
+                                        startActivity(mIntent);
+                                    } else {
+
+                                        onReLogin("");
+
+                                    }
                                 }
                             });
                             mExpandableListTicket.setAdapter(myExpandableAdapter);
@@ -809,9 +880,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             case Constants.SUCCESS_CODE:
                 try {
                     mchCouponResponseList = res.getData();
-                    if(mchCouponResponseList != null) {
-                        if (mchCouponReceiveDialog == null)
-                        {
+                    if (mchCouponResponseList != null) {
+                        if (mchCouponReceiveDialog == null) {
                             mchCouponReceiveDialog = new MchCouponReceiveDialog(mchCouponResponseList, new MchCouponReceiveDialog.MchCouponReceiveListener() {
 
                                 @Override
@@ -825,7 +895,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                                 @Override
                                 public void setCouponListRefreshListener(RefreshLayout refreshLayout) {
 
-                                 //   queryMchCouponList();
+                                    //   queryMchCouponList();
                                     // mchCouponReceiveDialog.setSmartRefreshLayoutLoadMoreFinish();
                                 }
                             });
@@ -886,7 +956,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     }
 
     @OnClick({R.id.ibtn_back, R.id.rlyt_scenic_spots_ranking_list, R.id.img_menu, R.id.rlyt_scenic_spot_location, R.id.img_scenic_spot_forward, R.id.rlyt_view_more_tour_guide,
-            R.id.tv_question_num, R.id.tv_look_all_scenic_spot_info, R.id.tv_scenic_spot_nearby, R.id.tv_look_user_all_comment, R.id.img_collection,R.id.tv_coupon_receive})
+            R.id.tv_question_num, R.id.tv_look_all_scenic_spot_info, R.id.tv_scenic_spot_nearby, R.id.tv_look_user_all_comment, R.id.img_collection, R.id.tv_coupon_receive, R.id.llyt_user_comment})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -927,28 +997,37 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                 break;
             case R.id.img_scenic_spot_forward:
+                if (shareOprateDialog == null) {
+                    shareOprateDialog = new ShareOprateDialog(ScenicSpotDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                        @Override
+                        public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
 
-                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(ScenicSpotDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
-                    @Override
-                    public void onSharePlatformItemClick(String sharePlatform) {
+                            try {
+                                if (bannerList != null && bannerList.size() > 0) {
+                                    String sharePlatformStr = sharePlatform.toString();
+                                    photoUrl = bannerList.get(0);
+                                    String wechatFriend = SharePlatformEnum.WECHAT_FRIEND.getValue();
+                                    if (sharePlatformStr.equals(wechatFriend)) {
 
-                        //   showToast(getActivity(),sharePlatform);
+                                        new Thread(saveFileRunnable).start();
 
-                       /* new ShareAction(ScenicSpotDetailActivity.this)
-                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                                .withText("hello")//分享内容
-                                .setCallback(umShareListener)//回调监听器
-                                .share();*/
+                                    } else {
 
-                    }
-                }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                                        thirdShare(sharePlatform, photoUrl);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                }
                 shareOprateDialog.show();
-
                 break;
             case R.id.tv_question_num:
-                intent.putExtra("mchId",mchId);
-                intent.putExtra("mchPhotoUrl",mchPhotoUrl);
-                intent.putExtra("address",address);
+                intent.putExtra("mchId", mchId);
+                intent.putExtra("mchPhotoUrl", mchPhotoUrl);
+                intent.putExtra("address", address);
                 intent.setClass(ScenicSpotDetailActivity.this, MoreQuestionsActivity.class);
                 startActivity(intent);
                 break;
@@ -1003,11 +1082,135 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                 break;
 
+            case R.id.llyt_user_comment:
+                intent.setClass(ScenicSpotDetailActivity.this, MchCommentActivity.class);
+                intent.putExtra("mchId", mchId);
+                startActivity(intent);
+
+                break;
             default:
                 break;
-
         }
     }
+
+    private void thirdShare(SHARE_MEDIA platform, String photoUrl) {
+        String webUrl = Net.H5_YURENZIYOU_DOWNLOAD_GUIDE_PAGE_URL;
+        UMImage image = new UMImage(ScenicSpotDetailActivity.this, photoUrl);                    //资源文件
+        UMWeb umWeb = new UMWeb(webUrl, ScenicSpotDetailActivity.this.getResources().getString(R.string.app_name), "鱼人自游是宁波海洋世界旗下一站式旅游服务平台,产品及服务覆盖门票预订,景点评价及景点打折门票查询,酒店预订,美食推荐、还有更详细的旅游攻略.", image); //URL 标题 描述 封面图
+        new ShareAction(ScenicSpotDetailActivity.this)
+                .setPlatform(platform)//传入平台
+                .withText("HiVideo")//标题
+                .withMedia(umWeb)
+                .setCallback(shareListener)//回调监听器
+                .share();
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //   Toast.makeText(getActivity(), "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(ScenicSpotDetailActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(ScenicSpotDetailActivity.this, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private static Runnable saveFileRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                URL url = new URL(photoUrl);
+                //打开输入流
+                InputStream inputStream = url.openStream();
+                //对网上资源进行下载转换位图图片
+                Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 500, 500, true);
+                bmp.recycle();
+                WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
+                miniProgramObj.webpageUrl = "http:192.168.1.140:8083/"; // 兼容低版本的网页链接
+                miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE;// 正式版:0，测试版:1，体验版:2
+                miniProgramObj.userName = "gh_8f591c4ee659";     // 小程序原始id
+                miniProgramObj.path = Net.MCH_SCENIC_MINIPTOGRAM_URL + mchId; //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
+                WXMediaMessage msg = new WXMediaMessage(miniProgramObj);
+                msg.title = "鱼人自游";                    // 小程序消息title
+                msg.description = "帖子分享";               // 小程序消息desc
+                msg.thumbData = compressImage(thumbBmp);                      // 小程序消息封面图片，小于128k
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("miniProgram");
+                req.message = msg;
+                req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前只支持会话
+                api.sendReq(req);
+
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+
+                //saveFile(mBitmap);
+                //   mSaveMessage = "图片保存成功！";
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //   messageHandler.sendMessage(messageHandler.obtainMessage());
+        }
+    };
+
+    private static String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    private static byte[] compressImage(Bitmap bitmapImage) {
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+            int options = 50;
+            while (baos.toByteArray().length / 1024 > 100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+                baos.reset();//重置baos即清空baos
+                options -= 10;//每次都减少10
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+
+            }
+            //ByteArrayInputStream isBm = new ByteArrayInputStream());//把压缩后的数据baos存放到ByteArrayInputStream中
+            //   bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
+
 
     private void showPopupWindow(View anchorView) {
         View contentView = getPopupWindowContentView();
@@ -1042,20 +1245,33 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                 Intent intent = new Intent();
                 if (itemStr.equals(backHomePage)) {
-                    if (appManager != null) {
+
+                    if (appManager != null)
+                    {
                         appManager.finishActivity(MainActivity.class);
                     }
-                    //  EventBus.getDefault().post("backHomePage");
+
+                    Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                    mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL);
+                    sendBroadcast(mIntent);
 
                 } else if (itemStr.equals(backMyCollection)) {
-                    //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
-                    //intent.putExtra("currentItem",3);
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
-                    if (appManager != null) {
-                        appManager.finishActivity(MainActivity.class);
+                    if (!TextUtils.isEmpty(token))
+                    {
+                        if (appManager != null)
+                        {
+                            appManager.finishActivity(MainActivity.class);
+                        }
+
+                        Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                        mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_MY_COLLECTION);
+                        sendBroadcast(mIntent);
+
+                    } else {
+                        onReLogin("");
                     }
-
-                    //  EventBus.getDefault().post("backMyCollection");
 
                 } else if (itemStr.equals(backMyOrder)) {
                     intent.setClass(ScenicSpotDetailActivity.this, MyOrderActivity.class);
@@ -1098,7 +1314,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     }
 
     //查询商户券列表
-    public void queryMchCouponList(){
+    public void queryMchCouponList() {
 
         if (validateInternet()) {
             showProgressDialog(ScenicSpotDetailActivity.this);
@@ -1107,7 +1323,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     }
 
     //获取优惠券
-    public void getCoupon(){
+    public void getCoupon() {
 
         if (validateInternet()) {
             showProgressDialog(ScenicSpotDetailActivity.this);
@@ -1118,6 +1334,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -18,7 +18,8 @@
         android:padding="@dimen/dp_8"
         android:text="识别证件添加信息"
         android:textSize="@dimen/text_size_xsmall"
-        android:textColor="@color/color_text_blue" />
+        android:textColor="@color/color_text_blue"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -89,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_44"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_15"
                 android:layout_toLeftOf="@+id/img_passenger_avatar"
                 android:layout_toRightOf="@+id/tv_phone"
                 android:background="@null"
@@ -106,7 +107,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_16"
-                android:src="@mipmap/icon_passenger_default_avatar" />
+                android:src="@mipmap/icon_passenger_default_avatar"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

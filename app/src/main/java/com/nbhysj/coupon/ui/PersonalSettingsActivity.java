@@ -136,7 +136,7 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
         showToast(PersonalSettingsActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache, R.id.rlyt_evaluate_murloc_travel})
+    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache, R.id.rlyt_evaluate_murloc_travel,R.id.rlyt_video_auto_play_settings})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_bind_account_and_setting:
@@ -163,10 +163,9 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
                     e.printStackTrace();
                 }
                 break;
-            case R.id.rlyt_evaluate_murloc_travel:
+            case R.id.rlyt_video_auto_play_settings:
 
-                startMarket(PersonalSettingsActivity.this);
-
+                toActivity(VideoAutoPlaySettingsActivity.class);
                 break;
             default:
                 break;

@@ -167,7 +167,7 @@ public class NoteSaveExitPromptDialog {
                         }
                     } else {
                         if (i == 1) {
-                            textView.setBackgroundResource(R.drawable.bg_white_radius_five_top_shape);
+                            textView.setBackgroundResource(R.drawable.bg_white_radius_ten_top_shape);
                         } else if (i < size) {
                             textView.setBackgroundResource(R.drawable.bg_white_shape);
                         } else {

@@ -425,6 +425,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                 intent.setClass(mContext, PartialApplyForRefundActivity.class);
                 intent.putExtra("orderGoodsId", orderGoodsId);
                 intent.putExtra("goodsType", goodsType);
+                intent.putExtra("orderNo", orderNo);
                 startActivityForResult(intent, PARTIAL_APPLY_For_REfUND_REQUEST_CODE);
             }
         });
@@ -444,6 +445,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                 intent.setClass(mContext, PartialApplyForRefundActivity.class);
                 intent.putExtra("orderGoodsId", orderGoodsId);
                 intent.putExtra("goodsType", goodsType);
+                intent.putExtra("orderNo", orderNo);
                 startActivityForResult(intent, PARTIAL_APPLY_For_REfUND_REQUEST_CODE);
             }
         });

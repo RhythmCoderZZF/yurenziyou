@@ -8,11 +8,21 @@ public class FavoritesCollectionResponse {
 
     private int collectionStatus;
 
+    private int collectionCount;
+
     public int getCollectionStatus() {
         return collectionStatus;
     }
 
     public void setCollectionStatus(int collectionStatus) {
         this.collectionStatus = collectionStatus;
+    }
+
+    public int getCollectionCount() {
+        return collectionCount;
+    }
+
+    public void setCollectionCount(int collectionCount) {
+        this.collectionCount = collectionCount;
     }
 }

@@ -24,6 +24,8 @@ import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HouseResouceResponse;
+import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -202,7 +204,6 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))
                 {
                     loadData();
@@ -235,6 +236,15 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
         }
     }
 
+    @Override
+    public void getLandlordHomePageResult(BackResult<LandlordDetailResonse> res) {
+
+    }
+
+    @Override
+    public void getLandlordHouseResourceListResult(BackResult<HouseResouceResponse> res) {
+
+    }
 
     @Override
     public void getHomestayHomePageResult(BackResult<ScenicSpotHomePageResponse> res) {
@@ -281,7 +291,7 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
                     mTotalPageCount = pageBean.getPageCount();
                     mHomestayList.addAll(scenicSpotList);
 
-                    if (mPage == 1) {
+                        if (mPage == 1) {
 
                         if (mSmartRefreshLayout != null) {
                             mSmartRefreshLayout.finishRefresh();

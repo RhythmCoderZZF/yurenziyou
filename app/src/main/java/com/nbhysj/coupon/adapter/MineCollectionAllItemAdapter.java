@@ -39,6 +39,7 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
     private Context mContext;
 
 
+
     public MineCollectionAllItemAdapter(Context mContext) {
 
         this.mContext = mContext;
@@ -70,7 +71,17 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
                 linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
                 holder.mRvMineCollectionAll.setLayoutManager(linearLayoutManager);
-                MineCollectionAllSubItemAdapter mineCollectionAllSubItemAdapter = new MineCollectionAllSubItemAdapter(mContext);
+                MineCollectionAllSubItemAdapter mineCollectionAllSubItemAdapter = new MineCollectionAllSubItemAdapter(mContext, new MineCollectionAllSubItemAdapter.MineCollectionAllItemListener() {
+                    @Override
+                    public void setMineCollectionAllItemListener(int position) {
+
+
+                        Intent intent = new Intent();
+                        intent.putExtra("type",type);
+                        intent.setClass(mContext, CollectionDetailsActivity.class);
+                        mContext.startActivity(intent);
+                    }
+                });
                 mineCollectionAllSubItemAdapter.setMineCollectionPhotoUrlList(photosUrl);
                 holder.mRvMineCollectionAll.setAdapter(mineCollectionAllSubItemAdapter);
             }

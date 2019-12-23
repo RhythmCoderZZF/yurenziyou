@@ -14,12 +14,13 @@
         android:id="@+id/view_line"
         android:layout_height="@dimen/dp_10"
         android:layout_width="match_parent"
-        android:background="@color/line"
+        android:background="@color/background_l_grey"
         android:layout_below="@+id/toolbar" />
 
     <RelativeLayout
+        android:id="@+id/rlyt_video_auto_play_4g_and_wifi"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="56dp"
         android:background="@color/white">
 
         <TextView
@@ -33,6 +34,7 @@
             android:textSize="@dimen/text_size_xnormal" />
 
         <ImageView
+            android:id="@+id/img_video_auto_play_4g_and_wifi"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -50,6 +52,7 @@
         android:layout_marginLeft="@dimen/dp_16" />
 
     <RelativeLayout
+        android:id="@+id/rlyt_video_auto_play_wifi"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white">
@@ -65,6 +68,7 @@
             android:textSize="@dimen/text_size_xnormal" />
 
         <ImageView
+            android:id="@+id/img_video_auto_play_wifi"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -72,7 +76,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/dp_16"
             android:gravity="center"
-            android:src="@mipmap/icon_user_agreement_select"
+            android:src="@mipmap/icon_user_agreement_unselect"
             android:textColor="@color/text_grey"
             android:textSize="@dimen/text_size_xsmall" />
     </RelativeLayout>

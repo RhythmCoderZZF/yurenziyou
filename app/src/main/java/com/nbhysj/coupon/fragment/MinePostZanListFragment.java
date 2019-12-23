@@ -117,7 +117,7 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
                 }
                 break;
             default:
-                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                //showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
         }
     }
@@ -181,6 +181,11 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
 
     @Override
     public void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res) {
+
+    }
+
+    @Override
+    public void deletePostResult(BackResult res) {
 
     }
 

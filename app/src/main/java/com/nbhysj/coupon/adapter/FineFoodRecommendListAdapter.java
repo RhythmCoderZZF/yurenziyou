@@ -72,7 +72,7 @@ public class FineFoodRecommendListAdapter extends RecyclerView.Adapter<RecyclerV
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 MchFoodBean fineFoodBean = mFineFoodList.get(pos);
-                int mchId = fineFoodBean.getMchId();
+                int mchId = fineFoodBean.getId();
                 String photoUrl = fineFoodBean.getPhoto();
                 String mchName = fineFoodBean.getTitle();
                 int zanNum = fineFoodBean.getZanNum();
@@ -96,7 +96,6 @@ public class FineFoodRecommendListAdapter extends RecyclerView.Adapter<RecyclerV
                 holder1.mRlytFineFoodItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         Intent intent = new Intent();
                         intent.setClass(mContext, FoodDetailActivity.class);
                         intent.putExtra("mchId",mchId);

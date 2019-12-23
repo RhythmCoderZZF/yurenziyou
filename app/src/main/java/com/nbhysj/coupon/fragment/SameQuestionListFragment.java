@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.adapter.MyQuestionListAdapter;
 import com.nbhysj.coupon.adapter.SameQuestionAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;

@@ -87,6 +87,8 @@ public class MchGoodsBean {
 
     private String goodsBuyNotes;
 
+    private int timeLimitStatus;
+
     public int getGoodsId() {
         return goodsId;
     }
@@ -365,5 +367,13 @@ public class MchGoodsBean {
 
     public void setGoodsBuyNotes(String goodsBuyNotes) {
         this.goodsBuyNotes = goodsBuyNotes;
+    }
+
+    public int getTimeLimitStatus() {
+        return timeLimitStatus;
+    }
+
+    public void setTimeLimitStatus(int timeLimitStatus) {
+        this.timeLimitStatus = timeLimitStatus;
     }
 }

@@ -917,12 +917,14 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     travellersList = travellerInfoResponse.getResult();
                     if (travellersList.size() > 0) {
                         TravellerBean travellerBean = travellersList.get(0);
-                        userTravelerId = travellerBean.getUserId();
+                        userTravelerId = travellerBean.getId();
                         travellerBean.setTravellerSelect(true);
                         realname = travellerBean.getRealname();
                         mobile = travellerBean.getMobile();
                         mTvTouristName.setText(realname);
                         mTvTouristMobile.setText(mobile);
+
+                        mRlytTouristInfoItem.setVisibility(View.VISIBLE);
                     }
 
                     addTouristInformationAdapter.setTouristInfoList(travellersList);
@@ -954,6 +956,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
+
+                    mEdtTouristAddName.setText("");
+                    mEdtTouristAddMobile.setText("");
                     setTouristInfoDialog();
                     getTravellerList();
 
@@ -977,6 +982,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     realname = mEdtTouristName.getText().toString();
                     mobile = mEdtTouristMobile.getText().toString();
                     TravellerBean travellersEntity = travellersList.get(mPosition);
+                    userTravelerId = travellersEntity.getId();
                     travellersEntity.setRealname(mEdtTouristName.getText().toString());
                     travellersEntity.setMobile(mEdtTouristMobile.getText().toString());
 
@@ -1017,27 +1023,41 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-
+                   // mLlytEditTourists.setVisibility(View.GONE);
                     if (travellersList != null) {
                         if (travellersList.size() > 0) {
                             TravellerBean travellersEntity = travellersList.get(mPosition);
-
                             travellersList.remove(travellersEntity);
-                            TravellerBean travellers = travellersList.get(0);
-                            travellers.setTravellerSelect(true);
-                            addTouristInformationAdapter.setTouristInfoList(travellersList);
-                            addTouristInformationAdapter.notifyDataSetChanged();
+                            if (travellersList != null && travellersList.size() > 0) {
+                                TravellerBean travellers = travellersList.get(0);
+                                userTravelerId = travellersEntity.getId();
+                                travellers.setTravellerSelect(true);
+                                addTouristInformationAdapter.setTouristInfoList(travellersList);
+                                addTouristInformationAdapter.notifyDataSetChanged();
 
-                            touristInformationAdapter.setTouristInfoList(travellersList);
-                            touristInformationAdapter.notifyDataSetChanged();
-                            realname = travellers.getRealname();
-                            mobile = travellers.getMobile();
+                                touristInformationAdapter.setTouristInfoList(travellersList);
+                                touristInformationAdapter.notifyDataSetChanged();
+                                realname = travellers.getRealname();
+                                mobile = travellers.getMobile();
 
-                            mLlytEditTourists.setVisibility(View.GONE);
-                            mTvTouristName.setText(realname);
-                            mTvTouristMobile.setText(mobile);
-                            mEdtTouristName.setText("");
-                            mEdtTouristMobile.setText("");
+                                mLlytEditTourists.setVisibility(View.GONE);
+                                mTvTouristName.setText(realname);
+                                mTvTouristMobile.setText(mobile);
+                                mEdtTouristName.setText("");
+                                mEdtTouristMobile.setText("");
+
+                                mTvTouristName.setText(realname);
+                                mTvTouristMobile.setText(mobile);
+                                mRlytTouristInfoItem.setVisibility(View.VISIBLE);
+                            }else {
+                                userTravelerId = 0;
+                                mRlytTouristInfoItem.setVisibility(View.GONE);
+                                mLlytEditTourists.setVisibility(View.GONE);
+                                mLlytAddAndUpdateTourists.setVisibility(View.GONE);
+                                mRlytNewTouristsBgHalf.setVisibility(View.GONE);
+                                touristInformationAdapter.setTouristInfoList(travellersList);
+                                touristInformationAdapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -1103,6 +1123,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     intent.putExtra("payExprireTime", payExprireTime);
                     intent.putExtra("orderNo", orderNo);
                     startActivity(intent);
+                    finish();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1474,13 +1495,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 return;
             }
 
-            //请填写证件号码
-         /*   if (TextUtils.isEmpty(identityCardNumber)) {
-
-                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_identification_number));
-                return;
-            }*/
-
             TravellerInfoRequest updateTravellerRequest = new TravellerInfoRequest();
             updateTravellerRequest.setUserId(getSharedPreferencesUserId());
             updateTravellerRequest.setRealname(touristName);
@@ -1513,13 +1527,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_phone));
                 return;
             }
-
-            //请填写证件号码
-         /*   if (TextUtils.isEmpty(identityCardNumber)) {
-
-                showToast(OrderSubmitActivity.this, getResources().getString(R.string.str_input_identification_number));
-                return;
-            }*/
 
             TravellerInfoRequest addTravellerRequest = new TravellerInfoRequest();
             addTravellerRequest.setUserId(getSharedPreferencesUserId());

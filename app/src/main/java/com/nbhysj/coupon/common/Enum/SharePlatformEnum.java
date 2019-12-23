@@ -6,7 +6,7 @@ package com.nbhysj.coupon.common.Enum;
  */
 public enum SharePlatformEnum {
 
-    WECHAT_FRIEND(0, "微信好友"), WECHAT_FRIENDSHIP_CIRCLE(1, "微信朋友圈"), QQ(2, "QQ"), SECRECY(3, "QQ空间");
+    WECHAT_FRIEND(0, "WEIXIN"), WECHAT_FRIENDSHIP_CIRCLE(1, "WEIXIN_CIRCLE"), QQ(2, "QQ"), SECRECY(3, "QZONE");
 
     private final int key;
     private final String value;

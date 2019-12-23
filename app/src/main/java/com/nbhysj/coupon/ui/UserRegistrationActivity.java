@@ -138,7 +138,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
             }
         };
     }
-    private class PrivacyPolicyClick extends ClickableSpan{
+    private class RegisterPrivacyPolicyClick extends ClickableSpan{
         @Override
         public void onClick(View widget) {
             //            跳转隐私政策网址
@@ -157,7 +157,7 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
         }
     }
 
-    private class userAgreementClick extends ClickableSpan{
+    public class RegisterAgreementClick extends ClickableSpan{
         @Override
         public void onClick(View widget) {
             // 跳转用户协议网址
@@ -171,49 +171,22 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
         @Override
         public void updateDrawState(TextPaint ds) {
-//            ds.setColor(ds.linkColor);
-//            ds.setUnderlineText(true);
         }
     }
     @Override
     public void initData() {
-       // mTvUserAgreement.setText(Html.fromHtml("点击注册即表示接受鱼人自游的" + "<font color='#00C7DA'>" + "《用户协议》" + "</font>"));
-
-        //        我同意本DEMO的隐私政策和服务协议
-      /*  SpannableStringBuilder builder=new SpannableStringBuilder(getString(R.string.string_privacy));
-        ClickableSpan clickSpanPrivacy=new ClickableSpan() {
-            @Override
-            public void onClick( View widget) {
-//                跳转隐私政策网址
-                Toast.makeText(UserRegistrationActivity.this, "隐私政策", Toast.LENGTH_SHORT).show();
-            }
-        };
-        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.parseColor("#0000FF"));
-        builder.setSpan(foregroundColorSpan,15,18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder.setSpan(clickSpanPrivacy,15,18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-       // builder.setSpan(new ForegroundColorSpan(Color.parseColor("#009ad6")),13,18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ClickableSpan clickableSpanProtocol=new ClickableSpan() {
-            @Override
-            public void onClick( View widget) {
-//                跳转服务协议
-                Toast.makeText(UserRegistrationActivity.this, "用户协议", Toast.LENGTH_SHORT).show();
-            }
-        };
-        builder.setSpan(clickableSpanProtocol,21,24,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mTvUserAgreement.setText(builder);
-        mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());//调用此方法时文字点击事件才有效*/
 
         SpannableStringBuilder spannable = new SpannableStringBuilder(getString(R.string.string_privacy));
         //设置文字的前景色
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_blu4)),14,20,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         //这个一定要记得设置，不然点击不生效
         mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
-        spannable.setSpan(new PrivacyPolicyClick(),14,20 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new RegisterPrivacyPolicyClick(),14,20 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         //设置文字的前景色
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_blu4)),21,27,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         //这个一定要记得设置，不然点击不生效
         mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
-        spannable.setSpan(new userAgreementClick(),23,26 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new RegisterAgreementClick(),23,26 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvUserAgreement.setText(spannable);
 
 
@@ -374,7 +347,12 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                 }
                 break;
             case R.id.tv_login:
-
+                int pwdLength = mEdtPassword.getText().toString().length();
+                if(pwdLength < 6)
+                {
+                    showToast(UserRegistrationActivity.this,"密码长度需大于6位数");
+                    return;
+                }
                 getSalt();
                 break;
             case R.id.iv_toolbar_right:
@@ -457,7 +435,9 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
 
                     String currentVersionName = getCurrentVersionName();
                     SharedPreferencesUtils.putData("version", currentVersionName);
+                    setResult(RESULT_OK);
                     finish();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -509,9 +489,8 @@ public class UserRegistrationActivity extends BaseActivity<RegisterPresenter, Re
                     userId = loginResponse.getId();                 //用户id
                     String mobile = loginResponse.getMobile();      //手机号
                     String nickname = loginResponse.getNickname();  //昵称
-                    String username = loginResponse.getUsername();  //用户名
                     String token = res.getToken();
-                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, token);
                     getUserInfo();
 
                 } catch (Exception e) {

@@ -39,9 +39,11 @@ public class MoreQuestionListAdapter extends RecyclerView.Adapter<MoreQuestionLi
     List<WaitMyAnswerBean> mQuestionContentList;
     private Context mContext;
 
-    public MoreQuestionListAdapter(Context mContext) {
+    private QuestionAskListener questionAskListener;
+    public MoreQuestionListAdapter(Context mContext,QuestionAskListener questionAskListener) {
 
         this.mContext = mContext;
+        this.questionAskListener = questionAskListener;
     }
 
     public void setMoreQuestionList(List<WaitMyAnswerBean> waitMyAnswerList) {
@@ -122,6 +124,8 @@ public class MoreQuestionListAdapter extends RecyclerView.Adapter<MoreQuestionLi
                 @Override
                 public void onClick(View view) {
 
+                    questionAskListener.setQuestionAskCallback(questionId);
+
                     Intent intent = new Intent();
                     intent.setClass(mContext, AskAndAnswerDetailActivity.class);
                     intent.putExtra("questionId", questionId);
@@ -181,5 +185,10 @@ public class MoreQuestionListAdapter extends RecyclerView.Adapter<MoreQuestionLi
 
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface QuestionAskListener{
+
+        void setQuestionAskCallback(int questionId);
     }
 }

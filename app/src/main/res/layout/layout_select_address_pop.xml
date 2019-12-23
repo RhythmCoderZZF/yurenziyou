@@ -35,15 +35,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 app:pstsDividerColor="@color/white"
-                app:pstsIndicatorColor="@color/color_text_blue"
+                app:pstsIndicatorColor="@color/white"
                 app:pstsIndicatorHeight="1.5dp"
                 app:pstsShouldExpand="false"
                 app:pstsTabPaddingLeftRight="10dp"
                 app:pstsUnderlineColor="@color/line"
-                android:layout_marginTop="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_5"
                 app:pstsUnderlineHeight="1px" />
 
-            <android.support.v4.view.ViewPager
+            <com.nbhysj.coupon.view.MyScrollViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_below="@+id/pagerTab"

@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.CreateFavoritesRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchDeleteContentRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchMoveContentRequest;
+import com.nbhysj.coupon.model.request.FavoritesDeleteRequest;
 import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -62,5 +63,10 @@ public class AlbumModel implements AlbumContract.Model {
     @Override
     public Observable<BackResult<FavoritesListResponse>> getFavoritesList(int page, int pageSize) {
         return Api.getInstance().apiService.getUserFindFavoritesList(page,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> delFavoritesRequest(FavoritesDeleteRequest favoritesDeleteRequest) {
+        return Api.getInstance().apiService.delFavoritesRequest(favoritesDeleteRequest).compose(RxSchedulers.io_main());
     }
 }

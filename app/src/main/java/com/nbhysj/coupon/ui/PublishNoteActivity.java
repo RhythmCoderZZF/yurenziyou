@@ -25,6 +25,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.sdk.android.oss.ClientConfiguration;
 import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
@@ -48,6 +52,7 @@ import com.nbhysj.coupon.model.request.PublishPostRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.HotTagsTopicBean;
 import com.nbhysj.coupon.model.response.MerchantListResponse;
+import com.nbhysj.coupon.model.response.MyPostShareResponse;
 import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
 import com.nbhysj.coupon.model.response.TopicResponse;
 import com.nbhysj.coupon.oss.Config;
@@ -60,6 +65,7 @@ import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.BitmapUtils;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.EncryptedSignatureUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
 import com.nbhysj.coupon.view.MyRecycleView;
@@ -79,6 +85,9 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -87,6 +96,12 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.iwf.photopicker.PhotoPreview;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
+
+import static com.alibaba.fastjson.util.IOUtils.UTF8;
 
 /**
  * @auther：hysj created on 2019/03/02
@@ -532,21 +547,8 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                 PublishNoteActivity.this.finish();
                 break;
             case R.id.rlyt_push_note:
-
-              /*  for (int i = 0; i < photos.size(); i++) {
-                    String selectPhotoUrl = photos.get(i);
-                    String objectName = getFileName(selectPhotoUrl);
-                    mService.asyncPutImage(objectName, selectPhotoUrl);
-                }
-                String fileBasePath = Environment.getExternalStorageDirectory().getAbsolutePath() + AUDIO_WAV_BASEPATH + "0880450f1e4e4e799d6f8ce335c49050.wav";
-                String objectName = getAudioFileName(fileBasePath);
-                mService.asyncUploadAuidio(objectName, fileBasePath);*/
-
-                //String objectName = getVideoFileName(localVideoPath);
-                //mService.asyncUploadAuidio(objectName, localVideoPath);
-
-                // String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "1553772900962.gif";
-                //String objectName = getFileName("1553772900962.gif");
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                if (!TextUtils.isEmpty(token)) {
 
                 if (validateInternet()) {
                     String profile = mEdtProfile.getText().toString().trim();
@@ -556,11 +558,12 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                         showToast(PublishNoteActivity.this, "请输入内容");
                         return;
                     }
-                    showProgressDialog(PublishNoteActivity.this);
 
+                    showProgressDialog(PublishNoteActivity.this);
                     resourceInfoEntityList.clear();
                     fileUploadNum = 0;
                     if (isPhotoSelect) {
+
                         String objectName = "";
                         byte[] imageByte = null;
                         for (int i = 0; i < photos.size(); i++) {
@@ -577,6 +580,7 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                                 resourceInfoEntity.setSort(i);
                                 resourceInfoEntityList.add(resourceInfoEntity);
                             }
+
                             mService.asyncUploadIamge(objectName, UploadFileTypeEnum.IMAGE.getValue(), imageByte);
                             //publishNote(resourceInfoEntityList);
                         }
@@ -595,26 +599,40 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
 
                     } else {
 
-                        Bitmap bitmap = BitmapUtils.getVideoThumbnail(localVideoPath);
-                        imageHight = bitmap.getHeight();
-                        imageWidth = bitmap.getWidth();
+                        if (!TextUtils.isEmpty(localVideoPath)) {
 
-                        //视频
-                        PublishPostRequest.ResourceInfoEntity resourceInfoEntity = new PublishPostRequest().new ResourceInfoEntity();
-                        String objectName = getVideoFileName(localVideoPath);
-                        resourceInfoEntity.setType(UploadFileTypeEnum.VIDEO.getKey());
-                        resourceInfoEntity.setUrl(objectName);
-                        resourceInfoEntityList.add(resourceInfoEntity);
-                        mService.asyncPutFile(objectName, UploadFileTypeEnum.VIDEO.getValue(), localVideoPath);
+                            Bitmap bitmap = BitmapUtils.getVideoThumbnail(localVideoPath);
+                            imageHight = bitmap.getHeight();
+                            imageWidth = bitmap.getWidth();
 
-                        //gif
-                        PublishPostRequest.ResourceInfoEntity resourceInfoGif = new PublishPostRequest().new ResourceInfoEntity();
-                        String mGifFileName = getFileName(UploadFileTypeEnum.GIF.getValue(), null) + ".gif";
-                        resourceInfoGif.setType(UploadFileTypeEnum.GIF.getKey());
-                        resourceInfoGif.setUrl(mGifFileName);
-                        resourceInfoEntityList.add(resourceInfoGif);
-                        mService.asyncPutFile(mGifFileName, UploadFileTypeEnum.GIF.getValue(), mGifFilePath);
+                            //视频
+                            PublishPostRequest.ResourceInfoEntity resourceInfoEntity = new PublishPostRequest().new ResourceInfoEntity();
+                            String objectName = getVideoFileName(localVideoPath);
+                            resourceInfoEntity.setType(UploadFileTypeEnum.VIDEO.getKey());
+                            resourceInfoEntity.setUrl(objectName);
+                            resourceInfoEntity.setWidth(imageWidth);
+                            resourceInfoEntity.setHeight(imageHight);
+                            resourceInfoEntityList.add(resourceInfoEntity);
+                            mService.asyncPutFile(objectName, UploadFileTypeEnum.VIDEO.getValue(), localVideoPath);
+
+                            //gif
+                            PublishPostRequest.ResourceInfoEntity resourceInfoGif = new PublishPostRequest().new ResourceInfoEntity();
+                            String mGifFileName = getFileName(UploadFileTypeEnum.GIF.getValue(), null) + ".gif";
+                            resourceInfoGif.setType(UploadFileTypeEnum.GIF.getKey());
+                            resourceInfoGif.setUrl(mGifFileName);
+                            resourceInfoGif.setWidth(imageWidth);
+                            resourceInfoGif.setHeight(imageHight);
+                            resourceInfoEntityList.add(resourceInfoGif);
+                            mService.asyncPutFile(mGifFileName, UploadFileTypeEnum.GIF.getValue(), mGifFilePath);
+                        } else {
+
+                            dismissProgressDialog();
+                            showToast(PublishNoteActivity.this,"请选择要发布的图片");
+                        }
                     }
+                }
+                }else {
+                    onReLogin("");
                 }
                 break;
             default:
@@ -786,6 +804,80 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
     }
 
     @Override
+    public void getHotTagsTopicListResult(ResponseBody response) {
+        dismissProgressDialog();
+        String json = getResponseBody(response);
+        JSONObject jsonObject = JSONObject.parseObject(json);
+        int code = jsonObject.getInteger("code");
+        String msg = jsonObject.getString("msg");
+        switch (code) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    String JSONStr = JSON.toJSONString(data);
+                    hotTagsTopicResponse = JSON.parseObject(JSONStr, new TypeReference<List<HotTagsTopicBean>>() {});
+
+                    tagAdapter = new TagAdapter<HotTagsTopicBean>(hotTagsTopicResponse) {
+                        @Override
+                        public View getView(FlowLayout parent, int position, HotTagsTopicBean hotTagsTopicEntity) {
+                            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag_post_topic,
+                                    mTagHotLabel, false);
+
+                            TextView tv = view.findViewById(R.id.tv_flowlayout);
+                            String title = hotTagsTopicEntity.getTitle();
+                            tv.getBackground().setAlpha(99);
+                            tv.setText(title);
+
+                            return view;
+                        }
+                    };
+                    mTagHotLabel.setAdapter(tagAdapter);
+
+                    mTagHotLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                        @Override
+                        public boolean onTagClick(View view, int position, FlowLayout parent) {
+                            selectTopicIdList.clear();
+
+                            //view.setVisibility(View.GONE);
+                            selectPosSet = mTagHotLabel.getSelectedList();
+                            Iterator it = selectPosSet.iterator();
+                            while (it.hasNext()) {
+                                int index = (int) it.next();
+                                int topicId = hotTagsTopicResponse.get(index).getId();
+                                selectTopicIdList.add(topicId);
+
+                            }
+                            //  Toast.makeText(PublishNoteActivity.this, selectTopicIdList.toString(), Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                    mTagHotLabel.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+                        @Override
+                        public void onSelected(Set<Integer> selectPosSet) {
+
+                            //showToast(PublishNoteActivity.this, selectPosSet.toString());
+
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                onReLogin("");
+                break;
+            case 201:
+
+                break;
+            default:
+                showToast(PublishNoteActivity.this, Constants.getResultMsg(msg));
+                break;
+        }
+    }
+
+ /*   @Override
     public void getHotTagsTopicListResult(BackResult<List<HotTagsTopicBean>> res) {  //主题标签
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -843,7 +935,7 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                 showToast(PublishNoteActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
-    }
+    }*/
 
     @Override
     public void getMerchantListResult(BackResult<MerchantListResponse> res) {
@@ -1108,4 +1200,27 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
         }
         cameraCapturePromptDialog.show();
     }
+
+    public static String getResponseBody(ResponseBody responseBody) {
+
+        BufferedSource source = responseBody.source();
+        try {
+            source.request(Long.MAX_VALUE); // Buffer the entire body.
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Buffer buffer = source.buffer();
+
+        Charset charset = UTF8;
+        MediaType contentType = responseBody.contentType();
+        if (contentType != null) {
+            try {
+                charset = contentType.charset(UTF8);
+            } catch (UnsupportedCharsetException e) {
+                e.printStackTrace();
+            }
+        }
+        return buffer.clone().readString(charset);
+    }
+
 }

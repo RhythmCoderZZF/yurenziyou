@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.CreateFavoritesRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchDeleteContentRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchMoveContentRequest;
+import com.nbhysj.coupon.model.request.FavoritesDeleteRequest;
 import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -51,6 +52,10 @@ public interface AlbumContract {
 
         //专辑列表
         Observable<BackResult<FavoritesListResponse>> getFavoritesList(int page, int pageSize);
+
+        //删除专辑
+        Observable<BackResult> delFavoritesRequest(FavoritesDeleteRequest favoritesDeleteRequest);
+
     }
 
     interface View extends BaseView {
@@ -71,6 +76,8 @@ public interface AlbumContract {
 
         //专辑列表
         void getFavoritesListResult(BackResult<FavoritesListResponse> res);
+
+        void delFavoritesRequest(BackResult res);
 
         void showMsg(String msg);
     }
@@ -93,5 +100,8 @@ public interface AlbumContract {
 
         //专辑列表
         public abstract void getFavoritesList(int page, int pageSize);
+
+        //删除专辑
+        public abstract void delFavoritesRequest(FavoritesDeleteRequest favoritesDeleteRequest);
     }
 }

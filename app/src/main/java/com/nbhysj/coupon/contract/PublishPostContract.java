@@ -14,6 +14,7 @@ import com.nbhysj.coupon.model.response.TopicResponse;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 
 /**
  * @auther：hysj created on 2019/03/25
@@ -33,7 +34,7 @@ public interface PublishPostContract {
         Observable<BackResult<MerchantListResponse>> getMerchantList(String cityId, String mchName, int page, int pageSize);
 
         //获取热门标签
-        Observable<BackResult<List<HotTagsTopicBean>>> getHotTagsTopicList(String type); //topic 类型：城市（city）或话题（topic）
+        Observable<ResponseBody> getHotTagsTopicList(String type); //topic 类型：城市（city）或话题（topic）
 
         //话题搜索
         Observable<BackResult<TagTopicSearchResponse>> topicSearch(String type, String param); //topic 类型：城市（city）或话题（topic）
@@ -48,7 +49,7 @@ public interface PublishPostContract {
 
         void getMerchantListResult(BackResult<MerchantListResponse> res);
 
-        void getHotTagsTopicListResult(BackResult<List<HotTagsTopicBean>> res);
+        void getHotTagsTopicListResult(ResponseBody res);
 
         void topicSearchResult(BackResult<TagTopicSearchResponse> res);
 

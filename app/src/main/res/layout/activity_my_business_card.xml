@@ -58,6 +58,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_14"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
                 android:text=""
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_small" />

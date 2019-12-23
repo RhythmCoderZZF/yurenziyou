@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ExpressionAdapter;
 import com.nbhysj.coupon.adapter.PostCommentItemAdapter;
@@ -54,6 +55,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 
@@ -109,6 +111,8 @@ public class CommentsListActivity extends BaseActivity<CommentPresenter, Comment
 
     //(0:评论帖子 1:评论) 帖子的评论
     private int mPid = 0;
+
+    TextView mTvSure;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -162,7 +166,7 @@ public class CommentsListActivity extends BaseActivity<CommentPresenter, Comment
         mParser = SmileyParser.getInstance();
         emojie_tv = (ImageView) findViewById(R.id.emojie_tv);
         emojie_tv.setOnClickListener(this);
-        TextView mTvSure = findViewById(R.id.tv_comment_sure_send);
+        mTvSure = findViewById(R.id.tv_comment_sure_send);
         mTvSure.setOnClickListener(this);
         mLlytUserComment.setOnClickListener(this);
         vViewPager = (ViewPager) findViewById(R.id.viwepager_expression);//viewPager
@@ -273,7 +277,25 @@ public class CommentsListActivity extends BaseActivity<CommentPresenter, Comment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_comment_sure_send://确定
-                postCommentRequest();
+                //两秒连续点击，只取第一次的点击有效
+                RxView.clicks(mTvSure).throttleFirst(2, TimeUnit.SECONDS).subscribe(new rx.Observer<Void>() {
+                    @Override
+                    public void onCompleted() {
+                    //    postCommentRequest();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Void aVoid) {
+                      //  Log.e(TAG, "onNext: 点击事件" );
+                        postCommentRequest();
+                    }
+                });
+
                 break;
             case R.id.emojie_tv://表情
 

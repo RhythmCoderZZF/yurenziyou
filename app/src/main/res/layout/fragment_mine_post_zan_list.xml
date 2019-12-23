@@ -39,7 +39,7 @@
                 android:clickable="false"
                 ></android.support.v7.widget.RecyclerView>
 
-            <include layout="@layout/layout_order_no_data"></include>
+            <include layout="@layout/layout_nodata"></include>
 
         </RelativeLayout>
 

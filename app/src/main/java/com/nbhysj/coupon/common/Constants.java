@@ -54,13 +54,19 @@ public class Constants {
 
     public static final String PAYMENT_CANCEL_CODE_ALIPAY = "6001";
 
-
-
     public static final String CONNECT_TIMED_OUT = "timeout";
 
     public static final String HTTP_UNAUTHORIZED_401 = "HTTP 401 Unauthorized";
 
     public static final String BROCAST_ACTION_TRIP_ASSISANT = "android.intent.action.trip.assisant";
+
+    public static final String BROADCAST_ACTION_MAIN_BACK = "android.intent.action.main.back";
+
+    public static final String BROADCAST_ACTION_ARG_OPRATE = "android.intent.action.oprate";
+
+    public static final String BROADCAST_ACTION_BACK_MY_COLLECTION = "android.intent.action.my.collection";
+
+    public static final String BROADCAST_ACTION_BACK_SHOPPING_MALL = "android.intent.action.back.shopping.mall";
 
     //高德POI搜索
     public static final String EXTRA_TIP = "extraTip";

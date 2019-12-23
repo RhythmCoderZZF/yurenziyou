@@ -20,7 +20,6 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.PostsTypeEnum;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
-import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCollectionRequest;
@@ -43,18 +42,14 @@ import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.CommentsListActivity;
 import com.nbhysj.coupon.ui.FindFriendsActivity;
 import com.nbhysj.coupon.ui.NewAlbumActivity;
-import com.nbhysj.coupon.ui.NewFansActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
-import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
+import com.nbhysj.coupon.view.JudgeNestedScrollView;
+import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -76,7 +71,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @BindView(R.id.rv_follow)
     RecyclerView mRvFollow;
     @BindView(R.id.scroll_view)
-    NestedScrollView setNeedScroll;
+    JudgeNestedScrollView setNeedScroll;
     //加载
     @BindView(R.id.llyt_progress_bar_loading)
     LinearLayout mLlytProgressBarLoading;
@@ -119,6 +114,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     private boolean isOnLoadMore = false;
 
     private int mPostId;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_follow;
@@ -160,6 +156,14 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
             favoritesAlbumList.clear();
         }
 
+
+      /*  HomePageSubTopicTagBean homePageSubTopicTagBean = recommendFriendsList.get(mPosition);
+        int postId = homePageSubTopicTagBean.getId();
+        Intent intent = new Intent();
+        intent.putExtra("postId", postId);
+        intent.setClass(getActivity(), PostRecommendDetailActivity.class);
+        startActivity(intent);*/
+
         // 创建一个线性布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         // 设置布局管理器
@@ -168,7 +172,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         followListAdapter = new FollowListAdapter(getActivity(), new FollowListAdapter.FollowListener() {
 
             @Override
-            public void setPostPraiseListener(int position,int postId) {
+            public void setPostPraiseListener(int position, int postId) {
 
                 mPosition = position;
                 postOprate(postId);
@@ -205,9 +209,12 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
             }
 
             @Override
-            public void setFollowItemOnClickListener() {
-
-                hiddenIME();
+            public void setFollowItemOnClickListener(int mPostId) {
+                Intent intent = new Intent();
+                intent.putExtra("postId", mPostId);
+                intent.setClass(getActivity(), PostRecommendDetailActivity.class);
+                startActivity(intent);
+            //    hiddenIME();
             }
 
             @Override
@@ -216,7 +223,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
               /*  ShareDialog shareDialog = new ShareDialog();
                 shareDialog.show(getActivity().getFragmentManager(),"");*/
 
-                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(getActivity(), new ShareOprateDialog.OnSharePlatformItemClickListener() {
+               /* ShareOprateDialog shareOprateDialog = new ShareOprateDialog(getActivity(), new ShareOprateDialog.OnSharePlatformItemClickListener() {
                     @Override
                     public void onSharePlatformItemClick(String sharePlatform) {
 
@@ -245,9 +252,9 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
                     }
                 }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
-                shareOprateDialog.show();
+                shareOprateDialog.show();*/
             }
-        });
+        }, true);
         followListAdapter.setFollowDetailList(followDetailList);
         mRvFollow.setAdapter(followListAdapter);
     }
@@ -316,6 +323,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         imageHight = bitmapImage.getHeight();
         return baos.toByteArray();
     }
+
     private UMShareListener umShareListener = new UMShareListener() {
         /**
          * @descrption 分享开始的回调
@@ -357,7 +365,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @Override
     public void initData() {
 
-        setNeedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        setNeedScroll.setOnScrollChangeListener(new JudgeNestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY > oldScrollY) {
@@ -381,6 +389,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
         });
     }
+
     public void loadData() {
         mLlytProgressBarLoading.setVisibility(View.VISIBLE);
         if (hasNext == 1) {
@@ -410,11 +419,11 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     //关注
-    public void userFollow(int userId)
-    {
+    public void userFollow(int userId) {
         showProgressDialog(getActivity());
         mPresenter.userFollow(userId);
     }
+
     @Override
     public void getHomePageIndexResult(BackResult<HomePageResponse> res) {
 
@@ -481,42 +490,6 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
                     followListAdapter.setFollowDetailList(followDetailList);
                     followListAdapter.notifyDataSetChanged();
-                   /* if (zanStatus == 0) {
-
-                        mTvPostPraise.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_love_gray), null, null, null);
-                        mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.text_grey));
-                        mRlytPraise.setBackgroundResource(R.drawable.bg_rect_light_gray_shape_radius_five);
-
-                        for(int i = 0;i < zanAvatersList.size();i++){
-
-                            ZanAvatersBean zanAvatersBean = zanAvatersList.get(i);
-                            String avatarUrl = zanAvatersBean.getAvater();
-                            if(avatarUrl.equals(userAvatarUrl)){
-
-                                zanAvatersList.remove(zanAvatersBean);
-                            }
-                        }
-                    } else {
-
-                        zanAvatersBean.setNickname(nickname);
-                        zanAvatersBean.setAvater(userAvatarUrl);
-                        zanAvatersBean.setId(userId);
-                        zanAvatersList.add(zanAvatersBean);
-
-                        mTvPostPraise.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_note_heart_white), null, null, null);
-                        mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.white));
-                        mRlytPraise.setBackgroundResource(R.drawable.bg_praise_rect_dark_red_shape);
-                    }
-
-                    //点赞用户数量
-                    mTvPraisePeopleNum.setText(String.valueOf(zanNum));
-
-                    //用户点赞
-                    if (zanAvatersList != null) {
-
-                        praisePeopleAdapter.setPraisePeopleList(zanAvatersList);
-                        praisePeopleAdapter.notifyDataSetChanged();
-                    }*/
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -562,11 +535,8 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                     e.printStackTrace();
                 }
                 break;
-                case Constants.USER_NOT_LOGIN_CODE:
-
-                    toActivity(PhoneQuickLoginActivity.class);
-
-                    break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
                 break;
@@ -587,7 +557,6 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
             mPresenter.getHomeAttention(mPageNo, mPageSize);
         }
     }
-
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -624,13 +593,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         } else {
             isVisible = false;
         }
-        /*if (isVisibleToUser) {
 
-            String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
-            if (TextUtils.isEmpty(token)) {
-                toActivity(PhoneQuickLoginActivity.class);
-            }
-        }*/
 
     }
 
@@ -652,7 +615,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 try {
                     FavoritesCollectionResponse favoritesCollectionResponse = res.getData();
                     int collectionStatus = favoritesCollectionResponse.getCollectionStatus();
-                   // HomePageSubTopicTagBean homePageSubTopicTagBean = followDetailList.get(0);
+                    // HomePageSubTopicTagBean homePageSubTopicTagBean = followDetailList.get(0);
                    /* if (collectionStatus == 0) {
 
                         mImageIsCollectionPosts.setImageResource(R.mipmap.icon_gray_collection_posts);
@@ -685,10 +648,8 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
             case Constants.SUCCESS_CODE:
                 try {
                     favoritesAlbumList.clear();
-                    if(collectEnterAlbumsDialog != null)
-                    {
-                        if (isOnLoadMore)
-                        {
+                    if (collectEnterAlbumsDialog != null) {
+                        if (isOnLoadMore) {
                             collectEnterAlbumsDialog.setSmartRefreshLayoutLoadMoreFinish();
                         } else {
                             collectEnterAlbumsDialog.setSmartRefreshLayoutRefreshFinish();
@@ -700,8 +661,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
                     BasePaginationResult paginationResult = res.getData().getPage();
                     mTotalPageCount = paginationResult.getPageCount();
-                    if (favoritesList == null)
-                    {
+                    if (favoritesList == null) {
                         favoritesList = new ArrayList<>();
                     }
 
@@ -795,21 +755,17 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     @Subscribe
     public void onEvent(String mineFragmentRefresh) {
 
-        if(visibleToUser)
-        {
-            if(mineFragmentRefresh.equals("homeFragmentRefresh"))
-            {
+        if (visibleToUser) {
+            if (mineFragmentRefresh.equals("homeFragmentRefresh")) {
                 if (followDetailList != null) {
                     followDetailList.clear();
                 }
                 mPageNo = 1;
-                if(mRlytNoData != null)
-                {
+                if (mRlytNoData != null) {
                     mRlytNoData.setVisibility(View.GONE);
                 }
-            //    showProgressDialog(getActivity());
-                if(followListAdapter != null)
-                {
+                //    showProgressDialog(getActivity());
+                if (followListAdapter != null) {
                     followListAdapter.notifyDataSetChanged();
                 }
                 getHomeAttention();
@@ -824,7 +780,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
         PostsCollectionRequest postsCollectionRequest = new PostsCollectionRequest();
         postsCollectionRequest.setDataId(mPostId);
         postsCollectionRequest.setFavoritesId(favoritesId);
-        int userId = (int)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID,0);
+        int userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
         postsCollectionRequest.setUserId(userId);
         mPresenter.postCollection(postsCollectionRequest);
     }

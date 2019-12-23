@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.BroadcastBean;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
+import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
+import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -83,11 +85,24 @@ public class MineFollowHeaderAdapter extends RecyclerView.Adapter<MineFollowHead
                 holder.mLlytFollow.setBackgroundResource(R.drawable.bg_gray_radius_thirteen_shape);
             }
 
-            holder.mLlytFollowItem.setOnClickListener(new View.OnClickListener() {
+            holder.mLlytFollow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     followListener.setFollowListener(fansId,position);
+                }
+            });
+
+            holder.mImgUserAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, UserPersonalHomePageActivity.class);
+                    intent.putExtra("publisherAvatarUrl", avatarUrl);
+                    intent.putExtra("authorId", fansId);
+                    mContext.startActivity(intent);
+
                 }
             });
         } catch (Exception e) {

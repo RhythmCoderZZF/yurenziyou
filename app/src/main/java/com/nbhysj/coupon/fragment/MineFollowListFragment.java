@@ -196,7 +196,7 @@ public class MineFollowListFragment extends BaseFragment<MessagePresenter, Messa
                         isOnLoadMore = true;
                         try {
                             mSmartRefreshLayout.finishLoadMore();
-                            if (mTotalPageCount == userFansFollowHeaderList.size()) {
+                            if (mTotalPageCount == userFansFollowFooterList.size()) {
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
                                 mPageNo++;

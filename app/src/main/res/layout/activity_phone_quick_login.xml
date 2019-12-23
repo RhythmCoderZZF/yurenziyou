@@ -153,6 +153,18 @@
         android:textColor="@color/color_text_gray4"
         android:textSize="@dimen/text_size_normal" />
 
+    <TextView
+        android:id="@+id/tv_user_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_25"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_marginRight="@dimen/dp_25"
+        android:text=""
+        android:textSize="@dimen/text_size_small"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tv_pwd_login"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -184,7 +196,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/dp_8"
                 android:layout_marginRight="@dimen/dp_8"
-                android:text="其他方式登陆"
+                android:text="@string/str_other_ways_to_login"
                 android:textColor="@color/text_grey"
                 android:textSize="@dimen/text_size_small" />
 

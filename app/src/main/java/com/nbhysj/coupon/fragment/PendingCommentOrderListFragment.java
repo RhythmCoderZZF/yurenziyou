@@ -122,7 +122,7 @@ public class PendingCommentOrderListFragment extends BaseFragment<OrderListPrese
 
 
             @Override
-            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {  //待付款
+            public void setOrderCancelListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {  //待付款
 
                 mOrderTypeEntity = orderTypeEntity;
                 OprateDialog oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_cancel_the_order));

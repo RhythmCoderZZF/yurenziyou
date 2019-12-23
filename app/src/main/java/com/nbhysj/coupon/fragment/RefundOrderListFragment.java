@@ -104,7 +104,7 @@ public class RefundOrderListFragment extends BaseFragment<OrderListPresenter, Or
             }
 
             @Override
-            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderCancelListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
 
             }
 

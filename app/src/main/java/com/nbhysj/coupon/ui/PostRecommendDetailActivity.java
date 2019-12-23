@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,10 +35,12 @@ import com.nbhysj.coupon.adapter.PraisePeopleAdapter;
 import com.nbhysj.coupon.adapter.StrategyListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.PostsTypeEnum;
+import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.common.Enum.UploadFileTypeEnum;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
+import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCollectionRequest;
@@ -49,6 +53,7 @@ import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
 import com.nbhysj.coupon.model.response.HomePageResponse;
 import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
+import com.nbhysj.coupon.model.response.MyPostShareBean;
 import com.nbhysj.coupon.model.response.PostCommentBean;
 import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
@@ -59,6 +64,7 @@ import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.DensityUtils;
 import com.nbhysj.coupon.util.DonwloadSaveImgUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
@@ -79,12 +85,16 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,6 +199,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @BindView(R.id.img_post_video_gif)
     ImageView mImgPostVideGif;
 
+    @BindView(R.id.rlyt_post_video)
+    RelativeLayout mRlytPostVideo;
+
     @BindView(R.id.jzvd_post_video)
     MyJzvdStd mJzvdPostVideo;
 
@@ -216,7 +229,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     private String mPostKey = "recomm";
 
     //帖子id
-    private int mPostId;
+    private static int mPostId;
 
     Bitmap videoThumbnailBitmap;
 
@@ -230,11 +243,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     //帖子发布者
     private int authorId;
-    private IWXAPI api;
+    private static IWXAPI api;
 
-    private int imageWidth, imageHight;
-
-    Bitmap bitmap = null;
+    static Bitmap bitmap = null;
 
     private int mPageNo = 1;
     private int mPageSize = 10;
@@ -265,6 +276,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     List<String> resourcesPictureList;
 
     private boolean isPostReFresh = false;
+
+    private static String photoUrl;
+
     @Override
     public int getLayoutId() {
 
@@ -281,9 +295,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
         api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID, false);
 
-        nickname = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME,"");
-        userAvatarUrl = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR,"");
-        userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID,0);
+        nickname = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME, "");
+        userAvatarUrl = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
+        userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
         if (zanAvatersList == null) {
 
             zanAvatersList = new ArrayList<>();
@@ -301,12 +315,13 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             favoritesAlbumList.clear();
         }
 
-        if(resourcesPictureList == null){
+        if (resourcesPictureList == null) {
 
             resourcesPictureList = new ArrayList<>();
         } else {
             resourcesPictureList.clear();
         }
+
 
         //点赞用户列表
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -331,7 +346,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                      //  showProgressDialog(PostRecommendDetailActivity.this);
+                        //  showProgressDialog(PostRecommendDetailActivity.this);
                         isPostReFresh = true;
                         getPostInfo();
 
@@ -390,11 +405,11 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         mTvPostPraise.setTextColor(mContext.getResources().getColor(R.color.text_grey));
                         mRlytPraise.setBackgroundResource(R.drawable.bg_rect_light_gray_shape_radius_five);
 
-                        for(int i = 0;i < zanAvatersList.size();i++){
+                        for (int i = 0; i < zanAvatersList.size(); i++) {
 
                             ZanAvatersBean zanAvatersBean = zanAvatersList.get(i);
                             String avatarUrl = zanAvatersBean.getAvater();
-                            if(avatarUrl.equals(userAvatarUrl)){
+                            if (avatarUrl.equals(userAvatarUrl)) {
 
                                 zanAvatersList.remove(zanAvatersBean);
                             }
@@ -426,7 +441,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 }
                 break;
             case Constants.USER_NOT_LOGIN_CODE:
-               onReLogin("");
+                onReLogin("");
                 break;
             default:
                 showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -465,14 +480,21 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         PostInfoDetailResponse.PostInfoEntity postInfoEntity = postInfoList.get(0);
                         authorId = postInfoEntity.getUserId();
                         mPostId = postInfoEntity.getId();
-                        String photoUrl = postInfoEntity.getPhoto();          //拍视频生成 gif
+                        String gifPhotoUrl = postInfoEntity.getPhoto();          //拍视频生成 gif
                         publisherAvatarUrl = postInfoEntity.getAvater();
                         resourcesPictureList = postInfoEntity.getResources(); //图片
                         String resourceUrl = postInfoEntity.getResourceUrl();  //mp4
                         String content = postInfoEntity.getContent();
+                        int photoHeight = postInfoEntity.getPhotoHeight();
+                        int photoWidth = postInfoEntity.getPhotoWidth();
                         String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
                         String userName = postInfoEntity.getNickname(); //用户名
                         int postsType = postInfoEntity.getPostsType();  //1图片，2语音，3视频
+
+                     /*   LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(PostRecommendDetailActivity.this, photoHeight) / 4);
+                        mRlytPostDetailPicture.setLayoutParams(params);*/
+
                         //推荐用户
                         List<RecommendInterestUsersBean> recommendUsersList = postInfoEntity.getRecommendUsers();
 
@@ -503,34 +525,45 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         if (postsType == 1) { //图片
 
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
-                            mJzvdPostVideo.setVisibility(View.GONE);
+                            mRlytPostVideo.setVisibility(View.GONE);
                             mBtnLayoutExpandSound.setVisibility(View.INVISIBLE);
-                                mBannerViewFriendDetailPicture.setBannerList(resourcesPictureList);
+                            mBannerViewFriendDetailPicture.setBannerList(resourcesPictureList);
                         } else if (postsType == 2) {  //音频+图片
 
                             mRlytPostDetailPicture.setVisibility(View.VISIBLE);
-                            mJzvdPostVideo.setVisibility(View.GONE);
+                            mRlytPostVideo.setVisibility(View.GONE);
 
                             if (!TextUtils.isEmpty(resourceUrl)) {
                                 String audioValue = UploadFileTypeEnum.AUDIO.getValue();
-                                if(resourceUrl.contains(audioValue))
+                                if (resourceUrl.contains(audioValue))
                                 {
                                     mBtnLayoutExpandSound.setVisibility(View.VISIBLE);
                                     mBtnLayoutExpandSound.setAudioFileUrl(resourceUrl);
                                 }
                             }
-                                mBannerViewFriendDetailPicture.setBannerList(resourcesPictureList);
+                            mBannerViewFriendDetailPicture.setBannerList(resourcesPictureList);
                         } else if (postsType == 3) {  //视频
 
-                            mJzvdPostVideo.setVisibility(View.VISIBLE);
+                            mRlytPostVideo.setVisibility(View.VISIBLE);
                             mRlytPostDetailPicture.setVisibility(View.GONE);
+
                             mJzvdPostVideo.setUp(resourceUrl, "");
+                            mJzvdPostVideo.startButton.performClick();
+                            mJzvdPostVideo.startVideo();
                             mBtnLayoutExpandSound.setVisibility(View.INVISIBLE);
-                            Glide.with(this).load(photoUrl).into(mJzvdPostVideo.thumbImageView);
+                            Glide.with(this).load(gifPhotoUrl).into(mJzvdPostVideo.thumbImageView);
+
+                            mJzvdPostVideo.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    System.out.print("111");
+                                }
+                            });
                         }
 
                         //用户点赞
-                         zanAvatersList = postInfoEntity.getZanAvaters();
+                        zanAvatersList = postInfoEntity.getZanAvaters();
                         int zanCount = postInfoEntity.getZanCount();
                         if (zanAvatersList != null) {
 
@@ -594,12 +627,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                             mLlytUserComment.setVisibility(View.GONE);
                         }
 
-                        if (recommendUsersList != null) {
-
-                            mRlytInterestUser.setVisibility(View.VISIBLE);
-                        }
-
-                        if (recommendUsersList != null) {
+                        if (recommendUsersList != null && recommendUsersList.size() > 0) {
                             mRlytInterestUser.setVisibility(View.VISIBLE);
                             //可能感兴趣列表
                             LinearLayoutManager userOfInterestLinearLayoutManager = new LinearLayoutManager(mContext);
@@ -784,6 +812,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         if (mBtnLayoutExpandSound != null) {
             mBtnLayoutExpandSound.stopPlaying();
         }
+        // mJzvdPostVideo.on
     }
 
     @Override
@@ -826,29 +855,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         });
     }
 
-
-    //帖子评论
-   /* public void postCommentRequest() {
-
-        if (validateInternet()) {
-
-            String postCommentContent = mEdtPostCommentContent.getText().toString().trim();
-
-            if (!TextUtils.isEmpty(postCommentContent)) {
-                dismissProgressDialog();
-                showToast(PostRecommendDetailActivity.this, "请填写帖子评论");
-                return;
-            }
-            PostsCommentRequest postsCommentRequest = new PostsCommentRequest();
-            postsCommentRequest.setArticleId(mPostId);
-            postsCommentRequest.setContent(postCommentContent);
-            postsCommentRequest.setPid(0);
-            mPresenter.postsCommentRequest(postsCommentRequest);
-
-        }
-    }*/
-
-    @OnClick({R.id.img_post_share, R.id.tv_post_comment_num, R.id.rlyt_praise, R.id.tv_post_comment, R.id.tv_total_comment_num, R.id.llyt_post_collection,R.id.image_user_avatar})
+    @OnClick({R.id.img_post_share, R.id.tv_post_comment_num, R.id.rlyt_praise, R.id.tv_post_comment, R.id.tv_total_comment_num, R.id.llyt_post_collection, R.id.image_user_avatar})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -856,43 +863,22 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
                 ShareOprateDialog shareOprateDialog = new ShareOprateDialog(PostRecommendDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
                     @Override
-                    public void onSharePlatformItemClick(String sharePlatform) {
+                    public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
+                        try {
 
-                           //`     DonwloadSaveImgUtil.donwloadImg(PostRecommendDetailActivity.this,Path);//iPath
+                            String sharePlatformStr = sharePlatform.toString();
+                            photoUrl = resourcesPictureList.get(0);
+                            String wechatFriend = SharePlatformEnum.WECHAT_FRIEND.getValue();
+                            if (sharePlatformStr.equals(wechatFriend)) {
 
-                        //   showToast(getActivity(),sharePlatform);
+                                new Thread(saveFileRunnable).start();
 
-                      /*  new ShareAction(PostRecommendDetailActivity.this)
-                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                                .withText("hello")//分享内容
-                                .setCallback(umShareListener)//回调监听器
-                                .share();*/
+                            } else {
 
-                    /*    WXLaunchMiniProgram.Req req = new WXLaunchMiniProgram.Req();
-                        req.userName = "gh_8f591c4ee659"; // 填小程序原始id
-                        req.path = "pages/travel/travel";                  ////拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
-                        req.miniprogramType = WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE;// 可选打开 开发版，体验版和正式版
-                        api.sendReq(req);
-*/
-                        WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
-                        miniProgramObj.webpageUrl = "http:192.168.1.140:8083/"; // 兼容低版本的网页链接
-                        miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPROGRAM_TYPE_PREVIEW;// 正式版:0，测试版:1，体验版:2
-                        miniProgramObj.userName = "gh_8f591c4ee659";     // 小程序原始id
-                        miniProgramObj.path = "pages/travel/travel?id=" + mPostId; //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
-                        WXMediaMessage msg = new WXMediaMessage(miniProgramObj);
-                        msg.title = getResources().getString(R.string.app_name);                    // 小程序消息title
-                        msg.description = "帖子分享";               // 小程序消息desc
-                        msg.thumbData = getImage("/storage/emulated/0/UCDownloads/pictures/4a90f603738da977d581be2cbf51f8198618e30f.jpg");                      // 小程序消息封面图片，小于128k
-
-                        SendMessageToWX.Req req = new SendMessageToWX.Req();
-                        req.transaction = buildTransaction("miniProgram");
-                        req.message = msg;
-                        req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前只支持会话
-                        api.sendReq(req);
-
-                        if (bitmap != null) {
-                            bitmap.recycle();
-                            bitmap = null;
+                                thirdShare(sharePlatform, photoUrl);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
@@ -925,15 +911,109 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 getFavoritesList();
                 break;
             case R.id.image_user_avatar:
-                intent.setClass(PostRecommendDetailActivity.this,UserPersonalHomePageActivity.class);
-                intent.putExtra("publisherAvatarUrl",publisherAvatarUrl);
-                intent.putExtra("authorId",authorId);
+                intent.setClass(PostRecommendDetailActivity.this, UserPersonalHomePageActivity.class);
+                intent.putExtra("publisherAvatarUrl", publisherAvatarUrl);
+                intent.putExtra("authorId", authorId);
                 startActivity(intent);
                 break;
             default:
                 break;
         }
     }
+
+    private static Runnable saveFileRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                URL url = new URL(photoUrl);
+                //打开输入流
+                InputStream inputStream = url.openStream();
+                //对网上资源进行下载转换位图图片
+                Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 500, 500, true);
+                if (bmp != null) {
+                    bmp.recycle();
+                    bmp = null;
+                }
+                WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
+                miniProgramObj.webpageUrl = "http:192.168.1.140:8083/"; // 兼容低版本的网页链接
+                miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE;// 正式版:0，测试版:1，体验版:2
+                miniProgramObj.userName = "gh_8f591c4ee659";     // 小程序原始id
+                miniProgramObj.path = Net.POST_TRAVEL_MINIPTOGRAM_URL + mPostId; //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
+                WXMediaMessage msg = new WXMediaMessage(miniProgramObj);
+                msg.title = "鱼人自游";                    // 小程序消息title
+                msg.description = "帖子分享";               // 小程序消息desc
+                msg.thumbData = compressImage(thumbBmp);                      // 小程序消息封面图片，小于128k
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("miniProgram");
+                req.message = msg;
+                req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前只支持会话
+                api.sendReq(req);
+
+
+                //saveFile(mBitmap);
+                //   mSaveMessage = "图片保存成功！";
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //   messageHandler.sendMessage(messageHandler.obtainMessage());
+        }
+    };
+
+    private void thirdShare(SHARE_MEDIA platform, String photoUrl) {
+        String webUrl = Net.H5_YURENZIYOU_DOWNLOAD_GUIDE_PAGE_URL;
+        UMImage image = new UMImage(PostRecommendDetailActivity.this, photoUrl);                    //资源文件
+        UMWeb umWeb = new UMWeb(webUrl, PostRecommendDetailActivity.this.getResources().getString(R.string.app_name), "鱼人自游是宁波海洋世界旗下一站式旅游服务平台,产品及服务覆盖门票预订,景点评价及景点打折门票查询,酒店预订,美食推荐、还有更详细的旅游攻略.", image); //URL 标题 描述 封面图
+        new ShareAction(PostRecommendDetailActivity.this)
+                .setPlatform(platform)//传入平台
+                .withText("HiVideo")//标题
+                .withMedia(umWeb)
+                .setCallback(shareListener)//回调监听器
+                .share();
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //   Toast.makeText(getActivity(), "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(PostRecommendDetailActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(PostRecommendDetailActivity.this, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
 
     @Override
     public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
@@ -943,6 +1023,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 try {
                     FavoritesCollectionResponse favoritesCollectionResponse = res.getData();
                     int collectionStatus = favoritesCollectionResponse.getCollectionStatus();
+                    int collectionCount = favoritesCollectionResponse.getCollectionCount();
 
                     if (collectionStatus == 0) {
 
@@ -950,8 +1031,10 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                     } else {
 
                         mImageIsCollectionPosts.setImageResource(R.mipmap.icon_yellow_collection_posts);
-                        showToast(PostRecommendDetailActivity.this,"收藏成功");
+                        showToast(PostRecommendDetailActivity.this, "收藏成功");
                     }
+
+                    mTvPostCollectionNum.setText(String.valueOf(collectionCount));
 
                     if (collectEnterAlbumsDialog != null) {
                         collectEnterAlbumsDialog.dismiss();
@@ -961,7 +1044,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 }
                 break;
             case Constants.USER_NOT_LOGIN_CODE:
-               onReLogin("");
+                onReLogin("");
                 break;
             default:
                 showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -976,8 +1059,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             case Constants.SUCCESS_CODE:
                 try {
                     favoritesAlbumList.clear();
-                    if(collectEnterAlbumsDialog != null)
-                    {
+                    if (collectEnterAlbumsDialog != null) {
                         if (isOnLoadMore) {
                             collectEnterAlbumsDialog.setSmartRefreshLayoutLoadMoreFinish();
 
@@ -1060,8 +1142,6 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         collectEnterAlbumsDialog.show();
                     }
 
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1075,7 +1155,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         }
     }
 
-    private String buildTransaction(final String type) {
+    private static String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
@@ -1171,7 +1251,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
     }
 
-    private byte[] compressImage(Bitmap bitmapImage) {
+    private static byte[] compressImage(Bitmap bitmapImage) {
         ByteArrayOutputStream baos = null;
         try {
             baos = new ByteArrayOutputStream();
@@ -1188,8 +1268,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         } catch (Exception e) {
             e.printStackTrace();
         }
-        imageWidth = bitmapImage.getWidth();
-        imageHight = bitmapImage.getHeight();
+        // imageWidth = bitmapImage.getWidth();
+        //imageHight = bitmapImage.getHeight();
         return baos.toByteArray();
     }
 
@@ -1219,4 +1299,6 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             getFavoritesList();
         }
     }
+
+
 }

@@ -1,12 +1,12 @@
 package com.nbhysj.coupon.model.response;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * @auther：hysj created on 2019/9/20
  * description：专辑对象
  */
-public class FavoritesBean {
+public class FavoritesBean implements Serializable {
 
     private int id;
 
@@ -44,6 +44,8 @@ public class FavoritesBean {
     private int mchId;
 
     private String mchType;
+
+    private String mchType2;
 
     //专辑选择
     private int isAlbumSelect;
@@ -190,6 +192,14 @@ public class FavoritesBean {
         return mchType;
     }
 
+    public String getMchType2() {
+        return mchType2;
+    }
+
+    public void setMchType2(String mchType2) {
+        this.mchType2 = mchType2;
+    }
+
     public void setMchType(String mchType) {
         this.mchType = mchType;
     }
@@ -200,5 +210,14 @@ public class FavoritesBean {
 
     public void setIsAlbumSelect(int isAlbumSelect) {
         this.isAlbumSelect = isAlbumSelect;
+    }
+
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

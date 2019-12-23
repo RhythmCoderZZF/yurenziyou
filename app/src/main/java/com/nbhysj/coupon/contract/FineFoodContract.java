@@ -3,8 +3,10 @@ package com.nbhysj.coupon.contract;
 import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
+import com.nbhysj.coupon.model.request.FineFoodCommentRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -49,6 +51,12 @@ public interface FineFoodContract {
 
         //景点类目列表
         Observable<BackResult<MchCateListResponse>> findFoodListByCateId(HashMap<String, String> map);
+
+        //美食评价初始化接口
+        Observable<BackResult<FineFoodCommentInitResponse>> getFoodCommentIndex(int mchId);
+
+        //美食评价接口
+        Observable<BackResult> fineFoodComment(FineFoodCommentRequest fineFoodCommentRequest);
     }
 
     interface View extends BaseView {
@@ -67,6 +75,12 @@ public interface FineFoodContract {
 
         //美食类目列表
         void findFoodsListByCateIdResult(BackResult<MchCateListResponse> res);
+
+        //美食评价初始化接口
+        void getFoodCommentIndexResult(BackResult<FineFoodCommentInitResponse> res);
+
+        //美食评价接口
+        void fineFoodCommentResult(BackResult res);
 
         void showMsg(String msg);
     }
@@ -88,5 +102,9 @@ public interface FineFoodContract {
 
         //美食列表-筛选
         public abstract void findFoodListByCateId(HashMap<String, String> map);
+
+        public abstract void getFoodCommentIndex(int mchId);
+
+        public abstract void fineFoodComment(FineFoodCommentRequest fineFoodCommentRequest);
     }
 }

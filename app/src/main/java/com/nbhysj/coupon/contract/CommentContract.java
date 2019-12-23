@@ -13,6 +13,8 @@ import com.nbhysj.coupon.model.response.PostsCommentResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 
 /**
@@ -30,7 +32,7 @@ public interface CommentContract {
         Observable<BackResult> postsCommentRequest(PostsCommentRequest postsCommentRequest);
 
         //获取商户评论列表
-        Observable<BackResult<MchCommentResponse>> getMchCommentList(int mchId);
+        Observable<BackResult<MchCommentResponse>> getMchCommentList(Map<String, Object> map);
 
         //获取帖子评论列表
         Observable<BackResult<PostsCommentResponse>> getAllPostsCommentListByArticleId(int articleId, int pageNo, int pageSize);
@@ -58,7 +60,7 @@ public interface CommentContract {
         public abstract void postsCommentRequest(PostsCommentRequest postsCommentRequest);
 
         //获取商户评论列表
-        public abstract void getMchCommentList(int mchId);
+        public abstract void getMchCommentList(Map<String, Object> map);
 
         //获取帖子评论列表
         public abstract void getAllPostsCommentListByArticleId(int articleId, int pageNo, int pageSize);

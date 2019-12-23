@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 
 import butterknife.OnClick;
@@ -16,6 +17,7 @@ public class FrequentlyUsedInformationActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_frequently_used_information;
     }
 
@@ -46,7 +48,7 @@ public class FrequentlyUsedInformationActivity extends BaseActivity {
                 toActivity(FrequentContactsActivity.class);
                 break;
             case R.id.rlyt_recipient_information:
-                toActivity(RecipientInformationActivity.class);
+                toActivity(RecipientListActivity.class);
                 break;
             default:
                 break;

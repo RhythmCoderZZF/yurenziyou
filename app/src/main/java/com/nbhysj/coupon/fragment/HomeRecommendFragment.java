@@ -105,20 +105,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                /*    if (isOnLoadMore) {
-
-                        // mSmartRefreshLayout.finishLoadMore();
-                    } else {
-
-                        recommendFriendsList.clear();
-                        recommendFriendsAdapter.notifyDataSetChanged();
-                    }*/
 
                     if (mPage == 1) {
 
                         mLlytProgressBarLoading.setVisibility(View.GONE);
                     }
-
 
                     HomePageResponse.ResultBean result = res.getData().getResult();
                     List<HomePageSubTopicTagBean> postsTagsBeanList = result.getList();

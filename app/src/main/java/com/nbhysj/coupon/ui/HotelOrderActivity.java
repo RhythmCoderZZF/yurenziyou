@@ -29,6 +29,7 @@ import com.nbhysj.coupon.model.response.CouponsBean;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -130,7 +131,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     ImageView mImgCoupon;
 
     //房间数量
-    private int roomNum = 1;
+    private int mRoomsReservedNum = 1;
     //商品id
     private int goodsId;
     //商户名
@@ -150,10 +151,13 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     private double price;
 
     //酒店或者民宿（总价）
-    private double totalPrice;
+    private double mTotalPrice;
 
     //优惠券
     List<CouponsBean> couponList;
+
+    //优惠价格
+    private double discountPrice;
 
     //商品列表
     private List<GoodsBeanRequest> goodsList;
@@ -170,6 +174,8 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
 
     //优惠券标题
     private String mCouponTitle;
+
+    private long differDays = 1l;
     @Override
     public int getLayoutId() {
 
@@ -270,7 +276,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     stringBuffer.setLength(0);
                     HotelOrderInitResponse hotelOrderInitResponse = res.getData();
                     price = hotelOrderInitResponse.getPrice();
-                    totalPrice = roomNum * price;
+                    mTotalPrice = mRoomsReservedNum * price;
                     String intoTime = hotelOrderInitResponse.getIntoTime();
                     String leaveTime = hotelOrderInitResponse.getLeaveTime();
                     List<String> sign = hotelOrderInitResponse.getSign();
@@ -363,6 +369,11 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     }
 
     @Override
+    public void getHotelListByCateIdResult(BackResult<MchCateListResponse> res) {
+
+    }
+
+    @Override
     public void queryByTicketResult(BackResult<QueryByTicketResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
@@ -410,36 +421,28 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                        UseCouponTicketResponse useCouponTicketResponse = res.getData();
+                    UseCouponTicketResponse useCouponTicketResponse = res.getData();
 
-                        double disCount = useCouponTicketResponse.getDiscount();
-                        chooseIds.clear();
-                        chooseIds = useCouponTicketResponse.getChooseId();
+                    discountPrice = useCouponTicketResponse.getDiscount();
+                    chooseIds.clear();
+                    chooseIds = useCouponTicketResponse.getChooseId();
 
-                        if (couponSelectDialog != null)
-                        {
-                            couponSelectDialog.dismiss();
-                        }
-
-                        if(disCount > 0) {
-
-                            mTvAlreadyReducedPrice.setVisibility(View.VISIBLE);
-                            mTvAlreadyReducedPrice.setText("已减" + disCount + "元");
-                            mTvDefaultTicketPrice.setVisibility(View.VISIBLE);
-                            double price = totalPrice - disCount;
-                            mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(price));
-                            mTvDefaultTicketPrice.setText("¥" + Tools.getTwoDecimalPoint(totalPrice));
-                            mTvDefaultTicketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-                            mTvCoupon.setText(mCouponTitle);
-                        } else {
-                            mTvCoupon.setText("无优惠券");
-                            mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
-                            mTvAlreadyReducedPrice.setVisibility(View.GONE);
-                            mTvDefaultTicketPrice.setVisibility(View.GONE);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (couponSelectDialog != null)
+                    {
+                        couponSelectDialog.dismiss();
                     }
+
+                    if(discountPrice > 0) {
+                        getPriceSettlement();
+                        mTvCoupon.setText("-¥" + discountPrice);
+
+                    } else {
+                        getPriceSettlement();
+                        mTvCoupon.setText("不使用优惠券");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 showToast(HotelOrderActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -465,11 +468,9 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                         @Override
                         public void setVehicleUseSelectModelCallBack(int mItemSelectRoomNum) {
 
-                            roomNum = mItemSelectRoomNum;
+                            mRoomsReservedNum = mItemSelectRoomNum;
                             mTvRoomNum.setText(String.valueOf(mItemSelectRoomNum) + "间");
-                            double totalPrice = roomNum * price;
-
-                            mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                            getPriceSettlement();
                         }
                     });
                     roomNumberSelectDialog.show(getFragmentManager(), "");
@@ -515,7 +516,8 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                                     mTvCoupon.setText(mCouponTitle);
                                     mTvAlreadyReducedPrice.setVisibility(View.GONE);
                                     mTvDefaultTicketPrice.setVisibility(View.GONE);
-
+                                    discountPrice = 0;
+                                    getPriceSettlement();
                                     if (couponSelectDialog != null)
                                     {
                                         couponSelectDialog.dismiss();
@@ -549,10 +551,10 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
          */
         if(requestCode == 0 && resultCode == RESULT_OK)
         {
-            String startDate = data.getStringExtra("startDate");
-            String endDate = data.getStringExtra("endDate");
+            checkInDateStr = data.getStringExtra("startDate");
+            leaveDateStr = data.getStringExtra("endDate");
 
-            hotelDateSelectDeal(startDate,endDate);
+            hotelDateSelectDeal(checkInDateStr,leaveDateStr);
         }
     }
 
@@ -592,7 +594,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
             homestayOrderSubmitRequest.setCheckInAndOutDate(checkInDateStr + "~" + leaveDateStr);
             homestayOrderSubmitRequest.setName(checkInUsername);
             homestayOrderSubmitRequest.setMobile(checkInUserPhone);
-            homestayOrderSubmitRequest.setNum(roomNum);
+            homestayOrderSubmitRequest.setNum(mRoomsReservedNum);
             homestayOrderSubmitRequest.setCouponIds(chooseIds);
             mPresenter.hotelHomestayOrderSubmit(homestayOrderSubmitRequest);
         }
@@ -619,10 +621,11 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                 DateFormat df = new SimpleDateFormat(DateUtil.sDateYMDFormat);
                 Date leaveDate = df.parse(leaveDateStr);
                 Date checkInDate = df.parse(checkInDateStr);
-                long differDays = DateUtil.differDays(leaveDate, checkInDate);
+                differDays = DateUtil.differDays(leaveDate, checkInDate);
                 mTvDifferDaysNum.setText("共" + String.valueOf(differDays) + "晚");
 
                 calendar = CalendarUtil.getDays(checkInDateStr,leaveDateStr);
+                getPriceSettlement();
                 queryByTicket(calendar);
             }
 
@@ -640,7 +643,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
             String calendarStr = calendar.get(i);
             GoodsBeanRequest goodsBean = new GoodsBeanRequest();
             goodsBean.setGoodsId(goodsId);
-            goodsBean.setNum(roomNum);
+            goodsBean.setNum(mRoomsReservedNum);
             goodsBean.setGoodsType("GOODS_HOTEL_ROOM");
             goodsBean.setDate(calendarStr);
             goodsList.add(goodsBean);
@@ -691,7 +694,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
             String calendarStr = calendar.get(i);
             GoodsBeanRequest goodsBean = new GoodsBeanRequest();
             goodsBean.setGoodsId(goodsId);
-            goodsBean.setNum(roomNum);
+            goodsBean.setNum(mRoomsReservedNum);
             goodsBean.setGoodsType("GOODS_HOTEL_ROOM");
             goodsBean.setDate(calendarStr);
             goodsList.add(goodsBean);
@@ -712,5 +715,12 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
             useCouponTicketRequest.setNewUseId(newUseId);
             mPresenter.useCouponTicketRequest(useCouponTicketRequest);
         }
+    }
+
+    //价格结算
+    public void getPriceSettlement()
+    {
+        mTotalPrice = price * mRoomsReservedNum * differDays - discountPrice;
+        mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
     }
 }

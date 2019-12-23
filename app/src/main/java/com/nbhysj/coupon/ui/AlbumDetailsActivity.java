@@ -267,6 +267,10 @@ public class AlbumDetailsActivity extends BaseActivity<AlbumPresenter, AlbumMode
         mPresenter.setVM(this, mModel);
     }
 
+    @Override
+    public void delFavoritesRequest(BackResult res) {
+
+    }
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
         private int itemSpace;

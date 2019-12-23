@@ -230,6 +230,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
 
         viewPager.setAdapter(new ComFragmentAdapter(getChildFragmentManager(), getFragments()));
         viewPager.setOffscreenPageLimit(3);
+        viewPager.setCurrentItem(1);
         initMagicIndicator();
         initMagicIndicatorTitle();
 
@@ -332,7 +333,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
 
                 break;
             case R.id.llyt_fans_num:
-                intent.putExtra("currentItem",0);
+                intent.putExtra("currentItem",1);
                 intent.setClass(getActivity(),FollowAndFansActivity.class);
                 startActivity(intent);
 
@@ -344,7 +345,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 toActivity(CollectionActivity.class);
                 break;
             case R.id.llyt_follow_num:
-                intent.putExtra("currentItem",1);
+                intent.putExtra("currentItem",0);
                 intent.setClass(getActivity(),FollowAndFansActivity.class);
                 startActivity(intent);
                 break;

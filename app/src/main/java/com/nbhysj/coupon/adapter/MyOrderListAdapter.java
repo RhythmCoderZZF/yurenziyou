@@ -340,7 +340,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                 @Override
                 public void onClick(View view) {
 
-                    myOrderListener.setOrderCancelListener(orderTypeEntity);
+                    myOrderListener.setOrderCancelListener(position,orderTypeEntity);
                 }
             });
 
@@ -465,7 +465,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
         void setOrderDeleteListener(int position, UserOrderListResponse.OrderTypeEntity orderTypeEntity);
 
-        void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity);
+        void setOrderCancelListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity);
 
         void setOrderAllRefundListener(String orderNo);
 

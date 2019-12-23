@@ -102,7 +102,7 @@ public class HomePageSearchActivity extends BaseActivity {
                     // 按下完成按钮，这里和上面imeOptions对应
                     String searchKeyWordStr = textView.getText().toString().trim();
 
-                        addSearchRecordData(searchKeyWordStr);
+
                         EventBus.getDefault().post(searchKeyWordStr);
                         SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD,searchKeyWordStr);
                     return false;   //返回true，保留软键盘。false，隐藏软键盘
@@ -181,5 +181,11 @@ public class HomePageSearchActivity extends BaseActivity {
                 break;
                 default:break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD,"");
     }
 }

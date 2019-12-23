@@ -5,8 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +23,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.ThirdPartyLoginTypeEnum;
 import com.nbhysj.coupon.contract.LoginContract;
 import com.nbhysj.coupon.dialog.OprateDialog;
+import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.LoginModel;
 import com.nbhysj.coupon.model.request.LoginRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
@@ -33,9 +40,11 @@ import com.nbhysj.coupon.util.ToolbarHelper;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -66,6 +75,9 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
     TextView mTvCountryCode;
     @BindView(R.id.tv_login)
     TextView mTvLogin;
+    //用户协议
+    @BindView(R.id.tv_user_agreement)
+    TextView mTvUserAgreement;
     //手机号码
     private String phoneNum;
     //手机验证码
@@ -85,6 +97,8 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
     //登录成功code
     private int LOGIN_SUCCESS_REQUEST_CODE = 1;
 
+    //用户注册成功
+    private int REQUEST_CODE_USER_REGISTER_SUCCESS = 2;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -98,7 +112,9 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
 
         mTvUserRegister.setOnClickListener(v -> {
 
-            toActivity(UserRegistrationActivity.class);
+            Intent intent = new Intent();
+            intent.setClass(PhoneQuickLoginActivity.this, UserRegistrationActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_USER_REGISTER_SUCCESS);
         });
 
         handler = new Handler() {
@@ -127,11 +143,14 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
     public void initData() {
 
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
-        if (!TextUtils.isEmpty(avatar))
-        {
-            GlideUtil.loadImage(PhoneQuickLoginActivity.this,avatar,mImageUserAvatar);
+        if (!TextUtils.isEmpty(avatar)) {
+            GlideUtil.loadImage(PhoneQuickLoginActivity.this, avatar, mImageUserAvatar);
         }
-
+        String username = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME, "");
+        if (!TextUtils.isEmpty(username))
+        {
+            mEdtPhone.setText(username);
+        }
         mEdtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -165,6 +184,57 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
 
             }
         });
+
+        SpannableStringBuilder spannable = new SpannableStringBuilder(getString(R.string.string_murloc_self_privacy));
+        //设置文字的前景色
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_blu4)), 4, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //这个一定要记得设置，不然点击不生效
+        mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+        spannable.setSpan(new PrivacyPolicyClick(), 4, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //设置文字的前景色
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_blu4)), 11, 17, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //这个一定要记得设置，不然点击不生效
+        mTvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+        spannable.setSpan(new UserAgreementClick(), 11, 17, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTvUserAgreement.setText(spannable);
+    }
+
+    private class PrivacyPolicyClick extends ClickableSpan {
+        @Override
+        public void onClick(View widget) {
+            //            跳转隐私政策网址
+            Intent intent = new Intent();
+            intent.putExtra("url", Net.PRAVACY_POLICY_URL);
+            intent.putExtra("title", Constants.PRAVACY_POLICY_H5_TITEL);
+            intent.setClass(PhoneQuickLoginActivity.this, WebActivity.class);
+            startActivity(intent);
+
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+//            ds.setColor(ds.linkColor);
+//            ds.setUnderlineText(true);
+        }
+    }
+
+    private class UserAgreementClick extends ClickableSpan {
+        @Override
+        public void onClick(View widget) {
+            // 跳转用户协议网址
+            Intent intent = new Intent();
+            intent.putExtra("url", Net.USER_AGREEMENT_URL);
+            intent.putExtra("title", Constants.USER_AGREEMENT_H5_TITEL);
+            intent.setClass(PhoneQuickLoginActivity.this, WebActivity.class);
+            startActivity(intent);
+
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+//            ds.setColor(ds.linkColor);
+//            ds.setUnderlineText(true);
+        }
     }
 
     @Override
@@ -200,11 +270,10 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
                     LoginResponse thirdPartyLoginResponse = res.getData();
 
                     userId = thirdPartyLoginResponse.getId();                 //用户id
-                    String mobile = thirdPartyLoginResponse.getMobile();      //手机号
+                    String mobile = thirdPartyLoginResponse.getMobile();      //手机号 （用户账号）
                     String nickname = thirdPartyLoginResponse.getNickname();  //昵称
-                    String username = thirdPartyLoginResponse.getUsername();  //用户名
                     String token = res.getToken();
-                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, token);
 
                     getUserInfo();
                 } catch (Exception e) {
@@ -258,9 +327,8 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
                 userId = loginResponse.getId();                 //用户id
                 String mobile = loginResponse.getMobile();      //手机号
                 String nickname = loginResponse.getNickname();  //昵称
-                String username = loginResponse.getUsername();  //用户名
                 String token = res.getToken();
-                SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, token);
                 getUserInfo();
 
                 break;
@@ -380,7 +448,7 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
             mTvLogin.setBackgroundResource(R.drawable.bg_rect_gray_shape);
             mTvLogin.setEnabled(false);
             mTvLogin.setClickable(false);
-        } else if(!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(verifyCode)){
+        } else if (!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(verifyCode)) {
             mTvLogin.setBackgroundResource(R.drawable.btn_oprate_bg);
             mTvLogin.setEnabled(true);
             mTvLogin.setClickable(true);
@@ -402,8 +470,8 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
         switch (v.getId()) {
             case R.id.tv_pwd_login:          //密码登录
                 Intent intent = new Intent();
-                intent.setClass(PhoneQuickLoginActivity.this,LoginActivity.class);
-                startActivityForResult(intent,LOGIN_SUCCESS_REQUEST_CODE);
+                intent.setClass(PhoneQuickLoginActivity.this, LoginActivity.class);
+                startActivityForResult(intent, LOGIN_SUCCESS_REQUEST_CODE);
                 break;
             case R.id.tv_get_verification_code:
 
@@ -527,9 +595,8 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
         super.onResume();
 
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
-        if (!TextUtils.isEmpty(avatar))
-        {
-            GlideUtil.loadImage(PhoneQuickLoginActivity.this,avatar,mImageUserAvatar);
+        if (!TextUtils.isEmpty(avatar)) {
+            GlideUtil.loadImage(PhoneQuickLoginActivity.this, avatar, mImageUserAvatar);
         }
 
     }
@@ -537,9 +604,12 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == LOGIN_SUCCESS_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == LOGIN_SUCCESS_REQUEST_CODE && resultCode == RESULT_OK) {
 
             PhoneQuickLoginActivity.this.finish();
+        }else if(requestCode == REQUEST_CODE_USER_REGISTER_SUCCESS && resultCode == RESULT_OK){
+
+            finish();
         }
 
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);

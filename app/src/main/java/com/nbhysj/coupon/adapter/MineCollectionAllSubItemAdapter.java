@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -31,11 +32,12 @@ public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCo
     private List<String>  mineCollectionPhotoUrlList;
 
     private Context mContext;
+    private MineCollectionAllItemListener collectionAllItemListener;
 
-
-    public MineCollectionAllSubItemAdapter(Context mContext) {
+    public MineCollectionAllSubItemAdapter(Context mContext,MineCollectionAllItemListener collectionAllItemListener) {
 
         this.mContext = mContext;
+        this.collectionAllItemListener = collectionAllItemListener;
     }
 
     public void setMineCollectionPhotoUrlList(List<String> mineCollectionPhotoUrlList) {
@@ -71,6 +73,15 @@ public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCo
                 holder.mViewMineCollectionAllSubPictureHeader.setVisibility(View.GONE);
             }
 
+            holder.mLlytCollectionPictureItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    collectionAllItemListener.setMineCollectionAllItemListener(position);
+
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,10 +101,17 @@ public class MineCollectionAllSubItemAdapter extends RecyclerView.Adapter<MineCo
         View mViewMineCollectionAllSubPictureFoot;
         @BindView(R.id.view_mine_collection_all_sub_picture_header)
         View mViewMineCollectionAllSubPictureHeader;
+        @BindView(R.id.llyt_collection_picture_item)
+        LinearLayout mLlytCollectionPictureItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    interface MineCollectionAllItemListener{
+
+        void setMineCollectionAllItemListener(int position);
     }
 }

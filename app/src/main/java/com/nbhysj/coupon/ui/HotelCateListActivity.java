@@ -19,9 +19,11 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -30,6 +32,7 @@ import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.QueryByTicketResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.HotelPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
@@ -39,6 +42,7 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +73,9 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
     //美食转发
     @BindView(R.id.img_fine_food_forward)
     ImageView mImgFineFoodForward;
+    //赞无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
     private HotelBangDanListAdapter hotelBangDanListAdapter;
     private LinearLayoutManager scenicSpotsLinearLayoutManager;
     //酒店列表
@@ -76,11 +83,11 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
     View header;
     private ImageView mImgFineFoodHeader;
 
-    private int cateId;
+    private int mCateId;
 
     private String mSortStr;
 
-    private int mPage = 1;
+    private int mPageNo = 1;
     private int mPageSize = 10;
     //纬度
     String latitude;
@@ -89,6 +96,12 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
 
     //图片路径
     private String photoUrl;
+
+    //总条数
+    private int mTotalPageCount;
+
+    private boolean isOnLoadMore = false;
+
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -101,11 +114,11 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        cateId = getIntent().getIntExtra("cateId",0);
+        mCateId = getIntent().getIntExtra("cateId", 0);
         mSortStr = getIntent().getStringExtra("sortStr");
         photoUrl = getIntent().getStringExtra("photoUrl");
-        latitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
-        longitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
+        latitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE, "");
+        longitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE, "");
         if (mHotelList == null) {
 
             mHotelList = new ArrayList<>();
@@ -142,8 +155,7 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
         header = LayoutInflater.from(this).inflate(R.layout.layout_fine_food_header_item, view, false);
         mImgFineFoodHeader = header.findViewById(R.id.img_fine_food_header);
 
-        if (!TextUtils.isEmpty(photoUrl))
-        {
+        if (!TextUtils.isEmpty(photoUrl)) {
 
             GlideUtil.loadImage(mContext, photoUrl, mImgFineFoodHeader);
         }
@@ -189,11 +201,28 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
                 }
             }
 
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int lastVisiableItemPosition = scenicSpotsLinearLayoutManager.findFirstVisibleItemPosition();
+            }
+        });
+
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnLoadMore = false;
+                        mPageNo = 1;
+                        mHotelList.clear();
+                        hotelBangDanListAdapter.notifyDataSetChanged();
+                     //   showProgressDialog(HotelCateListActivity.this);
+                        findHotelHomestayByCate();
+
+                    }
+                }, 100);
             }
         });
 
@@ -204,14 +233,14 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
 
                     @Override
                     public void run() {
-                        // isOnLoadMore = true;
+                        isOnLoadMore = true;
                         try {
-                           /* if (mTotalCount == merchantEntityList.size()) {
+                            if (mTotalPageCount == mHotelList.size()) {
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
-                                mPage++;
-                                getMerchantList();
-                            }*/
+                                mPageNo++;
+                                findHotelHomestayByCate();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -241,24 +270,7 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
 
     @Override
     public void findHotelByCateResult(BackResult<ScenicSpotResponse> res) {
-        dismissProgressDialog();
-        switch (res.getCode()) {
-            case Constants.SUCCESS_CODE:
-                try {
 
-                    List<MchTypeBean> scenicSpotList = res.getData().getResult();
-                    mHotelList.addAll(scenicSpotList);
-                    hotelBangDanListAdapter.setHotelBangDanList(mHotelList);
-                    hotelBangDanListAdapter.notifyDataSetChanged();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                showToast(HotelCateListActivity.this, Constants.getResultMsg(res.getMsg()));
-                break;
-        }
     }
 
     @Override
@@ -305,7 +317,7 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
     public void showMsg(String msg) {
 
         dismissProgressDialog();
-        showToast(HotelCateListActivity.this,Constants.getResultMsg(msg));
+        showToast(HotelCateListActivity.this, Constants.getResultMsg(msg));
     }
 
     @OnClick({R.id.iv_back})
@@ -318,17 +330,78 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
                 break;
         }
     }
+
+    @Override
+    public void getHotelListByCateIdResult(BackResult<MchCateListResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+
+                    // mHotelList.addAll(scenicSpotList);
+              /*      hotelBangDanListAdapter.setHotelBangDanList(mHotelList);
+                    hotelBangDanListAdapter.notifyDataSetChanged();*/
+
+
+                    if (isOnLoadMore) {
+
+                        mSmartRefreshLayout.finishLoadMore();
+                        String bannerUrl = res.getData().getBanner();
+                        if (!TextUtils.isEmpty(bannerUrl)) {
+                            GlideUtil.loadImage(mContext, bannerUrl, mImgFineFoodHeader);
+                        }
+                        hotelBangDanListAdapter.setHeaderView(header);
+
+                    } else {
+
+                        mHotelList.clear();
+                        hotelBangDanListAdapter.notifyDataSetChanged();
+                        mSmartRefreshLayout.finishRefresh();
+                        mSmartRefreshLayout.setNoMoreData(false);
+                    }
+
+                    MchCateListResponse mchCateListResponse = res.getData();
+
+                    List<MchTypeBean> scenicSpotList = mchCateListResponse.getMchs();
+                    BasePaginationResult paginationResult = mchCateListResponse.getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+
+                    if (mTotalPageCount == 0) {
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                    } else {
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
+
+                    if (scenicSpotList != null)
+                    {
+                        mHotelList.addAll(scenicSpotList);
+                    }
+                    hotelBangDanListAdapter.setHotelBangDanList(mHotelList);
+                    hotelBangDanListAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(HotelCateListActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
     public void findHotelHomestayByCate() {
         if (validateInternet()) {
 
             HashMap<String, String> scenicSpotByCateRequest = new HashMap<>();
 
             scenicSpotByCateRequest.put("Sorting", mSortStr);
-            scenicSpotByCateRequest.put("page", String.valueOf(mPage));
+            scenicSpotByCateRequest.put("page", String.valueOf(mPageNo));
             scenicSpotByCateRequest.put("pageSize", String.valueOf(mPageSize));
-            scenicSpotByCateRequest.put("latitude",latitude);
-            scenicSpotByCateRequest.put("longitude",longitude);
-            mPresenter.findHotelByCate(scenicSpotByCateRequest);
+            scenicSpotByCateRequest.put("latitude", latitude);
+            scenicSpotByCateRequest.put("longitude", longitude);
+            scenicSpotByCateRequest.put("cateId", String.valueOf(mCateId));
+            mPresenter.getHotelListByCateId(scenicSpotByCateRequest);
         }
     }
 }

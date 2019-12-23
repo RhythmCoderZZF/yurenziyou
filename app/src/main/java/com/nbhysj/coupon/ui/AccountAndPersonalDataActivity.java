@@ -229,7 +229,7 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 int nicknameLength = charSequence.length();
-                mTvInputLimitation.setText(nicknameLength + " / 15");
+                mTvInputLimitation.setText(nicknameLength + " / 6");
             }
 
             @Override
@@ -297,13 +297,12 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
                             public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
 
                                 Matisse.from(AccountAndPersonalDataActivity.this)
-                                        .choose(MimeType.ofAll(), false)
+                                        .choose(MimeType.ofImage(), false)
                                         .countable(true)
                                         .capture(false)
                                         .captureStrategy(
                                                 new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
                                         .maxSelectable(1)
-
                                         .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                         .gridExpectedSize(
                                                 getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
@@ -344,6 +343,7 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
                             }
                         }).start();
                 break;
+
             default:
                 break;
         }

@@ -4,8 +4,10 @@ package com.nbhysj.coupon.model;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
+import com.nbhysj.coupon.model.request.FineFoodCommentRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -59,5 +61,15 @@ public class FineFoodModel implements FineFoodContract.Model {
     @Override
     public Observable<BackResult<MchCateListResponse>> findFoodListByCateId(HashMap<String, String> map) {
         return Api.getInstance().apiService.findFoodListByCateId(map).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<FineFoodCommentInitResponse>> getFoodCommentIndex(int mchId) {
+        return Api.getInstance().apiService.getFoodCommentIndex(mchId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> fineFoodComment(FineFoodCommentRequest fineFoodCommentRequest) {
+        return Api.getInstance().apiService.fineFoodComment(fineFoodCommentRequest).compose(RxSchedulers.io_main());
     }
 }

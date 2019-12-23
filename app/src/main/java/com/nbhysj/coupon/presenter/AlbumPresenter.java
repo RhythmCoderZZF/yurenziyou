@@ -5,6 +5,7 @@ import com.nbhysj.coupon.contract.CommentContract;
 import com.nbhysj.coupon.model.request.CreateFavoritesRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchDeleteContentRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchMoveContentRequest;
+import com.nbhysj.coupon.model.request.FavoritesDeleteRequest;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
@@ -53,6 +54,11 @@ public class AlbumPresenter extends AlbumContract.Presenter {
     @Override
     public void getFavoritesList(int page, int pageSize) {
         mRxManager.add(mModel.getFavoritesList(page,pageSize).subscribe(res -> mView.getFavoritesListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void delFavoritesRequest(FavoritesDeleteRequest favoritesDeleteRequest) {
+        mRxManager.add(mModel.delFavoritesRequest(favoritesDeleteRequest).subscribe(res -> mView.getFavoritesListResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

@@ -71,7 +71,7 @@ public class MineFollowFansHeaderListAdapter extends RecyclerView.Adapter<Recycl
             final int pos = getRealPosition(holder);
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
-                UserFansFollowBean userFansFollow = userFansFollowList.get(position - 1);
+                UserFansFollowBean userFansFollow = userFansFollowList.get(pos);
                 int fansId = userFansFollow.getFansId();
                 String avatarUrl = userFansFollow.getAvater();
                 String fansName = userFansFollow.getFansName();
@@ -98,7 +98,7 @@ public class MineFollowFansHeaderListAdapter extends RecyclerView.Adapter<Recycl
                     @Override
                     public void onClick(View view) {
 
-                        followListener.setFollowListener(fansId,position - 1);
+                        followListener.setFollowListener(fansId,pos);
 
                     }
                 });
@@ -115,7 +115,7 @@ public class MineFollowFansHeaderListAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        return mHeaderView != null ? userFansFollowList.size() + 1:userFansFollowList.size();
+        return mHeaderView != null ? userFansFollowList.size() + 1: userFansFollowList.size();
     }
 
     @Override

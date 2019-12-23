@@ -23,6 +23,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundResponse;
 import com.nbhysj.coupon.presenter.OrderRefundPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -248,7 +249,7 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
                     goodsTotalNum = orderRefundInitResponse.getSumNum();  //商品总数量
                     unitPrice = orderRefundInitResponse.getPrice();  //商品单价
                     refundPercentage = orderRefundInitResponse.getRefundPercentage();
-                    refundNum = goodsTotalNum - usedNum;
+                    refundNum = validNum;
                     //用车类型
                     String goodsCarType = GoodsTypeEnum.GOODS_CAR.getValue();
                     //普通商品类型
@@ -256,6 +257,7 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
 
                     String deductNote = orderRefundInitResponse.getDeductNote();  //折扣信息
                     deductPrice = orderRefundInitResponse.getDeductPrice();  //减免优惠
+                    deductPriceDouble = Double.parseDouble(deductPrice);
                     if (!goodsType.equals(goodsCarType) || goodsType.equals(goodsTicketType)) {
                         mRlytGoodsTicket.setVisibility(View.VISIBLE);
                         mLlytOrderRefundVehicleUseItem.setVisibility(View.GONE);
@@ -267,10 +269,9 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
 
                         mTvGoodsTitle.setText(title);
                         if (!TextUtils.isEmpty(unitPrice)) {
-                            int sumNum = validNum + usedNum;
-                            goodsTotalPrice = Double.parseDouble(unitPrice) * sumNum;
+                            goodsTotalPrice = Double.parseDouble(unitPrice) * refundNum;
                             mTvRefundGoodsTotalPrice.setText("¥ " + goodsTotalPrice);
-                            mTvGoodsNum.setText("x" + sumNum);
+                            mTvGoodsNum.setText("x" + refundNum);
                         }
                         mTvGoodsRefundNum.setText(String.valueOf(validNum));
                         mTvGoodsItemPrice.setText(unitPrice);
@@ -312,15 +313,18 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
     }
 
     @Override
-    public void orderPartialRefundSubmitResult(BackResult res) {
+    public void orderPartialRefundSubmitResult(BackResult<OrderRefundResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
-
-                showToast(PartialApplyForRefundActivity.this,"退款成功");
+                OrderRefundResponse orderRefundResponse = res.getData();
+                String oredrRefundNo = orderRefundResponse.getOrderRefundNo();
                 setResult(RESULT_OK);
                 finish();
-
+                Intent intent = new Intent();
+                intent.putExtra("orderRefundNo", oredrRefundNo);
+                intent.setClass(mContext, RefundDetailsActivity.class);
+                mContext.startActivity(intent);
                 break;
             case Constants.USER_NOT_LOGIN_CODE:
                 toActivity(PhoneQuickLoginActivity.class);
@@ -369,7 +373,6 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
 
         if (validateInternet()) {
 
-
             mDialog.setTitle("正在退款...");
 
             //退款理由
@@ -385,7 +388,7 @@ public class PartialApplyForRefundActivity extends BaseActivity<OrderRefundPrese
             partialApplyForRefundRequest.setOrderGoodsId(orderGoodsId);
             //扣款信息
             partialApplyForRefundRequest.setDiscountPrice(deductPrice);
-            deductPriceDouble = Double.parseDouble(deductPrice);
+
 
             //商品退款总金额
             partialApplyForRefundRequest.setGoodsRefundPrice(String.valueOf(goodsRefundPrice));

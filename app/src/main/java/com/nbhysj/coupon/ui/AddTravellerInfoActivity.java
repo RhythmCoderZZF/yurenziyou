@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
 import com.nbhysj.coupon.model.response.TravellerBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.presenter.FrequentlyUsedInfoPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.widget.ToggleButton;
 
@@ -55,12 +56,13 @@ public class AddTravellerInfoActivity extends BaseActivity<FrequentlyUsedInfoPre
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_adding_passenger_information;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        ToolbarHelper.setBar(AddTravellerInfoActivity.this, getResources().getString(R.string.str_adding_passenger_information), R.mipmap.nav_ico_back_black);
+        ToolbarHelper.setBar(AddTravellerInfoActivity.this, getResources().getString(R.string.str_adding_passenger_information), R.mipmap.icon_left_arrow_black);
         userId = getSharedPreferencesUserId();
         travellerBean = (TravellerBean) getIntent().getSerializableExtra("travellerBean");
         if (travellerBean != null) {
@@ -182,6 +184,21 @@ public class AddTravellerInfoActivity extends BaseActivity<FrequentlyUsedInfoPre
 
     @Override
     public void addUserContactsResult(BackResult res) {
+
+    }
+
+    @Override
+    public void addRecipientsInfoResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateRecipientsInfoResult(BackResult res) {
+
+    }
+
+    @Override
+    public void deleteRecipientsResult(BackResult res) {
 
     }
 

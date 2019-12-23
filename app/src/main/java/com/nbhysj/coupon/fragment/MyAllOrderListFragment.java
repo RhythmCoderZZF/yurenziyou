@@ -66,6 +66,8 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
     private final static int ORDER_ALL_REFUND_REQUEST_CODE = 0;
 
     private boolean visibleToUser;
+
+    private int mPosition;
     public static MyAllOrderListFragment newInstance(String content) {
         MyAllOrderListFragment fragment = new MyAllOrderListFragment();
 
@@ -133,8 +135,8 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
         myOrderListAdapter = new MyOrderListAdapter(getActivity(), new MyOrderListAdapter.MyOrderListener() {
             @Override
             public void setOrderDeleteListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
-
                 mOrderTypeEntity = orderTypeEntity;
+                mPosition = position;
                 if(orderDeleteOprateDialog == null)
                 {
                     orderDeleteOprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_order));
@@ -174,8 +176,9 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
             }
 
             @Override
-            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderCancelListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
                 mOrderTypeEntity = orderTypeEntity;
+                mPosition = position;
                 if(orderCancelOprateDialog == null)
                 {
                     orderCancelOprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_cancel_the_order));
@@ -369,6 +372,7 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
             case Constants.SUCCESS_CODE:
                 try {
 
+                    mOrderTypeEntity = orderAllList.get(mPosition);
                     orderAllList.remove(mOrderTypeEntity);
                     if (orderAllList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
@@ -397,7 +401,8 @@ public class MyAllOrderListFragment extends BaseFragment<OrderListPresenter, Ord
             case Constants.SUCCESS_CODE:
                 try {
 
-                        orderAllList.remove(mOrderTypeEntity);
+                    mOrderTypeEntity = orderAllList.get(mPosition);
+                    orderAllList.remove(mOrderTypeEntity);
                     if (orderAllList.size() > 0) {
                         mRlytNoOrderData.setVisibility(View.GONE);
 

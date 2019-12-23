@@ -3,6 +3,7 @@ package com.nbhysj.coupon.presenter;
 import com.nbhysj.coupon.contract.MineContract;
 import com.nbhysj.coupon.model.request.CollectionBatchMchDeleteRequest;
 import com.nbhysj.coupon.model.request.CollectionBatchPostsDeleteRequest;
+import com.nbhysj.coupon.model.request.PostDeleteRequest;
 
 /**
  * @auther：hysj created on 2019/04/03
@@ -53,5 +54,10 @@ public class MinePresenter extends MineContract.Presenter {
     @Override
     public void getCollectionMsgList(int pageNo, int pageSize) {
         mRxManager.add(mModel.getCollectionMsgList(pageNo,pageSize).subscribe(res -> mView.getCollectionMsgListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void deletePost(PostDeleteRequest postDeleteRequest) {
+        mRxManager.add(mModel.deletePost(postDeleteRequest).subscribe(res -> mView.deletePostResult(res), e -> mView.showMsg(e.getMessage())));
     }
 }

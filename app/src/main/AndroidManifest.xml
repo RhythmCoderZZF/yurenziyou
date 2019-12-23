@@ -82,14 +82,28 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
-        <activity android:name=".ui.ScenicSpotCateListActivity"
+        <activity android:name=".ui.GeneratePicturesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.FineFoodEvaluateActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.FineFoodCateListActivity"
+        <activity android:name=".ui.StrategyWebActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.AskAndAnswerDetailActivity"
+        <activity android:name=".ui.ReportOtherActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.MyAnswerDetailActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ui.ReportActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.ScenicSpotCateListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FineFoodCateListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AskAndAnswerDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MyAnswerDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ZanAndCollectionActivity"
             android:screenOrientation="portrait" />
@@ -118,6 +132,11 @@
             android:name=".ui.CollectionDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.OthersCollectionDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.OthersAlbumDetailsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.FoodDetailActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -145,9 +164,6 @@
             android:name=".ui.LetMeAnswerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.QuestionsAndAnswersDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.PostCollectionActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -161,6 +177,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.PostRecommendDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TravelAssistantRoutePlanMapActivity"
@@ -373,9 +390,7 @@
             android:name=".ui.MoreQuestionsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".ui.AnswerQuestionsActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.AskQuestionsActivity"
             android:screenOrientation="portrait" />
@@ -421,7 +436,10 @@
             <!--  -->
 
         </activity>
-
+        <activity
+            android:name=".ui.VideoPlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         <meta-data
             android:name="android.vendor.full_screen"
             android:value="true" />
@@ -451,10 +469,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             -->
-        </activity> <!-- 名片 -->
-        <activity
-            android:name=".ui.BusinessCardActivity"
-            android:screenOrientation="portrait" />
+        </activity>
         <activity
             android:name=".ui.CityChooseListActivity"
             android:screenOrientation="portrait" />
@@ -465,7 +480,7 @@
             android:name=".ui.AddFrequentContactsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.RecipientInformationActivity"
+            android:name=".ui.AddRecipientInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -500,7 +515,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.OneKeyLoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+          />
         <activity
             android:name=".ui.NearbyCardDetailActivity"
             android:screenOrientation="portrait" />
@@ -509,19 +525,23 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.FindPasswordActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.CountryCodeSelectActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.OneClickLoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.UserRegistrationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.PhoneQuickLoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.LoginActivity"
             android:launchMode="singleTask"

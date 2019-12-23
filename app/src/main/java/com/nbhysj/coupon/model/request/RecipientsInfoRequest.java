@@ -6,11 +6,13 @@ package com.nbhysj.coupon.model.request;
  */
 public class RecipientsInfoRequest {
 
-    //数据id
     private int id;
 
+    //用户id
+    private int userId;
+
     //收货地址
-    private int address;
+    private String address;
 
     //省
     private String province;
@@ -24,8 +26,13 @@ public class RecipientsInfoRequest {
     //手机号
     private String mobile;
 
+    //标签
+    private String tag;
+
     //收货人
     private String consignee;
+
+    private int defaultStatus;
 
     public int getId() {
         return id;
@@ -35,11 +42,11 @@ public class RecipientsInfoRequest {
         this.id = id;
     }
 
-    public int getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(int address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -81,5 +88,29 @@ public class RecipientsInfoRequest {
 
     public void setConsignee(String consignee) {
         this.consignee = consignee;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public int getDefaultStatus() {
+        return defaultStatus;
+    }
+
+    public void setDefaultStatus(int defaultStatus) {
+        this.defaultStatus = defaultStatus;
     }
 }

@@ -11,7 +11,7 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/line_bg"
+        android:background="@color/white"
         app:srlAccentColor="#00000000"
         app:srlEnableHeaderTranslationContent="true"
         app:srlEnableLoadMore="true"
@@ -25,11 +25,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_mch_cate_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
+        <include
+            layout="@layout/layout_nodata"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            ></include>
+
+        </RelativeLayout>
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="@dimen/dp_10"
-                android:src="@mipmap/icon_white_fine_food_collection" />
+                android:src="@mipmap/icon_white_fine_food_collection"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/img_fine_food_forward"
@@ -79,7 +94,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/dp_15"
                 android:padding="@dimen/dp_10"
-                android:src="@mipmap/icon_white_forward" />
+                android:src="@mipmap/icon_white_forward"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </RelativeLayout>

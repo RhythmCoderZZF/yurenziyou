@@ -20,6 +20,7 @@ public class HomePageSubTopicTagBean implements Serializable {
     private int id;
     private int collectionCount;
     private int commentCount;
+    private int isAttention;
     private int hits;
     private int postsType;
     private int userId;
@@ -144,6 +145,14 @@ public class HomePageSubTopicTagBean implements Serializable {
 
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public int getIsAttention() {
+        return isAttention;
+    }
+
+    public void setIsAttention(int isAttention) {
+        this.isAttention = isAttention;
     }
 
     public int getHits() {

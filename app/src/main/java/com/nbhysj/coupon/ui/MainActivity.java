@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
@@ -16,6 +18,7 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.os.Bundle;
@@ -39,6 +42,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.fragment.CameraFragment;
 import com.nbhysj.coupon.fragment.HomeFragment;
 import com.nbhysj.coupon.fragment.MineFragment;
@@ -51,6 +55,9 @@ import com.nbhysj.coupon.view.BottomNavigationViewHelper;
 import com.umeng.socialize.UMShareAPI;
 
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -61,7 +68,7 @@ import java.util.List;
  * description：主页面
  */
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private FragmentTransaction ft;
+
     private Fragment CURRENT_FRAGMENT;
     private List<Fragment> fragments;
     /* @BindView(R.id.llyt_main)
@@ -77,11 +84,22 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private AMapLocationClientOption locationOption = null;
     private String mLatitude = "";
     private String mLongitude = "";
+    private int selectIndex = 0;
+
+    private int currentItem = 0;
+    //是否是 我的收藏 我的菜单返回
+    private boolean isBackMineModule;
+    private MyBroadcastReceiver myBroadcastReceiver;
+    private HomeFragment homeFragment;
+    private ShoppingMallFragment shoppingMallFragment;
+    private CameraFragment cameraFragment;
+    private TravelAssistantFragment travelAssistantFragment;
+    private MineFragment mineFragment;
     private enum TabFragment {
         main(R.id.navigation_main, HomeFragment.class),
         house(R.id.navigation_house, ShoppingMallFragment.class),
         camera(R.id.navigation_camera, CameraFragment.class),
-        footprint(R.id.navigation_footprint, TravelAssistantFragment.class),
+        footprint(R.id.navigation_travel_assistant, TravelAssistantFragment.class),
         mine(R.id.navigation_mine, MineFragment.class),
         ;
 
@@ -121,6 +139,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             for (TabFragment fragment : values()) {
                 fragment.fragment = null;
             }
+
         }
     }
 
@@ -149,8 +168,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     public void initView() {
-
-       int currentItem = getIntent().getIntExtra("currentItem",0);
+        SharedPreferencesUtils.putData("isBackMineModule",false);
+        currentItem = getIntent().getIntExtra("currentItem", 0);
+        isBackMineModule = getIntent().getBooleanExtra("isBackMineModule",false);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -159,11 +179,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
 
         fragments = new ArrayList<>();
-        fragments.add(new HomeFragment());
-        fragments.add(new ShoppingMallFragment());
-        fragments.add(new CameraFragment());
-        fragments.add(new TravelAssistantFragment());
-        fragments.add(new MineFragment());
+        homeFragment = new HomeFragment();
+        shoppingMallFragment = new ShoppingMallFragment();
+        cameraFragment = new CameraFragment();
+        travelAssistantFragment = new TravelAssistantFragment();
+        mineFragment = new MineFragment();
+        fragments.add(homeFragment);
+        fragments.add(shoppingMallFragment);
+        fragments.add(cameraFragment);
+        fragments.add(travelAssistantFragment);
+        fragments.add(mineFragment);
         //  msgListCountResult();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -187,7 +212,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                     Manifest.permission.RECORD_AUDIO};
             ActivityCompat.requestPermissions(this, mPermissionList, 123);
         }
-      //  EventBus.getDefault().register(this);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.BROADCAST_ACTION_MAIN_BACK);
+        myBroadcastReceiver = new MyBroadcastReceiver();
+        registerReceiver(myBroadcastReceiver, intentFilter);
+
 
     }
 
@@ -211,7 +241,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     public void goFragment(int index) {
 
-        ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (null != CURRENT_FRAGMENT) {
             ft.hide(CURRENT_FRAGMENT);
         }
@@ -221,23 +251,80 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             fragment = fragments.get(index);
         }
         CURRENT_FRAGMENT = fragment;
-        if (!fragment.isAdded()) {
+        if (!fragment.isAdded())
+        {
+
             ft.add(R.id.frame, fragment, fragment.getClass().getName());
+           // ft.show(fragment);
         } else {
             ft.show(fragment);
         }
-        ft.commit();
+        ft.commitAllowingStateLoss();
+        getSupportFragmentManager().executePendingTransactions();
+
+        // com.nbhysj.coupon.fragment.HomeFragment
     }
+
+    //切换Fragment
+    private void switchFragment(int lastfragment,int index) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = fragments.get(lastfragment);
+        transaction.hide(fragment);//隐藏上个Fragment
+        if (fragment.isAdded() == false) {
+            transaction.add(R.id.frame,fragment);
+
+
+        }
+        transaction.show(fragment).commitAllowingStateLoss();
+
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-       /* getSupportFragmentManager()
-                .beginTransaction()
-                //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.framelayout, TabFragment.from(item.getItemId()).fragment())
-                .commit();*/
-        int index = 0;
+       int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.navigation_main:
+               /* Fragment fragmentA = fragments.get(0);
+                hideAllFragment(getSupportFragmentManager());
+                addFragment(getSupportFragmentManager(), fragmentA, "A");
+                showFragment(getSupportFragmentManager(), fragmentA);*/
+               goFragment(0);
+                break;
 
+            case R.id.navigation_house:
+               /* Fragment fragmentB = fragments.get(1);
+                hideAllFragment(getSupportFragmentManager());
+                addFragment(getSupportFragmentManager(), fragmentB, "B");
+                showFragment(getSupportFragmentManager(), fragmentB);*/
+                goFragment(1);
+                break;
+
+            case R.id.navigation_camera:
+
+                toActivity(PublishNoteActivity.class);
+
+                break;
+            case R.id.navigation_travel_assistant:
+                goFragment(3);
+
+                break;
+
+            case R.id.navigation_mine:
+
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                if (TextUtils.isEmpty(token)) {
+
+                    toActivity(PhoneQuickLoginActivity.class);
+                    navigation.setSelectedItemId(TabFragment.values()[selectIndex].menuId);
+                    return false;
+                }
+
+                goFragment(4);
+                break;
+        }
+        return true;
+       /* int index = 0;
         String title = item.getTitle().toString();
         if (!TextUtils.isEmpty(title)) {
             if (!itemTitle.equals(title)) {
@@ -249,39 +336,35 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                     index = 3;
                 } else if (title.equals("我的")) {
                     index = 4;
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                    if (TextUtils.isEmpty(token)) {
+
+                        toActivity(PhoneQuickLoginActivity.class);
+                        navigation.setSelectedItemId(TabFragment.values()[selectIndex].menuId);
+                        return false;
+                    }
                 }
                 itemTitle = title;
-                ft = getSupportFragmentManager().beginTransaction();
-                if (null != CURRENT_FRAGMENT) {
-                    ft.hide(CURRENT_FRAGMENT);
-                }
-                Fragment fragment = getSupportFragmentManager()
-                        .findFragmentByTag(fragments.get(index).getClass().getName());
-                if (fragment == null) {
-                    fragment = fragments.get(index);
-                }
-                CURRENT_FRAGMENT = fragment;
-                if (!fragment.isAdded()) {
-                    ft.add(R.id.frame, fragment, fragment.getClass().getName());
-                } else {
-                    ft.show(fragment);
-                }
-                ft.commit();
+                selectIndex = index;
+                goFragment(index);
             }
         } else {
-
             toActivity(PublishNoteActivity.class);
 
         }
-        return true;
+        return true;*/
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        SharedPreferencesUtils.putData("isBackMineModule",false);
         TabFragment.onDestroy();
         UMShareAPI.get(this).release();
+        if (myBroadcastReceiver != null) {
+            unregisterReceiver(myBroadcastReceiver);
+        }
     }
 
 
@@ -469,11 +552,20 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
+        boolean isBackMineModule = (boolean)SharedPreferencesUtils.getData("isBackMineModule",false);
+        String name = fragments.get(selectIndex).getClass().getName();
+        if (name.equals("com.nbhysj.coupon.fragment.MineFragment")) {
+            String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+            if (TextUtils.isEmpty(token))
+            {
+                goFragment(0);
+                navigation.setSelectedItemId(TabFragment.values()[0].menuId);
+            }
+        } /*else if (isBackMineModule) {
+            SharedPreferencesUtils.putData("isBackMineModule",false);
+            goFragment(4);
+            navigation.setSelectedItemId(TabFragment.values()[4].menuId);
 
-     /*   String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
-        if (TextUtils.isEmpty(token)) {
-            goFragment(0);
-            navigation.setSelectedItemId(TabFragment.values()[0].menuId);
         }*/
     }
 
@@ -523,6 +615,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         final float scale = getApplication().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+
     /**
      * 初始化定位
      */
@@ -572,7 +665,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         locationClient.startLocation();
     }
 
-
     /**
      * 定位监听
      */
@@ -583,7 +675,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 mLongitude = String.valueOf(location.getLongitude());
                 mLatitude = String.valueOf(location.getLatitude());
 
-                SharedPreferencesUtils.saveLongitudeAndLatitudeData(mLatitude,mLongitude);
+                SharedPreferencesUtils.saveLongitudeAndLatitudeData(mLatitude, mLongitude);
              /*   StringBuffer sb = new StringBuffer();
                 //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
                 if(location.getErrorCode() == 0){
@@ -632,7 +724,31 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
     };
 
-   /* @Subscribe
+    public class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            String action = intent.getAction();
+            intent.getStringExtra("");
+            if (Constants.BROADCAST_ACTION_MAIN_BACK.equals(action)) {
+                String actionOprate = intent.getStringExtra(Constants.BROADCAST_ACTION_ARG_OPRATE);
+
+                if(actionOprate.equals(Constants.BROADCAST_ACTION_BACK_MY_COLLECTION))
+                {
+                    goFragment(4);
+                    navigation.setSelectedItemId(TabFragment.values()[4].menuId);
+                }else if(actionOprate.equals(Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL)){
+
+                    goFragment(1);
+                    navigation.setSelectedItemId(TabFragment.values()[1].menuId);
+                }
+            }
+        }
+    }
+
+
+
+  /*  @Subscribe
     public void onEvent(String oprate) {
 
          if(oprate.equals("backHomePage"))
@@ -645,4 +761,49 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
              navigation.setSelectedItemId(TabFragment.values()[4].menuId);
          }
     }*/
+
+    private void hideAllFragment(FragmentManager fm) {
+        FragmentTransaction ft = fm.beginTransaction();
+        if (!homeFragment.isHidden())
+        {
+            ft.hide(homeFragment);
+        }
+        if (!shoppingMallFragment.isHidden())
+        {
+            ft.hide(shoppingMallFragment);
+        }
+
+        if (!cameraFragment.isHidden())
+        {
+            ft.hide(cameraFragment);
+        }
+
+        if (!travelAssistantFragment.isHidden())
+        {
+            ft.hide(travelAssistantFragment);
+        }
+
+        if (!mineFragment.isHidden())
+        {
+            ft.hide(mineFragment);
+        }
+        ft.commit();
+    }
+
+    private void addFragment(FragmentManager fm, Fragment fragment, String tag) {
+        if (!fragment.isAdded() && null == fm.findFragmentByTag(tag))
+        {
+            FragmentTransaction ft = fm.beginTransaction();
+            fm.executePendingTransactions();
+            ft.add( R.id.frame, fragment, tag );
+            ft.commit();
+        }
+    }
+
+    private void showFragment(FragmentManager fm, Fragment fragment)
+    {
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.show(fragment);
+        ft.commit();
+    }
 }

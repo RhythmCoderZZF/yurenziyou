@@ -3,6 +3,7 @@ package com.nbhysj.coupon.presenter;
 import com.nbhysj.coupon.contract.FrequentlyUsedInfoContract;
 import com.nbhysj.coupon.model.request.ContactsInfoRequest;
 import com.nbhysj.coupon.model.request.DeleteTravellerInfoRequest;
+import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
 import com.nbhysj.coupon.model.request.TravellerInfoRequest;
 
 /**
@@ -59,6 +60,21 @@ public class FrequentlyUsedInfoPresenter extends FrequentlyUsedInfoContract.Pres
     @Override
     public void getRecipientsInfoList(int userId, String mobile, int page, int pageSize) {
         mRxManager.add(mModel.getRecipientsInfoList(userId, mobile, page, pageSize).subscribe(res -> mView.getRecipientsInfoListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void addRecipientsInfo(RecipientsInfoRequest recipientsInfoRequest) {
+        mRxManager.add(mModel.addRecipientsInfo(recipientsInfoRequest).subscribe(res -> mView.addRecipientsInfoResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void updateRecipientsInfo(RecipientsInfoRequest recipientsInfoRequest) {
+        mRxManager.add(mModel.updateRecipientsInfo(recipientsInfoRequest).subscribe(res -> mView.updateRecipientsInfoResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
+    public void deleteRecipientsInfo(DeleteTravellerInfoRequest deleteTravellerInfoRequest) {
+        mRxManager.add(mModel.deleteRecipientsInfo(deleteTravellerInfoRequest).subscribe(res -> mView.deleteRecipientsResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

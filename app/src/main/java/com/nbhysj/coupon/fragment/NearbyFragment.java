@@ -73,6 +73,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     private String mLongitude = "";
     private HomePageSubTopicTagBean mHomePageSubTopicTagBean;
     private boolean visibleToUser;
+    private int mUserId;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_nearby;
@@ -213,6 +214,7 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
             @Override
             public void setPostFollowListener(HomePageSubTopicTagBean homePageSubTopicTagBean,int userId) {
                 mHomePageSubTopicTagBean = homePageSubTopicTagBean;
+                mUserId = userId;
                 userFollow(userId);
             }
         });
@@ -308,18 +310,19 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
                     FollowUserStatusResponse followStatusResponse = res.getData();
                     int attentionStatus = followStatusResponse.getFollowStatus();
 
-                    if(attentionStatus == 0)
+                    if(nearbyCardList != null && nearbyCardList.size() > 0)
                     {
-                        mHomePageSubTopicTagBean.setLove(false);
-
-                    } else if(attentionStatus == 1)
-                    {
-                        mHomePageSubTopicTagBean.setLove(true);
+                        for (int i = 0; i < nearbyCardList.size(); i++)
+                        {
+                            HomePageSubTopicTagBean homePageSubTopicTagBean = nearbyCardList.get(i);
+                            int userId = homePageSubTopicTagBean.getUserId();
+                            if (userId == mUserId) {
+                                homePageSubTopicTagBean.setIsAttention(attentionStatus);
+                            }
+                        }
+                        nearbyCardAdapter.setNearbyCardList(nearbyCardList);
+                        nearbyCardAdapter.notifyDataSetChanged();
                     }
-
-                    nearbyCardAdapter.setNearbyCardList(nearbyCardList);
-                    nearbyCardAdapter.notifyDataSetChanged();
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

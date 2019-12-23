@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.library.banner.BannerLayout;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.common.Enum.UploadFileTypeEnum;
 import com.nbhysj.coupon.model.response.BannerUrlBO;
 import com.nbhysj.coupon.model.response.FollowDetailBean;
 import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
@@ -25,11 +28,15 @@ import com.nbhysj.coupon.model.response.TopicsBean;
 import com.nbhysj.coupon.model.response.ZanAvatersBean;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
+import com.nbhysj.coupon.widget.customjzvd.MyJzvdStd;
+import com.nbhysj.coupon.widget.wavelineview.ExpandButtonLayout;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
+
 import java.util.Date;
 import java.util.List;
 
@@ -60,14 +67,19 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     private HPFollowPostCommentAdapter hpFollowPostCommentAdapter;
     private FollowListener followListener;
 
-    public FollowListAdapter(Context mContext, FollowListener followListener) {
+    private boolean isFollowRefresh = true;
+
+    public FollowListAdapter(Context mContext, FollowListener followListener,boolean isFollowRefresh) {
         this.mContext = mContext;
         this.followListener = followListener;
+        this.isFollowRefresh = isFollowRefresh;
+
     }
 
     public void setFollowDetailList(List<HomePageSubTopicTagBean> followDetailList) {
 
         this.followDetailList = followDetailList;
+
     }
 
     @Override
@@ -83,10 +95,11 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
             HomePageSubTopicTagBean followDetailBean = followDetailList.get(position);
             int postId = followDetailBean.getId();
+
             int commentCount = followDetailBean.getCommentCount();//评论数
             int collectionCount = followDetailBean.getCollectionCount();//收藏数
             int zanCount = followDetailBean.getZanCount();//点赞数
-
+            String photoUrl = followDetailBean.getPhoto();          //拍视频生成 gif
             holder.mTvUserName.setText(followDetailBean.getNickname());
             String postPublishDateStr = DateUtil.transferLongToDate(DateUtil.sDateYMDHHMMSSFormat, followDetailBean.getCtime());
             Date date = DateUtil.getDateStrToDate(postPublishDateStr, DateUtil.sDateYMDHHMMSSFormat);
@@ -94,12 +107,50 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             holder.mTvTime.setText(postPublishDate);
             String avaterUrl = followDetailBean.getAvater();
             List<PostCommentBean> postsCommentsList = followDetailBean.getPostsComments();
-            GlideUtil.loadImage(mContext, avaterUrl, holder.mImgRecommendUserAvatar);
-            List<String> bannerUrlList = followDetailBean.getResources();
 
-            if (bannerUrlList != null) {
+                GlideUtil.loadImage(mContext, avaterUrl, holder.mImgRecommendUserAvatar);
+
+            List<String> bannerUrlList = followDetailBean.getResources();
+            String resourceUrl = followDetailBean.getResourceUrl();  //mp4
+            int postsType = followDetailBean.getPostsType();  //1图片，2语音，3视频
+
+            if (bannerUrlList != null)
+            {
                 holder.mSlideViewFriendDetailPictrue.initUI(bannerUrlList);
+
+                isFollowRefresh = false;
             }
+
+            if (postsType == 1) { //图片
+
+                holder.mRlytPostDetailPicture.setVisibility(View.VISIBLE);
+                holder.mRlytPostVideo.setVisibility(View.GONE);
+                holder.mBtnLayoutExpandSound.setVisibility(View.INVISIBLE);
+                holder.mSlideViewFriendDetailPictrue.setBannerList(bannerUrlList);
+
+            } else if (postsType == 2) {  //音频+图片
+
+                holder.mRlytPostDetailPicture.setVisibility(View.VISIBLE);
+                holder.mRlytPostVideo.setVisibility(View.GONE);
+
+                if (!TextUtils.isEmpty(resourceUrl)) {
+                    String audioValue = UploadFileTypeEnum.AUDIO.getValue();
+                    if (resourceUrl.contains(audioValue)) {
+                        holder.mBtnLayoutExpandSound.setVisibility(View.VISIBLE);
+                        holder.mBtnLayoutExpandSound.setAudioFileUrl(resourceUrl);
+                    }
+                }
+                holder.mSlideViewFriendDetailPictrue.setBannerList(bannerUrlList);
+
+            } else if (postsType == 3) {  //视频
+
+                holder.mRlytPostVideo.setVisibility(View.VISIBLE);
+                holder.mRlytPostDetailPicture.setVisibility(View.GONE);
+                holder.mJzvdPostVideo.setUp(resourceUrl, "");
+                holder.mBtnLayoutExpandSound.setVisibility(View.INVISIBLE);
+                GlideUtil.loadImage(mContext, photoUrl, holder.mJzvdPostVideo.thumbImageView);
+            }
+
             List<TopicsBean> topicsList = followDetailBean.getTopics();
             holder.mTagFlowLayout.setAdapter(new TagAdapter<TopicsBean>(topicsList) {
 
@@ -164,14 +215,20 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 holder.mLlytUserComment.setVisibility(View.GONE);
             }
 
-            GlideUtil.loadImage(mContext, avaterUrl, holder.mCircleImageViewCommentUserAvatar);
+            //用户头像
+            String commentatorAvater = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR,"");
+
+            if(!TextUtils.isEmpty(commentatorAvater))
+            {
+                GlideUtil.loadImage(mContext, commentatorAvater, holder.mCircleImageViewCommentUserAvatar);
+            }
             //帖子时间
             String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, followDetailBean.getCtime());
             holder.mTvPostTime.setText(postPublishTime);
 
             List<RecommendInterestUsersBean> recommendUsersList = followDetailBean.getRecommendUsers();
 
-            if (recommendUsersList != null) {
+            if (recommendUsersList != null && recommendUsersList.size() > 0) {
                 holder.mLlytInterestUser.setVisibility(View.VISIBLE);
                 //可能感兴趣列表
                 LinearLayoutManager userOfInterestLinearLayoutManager = new LinearLayoutManager(mContext);
@@ -223,7 +280,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 @Override
                 public void onClick(View view) {
 
-                    followListener.setFollowItemOnClickListener();
+                    followListener.setFollowItemOnClickListener(postId);
                 }
             });
 
@@ -240,10 +297,25 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 @Override
                 public void onClick(View view) {
 
-                    followListener.setPostPraiseListener(position,postId);
+                    followListener.setPostPraiseListener(position, postId);
                 }
             });
 
+            holder.mTvAddComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    followListener.setLookCommentListener(postId);
+                }
+            });
+
+            holder.mLlytUserComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    followListener.setLookCommentListener(postId);
+                }
+            });
            /* if (interestUserList == null || interestUserList.size() == 0) {
 
                 holder.mRlytInterestUser.setVisibility(View.GONE);
@@ -300,8 +372,9 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         BannerSlideShowView mSlideViewFriendDetailPictrue;
         @BindView(R.id.flowlayout_tag)
         TagFlowLayout mTagFlowLayout;
-        /*  @BindView(R.id.banner_users_of_interest)
-          BannerLayout mBannerUserOfInterest;*/
+        //帖子详情照片
+        @BindView(R.id.rlyt_post_detail_picture)
+        RelativeLayout mRlytPostDetailPicture;
         @BindView(R.id.llyt_interest_user)
         LinearLayout mLlytInterestUser;
         //点赞人数
@@ -358,6 +431,17 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         LinearLayout mLlytFollowItem;
         @BindView(R.id.img_share)
         ImageView mImgShare;
+        @BindView(R.id.jzvd_post_video)
+        MyJzvdStd mJzvdPostVideo;
+        @BindView(R.id.img_post_video_gif)
+        ImageView mImgPostVideGif;
+        @BindView(R.id.layout_expanded_button)
+        ExpandButtonLayout mBtnLayoutExpandSound;
+        //添加评论
+        @BindView(R.id.tv_add_comment)
+        TextView mTvAddComment;
+        @BindView(R.id.rlyt_post_video)
+        RelativeLayout mRlytPostVideo;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -368,7 +452,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     public interface FollowListener {
 
         //帖子点赞
-        void setPostPraiseListener(int position,int postId);
+        void setPostPraiseListener(int position, int postId);
 
         //可能感兴趣的用户 点击关注
         void setUserOfInterestListener(RecommendInterestUsersBean userEntity);
@@ -382,8 +466,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         //点击收藏帖子到专辑
         void setCollectionPostToAlbumsListener(HomePageSubTopicTagBean followDetailBean);
 
-        //item点击缩回键盘
-        void setFollowItemOnClickListener();
+        //item点击查看帖子详情
+        void setFollowItemOnClickListener(int postId);
 
         //分享
         void setFollowShareListener(int mPostId);

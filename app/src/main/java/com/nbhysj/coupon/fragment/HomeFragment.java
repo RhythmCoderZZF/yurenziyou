@@ -2,6 +2,7 @@ package com.nbhysj.coupon.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -9,6 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,6 +38,8 @@ import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.ui.HomePageSearchActivity;
 import com.nbhysj.coupon.ui.MessageActivity;
+import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.widget.glide.CacheImageLoader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -86,8 +90,9 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     TextView mTvHomeCity;
     private int mCurrentItem = 1;
     //标识广播通知对应的页面
-    private String mBroadcastAction;
+    private int mCurrentItemFlag = 1;
     private boolean initComplete = false;
+    private boolean isOnTabSelect = true;
 
     /**
      * Use this factory method to create a new instance of
@@ -228,7 +233,6 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
             bannerList.clear();
         }
 
-
         fragments = new ArrayList<>();
         List<Fragment> fragments1 = getChildFragmentManager().getFragments();
         if (fragments1 != null && fragments1.size() > 1) {
@@ -242,7 +246,6 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
             followFragment = new FollowFragment();
             recommendFragment = new RecommendFragment();
             nearbyFragment = new NearbyFragment();
-
         }
 
         fragments.add(followFragment);
@@ -250,12 +253,16 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
         fragments.add(nearbyFragment);
 
         tabLayout.setViewPager(viewpager, titles, getActivity(), fragments);
-
         tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
-
-                //   showToast(getActivity(), position + "");
+                isOnTabSelect = true;
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                if (TextUtils.isEmpty(token) && mCurrentItem == 0)
+                {
+                    toActivity(PhoneQuickLoginActivity.class);
+                    viewpager.setCurrentItem(mCurrentItemFlag);
+                }
             }
 
             @Override
@@ -265,6 +272,7 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
         });
 
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -273,8 +281,21 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
             @Override
             public void onPageSelected(int position) {
 
-                mCurrentItem = position;
-                // showToast(getActivity(), position + "");
+                    mCurrentItem = position;
+                    if(mCurrentItem != 0)
+                    {
+                        mCurrentItemFlag = position;
+                    }
+
+                    if(!isOnTabSelect)
+                    {
+                        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                        if (TextUtils.isEmpty(token) && mCurrentItem == 0) {
+                            toActivity(PhoneQuickLoginActivity.class);
+                            viewpager.setCurrentItem(mCurrentItemFlag);
+                        }
+                    }
+                isOnTabSelect = false;
             }
 
             @Override
@@ -289,7 +310,6 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
         mBannerHome.setImageLoader(new CacheImageLoader());
         mBannerHome.start();
         viewpager.setCurrentItem(mCurrentItem);
-
 
     }
 

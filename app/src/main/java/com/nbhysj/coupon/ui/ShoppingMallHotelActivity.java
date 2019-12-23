@@ -25,6 +25,7 @@ import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -311,6 +312,11 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     }
 
     @Override
+    public void getHotelListByCateIdResult(BackResult<MchCateListResponse> res) {
+
+    }
+
+    @Override
     public void getHotelBangDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
 
     }
@@ -481,7 +487,7 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
         }
     }
 
-    public void findHotelHomestayByCate() {
+    public void findHotelHomestayByCate(){
         if (validateInternet()) {
 
             HashMap<String, String> scenicSpotByCateRequest = new HashMap<>();

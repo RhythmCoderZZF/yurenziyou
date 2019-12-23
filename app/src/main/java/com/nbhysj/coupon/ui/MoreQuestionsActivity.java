@@ -100,7 +100,13 @@ public class MoreQuestionsActivity extends BaseActivity<MchQuestionAndAnswerPres
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(MoreQuestionsActivity.this);
         mRvMoreQuestion.setLayoutManager(layoutManager);
-        moreQuestionListAdapter = new MoreQuestionListAdapter(MoreQuestionsActivity.this);
+        moreQuestionListAdapter = new MoreQuestionListAdapter(MoreQuestionsActivity.this, new MoreQuestionListAdapter.QuestionAskListener() {
+            @Override
+            public void setQuestionAskCallback(int questionId) {
+
+
+            }
+        });
         moreQuestionListAdapter.setMoreQuestionList(mQuestionContentList);
         mRvMoreQuestion.setAdapter(moreQuestionListAdapter);
     }

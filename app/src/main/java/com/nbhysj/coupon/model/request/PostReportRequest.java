@@ -12,7 +12,7 @@ public class PostReportRequest {
     private int postsId;
 
     //理由
-    private int reason;
+    private String reason;
 
     private List<String> images;
 
@@ -24,11 +24,11 @@ public class PostReportRequest {
         this.postsId = postsId;
     }
 
-    public int getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(int reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 

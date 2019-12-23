@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,10 +11,13 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.AlbumContract;
 import com.nbhysj.coupon.model.AlbumModel;
+import com.nbhysj.coupon.model.request.FavoritesDeleteRequest;
 import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CarH5UrlResponse;
 import com.nbhysj.coupon.model.response.CreateFavoritesResponse;
+import com.nbhysj.coupon.model.response.FavoritesBean;
 import com.nbhysj.coupon.model.response.FavoritesListResponse;
 import com.nbhysj.coupon.model.response.FavoritesResponse;
 import com.nbhysj.coupon.presenter.AlbumPresenter;
@@ -48,6 +52,8 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
     //专辑id
     private int collectionId;
 
+    //专辑标题
+    String mAlbumTitle,mAlbumIntro;
 
     @Override
     public int getLayoutId() {
@@ -60,13 +66,50 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
 
         ToolbarHelper.setHeadBar(EditAlbumActivity.this, getResources().getString(R.string.str_edit_albums), R.mipmap.icon_left_arrow_black, getResources().getString(R.string.str_save));
         mTvSave.setTextColor(getResources().getColor(R.color.color_text_blue2));
-        collectionId = getIntent().getIntExtra("collectionId", 0);
+        FavoritesBean favoritesBean = (FavoritesBean)getIntent().getSerializableExtra("favoritesBean");
+        if(favoritesBean != null)
+        {
+            collectionId = favoritesBean.getId();
+            String title = favoritesBean.getTitle();
+            String intro = favoritesBean.getIntro();
+            isVisibleStatus = favoritesBean.getVisibleStatus();
+            if(!TextUtils.isEmpty(title))
+            {
+                mEdtAlbumTitle.setText(title);
+            }
+
+            if(!TextUtils.isEmpty(intro))
+            {
+                mEdtAlbumIntro.setText(intro);
+            }
+
+            if(isVisibleStatus == 1)
+            {
+                mToggleBtnSetUpAsSelf.setToggleOn();
+            } else if(isVisibleStatus == 0)
+            {
+                mToggleBtnSetUpAsSelf.setToggleOff();
+            }
+        }
     }
 
     @Override
     public void initData()
     {
 
+        mToggleBtnSetUpAsSelf.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
+            @Override
+            public void onToggle(boolean isOnToggleChanged) {
+
+                if(isOnToggleChanged){
+
+                    isVisibleStatus = 1;
+                } else {
+
+                    isVisibleStatus = 0;
+                }
+            }
+        });
     }
 
     @Override
@@ -87,7 +130,26 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
 
     @Override
     public void updateFavoritesResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                    Intent intent = new Intent();
+                    intent.putExtra("albumTitle",mAlbumTitle);
+                    intent.putExtra("albumIntro",mAlbumIntro);
+                    intent.putExtra("albumOprate",0);
+                    setResult(RESULT_OK,intent);
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(EditAlbumActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -125,26 +187,60 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
     public void editAlbum() {
 
         if (validateInternet()) {
-            showProgressDialog(EditAlbumActivity.this);
 
-            String mAlbumTitle = mEdtAlbumTitle.getText().toString();
-            String mAlbumIntro = mEdtAlbumIntro.getText().toString();
+
+            //专辑标题
+            mAlbumTitle = mEdtAlbumTitle.getText().toString();
+
+            //专辑简介
+            mAlbumIntro = mEdtAlbumIntro.getText().toString();
             if (TextUtils.isEmpty(mAlbumTitle)) {
                 showToast(EditAlbumActivity.this, "请填写专辑标题");
                 return;
             }
 
-            if (TextUtils.isEmpty(mAlbumIntro)) {
-                showToast(EditAlbumActivity.this, "请填写专辑简介");
-                return;
-            }
-
+            showProgressDialog(EditAlbumActivity.this);
             UpdateFavoritesRequest updateFavoritesRequest = new UpdateFavoritesRequest();
             updateFavoritesRequest.setId(collectionId);
             updateFavoritesRequest.setTitle(mAlbumTitle);
-            updateFavoritesRequest.setIntro(mAlbumIntro);
+            if(!TextUtils.isEmpty(mAlbumIntro)) {
+                updateFavoritesRequest.setIntro(mAlbumIntro);
+            }
             updateFavoritesRequest.setVisibleStatus(isVisibleStatus);
             mPresenter.updateFavorites(updateFavoritesRequest);
+        }
+    }
+
+    @Override
+    public void delFavoritesRequest(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    Intent intent = new Intent();
+                    intent.putExtra("albumOprate",1);
+                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK);
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(EditAlbumActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    //删除专辑
+    public void deleteFavorites()
+    {
+        if(validateInternet())
+        {
+            FavoritesDeleteRequest favoritesDeleteRequest = new FavoritesDeleteRequest();
+            favoritesDeleteRequest.setId(collectionId);
+            mPresenter.delFavoritesRequest(favoritesDeleteRequest);
         }
     }
 
@@ -153,6 +249,7 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
         switch (v.getId()) {
             case R.id.tv_album_delete:
 
+                deleteFavorites();
 
                 break;
             case R.id.tv_save:

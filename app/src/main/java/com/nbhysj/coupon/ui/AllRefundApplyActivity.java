@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundResponse;
 import com.nbhysj.coupon.presenter.OrderRefundPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
@@ -112,7 +114,6 @@ public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, O
 
     @Override
     public void initData() {
-
         getOrderForAllRefund();
 
         if (mRefundReasonSelectList == null) {
@@ -171,7 +172,7 @@ public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, O
 
                     OrderAllRefundInitResponse orderAllRefundInitResponse = res.getData();
                     orderRefundIniteList = orderAllRefundInitResponse.getGoods();
-                    String orderNo = orderAllRefundInitResponse.getOrderNo();
+                    orderNo = orderAllRefundInitResponse.getOrderNo();
                     discountPrice = orderAllRefundInitResponse.getDiscountPrice();
                     double refundPrice = orderAllRefundInitResponse.getRefundPrice();
                     double price = orderAllRefundInitResponse.getPrice();
@@ -216,16 +217,20 @@ public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, O
     }
 
     @Override
-    public void orderAllRefundSubmitResult(BackResult res) {
+    public void orderAllRefundSubmitResult(BackResult<OrderRefundResponse> res) {
 
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
-
+                OrderRefundResponse orderRefundResponse = res.getData();
+                String oredrRefundNo = orderRefundResponse.getOrderRefundNo();
                 EventBus.getDefault().post("refundOprate");
                 setResult(RESULT_OK);
                 finish();
-
+                Intent intent = new Intent();
+                intent.putExtra("orderRefundNo", oredrRefundNo);
+                intent.setClass(mContext, RefundDetailsActivity.class);
+                mContext.startActivity(intent);
                 break;
             default:
                 showToast(AllRefundApplyActivity.this, Constants.getResultMsg(res.getMsg()));
@@ -260,8 +265,6 @@ public class AllRefundApplyActivity extends BaseActivity<OrderRefundPresenter, O
     public void orderAllRefundSubmit() {
 
         if (validateInternet()) {
-
-
 
             String mRefundReasonInput = mEdtRefundReason.getText().toString().trim();
 

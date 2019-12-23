@@ -69,17 +69,17 @@ public class FrequentlyUsedInfoModel implements FrequentlyUsedInfoContract.Model
 
     @Override
     public Observable<BackResult> addRecipientsInfo(RecipientsInfoRequest recipientsInfoRequest) {
-        return null;
+        return Api.getInstance().apiService.addRecipientsInfo(recipientsInfoRequest).compose(RxSchedulers.io_main());
     }
 
     @Override
     public Observable<BackResult> updateRecipientsInfo(RecipientsInfoRequest recipientsInfoRequest) {
-        return null;
+        return Api.getInstance().apiService.updateRecipientsInfo(recipientsInfoRequest).compose(RxSchedulers.io_main());
     }
 
     @Override
     public Observable<BackResult> deleteRecipientsInfo(DeleteTravellerInfoRequest deleteTravellerInfoRequest) {
-        return null;
+        return Api.getInstance().apiService.deleteRecipientsInfo(deleteTravellerInfoRequest).compose(RxSchedulers.io_main());
     }
 
     @Override

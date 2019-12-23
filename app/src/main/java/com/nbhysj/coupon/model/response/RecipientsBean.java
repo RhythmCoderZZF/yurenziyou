@@ -1,10 +1,12 @@
 package com.nbhysj.coupon.model.response;
 
+import java.io.Serializable;
+
 /**
  * @auther：hysj created on 2019/3/16
  * description：收件人对象
  */
-public class RecipientsBean {
+public class RecipientsBean implements Serializable {
 
     private int id;
 
@@ -27,6 +29,8 @@ public class RecipientsBean {
     private String province;
 
     private String zipcode;
+
+    private String tag;
 
     private String loginMobile;
 
@@ -144,5 +148,13 @@ public class RecipientsBean {
 
     public void setUtime(Long utime) {
         this.utime = utime;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

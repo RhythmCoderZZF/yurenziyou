@@ -59,19 +59,19 @@ public class MyQuestionCorrelationListAdapter extends RecyclerView.Adapter<MyQue
         try {
 
             AnswerBean myQuestionAnsweringBean = myQuestionCorrelationList.get(itemPosition);
-            int questionId = myQuestionAnsweringBean.getQuestionId();
+            int questionId = myQuestionAnsweringBean.getId();
             String questionerName = myQuestionAnsweringBean.getUserName();
             String answerAvatar = myQuestionAnsweringBean.getAvater();
             long answerCTime = myQuestionAnsweringBean.getCtime();
             String questionContent = myQuestionAnsweringBean.getContent();
             String question = URLDecoder.decode(questionContent, "UTF-8");
 
-            GlideUtil.loadImage(mContext,answerAvatar,holder.mImgQuestionerAvatar);
+            GlideUtil.loadImage(mContext, answerAvatar, holder.mImgQuestionerAvatar);
 
-                String questioner = URLDecoder.decode(questionerName, "UTF-8");
-                holder.mTvQuestionerName.setText(questioner);
+            String questioner = URLDecoder.decode(questionerName, "UTF-8");
+            holder.mTvQuestionerName.setText(questioner);
 
-                holder.mTvQuestionContent.setText(question);
+            holder.mTvQuestionContent.setText(question);
 
             holder.mTvViewAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,9 +79,9 @@ public class MyQuestionCorrelationListAdapter extends RecyclerView.Adapter<MyQue
 
                     Intent intent = new Intent();
                     intent.setClass(mContext, MyAnswerDetailActivity.class);
-                    intent.putExtra("questionId",questionId);
+                    intent.putExtra("questionId", questionId);
                     mContext.startActivity(intent);
-                  //  questionUsefulListener.setQuestionUsefulListener(itemPosition);
+                    //  questionUsefulListener.setQuestionUsefulListener(itemPosition);
 
                 }
             });

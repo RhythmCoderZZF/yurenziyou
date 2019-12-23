@@ -10,11 +10,9 @@ import android.widget.RelativeLayout;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MyAnswerListAdapter;
-import com.nbhysj.coupon.adapter.MyQuestionListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
-import com.nbhysj.coupon.model.response.AnswerResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MyQuestionAnsweringBean;

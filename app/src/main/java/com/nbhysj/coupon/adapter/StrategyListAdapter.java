@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
+import com.nbhysj.coupon.ui.StrategyWebActivity;
 import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -84,7 +85,7 @@ public class StrategyListAdapter extends RecyclerView.Adapter<StrategyListAdapte
                     if(!TextUtils.isEmpty(strategyH5Url))
                     {
                         Intent intent = new Intent();
-                        intent.setClass(mContext, WebActivity.class);
+                        intent.setClass(mContext, StrategyWebActivity.class);
                         intent.putExtra("title", Constants.STRATEGY_H5_TITEL);
                         intent.putExtra("url",strategyH5Url);
                         mContext.startActivity(intent);

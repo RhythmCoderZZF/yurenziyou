@@ -55,14 +55,12 @@
                 android:layout_toRightOf="@+id/img_account"
                 android:background="@null"
                 android:gravity="center_vertical"
+                android:textColorHint="@color/color_text_gray"
                 android:hint="@string/str_input_username"
                 android:maxLines="1"
                 android:textColor="@color/color_text_gray"
-                android:textColorHint="@color/color_text_gray"
                 android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
-                android:textSize="@dimen/text_size_xmedium"
-                android:text="13852209421
-" />
+                android:textSize="@dimen/text_size_xmedium" />
 
         </RelativeLayout>
 
@@ -105,7 +103,7 @@
                 android:inputType="textPassword"
                 android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:maxLines="1"
-                android:text="z123456"
+                android:text=""
                 android:textColor="@color/color_text_gray"
                 android:textColorHint="@color/color_text_gray"
                 android:textSize="@dimen/text_size_xmedium" />
@@ -160,7 +158,6 @@
         android:layout_marginTop="@dimen/dp_20"
         android:layout_centerHorizontal="true" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -188,7 +185,7 @@
                 android:id="@+id/tv_other_mode_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="其他方式登陆"
+                android:text="@string/str_other_ways_to_login"
                 android:textColor="@color/text_grey"
                 android:textSize="@dimen/text_size_small"
                 android:layout_marginLeft="@dimen/dp_8"

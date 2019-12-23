@@ -38,9 +38,12 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.ConscienceRecommendationBean;
 import com.nbhysj.coupon.model.response.GoodsBean;
 import com.nbhysj.coupon.model.response.GroupMchResponse;
+import com.nbhysj.coupon.model.response.LimitedSaleBean;
 import com.nbhysj.coupon.model.response.LimitedTimeSalePageBean;
 import com.nbhysj.coupon.presenter.LimitedTimeSalePresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
+import com.nbhysj.coupon.util.ToolbarHelper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -138,6 +141,8 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
+        ToolbarHelper.setBar(ShoppingMallSpecialSaleActivity.this,getResources().getString(R.string.str_limit_time_sale),R.mipmap.icon_left_arrow_black);
 
         fragments = new ArrayList<>();
         if(conscienceRecommendationList == null)
@@ -267,8 +272,6 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
                     LimitedTimeSalePageBean limitedTimeSalePageBean = res.getData();
                     LimitedTimeSalePageBean.TimeLimitEntity timeLimitEntity = limitedTimeSalePageBean.getTimeLimit();
                     String title = timeLimitEntity.getTitle();
-                    long startTime = timeLimitEntity.getStartTime();
-                    long endTime = timeLimitEntity.getEndTime();
                     List<GoodsBean> limitedTimeSalegoodsList = timeLimitEntity.getGoods();
                     if(limitedTimeSalegoodsList != null)
                     {
@@ -280,27 +283,12 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
                     List<ConscienceRecommendationBean> limitedTimeSalePageList = recommendEntity.getScenic();
                     conscienceRecommendationListAdapter.setConscienceRecommendationList(limitedTimeSalePageList);
                     conscienceRecommendationListAdapter.notifyDataSetChanged();
-                   /* viewPager.setAdapter(new ComFragmentAdapter(getSupportFragmentManager(), getFragments()));
-                    viewPager.setOffscreenPageLimit(10);
-                    initMagicIndicator();
-                    initMagicIndicatorTitle();*/
-                    long endTimeLong = endTime;
-                    long start_time = new Date().getTime() / 1000;
 
-                    endTime = endTimeLong-start_time;
-                  /*  r = new Runnable() {
+                    //限时特卖
+                    long endTimeLong = timeLimitEntity.getEndTime();
+                    long currentTime = System.currentTimeMillis() / 1000;
+                    endTime = endTimeLong - currentTime;
 
-                        @Override
-                        public void run() {
-                            mHandler.sendEmptyMessage(200);
-                            if(timerIsInit){//数据初始化成功，则延迟1秒
-                                mHandler.postDelayed(this, 1000);
-                            }else {
-                                mHandler.post(this);
-                            }
-                        }
-                    };
-                    mHandler.post(r);*/
                     handler.postDelayed(runnable, 1000);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -319,15 +307,11 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
         showToast(ShoppingMallSpecialSaleActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.img_back})
+    @OnClick({})
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.img_back:
 
-                ShoppingMallSpecialSaleActivity.this.finish();
-
-                break;
             default:
                 break;
 
@@ -416,6 +400,14 @@ public class ShoppingMallSpecialSaleActivity extends BaseActivity<LimitedTimeSal
         if(validateInternet()){
 
             mPresenter.getLimitedTimeSalePage();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
         }
     }
 

@@ -8,97 +8,8 @@
     android:orientation="vertical"
     tools:context=".ui.ShoppingMallScenicSpotActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/llyt_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <View
-                android:id="@+id/toolbar_space"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:visibility="gone"></View>
-
-            <RelativeLayout
-                android:id="@+id/rl_title"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:background="@android:color/transparent">
-
-                <ImageView
-                    android:id="@+id/img_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="@dimen/dp_2"
-                    android:padding="@dimen/dp_10"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    android:layout_marginRight="@dimen/dp_10"
-                    android:src="@mipmap/icon_left_arrow_black" />
-
-
-                <LinearLayout
-                    android:id="@+id/ll_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginRight="@dimen/dp_17"
-                    android:layout_marginBottom="7dp"
-                    android:layout_toLeftOf="@+id/img_fine_food_forward"
-                    android:layout_toRightOf="@+id/img_back"
-                    android:background="@drawable/bg_radius_gray_shape"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/img_bar_search"
-                        android:layout_width="@dimen/dp_13"
-                        android:layout_height="@dimen/dp_12"
-                        android:layout_marginLeft="@dimen/dp_8"
-                        android:alpha="0.6"
-                        android:src="@mipmap/icon_search_bar_gray" />
-
-                    <TextView
-                        android:id="@+id/tv_search_hint"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_7"
-                        android:background="@null"
-                        android:drawablePadding="4dp"
-                        android:hint="寻找你感兴趣的目的地"
-                        android:lines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/color_text_gray17"
-                        android:textSize="@dimen/text_size_xnormal" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/img_fine_food_forward"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/dp_15"
-                    android:padding="@dimen/dp_10"
-                    android:src="@mipmap/icon_black_forward"
-                    android:visibility="gone"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
+    <include layout="@layout/toolbar"></include>
 
     <!-- <com.nbhysj.coupon.view.RecyclerScrollView
          android:layout_width="match_parent"
@@ -170,13 +81,15 @@
 
                             <TextView
                                 android:id="@+id/tv_limited_sale_hour"
-                                android:layout_width="@dimen/dp_27"
-                                android:layout_height="@dimen/dp_21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/dp_5"
                                 android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                                 android:gravity="center"
                                 android:text="00"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_5"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_medium"
                                 android:textStyle="bold" />
@@ -194,13 +107,15 @@
 
                             <TextView
                                 android:id="@+id/tv_limited_sale_minute"
-                                android:layout_width="@dimen/dp_27"
-                                android:layout_height="@dimen/dp_21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/dp_3"
                                 android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                                 android:gravity="center"
                                 android:text="00"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_5"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_medium"
                                 android:textStyle="bold" />
@@ -218,13 +133,15 @@
 
                             <TextView
                                 android:id="@+id/tv_limited_sale_second"
-                                android:layout_width="@dimen/dp_27"
-                                android:layout_height="@dimen/dp_21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/dp_3"
                                 android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                                 android:gravity="center"
                                 android:text="00"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_5"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_medium"
                                 android:textStyle="bold" />

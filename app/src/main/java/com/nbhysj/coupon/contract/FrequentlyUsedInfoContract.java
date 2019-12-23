@@ -90,11 +90,11 @@ public interface FrequentlyUsedInfoContract {
         //3.收件人
         void getRecipientsInfoListResult(BackResult<RecipientsInfoResponse> res);
 
-    /*   void addUserContactsResult(BackResult res);
+        void addRecipientsInfoResult(BackResult res);
 
-        void updateUserContactsResult(BackResult res);
+        void updateRecipientsInfoResult(BackResult res);
 
-        void deleteUserContactsResult(BackResult res);*/
+        void deleteRecipientsResult(BackResult res);
 
         void getRecipientsAddressResult(BackResult<List<RecipientAddressResponse>> res);
 
@@ -122,6 +122,15 @@ public interface FrequentlyUsedInfoContract {
 
         //获取收件人列表
         public abstract void getRecipientsInfoList(int userId, String mobile, int page, int pageSize);
+
+        //增加收件人
+        public abstract void addRecipientsInfo(RecipientsInfoRequest recipientsInfoRequest);
+
+        //增加收件人
+        public abstract void updateRecipientsInfo(RecipientsInfoRequest recipientsInfoRequest);
+
+        //删除收件人
+        public abstract void deleteRecipientsInfo(DeleteTravellerInfoRequest deleteTravellerInfoRequest);
 
         //获取收件人地址列表
         public abstract void getRecipientsAddress();

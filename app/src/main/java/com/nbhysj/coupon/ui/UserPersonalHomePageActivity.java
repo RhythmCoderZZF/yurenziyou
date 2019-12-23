@@ -4,6 +4,7 @@ package com.nbhysj.coupon.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -28,13 +29,20 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.OthersHomePageContract;
+import com.nbhysj.coupon.dialog.NoteSaveExitPromptDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.fragment.LocalFoodFragment;
+import com.nbhysj.coupon.fragment.OthersCollectionFragment;
+import com.nbhysj.coupon.fragment.OthersPostZanListFragment;
+import com.nbhysj.coupon.fragment.OthersShareFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
+import com.nbhysj.coupon.fragment.ShareFragment;
 import com.nbhysj.coupon.model.OthersHomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FavoritesListResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
+import com.nbhysj.coupon.model.response.MinePostZanListResponse;
 import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
 import com.nbhysj.coupon.presenter.OthersHomePagePresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
@@ -62,13 +70,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 
 /**
  * @auther：hysj created on 2019/07/31
  * description：个人主页
  */
-public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePresenter, OthersHomePageModel> implements OthersHomePageContract.View, JudgeNestedScrollView.OnScrollChangeListener {
-
+public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePresenter, OthersHomePageModel> implements OthersHomePageContract.View{
 
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
@@ -122,6 +130,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
 
     //帖子发布者id
     private int authorId;
+    private NoteSaveExitPromptDialog noteSaveExitPromptDialog;
 
     @Override
     public int getLayoutId() {
@@ -155,7 +164,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
 
         GlideUtil.loadBlurImageUrl(UserPersonalHomePageActivity.this, publisherAvatarUrl, mImgBgAvatarBlur);
 
-        //获取顶部图片高度后，设置滚动监听
+      /*  //获取顶部图片高度后，设置滚动监听
         ViewTreeObserver vto = mImgBgAvatarBlur.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -165,8 +174,13 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 mScrollViewPersonalHomePage.setOnScrollChangeListener(UserPersonalHomePageActivity.this);
             }
         });
-
+*/
         mLlytChatWithOthers.getBackground().setAlpha(30);
+    }
+
+    @Override
+    public void deletePostResult(BackResult res) {
+
     }
 
     @Override
@@ -209,22 +223,20 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 }
                 if (scrollY == 0) {
 
-                    mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-
-                    mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
-                    mLlytHeaderToolbar.setBackgroundColor(Color.argb(((255 * mScrollY / h) << 24) | color, 0, 0, 0));
-                    mToolbarSpace.setBackgroundColor(Color.argb(((255 * mScrollY / h) << 24) | color, 0, 0, 0));
+                    mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
+                    mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
+                    //mLlytHeaderToolbar.setBackgroundColor(Color.argb(((255 * mScrollY / h) << 24) | color, 0, 0, 0));
+                    //mToolbarSpace.setBackgroundColor(Color.argb(((255 * mScrollY / h) << 24) | color, 0, 0, 0));
                 } else {
                     mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
                     mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
-                    mLlytHeaderToolbar.setBackgroundColor(Color.argb(255, 255, 255, 255));
-                    mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    //mLlytHeaderToolbar.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                 //   mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
                 }
 
                 lastScrollY = scrollY;
             }
         });
-        //buttonBarLayout.setAlpha(0);
         mLlytHeaderToolbar.setBackgroundColor(0);
 
         viewPager.setAdapter(new ComFragmentAdapter(getSupportFragmentManager(), getFragments()));
@@ -247,11 +259,21 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
         mPresenter.setVM(this, mModel);
     }
 
+    @Override
+    public void getOtherBeforeZanResult(BackResult<MinePostZanListResponse> res) {
+
+    }
+
+    @Override
+    public void getOtherFindFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
+    }
+
     private List<Fragment> getFragments() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new LocalFoodFragment());
-        fragments.add(new ScenicSpotFragment());
-        fragments.add(new ScenicSpotFragment());
+        fragments.add(new OthersShareFragment().newInstance(authorId));
+        fragments.add(new OthersCollectionFragment().newInstance(authorId));
+        fragments.add(new OthersPostZanListFragment().newInstance(authorId));
         return fragments;
     }
 
@@ -275,7 +297,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mScrollViewPersonalHomePage.scrollTo(0, 2835);
+                       // mScrollViewPersonalHomePage.scrollTo(0, 2835);
                         viewPager.setCurrentItem(index, false);
                     }
                 });
@@ -321,7 +343,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                     public void onClick(View v) {
                         //int[] location = new int[2];
                         //magicIndicator.getLocationOnScreen(location);
-                        mScrollViewPersonalHomePage.scrollTo(0, 2835);
+                        //mScrollViewPersonalHomePage.scrollTo(0, 2835);
                         int hight = mCollapsingToolbarLayout.getHeight();
                         System.out.print(hight + "");
                         viewPager.setCurrentItem(index, false);
@@ -347,35 +369,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
         ViewPagerHelper.bind(magicIndicatorTitle, viewPager);
     }
 
-    @Override
-    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        int lastScrollY = 0;
-        int h = DensityUtil.dp2px(170);
-        int color = ContextCompat.getColor(getApplicationContext(), R.color.white) & 0x00ffffff;
-        if (lastScrollY < h) {
-            scrollY = Math.min(h, scrollY);
-            mScrollY = scrollY > h ? h : scrollY;
-            //    buttonBarLayout.setAlpha(1f * mScrollY / h);
-            mLlytHeaderToolbar.setBackgroundColor(((255 * mScrollY / h) << 24) | color);
-            // mLlytHeaderBg.setTranslationY(mOffset - mScrollY);
-        }
-        if (scrollY == 0) {
-
-            mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
-            mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
-            mLlytHeaderToolbar.setBackgroundColor(Color.argb(0, 0, 0, 0));
-            mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));
-        } else {
-            mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
-            mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
-            mLlytHeaderToolbar.setBackgroundColor(Color.argb(255, 255, 255, 255));
-            mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
-        }
-
-        lastScrollY = scrollY;
-    }
-
-    @OnClick({R.id.ibtn_back,R.id.tv_follow})
+    @OnClick({R.id.ibtn_back,R.id.tv_follow,R.id.img_menu})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -387,9 +381,49 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
             case R.id.tv_follow:
                 userFollow();
                 break;
+            case R.id.img_menu:
+                if(noteSaveExitPromptDialog == null)
+                {
+                    noteSaveExitPromptDialog = new NoteSaveExitPromptDialog(UserPersonalHomePageActivity.this).builder();
+
+                    noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_report), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick(int which) {
+
+                            Intent intent = new Intent();
+                            intent.setClass(UserPersonalHomePageActivity.this,ReportActivity.class);
+                            intent.putExtra("reportFlag",1);
+                            intent.putExtra("userId",authorId);
+                            startActivity(intent);
+
+                        }
+                    });
+                    noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_pull_black), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick(int which) {
+
+                        }
+                    });
+                    noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_un_interested), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick(int which) {
+
+
+                        }
+                    });
+                    noteSaveExitPromptDialog.setSheetItems();
+                }
+
+                noteSaveExitPromptDialog.show();
+                break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void getOtherCollectionAllResult(ResponseBody res) {
+
     }
 
     @Override
@@ -471,6 +505,11 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getOthersPostShareListResult(ResponseBody res) {
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.nbhysj.coupon.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -74,11 +75,10 @@ public class SharedPreferencesUtils {
      * @param userId
      * @param mobile
      * @param nickname
-     * @param username
      * @param token
      * @return
      */
-    public static boolean saveLoginData(int userId, String mobile, String nickname, String username, String token) {
+    public static boolean saveLoginData(int userId, String mobile, String nickname,String token) {
 
         boolean result;
         SharedPreferences.Editor editor = sp.edit();
@@ -86,7 +86,9 @@ public class SharedPreferencesUtils {
             editor.putInt(USER_ID, userId);
             editor.putString(USER_MOBILE, mobile);
             editor.putString(NICKNAME, nickname);
-            editor.putString(USERNAME, username);
+            if(!TextUtils.isEmpty(mobile)) {
+                editor.putString(USERNAME, mobile);
+            }
             editor.putString(SharedPreferencesUtils.TOKEN, token);
             result = true;
         } catch (Exception e) {

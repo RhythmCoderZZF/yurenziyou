@@ -26,7 +26,7 @@ public class GoodsBean {
 
     private double goodsPrice;
 
-    private int marketPrice;
+    private double marketPrice;
 
     private String salesDiscount;
 
@@ -114,11 +114,11 @@ public class GoodsBean {
         this.goodsPrice = goodsPrice;
     }
 
-    public int getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public void setMarketPrice(int marketPrice) {
+    public void setMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
     }
 

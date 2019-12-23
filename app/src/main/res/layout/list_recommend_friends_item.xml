@@ -49,8 +49,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_6"
             android:text=""
+            android:lines="2"
+            android:ellipsize="end"
             android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -76,6 +79,8 @@
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_toRightOf="@+id/image_avatar"
                 android:text=""
+                android:layout_toLeftOf="@+id/tv_look_num"
+                android:layout_marginRight="@dimen/dp_20"
                 android:textColor="@color/black"
                 android:textSize="11sp" />
 

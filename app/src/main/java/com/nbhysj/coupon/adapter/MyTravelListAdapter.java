@@ -117,8 +117,16 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
             holder.mLlytMyTravelItem.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    myTravelListener.setMyTravelEditListener(itemPosition);
+                    //myTravelListener.setMyTravelEditListener(itemPosition);
                     return false;
+                }
+            });
+
+            holder.mImgTripDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    myTravelListener.setMyTravelEditListener(itemPosition);
                 }
             });
         } catch (Exception e) {
@@ -144,6 +152,8 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
 
         TextView mTvTravelAssistantTag;
 
+        private ImageView mImgTripDelete;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -153,7 +163,7 @@ public class MyTravelListAdapter extends RecyclerView.Adapter<MyTravelListAdapte
             mTvMyTravelDate = itemView.findViewById(R.id.tv_my_travel_date);
             mTvMyTravelAssistantTitle = itemView.findViewById(R.id.tv_travel_assistant_title);
             mTvTravelAssistantTag = itemView.findViewById(R.id.tv_travel_assistant_tag);
-
+            mImgTripDelete = itemView.findViewById(R.id.img_trip_delete);
         }
     }
 

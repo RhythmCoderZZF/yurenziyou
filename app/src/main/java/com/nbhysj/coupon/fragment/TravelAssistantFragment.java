@@ -335,14 +335,24 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
 
     @OnClick({R.id.cardview_add_my_travel, R.id.rlyt_add_trip})
     public void onClick(View v) {
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         switch (v.getId()) {
             case R.id.cardview_add_my_travel:
 
-                toActivity(CalendarActivity.class);
-
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(CalendarActivity.class);
+                } else {
+                    onReLogin("");
+                }
                 break;
             case R.id.rlyt_add_trip:
-                toActivity(CalendarActivity.class);
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(CalendarActivity.class);
+                } else {
+                    onReLogin("");
+                }
                 break;
             default:
                 break;

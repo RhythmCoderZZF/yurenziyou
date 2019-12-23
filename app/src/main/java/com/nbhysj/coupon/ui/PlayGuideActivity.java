@@ -86,9 +86,9 @@ public class PlayGuideActivity extends BaseActivity<ScenicSpotPresenter, ScenicS
 
         List<String> labelList3 = new ArrayList();
         labelList3.add("全部");
-        labelList3.add("景点");
-        labelList3.add("收费项目");
-        labelList3.add("表演活动");
+        labelList3.add("风景");
+        labelList3.add("演出项目");
+        labelList3.add("游玩项目");
         mTabIndicator.notifyAddTab(labelList3, 13);
         mTabIndicator.setmTabSelector(0);
 

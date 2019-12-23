@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.AnswerBean;
 import com.nbhysj.coupon.model.response.MyQuestionAnsweringBean;
+import com.nbhysj.coupon.ui.MyAnswerDetailActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 
@@ -62,7 +64,7 @@ public class MyQuestionListAdapter extends RecyclerView.Adapter<MyQuestionListAd
             long answerCtime = myQuestionAnsweringBean.getAnswerCTime();
             String answerAvatar = myQuestionAnsweringBean.getAnswerAvater();
             String answerUserName = myQuestionAnsweringBean.getAnswerUserName();
-
+            int questionId = myQuestionAnsweringBean.getQuestionId();
 
             if(!TextUtils.isEmpty(mchName))
             {
@@ -101,6 +103,17 @@ public class MyQuestionListAdapter extends RecyclerView.Adapter<MyQuestionListAd
                 holder.mLlytAnswererInfo.setVisibility(View.GONE);
             }
 
+            holder.mLlytAskQuestionItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, MyAnswerDetailActivity.class);
+                    intent.putExtra("questionId",questionId);
+                    mContext.startActivity(intent);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,6 +142,7 @@ public class MyQuestionListAdapter extends RecyclerView.Adapter<MyQuestionListAd
         LinearLayout mLlytAnswererInfo;
 
         TextView mTvAnswerNoData;
+        LinearLayout mLlytAskQuestionItem;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -140,6 +154,7 @@ public class MyQuestionListAdapter extends RecyclerView.Adapter<MyQuestionListAd
             mTvAnswerDate = itemView.findViewById(R.id.tv_answer_date);
             mLlytAnswererInfo = itemView.findViewById(R.id.llyt_answerer_info);
             mTvAnswerNoData = itemView.findViewById(R.id.tv_answer_no_data);
+            mLlytAskQuestionItem = itemView.findViewById(R.id.llyt_ask_question_item);
 
         }
     }

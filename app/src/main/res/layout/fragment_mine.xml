@@ -97,8 +97,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
                                     android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_toLeftOf="@+id/rlyt_my_business_card"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_toLeftOf="@+id/rlyt_my_coupon"
                                     android:layout_toRightOf="@+id/rlyt_avatar"
                                     android:orientation="vertical">
 
@@ -116,7 +116,7 @@
 
                                     <TextView
                                         android:id="@+id/tv_user_profile"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:paddingTop="@dimen/dp_2"
@@ -503,7 +503,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="@dimen/dp_20"
                     android:layout_marginRight="@dimen/dp_15"
-                    android:src="@mipmap/icon_qr_my_card" />
+                    android:src="@mipmap/icon_qr_my_card"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

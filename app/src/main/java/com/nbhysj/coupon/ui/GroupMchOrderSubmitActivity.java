@@ -307,12 +307,12 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     public void initView(Bundle savedInstanceState) {
 
         //沉浸式
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-
 
         ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
         layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
@@ -653,7 +653,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 break;
             case R.id.img_reduce_purchase_num:
 
-                if (mPurchaseNum > 1) {
+              /*  if (mPurchaseNum > 1) {
                     mPurchaseNum--;
                     mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
                     if (goodsPriceList.size() > 0) {
@@ -666,18 +666,18 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
                     showToast(GroupMchOrderSubmitActivity.this, getResources().getString(R.string.str_need_to_buy_at_least_one));
                     return;
-                }
+                }*/
 
                 break;
             case R.id.img_add_purchase_num:
-                mPurchaseNum++;
+               /* mPurchaseNum++;
                 mTvPurchaseNum.setText(String.valueOf(mPurchaseNum));
                 if (goodsPriceList.size() > 0) {
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                     goodsPriceEntity.setTicketPurchaseNum(mPurchaseNum);
                 }
                 double totalPrice = payFee * mPurchaseNum;
-                mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));
+                mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));*/
                 break;
             case R.id.tv_add_vehicle_more:
 

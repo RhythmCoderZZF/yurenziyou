@@ -56,7 +56,6 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
 
         try {
 
-
             if (itemPosition == collectionAlbumResponseList.size()) {
 
                 holder.mLlytNewAlbum.setVisibility(View.VISIBLE);
@@ -84,11 +83,12 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
                     newCollectionAlbumListener.setNewCollectionAlbumListener();
                 }
             });
+
             holder.mTvAlbumEditTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    newCollectionAlbumListener.setEditCollectionAlbumListener(mineCollectionAlbumResponse);
+                    FavoritesBean mineCollectionAlbumResponse = collectionAlbumResponseList.get(itemPosition);
+                    newCollectionAlbumListener.setEditCollectionAlbumListener(itemPosition,mineCollectionAlbumResponse);
                 }
             });
 
@@ -161,6 +161,6 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
 
         void setNewCollectionAlbumListener();
 
-        void setEditCollectionAlbumListener(FavoritesBean mineCollectionAlbumResponse);
+        void setEditCollectionAlbumListener(int position,FavoritesBean mineCollectionAlbumResponse);
     }
 }

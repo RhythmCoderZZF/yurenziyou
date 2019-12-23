@@ -128,6 +128,7 @@
     <string name="str_input_wechat_number" translatable="false">请填写微信号</string>
     <string name="str_input_email" translatable="false">请填写邮箱</string>
     <string name="str_add_tag" translatable="false">添加标签</string>
+    <string name="str_add" translatable="false">增加</string>
     <string name="str_input_location" translatable="false">输入位置</string>
     <string name="select_address_pop_title" translatable="false">所在地区</string>
     <string name="str_interactive_question_and_answer" translatable="false">互动问答</string>
@@ -185,6 +186,7 @@
     <string name="str_admission_ticket" translatable="false">门票</string>
     <string name="str_scenic_spot_information" translatable="false">景点信息</string>
     <string name="str_order_submit" translatable="false">提交订单</string>
+    <string name="str_submit" translatable="false">提交</string>
     <string name="str_tourist_information" translatable="false">游客信息</string>
     <string name="str_increase_ticket" translatable="false">增加门票</string>
     <string name="str_merchant_album" translatable="false">商家相册</string>
@@ -254,7 +256,12 @@
     <string name="str_use_immediately">立即使用</string>
     <string name="str_close">关闭</string>
     <string name="string_privacy">点击注册即表示接受鱼人自游的《隐私政策》和《用户协议》</string>
+    <string name="string_murloc_self_privacy">鱼人自游《隐私政策》和《用户协议》</string>
     <string name="str_same_question">同问</string>
+    <string name="str_report">举报</string>
+    <string name="str_pull_black">拉黑</string>
+    <string name="str_un_interested">不感兴趣</string>
+    <string name="str_generate_pictures">生成图片</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
@@ -314,6 +321,9 @@
     <string name="str_collection_success">收藏成功</string>
     <string name="str_collection_cancel">取消收藏</string>
     <string name="str_no_one_has_answered_the_question_yet">暂时还没有人回答过该问题</string>
+    <string name="str_sure_to_delete_the_post">确认删除该帖子吗</string>
+    <string name="str_limit_time_sale">限时特卖</string>
+    <string name="str_other_ways_to_login">其他方式登录</string>
 
     <string name="select" translatable="false">选择图片</string>
     <string name="object_name">请输入OSS文件名</string>

@@ -60,13 +60,16 @@ public class PurchaseInstructionsDialog extends DialogFragment {
     //已减
     private TextView mTvAlreadyReducedPrice;
 
+    private PurchaseInstructionsListener purchaseInstructionsListener;
+
     public PurchaseInstructionsDialog() {
 
     }
 
     @SuppressLint("ValidFragment")
-    public PurchaseInstructionsDialog(MchGoodsBean mchHotelGoodsBean, String mchType, String mchName) {
+    public PurchaseInstructionsDialog(PurchaseInstructionsListener purchaseInstructionsListener,MchGoodsBean mchHotelGoodsBean, String mchType, String mchName) {
 
+        this.purchaseInstructionsListener = purchaseInstructionsListener;
         this.mchHotelGoodsBean = mchHotelGoodsBean;
         this.mchType = mchType;
         this.mchName = mchName;
@@ -146,27 +149,8 @@ public class PurchaseInstructionsDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
-                String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
-                String mchGroupType = MchTypeEnum.MCH_GROUP.getValue();
-                Intent intent = new Intent();
+                purchaseInstructionsListener.setPurchaseInstructionsCallback(mchHotelGoodsBean);
 
-                int goodsId = 0;
-                if(mchType.equals(mchScenicType) || mchType.equals(mchRecreationType))
-                {
-                    intent.putExtra("mchType", mchType);
-                    goodsId = mchHotelGoodsBean.getGoodsId();
-                    intent.setClass(context, OrderSubmitActivity.class);
-
-                } else if(mchType.equals(mchGroupType))
-                {
-                    goodsId = mchHotelGoodsBean.getId();
-                    intent.setClass(context, GroupMchOrderSubmitActivity.class);
-                }
-
-              ;
-                intent.putExtra("goodsId", goodsId);
-                startActivity(intent);
             }
         });
         String goodsBuyNotes = mchHotelGoodsBean.getGoodsBuyNotes();
@@ -250,5 +234,9 @@ public class PurchaseInstructionsDialog extends DialogFragment {
         super.show(manager, tag);
     }
 
+   public interface PurchaseInstructionsListener{
+
+        void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean);
+    }
 
 }

@@ -1,6 +1,8 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.FoodNearbyMoreAdapter;
@@ -29,11 +32,14 @@ import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.adapter.ShopRecommendDeliciousFoodAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
+import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
@@ -44,16 +50,32 @@ import com.nbhysj.coupon.model.response.MchFoodBean;
 import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.FineFoodPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.PopupWindowUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
 import com.nbhysj.coupon.view.StarBarView;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,8 +173,8 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     //附近商户
     private  FoodNearbyMoreAdapter foodNearbyMoreAdapter;
     private MchCommentAdapter userCommentAdapter;
-    //商户名
-    private int mchId;
+    //商户id
+    private static int mchId;
     private String address;
     //商户名
     private String mchName;
@@ -166,7 +188,13 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     //收藏状态
     private int collectionStatus;
     private ShopRecommendDeliciousFoodAdapter recommendDeliciousFoodAdapter;
+    static Bitmap bitmap = null;
 
+    private static IWXAPI api;
+
+    private static String photoUrl;
+
+    private ShareOprateDialog shareOprateDialog;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -179,6 +207,8 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     @Override
     public void initView(Bundle savedInstanceState) {
         mchId = getIntent().getIntExtra("mchId", 0);
+
+        api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID, false);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -279,9 +309,6 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 mScrollViewFoodRecommendation.setScrolListener(FoodDetailActivity.this);
             }
         });
-
-
-
     }
 
     @Override
@@ -323,9 +350,8 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                     MchFoodDetailResponse.MchQuestionEntity mchQuestionEntity = mchDetailsResponse.getMchQuestion(); //问题
                     MchFoodDetailResponse.CommentEntity commentEntity = mchDetailsResponse.getComment();
 
-
                     mchName = mchDetailsEntity.getMchName();
-                    String photoUrl = mchDetailsEntity.getPhoto();
+                    photoUrl = mchDetailsEntity.getPhoto();
                     float commentScore = mchDetailsEntity.getCommentScore();
                     double consumePrice = mchDetailsEntity.getConsumePrice();
                     int mchCommentNum = mchDetailsEntity.getCommentNum();
@@ -529,7 +555,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     }
 
     @OnClick({R.id.ibtn_back, R.id.rlyt_mch_ranking, R.id.img_menu, R.id.tv_mch_address, R.id.img_scenic_spot_forward
-    ,R.id.tv_more_businesses_nearby, R.id.img_collection,R.id.tv_recommend_delicious_food_look_more,R.id.tv_look_user_all_comment})
+    ,R.id.tv_more_businesses_nearby, R.id.img_collection,R.id.tv_recommend_delicious_food_look_more,R.id.tv_look_user_all_comment,R.id.rlyt_fine_food_comment,R.id.tv_user_comment_num})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -554,22 +580,33 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 break;
             case R.id.img_scenic_spot_forward:
 
-                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(FoodDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
-                    @Override
-                    public void onSharePlatformItemClick(String sharePlatform) {
+                if(shareOprateDialog == null)
+                {
+                    shareOprateDialog = new ShareOprateDialog(FoodDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                        @Override
+                        public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
 
-                        //   showToast(getActivity(),sharePlatform);
+                            try {
+                                if (bannerList != null && bannerList.size() > 0) {
+                                    String sharePlatformStr = sharePlatform.toString();
+                                    photoUrl = bannerList.get(0);
+                                    String wechatFriend = SharePlatformEnum.WECHAT_FRIEND.getValue();
+                                    if (sharePlatformStr.equals(wechatFriend)) {
 
-                       /* new ShareAction(ScenicSpotDetailActivity.this)
-                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                                .withText("hello")//分享内容
-                                .setCallback(umShareListener)//回调监听器
-                                .share();*/
+                                        new Thread(saveFileRunnable).start();
 
-                    }
-                }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                                    } else {
+
+                                        thirdShare(sharePlatform, photoUrl);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                }
                 shareOprateDialog.show();
-
                 break;
 
             case R.id.tv_more_businesses_nearby:
@@ -599,12 +636,43 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 startActivity(intent);
 
                 break;
+            case R.id.rlyt_fine_food_comment:
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.setClass(FoodDetailActivity.this,FineFoodEvaluateActivity.class);
+                    intent.putExtra("mchId",mchId);
+                    startActivity(intent);
+
+                } else {
+                    onReLogin("");
+                }
+
+                break;
+            case R.id.tv_user_comment_num:
+
+                intent.setClass(FoodDetailActivity.this,MchCommentActivity.class);
+                intent.putExtra("mchId",mchId);
+                startActivity(intent);
+
+                break;
+
             default:
                 break;
 
         }
     }
 
+    @Override
+    public void getFoodCommentIndexResult(BackResult<FineFoodCommentInitResponse> res) {
+
+    }
+
+    @Override
+    public void fineFoodCommentResult(BackResult res) {
+
+    }
 
     private void showPopupWindow(View anchorView) {
         View contentView = getPopupWindowContentView();
@@ -638,34 +706,41 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 String backMyMessage = getResources().getString(R.string.str_back_my_message);
 
                 Intent intent = new Intent();
-                if(itemStr.equals(backHomePage))
-                {
-                    if(appManager != null)
-                    {
-                        appManager.finishActivity(MainActivity.class);
-                    }
-                    //  EventBus.getDefault().post("backHomePage");
+                if (itemStr.equals(backHomePage)) {
 
-                } else if(itemStr.equals(backMyCollection))
-                {
-                    //  intent.setClass(ScenicSpotDetailActivity.this, MainActivity.class);
-                    //intent.putExtra("currentItem",3);
-
-                    if(appManager != null)
+                    if (appManager != null)
                     {
                         appManager.finishActivity(MainActivity.class);
                     }
 
-                    //  EventBus.getDefault().post("backMyCollection");
+                    Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                    mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL);
+                    sendBroadcast(mIntent);
 
-                } else if(itemStr.equals(backMyOrder))
-                {
+                } else if (itemStr.equals(backMyCollection)) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+
+                    if (!TextUtils.isEmpty(token))
+                    {
+                        if (appManager != null)
+                        {
+                            appManager.finishActivity(MainActivity.class);
+                        }
+
+                        Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                        mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_MY_COLLECTION);
+                        sendBroadcast(mIntent);
+
+                    } else {
+                        onReLogin("");
+                    }
+
+                } else if (itemStr.equals(backMyOrder)) {
                     intent.setClass(FoodDetailActivity.this, MyOrderActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
 
-                } else if(itemStr.equals(backMyMessage))
-                {
+                } else if (itemStr.equals(backMyMessage)) {
                     intent.setClass(FoodDetailActivity.this, MessageActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -726,4 +801,123 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
             mPresenter.mchCollection(mchCollectionRequest);
         }
     }
+
+    private void thirdShare(SHARE_MEDIA platform, String photoUrl) {
+        String webUrl = Net.H5_YURENZIYOU_DOWNLOAD_GUIDE_PAGE_URL;
+        UMImage image = new UMImage(FoodDetailActivity.this, photoUrl);                    //资源文件
+        UMWeb umWeb = new UMWeb(webUrl, FoodDetailActivity.this.getResources().getString(R.string.app_name), "鱼人自游是宁波海洋世界旗下一站式旅游服务平台,产品及服务覆盖门票预订,景点评价及景点打折门票查询,酒店预订,美食推荐、还有更详细的旅游攻略.", image); //URL 标题 描述 封面图
+        new ShareAction(FoodDetailActivity.this)
+                .setPlatform(platform)//传入平台
+                .withText("HiVideo")//标题
+                .withMedia(umWeb)
+                .setCallback(shareListener)//回调监听器
+                .share();
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //   Toast.makeText(getActivity(), "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(FoodDetailActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(FoodDetailActivity.this, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private static Runnable saveFileRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                URL url = new URL(photoUrl);
+                //打开输入流
+                InputStream inputStream = url.openStream();
+                //对网上资源进行下载转换位图图片
+                Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 500, 500, true);
+                bmp.recycle();
+                WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
+                miniProgramObj.webpageUrl = "http:192.168.1.140:8083/"; // 兼容低版本的网页链接
+                miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE;// 正式版:0，测试版:1，体验版:2
+                miniProgramObj.userName = "gh_8f591c4ee659";     // 小程序原始id
+                miniProgramObj.path = Net.MCH_FOODS_MINIPTOGRAM_URL + mchId; //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
+                WXMediaMessage msg = new WXMediaMessage(miniProgramObj);
+                msg.title = "鱼人自游";                    // 小程序消息title
+                msg.description = "帖子分享";               // 小程序消息desc
+                msg.thumbData = compressImage(thumbBmp);                      // 小程序消息封面图片，小于128k
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("miniProgram");
+                req.message = msg;
+                req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前只支持会话
+                api.sendReq(req);
+
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+
+                //saveFile(mBitmap);
+                //   mSaveMessage = "图片保存成功！";
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //   messageHandler.sendMessage(messageHandler.obtainMessage());
+        }
+    };
+
+    private static String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    private static byte[] compressImage(Bitmap bitmapImage) {
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+            int options = 50;
+            while (baos.toByteArray().length / 1024 > 100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+                baos.reset();//重置baos即清空baos
+                options -= 10;//每次都减少10
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+
+            }
+            //ByteArrayInputStream isBm = new ByteArrayInputStream());//把压缩后的数据baos存放到ByteArrayInputStream中
+            //   bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
+
 }

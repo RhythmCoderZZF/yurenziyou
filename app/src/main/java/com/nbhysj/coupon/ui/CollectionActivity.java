@@ -172,6 +172,11 @@ public class CollectionActivity extends BaseActivity<MinePresenter, MineModel> i
     }
 
     @Override
+    public void deletePostResult(BackResult res) {
+
+    }
+
+    @Override
     public void getCollectionMsgListResult(BackResult<ZanAndCollectionResponse> res) {
 
         dismissProgressDialog();

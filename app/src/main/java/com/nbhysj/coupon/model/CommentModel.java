@@ -14,6 +14,8 @@ import com.nbhysj.coupon.model.response.PostsCommentResponse;
 import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
 import com.nbhysj.coupon.model.response.UserOrderListResponse;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 
 /**
@@ -29,8 +31,8 @@ public class CommentModel implements CommentContract.Model
     }
 
     @Override
-    public Observable<BackResult<MchCommentResponse>> getMchCommentList(int mchId) {
-        return Api.getInstance().apiService.getMchCommentList(mchId).compose(RxSchedulers.io_main());
+    public Observable<BackResult<MchCommentResponse>> getMchCommentList(Map<String, Object> map) {
+        return Api.getInstance().apiService.getMchCommentList(map).compose(RxSchedulers.io_main());
     }
 
     @Override

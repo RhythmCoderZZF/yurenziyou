@@ -142,12 +142,18 @@ public class GroupMchListActivity extends BaseActivity<GroupMchPresenter, GroupM
                         @Override
                         public void onPageSelected(int position)
                         {
-                            String title = tagList.get(position).getTitle();
-                            mTvTitleTag.setText(title);
-                            GroupMchResponse.GroupEntity groupEntity = groupVOSEntityList.get(position);
-                            packageVOSEntityList = groupEntity.getPackageVOS();
-                            groupMchListAdapter.setGroupMchList(packageVOSEntityList);
-                            groupMchListAdapter.notifyDataSetChanged();
+                            try {
+
+                                GroupMchResponse.GroupEntity groupEntity = groupVOSEntityList.get(position);
+                                String title = tagList.get(position).getTitle();
+                                mTvTitleTag.setText(title);
+                                packageVOSEntityList = groupEntity.getPackageVOS();
+                                groupMchListAdapter.setGroupMchList(packageVOSEntityList);
+                                groupMchListAdapter.notifyDataSetChanged();
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override

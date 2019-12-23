@@ -126,7 +126,16 @@ public class SubShareAdapter extends RecyclerView.Adapter<SubShareAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
 
-                    subShareListener.setSubShareListener(postId);
+                    subShareListener.setSubShareListener(postId,itemPosition);
+
+                }
+            });
+
+            holder.mTvShareMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    subShareListener.setSubShareListener(postId,itemPosition);
 
                 }
             });
@@ -182,6 +191,9 @@ public class SubShareAdapter extends RecyclerView.Adapter<SubShareAdapter.ViewHo
 
         @BindView(R.id.img_share)
         ImageView mImgShare;
+
+        @BindView(R.id.tv_share_menu)
+        TextView mTvShareMenu;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -191,6 +203,6 @@ public class SubShareAdapter extends RecyclerView.Adapter<SubShareAdapter.ViewHo
 
     public interface SubShareListener{
 
-        void setSubShareListener(int mPostId);
+        void setSubShareListener(int mPostId,int position);
     }
 }

@@ -17,6 +17,8 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AlbumOprateAdapter;
 import com.nbhysj.coupon.adapter.CollectionOprateAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.GoodsTypeEnum;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.common.Enum.MineCollectionTypeEnum;
 import com.nbhysj.coupon.contract.AlbumContract;
 import com.nbhysj.coupon.contract.MineContract;
@@ -25,6 +27,7 @@ import com.nbhysj.coupon.dialog.OprateDialog;
 import com.nbhysj.coupon.model.AlbumModel;
 import com.nbhysj.coupon.model.MineModel;
 import com.nbhysj.coupon.model.request.CollectionBatchMchDeleteRequest;
+import com.nbhysj.coupon.model.request.CollectionBatchPostsDeleteRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchDeleteContentRequest;
 import com.nbhysj.coupon.model.request.FavoritesBatchMoveContentRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
@@ -132,6 +135,7 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
     public void initView(Bundle savedInstanceState) {
 
         type = getIntent().getStringExtra("type");
+
         if (favoritesAlbumList == null) {
 
             favoritesAlbumList = new ArrayList<>();
@@ -189,6 +193,7 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mPageNo = 1;
                         isOnLoadMore = false;
                         favoritesAlbumList.clear();
                         collectionOprateAdapter.notifyDataSetChanged();
@@ -236,6 +241,11 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
 
     @Override
     public void getMineCollectionAllListResult(ResponseBody res) {
+
+    }
+
+    @Override
+    public void deletePostResult(BackResult res) {
 
     }
 
@@ -311,7 +321,40 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
 
     @Override
     public void collectionPostsBatchDeleteResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                   /* for (int i = 0; i < favoritesAlbumList.size(); i++) {
+
+                        FavoritesBean favoritesBean = favoritesAlbumList.get(i);
+                        int mCollectionId = favoritesBean.getCollectionId();
+
+                        for (int j = 0; j < collectionIdList.size(); j++) {
+                            int collectionId = collectionIdList.get(j);
+
+                            if (mCollectionId == collectionId) {
+
+                                favoritesAlbumList.remove(favoritesBean);
+                            }
+                        }
+                    }
+
+                    collectionOprateAdapter.setAlbumOprateList(favoritesAlbumList);
+                    collectionOprateAdapter.notifyDataSetChanged();*/
+                    mPageNo = 1;
+                    favoritesAlbumList.clear();
+                    collectionOprateAdapter.notifyDataSetChanged();
+                    getMineCollectionDetail();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(CollectionDetailsActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -438,6 +481,19 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
         }
     }
 
+    //帖子批量删除
+    public void collectionPostsBatchDelete() {
+
+        if (validateInternet()) {
+
+            showProgressDialog(CollectionDetailsActivity.this);
+
+            CollectionBatchPostsDeleteRequest collectionBatchPostsDeleteRequest = new CollectionBatchPostsDeleteRequest();
+            collectionBatchPostsDeleteRequest.setIds(collectionIdList);
+            mPresenter.collectionPostsBatchDeleteRequest(collectionBatchPostsDeleteRequest);
+        }
+    }
+
     public void oprateDialog() {
 
         if (oprateDialog == null) {
@@ -462,7 +518,17 @@ public class CollectionDetailsActivity extends BaseActivity<MinePresenter, MineM
                             int collectionId = selectAlbumEditList.get(i).getCollectionId();
                             collectionIdList.add(collectionId);
                         }
-                        collectionMchBatchDeleteContent();
+
+                        String postsValue = MineCollectionTypeEnum.POSTS.getKey();
+                        String mchValue = MineCollectionTypeEnum.MCH.getKey();
+                        if(type.equals(postsValue))
+                        {
+                            collectionPostsBatchDelete();
+
+                        } else if(type.equals(mchValue))
+                        {
+                            collectionMchBatchDeleteContent();
+                        }
 
                     } else {
 

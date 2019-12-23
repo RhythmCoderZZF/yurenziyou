@@ -9,6 +9,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
 import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
 import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
+import com.nbhysj.coupon.model.response.OrderRefundResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import io.reactivex.Observable;
 
@@ -27,14 +28,13 @@ public interface OrderRefundContract {
         Observable<BackResult<OrderRefundInitResponse>> getOrderPartialRefundDataInit(int orderGoodsId, String goodsType);
 
         //部分退款
-        Observable<BackResult> orderPartialRefundSubmit(OrderPartialRefundRequest orderPartialRefundRequest);
+        Observable<BackResult<OrderRefundResponse>> orderPartialRefundSubmit(OrderPartialRefundRequest orderPartialRefundRequest);
 
         //全部退款订单页面
         Observable<BackResult<OrderAllRefundInitResponse>> getOrderAllRefundDataInit(String orderNo);
 
         //全部退款
-        Observable<BackResult> orderAllRefundSubmit(OrderAllRefundRequest orderAllRefundRequest);
-
+        Observable<BackResult<OrderRefundResponse>> orderAllRefundSubmit(OrderAllRefundRequest orderAllRefundRequest);
 
         //全部退款
         Observable<BackResult<OrderRefundDetailResponse>> getOrderRefundDetail(String orderRefundNo);
@@ -46,11 +46,11 @@ public interface OrderRefundContract {
 
         void getOrderPartialRefundDataInitResult(BackResult<OrderRefundInitResponse> res);
 
-        void orderPartialRefundSubmitResult(BackResult res);
+        void orderPartialRefundSubmitResult(BackResult<OrderRefundResponse> res);
 
         void getOrderAllRefundDataInitResult(BackResult<OrderAllRefundInitResponse> res);
 
-        void orderAllRefundSubmitResult(BackResult res);
+        void orderAllRefundSubmitResult(BackResult<OrderRefundResponse> res);
 
         void getOrderRefundDetailResult(BackResult<OrderRefundDetailResponse> res);
 

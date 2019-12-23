@@ -113,7 +113,7 @@ public class PendingTravelListFragment extends BaseFragment<OrderListPresenter, 
             }
 
             @Override
-            public void setOrderCancelListener(UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
+            public void setOrderCancelListener(int position,UserOrderListResponse.OrderTypeEntity orderTypeEntity) {
 
             }
 

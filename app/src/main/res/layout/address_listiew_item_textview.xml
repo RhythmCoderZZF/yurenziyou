@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_grey"
-        android:text="A"
+        android:text=""
         android:textSize="@dimen/text_size_medium" />
 
     <TextView

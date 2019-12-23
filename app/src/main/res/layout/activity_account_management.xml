@@ -160,11 +160,13 @@
 
             <View
                 style="@style/line"
-                android:layout_marginLeft="@dimen/dp_16" />
+                android:layout_marginLeft="@dimen/dp_16"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:id="@+id/rlyt_bind_account_and_setting"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="56dp">
 
                 <TextView

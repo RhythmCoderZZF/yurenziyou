@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +14,7 @@ import com.nbhysj.coupon.adapter.MineCollectionAlbumAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.AlbumContract;
 import com.nbhysj.coupon.model.AlbumModel;
+import com.nbhysj.coupon.model.request.FavoritesDeleteRequest;
 import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
@@ -38,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * @auther：hysj created on 2019/05/24
@@ -66,6 +70,15 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     private MineCollectionAlbumAdapter mineCollectionAlbumAdapter;
 
     private boolean visibleToUser;
+
+    //专辑编辑
+    private int REQUEST_CODE_EDIT_COLLECTIION_ALBUM = 0;
+
+    //删除编辑
+    private int REQUEST_CODE_DELETE_COLLECTIION_ALBUM = 1;
+
+    private int mPosition;
+
     public MineCollectAlbumFragment() {
         // Required empty public constructor
     }
@@ -119,8 +132,17 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
             }
 
             @Override
-            public void setEditCollectionAlbumListener(FavoritesBean mineCollectionAlbumResponse) {
-                toActivity(EditAlbumActivity.class);
+            public void setEditCollectionAlbumListener(int position,FavoritesBean favoritesBean) {
+                mPosition = position;
+                int collectionId = favoritesBean.getId();
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("favoritesBean",favoritesBean);
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
+                intent.setClass(getActivity(),EditAlbumActivity.class);
+               // intent.putExtra("collectionId",collectionId);
+                startActivityForResult(intent,REQUEST_CODE_EDIT_COLLECTIION_ALBUM);
             }
         });
         mineCollectionAlbumAdapter.setCollectionAlbumList(mineCollectionAlbumList);
@@ -191,14 +213,9 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             outRect.bottom = itemSpace;
-                /*if (parent.getChildLayoutPosition(view)%itemNum == 0){  //parent.getChildLayoutPosition(view) 获取view的下标
-                    outRect.left = 0;
-                } else {
-                    outRect.left = itemSpace;
-                }*/
             outRect.left = itemSpace;
             outRect.right = itemSpace;
-            //outRect.right = itemSpace;
+
         }
     }
 
@@ -240,6 +257,11 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
 
     @Override
     public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
+
+    }
+
+    @Override
+    public void delFavoritesRequest(BackResult res) {
 
     }
 
@@ -328,6 +350,8 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
         {
             if(mineFragmentRefresh.equals("mineFragmentRefresh"))
             {
+                mPageNo = 1;
+                mSmartRefreshLayout.setNoMoreData(false);
                 mineCollectionAlbumList.clear();
                 mineCollectionAlbumAdapter.notifyDataSetChanged();
                 getFavoritesCollectionList();
@@ -339,5 +363,27 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_EDIT_COLLECTIION_ALBUM && resultCode == RESULT_OK)
+        {
+            int albumOprate = data.getIntExtra("albumOprate",0);
+            if(albumOprate == 0) {
+                String albumTitle = data.getStringExtra("albumTitle");
+                String albumIntro = data.getStringExtra("albumIntro");
+                mineCollectionAlbumList.get(mPosition).setTitle(albumTitle);
+                mineCollectionAlbumList.get(mPosition).setIntro(albumIntro);
+                mineCollectionAlbumAdapter.notifyDataSetChanged();
+            } else if(albumOprate == 1){
+
+                FavoritesBean favoritesBean = mineCollectionAlbumList.get(mPosition);
+                mineCollectionAlbumList.remove(favoritesBean);
+                mineCollectionAlbumAdapter.setCollectionAlbumList(mineCollectionAlbumList);
+                mineCollectionAlbumAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

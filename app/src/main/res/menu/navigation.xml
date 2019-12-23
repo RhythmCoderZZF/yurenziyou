@@ -15,7 +15,7 @@
         android:title="" />
 
     <item
-        android:id="@+id/navigation_footprint"
+        android:id="@+id/navigation_travel_assistant"
         android:icon="@drawable/bg_bottom_navigation_assistant_selector"
         android:title="助手" />
 

@@ -137,7 +137,8 @@
                                         android:drawablePadding="4dp"
                                         android:lines="1"
                                         android:singleLine="true"
-                                        android:textColor="#999999"
+                                        android:textColor="@color/white"
+                                        android:text="请输入您要搜索的内容"
                                         android:textSize="14sp" />
 
                                 </LinearLayout>

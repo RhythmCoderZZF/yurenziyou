@@ -11,6 +11,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
@@ -69,6 +70,9 @@ public interface HotelContract {
         //领取优惠券
         Observable<BackResult<CouponsGetBean>> getCoupon(int couponId);
 
+        //酒店类目列表
+        Observable<BackResult<MchCateListResponse>> getHotelListByCateId(HashMap<String, String> map);
+
     }
 
     interface View extends BaseView {
@@ -97,6 +101,8 @@ public interface HotelContract {
         //领取优惠券
         void getCouponResult(BackResult<CouponsGetBean> res);
 
+        void getHotelListByCateIdResult(BackResult<MchCateListResponse> res);
+
         void showMsg(String msg);
     }
 
@@ -124,6 +130,9 @@ public interface HotelContract {
         public abstract void queryMchCouponList(int mchId);
 
         public abstract void getCoupon(int couponId);
+
+        //酒店类目列表
+        public abstract void getHotelListByCateId(HashMap<String, String> map);
 
     }
 }

@@ -87,23 +87,24 @@
                 android:textColor="@color/black"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginRight="@dimen/dp_10"
-                android:layout_toLeftOf="@+id/img_share_menu"
+                android:layout_toLeftOf="@+id/tv_share_menu"
                 android:layout_marginTop="@dimen/dp_14"
                 android:textSize="@dimen/text_size_medium"
                 android:lines="2"
                 android:ellipsize="end"
                 android:textStyle="bold"/>
 
-            <ImageView
-                android:id="@+id/img_share_menu"
+            <TextView
+                android:id="@+id/tv_share_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center"
-                android:padding="@dimen/dp_10"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_15"
-                android:src="@mipmap/icon_my_module_menu" />
+                android:padding="@dimen/dp_10"
+                android:textColor="@color/color_text_gray6"
+                android:text="•••" />
 
         </RelativeLayout>
 

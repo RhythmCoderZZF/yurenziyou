@@ -20,6 +20,7 @@ import com.nbhysj.coupon.model.response.UserInfoResponse;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 
 /**
  * created by hysj at 2019/03/25.
@@ -39,7 +40,7 @@ public class PublishPostModel implements PublishPostContract.Model {
     }
 
     @Override
-    public Observable<BackResult<List<HotTagsTopicBean>>> getHotTagsTopicList(String type) {
+    public Observable<ResponseBody> getHotTagsTopicList(String type) {
         return Api.getInstance().apiService.getHotTagsTopicList(type).compose(RxSchedulers.io_main());
     }
 

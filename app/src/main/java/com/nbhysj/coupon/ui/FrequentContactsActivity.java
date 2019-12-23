@@ -24,6 +24,7 @@ import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
 import com.nbhysj.coupon.model.response.TravellerBean;
 import com.nbhysj.coupon.model.response.TravellerInfoResponse;
 import com.nbhysj.coupon.presenter.FrequentlyUsedInfoPresenter;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -54,6 +55,7 @@ public class FrequentContactsActivity extends BaseActivity<FrequentlyUsedInfoPre
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_my_frequent_contacts;
     }
 
@@ -145,6 +147,21 @@ public class FrequentContactsActivity extends BaseActivity<FrequentlyUsedInfoPre
 
     @Override
     public void getRecipientsInfoListResult(BackResult<RecipientsInfoResponse> res) {
+
+    }
+
+    @Override
+    public void addRecipientsInfoResult(BackResult res) {
+
+    }
+
+    @Override
+    public void updateRecipientsInfoResult(BackResult res) {
+
+    }
+
+    @Override
+    public void deleteRecipientsResult(BackResult res) {
 
     }
 

@@ -6,6 +6,8 @@ import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HouseResouceResponse;
+import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
@@ -48,6 +50,12 @@ public interface HomestayContract {
 
         //领取优惠券
         Observable<BackResult<CouponsGetBean>> getCoupon(int couponId);
+
+        //房东主页
+        Observable<BackResult<LandlordDetailResonse>> getLandlordHomePage(int landlordId);
+
+        //房源列表信息
+        Observable<BackResult<HouseResouceResponse>> getLandlordHouseResourceList(int landlordId);
     }
 
     interface View extends BaseView {
@@ -66,6 +74,12 @@ public interface HomestayContract {
 
         //领取优惠券
         void getCouponResult(BackResult<CouponsGetBean> res);
+
+        //房东主页
+        void getLandlordHomePageResult(BackResult<LandlordDetailResonse> res);
+
+        //房源列表信息
+        void getLandlordHouseResourceListResult(BackResult<HouseResouceResponse> res);
 
         void showMsg(String msg);
     }
@@ -88,5 +102,9 @@ public interface HomestayContract {
         public abstract void queryMchCouponList(int mchId);
 
         public abstract void getCoupon(int couponId);
+
+        public abstract void getLandlordHomePage(int landlordId);
+
+        public abstract void getLandlordHouseResourceList(int landlordId);
     }
 }

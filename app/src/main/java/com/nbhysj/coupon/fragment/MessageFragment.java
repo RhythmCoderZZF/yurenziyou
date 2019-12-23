@@ -22,6 +22,8 @@ import com.nbhysj.coupon.model.response.UserFollowResponse;
 import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.presenter.MessagePresenter;
 import com.nbhysj.coupon.ui.CommentsAndAnswersActivity;
+import com.nbhysj.coupon.ui.MoreQuestionsActivity;
+import com.nbhysj.coupon.ui.MyQuestionAndAnswersActivity;
 import com.nbhysj.coupon.ui.NewFansActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.ui.StrokeDynamicsActivity;
@@ -94,7 +96,7 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
                 toActivity(StrokeDynamicsActivity.class);
                 break;
             case R.id.rlyt_question_and_answer:
-                toActivity(CommentsAndAnswersActivity.class);
+                toActivity(MyQuestionAndAnswersActivity.class);
                 break;
             case R.id.llyt_new_fans:   //新增粉丝
                 toActivity(NewFansActivity.class);

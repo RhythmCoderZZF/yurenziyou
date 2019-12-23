@@ -11,114 +11,125 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:id="@+id/rlyt_fine_food"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/dp_15">
-
-        <com.nbhysj.coupon.view.RoundedImageView
-            android:id="@+id/image_fine_food"
-            android:layout_width="104dp"
-            android:layout_height="104dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            app:riv_corner_radius="5dip"
-            android:scaleType="fitXY"
-            />
-
-        <TextView
-            android:id="@+id/tv_fine_food_serial_number"
-            android:layout_width="@dimen/dp_47"
-            android:layout_height="@dimen/dp_21"
-            android:background="@drawable/bg_tag_fine_food_red_purple_gradient"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_normal"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
+        android:id="@+id/rlyt_fine_food_sub_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_24"
-        android:layout_toRightOf="@+id/rlyt_fine_food"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_mch_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_7"
-            android:text=""
-            android:textColor="@color/txt_font_black2"
-            android:textSize="@dimen/text_size_xnormal"
-            android:textStyle="bold" />
+        android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/rlyt_price_and_score"
-            android:layout_width="match_parent"
+            android:id="@+id/rlyt_fine_food"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_mch_name"
-            android:layout_marginTop="@dimen/dp_8"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_15">
 
-            <com.nbhysj.coupon.view.StarBarView
-                android:id="@+id/starbar_store_fine_food"
-                android:layout_width="5dp"
-                android:layout_height="5dp"
+            <com.nbhysj.coupon.view.RoundedImageView
+                android:id="@+id/image_fine_food"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_centerVertical="true"
-                android:clickable="false"
-                android:focusable="false"
-                ratingbar:starCount="5"
-                ratingbar:starDistance="5dp"
-                ratingbar:starEmpty="@mipmap/icon_flower_gray"
-                ratingbar:starFill="@mipmap/icon_flower_orange"
-                ratingbar:starSize="13dp" />
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitXY"
+                app:riv_corner_radius="5dip" />
 
             <TextView
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_7"
-                android:layout_toRightOf="@+id/starbar_store_fine_food"
-                android:text="¥ 0/人"
-                android:textColor="@color/txt_font_black2"
-                android:textSize="@dimen/text_size_small" />
+                android:id="@+id/tv_fine_food_serial_number"
+                android:layout_width="@dimen/dp_47"
+                android:layout_height="@dimen/dp_21"
+                android:background="@drawable/bg_tag_fine_food_red_purple_gradient"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_normal"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_fine_food_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rlyt_price_and_score"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_15"
-            android:lines="1"
-            android:singleLine="true"
-            android:text=""
-            android:textColor="@color/color_text_gray20"
-            android:textSize="@dimen/text_size_small" />
-
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/flowlayout_fine_food_label"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_fine_food_des"
-            android:layout_marginBottom="@dimen/dp_17"
-            zhy:max_select="-1" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:layout_toRightOf="@+id/rlyt_fine_food"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:layout_alignParentBottom="true"
-            android:alpha="0.25"
-            android:background="@color/color_text_gray6"></View>
+            <TextView
+                android:id="@+id/tv_mch_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_7"
+                android:text=""
+                android:textColor="@color/txt_font_black2"
+                android:textSize="@dimen/text_size_xnormal"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/rlyt_price_and_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_mch_name"
+                android:layout_marginTop="@dimen/dp_8"
+                android:orientation="horizontal">
+
+                <com.nbhysj.coupon.view.StarBarView
+                    android:id="@+id/starbar_store_fine_food"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:focusable="false"
+                    ratingbar:starCount="5"
+                    ratingbar:starDistance="5dp"
+                    ratingbar:starEmpty="@mipmap/icon_hollow_yellow_star"
+                    ratingbar:starFill="@mipmap/icon_solid_yellow_star"
+                    ratingbar:starSize="13dp" />
+
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_7"
+                    android:layout_toRightOf="@+id/starbar_store_fine_food"
+                    android:text="¥ 0/人"
+                    android:textColor="@color/txt_font_black2"
+                    android:textSize="@dimen/text_size_small" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_fine_food_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlyt_price_and_score"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_15"
+                android:lines="1"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/color_text_gray20"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone" />
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/flowlayout_fine_food_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_fine_food_des"
+                android:layout_marginBottom="@dimen/dp_17"
+                zhy:max_select="-1" />
+
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@+id/rlyt_fine_food_sub_item"
+        android:layout_marginLeft="@dimen/dp_135"
+        android:layout_marginTop="@dimen/dp_10"
+        android:alpha="0.25"
+        android:background="@color/color_text_gray6"></View>
 
 </RelativeLayout>

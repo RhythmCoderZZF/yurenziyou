@@ -102,9 +102,12 @@ public class CityFragment implements AdapterView.OnItemClickListener {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = LayoutInflater.from(context).inflate(R.layout.address_listiew_item_textview, null);
-            TextView text = (TextView) view.findViewById(R.id.tvTextName);
-            ImageView ivSelect = (ImageView) view.findViewById(R.id.ivSelect);
+            TextView text = view.findViewById(R.id.tvTextName);
+            ImageView ivSelect = view.findViewById(R.id.ivSelect);
+            TextView mTvAlphabet = view.findViewById(R.id.tv_alphabet);
             text.setText(list.get(i).getName());
+            String letter = list.get(i).getLetter();
+            mTvAlphabet.setText(letter);
             if (String.valueOf(list.get(i).getId()).equals(code)) {
                 text.setTextColor(context.getResources().getColor(R.color.color_text_blue2));
                 ivSelect.setVisibility(View.VISIBLE);

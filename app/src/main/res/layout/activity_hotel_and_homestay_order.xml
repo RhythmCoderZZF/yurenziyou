@@ -309,7 +309,8 @@
                         android:layout_marginRight="@dimen/dp_16"
                         android:text="规则 >"
                         android:textColor="@color/color_orange2"
-                        android:textSize="@dimen/text_size_small" />
+                        android:textSize="@dimen/text_size_small"
+                        android:visibility="gone"/>
 
 
                 </RelativeLayout>

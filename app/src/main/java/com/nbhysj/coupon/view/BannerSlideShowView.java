@@ -84,6 +84,8 @@ public class BannerSlideShowView extends FrameLayout {
     boolean stat = false;
 
     private MyPagerAdapter myPagerAdapter;
+
+    View layoutView;
     /**
      * Handler
      **/
@@ -180,14 +182,15 @@ public class BannerSlideShowView extends FrameLayout {
         this.bannerList = list;
         dotCount = list.size();
         count = list.size();
-        LayoutInflater.from(context).inflate(R.layout.layout_slideshow, this,
+        layoutView = LayoutInflater.from(context).inflate(R.layout.layout_slideshow, this,
                 true);
-        LinearLayout dotLayout = (LinearLayout) findViewById(R.id.dotLayout);
+        LinearLayout dotLayout = (LinearLayout)layoutView.findViewById(R.id.dotLayout);
         dotLayout.removeAllViews();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++)
+        {
+
             ImageView view = new ImageView(context);
-            // view.setTag(Constant.URLIMG + banner.getImage());
-            //	if (i == 0)// 给一个默认图
+
             view.setScaleType(ScaleType.FIT_XY);
             imageViewsList.add(view);
         }
@@ -229,7 +232,6 @@ public class BannerSlideShowView extends FrameLayout {
             viewPager.setScroll(false);
 
         }
-
     }
 
     public void setBannerList(List<String> bannerList){

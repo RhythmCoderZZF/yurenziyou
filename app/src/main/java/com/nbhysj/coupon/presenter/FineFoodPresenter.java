@@ -2,6 +2,7 @@ package com.nbhysj.coupon.presenter;
 
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
+import com.nbhysj.coupon.model.request.FineFoodCommentRequest;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 
 import java.util.HashMap;
@@ -48,6 +49,18 @@ public class FineFoodPresenter extends FineFoodContract.Presenter {
 
         mRxManager.add(mModel.findFoodListByCateId(map).subscribe(res -> mView.findFoodsListByCateIdResult(res), e -> mView.showMsg(e.getMessage())));
     }
+
+    @Override
+    public void getFoodCommentIndex(int mchId) {
+
+        mRxManager.add(mModel.getFoodCommentIndex(mchId).subscribe(res -> mView.getFoodCommentIndexResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+    @Override
+    public void fineFoodComment(FineFoodCommentRequest fineFoodCommentRequest)
+    {
+        mRxManager.add(mModel.fineFoodComment(fineFoodCommentRequest).subscribe(res -> mView.fineFoodCommentResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
     @Override
     public void onStart() {
 

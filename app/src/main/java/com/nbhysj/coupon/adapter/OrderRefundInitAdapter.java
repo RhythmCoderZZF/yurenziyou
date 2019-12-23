@@ -88,17 +88,18 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
                 if(!TextUtils.isEmpty(deductNote))
                 {
-                    ((GoodsViewHolder) holder).mTvGoodDeductNote.setVisibility(View.VISIBLE);
-                    ((GoodsViewHolder) holder).mTvGoodDeductNote.setText(deductNote);
+                    ((GoodsViewHolder) holder).mTvGoodsDeductNote.setVisibility(View.VISIBLE);
+                    ((GoodsViewHolder) holder).mTvGoodsDeductNote.setText(deductNote);
                 } else {
-                    ((GoodsViewHolder) holder).mTvGoodDeductNote.setVisibility(View.GONE);
+                    ((GoodsViewHolder) holder).mTvGoodsDeductNote.setVisibility(View.GONE);
                 }
 
                 ((GoodsViewHolder) holder).mTvHasBeenUsedNum.setText(String.valueOf(usedNum));
                 ((GoodsViewHolder) holder).mTvQuantityOfRefundNum.setText(String.valueOf(validNum));
-                ((GoodsViewHolder) holder).mTvGoodDeductPrice.setText(String.valueOf(deductPrice));
-                ((GoodsViewHolder) holder).mTvTotalPrice.setText(String.valueOf(totalPrice));
-                ((GoodsViewHolder) holder).mTvGoodNum.setText("x" + String.valueOf(sumNum));
+                double goodsTotalPrice = sumNum * Double.parseDouble(price);
+                ((GoodsViewHolder) holder).mTvGoodsTotalPrice.setText(String.valueOf(goodsTotalPrice));
+                ((GoodsViewHolder) holder).mTvUnitPrice.setText(String.valueOf(price));
+                ((GoodsViewHolder) holder).mTvGoodsNum.setText("x" + String.valueOf(sumNum));
 
 
             } else if (holder instanceof GoodsVehicleViewHolder) {
@@ -177,17 +178,17 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         //可使用数量
         TextView mTvQuantityOfRefundNum;
 
-        //总金额
-        TextView mTvTotalPrice;
+        //单价金额
+        TextView mTvUnitPrice;
 
         //商品数量
-        TextView mTvGoodNum;
+        TextView mTvGoodsNum;
 
         //商品扣款理由
-        TextView mTvGoodDeductNote;
+        TextView mTvGoodsDeductNote;
 
-        //商品扣款价格
-        TextView mTvGoodDeductPrice;
+        //商品总金额
+        TextView mTvGoodsTotalPrice;
 
         //商户名
         TextView mTvMchName;
@@ -198,10 +199,10 @@ public class OrderRefundInitAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             mImgGoods = itemView.findViewById(R.id.image_goods);
             mTvHasBeenUsedNum = itemView.findViewById(R.id.tv_has_been_used_num);
             mTvQuantityOfRefundNum = itemView.findViewById(R.id.tv_quantity_of_refund_num);
-            mTvTotalPrice = itemView.findViewById(R.id.tv_total_price);
-            mTvGoodNum = itemView.findViewById(R.id.tv_good_num);
-            mTvGoodDeductNote = itemView.findViewById(R.id.tv_good_deduct_note);
-            mTvGoodDeductPrice = itemView.findViewById(R.id.tv_deduct_price);
+            mTvUnitPrice = itemView.findViewById(R.id.tv_unit_price);
+            mTvGoodsNum = itemView.findViewById(R.id.tv_good_num);
+            mTvGoodsDeductNote = itemView.findViewById(R.id.tv_good_deduct_note);
+            mTvGoodsTotalPrice = itemView.findViewById(R.id.tv_total_price);
             mTvMchName = itemView.findViewById(R.id.tv_mch_name);
         }
     }

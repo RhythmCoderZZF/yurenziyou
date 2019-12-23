@@ -67,9 +67,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 holder.mRvPostShare.setLayoutManager(linearLayoutManager);
                 SubShareAdapter subShareAdapter = new SubShareAdapter(mContext, new SubShareAdapter.SubShareListener() {
                     @Override
-                    public void setSubShareListener(int mPostId) {
+                    public void setSubShareListener(int mPostId,int position) {
 
-                        shareListener.setShareListener(mPostId);
+                        shareListener.setShareListener(mPostId,itemPosition,position);
 
                     }
                 });
@@ -104,6 +104,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     public interface ShareListener{
 
-        void setShareListener(int mPostId);
+        void setShareListener(int mPostId,int groupPosition,int childPosition);
     }
 }

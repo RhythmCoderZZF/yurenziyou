@@ -54,9 +54,11 @@
                     android:layout_marginLeft="@dimen/dp_21" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/llyt_follow"
+                    android:layout_marginRight="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_17"
                     android:layout_toRightOf="@+id/image_interest_user_avatar"
                     android:orientation="vertical">
@@ -84,6 +86,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llyt_follow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

@@ -18,6 +18,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -212,6 +213,15 @@ public class FineFoodBangDanListActivity extends BaseActivity<FineFoodPresenter,
 
     }
 
+    @Override
+    public void getFoodCommentIndexResult(BackResult<FineFoodCommentInitResponse> res) {
+
+    }
+
+    @Override
+    public void fineFoodCommentResult(BackResult res) {
+
+    }
 
     @Override
     public void findFoodsListByCateIdResult(BackResult<MchCateListResponse> res) {

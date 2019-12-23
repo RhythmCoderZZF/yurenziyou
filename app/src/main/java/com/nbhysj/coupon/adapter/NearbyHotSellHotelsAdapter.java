@@ -89,16 +89,17 @@ public class NearbyHotSellHotelsAdapter extends RecyclerView.Adapter<NearbyHotSe
 
             holder.mTvPerCapitaPrice.setText(String.valueOf(price));
 
-            for(int i = 0;i < serviceList.size();i++)
-            {
-                String serviceTitle = serviceList.get(i).getTitle();
-                if(!TextUtils.isEmpty(serviceTitle))
+                if(serviceList != null && serviceList.size() > 0)
                 {
-                    stringBuffer.append(serviceTitle);
-                }
-            }
 
-            holder.mHotelInfoDes.setText("入住时间" + checkinTime + "-" + leaveTime + stringBuffer.toString());
+                    for (int i = 0; i < serviceList.size(); i++) {
+                        String serviceTitle = serviceList.get(i).getTitle();
+                        if (!TextUtils.isEmpty(serviceTitle)) {
+                            stringBuffer.append(serviceTitle);
+                        }
+                    }
+                    holder.mHotelInfoDes.setText("入住时间" + checkinTime + "-" + leaveTime + stringBuffer.toString());
+                }
 
             holder.mLlytHotSellHotelItem.setOnClickListener(new View.OnClickListener() {
                 @Override

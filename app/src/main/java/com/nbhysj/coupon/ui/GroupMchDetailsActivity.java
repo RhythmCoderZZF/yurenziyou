@@ -1,6 +1,8 @@
 package com.nbhysj.coupon.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -31,9 +33,11 @@ import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
+import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.contract.GroupMchContract;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
+import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.GroupMchModel;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -44,19 +48,35 @@ import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchGoodsBean;
+import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.GroupMchPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.PopupWindowUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
 import com.nbhysj.coupon.view.StarBarView;
 import com.nbhysj.coupon.widget.NestedExpandaleListView;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,7 +181,9 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
     private int height;
     private PopupWindow mPopupWindow;
     //组合包id
-    private int packageId;
+    private static int packageId;
+
+    private static String photoUrl;
 
     //组合套餐详情
     private List<GroupMchDetailsResponse.ContentEntity> groupMchPackageMealList;
@@ -178,8 +200,15 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
     private PurchaseInstructionsDialog mPurchaseInstructionsDialog;
     //收藏状态
     private int collectionStatus;
+
+    private ShareOprateDialog shareOprateDialog;
+
+    private static IWXAPI api;
+
+    static Bitmap bitmap = null;
     @Override
     public int getLayoutId() {
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         StatusBarCompat.translucentStatusBar(this, false);
         //修改状态栏字体颜色
@@ -191,6 +220,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
     public void initView(Bundle savedInstanceState) {
 
         packageId = getIntent().getIntExtra("packageId", 0);
+        api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID, false);
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -250,7 +280,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
         GridLayoutManager linearLayoutManager1 = new GridLayoutManager(GroupMchDetailsActivity.this, 3);
         linearLayoutManager1.setOrientation(linearLayoutManager1.VERTICAL);
         mRvUserCommentSearchTag.setLayoutManager(linearLayoutManager1);
-        userCommentAdapter = new UserCommentAdapter(GroupMchDetailsActivity.this);
+        userCommentAdapter = new UserCommentAdapter(0,GroupMchDetailsActivity.this);
         userCommentAdapter.setLabelList(labelEntityList);
         mRvUserCommentSearchTag.setAdapter(userCommentAdapter);
 
@@ -332,7 +362,7 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                     List<GroupMchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
 
                     //banner
-                    List<String> bannerList = mchDetailsEntity.getRecommendPhoto();
+                    bannerList = mchDetailsEntity.getRecommendPhoto();
 
                     if (bannerList.size() > 0) {
 
@@ -436,7 +466,36 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                                 String mchName = mchDetailsEntity.getMchName();
 
                                 String mchType = MchTypeEnum.MCH_GROUP.getValue();
-                                mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(mchGoodsBean,mchType,mchName);
+                                mPurchaseInstructionsDialog = new PurchaseInstructionsDialog(new PurchaseInstructionsDialog.PurchaseInstructionsListener() {
+                                    @Override
+                                    public void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean) {
+                                        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                                        if (!TextUtils.isEmpty(token)) {
+
+                                            String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
+                                            String mchRecreationType = MchTypeEnum.MCH_RECREATION.getValue();
+                                            String mchGroupType = MchTypeEnum.MCH_GROUP.getValue();
+                                            Intent intent = new Intent();
+
+                                            int goodsId = 0;
+                                            if (mchType.equals(mchScenicType) || mchType.equals(mchRecreationType)) {
+                                                intent.putExtra("mchType", mchType);
+                                                goodsId = mchGoodsBean.getGoodsId();
+                                                intent.setClass(GroupMchDetailsActivity.this, OrderSubmitActivity.class);
+
+                                            } else if (mchType.equals(mchGroupType)) {
+                                                goodsId = mchGoodsBean.getId();
+                                                intent.setClass(GroupMchDetailsActivity.this, GroupMchOrderSubmitActivity.class);
+                                            }
+                                            intent.putExtra("goodsId", goodsId);
+                                            startActivity(intent);
+
+                                        } else {
+
+                                            onReLogin("");
+                                        }
+                                    }
+                                },mchGoodsBean, mchType, mchName);
                             }
                             mPurchaseInstructionsDialog.show(getFragmentManager(), "组合商品购票须知");
                         }
@@ -567,20 +626,32 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                 break;*/
             case R.id.img_scenic_spot_forward:
 
-                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(GroupMchDetailsActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
-                    @Override
-                    public void onSharePlatformItemClick(String sharePlatform) {
+                if(shareOprateDialog == null)
+                {
+                    shareOprateDialog = new ShareOprateDialog(GroupMchDetailsActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                        @Override
+                        public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
 
-                        //   showToast(getActivity(),sharePlatform);
+                            try {
+                                if (bannerList != null && bannerList.size() > 0) {
+                                    String sharePlatformStr = sharePlatform.toString();
+                                    photoUrl = bannerList.get(0);
+                                    String wechatFriend = SharePlatformEnum.WECHAT_FRIEND.getValue();
+                                    if (sharePlatformStr.equals(wechatFriend)) {
 
-                       /* new ShareAction(ScenicSpotDetailActivity.this)
-                                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                                .withText("hello")//分享内容
-                                .setCallback(umShareListener)//回调监听器
-                                .share();*/
+                                        new Thread(saveFileRunnable).start();
 
-                    }
-                }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                                    } else {
+
+                                        thirdShare(sharePlatform, photoUrl);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                }
                 shareOprateDialog.show();
 
                 break;
@@ -626,7 +697,53 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
         View.OnClickListener menuItemOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Click " + ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+                String itemStr = ((TextView) v).getText().toString();
+                String backHomePage = getResources().getString(R.string.str_back_home_page);
+                String backMyCollection = getResources().getString(R.string.str_back_my_collection);
+                String backMyOrder = getResources().getString(R.string.str_back_my_order);
+                String backMyMessage = getResources().getString(R.string.str_back_my_message);
+
+                Intent intent = new Intent();
+                if (itemStr.equals(backHomePage)) {
+
+                    if (appManager != null)
+                    {
+                        appManager.finishActivity(MainActivity.class);
+                    }
+
+                    Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                    mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL);
+                    sendBroadcast(mIntent);
+
+                } else if (itemStr.equals(backMyCollection)) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+
+                    if (!TextUtils.isEmpty(token))
+                    {
+                        if (appManager != null)
+                        {
+                            appManager.finishActivity(MainActivity.class);
+                        }
+
+                        Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                        mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE,Constants.BROADCAST_ACTION_BACK_MY_COLLECTION);
+                        sendBroadcast(mIntent);
+
+                    } else {
+                        onReLogin("");
+                    }
+
+                } else if (itemStr.equals(backMyOrder)) {
+                    intent.setClass(GroupMchDetailsActivity.this, MyOrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                } else if (itemStr.equals(backMyMessage)) {
+                    intent.setClass(GroupMchDetailsActivity.this, MessageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
@@ -648,14 +765,122 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
         }
     }
 
- /*   //商户收藏
-    public void mchCollection(){
+    private void thirdShare(SHARE_MEDIA platform, String photoUrl) {
+        String webUrl = Net.H5_YURENZIYOU_DOWNLOAD_GUIDE_PAGE_URL;
+        UMImage image = new UMImage(GroupMchDetailsActivity.this, photoUrl);                    //资源文件
+        UMWeb umWeb = new UMWeb(webUrl, GroupMchDetailsActivity.this.getResources().getString(R.string.app_name), "鱼人自游是宁波海洋世界旗下一站式旅游服务平台,产品及服务覆盖门票预订,景点评价及景点打折门票查询,酒店预订,美食推荐、还有更详细的旅游攻略.", image); //URL 标题 描述 封面图
+        new ShareAction(GroupMchDetailsActivity.this)
+                .setPlatform(platform)//传入平台
+                .withText("HiVideo")//标题
+                .withMedia(umWeb)
+                .setCallback(shareListener)//回调监听器
+                .share();
+    }
 
-        if(validateInternet()) {
-            showProgressDialog(Grou.this);
-            MchCollectionRequest mchCollectionRequest = new MchCollectionRequest();
-            mchCollectionRequest.setDataId(packageId);
-            mPresenter.mchCollection(mchCollectionRequest);
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
         }
-    }*/
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //   Toast.makeText(getActivity(), "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(GroupMchDetailsActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(GroupMchDetailsActivity.this, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private static Runnable saveFileRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                URL url = new URL(photoUrl);
+                //打开输入流
+                InputStream inputStream = url.openStream();
+                //对网上资源进行下载转换位图图片
+                Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 500, 500, true);
+                bmp.recycle();
+                WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
+                miniProgramObj.webpageUrl = "http:192.168.1.140:8083/"; // 兼容低版本的网页链接
+                miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE;// 正式版:0，测试版:1，体验版:2
+                miniProgramObj.userName = "gh_8f591c4ee659";     // 小程序原始id
+                miniProgramObj.path = Net.COMBINATION_MINIPTOGRAM_URL + packageId; //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
+                WXMediaMessage msg = new WXMediaMessage(miniProgramObj);
+                msg.title = "鱼人自游";                    // 小程序消息title
+                msg.description = "帖子分享";               // 小程序消息desc
+                msg.thumbData = compressImage(thumbBmp);                      // 小程序消息封面图片，小于128k
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("miniProgram");
+                req.message = msg;
+                req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前只支持会话
+                api.sendReq(req);
+
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+
+                //saveFile(mBitmap);
+                //   mSaveMessage = "图片保存成功！";
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //   messageHandler.sendMessage(messageHandler.obtainMessage());
+        }
+    };
+
+    private static String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    private static byte[] compressImage(Bitmap bitmapImage) {
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+            int options = 50;
+            while (baos.toByteArray().length / 1024 > 100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+                baos.reset();//重置baos即清空baos
+                options -= 10;//每次都减少10
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+
+            }
+            //ByteArrayInputStream isBm = new ByteArrayInputStream());//把压缩后的数据baos存放到ByteArrayInputStream中
+            //   bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
+
 }

@@ -5,6 +5,7 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.request.CollectionBatchMchDeleteRequest;
 import com.nbhysj.coupon.model.request.CollectionBatchPostsDeleteRequest;
+import com.nbhysj.coupon.model.request.PostDeleteRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MineCollectionAllResponse;
 import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
@@ -51,6 +52,8 @@ public interface MineContract {
         //获取收藏
         Observable<BackResult<ZanAndCollectionResponse>> getCollectionMsgList(int pageNo, int pageSize);
 
+        //帖子删除
+        Observable<BackResult> deletePost(PostDeleteRequest postDeleteRequest);
     }
 
     interface View extends BaseView {
@@ -70,6 +73,8 @@ public interface MineContract {
         void getZanMsgListResult(BackResult<ZanAndCollectionResponse> res);
 
         void getCollectionMsgListResult(BackResult<ZanAndCollectionResponse> res);
+
+        void deletePostResult(BackResult res);
 
         void showMsg(String msg);
     }
@@ -91,5 +96,7 @@ public interface MineContract {
         public abstract void getZanMsgList(int pageNo,int pageSize);
 
         public abstract void getCollectionMsgList(int pageNo,int pageSize);
+
+        public abstract void deletePost(PostDeleteRequest postDeleteRequest);
     }
 }

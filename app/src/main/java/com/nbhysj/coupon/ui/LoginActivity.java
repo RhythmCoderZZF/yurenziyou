@@ -90,7 +90,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     Map<String, String> thirdPartyData;
 
     //第三方绑定请求code
-    private int THIRD_PARTY_LOGIN_REQUEST_CODE = 0;
+    private int REQUEST_CODE_THIRD_PARTY_LOGIN = 0;
+
+    //用户注册成功
+    private int REQUEST_CODE_USER_REGISTER_SUCCESS = 1;
 
     private boolean isSeePasswordOprate = true;
     @Override
@@ -102,15 +105,21 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setLoginBar(LoginActivity.this, getResources().getString(R.string.str_login), R.mipmap.nav_ico_back_black, "注册");
+        ToolbarHelper.setLoginBar(LoginActivity.this, getResources().getString(R.string.str_login), R.mipmap.icon_left_arrow_black, "注册");
     }
 
     @Override
     public void initData() {
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
+        String username = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME, "");
         if (!TextUtils.isEmpty(avatar))
         {
             GlideUtil.loadImage(LoginActivity.this,avatar,mImageUserAvatar);
+        }
+
+        if (!TextUtils.isEmpty(username))
+        {
+           mEdtUsername.setText(username);
         }
 
         mImgPwdIsInvisible.setOnClickListener(new View.OnClickListener() {
@@ -217,11 +226,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
             case Constants.SUCCESS_CODE:
                 LoginResponse loginResponse = res.getData();
                 userId = loginResponse.getId();                 //用户id
-                String mobile = loginResponse.getMobile();      //手机号
+                String mobile = loginResponse.getMobile();      //手机号(用户名)
                 String nickname = loginResponse.getNickname();  //昵称
-                String username = loginResponse.getUsername();  //用户名
                 String token = res.getToken();
-                SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, token);
                 getUserInfo();
 
                 break;
@@ -276,11 +284,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                     LoginResponse thirdPartyLoginResponse = res.getData();
 
                     userId = thirdPartyLoginResponse.getId();                 //用户id
-                    String mobile = thirdPartyLoginResponse.getMobile();      //手机号
+                    String mobile = thirdPartyLoginResponse.getMobile();      //手机号（用户账号）
                     String nickname = thirdPartyLoginResponse.getNickname();  //昵称
-                    String username = thirdPartyLoginResponse.getUsername();  //用户名
                     String token = res.getToken();
-                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, username, token);
+                    SharedPreferencesUtils.saveLoginData(userId, mobile, nickname, token);
 
                     getUserInfo();
                 } catch (Exception e) {
@@ -297,7 +304,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                 bundle.putSerializable("thirdPartyMap", thirdPartyMap);
                 bundle.putString("thirdPartyLoginType", mThirdPartyLoginType);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, THIRD_PARTY_LOGIN_REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE_THIRD_PARTY_LOGIN);
                 break;
             default:
                 dismissProgressDialog();
@@ -340,7 +347,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
 
                 break;
               case R.id.tv_toolbar_right:
-            toActivity(UserRegistrationActivity.class);
+
+                  Intent intent = new Intent();
+                  intent.setClass(LoginActivity.this, UserRegistrationActivity.class);
+                  startActivityForResult(intent, REQUEST_CODE_USER_REGISTER_SUCCESS);
+
             break;
             default:
                 break;
@@ -405,8 +416,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == THIRD_PARTY_LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_THIRD_PARTY_LOGIN && resultCode == RESULT_OK) {
 
+            finish();
+        } else if(requestCode == REQUEST_CODE_USER_REGISTER_SUCCESS && resultCode == RESULT_OK){
+
+            setResult(RESULT_OK);
             finish();
         }
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);

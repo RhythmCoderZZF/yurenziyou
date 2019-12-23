@@ -7,6 +7,8 @@ import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HouseResouceResponse;
+import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
@@ -58,5 +60,15 @@ public class HomestayModel implements HomestayContract.Model {
     @Override
     public Observable<BackResult<CouponsGetBean>> getCoupon(int couponId) {
         return Api.getInstance().apiService.getCoupon(couponId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<LandlordDetailResonse>> getLandlordHomePage(int landlordId) {
+        return Api.getInstance().apiService.getLandlordHomePage(landlordId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<HouseResouceResponse>> getLandlordHouseResourceList(int landlordId) {
+        return Api.getInstance().apiService.getLandlordHouseResourceList(landlordId).compose(RxSchedulers.io_main());
     }
 }
