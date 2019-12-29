@@ -17,6 +17,7 @@ import com.nbhysj.coupon.adapter.WaitForMeToAnswerAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AnswerBean;
 import com.nbhysj.coupon.model.response.AnswerResponse;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -50,8 +51,6 @@ public class MyQuestionListFragment extends BaseFragment<MchQuestionAndAnswerPre
     //待我来回答
     @BindView(R.id.rv_wait_for_me_to_answer)
     RecyclerView mRvWaitForMeToAnswer;
-
-
     private int mPageNo = 1;
     private int mPageSize = 10;
 
@@ -184,6 +183,11 @@ public class MyQuestionListFragment extends BaseFragment<MchQuestionAndAnswerPre
 
     @Override
     public void getWaitMyAnswerListResult(BackResult<WaitForMeToAnswerResponse> res) {
+
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

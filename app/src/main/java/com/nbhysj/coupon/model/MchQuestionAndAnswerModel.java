@@ -4,12 +4,14 @@ package com.nbhysj.coupon.model;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
+import com.nbhysj.coupon.model.request.AnswerAdoptRequest;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
 import com.nbhysj.coupon.model.request.IgnoreQuestionsAndAnswersRequest;
 import com.nbhysj.coupon.model.request.QuestionPublishRequest;
 import com.nbhysj.coupon.model.response.AnswerResponse;
+import com.nbhysj.coupon.model.response.AnswerZanResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -52,7 +54,7 @@ public class MchQuestionAndAnswerModel implements MchQuestionAndAnswerContract.M
     }
 
     @Override
-    public Observable<BackResult> answerZanRequest(AnswerZanRequest answerZanRequest) {
+    public Observable<BackResult<AnswerZanResponse>> answerZanRequest(AnswerZanRequest answerZanRequest) {
         return Api.getInstance().apiService.answerZanRequest(answerZanRequest).compose(RxSchedulers.io_main());
     }
 
@@ -79,5 +81,10 @@ public class MchQuestionAndAnswerModel implements MchQuestionAndAnswerContract.M
     @Override
     public Observable<BackResult> ignoreQuestionsAndAnswers(IgnoreQuestionsAndAnswersRequest ignoreQuestionsAndAnswersRequest) {
         return Api.getInstance().apiService.ignoreQuestionsAndAnswersRequest(ignoreQuestionsAndAnswersRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult> adoptAnswersRequest(AnswerAdoptRequest answerAdoptRequest) {
+        return Api.getInstance().apiService.adoptAnswersRequest(answerAdoptRequest).compose(RxSchedulers.io_main());
     }
 }

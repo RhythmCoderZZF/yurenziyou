@@ -13,6 +13,7 @@ import com.nbhysj.coupon.adapter.MoreQuestionListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
@@ -283,6 +284,11 @@ public class MoreQuestionsActivity extends BaseActivity<MchQuestionAndAnswerPres
 
     @Override
     public void getMyQuestionListResult(BackResult<QuestionAnsweringResponse> res) {
+
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

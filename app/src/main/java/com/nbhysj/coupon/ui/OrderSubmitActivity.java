@@ -1763,7 +1763,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         }
     }
 
-
     public void getAndUseCoupon(int couponId, boolean isCouponSelect) {
         goodsList.clear();
         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
@@ -1790,7 +1789,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             }
         }
 
-        if (isCouponSelect) {
+       if (isCouponSelect) {
 
             /*for (int i = 0;i < chooseIds.size();i++){
                 int selectCouponId = chooseIds.get(i);
@@ -1801,12 +1800,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
             }*/
             boolean isCountainsCouponId = chooseIds.contains(couponId);
-            if (!isCountainsCouponId) {
-
-                chooseIds.add(couponId);
+            if (!isCountainsCouponId)
+            {
+               // chooseIds.add(couponId);
                 newUseId = couponId;
             }
-
         } else {
             boolean isCountainsCouponId = chooseIds.contains(couponId);
             if (isCountainsCouponId) {
@@ -1816,12 +1814,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     if(selectCouponId == couponId)
                     {
                         chooseIds.remove(i);
-                        newUseId = 0;
+                        newUseId = couponId;
                     }
                 }
             }
         }
-
         useCouponTicket();
     }
 
@@ -1843,6 +1840,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     public void getPriceSettlement()
     {
         mTotalPrice = increaseTicketPrice + datePrice * mPurchaseNum - discountPrice;
+        if(mTotalPrice < 0)
+        {
+            mTotalPrice = 0.00;
+        }
         mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
     }
 }

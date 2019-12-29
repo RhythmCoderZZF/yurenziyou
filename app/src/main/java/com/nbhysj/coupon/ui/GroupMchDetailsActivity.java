@@ -481,13 +481,15 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                                             if (mchType.equals(mchScenicType) || mchType.equals(mchRecreationType)) {
                                                 intent.putExtra("mchType", mchType);
                                                 goodsId = mchGoodsBean.getGoodsId();
+                                                intent.putExtra("goodsId", goodsId);
                                                 intent.setClass(GroupMchDetailsActivity.this, OrderSubmitActivity.class);
 
                                             } else if (mchType.equals(mchGroupType)) {
-                                                goodsId = mchGoodsBean.getId();
+                                                goodsId = mchGoodsBean.getPackageId();
+                                                intent.putExtra("groupId", goodsId);
                                                 intent.setClass(GroupMchDetailsActivity.this, GroupMchOrderSubmitActivity.class);
                                             }
-                                            intent.putExtra("goodsId", goodsId);
+
                                             startActivity(intent);
 
                                         } else {

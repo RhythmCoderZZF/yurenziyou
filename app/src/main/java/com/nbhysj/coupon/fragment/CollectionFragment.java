@@ -25,6 +25,8 @@ import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
 import com.nbhysj.coupon.presenter.HomePagePresenter;
 import com.nbhysj.coupon.widget.MyIndicator;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -182,6 +184,16 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
         showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
+/*    @Subscribe
+    public void onEvent(String mineFragmentRefresh) {
+
+            if (mineFragmentRefresh.equals("shareFragmentRefresh")) {
+                c.clear();
+                collectionSelectAdapter.notifyDataSetChanged();
+                showProgressDialog(getActivity());
+                getMyPostShareList();
+            }
+    }*/
     public void getHomeAttention() {
 
         if (validateInternet()) {

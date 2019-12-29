@@ -138,6 +138,7 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
                     Intent intent = new Intent();
                     intent.putExtra("albumTitle",mAlbumTitle);
                     intent.putExtra("albumIntro",mAlbumIntro);
+                    intent.putExtra("isVisibleStatus",isVisibleStatus);
                     intent.putExtra("albumOprate",0);
                     setResult(RESULT_OK,intent);
                     finish();

@@ -27,8 +27,8 @@ public class RecreationPresenter extends RecreationContract.Presenter {
     }
 
     @Override
-    public void getRecreationDetail(int mchId) {
-        mRxManager.add(mModel.getRecreationDetail(mchId).subscribe(res -> mView.getRecreationDetailResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getRecreationListByCateId(HashMap<String, String> map) {
+        mRxManager.add(mModel.getRecreationListByCateId(map).subscribe(res -> mView.getRecreationListByCateIdResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

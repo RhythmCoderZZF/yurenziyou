@@ -366,8 +366,14 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
 
                             getHomePageData();
                         } else {
-
-                            EventBus.getDefault().post("homeFragmentRefresh");
+                            if(mCurrentItem == 0){
+                                EventBus.getDefault().post("followFragmentRefresh");
+                            } else if(mCurrentItem == 1){
+                                EventBus.getDefault().post("homeFragmentRefresh");
+                            } else if(mCurrentItem == 2){
+                                EventBus.getDefault().post("nearbyFragmentRefresh");
+                            }
+                          //  EventBus.getDefault().post("homeFragmentRefresh");
                           /*  Intent intent = new Intent();
                             //指定发送广播的频道
                             intent.setAction(mBroadcastAction);

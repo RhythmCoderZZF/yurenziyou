@@ -565,7 +565,7 @@ public class ShareFragment extends BaseFragment<MinePresenter, MineModel> implem
     public void onEvent(String mineFragmentRefresh) {
 
         if (visibleToUser) {
-            if (mineFragmentRefresh.equals("mineFragmentRefresh")) {
+            if (mineFragmentRefresh.equals("shareFragmentRefresh")) {
                 myPostShareList.clear();
                 shareAdapter.notifyDataSetChanged();
                 showProgressDialog(getActivity());

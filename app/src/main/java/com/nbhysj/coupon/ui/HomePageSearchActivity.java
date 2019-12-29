@@ -39,6 +39,7 @@ import com.nbhysj.coupon.widget.HomePageSearchIndicator;
 import net.lucode.hackware.magicindicator.MagicIndicator;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,17 +62,17 @@ public class HomePageSearchActivity extends BaseActivity {
     private String[] titles = new String[]{"综合", "XIU", "住宿", "景点", "美食", "互动", "攻略"};
     private List<Fragment> fragmentList;
     private boolean isExistSearchContent = false;
+
     @Override
-    public int getLayoutId()
-    {
+    public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_home_page_search;
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
-
-        if(fragmentList == null){
+        EventBus.getDefault().register(this);
+        if (fragmentList == null) {
 
             fragmentList = new ArrayList<>();
         } else {
@@ -87,7 +88,7 @@ public class HomePageSearchActivity extends BaseActivity {
         fragmentList.add(new HomeSearchRecreationFragment());
         fragmentList.add(new HomeSearchStrategyFragment());
 
-        FragmentPagerAdapter adapter = new MyOrderFragmentManager(getSupportFragmentManager(), titles,fragmentList);
+        FragmentPagerAdapter adapter = new MyOrderFragmentManager(getSupportFragmentManager(), titles, fragmentList);
         viewPager.setAdapter(adapter);
         tabLayout.setViewPager(viewPager, titles);
     }
@@ -102,9 +103,8 @@ public class HomePageSearchActivity extends BaseActivity {
                     // 按下完成按钮，这里和上面imeOptions对应
                     String searchKeyWordStr = textView.getText().toString().trim();
 
-
-                        EventBus.getDefault().post(searchKeyWordStr);
-                        SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD,searchKeyWordStr);
+                    EventBus.getDefault().post(searchKeyWordStr);
+                    SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD, searchKeyWordStr);
                     return false;   //返回true，保留软键盘。false，隐藏软键盘
                 }
 
@@ -121,9 +121,8 @@ public class HomePageSearchActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String searchKeyWordStr = charSequence.toString().trim();
-                if (TextUtils.isEmpty(searchKeyWordStr))
-                {
-                    SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD,searchKeyWordStr);
+                if (TextUtils.isEmpty(searchKeyWordStr)) {
+                    SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD, searchKeyWordStr);
                     EventBus.getDefault().post(searchKeyWordStr);
                 }
             }
@@ -140,23 +139,19 @@ public class HomePageSearchActivity extends BaseActivity {
 
     }
 
-    private void addSearchRecordData(String keyword)
-    {
+    private void addSearchRecordData(String keyword) {
         List<HomeSearchComprehensiveBean> homeSearchComprehensiveList = queryAll();
-        for (HomeSearchComprehensiveBean homeSearchComprehensiveBean:homeSearchComprehensiveList){
+        for (HomeSearchComprehensiveBean homeSearchComprehensiveBean : homeSearchComprehensiveList) {
 
-           String searchRecord = homeSearchComprehensiveBean.getSearch();
-           if(!searchRecord.equals(keyword))
-           {
-               isExistSearchContent = true;
-           }
+            String searchRecord = homeSearchComprehensiveBean.getSearch();
+            if (!searchRecord.equals(keyword)) {
+                isExistSearchContent = true;
+            }
         }
 
         //是否存在搜索内容 不存在的情况
-        if(!isExistSearchContent)
-        {
-            if(homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 4)
-            {
+        if (!isExistSearchContent) {
+            if (homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 4) {
                 HomeSearchComprehensiveBean homeSearchComprehensiveBean = homeSearchComprehensiveList.get(homeSearchComprehensiveList.size() - 1);
                 homeSearchComprehensiveList.remove(homeSearchComprehensiveBean);
             }
@@ -169,23 +164,34 @@ public class HomePageSearchActivity extends BaseActivity {
 
     //查询全部搜索记录
     public List<HomeSearchComprehensiveBean> queryAll() {
-        List<HomeSearchComprehensiveBean> searchs = ((BasicApplication)getApplication()).getDaoSession().loadAll(HomeSearchComprehensiveBean.class);
+        List<HomeSearchComprehensiveBean> searchs = ((BasicApplication) getApplication()).getDaoSession().loadAll(HomeSearchComprehensiveBean.class);
         return searchs;
     }
 
     @OnClick({R.id.tv_cancel_search})
-    public void onClick(View v){
-        switch (v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.tv_cancel_search:
                 HomePageSearchActivity.this.finish();
                 break;
-                default:break;
+            default:
+                break;
+        }
+    }
+
+    @Subscribe
+    public void onEvent(String searchkeyWordStr) {
+
+        if(!TextUtils.isEmpty(searchkeyWordStr))
+        {
+            mEdtHomePageSearch.setText(searchkeyWordStr);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD,"");
+        SharedPreferencesUtils.putData(SharedPreferencesUtils.SEARCH_KEYWORD, "");
+        EventBus.getDefault().unregister(this);
     }
 }

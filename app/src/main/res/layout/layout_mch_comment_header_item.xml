@@ -96,7 +96,7 @@
                     android:id="@+id/tv_scenic_spot_score_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="景    色"
+                    android:text="环   境"
                     android:textColor="@color/color_text_gray20"
                     android:textSize="@dimen/text_size_small" />
 
@@ -135,7 +135,7 @@
                     android:id="@+id/tv_interest_score_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="趣    味"
+                    android:text="舒   适"
                     android:textColor="@color/color_text_gray20"
                     android:textSize="@dimen/text_size_small" />
 

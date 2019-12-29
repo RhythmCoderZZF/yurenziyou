@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.presenter;
 
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
+import com.nbhysj.coupon.model.request.AnswerAdoptRequest;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
@@ -68,6 +69,10 @@ public class MchQuestionAndAnswerPresenter extends MchQuestionAndAnswerContract.
         mRxManager.add(mModel.ignoreQuestionsAndAnswers(ignoreQuestionsAndAnswersRequest).subscribe(res -> mView.getMyAnswerListResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
+    @Override
+    public void answersAdopt(AnswerAdoptRequest answerAdoptRequest) {
+        mRxManager.add(mModel.adoptAnswersRequest(answerAdoptRequest).subscribe(res -> mView.answersAdoptResult(res), e -> mView.showMsg(e.getMessage())));
+    }
 
     @Override
     public void onStart() {

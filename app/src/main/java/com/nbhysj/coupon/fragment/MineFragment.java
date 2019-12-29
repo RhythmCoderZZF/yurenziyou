@@ -129,7 +129,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
     private String[] mTitles = new String[]{"分享", "收藏", "赞过"};
     private List<String> mDataList = Arrays.asList(mTitles);
 
-
+    private int mCurrentItem = 1;
     @Override
     public int getLayoutId() {
 
@@ -230,9 +230,27 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
 
         viewPager.setAdapter(new ComFragmentAdapter(getChildFragmentManager(), getFragments()));
         viewPager.setOffscreenPageLimit(3);
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(mCurrentItem);
         initMagicIndicator();
         initMagicIndicatorTitle();
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                mCurrentItem = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -240,8 +258,13 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
-                        EventBus.getDefault().post("mineFragmentRefresh");
+                        if(mCurrentItem == 0) {
+                            EventBus.getDefault().post("shareFragmentRefresh");
+                        } else if(mCurrentItem == 1) {
+                            EventBus.getDefault().post("collectionFragmentRefresh");
+                        }else if(mCurrentItem == 2){
+                            EventBus.getDefault().post("minePostZanListFragmentRefresh");
+                        }
                         if (mSmartRefreshLayout != null) {
                             mSmartRefreshLayout.finishRefresh();
                         }

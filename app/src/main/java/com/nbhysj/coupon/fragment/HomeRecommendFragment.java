@@ -494,9 +494,9 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
 
     @Subscribe
     public void onEvent(String mineFragmentRefresh) {
-
+/*
         if(visibleToUser)
-        {
+        {*/
             if(mineFragmentRefresh.equals("homeFragmentRefresh"))
             {
                 if (recommendFriendsList != null) {
@@ -515,7 +515,7 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
                 showProgressDialog(getActivity());
                 queryByTopic();
             }
-        }
+       // }
     }
 
     @Override

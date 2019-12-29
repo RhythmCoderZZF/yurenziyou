@@ -14,6 +14,7 @@ import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.AddMchRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CountryBean;
@@ -269,6 +270,11 @@ public class TravelAssisantAddHotelHomestayFragment extends BaseFragment<TravelA
 
     @Override
     public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
 
     }
 

@@ -43,19 +43,19 @@ public class FindPasswordActivity extends BaseActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setHeaderBar(FindPasswordActivity.this, "", R.mipmap.nav_ico_back_black, R.mipmap.icon_cancel);
+        ToolbarHelper.setHeaderBar(FindPasswordActivity.this, "", R.mipmap.icon_left_arrow_black, 0);
         fragments = new ArrayList<>();
         List<Fragment> fragments1 = getSupportFragmentManager().getFragments();
         if (fragments1 != null && fragments1.size() > 1) {
             mFindPwdByPhone = (FindPwdByPhoneFragment) fragments1.get(1);
-            mFindPwdByEmail = (FindPwdByEmailFragment) fragments1.get(2);
+           // mFindPwdByEmail = (FindPwdByEmailFragment) fragments1.get(2);
         } else {
             mFindPwdByPhone = new FindPwdByPhoneFragment();
-            mFindPwdByEmail = new FindPwdByEmailFragment();
+           // mFindPwdByEmail = new FindPwdByEmailFragment();
         }
 
         fragments.add(mFindPwdByPhone);
-        fragments.add(mFindPwdByEmail);
+       // fragments.add(mFindPwdByEmail);
 
         tabLayout.setViewPager(viewpager, titles, FindPasswordActivity.this, fragments);
     }

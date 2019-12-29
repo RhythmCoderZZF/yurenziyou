@@ -45,6 +45,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,6 +139,7 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
 
     @Override
     public void initView(View v) {
+        EventBus.getDefault().register(this);
         if (recommendFriendsList == null) {
 
             recommendFriendsList = new ArrayList<>();
@@ -144,8 +148,7 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
             recommendFriendsList.clear();
         }
 
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2,
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
                         StaggeredGridLayoutManager.VERTICAL);
         mRvMinePostZanList.setLayoutManager(staggeredGridLayoutManager);
         mRvMinePostZanList.setHasFixedSize(true);
@@ -307,5 +310,24 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
         if (validateInternet()) {
             mPresenter.getMinePostZanList(mPageNo, mPageSize);
         }
+    }
+
+    @Subscribe
+    public void onEvent(String mineFragmentRefresh) {
+
+            if(mineFragmentRefresh.equals("minePostZanListFragmentRefresh"))
+            {
+                if (recommendFriendsList != null) {
+                    recommendFriendsList.clear();
+                }
+
+                recommendFriendsAdapter.notifyDataSetChanged();
+                mPageNo = 1;
+                if(mRlytNoData != null)
+                {
+                    mRlytNoData.setVisibility(View.GONE);
+                }
+                getMinePostZanList();
+            }
     }
 }

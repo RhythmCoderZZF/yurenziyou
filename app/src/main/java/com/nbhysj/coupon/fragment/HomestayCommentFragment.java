@@ -250,13 +250,13 @@ public class HomestayCommentFragment extends BaseFragment<HomestayPresenter, Hom
 
     @Override
     public void lazyInitView(View view) {
-        mPage = 1;
+       /* mPage = 1;
         houseResourceList.clear();
         houseResourceAdapter.notifyDataSetChanged();
         mSmartRefreshLayout.finishRefresh();
         mSmartRefreshLayout.setNoMoreData(false);
         showProgressDialog(getActivity());
-        getLandlordHouseResourceList();
+        getLandlordHouseResourceList();*/
     }
 
     @Override

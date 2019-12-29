@@ -35,6 +35,7 @@ import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.contract.OrderCommentContract;
 import com.nbhysj.coupon.model.FineFoodModel;
 import com.nbhysj.coupon.model.OrderCommentModel;
+import com.nbhysj.coupon.model.request.FineFoodCommentBean;
 import com.nbhysj.coupon.model.request.FineFoodCommentRequest;
 import com.nbhysj.coupon.model.request.OrderPartialCommentRequest;
 import com.nbhysj.coupon.model.request.PublishPostRequest;
@@ -178,6 +179,8 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
 
     List<PublishPostRequest.ResourceInfoEntity> resourceInfoEntityList = new ArrayList<>();
 
+    private List<FineFoodCommentBean> fineFoodCommentList;
+
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -216,6 +219,13 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
 
         } else {
             uploadPhotoSelect.clear();
+        }
+
+        if(fineFoodCommentList == null){
+
+            fineFoodCommentList = new ArrayList<>();
+        } else {
+            fineFoodCommentList.clear();
         }
 
         mUIDisplayer = new UIDisplayer(this, new UIDisplayer.UIDisPlayerListener() {
@@ -594,24 +604,29 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
     }
 
     public void orderPartialGoodsComment() {
+
+        fineFoodCommentList.clear();
+
         String consumePrice = mEdtConsumePrice.getText().toString();
         String orderCommentDes = mEdtOrderCommentDes.getText().toString();
         FineFoodCommentRequest fineFoodCommentRequest = new FineFoodCommentRequest();
-        fineFoodCommentRequest.setMchId(mchId);
+        FineFoodCommentBean fineFoodCommentBean = new FineFoodCommentBean();
+        fineFoodCommentBean.setMchId(mchId);
         if (!TextUtils.isEmpty(consumePrice)) {
-            fineFoodCommentRequest.setConsumePrice(Double.parseDouble(consumePrice));
+            fineFoodCommentBean.setConsumePrice(Double.parseDouble(consumePrice));
         }
-        fineFoodCommentRequest.setContent(orderCommentDes);
-        fineFoodCommentRequest.setScore(score);
-        fineFoodCommentRequest.setScore1(score1);
-        fineFoodCommentRequest.setScore2(score2);
-        fineFoodCommentRequest.setScore3(score3);
+        fineFoodCommentBean.setContent(orderCommentDes);
+        fineFoodCommentBean.setScore(score);
+        fineFoodCommentBean.setScore1(score1);
+        fineFoodCommentBean.setScore2(score2);
+        fineFoodCommentBean.setScore3(score3);
         if (uploadPhotoSelect.size() > 0) {
-            fineFoodCommentRequest.setPhoto(uploadPhotoSelect);
+            fineFoodCommentBean.setPhoto(uploadPhotoSelect);
         }
-        fineFoodCommentRequest.setTagJson(selectTopicIdList);
-        fineFoodCommentRequest.setAnonymousStatus(anonymousScore);
-
+        fineFoodCommentBean.setTagJson(selectTopicIdList);
+        fineFoodCommentBean.setAnonymousStatus(anonymousScore);
+        fineFoodCommentList.add(fineFoodCommentBean);
+        fineFoodCommentRequest.setCreateMchCommentVO(fineFoodCommentList);
         mPresenter.fineFoodComment(fineFoodCommentRequest);
     }
 

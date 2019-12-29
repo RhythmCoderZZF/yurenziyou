@@ -6,6 +6,7 @@ import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
@@ -39,5 +40,10 @@ public class RecreationModel implements RecreationContract.Model {
     @Override
     public Observable<BackResult<MchDetailsResponse>> getRecreationDetail(int mchId) {
         return Api.getInstance().apiService.getMchDetails(mchId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<MchCateListResponse>> getRecreationListByCateId(HashMap<String, String> map) {
+        return Api.getInstance().apiService.getRecreationListByCateId(map).compose(RxSchedulers.io_main());
     }
 }

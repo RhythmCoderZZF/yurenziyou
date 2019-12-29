@@ -17,6 +17,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
 import com.nbhysj.coupon.model.request.IgnoreQuestionsAndAnswersRequest;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -259,7 +260,6 @@ public class WaitForMeToAnswerListFragment extends BaseFragment<MchQuestionAndAn
         }
     }
 
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -267,11 +267,13 @@ public class WaitForMeToAnswerListFragment extends BaseFragment<MchQuestionAndAn
         }
     }
 
-
     @Override
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
+    }
 
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

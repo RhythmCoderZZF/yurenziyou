@@ -23,6 +23,7 @@ import com.nbhysj.coupon.dialog.OprateDialog;
 import com.nbhysj.coupon.framework.RxBus;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -265,6 +266,11 @@ public class TravelAssisantDetailFragment extends BaseFragment<TravelAssistantPr
     }
     @Override
     public void travelAssistantPlusADay(BackResult res) {
+
+    }
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
 
     }
 

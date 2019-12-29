@@ -23,13 +23,13 @@
         android:hint="请选择时间区间"
         android:textColor="@color/color_text_black8" />
 
-    <com.nbhysj.coupon.widget.calendar.CalendarList
+    <com.nbhysj.coupon.widget.calendar.TripCalendarList
         android:id="@+id/calendar_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tv_calendar_date_select">
 
-    </com.nbhysj.coupon.widget.calendar.CalendarList>
+    </com.nbhysj.coupon.widget.calendar.TripCalendarList>
 
     <TextView
         android:id="@+id/tv_next"

@@ -111,7 +111,7 @@ public class MchTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 GlideUtil.loadImage(mContext, photoUrl, ((ScenicSpotsViewHolder) holder).mImgScenicSpots);
 
-                ((ScenicSpotsViewHolder) holder).mLlytScenicSpotItem.setOnLongClickListener(new View.OnLongClickListener() {
+                ((ScenicSpotsViewHolder) holder).mRlytScenicSpotItem.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
 
@@ -186,7 +186,7 @@ public class MchTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //景点照片
         ImageView mImgScenicSpots;
 
-        LinearLayout mLlytScenicSpotItem;
+        LinearLayout mRlytScenicSpotItem;
 
         //景点名称
         TextView mTvScenicSpotsName;
@@ -200,7 +200,7 @@ public class MchTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ScenicSpotsViewHolder(View itemView) {
             super(itemView);
             mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
-            mLlytScenicSpotItem = itemView.findViewById(R.id.llyt_scenic_spot_item);
+            mRlytScenicSpotItem = itemView.findViewById(R.id.rlyt_scenic_spot_item);
             mTvScenicSpotsName = itemView.findViewById(R.id.tv_scenic_spots_name);
             mTvScenicSpotsDes = itemView.findViewById(R.id.tv_scenic_spots_des);
             mTvScenicSpotsScore = itemView.findViewById(R.id.tv_scenic_spots_score);

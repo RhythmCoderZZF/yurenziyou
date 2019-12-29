@@ -338,11 +338,6 @@ public class HotelCateListActivity extends BaseActivity<HotelPresenter, HotelMod
             case Constants.SUCCESS_CODE:
                 try {
 
-                    // mHotelList.addAll(scenicSpotList);
-              /*      hotelBangDanListAdapter.setHotelBangDanList(mHotelList);
-                    hotelBangDanListAdapter.notifyDataSetChanged();*/
-
-
                     if (isOnLoadMore) {
 
                         mSmartRefreshLayout.finishLoadMore();

@@ -32,9 +32,11 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
     List<TripDetailsResponse.DetailsEntity> travelPreviewList;
     private Context mContext;
 
-    public TravelPreviewAdapter(Context mContext) {
+    private TripPlaceDeleteListener tripPlaceDeleteListener;
+    public TravelPreviewAdapter(Context mContext,TripPlaceDeleteListener tripPlaceDeleteListener) {
 
         this.mContext = mContext;
+        this.tripPlaceDeleteListener = tripPlaceDeleteListener;
     }
 
     public void setTravelPreviewList(List<TripDetailsResponse.DetailsEntity> travelPreviewList) {
@@ -51,10 +53,10 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int itemPosition) {
+    public void onBindViewHolder(ViewHolder holder, final int groupPosition) {
 
         try {
-            if (itemPosition == 0) {
+            if (groupPosition == 0) {
 
                 holder.mViewTop.setVisibility(View.GONE);
             } else {
@@ -62,7 +64,7 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
                 holder.mViewTop.setVisibility(View.VISIBLE);
             }
 
-            TripDetailsResponse.DetailsEntity travelPreviewBean = travelPreviewList.get(itemPosition);
+            TripDetailsResponse.DetailsEntity travelPreviewBean = travelPreviewList.get(groupPosition);
             String date = travelPreviewBean.getTripDate();
 
             String tripDate = null;
@@ -77,13 +79,19 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
 
                 holder.mTvTravelDate.setText("");
             }
-            int day = itemPosition + 1;
+            int day = groupPosition + 1;
             holder.mTvTravelDays.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("DAY." + day, 0xFF1DEB96, 0xFF0DDDF6));
             List<TripDetailsResponse.TripDetailsEntity> travelPreviewList = travelPreviewBean.getTripDetails();
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
             layoutManager.setOrientation(layoutManager.VERTICAL);
             holder.mRvDestinationClassify.setLayoutManager(layoutManager);
-            TravelPreviewSubAdapter travelPreviewSubAdapter = new TravelPreviewSubAdapter(mContext);
+            TravelPreviewSubAdapter travelPreviewSubAdapter = new TravelPreviewSubAdapter(mContext, new TravelPreviewSubAdapter.TripPlaceDeleteListener() {
+                @Override
+                public void setTripPlaceDeleteCallBack(int tripPlaceId,int childPosition) {
+
+                    tripPlaceDeleteListener.setTripPlaceDeleteCallBack(tripPlaceId,groupPosition,childPosition);
+                }
+            });
             travelPreviewSubAdapter.setTravelPreviewList(travelPreviewList);
             holder.mRvDestinationClassify.setAdapter(travelPreviewSubAdapter);
 
@@ -115,6 +123,11 @@ public class TravelPreviewAdapter extends RecyclerView.Adapter<TravelPreviewAdap
             mRvDestinationClassify = itemView.findViewById(R.id.rv_destination_classify);
             mViewTop = itemView.findViewById(R.id.view_gradient_top);
         }
+    }
+
+    public interface TripPlaceDeleteListener{
+
+        void setTripPlaceDeleteCallBack(int tripPlaceId,int groupPosition,int childPosition);
     }
 
 }

@@ -13,22 +13,34 @@
         android:layout_height="match_parent"
         android:background="@color/line_bg"
         app:srlAccentColor="#00000000"
-        app:srlEnableHeaderTranslationContent="false"
+        app:srlEnableHeaderTranslationContent="true"
         app:srlEnableLoadMore="true"
         app:srlEnableRefresh="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
 
-        <com.scwang.smartrefresh.header.MaterialHeader
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_scenic_spot_bangdan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+
+            <include layout="@layout/layout_nodata"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+            ></include>
+        </RelativeLayout>
 
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"
@@ -80,14 +92,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/dp_15"
                 android:padding="@dimen/dp_10"
-                android:src="@mipmap/icon_white_forward" />
+                android:src="@mipmap/icon_white_forward"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </RelativeLayout>
-
-    <include layout="@layout/layout_nodata"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rlyt_fine_food_header"></include>
 
 </RelativeLayout>

@@ -13,6 +13,7 @@ import com.nbhysj.coupon.adapter.SameQuestionAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AnswerResponse;
 import com.nbhysj.coupon.model.response.AskTogetherBean;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
@@ -188,11 +189,14 @@ public class SameQuestionListFragment extends BaseFragment<MchQuestionAndAnswerP
         }
     }
 
-
     @Override
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
 
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

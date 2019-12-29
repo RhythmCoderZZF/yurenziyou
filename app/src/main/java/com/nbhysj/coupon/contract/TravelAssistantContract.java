@@ -3,6 +3,7 @@ package com.nbhysj.coupon.contract;
 import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
+import com.nbhysj.coupon.model.request.AddCountyRequest;
 import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.AddTrafficRequest;
@@ -12,6 +13,7 @@ import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.IntelligentTripRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -64,6 +66,9 @@ public interface TravelAssistantContract {
         //(行程助手)增加一天
         Observable<BackResult> travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest);
 
+        //添加区县
+        Observable<BackResult<AddCountyResponse>> insertCounty(AddCountyRequest addCountyRequest);
+
         //添加交通
         Observable<BackResult<CreateTripResponse>> insertTraffic(AddTrafficRequest addTrafficRequest);
 
@@ -107,6 +112,9 @@ public interface TravelAssistantContract {
 
         //增加一天
         void travelAssistantPlusADay(BackResult res);
+
+        //添加区县
+        void insertCountyResult(BackResult<AddCountyResponse> res);
 
         //添加备注
         void insertNoteResult(BackResult<CreateTripResponse> res);
@@ -155,6 +163,9 @@ public interface TravelAssistantContract {
 
         //增加一天
         public abstract void travelAssistantPlusADay(TravelAssistantAddOneDayRequest addOneDayRequest);
+
+        //添加区县
+        public abstract void insertCounty(AddCountyRequest addCountyRequest);
 
         //添加备注
         public abstract void insertRemarks(AddRemarksRequest addRemarksRequest);

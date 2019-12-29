@@ -20,6 +20,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ScenicSpotContract;
 import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
@@ -40,6 +41,7 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +72,9 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
     //美食转发
     @BindView(R.id.img_fine_food_forward)
     ImageView mImgFineFoodForward;
+    //赞无数据
+    @BindView(R.id.rlyt_no_data)
+    RelativeLayout mRlytNoData;
     private ScenicSpotCateListAdapter scenicSpotCateListAdapter;
     private LinearLayoutManager scenicSpotsLinearLayoutManager;
     //景点列表
@@ -77,15 +82,22 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
     View header;
     private ImageView mImgFineFoodHeader;
 
-    private int mPage = 1;
+    private int mPageNo = 1;
     private int mPageSize = 10;
-    int mTotalPageCount;
     //排序规则类型 FJ=附近热门 ZH=综合排序 默认FJ
     private String mSortStr = "FJ";
 
     private String mLatitude = "";
     private String mLongitude = "";
     private int mCateId;
+
+    //图片路径
+    private String photoUrl;
+
+    //总条数
+    private int mTotalPageCount;
+
+    private boolean isOnLoadMore = false;
 
     @Override
     public int getLayoutId() {
@@ -101,6 +113,8 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
         mLatitude = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.LONGITUDE,"");
         mLongitude = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.LATITUDE,"");
         mCateId = getIntent().getIntExtra("cateId",0);
+        mSortStr = getIntent().getStringExtra("sortStr");
+        photoUrl = getIntent().getStringExtra("photoUrl");
         if (mScenicSpotList == null) {
 
             mScenicSpotList = new ArrayList<>();
@@ -136,6 +150,11 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
     private void setHeader(RecyclerView view) {
         header = LayoutInflater.from(this).inflate(R.layout.layout_fine_food_header_item, view, false);
         mImgFineFoodHeader = header.findViewById(R.id.img_fine_food_header);
+        if (!TextUtils.isEmpty(photoUrl)) {
+
+            GlideUtil.loadImage(mContext, photoUrl, mImgFineFoodHeader);
+        }
+        scenicSpotCateListAdapter.setHeaderView(header);
     }
 
     @Override
@@ -185,6 +204,23 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
             }
         });
 
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshLayout) {
+                refreshLayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnLoadMore = false;
+                        mPageNo = 1;
+                        mScenicSpotList.clear();
+                        scenicSpotCateListAdapter.notifyDataSetChanged();
+                        findScenicListByCateId();
+
+                    }
+                }, 100);
+            }
+        });
+
         mSmartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(final RefreshLayout refreshLayout) {
@@ -192,14 +228,14 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
 
                     @Override
                     public void run() {
-                        // isOnLoadMore = true;
+                        isOnLoadMore = true;
                         try {
-                           /* if (mTotalCount == merchantEntityList.size()) {
+                            if (mTotalPageCount == mScenicSpotList.size()) {
                                 refreshLayout.finishLoadMoreWithNoMoreData();
                             } else {
-                                mPage++;
-                                getMerchantList();
-                            }*/
+                                mPageNo++;
+                                findScenicListByCateId();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -228,16 +264,44 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
             case Constants.SUCCESS_CODE:
                 try {
 
-                    List<MchTypeBean> scenicSpotList = res.getData().getMchs();
-                    mScenicSpotList.addAll(scenicSpotList);
+                    if (isOnLoadMore) {
+
+                        mSmartRefreshLayout.finishLoadMore();
+                        String bannerUrl = res.getData().getBanner();
+                        if (!TextUtils.isEmpty(bannerUrl)) {
+                            GlideUtil.loadImage(mContext, bannerUrl, mImgFineFoodHeader);
+                        }
+                        scenicSpotCateListAdapter.setHeaderView(header);
+
+                    } else {
+
+                        mScenicSpotList.clear();
+                        scenicSpotCateListAdapter.notifyDataSetChanged();
+                        mSmartRefreshLayout.finishRefresh();
+                        mSmartRefreshLayout.setNoMoreData(false);
+                    }
+
+                    MchCateListResponse mchCateListResponse = res.getData();
+
+                    List<MchTypeBean> scenicSpotList = mchCateListResponse.getMchs();
+                    BasePaginationResult paginationResult = mchCateListResponse.getPage();
+                    mTotalPageCount = paginationResult.getPageCount();
+
+                    if (mTotalPageCount == 0) {
+                        mRlytNoData.setVisibility(View.VISIBLE);
+
+                    } else {
+                        mRlytNoData.setVisibility(View.GONE);
+                    }
+
+                    if (scenicSpotList != null)
+                    {
+                        mScenicSpotList.addAll(scenicSpotList);
+                    }
                     scenicSpotCateListAdapter.setPopularScenicSpotsList(mScenicSpotList);
                     scenicSpotCateListAdapter.notifyDataSetChanged();
 
-                    String bannerUrl = res.getData().getBanner();
-                    if (!TextUtils.isEmpty(bannerUrl)) {
-                        GlideUtil.loadImage(mContext, bannerUrl, mImgFineFoodHeader);
-                    }
-                    scenicSpotCateListAdapter.setHeaderView(header);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -318,7 +382,7 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
             HashMap<String, String> scenicSpotByCateRequest = new HashMap<>();
 
             scenicSpotByCateRequest.put("Sorting", mSortStr);
-            scenicSpotByCateRequest.put("page", String.valueOf(mPage));
+            scenicSpotByCateRequest.put("page", String.valueOf(mPageNo));
             scenicSpotByCateRequest.put("pageSize", String.valueOf(mPageSize));
             scenicSpotByCateRequest.put("longitude", mLongitude);
             scenicSpotByCateRequest.put("latitude",mLatitude);

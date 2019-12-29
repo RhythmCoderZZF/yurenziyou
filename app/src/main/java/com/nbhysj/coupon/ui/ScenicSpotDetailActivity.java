@@ -410,8 +410,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         HomePageResponse.SmallTagEntity smallTagEntity = new HomePageResponse().new SmallTagEntity();
         smallTagEntity.setTitle("酒店");
 
-        HomePageResponse.SmallTagEntity smallTagEntity1 = new HomePageResponse().new SmallTagEntity();
-        smallTagEntity1.setTitle("组合");
+     /*   HomePageResponse.SmallTagEntity smallTagEntity1 = new HomePageResponse().new SmallTagEntity();
+        smallTagEntity1.setTitle("组合");*/
 
         HomePageResponse.SmallTagEntity smallTagEntity2 = new HomePageResponse().new SmallTagEntity();
         smallTagEntity2.setTitle("景点");
@@ -420,7 +420,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
         smallTagEntity3.setTitle("美食");
 
         nearbyLabelList.add(smallTagEntity);
-        nearbyLabelList.add(smallTagEntity1);
+       // nearbyLabelList.add(smallTagEntity1);
         nearbyLabelList.add(smallTagEntity2);
         nearbyLabelList.add(smallTagEntity3);
 
@@ -437,39 +437,40 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             public void onPageSelected(int position) {
                 mPosition = position;
                 MchDetailsResponse.NearbyEntity nearbyEntity = mchDetailsResponse.getNearby();
-                List<NearbyTypeResponse> groupGoodsList = nearbyEntity.getGroup();
+              //  List<NearbyTypeResponse> groupGoodsList = nearbyEntity.getGroup();
                 List<NearbyTypeResponse> scenicSpotList = nearbyEntity.getScenic();
                 List<NearbyTypeResponse> foodList = nearbyEntity.getFood();
                 List<NearbyTypeResponse> hotelList = nearbyEntity.getHotel();
                 if (position == 0) {
+                    mTvScenicSpotNearby.setText("查看附近全部酒店");
                     if (hotelList != null) {
                         mTvScenicSpotNearby.setVisibility(View.VISIBLE);
-                        mTvScenicSpotNearby.setText("查看附近全部酒店");
                         nearbyScenicSpotAdapter.setNearbyScenicSpotsList(hotelList);
                         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
                     }
                 } else if (position == 1) {
+                    mTvScenicSpotNearby.setText("查看附近全部景点");
+                    if (scenicSpotList != null) {
+                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
+
+                        nearbyScenicSpotAdapter.setNearbyScenicSpotsList(scenicSpotList);
+                        mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
+                    }
+                } else if (position == 2) {
+                    mTvScenicSpotNearby.setText("查看附近全部美食");
+                    if (foodList != null) {
+                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
+                        nearbyScenicSpotAdapter.setNearbyScenicSpotsList(foodList);
+                        mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
+                    }
+                }
+/*else if (position == 1) {
                     if (groupGoodsList != null) {
                         mTvScenicSpotNearby.setVisibility(View.GONE);
                         groupListAdapter.setGroupList(groupGoodsList);
                         mRvNearScenicSpot.setAdapter(groupListAdapter);
                     }
-                } else if (position == 2) {
-                    if (scenicSpotList != null) {
-                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
-                        mTvScenicSpotNearby.setText("查看附近全部景点");
-                        nearbyScenicSpotAdapter.setNearbyScenicSpotsList(scenicSpotList);
-                        mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
-                    }
-                } else if (position == 3) {
-                    if (foodList != null) {
-                        mTvScenicSpotNearby.setVisibility(View.VISIBLE);
-                        mTvScenicSpotNearby.setText("查看附近全部美食");
-                        nearbyScenicSpotAdapter.setNearbyScenicSpotsList(foodList);
-                        mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
-                    }
-                }
-
+                } */
             }
 
             @Override
@@ -1066,6 +1067,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
                 intent.setClass(ScenicSpotDetailActivity.this, MchCommentActivity.class);
                 intent.putExtra("mchId", mchId);
+                String mchScenicValue = MchTypeEnum.MCH_SCENIC.getValue();
+                intent.putExtra("mchType", mchScenicValue);
                 startActivity(intent);
 
                 break;
@@ -1084,6 +1087,8 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
             case R.id.llyt_user_comment:
                 intent.setClass(ScenicSpotDetailActivity.this, MchCommentActivity.class);
+                String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
+                intent.putExtra("mchType", mchScenic);
                 intent.putExtra("mchId", mchId);
                 startActivity(intent);
 

@@ -20,6 +20,7 @@ import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AnswerBean;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -148,6 +149,12 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
                 answerZan(answerId);
 
             }
+
+            @Override
+            public void setAnswerAdoptListener(int position, AnswerBean answerBean) {
+
+
+            }
         });
         answerDetailSubAdapter.setAnswerList(answerList);
         mRvAnswer.setAdapter(answerDetailSubAdapter);
@@ -194,6 +201,11 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
     @Override
     public void getMchQuestionAndAnswerListResult(BackResult<WaitMyAnswerResponse> res) {
+
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

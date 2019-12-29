@@ -28,6 +28,7 @@ import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -101,7 +102,8 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     private int height;
     private TravelAssistantAddDialog travelAssistantAddDialog;
     private boolean isFirstEntry = true;
-
+    //规划完成
+    private int planningComplete;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -114,6 +116,7 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
     @Override
     public void initView(Bundle savedInstanceState) {
         mTripId = getIntent().getIntExtra("tripId", 0);
+        planningComplete = getIntent().getIntExtra("planningComplete",0);
         ViewGroup.LayoutParams layoutParams = mToolbarSpace.getLayoutParams();//取控件当前的布局参数
         layoutParams.height = getStatusBarHeight();// 控件的高强制设成状态栏高度
         mToolbarSpace.setLayoutParams(layoutParams); //使设置好的布局参数应用到控件</pre>
@@ -178,6 +181,11 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
 
     @Override
     public void getCreateTripResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
 
     }
 
@@ -434,6 +442,10 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                 break;
             case R.id.iv_back:
 
+                if(planningComplete == 1)
+                {
+                    setResult(RESULT_OK);
+                }
                 TravelAssistantDetailsActivity.this.finish();
 
                 break;

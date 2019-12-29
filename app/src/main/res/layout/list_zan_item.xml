@@ -27,7 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_13"
             android:layout_marginRight="@dimen/dp_10"
-            android:layout_toLeftOf="@+id/img_trip_question_mark"
+            android:layout_toLeftOf="@+id/img_post_pictrue"
             android:layout_toRightOf="@+id/image_user_avatar"
             android:orientation="vertical">
 

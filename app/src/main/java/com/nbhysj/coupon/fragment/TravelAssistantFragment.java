@@ -17,6 +17,7 @@ import com.nbhysj.coupon.adapter.TravelAssisantRecommendAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -32,6 +33,7 @@ import com.nbhysj.coupon.ui.CalendarActivity;
 import com.nbhysj.coupon.ui.PhoneQuickLoginActivity;
 import com.nbhysj.coupon.ui.TravelAssistantDetailsActivity;
 import com.nbhysj.coupon.ui.TravelAssistantEditActivity;
+import com.nbhysj.coupon.ui.TripCalendarActivity;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
@@ -87,6 +89,8 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     private TravelAssisantRecommendAdapter strategyRecommendListAdapter;
 
     private int mPosition;
+
+    private int REQUEST_CODE_TRAVEL_PLANNING = 10000;
     public TravelAssistantFragment() {
         // Required empty public constructor
     }
@@ -256,6 +260,11 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     }
 
     @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
+
+    }
+
+    @Override
     public void getCountyWebListResult(BackResult<List<TravelAssistantDetailCountryBean>> res) {
 
     }
@@ -336,12 +345,15 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
     @OnClick({R.id.cardview_add_my_travel, R.id.rlyt_add_trip})
     public void onClick(View v) {
         String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+        Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.cardview_add_my_travel:
 
                 if (!TextUtils.isEmpty(token))
                 {
-                    toActivity(CalendarActivity.class);
+                    intent.setClass(getActivity(),TripCalendarActivity.class);
+                    startActivityForResult(intent,REQUEST_CODE_TRAVEL_PLANNING);
+
                 } else {
                     onReLogin("");
                 }
@@ -349,7 +361,8 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             case R.id.rlyt_add_trip:
                 if (!TextUtils.isEmpty(token))
                 {
-                    toActivity(CalendarActivity.class);
+                    intent.setClass(getActivity(),TripCalendarActivity.class);
+                    startActivityForResult(intent,REQUEST_CODE_TRAVEL_PLANNING);
                 } else {
                     onReLogin("");
                 }
@@ -391,6 +404,13 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             }
             myTravelListAdapter.setMyTravelList(tripEntityList);
             myTravelListAdapter.notifyDataSetChanged();
+
+        } else if(requestCode == REQUEST_CODE_TRAVEL_PLANNING && resultCode == 0)
+        {
+            tripEntityList.clear();
+            myTravelListAdapter.notifyDataSetChanged();
+            showProgressDialog(getActivity());
+            getTravelAssistantList();
         }
     }
 

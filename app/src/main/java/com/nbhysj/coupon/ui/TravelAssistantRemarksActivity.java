@@ -14,6 +14,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -137,6 +138,11 @@ public class TravelAssistantRemarksActivity extends BaseActivity<TravelAssistant
 
     @Override
     public void insertPlaceMchResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
 
     }
 

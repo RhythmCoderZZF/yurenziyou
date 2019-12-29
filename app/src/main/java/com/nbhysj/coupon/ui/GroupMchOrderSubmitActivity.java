@@ -28,6 +28,7 @@ import com.amap.api.services.poisearch.PoiSearch;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AddTouristInformationAdapter;
 import com.nbhysj.coupon.adapter.GroupMchOrderUseDateSelectAdapter;
+import com.nbhysj.coupon.adapter.GroupOrderDetailTicketInfoAdapter;
 import com.nbhysj.coupon.adapter.IncreaseTicketAdapter;
 import com.nbhysj.coupon.adapter.OrderDetailTicketInfoAdapter;
 import com.nbhysj.coupon.adapter.OrderUseDateSelectAdapter;
@@ -192,6 +193,10 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     @BindView(R.id.tv_total_price)
     TextView mTvTotalPrice;
 
+    //已减价格
+    @BindView(R.id.tv_already_reduced_price)
+    TextView mTvAlreadReducedPrice;
+
     //购买数量
     private int mPurchaseNum = 1;
 
@@ -213,7 +218,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     private GroupMchOrderUseDateSelectAdapter orderUseDateSelectAdapter;
 
     //价格明细
-    OrderDetailTicketInfoAdapter orderDetailTicketInfoAdapter;
+    GroupOrderDetailTicketInfoAdapter orderDetailTicketInfoAdapter;
 
     //日历价格
     private List<GoodsPriceDatesResponse> orderSubmitDateList;
@@ -293,6 +298,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     //组合单价
     private double payFee;
 
+    //总费用
+    private double totalFee = 0 ;
     @Override
     public int getLayoutId() {
 
@@ -401,12 +408,13 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
                     if (goodsPriceList != null) {
 
-                        //对增加门票进行遍历
+                       /* //对增加门票进行遍历
                         OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
                         int ticketPurchaseNum = goodsPriceEntity.getTicketPurchaseNum();
-                        if (ticketPurchaseNum > 0) {
-                            goodsPriceDetailList.add(goodsPriceEntity);
-                        }
+                            goodsPriceDetailList.add(goodsPriceEntity);*/
+
+                        orderDetailTicketInfoAdapter.setOrderDetailTicketList(goodsPriceList);
+                        orderDetailTicketInfoAdapter.notifyDataSetChanged();
                     }
 
                 } else {
@@ -469,6 +477,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
               //  goodsPriceDateSelect = goodsPriceDateEntity.getDate();
 
                 //  mTvMarketTicketPrice.setText(String.valueOf(totalPrice));
+                double alreadReducedPrice = getAlreadReducedPrice();
+                mTvAlreadReducedPrice.setText("已减" + Tools.getTwoDecimalPoint(alreadReducedPrice));
             }
         });
 
@@ -511,7 +521,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
         LinearLayoutManager orderDeatilTicketInfoLayoutManager = new LinearLayoutManager(GroupMchOrderSubmitActivity.this);
         mRvOrderDeatilTicketInfo.setLayoutManager(orderDeatilTicketInfoLayoutManager);
         orderDeatilTicketInfoLayoutManager.setOrientation(orderDeatilTicketInfoLayoutManager.VERTICAL);
-        orderDetailTicketInfoAdapter = new OrderDetailTicketInfoAdapter(GroupMchOrderSubmitActivity.this);
+        orderDetailTicketInfoAdapter = new GroupOrderDetailTicketInfoAdapter(GroupMchOrderSubmitActivity.this);
         orderDetailTicketInfoAdapter.setOrderDetailTicketList(goodsPriceDetailList);
         mRvOrderDeatilTicketInfo.setAdapter(orderDetailTicketInfoAdapter);
 
@@ -921,7 +931,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     orderUseDateSelectAdapter.setOrderUseDateSelectList(goodsPriceList);
                     orderUseDateSelectAdapter.notifyDataSetChanged();
 
-                    if (travellersList != null) {
+                    if (travellersList != null)
+                    {
                         mRlytTouristInfoItem.setVisibility(View.VISIBLE);
                         TravellerBean travellersEntity = travellersList.get(0);
                         if (travellersEntity != null) {
@@ -946,7 +957,9 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                         mTvTicketTitle.setText(title);
                     }
 
+
                     mTvTotalPrice.setText(Tools.getTwoDecimalPoint(payFee));
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1221,8 +1234,8 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     }
 
     //删除游客信息
-    public void deleteTravellerInfo() {
-
+    public void deleteTravellerInfo()
+    {
         if (validateInternet()) {
             showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle("正在删除...");
@@ -1382,5 +1395,32 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
             mPresenter.getGroupMchOrderSubmitInit(groupId);
         }
+    }
+
+    public double getAlreadReducedPrice(){
+        totalFee = 0;
+        for (int i = 0; i < goodsPriceList.size();i++){
+            List<GoodsPriceDatesResponse> goodsPriceDateList = goodsPriceList.get(i).getGoodsPriceSelectList();
+            for (int j = 0; j < goodsPriceDateList.size();j++){
+                GoodsPriceDatesResponse goodsPriceDatesResponse = goodsPriceDateList.get(j);
+                double price = goodsPriceDateList.get(j).getPrice();
+                boolean isSelectDatePrice = goodsPriceDatesResponse.isSelectDatePrice();
+                if(isSelectDatePrice)
+                {
+                    totalFee = totalFee + price;
+                }
+            }
+        }
+       /* List<GoodsPriceDatesResponse> goodsPriceDatesList = orderUseDateSelectAdapter.getOrderSubmitDateList();
+        if(goodsPriceDatesList != null && goodsPriceDatesList.size() > 0)
+        {
+            for (int i = 0; i < goodsPriceDatesList.size(); i++) {
+                double price = goodsPriceDateList.get(i).getPrice();
+
+                totalFee = totalFee + price;
+            }
+        }*/
+        double alreadReducedPrice = totalFee - payFee;
+        return alreadReducedPrice;
     }
 }

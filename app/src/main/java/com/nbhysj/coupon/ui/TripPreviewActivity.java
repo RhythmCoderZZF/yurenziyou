@@ -12,6 +12,8 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.fragment.TravelAssisantDetailFragment;
 import com.nbhysj.coupon.model.TravelAssistantModel;
+import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -54,6 +56,8 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
 
     private TravelPreviewAdapter travelPreviewAdapter;
 
+    private int mGroupPosition,mChildPosition;
+
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -79,68 +83,17 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
             travelPreviewEntityList.clear();
         }
 
-     /*   TravelPreviewBean.TravelPreviewEntity travelPreviewEntity = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity.setDestination("四明湖红杉林");
-        travelPreviewEntity.setTime("入住3天");
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity1 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity1.setDestination("四明湖红杉林1");
-        travelPreviewEntity1.setTime("2小时");
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity7 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity7.setDestination("四明湖红杉林7");
-        travelPreviewEntity7.setTime("入住3天");
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity8 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity8.setDestination("四明湖红杉林8");
-        travelPreviewEntity8.setTime("2小时");
-        travelPreviewEntityList.add(travelPreviewEntity);
-        travelPreviewEntityList.add(travelPreviewEntity1);
-        travelPreviewEntityList.add(travelPreviewEntity7);
-        travelPreviewEntityList.add(travelPreviewEntity8);
-
-
-        List<TravelPreviewBean.TravelPreviewEntity> travelPreviewEntityList1 = new ArrayList<>();
-
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity2 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity2.setDestination("四明湖红杉林");
-        travelPreviewEntity2.setTime("入住3天");
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity3 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity3.setDestination("四明湖红杉林1");
-        travelPreviewEntity3.setTime("2小时");
-        travelPreviewEntityList1.add(travelPreviewEntity2);
-        travelPreviewEntityList1.add(travelPreviewEntity3);
-
-        List<TravelPreviewBean.TravelPreviewEntity> travelPreviewEntityList2 = new ArrayList<>();
-
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity4 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity4.setDestination("四明湖红杉林");
-        travelPreviewEntity4.setTime("入住3天");
-        TravelPreviewBean.TravelPreviewEntity travelPreviewEntity5 = new TravelPreviewBean().new TravelPreviewEntity();
-        travelPreviewEntity5.setDestination("四明湖红杉林5");
-        travelPreviewEntity5.setTime("2小时");
-        travelPreviewEntityList2.add(travelPreviewEntity4);
-        travelPreviewEntityList2.add(travelPreviewEntity5);
-
-        TravelPreviewBean travelPreviewBean = new TravelPreviewBean();
-        travelPreviewBean.setDate("2019.3.19 星期二");
-        travelPreviewBean.setTravelPreviewEntityList(travelPreviewEntityList);
-
-
-        TravelPreviewBean travelPreviewBean1 = new TravelPreviewBean();
-        travelPreviewBean1.setDate("2019.3.20 星期三");
-        travelPreviewBean1.setTravelPreviewEntityList(travelPreviewEntityList1);
-
-
-        TravelPreviewBean travelPreviewBean2 = new TravelPreviewBean();
-        travelPreviewBean2.setDate("2019.3.21 星期四");
-        travelPreviewBean2.setTravelPreviewEntityList(travelPreviewEntityList2);
-
-        travelPreviewList.add(travelPreviewBean);
-        travelPreviewList.add(travelPreviewBean1);
-        travelPreviewList.add(travelPreviewBean2);*/
-
         LinearLayoutManager userCommentLayoutManager = new LinearLayoutManager(TripPreviewActivity.this);
         userCommentLayoutManager.setOrientation(userCommentLayoutManager.VERTICAL);
         mRvTripPreview.setLayoutManager(userCommentLayoutManager);
-        travelPreviewAdapter = new TravelPreviewAdapter(TripPreviewActivity.this);
+        travelPreviewAdapter = new TravelPreviewAdapter(TripPreviewActivity.this, new TravelPreviewAdapter.TripPlaceDeleteListener() {
+            @Override
+            public void setTripPlaceDeleteCallBack(int tripPlaceId,int groupPosition,int childPosition) {
+                mGroupPosition = groupPosition;
+                mChildPosition = childPosition;
+                //delTripPlace(tripPlaceId);
+            }
+        });
         travelPreviewAdapter.setTravelPreviewList(travelPreviewList);
         mRvTripPreview.setAdapter(travelPreviewAdapter);
     }
@@ -184,6 +137,11 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
 
     @Override
     public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
 
     }
 
@@ -233,7 +191,22 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
 
     @Override
     public void delTripPlaceResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
 
+                TripDetailsResponse.DetailsEntity tripDetailsEntity = travelPreviewList.get(mGroupPosition);
+                List<TripDetailsResponse.TripDetailsEntity> tripDetailsSubList = tripDetailsEntity.getTripDetails();
+                TripDetailsResponse.TripDetailsEntity subTripDetails = tripDetailsEntity.getTripDetails().get(mChildPosition);
+                tripDetailsSubList.remove(subTripDetails);
+                travelPreviewAdapter.setTravelPreviewList(travelPreviewList);
+                travelPreviewAdapter.notifyDataSetChanged();
+
+                break;
+            default:
+                showToast(TripPreviewActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -284,4 +257,16 @@ public class TripPreviewActivity extends BaseActivity<TravelAssistantPresenter, 
             mPresenter.getTripDetails(mTripId);
         }
     }
+
+   /* //删除行程助手行程点
+    public void delTripPlace(int tripPlaceId)
+    {
+        if (validateInternet())
+        {
+            DeleteTripPlaceRequest deleteTripPlaceRequest = new DeleteTripPlaceRequest();
+            deleteTripPlaceRequest.setId(tripPlaceId);
+            mPresenter.delTripPlace(deleteTripPlaceRequest);
+
+        }
+    }*/
 }

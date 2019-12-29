@@ -132,6 +132,11 @@ public class GroupMchOrderUseDateSelectAdapter extends RecyclerView.Adapter<Grou
         }
     }
 
+    public List<GoodsPriceDatesResponse> getOrderSubmitDateList(){
+
+        return orderSubmitDateList;
+    }
+
     public interface GroupMchOrderUseDateSelectListener {
 
         void setMoreDatesCallBack(int position);

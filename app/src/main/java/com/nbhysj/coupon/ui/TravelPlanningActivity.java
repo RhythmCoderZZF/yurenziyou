@@ -11,6 +11,7 @@ import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.CreateTripRequest;
 import com.nbhysj.coupon.model.request.IntelligentTripRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -40,6 +41,7 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
     //0:智能规划 1:自己规划
     private int mPlanningTripFlag = 0;
 
+    private int REQUEST_CODE_TRAVEL_PLANNING = 10000;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -177,6 +179,11 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
     }
 
     @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
+
+    }
+
+    @Override
     public void insertTrafficResult(BackResult<CreateTripResponse> res) {
 
     }
@@ -194,9 +201,11 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
 
                         Intent intent = new Intent();
                         intent.putExtra("tripId", tripId);
+                        intent.putExtra("planningComplete", 1);  //规划完成需要刷新
                         intent.setClass(TravelPlanningActivity.this, TravelAssistantDetailsActivity.class);
                         startActivity(intent);
-
+                        setResult(RESULT_OK);
+                        TravelPlanningActivity.this.finish();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

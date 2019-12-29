@@ -5,6 +5,7 @@ import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotResponse;
@@ -35,6 +36,9 @@ public interface RecreationContract {
 
         //互动详情
         Observable<BackResult<MchDetailsResponse>> getRecreationDetail(int mchId);
+
+        //互动类目列表
+        Observable<BackResult<MchCateListResponse>> getRecreationListByCateId(HashMap<String, String> map);
     }
 
     interface View extends BaseView {
@@ -46,6 +50,8 @@ public interface RecreationContract {
         void getRecreationDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
         void getRecreationDetailResult(BackResult<MchDetailsResponse> res);
+
+        void getRecreationListByCateIdResult(BackResult<MchCateListResponse> res);
 
         void showMsg(String msg);
     }
@@ -59,6 +65,6 @@ public interface RecreationContract {
 
         public abstract void getRecreationBangDanRanking(int cityId);
 
-        public abstract void getRecreationDetail(int mchId);
+        public abstract void getRecreationListByCateId(HashMap<String, String> map);
     }
 }

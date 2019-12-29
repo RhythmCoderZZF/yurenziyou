@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -22,6 +23,7 @@ import com.nbhysj.coupon.model.RecreationModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
@@ -149,7 +151,12 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
         mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallInteractionActivity.this, MchTypeEnum.MCH_RECREATION.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
             @Override
             public void setMchRankingClassificationListener(int cateId, String photoUrl) {
-
+                Intent intent = new Intent();
+                intent.setClass(mContext, RecreationCateListActivity.class);
+                intent.putExtra("cateId",cateId);
+                intent.putExtra("photoUrl",photoUrl);
+                intent.putExtra("sortStr",mSortStr);
+                mContext.startActivity(intent);
             }
         });
         mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
@@ -301,6 +308,11 @@ public class ShoppingMallInteractionActivity extends BaseActivity<RecreationPres
 
     @Override
     public void getRecreationDanRankingResult(BackResult<MchBangDanRankingResponse> res) {
+
+    }
+
+    @Override
+    public void getRecreationListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

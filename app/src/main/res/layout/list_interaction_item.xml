@@ -16,7 +16,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginBottom="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_5"
+        android:layout_centerVertical="true"
         app:riv_mutate_background="true"
         app:riv_corner_radius="5dip"
         app:riv_oval="false"

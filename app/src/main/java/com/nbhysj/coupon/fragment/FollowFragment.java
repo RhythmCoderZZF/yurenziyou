@@ -756,7 +756,7 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     public void onEvent(String mineFragmentRefresh) {
 
         if (visibleToUser) {
-            if (mineFragmentRefresh.equals("homeFragmentRefresh")) {
+            if (mineFragmentRefresh.equals("followFragmentRefresh")) {
                 if (followDetailList != null) {
                     followDetailList.clear();
                 }
@@ -764,7 +764,6 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
                 if (mRlytNoData != null) {
                     mRlytNoData.setVisibility(View.GONE);
                 }
-                //    showProgressDialog(getActivity());
                 if (followListAdapter != null) {
                     followListAdapter.notifyDataSetChanged();
                 }

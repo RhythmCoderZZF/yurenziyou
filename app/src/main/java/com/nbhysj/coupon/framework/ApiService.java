@@ -4,6 +4,7 @@ import com.nbhysj.coupon.model.request.AddCountyRequest;
 import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.AddTrafficRequest;
+import com.nbhysj.coupon.model.request.AnswerAdoptRequest;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
@@ -57,103 +58,7 @@ import com.nbhysj.coupon.model.request.UpdateFavoritesRequest;
 import com.nbhysj.coupon.model.request.UpdateUserInfoRequest;
 import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.request.UserReportRequest;
-import com.nbhysj.coupon.model.response.AlbumFavoritesDetail;
-import com.nbhysj.coupon.model.response.AnswerResponse;
-import com.nbhysj.coupon.model.response.ArticleWithCateResponse;
-import com.nbhysj.coupon.model.response.AskTogetherResponse;
-import com.nbhysj.coupon.model.response.AttentionResponse;
-import com.nbhysj.coupon.model.response.BackResult;
-import com.nbhysj.coupon.model.response.BroadcastResponse;
-import com.nbhysj.coupon.model.response.CarH5UrlResponse;
-import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
-import com.nbhysj.coupon.model.response.ContactsInfoResponse;
-import com.nbhysj.coupon.model.response.CountryBean;
-import com.nbhysj.coupon.model.response.CouponListBean;
-import com.nbhysj.coupon.model.response.CouponsBean;
-import com.nbhysj.coupon.model.response.CouponsGetBean;
-import com.nbhysj.coupon.model.response.CreateFavoritesResponse;
-import com.nbhysj.coupon.model.response.CreateTripResponse;
-import com.nbhysj.coupon.model.response.DestinationCityResponse;
-import com.nbhysj.coupon.model.response.DestinationResponse;
-import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
-import com.nbhysj.coupon.model.response.FavoritesCollectionResponse;
-import com.nbhysj.coupon.model.response.FavoritesListResponse;
-import com.nbhysj.coupon.model.response.FavoritesResponse;
-import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
-import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
-import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
-import com.nbhysj.coupon.model.response.GroupMchDetailsResponse;
-import com.nbhysj.coupon.model.response.GroupMchResponse;
-import com.nbhysj.coupon.model.response.HomePageAllSearchResponse;
-import com.nbhysj.coupon.model.response.HomePageResponse;
-import com.nbhysj.coupon.model.response.HomePageTypeSearchResponse;
-import com.nbhysj.coupon.model.response.HomestayBean;
-import com.nbhysj.coupon.model.response.HotScenicSpotResponse;
-import com.nbhysj.coupon.model.response.HotTagsTopicBean;
-import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
-import com.nbhysj.coupon.model.response.HouseResouceResponse;
-import com.nbhysj.coupon.model.response.LandlordDetailResonse;
-import com.nbhysj.coupon.model.response.LimitedTimeSalePageBean;
-import com.nbhysj.coupon.model.response.LoginResponse;
-import com.nbhysj.coupon.model.response.MchAlbumResponse;
-import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
-import com.nbhysj.coupon.model.response.MchCateListResponse;
-import com.nbhysj.coupon.model.response.MchCollectionResponse;
-import com.nbhysj.coupon.model.response.MchCommentResponse;
-import com.nbhysj.coupon.model.response.MchCouponResponse;
-import com.nbhysj.coupon.model.response.MchDetailsResponse;
-import com.nbhysj.coupon.model.response.MchFoodDetailResponse;
-import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
-import com.nbhysj.coupon.model.response.MerchantListResponse;
-import com.nbhysj.coupon.model.response.MessageResponse;
-import com.nbhysj.coupon.model.response.MineCollectionDetailResponse;
-import com.nbhysj.coupon.model.response.MinePostZanListResponse;
-import com.nbhysj.coupon.model.response.MyCardResponse;
-import com.nbhysj.coupon.model.response.MyQuestionAnsweringBean;
-import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
-import com.nbhysj.coupon.model.response.OrderAllRefundInitResponse;
-import com.nbhysj.coupon.model.response.OrderDetailResponse;
-import com.nbhysj.coupon.model.response.OrderGoodsInitResponse;
-import com.nbhysj.coupon.model.response.OrderGroupGoodsInitResponse;
-import com.nbhysj.coupon.model.response.OrderPaymentResponse;
-import com.nbhysj.coupon.model.response.OrderRefundDetailResponse;
-import com.nbhysj.coupon.model.response.OrderRefundInitResponse;
-import com.nbhysj.coupon.model.response.OrderRefundResponse;
-import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
-import com.nbhysj.coupon.model.response.OrderSubmitResponse;
-import com.nbhysj.coupon.model.response.PostInfoDetailResponse;
-import com.nbhysj.coupon.model.response.PostsCommentResponse;
-import com.nbhysj.coupon.model.response.PraiseOrCollectResponse;
-import com.nbhysj.coupon.model.response.QueryByTicketResponse;
-import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
-import com.nbhysj.coupon.model.response.QuestionDetailsBean;
-import com.nbhysj.coupon.model.response.RecipientAddressResponse;
-import com.nbhysj.coupon.model.response.RecipientsInfoResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotHomePageResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotResponse;
-import com.nbhysj.coupon.model.response.ShopMallHomePageResponse;
-import com.nbhysj.coupon.model.response.StrategyResponse;
-import com.nbhysj.coupon.model.response.TagTopicSearchResponse;
-import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
-import com.nbhysj.coupon.model.response.TourGuideBean;
-import com.nbhysj.coupon.model.response.TravelAssistantDetailCountryBean;
-import com.nbhysj.coupon.model.response.TravellerInfoResponse;
-import com.nbhysj.coupon.model.response.TripDetailsResponse;
-import com.nbhysj.coupon.model.response.TripHomePageResponse;
-import com.nbhysj.coupon.model.response.TripRouteMapResponse;
-import com.nbhysj.coupon.model.response.TripScenicSpotAddCountryBean;
-import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
-import com.nbhysj.coupon.model.response.UserFansFollowResponse;
-import com.nbhysj.coupon.model.response.UserFollowResponse;
-import com.nbhysj.coupon.model.response.UserInfoResponse;
-import com.nbhysj.coupon.model.response.UserOrderListResponse;
-import com.nbhysj.coupon.model.response.UserPersonalHomePageResponse;
-import com.nbhysj.coupon.model.response.VersionUpdateResponse;
-import com.nbhysj.coupon.model.response.WaitForMeToAnswerResponse;
-import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
-import com.nbhysj.coupon.model.response.WeatherResponse;
-import com.nbhysj.coupon.model.response.ZanAndCollectionBean;
-import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
+import com.nbhysj.coupon.model.response.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -497,6 +402,10 @@ public interface ApiService {
     //互动栏目筛选
     @GET("api/store/findRecreationByCate")
     Observable<BackResult<ScenicSpotResponse>> findRecreationByCate(@QueryMap HashMap<String, String> map);
+
+    //互动类目列表
+    @GET("api/store/findRecreationByCate")
+    Observable<BackResult<MchCateListResponse>> getRecreationListByCateId(@QueryMap HashMap<String, String> map);
 
     //互动榜单
     @GET("api/store/recreationRanking")
@@ -924,11 +833,15 @@ public interface ApiService {
 
     //点赞接口
     @POST("api/questionAnswering/thank")
-    Observable<BackResult> answerZanRequest(@Body AnswerZanRequest answerZanRequest);
+    Observable<BackResult<AnswerZanResponse>> answerZanRequest(@Body AnswerZanRequest answerZanRequest);
 
     //忽略问题
     @POST("api/questionAnswering/overlook")
     Observable<BackResult> ignoreQuestionsAndAnswersRequest(@Body IgnoreQuestionsAndAnswersRequest ignoreQuestionsAndAnswersRequest);
+
+    //问题采纳
+    @POST("api/questionAnswering/adopt")
+    Observable<BackResult<AnswerAdoptStatusResponse>> adoptAnswersRequest(@Body AnswerAdoptRequest adoptRequest);
 
     /********************   优惠券    **********************/
 

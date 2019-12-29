@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.presenter;
 
 import com.nbhysj.coupon.contract.TravelAssistantContract;
+import com.nbhysj.coupon.model.request.AddCountyRequest;
 import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.AddTrafficRequest;
@@ -99,6 +100,10 @@ public class TravelAssistantPresenter extends TravelAssistantContract.Presenter 
         mRxManager.add(mModel.insertTraffic(addTrafficRequest).subscribe(res -> mView.insertTrafficResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
+    @Override
+    public void insertCounty(AddCountyRequest addCountyRequest) {
+
+    }
 
     @Override
     public void onStart() {

@@ -16,6 +16,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.greendao.DaoSession;
 import com.nbhysj.coupon.model.TravelAssistantModel;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -185,6 +186,12 @@ public class TravelAssistantLocationCityActivity extends BaseActivity<TravelAssi
                     e.printStackTrace();
                 }
         }
+    }
+
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
+
     }
 
     @Override

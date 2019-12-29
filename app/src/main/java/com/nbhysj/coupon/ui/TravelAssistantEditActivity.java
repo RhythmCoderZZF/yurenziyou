@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.TravelAssistantModel;
 import com.nbhysj.coupon.model.request.DeleteTripPlaceRequest;
 import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -211,6 +212,11 @@ public class TravelAssistantEditActivity extends BaseActivity<TravelAssistantPre
     }
 
     @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
+
+    }
+
+    @Override
     public void delTripResult(BackResult res) {
 
         dismissProgressDialog();
@@ -264,11 +270,14 @@ public class TravelAssistantEditActivity extends BaseActivity<TravelAssistantPre
         Intent intent = new Intent();
         switch (view.getId()){
             case R.id.tv_travel_start_date:
-
-                 toActivityForResult(CalendarActivity.class,0);
+                intent.putExtra("selectType",1);
+                intent.setClass(TravelAssistantEditActivity.this,TripCalendarActivity.class);
+                startActivityForResult(intent,0);
                 break;
             case R.id.tv_travel_end_date:
-                  toActivityForResult(CalendarActivity.class,0);
+                intent.putExtra("selectType",1);
+                intent.setClass(TravelAssistantEditActivity.this,TripCalendarActivity.class);
+                startActivityForResult(intent,0);
                 break;
             case R.id.llyt_my_travel_detail_item:
 

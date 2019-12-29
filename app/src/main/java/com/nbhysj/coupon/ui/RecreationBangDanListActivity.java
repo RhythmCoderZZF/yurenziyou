@@ -23,6 +23,7 @@ import com.nbhysj.coupon.model.ScenicSpotModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.MchAlbumResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.NetFriendAlbumResponse;
@@ -207,6 +208,11 @@ public class RecreationBangDanListActivity extends BaseActivity<RecreationPresen
 
     @Override
     public void findRecreationByCateResult(BackResult<ScenicSpotResponse> res) {
+
+    }
+
+    @Override
+    public void getRecreationListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

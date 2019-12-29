@@ -374,8 +374,10 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
             if(albumOprate == 0) {
                 String albumTitle = data.getStringExtra("albumTitle");
                 String albumIntro = data.getStringExtra("albumIntro");
+                int isVisibleStatus = data.getIntExtra("isVisibleStatus",0);
                 mineCollectionAlbumList.get(mPosition).setTitle(albumTitle);
                 mineCollectionAlbumList.get(mPosition).setIntro(albumIntro);
+                mineCollectionAlbumList.get(mPosition).setVisibleStatus(isVisibleStatus);
                 mineCollectionAlbumAdapter.notifyDataSetChanged();
             } else if(albumOprate == 1){
 

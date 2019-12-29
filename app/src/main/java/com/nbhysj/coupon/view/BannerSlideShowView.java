@@ -60,7 +60,7 @@ public class BannerSlideShowView extends FrameLayout {
     /**
      * viewPager
      **/
-    private MyScrollViewPager viewPager;
+    private ScrollViewPager viewPager;
     /**
      * 当前轮播页
      **/
@@ -212,7 +212,7 @@ public class BannerSlideShowView extends FrameLayout {
         }
 
 
-        viewPager = (MyScrollViewPager) findViewById(R.id.viewPager);
+        viewPager = (ScrollViewPager) findViewById(R.id.viewPager);
         viewPager.setFocusable(true);
         myPagerAdapter = new MyPagerAdapter();
         viewPager.setAdapter(myPagerAdapter);
@@ -224,14 +224,14 @@ public class BannerSlideShowView extends FrameLayout {
         viewPager.setOnPageChangeListener(new MyPageChangeListener());
         currentItem = Integer.MAX_VALUE % Integer.MAX_VALUE;
         viewPager.setCurrentItem(currentItem, false);
-        viewPager.setScroll(true);
+      /*  viewPager.setScroll(true);
         if (count > 1) {
             //   startViewPager();
             viewPager.setScroll(true);
         } else {
             viewPager.setScroll(false);
 
-        }
+        }*/
     }
 
     public void setBannerList(List<String> bannerList){
@@ -266,13 +266,13 @@ public class BannerSlideShowView extends FrameLayout {
             dotViewsList.add(dotView);
         }
 
-        if (count > 1) {
+     /*   if (count > 1) {
             //   startViewPager();
             viewPager.setScroll(true);
         } else {
             viewPager.setScroll(false);
         }
-
+*/
         myPagerAdapter.notifyDataSetChanged();
     }
 

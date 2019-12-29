@@ -2,6 +2,7 @@ package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,16 +73,21 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
 
             } else if(breakfastStatus == 1){
 
-                stringBuffer.append("不含早餐 ");
+                stringBuffer.append("含早餐 ");
+            }
+
+            if(!TextUtils.isEmpty(bedInfo))
+            {
+                stringBuffer.append(bedInfo + " ");
             }
 
             if(windowStatus == 0){
 
-                stringBuffer.append("有窗");
+                stringBuffer.append("无窗");
 
             } else if(windowStatus == 1){
 
-                stringBuffer.append("无窗");
+                stringBuffer.append("有窗");
             }
 
             holder.mTvHotelRoomDes.setText(stringBuffer.toString());

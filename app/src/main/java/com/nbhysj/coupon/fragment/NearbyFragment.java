@@ -532,22 +532,17 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
 
         if(visibleToUser)
         {
-            if(mineFragmentRefresh.equals("homeFragmentRefresh"))
+            if(mineFragmentRefresh.equals("nearbyFragmentRefresh"))
             {
                 if (nearbyCardList != null) {
                     nearbyCardList.clear();
                 }
 
-                /*if(recommendFriendsAdapter != null)
-                {
-                    recommendFriendsAdapter.notifyDataSetChanged();
-                }*/
-                mPage = 1;
+                 mPage = 1;
                 if(mRlytNoData != null)
                 {
                     mRlytNoData.setVisibility(View.GONE);
                 }
-              //  showProgressDialog(getActivity());
                 queryByTopic();
             }
         }

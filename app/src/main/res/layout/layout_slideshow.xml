@@ -14,7 +14,7 @@
 
     </LinearLayout>
 
-    <com.nbhysj.coupon.view.MyScrollViewPager
+    <com.nbhysj.coupon.view.ScrollViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

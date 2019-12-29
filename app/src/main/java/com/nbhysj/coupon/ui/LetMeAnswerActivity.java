@@ -11,6 +11,7 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -157,6 +158,11 @@ public class LetMeAnswerActivity extends BaseActivity<MchQuestionAndAnswerPresen
 
     @Override
     public void ignoreQuestionsAndAnswersResult(BackResult<QuestionAnsweringResponse> res) {
+
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

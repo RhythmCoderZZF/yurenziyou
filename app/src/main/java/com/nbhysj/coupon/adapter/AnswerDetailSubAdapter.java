@@ -65,6 +65,7 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
             int zanNum = answerBean.getZanNum();
             long ctime = answerBean.getCtime();
             int buyStatus = answerBean.getBuy();
+            int adoptStatus = answerBean.getAdoptStatus();
 
             GlideUtil.loadImage(mContext, avatarUrl, holder.mImgUserAvatar);
 
@@ -89,15 +90,24 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
 
                 holder.mTvAnswerUseful.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_answer_useful_already_praised), null, null, null);
                 holder.mTvAnswerUseful.setBackgroundResource(R.drawable.bg_stroke_radius_ten_gray_shape);
+                holder.mTvAnswerUseful.setTextColor(mContext.getResources().getColor(R.color.color_text_gray27));
                 holder.mTvAnswerUseful.setText(String.valueOf(zanNum));
             }
 
-
-
-            if(buyStatus == 0){
+            if(buyStatus == 0)
+            {
                 holder.mTvBuyStatus.setVisibility(View.GONE);
-            } else if(buyStatus == 1){
+            } else if(buyStatus == 1)
+            {
                 holder.mTvBuyStatus.setVisibility(View.VISIBLE);
+            }
+
+            if(adoptStatus == 0)
+            {
+                holder.mImgAnswerAdopted.setVisibility(View.GONE);
+            } else if(adoptStatus == 1)
+            {
+                holder.mImgAnswerAdopted.setVisibility(View.VISIBLE);
             }
 
             holder.mTvAnswerUseful.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +115,14 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
                 public void onClick(View view) {
 
                     answerUsefulListener.setAnswerUsefulListener(position,answerBean);
+                }
+            });
+
+            holder.mTvAnswerAdopt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    answerUsefulListener.setAnswerAdoptListener(position,answerBean);
                 }
             });
         } catch (Exception e) {
@@ -143,6 +161,13 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
         @BindView(R.id.tv_buy_status)
         TextView mTvBuyStatus;
 
+        //回答采纳
+        @BindView(R.id.img_answer_adopted)
+        ImageView mImgAnswerAdopted;
+
+        //采纳问题
+        @BindView(R.id.tv_answer_adopt)
+        TextView mTvAnswerAdopt;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -150,6 +175,8 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
     }
 
     public interface AnswerUsefulListener {
+
+        void setAnswerAdoptListener(int position,AnswerBean answerBean);
 
         void setAnswerUsefulListener(int position,AnswerBean answerBean);
 

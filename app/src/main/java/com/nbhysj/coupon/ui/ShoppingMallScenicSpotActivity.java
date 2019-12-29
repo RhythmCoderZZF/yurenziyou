@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -156,7 +157,12 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
         scenicSpotClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallScenicSpotActivity.this, MchTypeEnum.MCH_SCENIC.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
             @Override
             public void setMchRankingClassificationListener(int cateId, String photoUrl) {
-
+                Intent intent = new Intent();
+                intent.putExtra("cateId",cateId);
+                intent.putExtra("photoUrl",photoUrl);
+                intent.putExtra("sortStr",mSortStr);
+                intent.setClass(mContext, ScenicSpotCateListActivity.class);
+                startActivity(intent);
             }
         });
         scenicSpotClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
@@ -198,7 +204,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
             }
         });
 
-        mStickyScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+ /*       mStickyScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
@@ -207,9 +213,9 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
                     loadData();
                 }
             }
-        });
+        });*/
 
-        mStickyScrollView.setScrolListener(new StickyScrollView.OnScrollListener() {
+      /*  mStickyScrollView.setScrolListener(new StickyScrollView.OnScrollListener() {
             @Override
             public void onScroll(int scrollY) {
 
@@ -217,7 +223,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
                     loadData();
                 }
             }
-        });
+        });*/
     }
 
     public void loadData() {

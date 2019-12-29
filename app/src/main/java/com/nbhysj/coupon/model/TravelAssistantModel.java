@@ -3,6 +3,7 @@ package com.nbhysj.coupon.model;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
+import com.nbhysj.coupon.model.request.AddCountyRequest;
 import com.nbhysj.coupon.model.request.AddMchRequest;
 import com.nbhysj.coupon.model.request.AddRemarksRequest;
 import com.nbhysj.coupon.model.request.AddTrafficRequest;
@@ -12,6 +13,7 @@ import com.nbhysj.coupon.model.request.DeleteTripRequest;
 import com.nbhysj.coupon.model.request.EditTripSubmitRequest;
 import com.nbhysj.coupon.model.request.IntelligentTripRequest;
 import com.nbhysj.coupon.model.request.TravelAssistantAddOneDayRequest;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -112,5 +114,10 @@ public class TravelAssistantModel implements TravelAssistantContract.Model {
     @Override
     public Observable<BackResult<CreateTripResponse>> insertTraffic(AddTrafficRequest addTrafficRequest) {
         return Api.getInstance().apiService.insertTraffic(addTrafficRequest).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<AddCountyResponse>> insertCounty(AddCountyRequest addCountyRequest) {
+        return null;
     }
 }

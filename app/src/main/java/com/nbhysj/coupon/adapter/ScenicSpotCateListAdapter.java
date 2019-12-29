@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
@@ -101,7 +102,7 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
 
                 GlideUtil.loadImage(mContext, photoUrl, holder1.mImgScenicSpots);
 
-                holder1.mLlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
+                holder1.mRlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -159,7 +160,7 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
         TextView mTvScenicSpotsLevel;
         //景点类型
         TextView mTvScenicSpotsType;
-        LinearLayout mLlytScenicSpotItem;
+        RelativeLayout mRlytScenicSpotItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -173,7 +174,7 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
             mTvScenicSpotsDes = itemView.findViewById(R.id.tv_scenic_spots_des);
             mTvScenicSpotsLevel = itemView.findViewById(R.id.tv_scenic_spots_level);
             mTvScenicSpotsType = itemView.findViewById(R.id.tv_scenic_spot_type);
-            mLlytScenicSpotItem = itemView.findViewById(R.id.llyt_scenic_spot_item);
+            mRlytScenicSpotItem = itemView.findViewById(R.id.rlyt_scenic_spot_item);
 
         }
     }

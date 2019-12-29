@@ -24,6 +24,7 @@ import com.nbhysj.coupon.fragment.SameQuestionListFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
 import com.nbhysj.coupon.fragment.WaitForMeToAnswerListFragment;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -110,6 +111,11 @@ public class MyQuestionAndAnswersActivity extends BaseActivity<MchQuestionAndAns
     }
     @Override
     public void initPresenter() {
+
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 

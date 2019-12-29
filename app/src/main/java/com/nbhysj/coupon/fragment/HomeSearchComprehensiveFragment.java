@@ -153,6 +153,8 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
     private List<HomeSearchComprehensiveBean> homeSearchComprehensiveList;
 
+    private TagAdapter mTagAdapter;
+
     public HomeSearchComprehensiveFragment() {
         // Required empty public constructor
     }
@@ -264,6 +266,35 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
         homeSearchStrategyListAdapter.setStrategyList(strategysList);
         mRvStrategy.setAdapter(homeSearchStrategyListAdapter);
 
+
+        mTagAdapter = new TagAdapter<HomeSearchComprehensiveBean>(homeSearchComprehensiveList) {
+
+            @Override
+            public View getView(FlowLayout parent, int position, HomeSearchComprehensiveBean homeSearchComprehensiveBean) {
+                LayoutInflater mInflater = LayoutInflater.from(getActivity());
+                TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
+                        mTagHistoryLabel, false);
+                String homeSearchComprehensiveStr = homeSearchComprehensiveBean.getSearch();
+                tagName.setText(homeSearchComprehensiveStr);
+                return tagName;
+            }
+        };
+
+
+        mTagHistoryLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
+                //toActivity(ScenicSpotDestinationActivity.class);
+                HomeSearchComprehensiveBean homeSearchComprehensive = homeSearchComprehensiveList.get(position);
+                keyWord = homeSearchComprehensive.getSearch();
+                EventBus.getDefault().post(keyWord);
+                getHomePageSearchAll();
+                return false;
+            }
+        });
+
+        mTagHistoryLabel.setAdapter(mTagAdapter);
     }
 
     @Override
@@ -350,6 +381,8 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
+                    mSmartRefreshLayout.finishRefresh();
+                    mSmartRefreshLayout.setNoMoreData(false);
                     HomePageAllSearchResponse homePageAllSearchResponse = res.getData();
                     mHotScenicSpotList = homePageAllSearchResponse.getScenics();
                     List<HomePageAllSearchResponse.CityEntity> cityEntityList = homePageAllSearchResponse.getCitys();
@@ -411,7 +444,7 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
 
                             if (homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 0) {
 
-                                mTagHistoryLabel.setAdapter(new TagAdapter<HomeSearchComprehensiveBean>(homeSearchComprehensiveList) {
+                                mTagAdapter = new TagAdapter<HomeSearchComprehensiveBean>(homeSearchComprehensiveList) {
 
                                     @Override
                                     public View getView(FlowLayout parent, int position, HomeSearchComprehensiveBean homeSearchComprehensiveBean) {
@@ -422,20 +455,10 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                                         tagName.setText(homeSearchComprehensiveStr);
                                         return tagName;
                                     }
-                                });
-
-                                mTagHistoryLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-                                    @Override
-                                    public boolean onTagClick(View view, int position, FlowLayout parent) {
-                                        //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
-                                        //toActivity(ScenicSpotDestinationActivity.class);
-                                        HomeSearchComprehensiveBean homeSearchComprehensive = homeSearchComprehensiveList.get(position);
-                                        String searchRecordData = homeSearchComprehensive.getSearch();
-
-                                        return false;
-                                    }
-                                });
+                                };
                             }
+                            //mTagAdapter.notifyDataChanged();
+                            mTagHistoryLabel.setAdapter(mTagAdapter);
                         } else {
                             addSearchRecordData(keyWord);
                         }
@@ -497,11 +520,10 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
             if (homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 5) {
                 HomeSearchComprehensiveBean homeSearchComprehensiveBean = homeSearchComprehensiveList.get(homeSearchComprehensiveList.size() - 1);
                 daoSession.delete(homeSearchComprehensiveBean);
-
-                HomeSearchComprehensiveBean searchBean = new HomeSearchComprehensiveBean();
-                searchBean.setSearch(keyword);
-                daoSession.insert(searchBean);
             }
+            HomeSearchComprehensiveBean searchBean = new HomeSearchComprehensiveBean();
+            searchBean.setSearch(keyword);
+            daoSession.insert(searchBean);
         }
     }
 
@@ -551,6 +573,41 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                 mRlytNoData.setVisibility(View.GONE);
                 mLlytHistoricalLabel.setVisibility(View.VISIBLE);
                 mLlytSearchResult.setVisibility(View.GONE);
+                homeSearchComprehensiveList = queryAll();
+                if (homeSearchComprehensiveList != null && homeSearchComprehensiveList.size() > 0) {
+
+                    mTagHistoryLabel.setVisibility(View.VISIBLE);
+
+                    mTagAdapter = new TagAdapter<HomeSearchComprehensiveBean>(homeSearchComprehensiveList) {
+
+                        @Override
+                        public View getView(FlowLayout parent, int position, HomeSearchComprehensiveBean homeSearchComprehensiveBean) {
+                            LayoutInflater mInflater = LayoutInflater.from(getActivity());
+                            TextView tagName = (TextView) mInflater.inflate(R.layout.layout_flowlayout_tag_gray_frame,
+                                    mTagHistoryLabel, false);
+                            String homeSearchComprehensiveStr = homeSearchComprehensiveBean.getSearch();
+                            tagName.setText(homeSearchComprehensiveStr);
+                            return tagName;
+                        }
+                    };
+                    mTagHistoryLabel.setAdapter(mTagAdapter);
+                    mTagHistoryLabel.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                        @Override
+                        public boolean onTagClick(View view, int position, FlowLayout parent) {
+                            //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
+                            //toActivity(ScenicSpotDestinationActivity.class);
+
+                            HomeSearchComprehensiveBean homeSearchComprehensive = homeSearchComprehensiveList.get(position);
+                            keyWord = homeSearchComprehensive.getSearch();
+                            EventBus.getDefault().post(keyWord);
+                            getHomePageSearchAll();
+
+                            return false;
+                        }
+                    });
+                } else {
+                    mTagHistoryLabel.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -590,7 +647,8 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
                             //    showToast(DestinationSearchActivity.this,historyLabelList.get(position));
                             //toActivity(ScenicSpotDestinationActivity.class);
                             HomeSearchComprehensiveBean homeSearchComprehensive = homeSearchComprehensiveList.get(position);
-                            String searchRecordData = homeSearchComprehensive.getSearch();
+                            keyWord = homeSearchComprehensive.getSearch();
+                            getHomePageSearchAll();
 
                             return false;
                         }

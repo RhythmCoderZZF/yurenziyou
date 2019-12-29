@@ -14,6 +14,7 @@ import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.fragment.TravelAssisantAddFineFoodFragment;
 import com.nbhysj.coupon.fragment.TravelAssisantAddHotelHomestayFragment;
 import com.nbhysj.coupon.model.TravelAssistantModel;
+import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
 import com.nbhysj.coupon.model.response.CreateTripResponse;
@@ -198,6 +199,11 @@ public class TravelAssisantHotelHomestayAddActivity extends BaseActivity<TravelA
 
     @Override
     public void insertTrafficResult(BackResult<CreateTripResponse> res) {
+
+    }
+
+    @Override
+    public void insertCountyResult(BackResult<AddCountyResponse> res) {
 
     }
 

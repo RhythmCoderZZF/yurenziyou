@@ -54,13 +54,13 @@ public class TravelAssistantDestionationsListAdapter extends RecyclerView.Adapte
 
         try {
 
-
-
             TravelAssistantDetailCountryBean travelAssistantDetailCountryBean = nearbyScenicSpotsList.get(itemPosition);
             String destinationName = travelAssistantDetailCountryBean.getCountyName();
+            String recommend = travelAssistantDetailCountryBean.getRecommend();
             holder.mTvDestinationName.setText(destinationName);
             String bannerUrl = travelAssistantDetailCountryBean.getBanner();
             GlideUtil.loadImage(mContext, bannerUrl, holder.mImgScenicSpots);
+            holder.mTvScenicSpotRecommend.setText(recommend);
 
             holder.mTvAddMyTravel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,7 +85,6 @@ public class TravelAssistantDestionationsListAdapter extends RecyclerView.Adapte
                 holder.mTvAddMyTravel.setEnabled(true);
             }
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,6 +103,8 @@ public class TravelAssistantDestionationsListAdapter extends RecyclerView.Adapte
         TextView mTvAddMyTravel;
         //目的地名字
         TextView mTvDestinationName;
+        //推荐景点
+        TextView mTvScenicSpotRecommend;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -111,6 +112,7 @@ public class TravelAssistantDestionationsListAdapter extends RecyclerView.Adapte
             mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
             mTvAddMyTravel = itemView.findViewById(R.id.tv_add_my_travel);
             mTvDestinationName = itemView.findViewById(R.id.tv_destination_name);
+            mTvScenicSpotRecommend = itemView.findViewById(R.id.tv_scenic_spot_recommend);
 
         }
     }

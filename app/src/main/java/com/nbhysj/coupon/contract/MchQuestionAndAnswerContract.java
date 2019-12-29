@@ -3,11 +3,14 @@ package com.nbhysj.coupon.contract;
 import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
+import com.nbhysj.coupon.model.request.AnswerAdoptRequest;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
 import com.nbhysj.coupon.model.request.IgnoreQuestionsAndAnswersRequest;
 import com.nbhysj.coupon.model.request.QuestionPublishRequest;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
+import com.nbhysj.coupon.model.response.AnswerZanResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -43,7 +46,7 @@ public interface MchQuestionAndAnswerContract {
         Observable<BackResult> askTogether(AskTogetherRequest askTogetherRequest);
 
         //点赞接口
-        Observable<BackResult> answerZanRequest(AnswerZanRequest answerZanRequest);
+        Observable<BackResult<AnswerZanResponse>> answerZanRequest(AnswerZanRequest answerZanRequest);
 
         //待我回答
         Observable<BackResult<WaitForMeToAnswerResponse>> getWaitMyAnswerList(int page, int pageSize);
@@ -59,6 +62,9 @@ public interface MchQuestionAndAnswerContract {
 
         //忽略问题
         Observable<BackResult> ignoreQuestionsAndAnswers(IgnoreQuestionsAndAnswersRequest ignoreQuestionsAndAnswersRequest);
+
+        //采纳问题
+        Observable<BackResult> adoptAnswersRequest(AnswerAdoptRequest answerAdoptRequest);
     }
 
     interface View extends BaseView {
@@ -77,7 +83,7 @@ public interface MchQuestionAndAnswerContract {
         void askTogetherResult(BackResult res);
 
         //点赞接口
-        void answerZanResult(BackResult res);
+        void answerZanResult(BackResult<AnswerZanResponse> res);
 
         //待我回答
         void getWaitMyAnswerListResult(BackResult<WaitForMeToAnswerResponse> res);
@@ -93,6 +99,9 @@ public interface MchQuestionAndAnswerContract {
 
         //忽略问题
         void ignoreQuestionsAndAnswersResult(BackResult<QuestionAnsweringResponse> res);
+
+        //采纳问题
+        void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res);
 
         void showMsg(String msg);
     }
@@ -130,5 +139,8 @@ public interface MchQuestionAndAnswerContract {
 
         //忽略问题
         public abstract void ignoreQuestionsAndAnswers(IgnoreQuestionsAndAnswersRequest ignoreQuestionsAndAnswersRequest);
+
+        //问题采纳
+        public abstract void answersAdopt(AnswerAdoptRequest answerAdoptRequest);
     }
 }

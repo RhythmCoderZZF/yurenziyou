@@ -26,9 +26,11 @@ public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewS
     private Context mContext;
     private RvSlideLayout mOpenMenu;
     private RvSlideLayout mScrollingMenu;
-    public TravelPreviewSubAdapter(Context mContext) {
+    private TripPlaceDeleteListener tripPlaceDeleteListener;
+    public TravelPreviewSubAdapter(Context mContext,TripPlaceDeleteListener tripPlaceDeleteListener) {
 
         this.mContext = mContext;
+        this.tripPlaceDeleteListener = tripPlaceDeleteListener;
     }
 
     public void setTravelPreviewList(List<TripDetailsResponse.TripDetailsEntity> travelPreviewEntityList) {
@@ -50,10 +52,19 @@ public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewS
         try {
 
             TripDetailsResponse.TripDetailsEntity travelPreview = travelPreviewEntityList.get(itemPosition);
+            int tripPlaceId = travelPreview.getTripPlaceId();
             String address = travelPreview.getAddress();
             String time = travelPreview.getTime();
             holder.mTvDestinationName.setText(address);
             holder.mTvTravelTime.setText(time);
+
+            holder.mImgTripPlaceDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    tripPlaceDeleteListener.setTripPlaceDeleteCallBack(tripPlaceId,itemPosition);
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,15 +83,16 @@ public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewS
         //行程日期
         TextView mTvTravelTime;
 
-        //行程点类型
-        ImageView mImgTripPlaceType;
+        //行程点删除
+        ImageView mImgTripPlaceDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             mTvDestinationName = itemView.findViewById(R.id.tv_trip_place);
             mTvTravelTime = itemView.findViewById(R.id.tv_travel_time);
-            itemView.findViewById(R.id.img_trip_place_type);
+            mImgTripPlaceDelete = itemView.findViewById(R.id.img_delete);
+
         }
     }
 
@@ -101,5 +113,10 @@ public class TravelPreviewSubAdapter extends RecyclerView.Adapter<TravelPreviewS
 
     public void holdOpenMenu(RvSlideLayout rvSlideLayout) {
         mOpenMenu = rvSlideLayout;
+    }
+
+    public interface TripPlaceDeleteListener{
+
+        void setTripPlaceDeleteCallBack(int tripPlaceId,int childPosition);
     }
 }

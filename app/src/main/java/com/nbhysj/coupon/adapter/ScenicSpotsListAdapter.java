@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -101,7 +102,7 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
 
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
 
-            holder.mLlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
+            holder.mRlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -150,8 +151,8 @@ public class ScenicSpotsListAdapter extends RecyclerView.Adapter<ScenicSpotsList
         //景点类型
         @BindView(R.id.tv_scenic_spot_type)
         TextView mTvScenicSpotsType;
-        @BindView(R.id.llyt_scenic_spot_item)
-        LinearLayout mLlytScenicSpotItem;
+        @BindView(R.id.rlyt_scenic_spot_item)
+        RelativeLayout mRlytScenicSpotItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

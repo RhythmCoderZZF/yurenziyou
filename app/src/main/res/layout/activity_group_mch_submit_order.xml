@@ -627,11 +627,23 @@
                         android:text="¥0"
                         android:textColor="@color/color_text_gray35"
                         android:textSize="@dimen/text_size_tiny"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
-            </LinearLayout>
 
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_already_reduced_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已减0元"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/color_orange3"
+                android:layout_marginLeft="@dimen/dp_25"
+                android:textSize="@dimen/text_size_tiny"
+                android:textStyle="bold"
+                />
         </LinearLayout>
 
 

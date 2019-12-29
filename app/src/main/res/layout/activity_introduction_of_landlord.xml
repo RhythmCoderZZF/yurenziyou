@@ -467,13 +467,13 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/dp_5"
                         android:padding="@dimen/dp_10"
-                        android:src="@mipmap/icon_black_menu_more" />
+                        android:src="@mipmap/icon_black_menu_more"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
             </RelativeLayout>
 
         </LinearLayout>
-
 
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/magic_indicator_title"

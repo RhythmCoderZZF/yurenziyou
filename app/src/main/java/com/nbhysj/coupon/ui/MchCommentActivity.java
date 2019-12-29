@@ -4,6 +4,7 @@ package com.nbhysj.coupon.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.CommentContract;
 import com.nbhysj.coupon.model.CommentModel;
 import com.nbhysj.coupon.model.response.BackResult;
@@ -63,10 +65,15 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
     //景色评分
     TextView mTvScenicSpotScore;
 
+    //评分标签
+    TextView mTvScenicSpotScoreTag;
+
     ProgressBar mProgressScenicSpot;
 
     //趣味评分
     TextView mTvInterestScore;
+
+    TextView mTvInterestScoreTag;
 
     ProgressBar mProgressInterest;
 
@@ -84,6 +91,9 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
 
     //商户Id
     private int mchId;
+
+    //商户类型
+    private String mchType;
 
     private View header;
 
@@ -114,6 +124,7 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
 
         ToolbarHelper.setHeadBar(MchCommentActivity.this, "评论", R.mipmap.icon_left_arrow_black, "");
         mchId = getIntent().getIntExtra("mchId", 0);
+        mchType = getIntent().getStringExtra("mchType");
         tagIndex = getIntent().getIntExtra("tagIndex", 0);
         tagValue = getIntent().getIntExtra("tagValue", 0);
 
@@ -128,8 +139,13 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
         header = LayoutInflater.from(this).inflate(R.layout.layout_mch_comment_header_item, view, false);
         mTvMchScore = header.findViewById(R.id.tv_mch_score);
         mStarBarView = header.findViewById(R.id.starbar);
+
+        mTvScenicSpotScoreTag = header.findViewById(R.id.tv_scenic_spot_score_tag);
         mTvScenicSpotScore = header.findViewById(R.id.tv_scenic_spot_score);
         mProgressScenicSpot = header.findViewById(R.id.pb_scenic_spot_progressbar);
+
+
+        mTvInterestScoreTag = header.findViewById(R.id.tv_interest_score_tag);
         mTvInterestScore = header.findViewById(R.id.tv_interest_score);
         mProgressInterest = header.findViewById(R.id.pb_interest_progressbar);
         mTvCostPerformancetScore = header.findViewById(R.id.tv_cost_performancet_score);
@@ -151,7 +167,14 @@ public class MchCommentActivity extends BaseActivity<CommentPresenter, CommentMo
         mchCommentAdapter.setScenicSpotsUserCommentList(mchCommentList);
         mRvUserComment.setAdapter(mchCommentAdapter);
         setHeader(mRvUserComment);
-
+        String mchTypeValue = MchTypeEnum.MCH_SCENIC.getValue();
+        if (!TextUtils.isEmpty(mchType)){
+            if (mchType.equals(mchTypeValue))
+            {
+                mTvScenicSpotScoreTag.setText("景色");
+                mTvInterestScoreTag.setText("舒适");
+            }
+       }
         mSmartRefreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
 
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {

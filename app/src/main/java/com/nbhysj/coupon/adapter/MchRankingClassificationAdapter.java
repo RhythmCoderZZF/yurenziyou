@@ -16,6 +16,7 @@ import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.FineFoodCateListActivity;
 import com.nbhysj.coupon.ui.HomestayBangDanListActivity;
 import com.nbhysj.coupon.ui.RecreationBangDanListActivity;
+import com.nbhysj.coupon.ui.RecreationCateListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
 import com.nbhysj.coupon.ui.ScenicSpotCateListActivity;
 import com.nbhysj.coupon.util.GlideUtil;
@@ -82,9 +83,7 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
                     Intent intent = new Intent();
                     if(mchType.equals(MchTypeEnum.MCH_SCENIC.getValue()))
                     {
-                        intent.setClass(mContext, ScenicSpotCateListActivity.class);
-                        intent.putExtra("cateId",cateId);
-                        mContext.startActivity(intent);
+                        mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);
                     }  else if(mchType.equals(MchTypeEnum.MCH_FOOD.getValue())){
 
                         intent.setClass(mContext, FineFoodCateListActivity.class);
@@ -99,9 +98,7 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
                         intent.setClass(mContext, HomestayBangDanListActivity.class);
                         mContext.startActivity(intent);
                     }else if(mchType.equals(MchTypeEnum.MCH_RECREATION.getValue())){
-
-                        intent.setClass(mContext, RecreationBangDanListActivity.class);
-                        mContext.startActivity(intent);
+                        mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);
                     }
 
                 }

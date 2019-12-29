@@ -17,7 +17,9 @@ import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
+import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AnswerBean;
+import com.nbhysj.coupon.model.response.AnswerZanResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -123,6 +125,12 @@ public class AskAndAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswe
                 mPosition = position;
                 int answerId = answerBean.getId();
                 answerZan(answerId);
+
+            }
+
+            @Override
+            public void setAnswerAdoptListener(int position, AnswerBean answerBean) {
+
 
             }
         });
@@ -305,7 +313,7 @@ public class AskAndAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswe
     }
 
     @Override
-    public void answerZanResult(BackResult res) {
+    public void answerZanResult(BackResult<AnswerZanResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
@@ -315,7 +323,11 @@ public class AskAndAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswe
                     case Constants.SUCCESS_CODE:
                         try {
 
-                            answerList.get(mPosition).setZanStatus(1);
+                            AnswerZanResponse answerZanResponse = res.getData();
+                            int zanNum = answerZanResponse.getZanNum();
+                            int zanStatus = answerZanResponse.getZanStatus();
+                            answerList.get(mPosition).setZanStatus(zanStatus);
+                            answerList.get(mPosition).setZanNum(zanNum);
                             answerDetailSubAdapter.setAnswerList(answerList);
                             answerDetailSubAdapter.notifyDataSetChanged();
 
@@ -337,6 +349,11 @@ public class AskAndAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswe
 
     @Override
     public void getMyQuestionListResult(BackResult<QuestionAnsweringResponse> res) {
+
+    }
+
+    @Override
+    public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
 
     }
 
@@ -384,7 +401,6 @@ public class AskAndAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswe
             mPresenter.askTogether(askTogetherRequest);
         }
     }
-
 
     public void answerZan(int answerId){
 
