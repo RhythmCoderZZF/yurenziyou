@@ -356,7 +356,6 @@ public class TravelAssistantDetailsActivity extends BaseActivity<TravelAssistant
                     mTvWeather.setText(weather);
                     GlideUtil.loadImage(TravelAssistantDetailsActivity.this,photoUrl,mImgWeather);
 
-                    System.out.print(weatherResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

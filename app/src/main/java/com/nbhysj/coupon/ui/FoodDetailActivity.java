@@ -32,6 +32,7 @@ import com.nbhysj.coupon.adapter.MchCommentAdapter;
 import com.nbhysj.coupon.adapter.ShopRecommendDeliciousFoodAdapter;
 import com.nbhysj.coupon.adapter.UserCommentAdapter;
 import com.nbhysj.coupon.common.Constants;
+import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
@@ -392,7 +393,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                     float tasteCommentScore = mchDetailsEntity.getCommentScore1();
                     float environmentCommentScore = mchDetailsEntity.getCommentScore2();
                     float serviceCommentScore = mchDetailsEntity.getCommentScore3();
-                    mTvMchFoodCommentScoreTag.setText("味道:" + tasteCommentScore + "  环境:" + environmentCommentScore + "  服务:" + serviceCommentScore);
+                    mTvMchFoodCommentScoreTag.setText("口味:" + tasteCommentScore + "  环境:" + environmentCommentScore + "  服务:" + serviceCommentScore);
                     mTvMchCommentNum.setText(String.valueOf(mchCommentNum) + "评价");
 
                     //开放时间
@@ -557,6 +558,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     @OnClick({R.id.ibtn_back, R.id.rlyt_mch_ranking, R.id.img_menu, R.id.tv_mch_address, R.id.img_scenic_spot_forward
     ,R.id.tv_more_businesses_nearby, R.id.img_collection,R.id.tv_recommend_delicious_food_look_more,R.id.tv_look_user_all_comment,R.id.rlyt_fine_food_comment,R.id.tv_user_comment_num})
     public void onClick(View v) {
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.ibtn_back:
@@ -564,8 +566,12 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 break;
             case R.id.rlyt_mch_ranking:
 
-                toActivity(FineFoodBangDanListActivity.class);
-
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(FineFoodBangDanListActivity.class);
+                } else {
+                    onReLogin("");
+                }
                 break;
             case R.id.img_menu:
                 showPopupWindow(mImageMenu);
@@ -637,8 +643,6 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
 
                 break;
             case R.id.rlyt_fine_food_comment:
-                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
-
                 if (!TextUtils.isEmpty(token))
                 {
                     intent.setClass(FoodDetailActivity.this,FineFoodEvaluateActivity.class);

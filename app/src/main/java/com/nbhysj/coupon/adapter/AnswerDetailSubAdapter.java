@@ -6,16 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.AnswerBean;
-import com.nbhysj.coupon.model.response.UserFansFollowBean;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -118,13 +114,6 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
                 }
             });
 
-            holder.mTvAnswerAdopt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    answerUsefulListener.setAnswerAdoptListener(position,answerBean);
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,9 +154,6 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
         @BindView(R.id.img_answer_adopted)
         ImageView mImgAnswerAdopted;
 
-        //采纳问题
-        @BindView(R.id.tv_answer_adopt)
-        TextView mTvAnswerAdopt;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

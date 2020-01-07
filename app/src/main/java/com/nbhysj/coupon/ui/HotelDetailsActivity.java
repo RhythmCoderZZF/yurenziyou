@@ -43,6 +43,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsBean;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HotelBean;
+import com.nbhysj.coupon.model.response.HotelMchDetailsResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
@@ -203,9 +204,9 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     private List<ImageView> viewList;
     private List<String> bannerList;
 
-    private MchDetailsResponse mchDetailsResponse;
+    private HotelMchDetailsResponse mchDetailsResponse;
 
-    private MchDetailsResponse.MchDetailsEntity mchDetailsEntity;
+    private HotelMchDetailsResponse.MchDetailsEntity mchDetailsEntity;
 
     //评论列表
     List<MchCommentEntity> commentList;
@@ -234,7 +235,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     private NearbyHotSellHotelsAdapter nearbyHotSellHotelsAdapter;
 
     //附近
-    private MchDetailsResponse.NearbyEntity nearbyEntity;
+    private HotelMchDetailsResponse.NearbyEntity nearbyEntity;
 
     //附近列表
     private List<NearbyTypeResponse> nearbyTypList;
@@ -455,7 +456,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     }
 
     @OnClick({R.id.llyt_delicious_food, R.id.llyt_entertainment, R.id.llyt_scenic_spot, R.id.ibtn_back, R.id.rlyt_hotel_location, R.id.rlyt_all_facility_details, R.id.rlyt_booking_information
-            , R.id.rlyt_nearby_hotel, R.id.img_collection, R.id.rlyt_look_user_all_comment, R.id.img_menu, R.id.img_scenic_spot_forward, R.id.tv_coupon_receive, R.id.rlyt_question_num})
+            , R.id.rlyt_nearby_hotel, R.id.img_collection, R.id.rlyt_look_user_all_comment, R.id.img_menu, R.id.img_scenic_spot_forward, R.id.tv_coupon_receive, R.id.rlyt_question_num,R.id.llyt_look_user_all_comment})
     public void onClick(View v) {
         Typeface normalFont = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
         mTvEntertainment.setTypeface(normalFont);
@@ -561,6 +562,11 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 intent.putExtra("mchId", mchId);
                 startActivity(intent);
 
+                break;
+            case R.id.llyt_look_user_all_comment:
+                intent.setClass(HotelDetailsActivity.this, MchCommentActivity.class);
+                intent.putExtra("mchId", mchId);
+                startActivity(intent);
                 break;
             case R.id.img_menu:
                 showPopupWindow(mImageMenu);
@@ -680,7 +686,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     }
 
     @Override
-    public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+    public void getHotelMchDetailResult(BackResult<HotelMchDetailsResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
@@ -689,7 +695,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     mchDetailsResponse = res.getData();
 
                     mchDetailsEntity = mchDetailsResponse.getMchDetails();
-                    MchDetailsResponse.MchQuestionEntity mchQuestionEntity = mchDetailsResponse.getMchQuestion(); //问题
+                    HotelMchDetailsResponse.MchQuestionEntity mchQuestionEntity = mchDetailsResponse.getMchQuestion(); //问题
                     couponsList = mchDetailsResponse.getCoupons();    //优惠券
                     mchHotelGoodsList = mchDetailsResponse.getMchGoods();     //酒店商品展示列表
                     latitude = mchDetailsEntity.getLatitude();
@@ -714,7 +720,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
                     }
 
-                    List<MchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
+                    List<HotelMchDetailsResponse.TagsEntity> tagsEntityList = mchDetailsEntity.getTags();
 
                     mTvHotelCommentScore.setText(String.valueOf(mCommentScore));
                     mStarBarView.setIntegerMark(false);
@@ -752,10 +758,10 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                         hotelMealDetailAdapter.notifyDataSetChanged();
                     }
 
-                    MchDetailsResponse.CommentEntity commentEntity = mchDetailsResponse.getComment();
+                    HotelMchDetailsResponse.CommentEntity commentEntity = mchDetailsResponse.getComment();
                     commentList = commentEntity.getComment();
 
-                    MchDetailsResponse.ScoreEntity scoreEntity = commentEntity.getScore();
+                    HotelMchDetailsResponse.ScoreEntity scoreEntity = commentEntity.getScore();
                     labelEntityList = commentEntity.getLabel();
 
                     int mCommentNum = scoreEntity.getCommentNum();
@@ -810,7 +816,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     String questionContent = mchQuestionEntity.getQuestionContent();
                     String answerContent = mchQuestionEntity.getAnswerContent();
                     //问
-                    if (!TextUtils.isEmpty(questionContent)) {
+                    if (!TextUtils.isEmpty(questionContent))
+                    {
                         mTvQuestionContent.setText(questionContent);
                     }
                     //答
@@ -823,12 +830,12 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     allFacilityDetailsH5Url = mchDetailsEntity.getAllFacilityDetails();
 
                     //设备详情
-                    List<MchDetailsResponse.ServiceEntity> tagsList = mchDetailsEntity.getServiceJson();
+                    List<HotelMchDetailsResponse.ServiceEntity> tagsList = mchDetailsEntity.getServiceJson();
 
-                    mTagFlowLayoutDevice.setAdapter(new TagAdapter<MchDetailsResponse.ServiceEntity>(tagsList) {
+                    mTagFlowLayoutDevice.setAdapter(new TagAdapter<HotelMchDetailsResponse.ServiceEntity>(tagsList) {
 
                         @Override
-                        public View getView(FlowLayout parent, int position, MchDetailsResponse.ServiceEntity tagsEntity) {
+                        public View getView(FlowLayout parent, int position, HotelMchDetailsResponse.ServiceEntity tagsEntity) {
                             LayoutInflater mInflater = LayoutInflater.from(mContext);
                             LinearLayout mLlytDevice = (LinearLayout) mInflater.inflate(R.layout.layout_flowlayout_device_detail,
                                     mTagFlowLayoutDevice, false);
@@ -869,7 +876,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     }
 
                     //附近热销酒店
-                    MchDetailsResponse.NearbyHotelEntity nearbyHotelEntity = mchDetailsResponse.getNearbyHotel();
+                    HotelMchDetailsResponse.NearbyHotelEntity nearbyHotelEntity = mchDetailsResponse.getNearbyHotel();
                     hotSellingHotelsNearbyList = nearbyHotelEntity.getHotel();
                     int hotelCount = nearbyHotelEntity.getHotelCount();
                     mNearbySellWellHotelNum.setText("(" + hotelCount + "家)");
@@ -1089,7 +1096,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
         if (validateInternet()) {
             showProgressDialog(HotelDetailsActivity.this);
-            mPresenter.getMchDetails(mchId);
+            mPresenter.getHotelMchDetail(mchId);
         }
     }
 

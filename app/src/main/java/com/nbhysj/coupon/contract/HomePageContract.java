@@ -65,6 +65,9 @@ public interface HomePageContract {
 
         //关注
         Observable<BackResult<FollowUserStatusResponse>> userFollow(int userId);
+
+        //获取未读消息列表
+        Observable<BackResult<Integer>> getHomePageUnReadMsg();
     }
 
     interface View extends BaseView {
@@ -91,6 +94,8 @@ public interface HomePageContract {
         void getHomePageSearchByTypeResult(BackResult<HomePageTypeSearchResponse> res);
 
         void userFollowResult(BackResult<FollowUserStatusResponse> res);
+
+        void getUnReadMessageListResult(BackResult<Integer> res);
 
         void showMsg(String msg);
     }
@@ -126,5 +131,8 @@ public interface HomePageContract {
 
         //关注
         public abstract void userFollow(int userId);
+
+        //获取未读消息列表
+        public abstract void getHomePageUnReadMsg();
     }
 }

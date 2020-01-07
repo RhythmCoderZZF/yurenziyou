@@ -260,6 +260,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
                     SharedPreferencesUtils.putData("version",currentVersionName);
                     setResult(RESULT_OK);
                     finish();
+                    Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                    mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE, Constants.BROADCAST_ACTION_BACK_MINE);
+                    sendBroadcast(mIntent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -388,7 +391,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter, LoginModel> impl
             try {
 
                 if (TextUtils.isEmpty(saltKey)) {
-
+                    dismissProgressDialog();
                     showToast(LoginActivity.this, getResources().getString(R.string.str_salt_error));
                     return;
                 }

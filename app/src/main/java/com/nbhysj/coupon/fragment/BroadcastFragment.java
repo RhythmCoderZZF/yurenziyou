@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.ImageData;
 import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.StrategyBean;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.UserFollowResponse;
 import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
@@ -145,6 +146,11 @@ public class BroadcastFragment extends BaseFragment<MessagePresenter, MessageMod
 
     @Override
     public void getMessageListResult(BackResult<MessageResponse> res) {
+
+    }
+
+    @Override
+    public void getUnReadMessage(BackResult<UnReadMessageBean> res) {
 
     }
 

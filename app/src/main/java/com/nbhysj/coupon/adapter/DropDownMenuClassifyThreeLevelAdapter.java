@@ -11,16 +11,17 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PositionDistanceBean;
+import com.nbhysj.coupon.model.response.PositionDistanceSearchBean;
 
 import java.util.List;
 
 /**
  * @author hysj created at 2019/05/20.
- * description: (景点,美食)距离位置筛选列表适配器
+ * description:距离位置筛选三级列表适配器
  */
 public class DropDownMenuClassifyThreeLevelAdapter extends RecyclerView.Adapter<DropDownMenuClassifyThreeLevelAdapter.ViewHolder> {
     private DropDownMenuListener dropDownMenuListener;
-    List<PositionDistanceBean.PositionDistanceTypeClassifyThreeLevel> positionDistanceTypeClassifyList;
+    List<PositionDistanceSearchBean> positionDistanceTypeThreeLevelList;
     private Context mContext;
 
     public DropDownMenuClassifyThreeLevelAdapter(Context mContext, DropDownMenuListener dropDownMenuListener) {
@@ -29,9 +30,9 @@ public class DropDownMenuClassifyThreeLevelAdapter extends RecyclerView.Adapter<
         this.dropDownMenuListener = dropDownMenuListener;
     }
 
-    public void setPositionDistanceList(List<PositionDistanceBean.PositionDistanceTypeClassifyThreeLevel> positionDistanceTypeClassifyList) {
+    public void setPositionDistanceList(List<PositionDistanceSearchBean> positionDistanceTypeThreeLevelList) {
 
-        this.positionDistanceTypeClassifyList = positionDistanceTypeClassifyList;
+        this.positionDistanceTypeThreeLevelList = positionDistanceTypeThreeLevelList;
     }
 
     @Override
@@ -47,15 +48,15 @@ public class DropDownMenuClassifyThreeLevelAdapter extends RecyclerView.Adapter<
 
         try {
 
-            PositionDistanceBean.PositionDistanceTypeClassifyThreeLevel positionDistanceBean = positionDistanceTypeClassifyList.get(itemPosition);
-            String sortCondition = positionDistanceBean.getThreeLevelName();
+            PositionDistanceSearchBean positionDistanceBean = positionDistanceTypeThreeLevelList.get(itemPosition);
+            String sortCondition = positionDistanceBean.getTitle();
             holder.mTvSortCondition.setText(sortCondition);
             holder.mRlytDropDownMenuItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    for (int i = 0; i < positionDistanceTypeClassifyList.size(); i++) {
-                        positionDistanceTypeClassifyList.get(i).setSelect(false);
+                    for (int i = 0; i < positionDistanceTypeThreeLevelList.size(); i++) {
+                        positionDistanceTypeThreeLevelList.get(i).setSelect(false);
                     }
                     positionDistanceBean.setSelect(true);
 
@@ -83,7 +84,7 @@ public class DropDownMenuClassifyThreeLevelAdapter extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        return positionDistanceTypeClassifyList.size();
+        return positionDistanceTypeThreeLevelList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -102,7 +103,7 @@ public class DropDownMenuClassifyThreeLevelAdapter extends RecyclerView.Adapter<
 
     public interface DropDownMenuListener {
 
-        void setDropDownMenuListener(int position, PositionDistanceBean.PositionDistanceTypeClassifyThreeLevel positionDistanceBean);
+        void setDropDownMenuListener(int position, PositionDistanceSearchBean positionDistanceBean);
     }
 
 }

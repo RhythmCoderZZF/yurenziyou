@@ -187,6 +187,9 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
     //商户名字
     private String mchName;
 
+    //编辑退出
+    private NoteSaveExitPromptDialog noteEditPromptDialog;
+
     //声音胶囊弹框选择
     private NoteSaveExitPromptDialog noteSaveExitPromptDialog;
 
@@ -241,11 +244,11 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
 
                     if (position == 0) {
 
-                        if(noteSaveExitPromptDialog == null)
+                        if(noteEditPromptDialog == null)
                         {
-                            noteSaveExitPromptDialog = new NoteSaveExitPromptDialog(PublishNoteActivity.this).builder();
+                            noteEditPromptDialog = new NoteSaveExitPromptDialog(PublishNoteActivity.this).builder();
 
-                                noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_video_play), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                            noteEditPromptDialog.addSheetItem(getResources().getString(R.string.str_video_play), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
                                     @Override
                                     public void onClick(int which) {
 
@@ -262,13 +265,13 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                                         }
                                     }
                                 });
-                            noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_edit), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                            noteEditPromptDialog.addSheetItem(getResources().getString(R.string.str_edit), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int which) {
 
                                 }
                             });
-                            noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_delete), NoteSaveExitPromptDialog.SheetItemColor.Red, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                            noteEditPromptDialog.addSheetItem(getResources().getString(R.string.str_delete), NoteSaveExitPromptDialog.SheetItemColor.Red, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int which) {
 
@@ -277,10 +280,10 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
                                     notePictureItemAdapter.notifyDataSetChanged();
                                 }
                             });
-                            noteSaveExitPromptDialog.setSheetItems();
+                            noteEditPromptDialog.setSheetItems();
                         }
 
-                        noteSaveExitPromptDialog.show();
+                        noteEditPromptDialog.show();
 
                     } else if (position == 1) {
 
@@ -543,8 +546,28 @@ public class PublishNoteActivity extends BaseActivity<PublishPostPresenter, Publ
 
                 break;
             case R.id.iv_back:
+                if(noteSaveExitPromptDialog == null)
+                {
+                    noteSaveExitPromptDialog = new NoteSaveExitPromptDialog(PublishNoteActivity.this).builder();
 
-                PublishNoteActivity.this.finish();
+                    noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_continue_editing), NoteSaveExitPromptDialog.SheetItemColor.Blue, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick(int which) {
+
+
+                        }
+                    });
+                    noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_confirm_exit), NoteSaveExitPromptDialog.SheetItemColor.Red, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick(int which) {
+                            PublishNoteActivity.this.finish();
+                        }
+                    });
+                    noteSaveExitPromptDialog.setSheetItems();
+                }
+
+                noteSaveExitPromptDialog.show();
+
                 break;
             case R.id.rlyt_push_note:
                 String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");

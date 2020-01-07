@@ -224,8 +224,8 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             if (commentStatus == 0) {
                 holder.mTvOrderComment.setVisibility(View.GONE);
 
-            } else if (commentStatus == 1) {
-
+            } else if (commentStatus == 1)
+            {
                 holder.mTvOrderComment.setVisibility(View.VISIBLE);
             }
 

@@ -610,6 +610,7 @@ public class ScenicSpotDestinationActivity extends BaseActivity<DestinationPrese
                 }
                 break;
             default:
+                showToast(ScenicSpotDestinationActivity.this,Constants.getResultMsg(res.getMsg()));
                 break;
         }
 

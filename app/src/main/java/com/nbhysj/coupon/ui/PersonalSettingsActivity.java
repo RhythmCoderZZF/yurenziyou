@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +48,9 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
     TextView mTvCacheSize;
     //缓存大小
     String mTotalCacheSize;
+
+    //退出后刷新code
+    private int REQUEST_CODE_LOGOUT_SUCCESS_REFRESH = 1000;
 
     @Override
     public int getLayoutId() {
@@ -136,7 +140,7 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
         showToast(PersonalSettingsActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache, R.id.rlyt_evaluate_murloc_travel,R.id.rlyt_video_auto_play_settings})
+    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache, R.id.rlyt_evaluate_murloc_travel, R.id.rlyt_video_auto_play_settings})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_bind_account_and_setting:
@@ -152,9 +156,12 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
                 toActivity(FrequentlyUsedInformationActivity.class);
                 break;
             case R.id.tv_logout:
-              //  logout();
+                //  logout();
+                Intent mIntent = new Intent(Constants.BROADCAST_ACTION_MAIN_BACK);
+                mIntent.putExtra(Constants.BROADCAST_ACTION_ARG_OPRATE, Constants.BROADCAST_ACTION_BACK_HOME_PAGE);
+                sendBroadcast(mIntent);
                 finish();
-                onReLogin("");
+                onReLogin("退出");
                 break;
             case R.id.rlyt_clear_cache:
                 try {
@@ -232,5 +239,10 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
             userId = getSharedPreferencesUserId();
             mPresenter.getThirdPartyLoginStatus(userId);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

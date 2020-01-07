@@ -54,10 +54,10 @@
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dp_3"
-                            android:src="@mipmap/icon_designate_me" />
+                            android:src="@mipmap/icon_comment_and_answer" />
 
                         <TextView
-                            android:id="@+id/tv_designate_me_num"
+                            android:id="@+id/tv_comment_unread_msg_num"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
@@ -101,9 +101,10 @@
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dp_3"
-                            android:src="@mipmap/icon_comment" />
+                            android:src="@mipmap/icon_add_fans" />
 
                         <TextView
+                            android:id="@+id/tv_new_fans_unread_msg_num"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
@@ -150,6 +151,7 @@
                             android:src="@mipmap/icon_praise_and_collection" />
 
                         <TextView
+                            android:id="@+id/tv_praise_and_collection_unread_msg_num"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
@@ -357,7 +359,9 @@
             <View
                 style="@style/line"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="@dimen/dp_16"></View>
+                android:layout_marginLeft="@dimen/dp_16"
+                android:visibility="gone"
+                ></View>
 
             <View
                 style="@style/line"

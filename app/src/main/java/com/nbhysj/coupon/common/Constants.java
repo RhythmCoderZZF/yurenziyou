@@ -68,6 +68,10 @@ public class Constants {
 
     public static final String BROADCAST_ACTION_BACK_SHOPPING_MALL = "android.intent.action.back.shopping.mall";
 
+    public static final String BROADCAST_ACTION_BACK_HOME_PAGE = "android.intent.action.back.homepage";
+
+    public static final String BROADCAST_ACTION_BACK_MINE = "android.intent.action.back.mine";
+
     //高德POI搜索
     public static final String EXTRA_TIP = "extraTip";
     public static final String KEY_WORDS_NAME = "KeyWord";

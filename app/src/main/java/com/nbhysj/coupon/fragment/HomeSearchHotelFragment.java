@@ -216,6 +216,11 @@ public class HomeSearchHotelFragment extends BaseFragment<HomePagePresenter, Hom
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
 
     }

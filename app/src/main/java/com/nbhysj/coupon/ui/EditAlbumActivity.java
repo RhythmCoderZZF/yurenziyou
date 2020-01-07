@@ -189,7 +189,6 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
 
         if (validateInternet()) {
 
-
             //专辑标题
             mAlbumTitle = mEdtAlbumTitle.getText().toString();
 
@@ -221,7 +220,6 @@ public class EditAlbumActivity extends BaseActivity<AlbumPresenter, AlbumModel> 
                     Intent intent = new Intent();
                     intent.putExtra("albumOprate",1);
                     setResult(RESULT_OK,intent);
-                    setResult(RESULT_OK);
                     finish();
 
                 } catch (Exception e) {

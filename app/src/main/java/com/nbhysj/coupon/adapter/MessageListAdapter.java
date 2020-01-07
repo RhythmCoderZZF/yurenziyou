@@ -1,16 +1,19 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
+import com.nbhysj.coupon.ui.UserChatListActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
@@ -63,15 +66,27 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         try {
             MessageResponse.MessageEntity userFansFollowBean = messageList.get(position);
             String fansName = userFansFollowBean.getNickname();
+            int userId = userFansFollowBean.getId();
              long chatTime = userFansFollowBean.getCtime();
             String avatar = userFansFollowBean.getAvater();
             String messageContent = userFansFollowBean.getMessage();
-           String time =  DateUtil.transferLongToDate(DateUtil.sDateYMDHHMMSSFormat,chatTime);
+            String time =  DateUtil.transferLongToDate(DateUtil.sDateYMDHHMMSSFormat,chatTime);
             holder.mTvUsername.setText(fansName);
             holder.mTvMessageTime.setText(time);
             GlideUtil.loadImage(mContext,avatar,holder.mImgUserAvatar);
             holder.mTvMessageContent.setText(messageContent);
 
+            holder.mLlytChatMessageItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(mContext, UserChatListActivity.class);
+                    mIntent.putExtra("uid",userId);
+                    mIntent.putExtra("username",fansName);
+                    mContext.startActivity(mIntent);
+                }
+            });
           //  holder.mTvMessageContent.setText(messageBean.getContent());
            /* String url = messageBean.getUrl();
             holder.mImgMessageType.loadCircle(url);
@@ -116,6 +131,8 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         TextView mTvMessageContent;
         @BindView(R.id.img_message_dot)
         ImageView mImageMessageDot;
+        @BindView(R.id.llyt_chat_message_item)
+        LinearLayout mLlytChatMessageItem;
 
         public ViewHolder(View itemView) {
             super(itemView);

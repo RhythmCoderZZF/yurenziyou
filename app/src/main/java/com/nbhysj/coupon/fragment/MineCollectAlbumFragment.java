@@ -75,7 +75,10 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     private int REQUEST_CODE_EDIT_COLLECTIION_ALBUM = 0;
 
     //删除编辑
-    private int REQUEST_CODE_DELETE_COLLECTIION_ALBUM = 1;
+    // private int REQUEST_CODE_DELETE_COLLECTIION_ALBUM = 1;
+
+    //新增专辑
+    private int REQUEST_CODE_ADD_COLLECTIION_ALBUM = 2;
 
     private int mPosition;
 
@@ -107,7 +110,7 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     @Override
     public void initPresenter() {
 
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
@@ -124,25 +127,27 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
         GridLayoutManager travelListAdapterLayoutManager = new GridLayoutManager(getActivity(), 2);
         travelListAdapterLayoutManager.setOrientation(travelListAdapterLayoutManager.VERTICAL);
         mRvMineCollectionAlbum.setLayoutManager(travelListAdapterLayoutManager);
-         mineCollectionAlbumAdapter = new MineCollectionAlbumAdapter(getActivity(), new MineCollectionAlbumAdapter.NewCollectionAlbumListener() {
+        mineCollectionAlbumAdapter = new MineCollectionAlbumAdapter(getActivity(), new MineCollectionAlbumAdapter.NewCollectionAlbumListener() {
             @Override
             public void setNewCollectionAlbumListener() {
 
-                toActivity(NewAlbumActivity.class);
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), NewAlbumActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD_COLLECTIION_ALBUM);
             }
 
             @Override
-            public void setEditCollectionAlbumListener(int position,FavoritesBean favoritesBean) {
+            public void setEditCollectionAlbumListener(int position, FavoritesBean favoritesBean) {
                 mPosition = position;
                 int collectionId = favoritesBean.getId();
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("favoritesBean",favoritesBean);
+                bundle.putSerializable("favoritesBean", favoritesBean);
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
-                intent.setClass(getActivity(),EditAlbumActivity.class);
-               // intent.putExtra("collectionId",collectionId);
-                startActivityForResult(intent,REQUEST_CODE_EDIT_COLLECTIION_ALBUM);
+                intent.setClass(getActivity(), EditAlbumActivity.class);
+                // intent.putExtra("collectionId",collectionId);
+                startActivityForResult(intent, REQUEST_CODE_EDIT_COLLECTIION_ALBUM);
             }
         });
         mineCollectionAlbumAdapter.setCollectionAlbumList(mineCollectionAlbumList);
@@ -290,17 +295,16 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
                     BasePaginationResult paginationResult = res.getData().getPage();
                     mTotalPageCount = paginationResult.getPageCount();
                     List<FavoritesBean> favoritesList = res.getData().getResult();
-
+/*
                     if (mTotalPageCount == 0)
                     {
                         mRlytNoData.setVisibility(View.VISIBLE);
 
                     } else {
                         mRlytNoData.setVisibility(View.GONE);
-                    }
+                    }*/
 
-                    if (favoritesList != null)
-                    {
+                    if (favoritesList != null && favoritesList.size() > 0) {
                         mineCollectionAlbumList.addAll(favoritesList);
                     }
 
@@ -328,11 +332,11 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     }
 
     //获取专辑列表
-    public void getFavoritesCollectionList(){
+    public void getFavoritesCollectionList() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
-            mPresenter.getFavoritesCollectionList(mPageNo,mPageSize);
+            mPresenter.getFavoritesCollectionList(mPageNo, mPageSize);
         }
     }
 
@@ -346,16 +350,12 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     @Subscribe
     public void onEvent(String mineFragmentRefresh) {
 
-        if(visibleToUser)
-        {
-            if(mineFragmentRefresh.equals("mineFragmentRefresh"))
-            {
-                mPageNo = 1;
-                mSmartRefreshLayout.setNoMoreData(false);
-                mineCollectionAlbumList.clear();
-                mineCollectionAlbumAdapter.notifyDataSetChanged();
-                getFavoritesCollectionList();
-            }
+        if (mineFragmentRefresh.equals("collectionFragmentRefresh")) {
+            mPageNo = 1;
+            mSmartRefreshLayout.setNoMoreData(false);
+            mineCollectionAlbumList.clear();
+            mineCollectionAlbumAdapter.notifyDataSetChanged();
+            getFavoritesCollectionList();
         }
     }
 
@@ -368,24 +368,30 @@ public class MineCollectAlbumFragment extends BaseFragment<AlbumPresenter, Album
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_EDIT_COLLECTIION_ALBUM && resultCode == RESULT_OK)
-        {
-            int albumOprate = data.getIntExtra("albumOprate",0);
-            if(albumOprate == 0) {
+        if (requestCode == REQUEST_CODE_EDIT_COLLECTIION_ALBUM && resultCode == RESULT_OK) {
+            int albumOprate = data.getIntExtra("albumOprate", 0);
+            if (albumOprate == 0) {
                 String albumTitle = data.getStringExtra("albumTitle");
                 String albumIntro = data.getStringExtra("albumIntro");
-                int isVisibleStatus = data.getIntExtra("isVisibleStatus",0);
+                int isVisibleStatus = data.getIntExtra("isVisibleStatus", 0);
                 mineCollectionAlbumList.get(mPosition).setTitle(albumTitle);
                 mineCollectionAlbumList.get(mPosition).setIntro(albumIntro);
                 mineCollectionAlbumList.get(mPosition).setVisibleStatus(isVisibleStatus);
                 mineCollectionAlbumAdapter.notifyDataSetChanged();
-            } else if(albumOprate == 1){
+            } else if (albumOprate == 1) {
 
                 FavoritesBean favoritesBean = mineCollectionAlbumList.get(mPosition);
                 mineCollectionAlbumList.remove(favoritesBean);
                 mineCollectionAlbumAdapter.setCollectionAlbumList(mineCollectionAlbumList);
                 mineCollectionAlbumAdapter.notifyDataSetChanged();
             }
+        } else if (requestCode == REQUEST_CODE_ADD_COLLECTIION_ALBUM && resultCode == RESULT_OK) {
+
+            mPageNo = 1;
+            mSmartRefreshLayout.setNoMoreData(false);
+            mineCollectionAlbumList.clear();
+            mineCollectionAlbumAdapter.notifyDataSetChanged();
+            getFavoritesCollectionList();
         }
     }
 }

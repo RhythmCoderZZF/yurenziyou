@@ -118,8 +118,9 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
                             dismissProgressDialog();
                             Intent intent = new Intent();
                             intent.putExtra("tripId", tripId);
+                            intent.putExtra("planningComplete", 1);  //规划完成需要刷新
                             intent.setClass(TravelPlanningActivity.this, TravelAssistantDetailsActivity.class);
-                            startActivity(intent);
+                            startActivityForResult(intent,REQUEST_CODE_TRAVEL_PLANNING);
                         }
 
                     } catch (Exception e) {
@@ -203,9 +204,9 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
                         intent.putExtra("tripId", tripId);
                         intent.putExtra("planningComplete", 1);  //规划完成需要刷新
                         intent.setClass(TravelPlanningActivity.this, TravelAssistantDetailsActivity.class);
-                        startActivity(intent);
-                        setResult(RESULT_OK);
-                        TravelPlanningActivity.this.finish();
+                        startActivityForResult(intent,REQUEST_CODE_TRAVEL_PLANNING);
+                       // setResult(RESULT_OK);
+                        //TravelPlanningActivity.this.finish();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -274,5 +275,13 @@ public class TravelPlanningActivity extends BaseActivity<TravelAssistantPresente
 
         }
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_TRAVEL_PLANNING && resultCode == RESULT_OK)
+        {
+            setResult(RESULT_OK);
+            TravelPlanningActivity.this.finish();
+        }
+    }
 }

@@ -516,14 +516,14 @@ public class GroupMchDetailsActivity extends BaseActivity<GroupMchPresenter, Gro
                     mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
 
                     //套餐详情
-                    if(groupMchPackageMealList != null)
+                    if(groupMchPackageMealList != null && groupMchPackageMealList.size() > 0)
                     {
                         groupMchPackageMealItemAdapter.setGroupMchPackageMealList(groupMchPackageMealList);
                         groupMchPackageMealItemAdapter.notifyDataSetChanged();
                     }
 
                     //更多组合
-                    if(groupMchMoreList != null)
+                    if(groupMchMoreList != null && groupMchMoreList.size() > 0)
                     {
                         groupMchListMoreAdapter.setGroupMchListMore(groupMchMoreList);
                         groupMchListMoreAdapter.notifyDataSetChanged();

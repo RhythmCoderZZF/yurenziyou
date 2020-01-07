@@ -3,21 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
     <com.nbhysj.coupon.widget.MyViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"/>
 
     <LinearLayout
         android:id="@+id/guideGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal"></LinearLayout>
 
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,15 +36,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/icon_left_arrow_white" />
+            android:src="@mipmap/icon_left_arrow_black" />
 
         <TextView
             android:id="@+id/tv_num_of_pages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_centerInParent="true"
             android:textSize="@dimen/text_size_xnormal" />
 

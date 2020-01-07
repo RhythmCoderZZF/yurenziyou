@@ -17,6 +17,7 @@ import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.UserFollowResponse;
 import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
@@ -44,6 +45,15 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
     private List<MessageResponse.MessageEntity> messageList;
     @BindView(R.id.llyt_comment_and_answer)
     LinearLayout mLlytCommentAndAnswer;
+    //评论可回答数量
+    @BindView(R.id.tv_comment_unread_msg_num)
+    TextView mTvCommentUnreadMsgNum;
+    //新增粉丝未读数量
+    @BindView(R.id.tv_new_fans_unread_msg_num)
+    TextView mTvNewFansUnreadMsgMsgNum;
+    //赞与收藏数量
+    @BindView(R.id.tv_praise_and_collection_unread_msg_num)
+    TextView mTvPraiseAndCollectionUnreadMsgNum;
 
     MessageListAdapter messageListAdapter;
 
@@ -192,6 +202,51 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
     }
 
     @Override
+    public void getUnReadMessage(BackResult<UnReadMessageBean> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    UnReadMessageBean unReadMessageBean = res.getData();
+                    int commentNum = unReadMessageBean.getCommentNum();
+                    int fansNum = unReadMessageBean.getFansNum();
+                    int zanNum = unReadMessageBean.getZanNum();
+
+                    if(commentNum > 0) {
+                        mTvCommentUnreadMsgNum.setVisibility(View.VISIBLE);
+                        mTvCommentUnreadMsgNum.setText(String.valueOf(commentNum));
+                    } else {
+                        mTvCommentUnreadMsgNum.setVisibility(View.GONE);
+                    }
+
+                    if(fansNum > 0) {
+                        mTvNewFansUnreadMsgMsgNum.setVisibility(View.VISIBLE);
+                        mTvNewFansUnreadMsgMsgNum.setText(String.valueOf(fansNum));
+                    } else {
+                        mTvNewFansUnreadMsgMsgNum.setVisibility(View.GONE);
+                    }
+
+                    if(zanNum > 0) {
+                        mTvPraiseAndCollectionUnreadMsgNum.setVisibility(View.VISIBLE);
+                        mTvPraiseAndCollectionUnreadMsgNum.setText(String.valueOf(zanNum));
+                    } else {
+                        mTvPraiseAndCollectionUnreadMsgNum.setVisibility(View.GONE);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();
@@ -205,5 +260,21 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
             showProgressDialog(getActivity());
             mPresenter.getMessageList();
         }
+    }
+
+    //获取未读消息
+    public void getUnReadMessage(){
+
+        if(validateInternet())
+        {
+            mPresenter.getUnReadMessage();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getUnReadMessage();
     }
 }

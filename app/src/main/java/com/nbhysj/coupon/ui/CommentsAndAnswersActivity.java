@@ -21,6 +21,7 @@ import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.CommentReceiveResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.UserFollowResponse;
 import com.nbhysj.coupon.model.response.ZanAndCollectionBean;
@@ -72,7 +73,7 @@ public class CommentsAndAnswersActivity extends BaseActivity<MessagePresenter, M
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setBar(CommentsAndAnswersActivity.this, getResources().getString(R.string.str_praise_and_collection), R.mipmap.nav_ico_back_black);
+        ToolbarHelper.setBar(CommentsAndAnswersActivity.this, getResources().getString(R.string.str_comments_received), R.mipmap.nav_ico_back_black);
         if (mCommentAndAnswerList == null) {
             mCommentAndAnswerList = new ArrayList<>();
 
@@ -175,6 +176,11 @@ public class CommentsAndAnswersActivity extends BaseActivity<MessagePresenter, M
 
     @Override
     public void getBroadcatMessageListResult(BackResult<BroadcastResponse> res) {
+
+    }
+
+    @Override
+    public void getUnReadMessage(BackResult<UnReadMessageBean> res) {
 
     }
 

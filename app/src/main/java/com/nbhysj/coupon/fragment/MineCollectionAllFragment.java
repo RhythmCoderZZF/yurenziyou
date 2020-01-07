@@ -53,6 +53,7 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
     private MineCollectionAllItemAdapter collectionAllItemAdapter;
 
     private boolean visibleToUser;
+
     public MineCollectionAllFragment() {
         // Required empty public constructor
     }
@@ -83,13 +84,13 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
     @Override
     public void initPresenter() {
 
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
     public void initView(View v) {
 
-        if(mineCollectionAllList == null){
+        if (mineCollectionAllList == null) {
 
             mineCollectionAllList = new ArrayList<>();
 
@@ -146,10 +147,10 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
 
                     JSONArray data = jsonObject.getJSONArray("data");
                     String JSONStr = JSON.toJSONString(data);
-                     mineCollectionAllList = JSON.parseObject(JSONStr,new TypeReference<List<MineCollectionAllResponse>>(){});
+                    mineCollectionAllList = JSON.parseObject(JSONStr, new TypeReference<List<MineCollectionAllResponse>>() {
+                    });
 
-                    if(mineCollectionAllList != null)
-                    {
+                    if (mineCollectionAllList != null) {
                         collectionAllItemAdapter.setCollectionAllList(mineCollectionAllList);
                         collectionAllItemAdapter.notifyDataSetChanged();
                     }
@@ -202,9 +203,9 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
         showToast(getActivity(), Constants.getResultMsg(msg));
     }
 
-    public void getMineCollectionAllList(){
+    public void getMineCollectionAllList() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
             mPresenter.getMineCollectionAllList();
         }
@@ -219,12 +220,8 @@ public class MineCollectionAllFragment extends BaseFragment<MinePresenter, MineM
     @Subscribe
     public void onEvent(String mineFragmentRefresh) {
 
-        if(visibleToUser)
-        {
-            if(mineFragmentRefresh.equals("mineFragmentRefresh"))
-            {
-                getMineCollectionAllList();
-            }
+        if (mineFragmentRefresh.equals("collectionFragmentRefresh")) {
+            getMineCollectionAllList();
         }
     }
 

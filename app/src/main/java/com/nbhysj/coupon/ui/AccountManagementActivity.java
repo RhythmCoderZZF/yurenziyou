@@ -13,6 +13,7 @@ import com.nbhysj.coupon.common.Enum.ThirdPartyLoginTypeEnum;
 import com.nbhysj.coupon.contract.AccountManagementContract;
 import com.nbhysj.coupon.dialog.OprateDialog;
 import com.nbhysj.coupon.model.AccountManagementModel;
+import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.LoginResponse;
@@ -65,7 +66,7 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
 
     //第三方绑定请求code
     private int THIRD_PARTY_LOGIN_REQUEST_CODE = 0;
-
+    SerializableThirdPartyMap thirdPartyMap = new SerializableThirdPartyMap();
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -179,13 +180,39 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
     }
 
     @Override
-    public void getThirdPartyLoginCreateUserResult(BackResult res) {
+    public void getThirdPartyLoginCreateUserResult(BackResult<LoginResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    thirdPartyLoginCreateUserResult();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
 
+            default:
+                showToast(AccountManagementActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
-    public void getRegisterVerifyCodeResult(BackResult res) {
+    public void getThirdPartyLoginVerifyCodeResult(BackResult res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            default:
+                showToast(AccountManagementActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -263,9 +290,7 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
             thirdPartyData = data;
-            String openid = data.get("openid");
-            String unionid = data.get("unionid");
-            thirdPartyLogin(openid, unionid);
+            thirdPartyLoginCreateUser(data);
         }
 
         @Override
@@ -287,7 +312,7 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
      * @param openid
      * @param unionid
      */
-    public void thirdPartyLogin(String openid, String unionid) {
+/*    public void thirdPartyLogin(String openid, String unionid) {
 
         if (validateInternet()) {
             ThirdPartyLoginRequest thirdPartyLoginRequest = new ThirdPartyLoginRequest();
@@ -302,6 +327,57 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
             mDialog.setTitle("");
             mPresenter.thirdPartyLogin(thirdPartyLoginRequest);
         }
+    }*/
+
+
+    /**
+     * 第三方绑定用户
+     */
+    public void thirdPartyLoginCreateUser(Map<String, String> thirdPartyData) {
+
+        if (validateInternet()) {
+
+            String userName = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME,"");
+
+            showProgressDialog(AccountManagementActivity.this);
+            String unionid = thirdPartyData.get("unionid");
+            String openid = thirdPartyData.get("openid");
+            String access_token = thirdPartyData.get("access_token");
+            String uid = thirdPartyData.get("uid");
+
+            ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind = new ThirdPartyLoginCreateUserBind();
+
+            //2.第三方登录token
+            if (!TextUtils.isEmpty(access_token)) {
+                thirdPartyLoginCreateUserBind.setAccessToken(access_token);
+            }
+            //3.第三方登录类型
+            if (!TextUtils.isEmpty(mThirdPartyLoginType)) {
+                thirdPartyLoginCreateUserBind.setLoginType(mThirdPartyLoginType);
+            }
+            //4.手机号码
+            thirdPartyLoginCreateUserBind.setMobile(userName);
+
+            //5.用户标识（当使用微信或qq注册openid为必选项）
+            if (!TextUtils.isEmpty(openid)) {
+                thirdPartyLoginCreateUserBind.setOpenid(openid);
+            }
+
+            //6.用户信息uid(当使用微博注册uid为必选项)
+            if (!TextUtils.isEmpty(uid)) {
+                thirdPartyLoginCreateUserBind.setUid(uid);
+            }
+            //7.用户统一标识（当使用微博注册时uniodID为必选项）,当注册微信时微信用户信息存在unionid时(建议选择)
+            if (!TextUtils.isEmpty(unionid)) {
+                thirdPartyLoginCreateUserBind.setUnionid(unionid);
+            }
+
+            //1:等于绑定 0:等于注册
+            thirdPartyLoginCreateUserBind.setBind(1);
+
+            mPresenter.getThirdPartyLoginCreateUser(thirdPartyLoginCreateUserBind);
+
+        }
     }
 
     @Override
@@ -309,27 +385,32 @@ public class AccountManagementActivity extends BaseActivity<AccountmanagementPre
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == THIRD_PARTY_LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
 
-            String qq = ThirdPartyLoginTypeEnum.QQ.getValue();
-            String wechat = ThirdPartyLoginTypeEnum.WECHAT.getValue();
-            String weibo = ThirdPartyLoginTypeEnum.WEIBO.getValue();
-
-            if (mThirdPartyLoginType.equals(qq))
-            {
-                mTvQQAccountBind.setText(getResources().getString(R.string.str_bound));
-                mTvQQAccountBind.setTextColor(getResources().getColor(R.color.button_grey));
-
-            } else if (mThirdPartyLoginType.equals(wechat))
-            {
-                mTvWechatAccountBind.setText(getResources().getString(R.string.str_bound));
-                mTvWechatAccountBind.setTextColor(getResources().getColor(R.color.button_grey));
-            } else if (mThirdPartyLoginType.equals(weibo))
-            {
-                mTvWeiboAccountBind.setText(getResources().getString(R.string.str_bound));
-                mTvWeiboAccountBind.setTextColor(getResources().getColor(R.color.button_grey));
-            }
+            thirdPartyLoginCreateUserResult();
         }
 
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void thirdPartyLoginCreateUserResult(){
+
+        String qq = ThirdPartyLoginTypeEnum.QQ.getValue();
+        String wechat = ThirdPartyLoginTypeEnum.WECHAT.getValue();
+        String weibo = ThirdPartyLoginTypeEnum.WEIBO.getValue();
+
+        if (mThirdPartyLoginType.equals(qq))
+        {
+            mTvQQAccountBind.setText(getResources().getString(R.string.str_bound));
+            mTvQQAccountBind.setTextColor(getResources().getColor(R.color.button_grey));
+
+        } else if (mThirdPartyLoginType.equals(wechat))
+        {
+            mTvWechatAccountBind.setText(getResources().getString(R.string.str_bound));
+            mTvWechatAccountBind.setTextColor(getResources().getColor(R.color.button_grey));
+        } else if (mThirdPartyLoginType.equals(weibo))
+        {
+            mTvWeiboAccountBind.setText(getResources().getString(R.string.str_bound));
+            mTvWeiboAccountBind.setTextColor(getResources().getColor(R.color.button_grey));
+        }
     }
 
 }

@@ -336,6 +336,11 @@ public class HomeSearchComprehensiveFragment extends BaseFragment<HomePagePresen
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void queryByTopicResult(BackResult<HomePageResponse> res) {
 
     }

@@ -112,7 +112,7 @@ public class IncreaseTicketAdapter extends RecyclerView.Adapter<IncreaseTicketAd
             holder.mTvDefaultPrice.setText(String.valueOf(mDefaultPrice));
 
             holder.mTvMarketPrice.setText("¥" + String.valueOf(mMarketPrice));
-            holder.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+            holder.mTvDefaultPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
             goodsPriceTagList.clear();
             goodsPriceTagList.add("官方");
             goodsPriceTagList.add(refundSettingsValue);

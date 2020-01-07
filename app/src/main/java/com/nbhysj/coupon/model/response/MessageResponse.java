@@ -28,19 +28,19 @@ public class MessageResponse {
         this.page = page;
     }
 
-    public class MessageEntity{
+    public class MessageEntity {
 
-    private int id;
+        private int id;
 
-    private String nickname;
+        private String nickname;
 
-    private String avater;
+        private String avater;
 
-    private String message;
+        private String message;
 
-    private int readStatus;
+        private int readStatus;
 
-    private long ctime;
+        private long ctime;
 
         public long getCtime() {
             return ctime;
@@ -51,44 +51,44 @@ public class MessageResponse {
         }
 
         public int getId() {
-        return id;
-    }
+            return id;
+        }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+        public void setId(int id) {
+            this.id = id;
+        }
 
-    public String getNickname() {
-        return nickname;
-    }
+        public String getNickname() {
+            return nickname;
+        }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
+        }
 
-    public String getAvater() {
-        return avater;
-    }
+        public String getAvater() {
+            return avater;
+        }
 
-    public void setAvater(String avater) {
-        this.avater = avater;
-    }
+        public void setAvater(String avater) {
+            this.avater = avater;
+        }
 
-    public String getMessage() {
-        return message;
-    }
+        public String getMessage() {
+            return message;
+        }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+        public void setMessage(String message) {
+            this.message = message;
+        }
 
-    public int isReadStatus() {
-        return readStatus;
-    }
+        public int isReadStatus() {
+            return readStatus;
+        }
 
-    public void setReadStatus(int readStatus) {
-        this.readStatus = readStatus;
-    }
+        public void setReadStatus(int readStatus) {
+            this.readStatus = readStatus;
+        }
 
         public int getReadStatus() {
             return readStatus;

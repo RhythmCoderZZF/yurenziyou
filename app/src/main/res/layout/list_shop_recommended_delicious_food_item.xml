@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/llyt_recyclerview_item"
+    android:id="@+id/cardview_fine_food_recommend_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/white"

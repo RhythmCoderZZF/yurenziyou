@@ -39,7 +39,10 @@ import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
 import com.nbhysj.coupon.pay.wechat.PayConstants;
 import com.nbhysj.coupon.presenter.MinePresenter;
 import com.nbhysj.coupon.presenter.OthersHomePagePresenter;
+import com.nbhysj.coupon.ui.GeneratePicturesActivity;
 import com.nbhysj.coupon.ui.ReportActivity;
+import com.nbhysj.coupon.util.blurbehind.BlurBehind;
+import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
@@ -176,27 +179,6 @@ public class OthersShareFragment extends BaseFragment<OthersHomePagePresenter, O
                         }
 
                         @Override
-                        public void onPostDeleteItemClick() {
-                            showToast(getActivity(),"无法删除其他用户的帖子");
-                            /*if (oprateDialog == null) {
-                                oprateDialog = new OprateDialog(getActivity()).builder().setTitle(getResources().getString(R.string.str_sure_to_delete_the_post));
-                                oprateDialog.setNegativeButton(getResources().getString(R.string.str_cancel), getResources().getColor(R.color.color_text_black7), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                });
-                                oprateDialog.setPositiveButton(getResources().getString(R.string.str_confirm), getResources().getColor(R.color.color_blue2), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        deletePost(mPostId);
-                                    }
-                                });
-                            }
-                            oprateDialog.show();*/
-                        }
-
-                        @Override
                         public void onPostReportItemClick() {
 
                             Intent intent = new Intent();
@@ -204,7 +186,27 @@ public class OthersShareFragment extends BaseFragment<OthersHomePagePresenter, O
                             intent.putExtra("reportFlag", 0);   //举报帖子
                             intent.putExtra("postsId", mPostId);
                             getActivity().startActivity(intent);
+                        }
 
+                        @Override
+                        public void onGeneratePictureItemClick() {
+                            List<MyPostShareBean> myPostShareBeanList = myPostShareList.get(groupPosition).getMyPosts();
+                            MyPostShareBean myPostShareBean = myPostShareBeanList.get(mChildPosition);
+                            photoUrl = myPostShareBean.getPhoto();
+                            String content = myPostShareBean.getContent();
+                            BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
+                                @Override
+                                public void onBlurComplete() {
+
+                                    Intent intent = new Intent(getActivity(), GeneratePicturesActivity.class);
+                                    intent.putExtra("imageUrl",photoUrl);
+                                    intent.putExtra("postId",postId);
+                                    intent.putExtra("content",content);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
                     othersPostOprateDialog.show();

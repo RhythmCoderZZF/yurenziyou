@@ -228,6 +228,11 @@ public class NearbyFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void getHomePageIndexResult(BackResult<HomePageResponse> res) {
 
     }

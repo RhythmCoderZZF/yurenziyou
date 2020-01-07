@@ -28,10 +28,12 @@ public class ScenicSpotDetailCommentPhotoAdapter extends RecyclerView.Adapter<Sc
 
     List<String> userCommentPhotoList;
     private Context mContext;
+    private CommentPhotoListener commentPhotoListener;
 
-    public ScenicSpotDetailCommentPhotoAdapter(Context mContext) {
+    public ScenicSpotDetailCommentPhotoAdapter(Context mContext,CommentPhotoListener commentPhotoListener) {
 
         this.mContext = mContext;
+        this.commentPhotoListener = commentPhotoListener;
     }
 
     public void setUserCommentPhotoList(List<String> userCommentPhotoList) {
@@ -55,6 +57,14 @@ public class ScenicSpotDetailCommentPhotoAdapter extends RecyclerView.Adapter<Sc
 
             GlideUtil.loadImage(mContext,photoUrl,holder.mImgUserCommentPhoto);
 
+            holder.mImgUserCommentPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    commentPhotoListener.setCommentPhotoOnlickCallback(itemPosition);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,5 +85,10 @@ public class ScenicSpotDetailCommentPhotoAdapter extends RecyclerView.Adapter<Sc
 
             mImgUserCommentPhoto = itemView.findViewById(R.id.image_user_comment_photo);
         }
+    }
+
+    public interface CommentPhotoListener{
+
+        void setCommentPhotoOnlickCallback(int itemPosition);
     }
 }

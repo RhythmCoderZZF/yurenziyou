@@ -19,6 +19,7 @@ import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
 import com.nbhysj.coupon.model.response.StrategyBean;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.UserFollowResponse;
@@ -214,6 +215,11 @@ public class MineFollowListFragment extends BaseFragment<MessagePresenter, Messa
 
     @Override
     public void getUserFansListResult(BackResult<UserFansFollowResponse> res) {
+
+    }
+
+    @Override
+    public void getUnReadMessage(BackResult<UnReadMessageBean> res) {
 
     }
 

@@ -60,7 +60,7 @@
                 android:textSize="@dimen/text_size_tiny" />
 
             <TextView
-                android:id="@+id/tv_per_capita_price"
+                android:id="@+id/tv_market_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp_3"
@@ -76,7 +76,7 @@
                 android:textSize="@dimen/text_size_tiny" />
 
             <TextView
-                android:id="@+id/tv_market_price"
+                android:id="@+id/tv_default_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¥0"

@@ -17,6 +17,7 @@ import com.nbhysj.coupon.adapter.TravelAssistantDestionationsListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.TravelAssistantContract;
 import com.nbhysj.coupon.model.TravelAssistantModel;
+import com.nbhysj.coupon.model.request.AddCountyRequest;
 import com.nbhysj.coupon.model.response.AddCountyResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CountryBean;
@@ -61,9 +62,12 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
     List<TravelAssistantDetailCountryBean> searchDestionationsList;
     private String startDate, endDate;
 
-    private boolean isTripSelectCountyAdd;
+    private boolean isTripCountyAdd;
 
     private int REQUEST_CODE_TRAVEL_PLANNING = 10000;
+
+    //行程id
+    private int tripId;
 
     @Override
     public int getLayoutId() {
@@ -76,7 +80,8 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
 
         startDate = getIntent().getStringExtra("startDate");
         endDate = getIntent().getStringExtra("endDate");
-        isTripSelectCountyAdd = getIntent().getBooleanExtra("isTripSelectCountyAdd",false);
+        isTripCountyAdd = getIntent().getBooleanExtra("isTripCountyAdd",false);
+        tripId = getIntent().getIntExtra("tripId",0);
 
         if (selectedDestinationTag == null) {
 
@@ -278,7 +283,23 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
 
     @Override
     public void insertCountyResult(BackResult<AddCountyResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
 
+
+                    setResult(RESULT_OK);
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(TravelAssistanSelectCountyActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -348,19 +369,25 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
 
             case R.id.tv_country_select:
 
+                ArrayList<Integer> countyIdList = selectedDestinationTagAdapter.getSelectedCountryTagList();
 
-                ArrayList<Integer> selectedCountryTagList = selectedDestinationTagAdapter.getSelectedCountryTagList();
+                    if (countyIdList.size() > 0) {
+                        if(isTripCountyAdd) {
 
-                if (selectedCountryTagList.size() > 0) {
-                    Intent intent = new Intent();
-                    intent.putExtra("startDate", startDate);
-                    intent.putExtra("endDate", endDate);
-                    intent.putIntegerArrayListExtra("countyIdList", selectedCountryTagList);
-                    intent.setClass(TravelAssistanSelectCountyActivity.this, TravelPlanningActivity.class);
-                    startActivityForResult(intent,REQUEST_CODE_TRAVEL_PLANNING);
-                } else {
+                            insertCounty(countyIdList,tripId);
+                        } else {
 
-                    showToast(TravelAssistanSelectCountyActivity.this, "请选择城市");
+                            Intent intent = new Intent();
+                            intent.putExtra("startDate", startDate);
+                            intent.putExtra("endDate", endDate);
+                            intent.putIntegerArrayListExtra("countyIdList", countyIdList);
+                            intent.setClass(TravelAssistanSelectCountyActivity.this, TravelPlanningActivity.class);
+                            startActivityForResult(intent, REQUEST_CODE_TRAVEL_PLANNING);
+
+                        }
+                    } else {
+
+                        showToast(TravelAssistanSelectCountyActivity.this, "请选择城市");
                 }
                 break;
             default:
@@ -375,6 +402,17 @@ public class TravelAssistanSelectCountyActivity extends BaseActivity<TravelAssis
         {
             setResult(RESULT_OK);
             TravelAssistanSelectCountyActivity.this.finish();
+        }
+    }
+
+    //添加区县
+    public void insertCounty(List<Integer> countyIdList,int tripId){
+
+        if(validateInternet()){
+            AddCountyRequest addCountyRequest = new AddCountyRequest();
+            addCountyRequest.setCountyId(countyIdList);
+            addCountyRequest.setTripId(tripId);
+            mPresenter.insertCounty(addCountyRequest);
         }
     }
 }

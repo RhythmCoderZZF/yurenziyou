@@ -60,38 +60,42 @@ public class HotelDetailRoomAdapter extends RecyclerView.Adapter<HotelDetailRoom
             MchGoodsBean mchGoodsBean = mchHotelGoodsList.get(itemPosition);
             String photoUrl = mchGoodsBean.getPhoto();
             String title = mchGoodsBean.getTitle();
-            double defaultPrice = mchGoodsBean.getDefaultPrice();
+            double marketPrice = mchGoodsBean.getMarketPrice();
             int breakfastStatus = mchGoodsBean.getBreakfastStatus();
             int windowStatus = mchGoodsBean.getWindowStatus();
+            String acreage = mchGoodsBean.getAcreage();
             String bedInfo = mchGoodsBean.getBedInfo();
 
             holder.mTvHotelRoomTilte.setText(title);
-            holder.mTvHotelRoomPrice.setText(Tools.getTwoDecimalPoint(defaultPrice));
-            if(breakfastStatus == 0){
+            holder.mTvHotelRoomPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
+            if (breakfastStatus == 0) {
 
-                stringBuffer.append("不含早餐 ");
+                stringBuffer.append("不含早餐·");
 
-            } else if(breakfastStatus == 1){
+            } else if (breakfastStatus == 1) {
 
-                stringBuffer.append("含早餐 ");
+                stringBuffer.append("含早餐·");
             }
 
-            if(!TextUtils.isEmpty(bedInfo))
-            {
-                stringBuffer.append(bedInfo + " ");
+            if (!TextUtils.isEmpty(bedInfo)) {
+                stringBuffer.append(bedInfo + "·");
             }
 
-            if(windowStatus == 0){
+            if (!TextUtils.isEmpty(acreage)) {
+                stringBuffer.append(acreage + "m²·");
+            }
+
+            if (windowStatus == 0) {
 
                 stringBuffer.append("无窗");
 
-            } else if(windowStatus == 1){
+            } else if (windowStatus == 1) {
 
                 stringBuffer.append("有窗");
             }
 
             holder.mTvHotelRoomDes.setText(stringBuffer.toString());
-            GlideUtil.loadImage(mContext,photoUrl,holder.mImgHotelRoom);
+            GlideUtil.loadImage(mContext, photoUrl, holder.mImgHotelRoom);
 
             holder.mLlytHotelRoomItem.setOnClickListener(new View.OnClickListener() {
                 @Override

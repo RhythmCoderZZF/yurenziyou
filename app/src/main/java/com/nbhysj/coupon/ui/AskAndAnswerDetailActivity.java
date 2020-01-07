@@ -402,6 +402,7 @@ public class AskAndAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswe
         }
     }
 
+    //回答点赞
     public void answerZan(int answerId){
 
         if(validateInternet())

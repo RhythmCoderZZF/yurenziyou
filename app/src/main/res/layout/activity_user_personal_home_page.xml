@@ -235,19 +235,28 @@
                                         android:layout_marginTop="@dimen/dp_21"
                                         android:orientation="horizontal">
 
-                                        <TextView
-                                            android:id="@+id/tv_follow"
-                                            android:layout_width="121dp"
+                                        <LinearLayout
+                                            android:id="@+id/llyt_follow"
+                                            android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_gravity="center_vertical"
-                                            android:background="@drawable/bg_blue_green_gradient_radius_five"
-                                            android:gravity="center"
+                                            android:paddingLeft="@dimen/dp_35"
+                                            android:paddingRight="@dimen/dp_35"
                                             android:paddingTop="@dimen/dp_7"
                                             android:paddingBottom="@dimen/dp_7"
+                                            android:background="@drawable/bg_blue_green_gradient_radius_five">
+
+                                        <TextView
+                                            android:id="@+id/tv_follow"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:gravity="center"
                                             android:text="@string/str_attention"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text_size_normal"
                                             android:textStyle="bold" />
+
+                                        </LinearLayout>
 
                                         <LinearLayout
                                             android:id="@+id/llyt_chat_with_others"

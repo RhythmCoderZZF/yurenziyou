@@ -118,6 +118,6 @@ public class TravelAssistantModel implements TravelAssistantContract.Model {
 
     @Override
     public Observable<BackResult<AddCountyResponse>> insertCounty(AddCountyRequest addCountyRequest) {
-        return null;
+        return Api.getInstance().apiService.insertCounty(addCountyRequest).compose(RxSchedulers.io_main());
     }
 }

@@ -16,6 +16,9 @@ public class CommentUserEntity {
 
     private String photos;
 
+    //0:非匿名  1:匿名
+    private int anonymousStatus;
+
     public int getMchFlag() {
         return mchFlag;
     }
@@ -54,5 +57,13 @@ public class CommentUserEntity {
 
     public void setPhotos(String photos) {
         this.photos = photos;
+    }
+
+    public int getAnonymousStatus() {
+        return anonymousStatus;
+    }
+
+    public void setAnonymousStatus(int anonymousStatus) {
+        this.anonymousStatus = anonymousStatus;
     }
 }

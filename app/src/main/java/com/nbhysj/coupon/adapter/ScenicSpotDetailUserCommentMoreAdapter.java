@@ -138,7 +138,13 @@ public class ScenicSpotDetailUserCommentMoreAdapter extends RecyclerView.Adapter
             layoutManager.setOrientation(layoutManager.HORIZONTAL);
             holder.mRvUserCommentPhoto.setLayoutManager(layoutManager);
             List<String> userCommentPhotoList = scenicSpotsUserCommentList.get(position).getUserCommentPhotoList();
-            ScenicSpotDetailCommentPhotoAdapter userCommentPhotoAdapter = new ScenicSpotDetailCommentPhotoAdapter(mContext);
+            ScenicSpotDetailCommentPhotoAdapter userCommentPhotoAdapter = new ScenicSpotDetailCommentPhotoAdapter(mContext, new ScenicSpotDetailCommentPhotoAdapter.CommentPhotoListener() {
+                @Override
+                public void setCommentPhotoOnlickCallback(int itemPosition) {
+
+
+                }
+            });
             userCommentPhotoAdapter.setUserCommentPhotoList(userCommentPhotoList);
             holder.mRvUserCommentPhoto.setAdapter(userCommentPhotoAdapter);
         } catch (Exception e) {

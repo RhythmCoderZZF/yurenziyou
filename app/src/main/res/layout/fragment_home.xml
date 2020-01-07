@@ -160,16 +160,18 @@
                                         android:background="@mipmap/icon_home_small_bell_message" />
 
                                     <TextView
-                                        android:layout_width="8dp"
-                                        android:layout_height="8dp"
+                                        android:id="@+id/tv_msg_unread_num"
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
                                         android:layout_alignParentRight="true"
                                         android:layout_marginRight="@dimen/dp_8"
                                         android:background="@drawable/shape_round_red_small"
                                         android:gravity="center"
-                                        android:text="0"
+                                        android:text="1"
                                         android:textColor="@color/white"
-                                        android:textSize="5sp"
-                                        android:visibility="invisible"/>
+                                        android:textSize="6sp"
+                                        android:visibility="gone"
+                                      />
 
                                 </RelativeLayout>
 

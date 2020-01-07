@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HomestayAdapter;
-import com.nbhysj.coupon.adapter.HotelHomestaySectionAdapter;
+import com.nbhysj.coupon.adapter.HomestaySectionAdapter;
 import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchSearchConditionEnum;
@@ -79,7 +79,7 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
     RecyclerView mRvHotelHomestay;
     LinearLayoutManager scenicSpotsLinearLayoutManager;
     //民宿栏目
-    private HotelHomestaySectionAdapter hotelHomestaySectionAdapter;
+    private HomestaySectionAdapter hotelHomestaySectionAdapter;
     //民宿分类
     private MchRankingClassificationAdapter mchRankingClassificationAdapter;
     //民宿适配器
@@ -141,7 +141,7 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ShoppingMallHomestayActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvPopularScenicSpots.setLayoutManager(linearLayoutManager);
-        hotelHomestaySectionAdapter = new HotelHomestaySectionAdapter(ShoppingMallHomestayActivity.this);
+        hotelHomestaySectionAdapter = new HomestaySectionAdapter(ShoppingMallHomestayActivity.this);
         hotelHomestaySectionAdapter.setHotelHomestaySectionList(mHomestayHotList);
         mRvPopularScenicSpots.setAdapter(hotelHomestaySectionAdapter);
 

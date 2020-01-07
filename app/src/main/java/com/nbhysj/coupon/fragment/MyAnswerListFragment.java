@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +14,9 @@ import com.nbhysj.coupon.adapter.MyAnswerListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
+import com.nbhysj.coupon.model.response.AnswerZanResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.MyQuestionAnsweringBean;
@@ -22,6 +25,8 @@ import com.nbhysj.coupon.model.response.QuestionDetailsBean;
 import com.nbhysj.coupon.model.response.WaitForMeToAnswerResponse;
 import com.nbhysj.coupon.model.response.WaitMyAnswerResponse;
 import com.nbhysj.coupon.presenter.MchQuestionAndAnswerPresenter;
+import com.nbhysj.coupon.ui.AskAndAnswerDetailActivity;
+import com.nbhysj.coupon.ui.MyAnswerDetailActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -52,6 +57,8 @@ public class MyAnswerListFragment extends BaseFragment<MchQuestionAndAnswerPrese
     private boolean isOnLoadMore = false;
 
     int mTotalPageCount;
+
+    private int mPosition;
 
     public String TAG = "MyAnswerListFragment.this";
 
@@ -114,11 +121,21 @@ public class MyAnswerListFragment extends BaseFragment<MchQuestionAndAnswerPrese
         mRvWaitForMeToAnswer.setLayoutManager(linearLayoutManager);
         myAnswerListAdapter = new MyAnswerListAdapter(getActivity(), new MyAnswerListAdapter.QuestionUsefulListener() {
             @Override
-            public void setQuestionUsefulListener(int position) {
+            public void setQuestionUsefulListener(int position,int answerId) {
+                mPosition = position;
+                answerZan(answerId);
+            }
 
+            @Override
+            public void setAskQuestionItemListener(int position, int questionId) {
+
+                Intent intent = new Intent();
+                intent.putExtra("questionId",questionId);
+                intent.setClass(getActivity(), MyAnswerDetailActivity.class);
+                startActivity(intent);
             }
         });
-        myAnswerListAdapter.setMyQuestionList(myQuestionAnsweringList);
+        myAnswerListAdapter.setMyAnswerList(myQuestionAnsweringList);
         mRvWaitForMeToAnswer.setAdapter(myAnswerListAdapter);
     }
 
@@ -234,8 +251,33 @@ public class MyAnswerListFragment extends BaseFragment<MchQuestionAndAnswerPrese
     }
 
     @Override
-    public void answerZanResult(BackResult res) {
+    public void answerZanResult(BackResult<AnswerZanResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
 
+                dismissProgressDialog();
+                switch (res.getCode()) {
+                    case Constants.SUCCESS_CODE:
+                        try {
+
+                            AnswerZanResponse answerZanResponse = res.getData();
+                            int zanNum = answerZanResponse.getZanNum();
+                            int zanStatus = answerZanResponse.getZanStatus();
+                            myQuestionAnsweringList.get(mPosition).setAnswerZanStatus(zanStatus);
+                            myQuestionAnsweringList.get(mPosition).setAnswerZanNum(zanNum);
+                            myAnswerListAdapter.setMyAnswerList(myQuestionAnsweringList);
+                            myAnswerListAdapter.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -280,7 +322,7 @@ public class MyAnswerListFragment extends BaseFragment<MchQuestionAndAnswerPrese
                         myQuestionAnsweringList.addAll(myQuestionAnswerList);
                     }
 
-                    myAnswerListAdapter.setMyQuestionList(myQuestionAnsweringList);
+                    myAnswerListAdapter.setMyAnswerList(myQuestionAnsweringList);
                     myAnswerListAdapter.notifyDataSetChanged();
 
                 } catch (Exception e) {
@@ -314,7 +356,16 @@ public class MyAnswerListFragment extends BaseFragment<MchQuestionAndAnswerPrese
         super.onDestroyView();
     }
 
+    //回答点赞
+    public void answerZan(int answerId){
 
+        if(validateInternet())
+        {
+            AnswerZanRequest answerZanRequest = new AnswerZanRequest();
+            answerZanRequest.setAnswerId(answerId);
+            mPresenter.answerZanRequest(answerZanRequest);
+        }
+    }
     //我的回答
     public void getMyAnswerList() {
 

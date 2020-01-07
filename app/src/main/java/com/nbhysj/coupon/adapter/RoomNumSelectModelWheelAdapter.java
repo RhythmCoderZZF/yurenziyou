@@ -43,7 +43,7 @@ public class RoomNumSelectModelWheelAdapter extends RecyclerView.Adapter<RoomNum
 
     @Override
     public int getItemsCount() {
-        return 20;
+        return 10;
     }
 
     @Override

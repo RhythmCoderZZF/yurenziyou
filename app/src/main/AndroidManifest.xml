@@ -94,6 +94,8 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.ReportActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.UserChatListActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.ScenicSpotCateListActivity"
             android:screenOrientation="portrait" />
@@ -168,9 +170,7 @@
         <activity
             android:name=".ui.PostCollectionActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.AttentionAndFansActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.UserPersonalHomePageActivity"
             android:screenOrientation="portrait" />

@@ -24,7 +24,7 @@
             android:layout_width="67dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-           android:orientation="vertical">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/img_weather"
@@ -32,9 +32,8 @@
                 android:layout_height="22dp"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:src="@mipmap/icon_weather"
                 android:layout_marginTop="@dimen/dp_2"
-               />
+                android:src="@mipmap/icon_weather" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -42,16 +41,17 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_1"
                 android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tv_weather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_my_answer"
-                android:layout_centerHorizontal="true"
-                android:text=""
-                android:textColor="@color/color_text_black7"
-                android:layout_marginRight="@dimen/dp_2"
-                android:textSize="@dimen/text_size_nine" />
+
+                <TextView
+                    android:id="@+id/tv_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_my_answer"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="@dimen/dp_2"
+                    android:text=""
+                    android:textColor="@color/color_text_black7"
+                    android:textSize="@dimen/text_size_nine" />
 
 
                 <TextView
@@ -175,8 +175,7 @@
                         android:id="@+id/banner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_home_search"
-                        >
+                        android:background="@drawable/bg_home_search">
 
 
                     </com.nbhysj.coupon.view.BannerView>
@@ -216,6 +215,12 @@
                     android:layout_marginTop="@dimen/dp_21"
                     android:layout_marginBottom="@dimen/dp_12"></android.support.v7.widget.RecyclerView>
 
+                <LinearLayout
+                    android:id="@+id/llyt_limited_sale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
                 <View
                     style="@style/line"
                     android:layout_height="@dimen/dp_10"
@@ -268,9 +273,9 @@
                             android:layout_marginLeft="@dimen/dp_5"
                             android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                             android:gravity="center"
-                            android:text="00"
                             android:paddingLeft="@dimen/dp_5"
                             android:paddingRight="@dimen/dp_5"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
@@ -320,9 +325,9 @@
                             android:layout_marginLeft="@dimen/dp_3"
                             android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
                             android:gravity="center"
-                            android:text="00"
                             android:paddingLeft="@dimen/dp_5"
                             android:paddingRight="@dimen/dp_5"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
@@ -376,7 +381,7 @@
                             android:ellipsize="end"
                             android:lines="1"
                             android:paddingRight="@dimen/dp_10"
-                            android:textColor="@color/color_text_black7"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
 
@@ -395,7 +400,7 @@
                                 android:layout_marginLeft="@dimen/dp_3"
                                 android:gravity="center"
                                 android:text="[限时特卖]"
-                                android:textColor="@color/color_text_black7"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold" />
 
@@ -480,7 +485,7 @@
                                 android:lines="1"
                                 android:paddingRight="@dimen/dp_10"
                                 android:text=""
-                                android:textColor="@color/color_text_black7"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_xsmall"
                                 android:textStyle="bold" />
 
@@ -499,7 +504,7 @@
                                     android:layout_marginLeft="@dimen/dp_3"
                                     android:gravity="center"
                                     android:text="[限时特卖]"
-                                    android:textColor="@color/color_text_black7"
+                                    android:textColor="@color/white"
                                     android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold" />
 
@@ -577,7 +582,7 @@
                                 android:ellipsize="end"
                                 android:lines="1"
                                 android:paddingRight="@dimen/dp_10"
-                                android:textColor="@color/color_text_black7"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_xsmall"
                                 android:textStyle="bold" />
 
@@ -596,7 +601,7 @@
                                     android:layout_marginLeft="@dimen/dp_3"
                                     android:gravity="center"
                                     android:text="[限时特卖]"
-                                    android:textColor="@color/color_text_black7"
+                                    android:textColor="@color/white"
                                     android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold" />
 
@@ -639,6 +644,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                </LinearLayout>
                 <View
                     style="@style/line"
                     android:layout_height="@dimen/dp_10"
@@ -769,7 +775,7 @@
                         android:text="@string/str_view_more"
                         android:textColor="@color/text_grey"
                         android:textSize="@dimen/text_size_normal"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
@@ -821,8 +827,8 @@
                         android:gravity="center"
                         android:text="@string/str_view_more"
                         android:textColor="@color/text_grey"
-                        android:visibility="gone"
-                        android:textSize="@dimen/text_size_normal" />
+                        android:textSize="@dimen/text_size_normal"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -832,8 +838,8 @@
                     android:layout_marginTop="@dimen/dp_21"
                     android:layout_marginRight="@dimen/dp_15"
                     android:orientation="horizontal"
-                    android:weightSum="3"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    android:weightSum="3">
 
                     <LinearLayout
                         android:layout_width="match_parent"

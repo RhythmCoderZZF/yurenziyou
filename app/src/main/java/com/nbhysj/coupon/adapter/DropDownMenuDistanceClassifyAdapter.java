@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.PositionDistanceBean;
+import com.nbhysj.coupon.model.response.PositionDistanceSearchBean;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class DropDownMenuDistanceClassifyAdapter extends RecyclerView.Adapter<DropDownMenuDistanceClassifyAdapter.ViewHolder> {
 
-    List<PositionDistanceBean> positionDistanceList;
+    List<PositionDistanceSearchBean> positionDistanceSearchList;
     private DropDownMenuDistanceClassifyListener dropDownMenuDistanceClassifyListener;
     private Context mContext;
 
@@ -30,9 +31,9 @@ public class DropDownMenuDistanceClassifyAdapter extends RecyclerView.Adapter<Dr
         this.dropDownMenuDistanceClassifyListener = dropDownMenuDistanceClassifyListener;
     }
 
-    public void setPositionDistanceList(List<PositionDistanceBean> positionDistanceList) {
+    public void setPositionDistanceList(List<PositionDistanceSearchBean> positionDistanceSearchList) {
 
-        this.positionDistanceList = positionDistanceList;
+        this.positionDistanceSearchList = positionDistanceSearchList;
     }
 
     @Override
@@ -48,15 +49,15 @@ public class DropDownMenuDistanceClassifyAdapter extends RecyclerView.Adapter<Dr
 
         try {
 
-            PositionDistanceBean positionDistanceBean = positionDistanceList.get(itemPosition);
-            String positionDistanceType = positionDistanceBean.getPositionDistanceType();
+            PositionDistanceSearchBean positionDistanceBean = positionDistanceSearchList.get(itemPosition);
+            String positionDistanceType = positionDistanceBean.getTitle();
             holder.mTvPositionDistanceType.setText(positionDistanceType);
             holder.mLlytDistanceClassifyItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    for (int i = 0; i < positionDistanceList.size(); i++) {
-                        positionDistanceList.get(i).setSelect(false);
+                    for (int i = 0; i < positionDistanceSearchList.size(); i++) {
+                        positionDistanceSearchList.get(i).setSelect(false);
                     }
                     positionDistanceBean.setSelect(true);
 
@@ -85,7 +86,7 @@ public class DropDownMenuDistanceClassifyAdapter extends RecyclerView.Adapter<Dr
 
     @Override
     public int getItemCount() {
-        return positionDistanceList.size();
+        return positionDistanceSearchList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -106,7 +107,7 @@ public class DropDownMenuDistanceClassifyAdapter extends RecyclerView.Adapter<Dr
 
     public interface DropDownMenuDistanceClassifyListener {
 
-        void setDropDownMenuDistanceClassifyListener(int position, PositionDistanceBean positionDistanceBean);
+        void setDropDownMenuDistanceClassifyListener(int position, PositionDistanceSearchBean positionDistanceSearchBean);
     }
 
 

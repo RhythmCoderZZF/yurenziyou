@@ -102,7 +102,7 @@ public class TravelAssistantPresenter extends TravelAssistantContract.Presenter 
 
     @Override
     public void insertCounty(AddCountyRequest addCountyRequest) {
-
+        mRxManager.add(mModel.insertCounty(addCountyRequest).subscribe(res -> mView.insertCountyResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

@@ -564,14 +564,12 @@ public class ShareFragment extends BaseFragment<MinePresenter, MineModel> implem
     @Subscribe
     public void onEvent(String mineFragmentRefresh) {
 
-        if (visibleToUser) {
             if (mineFragmentRefresh.equals("shareFragmentRefresh")) {
                 myPostShareList.clear();
                 shareAdapter.notifyDataSetChanged();
                 showProgressDialog(getActivity());
                 getMyPostShareList();
             }
-        }
     }
 
     private static String buildTransaction(final String type) {

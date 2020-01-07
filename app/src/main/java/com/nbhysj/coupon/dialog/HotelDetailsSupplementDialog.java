@@ -120,9 +120,9 @@ public class HotelDetailsSupplementDialog extends DialogFragment {
 
         myProgressBar = view.findViewById(R.id.pb_web);
         String title = mchHotelGoodsBean.getTitle();
-        double defaultPrice = mchHotelGoodsBean.getDefaultPrice();
+        double marketPrice = mchHotelGoodsBean.getMarketPrice();
         mTvHotelTitle.setText(title);
-        mTvPrice.setText(Tools.getTwoDecimalPoint(defaultPrice));
+        mTvPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
         String roomDetailsH5Url = mchHotelGoodsBean.getRoomDetails();
 
         mRlytNewTourists.setOnClickListener(new View.OnClickListener() {

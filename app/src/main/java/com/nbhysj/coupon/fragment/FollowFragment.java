@@ -435,6 +435,11 @@ public class FollowFragment extends BaseFragment<HomePagePresenter, HomePageMode
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
 
     }

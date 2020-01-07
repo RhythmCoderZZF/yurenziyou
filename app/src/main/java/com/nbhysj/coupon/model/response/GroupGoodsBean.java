@@ -16,7 +16,7 @@ public class GroupGoodsBean {
 
     private int sellNum;
 
-    private int price;
+    private double price;
 
     private String code;
 
@@ -62,11 +62,11 @@ public class GroupGoodsBean {
         this.sellNum = sellNum;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

@@ -106,7 +106,7 @@
             android:layout_marginLeft="@dimen/dp_16"
             android:drawableLeft="@mipmap/icon_publish_location"
             android:drawablePadding="@dimen/dp_10"
-            android:text="我的位置"
+            android:text="关联商户"
             android:textColor="@color/color_text_blue2"
             android:textSize="@dimen/text_size_xsmall" />
 

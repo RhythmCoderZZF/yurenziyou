@@ -71,6 +71,11 @@ public class HomePagePresenter extends HomePageContract.Presenter {
     }
 
     @Override
+    public void getHomePageUnReadMsg() {
+        mRxManager.add(mModel.getHomePageUnReadMsg().subscribe(res -> mView.getUnReadMessageListResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+    @Override
     public void onStart() {
 
     }

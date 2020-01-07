@@ -333,4 +333,8 @@ public class HomeSearchStrategyFragment extends BaseFragment<HomePagePresenter, 
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
 }

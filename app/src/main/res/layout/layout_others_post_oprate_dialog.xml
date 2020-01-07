@@ -143,6 +143,28 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/llyt_generate_picture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@mipmap/icon_generate_pictures" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/str_generate_pictures"
+                        android:textSize="@dimen/text_size_small"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/llyt_post_report"
@@ -174,7 +196,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:visibility="invisible"
+                    android:visibility="gone"
                     >
 
                     <ImageView

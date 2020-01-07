@@ -122,7 +122,7 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
 
     @Override
     public int getItemCount() {
-        return collectionAlbumResponseList.size() > 0 ? collectionAlbumResponseList.size() + 1 : collectionAlbumResponseList.size();
+        return collectionAlbumResponseList.size() + 1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

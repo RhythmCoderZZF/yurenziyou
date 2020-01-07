@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.statusbar.StatusBarCompat;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.MyViewPager;
 
@@ -56,6 +57,7 @@ public class ImagePagerActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
+        StatusBarCompat.setStatusBarColor(this, -131077);
         return R.layout.activity_imagepager;
     }
 

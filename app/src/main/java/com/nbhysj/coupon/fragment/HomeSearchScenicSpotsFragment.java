@@ -227,6 +227,11 @@ public class HomeSearchScenicSpotsFragment extends BaseFragment<HomePagePresente
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void userFollowResult(BackResult<FollowUserStatusResponse> res) {
 
     }

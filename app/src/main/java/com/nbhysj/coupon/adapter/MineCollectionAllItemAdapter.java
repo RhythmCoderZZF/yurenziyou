@@ -75,7 +75,6 @@ public class MineCollectionAllItemAdapter extends RecyclerView.Adapter<MineColle
                     @Override
                     public void setMineCollectionAllItemListener(int position) {
 
-
                         Intent intent = new Intent();
                         intent.putExtra("type",type);
                         intent.setClass(mContext, CollectionDetailsActivity.class);

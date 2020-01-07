@@ -217,6 +217,7 @@
     <string name="str_place_of_departure" translatable="false">出发地点</string>
     <string name="str_place_of_arrival" translatable="false">到达地点</string>
     <string name="str_attention">关注</string>
+    <string name="str_mutual_concern">互相关注</string>
     <string name="str_attention_and_fens">关注与粉丝</string>
     <string name="str_question_and_answers">我的问答</string>
     <string name="str_question_ignore">忽略</string>
@@ -242,7 +243,10 @@
     <string name="str_publication_evaluation">发表评价</string>
     <string name="str_scenery">景 色</string>
     <string name="str_interest">趣 味</string>
+    <string name="str_flavor">口 味</string>
+    <string name="str_environmental">环 境</string>
     <string name="str_cost_performance">性价比</string>
+    <string name="str_service">服 务</string>
     <string name="str_order_comment_publish">发表评论</string>
     <string name="str_navigation">导航</string>
     <string name="str_food_recommend">推荐菜</string>
@@ -262,6 +266,8 @@
     <string name="str_pull_black">拉黑</string>
     <string name="str_un_interested">不感兴趣</string>
     <string name="str_generate_pictures">生成图片</string>
+    <string name="str_continue_editing">继续编辑</string>
+    <string name="str_confirm_exit">确认退出</string>
 
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>

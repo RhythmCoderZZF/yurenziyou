@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.DeliciousFoodRecommendAdapter;
@@ -224,6 +225,9 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
     //限时特卖秒
     @BindView(R.id.tv_limited_sale_second)
     TextView mTvLimitedSaleSecond;
+
+    @BindView(R.id.llyt_limited_sale)
+    LinearLayout mLlytLimitedSale;
 
     private ShoppingMallMenuAdapter shoppingMallMenuAdapter;
     //热门景点
@@ -601,6 +605,13 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
                     //限时特卖
                     LimitedSaleBean limitedSaleBean = shopMallHomePageResponse.getLimitedSale();
+                    List<GoodsBean> goodsList = limitedSaleBean.getGoods();
+                    if(goodsList == null)
+                    {
+                        mLlytLimitedSale.setVisibility(View.GONE);
+                    } else {
+                        mLlytLimitedSale.setVisibility(View.VISIBLE);
+                    }
                     List<GoodsBean> limitedSaleGoodsList = limitedSaleBean.getGoods();
                     if (limitedSaleGoodsList != null && limitedSaleGoodsList.size() > 0) {
 
@@ -710,10 +721,10 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                         mTvTravelThemeFiveTitle.setText(travelThemeFive.getTitle());
                         mTvTravelThemeFiveDes.setText(travelThemeFive.getIntro());
                     }
+                    groupGoodsList = shopMallHomePageResponse.getGroupGoodsVO();
                     //自由行
                     if(groupGoodsList != null && groupGoodsList.size() > 0)
                     {
-                        groupGoodsList = shopMallHomePageResponse.getGroupGoodsVO();
                         independentTravelAdapter.setIndependentTravelList(groupGoodsList);
                         independentTravelAdapter.notifyDataSetChanged();
                     }
@@ -756,7 +767,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         }
     }
 
-    @OnClick({R.id.ll_search, R.id.tv_view_more_popular_scenic_spots, R.id.tv_view_more_delicious_food, R.id.rlyt_flash_sale,R.id.tv_view_more_independent_travel,R.id.tv_message_tag})
+    @OnClick({R.id.ll_search, R.id.tv_view_more_popular_scenic_spots, R.id.tv_view_more_delicious_food, R.id.rlyt_flash_sale,R.id.tv_view_more_independent_travel,R.id.tv_message_tag,R.id.tv_view_more_hotel_reputation})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_search:
@@ -782,6 +793,9 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 break;
             case R.id.tv_message_tag:
                 toActivity(MessageActivity.class);
+                break;
+            case R.id.tv_view_more_hotel_reputation:
+                toActivity(ShoppingMallScreeningActivity.class);
                 break;
             default:
                 break;

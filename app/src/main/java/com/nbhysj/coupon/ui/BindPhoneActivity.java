@@ -183,7 +183,7 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
     }
 
     @Override
-    public void getRegisterVerifyCodeResult(BackResult res) {
+    public void getThirdPartyLoginVerifyCodeResult(BackResult res) {
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 delaytime = 60;
@@ -294,7 +294,7 @@ public class BindPhoneActivity extends BaseActivity<AccountmanagementPresenter, 
                 showToast(BindPhoneActivity.this, getResources().getString(R.string.str_input_phone));
                 return;
             }
-            mPresenter.getRegisterVerifyCode(phoneNum);
+            mPresenter.getThirdPartyLoginVerifyCode(phoneNum);
         }
     }
 

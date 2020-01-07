@@ -304,7 +304,7 @@
                     android:layout_width="@dimen/dp_55"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/str_scenery"
+                    android:text="@string/str_flavor"
                     android:textColor="@color/color_text_gray28"
                     android:textSize="@dimen/text_size_xnormal" />
 
@@ -336,7 +336,7 @@
                     android:layout_width="@dimen/dp_55"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/str_interest"
+                    android:text="@string/str_environmental"
                     android:textColor="@color/color_text_gray28"
                     android:textSize="@dimen/text_size_xnormal" />
 
@@ -368,7 +368,7 @@
                     android:layout_width="@dimen/dp_55"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/str_cost_performance"
+                    android:text="@string/str_service"
                     android:textColor="@color/color_text_gray28"
                     android:textSize="@dimen/text_size_xnormal" />
 

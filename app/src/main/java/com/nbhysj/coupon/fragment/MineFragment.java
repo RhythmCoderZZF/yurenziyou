@@ -29,10 +29,13 @@ import com.nbhysj.coupon.model.response.MyCardResponse;
 import com.nbhysj.coupon.model.response.ThirdPartyLoginStatusResponse;
 import com.nbhysj.coupon.model.response.UserInfoResponse;
 import com.nbhysj.coupon.presenter.UserInfoPresenter;
+import com.nbhysj.coupon.ui.AccountAndPersonalDataActivity;
 import com.nbhysj.coupon.ui.AlbumDetailsActivity;
 import com.nbhysj.coupon.ui.CollectionActivity;
 import com.nbhysj.coupon.ui.CouponListActivity;
+import com.nbhysj.coupon.ui.FineFoodEvaluateActivity;
 import com.nbhysj.coupon.ui.FollowAndFansActivity;
+import com.nbhysj.coupon.ui.FoodDetailActivity;
 import com.nbhysj.coupon.ui.MyBusinessCardActivity;
 import com.nbhysj.coupon.ui.MyOrderActivity;
 import com.nbhysj.coupon.ui.PersonalSettingsActivity;
@@ -68,6 +71,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * created by hysj on 2018/07/31.
@@ -295,64 +300,129 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
             R.id.img_qr_my_card, R.id.rlyt_my_coupon, R.id.llyt_fans_num, R.id.llyt_zan,R.id.llyt_collection,R.id.llyt_follow_num})
     public void onClick(View view) {
         Intent intent = new Intent();
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         switch (view.getId()) {
             case R.id.img_personal_setting:
 
-                toActivity(PersonalSettingsActivity.class);
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.setClass(getActivity(), PersonalSettingsActivity.class);
+                    startActivityForResult(intent,0);
+
+                } else {
+                    onReLogin("");
+                }
                 break;
             case R.id.rlyt_avatar:
-                toActivity(PersonalSettingsActivity.class);
+
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(AccountAndPersonalDataActivity.class);
+
+                } else {
+                    onReLogin("");
+                }
                 break;
             case R.id.llyt_user_info:
-                toActivity(PersonalSettingsActivity.class);
+
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(AccountAndPersonalDataActivity.class);
+
+                } else {
+                    onReLogin("");
+                }
+
                 break;
             case R.id.llyt_all_order:
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.putExtra("orderStatus", 0);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                    intent.setClass(getActivity(), MyOrderActivity.class);
+                    getActivity().startActivity(intent);
 
-                intent.putExtra("orderStatus", 0);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
-                intent.setClass(getActivity(), MyOrderActivity.class);
-                getActivity().startActivity(intent);
+
+                } else {
+                    onReLogin("");
+                }
 
                 break;
             case R.id.llyt_pending_payment:
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.putExtra("orderStatus", 1);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                    intent.setClass(getActivity(), MyOrderActivity.class);
+                    getActivity().startActivity(intent);
 
-                intent.putExtra("orderStatus", 1);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
-                intent.setClass(getActivity(), MyOrderActivity.class);
-                getActivity().startActivity(intent);
+                } else {
+                    onReLogin("");
+                }
+
                 break;
 
             case R.id.llyt_pending_travel:
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.putExtra("orderStatus", 2);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                    intent.setClass(getActivity(), MyOrderActivity.class);
+                    getActivity().startActivity(intent);
 
-                intent.putExtra("orderStatus", 2);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
-                intent.setClass(getActivity(), MyOrderActivity.class);
-                getActivity().startActivity(intent);
+                } else {
+                    onReLogin("");
+                }
+
                 break;
             case R.id.llyt_pending_comment:
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.putExtra("orderStatus", 3);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                    intent.setClass(getActivity(), MyOrderActivity.class);
+                    getActivity().startActivity(intent);
+                } else {
+                    onReLogin("");
+                }
 
-                intent.putExtra("orderStatus", 3);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
-                intent.setClass(getActivity(), MyOrderActivity.class);
-                getActivity().startActivity(intent);
                 break;
             case R.id.llyt_order_refund:
+                if (!TextUtils.isEmpty(token))
+                {
 
-                intent.putExtra("orderStatus", 4);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
-                intent.setClass(getActivity(), MyOrderActivity.class);
-                getActivity().startActivity(intent);
+                    intent.putExtra("orderStatus", 4);  //自定义0:全部订单 1:待支付 2:待出行 3:待评价 4:售后
+                    intent.setClass(getActivity(), MyOrderActivity.class);
+                    getActivity().startActivity(intent);
+                } else {
+                    onReLogin("");
+                }
+
                 break;
             case R.id.img_qr_my_card:
-                BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
-                    @Override
-                    public void onBlurComplete() {
+                if (!TextUtils.isEmpty(token))
+                {
+                    BlurBehind.getInstance().execute(getActivity(), new OnBlurCompleteListener() {
+                        @Override
+                        public void onBlurComplete() {
 
-                        Intent intent = new Intent(getActivity(), MyBusinessCardActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            Intent intent = new Intent(getActivity(), MyBusinessCardActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                        startActivity(intent);
-                    }
-                });
+                            startActivity(intent);
+                        }
+                    });
+
+                } else {
+                    onReLogin("");
+                }
+
                 break;
             case R.id.rlyt_my_coupon:
 
-                toActivity(CouponListActivity.class);
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(CouponListActivity.class);
+
+                } else {
+                    onReLogin("");
+                }
 
                 break;
             case R.id.llyt_fans_num:
@@ -362,15 +432,36 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
 
                 break;
             case R.id.llyt_zan:
-                toActivity(ZanActivity.class);
+
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(ZanActivity.class);
+
+                } else {
+                    onReLogin("");
+                }
                 break;
             case R.id.llyt_collection:
-                toActivity(CollectionActivity.class);
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(CollectionActivity.class);
+
+                } else {
+                    onReLogin("");
+                }
+
                 break;
             case R.id.llyt_follow_num:
-                intent.putExtra("currentItem",0);
-                intent.setClass(getActivity(),FollowAndFansActivity.class);
-                startActivity(intent);
+                if (!TextUtils.isEmpty(token))
+                {
+                    intent.putExtra("currentItem",0);
+                    intent.setClass(getActivity(),FollowAndFansActivity.class);
+                    startActivity(intent);
+
+                } else {
+                    onReLogin("");
+                }
+
                 break;
 
             default:
@@ -462,6 +553,25 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
     @Override
     public void onResume() {
         super.onResume();
+
+        String userName = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.NICKNAME, "");
+
+        String profile = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_PROFILE, "");
+        mTvNickname.setText(userName);
+        if (TextUtils.isEmpty(profile))
+        {
+            mTvUserProfile.setVisibility(View.GONE);
+
+        } else {
+            mTvUserProfile.setVisibility(View.VISIBLE);
+            mTvUserProfile.setText(profile);
+        }
+        String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
+        if (!TextUtils.isEmpty(avatar))
+        {
+            mImgAvatar.loadCircle(avatar);
+        }
+/*
         String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         if (!TextUtils.isEmpty(token)) {
 
@@ -497,7 +607,7 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
                 isFristCreate = false;
                 isLoginFristCreate = false;
             }
-        }
+        }*/
     }
 
     @Override
@@ -616,5 +726,15 @@ public class MineFragment extends BaseFragment<UserInfoPresenter, UserInfoModel>
         super.setUserVisibleHint(isVisibleToUser);
 
         System.out.print("112");
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0 && resultCode == RESULT_OK){
+
+           // System.out.print("111");
+        }
     }
 }

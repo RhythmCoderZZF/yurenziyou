@@ -9,6 +9,7 @@ import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.UserFollowResponse;
 import com.nbhysj.coupon.model.response.ZanAndCollectionResponse;
@@ -49,6 +50,9 @@ public interface MessageContract {
 
         //广播列表
         Observable<BackResult<BroadcastResponse>> getBroadcatMessageList(int pageNo, int pageSize);
+
+        //获取未读消息(新增粉丝 赞与收藏)
+        Observable<BackResult<UnReadMessageBean>> getUnReadMessage();
     }
 
     interface View extends BaseView {
@@ -68,6 +72,8 @@ public interface MessageContract {
         void getPostsCommentAndAnswerResult(BackResult<CommentAndAnswerResponse> res);
 
         void getBroadcatMessageListResult(BackResult<BroadcastResponse> res);
+
+        void getUnReadMessage(BackResult<UnReadMessageBean> res);
 
         void showMsg(String msg);
     }
@@ -89,5 +95,7 @@ public interface MessageContract {
         public abstract void getPostsCommentAndAnswer(int pageNo, int pageSize);
 
         public abstract void getBroadcatMessageList(int pageNo, int pageSize);
+
+        public abstract void getUnReadMessage();
     }
 }

@@ -3,6 +3,7 @@ package com.nbhysj.coupon.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,10 @@ public class ScenicSpotMchDestinationAdapter extends RecyclerView.Adapter<Scenic
                 public void onClick(View view) {
 
                     Intent intent = new Intent();
-                    intent.putExtra("cityId",cityId);
+                    if(!TextUtils.isEmpty(cityId))
+                    {
+                        intent.putExtra("cityId", Integer.parseInt(cityId));
+                    }
                     intent.setClass(mContext, ScenicSpotDestinationActivity.class);
                     mContext.startActivity(intent);
                 }

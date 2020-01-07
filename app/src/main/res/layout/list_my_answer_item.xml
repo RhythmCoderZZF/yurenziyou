@@ -128,7 +128,7 @@
             android:text=""/>
 
         <TextView
-            android:id="@+id/tv_question_useful"
+            android:id="@+id/tv_answer_useful"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -137,15 +137,16 @@
             android:layout_marginRight="@dimen/dp_15"
             android:layout_marginTop="@dimen/dp_16"
             android:layout_marginBottom="@dimen/dp_7"
-            android:paddingBottom="@dimen/dp_4"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingLeft="@dimen/dp_11"
-            android:paddingRight="@dimen/dp_11"
-            android:drawablePadding="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_2"
             android:drawableLeft="@mipmap/icon_answer_useful_already_praised"
             android:text="@string/str_useful"
-            android:background="@drawable/bg_stroke_radius_ten_gray_shape"
-            android:textColor="@color/color_text_gray27" />
+            android:textSize="@dimen/text_size_small"
+            android:background="@drawable/bg_stroke_light_blue_radius_thirteen_shape"
+            android:textColor="@color/color_text_blue10"
+            android:drawablePadding="@dimen/dp_4"/>
 
     </RelativeLayout>
 

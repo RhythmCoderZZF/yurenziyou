@@ -317,7 +317,8 @@ public class MinePostZanListFragment extends BaseFragment<MinePresenter, MineMod
 
             if(mineFragmentRefresh.equals("minePostZanListFragmentRefresh"))
             {
-                if (recommendFriendsList != null) {
+                if (recommendFriendsList != null)
+                {
                     recommendFriendsList.clear();
                 }
 

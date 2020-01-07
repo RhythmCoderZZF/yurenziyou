@@ -93,7 +93,7 @@
             android:layout_marginTop="@dimen/dp_9"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginBottom="@dimen/dp_16"
-            android:background="@drawable/bg_blue_green_gradient_radius_thirteen"
+            android:background="@drawable/bg_gray_radius_thirteen_shape"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/dp_15"
             android:paddingTop="@dimen/dp_5"
@@ -107,7 +107,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/dp_5"
                 android:src="@mipmap/icon_already_followed_check_mark"
-                android:visibility="gone" />
+                 />
 
             <TextView
                 android:id="@+id/tv_cancel_follow"
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_horizontal"
-                android:text="取消关注"
+                android:text="@string/str_already_concerned"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_small" />
 

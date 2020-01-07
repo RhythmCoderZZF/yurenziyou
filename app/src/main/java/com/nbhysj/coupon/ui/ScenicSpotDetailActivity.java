@@ -208,6 +208,10 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
     @BindView(R.id.rlyt_coupon)
     RelativeLayout mRlytCoupon;
+
+    //游玩指南
+    @BindView(R.id.llyt_view_more_tour_guide)
+    LinearLayout mLlytViewMoreTourGuide;
     private int height;
     private List<ImageView> viewList;
     private List<String> bannerList;
@@ -464,13 +468,6 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                         mRvNearScenicSpot.setAdapter(nearbyScenicSpotAdapter);
                     }
                 }
-/*else if (position == 1) {
-                    if (groupGoodsList != null) {
-                        mTvScenicSpotNearby.setVisibility(View.GONE);
-                        groupListAdapter.setGroupList(groupGoodsList);
-                        mRvNearScenicSpot.setAdapter(groupListAdapter);
-                    }
-                } */
             }
 
             @Override
@@ -718,9 +715,16 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                     mTvAnswerNum.setText(String.valueOf(mchQuestionEntity.getAnswerCount()) + "个答案");
 
                     List<MchDetailsResponse.VisitGuideEntity> visitGuideList = mchDetailsResponse.getVisitGuide();
-                    if (visitGuideList != null) {
+
+                    if (visitGuideList != null && visitGuideList.size() > 0)
+                    {
+                        mLlytViewMoreTourGuide.setVisibility(View.VISIBLE);
                         playGuideAdapter.setVisitGuideEntityList(visitGuideList);
                         playGuideAdapter.notifyDataSetChanged();
+
+                    } else {
+
+                        mLlytViewMoreTourGuide.setVisibility(View.GONE);
                     }
 
                     //门票
@@ -965,17 +969,25 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 ScenicSpotDetailActivity.this.finish();
                 break;
             case R.id.rlyt_scenic_spots_ranking_list:
-                String mchTypeScenic = MchTypeEnum.MCH_SCENIC.getValue();
-                String mchTypeRecreation = MchTypeEnum.MCH_RECREATION.getValue();
 
-                if (mchType != null) {
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
-                    if (mchType.equals(mchTypeScenic)) {
-                        toActivity(ScenicSpotBangDanListActivity.class);
+                if (!TextUtils.isEmpty(token))
+                {
+                    String mchTypeScenic = MchTypeEnum.MCH_SCENIC.getValue();
+                    String mchTypeRecreation = MchTypeEnum.MCH_RECREATION.getValue();
 
-                    } else if (mchType.equals(mchTypeRecreation)) {
-                        toActivity(RecreationBangDanListActivity.class);
+                    if (mchType != null) {
+
+                        if (mchType.equals(mchTypeScenic)) {
+                            toActivity(ScenicSpotBangDanListActivity.class);
+
+                        } else if (mchType.equals(mchTypeRecreation)) {
+                            toActivity(RecreationBangDanListActivity.class);
+                        }
                     }
+                } else {
+                    onReLogin("");
                 }
 
                 break;

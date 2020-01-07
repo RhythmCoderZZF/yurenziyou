@@ -405,7 +405,7 @@ public class TravelAssistantFragment extends BaseFragment<TravelAssistantPresent
             myTravelListAdapter.setMyTravelList(tripEntityList);
             myTravelListAdapter.notifyDataSetChanged();
 
-        } else if(requestCode == REQUEST_CODE_TRAVEL_PLANNING && resultCode == 0)
+        } else if(requestCode == REQUEST_CODE_TRAVEL_PLANNING && resultCode == RESULT_OK)
         {
             tripEntityList.clear();
             myTravelListAdapter.notifyDataSetChanged();

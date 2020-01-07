@@ -212,6 +212,11 @@ public class HomeSearchFineFoodFragment extends BaseFragment<HomePagePresenter, 
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void postCollectionResult(BackResult<FavoritesCollectionResponse> res) {
 
     }

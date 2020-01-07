@@ -62,6 +62,7 @@
                 android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:gravity="center_vertical"
                 android:hint="@string/str_input_phone_number"
+                android:inputType="number"
                 android:maxLines="1"
                 android:text=""
                 android:textColor="@color/color_text_gray"

@@ -24,6 +24,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.ComFragmentAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HomestayContract;
+import com.nbhysj.coupon.fragment.HomestayCommentFragment;
 import com.nbhysj.coupon.fragment.HouseResourceFragment;
 import com.nbhysj.coupon.fragment.LocalFoodFragment;
 import com.nbhysj.coupon.fragment.ScenicSpotFragment;
@@ -104,12 +105,15 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
     @BindView(R.id.tv_motto)
     TextView mTvMotto;
 
+    //房源数量
+    private int homestayRoomNum;
     int toolBarPositionY = 0;
     private int mOffset = 0;
     private int mScrollY = 0;
-    private String[] mTitles = new String[]{"房源", "评价"};
-    private List<String> mDataList = Arrays.asList(mTitles);
+    private String[] mTitles = new String[2];
+
     private int landlordId;
+    private List<String> mTitleDataList;
 
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -137,6 +141,11 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
         }
 
         landlordId = getIntent().getIntExtra("landlordId", landlordId);
+        if(mTitleDataList == null){
+            mTitleDataList = new ArrayList<>();
+        } else {
+            mTitleDataList.clear();
+        }
         getHomeResourceList();
     }
 
@@ -191,8 +200,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
 
         viewPager.setAdapter(new ComFragmentAdapter(getSupportFragmentManager(), getFragments()));
         viewPager.setOffscreenPageLimit(10);
-        initMagicIndicator();
-        initMagicIndicatorTitle();
+
     }
 
     private void dealWithViewPager() {
@@ -211,7 +219,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
     private List<Fragment> getFragments() {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new HouseResourceFragment().newInstance(landlordId));
-        fragments.add(new ScenicSpotFragment());
+        fragments.add(new HomestayCommentFragment());
         return fragments;
     }
 
@@ -222,13 +230,13 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
             @Override
             public int getCount() {
-                return mDataList == null ? 0 : mDataList.size();
+                return mTitleDataList == null ? 0 : mTitleDataList.size();
             }
 
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
-                simplePagerTitleView.setText(mDataList.get(index));
+                simplePagerTitleView.setText(mTitleDataList.get(index));
                 simplePagerTitleView.setNormalColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.color_text_gray24));
                 simplePagerTitleView.setSelectedColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.black));
                 simplePagerTitleView.setTextSize(16);
@@ -266,13 +274,13 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
             @Override
             public int getCount() {
-                return mDataList == null ? 0 : mDataList.size();
+                return mTitleDataList == null ? 0 : mTitleDataList.size();
             }
 
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
-                simplePagerTitleView.setText(mDataList.get(index));
+                simplePagerTitleView.setText(mTitleDataList.get(index));
                 simplePagerTitleView.setNormalColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.color_text_gray24));
                 simplePagerTitleView.setSelectedColor(ContextCompat.getColor(IntroductionOfLandlordActivity.this, R.color.black));
                 simplePagerTitleView.setTextSize(16);
@@ -283,7 +291,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
                         //magicIndicator.getLocationOnScreen(location);
                         scrollView.scrollTo(0, 2835);
                         int hight = mCollapsingToolbarLayout.getHeight();
-                        System.out.print(hight + "");
+                       // System.out.print(hight + "");
                         viewPager.setCurrentItem(index, false);
                     }
                 });
@@ -352,7 +360,12 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
                     LandlordDetailResonse landlordDetailResonse = res.getData();
                     LandlordBean landlord = landlordDetailResonse.getLandlord();
                     int bookingSuccessRate = landlord.getBookingSuccess();
-                    int homestayRoomNum = landlord.getHomestayRoomNum();
+                    homestayRoomNum = landlord.getHomestayRoomNum();
+                    mTitles[0] = "房源("+homestayRoomNum+")";
+                    mTitles[1] = "评价";
+                    mTitleDataList = Arrays.asList(mTitles);
+                    initMagicIndicator();
+                    initMagicIndicatorTitle();
                     int confirmTime = landlord.getConfirmTime();
                     int score = landlord.getScore();
                     String motto = landlord.getMotto();

@@ -49,7 +49,8 @@
         android:id="@+id/rlyt_frequently_contacts"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_63"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,14 +79,16 @@
 
     <View
         style="@style/line"
-        android:layout_marginLeft="@dimen/dp_16" />
+        android:layout_marginLeft="@dimen/dp_16"
+        android:visibility="gone"/>
 
 
     <RelativeLayout
         android:id="@+id/rlyt_recipient_information"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_63"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

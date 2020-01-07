@@ -39,6 +39,7 @@ import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.common.Enum.UploadFileTypeEnum;
 import com.nbhysj.coupon.contract.HomePageContract;
 import com.nbhysj.coupon.dialog.CollectEnterAlbumsDialog;
+import com.nbhysj.coupon.dialog.OthersPostOprateDialog;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.HomePageModel;
@@ -69,6 +70,8 @@ import com.nbhysj.coupon.util.DonwloadSaveImgUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
+import com.nbhysj.coupon.util.blurbehind.BlurBehind;
+import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
 import com.nbhysj.coupon.widget.customjzvd.MyJzvdStd;
@@ -275,9 +278,12 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     List<String> resourcesPictureList;
 
-    private boolean isPostReFresh = false;
-
     private static String photoUrl;
+
+    private OthersPostOprateDialog othersPostOprateDialog;
+
+    //标题
+    private String content;
 
     @Override
     public int getLayoutId() {
@@ -289,7 +295,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setBar(PostRecommendDetailActivity.this, getResources().getString(R.string.str_recommendation_detail), R.mipmap.icon_left_arrow_black);
+        ToolbarHelper.setBar(PostRecommendDetailActivity.this, "", R.mipmap.icon_left_arrow_black);
 
         mPostId = getIntent().getIntExtra("postId", 0);
 
@@ -347,7 +353,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                     @Override
                     public void run() {
                         //  showProgressDialog(PostRecommendDetailActivity.this);
-                        isPostReFresh = true;
+                       // isPostReFresh = true;
                         getPostInfo();
 
                     }
@@ -465,6 +471,11 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void getPostInfoResult(BackResult<PostInfoDetailResponse> res) {
         dismissProgressDialog();
         if (mSmartRefreshLayout != null) {
@@ -484,7 +495,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         publisherAvatarUrl = postInfoEntity.getAvater();
                         resourcesPictureList = postInfoEntity.getResources(); //图片
                         String resourceUrl = postInfoEntity.getResourceUrl();  //mp4
-                        String content = postInfoEntity.getContent();
+                        content = postInfoEntity.getContent();
                         int photoHeight = postInfoEntity.getPhotoHeight();
                         int photoWidth = postInfoEntity.getPhotoWidth();
                         String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
@@ -861,7 +872,62 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         switch (v.getId()) {
             case R.id.img_post_share:
 
-                ShareOprateDialog shareOprateDialog = new ShareOprateDialog(PostRecommendDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
+                if (othersPostOprateDialog == null) {
+                    othersPostOprateDialog = new OthersPostOprateDialog(PostRecommendDetailActivity.this, new OthersPostOprateDialog.OnSharePlatformItemClickListener() {
+                        @Override
+                        public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
+                            try {
+
+                                String sharePlatformStr = sharePlatform.toString();
+                                photoUrl = resourcesPictureList.get(0);
+                                String wechatFriend = SharePlatformEnum.WECHAT_FRIEND.getValue();
+                                if (sharePlatformStr.equals(wechatFriend)) {
+
+                                    new Thread(saveFileRunnable).start();
+
+                                } else {
+
+                                    thirdShare(sharePlatform, photoUrl);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onPostReportItemClick() {
+
+                            Intent intent = new Intent();
+                            intent.setClass(PostRecommendDetailActivity.this, ReportActivity.class);
+                            intent.putExtra("reportFlag", 0);   //举报帖子
+                            intent.putExtra("postsId", mPostId);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onGeneratePictureItemClick() {
+                            photoUrl = resourcesPictureList.get(0);
+                            BlurBehind.getInstance().execute(PostRecommendDetailActivity.this, new OnBlurCompleteListener() {
+                                @Override
+                                public void onBlurComplete() {
+
+                                    Intent intent = new Intent(PostRecommendDetailActivity.this, GeneratePicturesActivity.class);
+                                    intent.putExtra("imageUrl",photoUrl);
+                                    intent.putExtra("postId",mPostId);
+                                    intent.putExtra("content",content);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
+                    othersPostOprateDialog.show();
+                } else {
+                    othersPostOprateDialog.show();
+                }
+
+             /*   ShareOprateDialog shareOprateDialog = new ShareOprateDialog(PostRecommendDetailActivity.this, new ShareOprateDialog.OnSharePlatformItemClickListener() {
                     @Override
                     public void onSharePlatformItemClick(SHARE_MEDIA sharePlatform) {
                         try {
@@ -882,7 +948,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         }
                     }
                 }).builder().setCancelable(true).setCanceledOnTouchOutside(true);
-                shareOprateDialog.show();
+                shareOprateDialog.show();*/
 
                 break;
             case R.id.tv_post_comment_num:

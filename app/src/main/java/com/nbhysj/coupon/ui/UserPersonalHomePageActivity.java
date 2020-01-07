@@ -76,7 +76,7 @@ import okhttp3.ResponseBody;
  * @auther：hysj created on 2019/07/31
  * description：个人主页
  */
-public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePresenter, OthersHomePageModel> implements OthersHomePageContract.View{
+public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePresenter, OthersHomePageModel> implements OthersHomePageContract.View {
 
     @BindView(R.id.toolbar_space)
     View mToolbarSpace;
@@ -112,6 +112,8 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
     //赞数量
     @BindView(R.id.tv_zan_num)
     TextView mTvZanNum;
+    @BindView(R.id.llyt_follow)
+    LinearLayout mLlytFollow;
     @BindView(R.id.tv_follow)
     TextView mTvFollow;
     @BindView(R.id.tv_nickname)
@@ -122,6 +124,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
 
     @BindView(R.id.llyt_chat_with_others)
     LinearLayout mLlytChatWithOthers;
+
     int toolBarPositionY = 0;
     private int mScrollY = 0;
     private String[] mTitles = new String[]{"分享", "收藏", "赞过"};
@@ -131,6 +134,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
     //帖子发布者id
     private int authorId;
     private NoteSaveExitPromptDialog noteSaveExitPromptDialog;
+    private String nickName;
 
     @Override
     public int getLayoutId() {
@@ -159,7 +163,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
         }
 
         publisherAvatarUrl = getIntent().getStringExtra("publisherAvatarUrl");
-        authorId = getIntent().getIntExtra("authorId",0);
+        authorId = getIntent().getIntExtra("authorId", 0);
         GlideUtil.loadImage(UserPersonalHomePageActivity.this, publisherAvatarUrl, mImgPostPublisherAvatar);
 
         GlideUtil.loadBlurImageUrl(UserPersonalHomePageActivity.this, publisherAvatarUrl, mImgBgAvatarBlur);
@@ -231,7 +235,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                     mIBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_black));
                     mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
                     //mLlytHeaderToolbar.setBackgroundColor(Color.argb(255, 255, 255, 255));
-                 //   mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    //   mToolbarSpace.setBackgroundColor(Color.argb(255, 255, 255, 255));
                 }
 
                 lastScrollY = scrollY;
@@ -297,7 +301,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // mScrollViewPersonalHomePage.scrollTo(0, 2835);
+                        // mScrollViewPersonalHomePage.scrollTo(0, 2835);
                         viewPager.setCurrentItem(index, false);
                     }
                 });
@@ -345,7 +349,6 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                         //magicIndicator.getLocationOnScreen(location);
                         //mScrollViewPersonalHomePage.scrollTo(0, 2835);
                         int hight = mCollapsingToolbarLayout.getHeight();
-                        System.out.print(hight + "");
                         viewPager.setCurrentItem(index, false);
                     }
                 });
@@ -369,7 +372,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
         ViewPagerHelper.bind(magicIndicatorTitle, viewPager);
     }
 
-    @OnClick({R.id.ibtn_back,R.id.tv_follow,R.id.img_menu})
+    @OnClick({R.id.ibtn_back, R.id.llyt_follow, R.id.img_menu,R.id.llyt_chat_with_others})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -378,12 +381,11 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 UserPersonalHomePageActivity.this.finish();
 
                 break;
-            case R.id.tv_follow:
+            case R.id.llyt_follow:
                 userFollow();
                 break;
             case R.id.img_menu:
-                if(noteSaveExitPromptDialog == null)
-                {
+                if (noteSaveExitPromptDialog == null) {
                     noteSaveExitPromptDialog = new NoteSaveExitPromptDialog(UserPersonalHomePageActivity.this).builder();
 
                     noteSaveExitPromptDialog.addSheetItem(getResources().getString(R.string.str_report), NoteSaveExitPromptDialog.SheetItemColor.Gray, new NoteSaveExitPromptDialog.OnSheetItemClickListener() {
@@ -391,9 +393,9 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                         public void onClick(int which) {
 
                             Intent intent = new Intent();
-                            intent.setClass(UserPersonalHomePageActivity.this,ReportActivity.class);
-                            intent.putExtra("reportFlag",1);
-                            intent.putExtra("userId",authorId);
+                            intent.setClass(UserPersonalHomePageActivity.this, ReportActivity.class);
+                            intent.putExtra("reportFlag", 1);
+                            intent.putExtra("userId", authorId);
                             startActivity(intent);
 
                         }
@@ -416,6 +418,15 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
 
                 noteSaveExitPromptDialog.show();
                 break;
+
+            case R.id.llyt_chat_with_others:
+
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(mContext, UserChatListActivity.class);
+                    mIntent.putExtra("uid", userId);
+                    mIntent.putExtra("username", nickName);
+                    mContext.startActivity(mIntent);
+                break;
             default:
                 break;
         }
@@ -434,7 +445,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                 try {
 
                     UserPersonalHomePageResponse userPersonalHomePageResponse = res.getData();
-                    String nickName = userPersonalHomePageResponse.getNickname();
+                    nickName = userPersonalHomePageResponse.getNickname();
                     int followNum = userPersonalHomePageResponse.getFollowNum();
                     int followStatus = userPersonalHomePageResponse.getFollowStatus();
                     int collectionNum = userPersonalHomePageResponse.getCollectionNum();
@@ -444,8 +455,7 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
 
                     mTvNickName.setText(nickName);
 
-                    if(!TextUtils.isEmpty(profile))
-                    {
+                    if (!TextUtils.isEmpty(profile)) {
                         mTvUserProfile.setText(profile);
                     }
                     mTvFansNum.setText(String.valueOf(zanNum));
@@ -454,11 +464,13 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                     mTvFansNum.setText(String.valueOf(fansNum));
 
                     if (followStatus == 0) {
-                        mTvFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_five);
+                        mLlytFollow.getBackground().setAlpha(0);
+                        mLlytFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_five);
 
                     } else if (followStatus == 1) {
 
-                        mTvFollow.setBackgroundResource(R.drawable.bg_stroke_radius_five_black_shape_white_edge);
+                        mLlytFollow.setBackgroundResource(R.drawable.bg_stroke_radius_five_black_shape_white_edge);
+                        mLlytFollow.getBackground().setAlpha(30);
 
                     }
 
@@ -486,11 +498,14 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
                     int followStatus = followUserStatusResponse.getFollowStatus();
 
                     if (followStatus == 0) {
-                        mTvFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_five);
+                        mLlytFollow.getBackground().setAlpha(0);
+                        mLlytFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_five);
+
 
                     } else if (followStatus == 1) {
 
-                        mTvFollow.setBackgroundResource(R.drawable.bg_stroke_radius_five_black_shape_white_edge);
+                        mLlytFollow.setBackgroundResource(R.drawable.bg_stroke_radius_five_black_shape_white_edge);
+                        mLlytFollow.getBackground().setAlpha(30);
 
                     }
 
@@ -519,17 +534,16 @@ public class UserPersonalHomePageActivity extends BaseActivity<OthersHomePagePre
         showToast(UserPersonalHomePageActivity.this, Constants.getResultMsg(msg));
     }
 
-    public void getOthersHomePageInfo(){
+    public void getOthersHomePageInfo() {
 
-        if(validateInternet()){
+        if (validateInternet()) {
 
             showProgressDialog(UserPersonalHomePageActivity.this);
             mPresenter.getOthersHomePageInfo(authorId);
         }
     }
 
-    public void userFollow()
-    {
+    public void userFollow() {
         showProgressDialog(UserPersonalHomePageActivity.this);
         mPresenter.userFollow(authorId);
     }

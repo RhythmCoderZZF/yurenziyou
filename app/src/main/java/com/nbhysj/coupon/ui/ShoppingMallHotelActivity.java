@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HotelAdapter;
-import com.nbhysj.coupon.adapter.HotelHomestaySectionAdapter;
+import com.nbhysj.coupon.adapter.HotelSectionAdapter;
 import com.nbhysj.coupon.adapter.MchRankingClassificationAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
@@ -23,6 +23,7 @@ import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HotelMchDetailsResponse;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -83,7 +84,7 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     RecyclerView mRvHotelHomestay;
     LinearLayoutManager scenicSpotsLinearLayoutManager;
     //酒店分栏目
-    private HotelHomestaySectionAdapter hotelHomestaySectionAdapter;
+    private HotelSectionAdapter hotelSectionAdapter;
     //酒店分类
     private MchRankingClassificationAdapter scenicSpotClassificationAdapter;
     //酒店适配器
@@ -145,9 +146,9 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ShoppingMallHotelActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.HORIZONTAL);
         mRvPopularScenicSpots.setLayoutManager(linearLayoutManager);
-        hotelHomestaySectionAdapter = new HotelHomestaySectionAdapter(ShoppingMallHotelActivity.this);
-        hotelHomestaySectionAdapter.setHotelHomestaySectionList(mHotelHotList);
-        mRvPopularScenicSpots.setAdapter(hotelHomestaySectionAdapter);
+        hotelSectionAdapter = new HotelSectionAdapter(ShoppingMallHotelActivity.this);
+        hotelSectionAdapter.setHotelHomestaySectionList(mHotelHotList);
+        mRvPopularScenicSpots.setAdapter(hotelSectionAdapter);
 
         //酒店民宿分类
         LinearLayoutManager scenicSpotClassificationLinearLayout = new LinearLayoutManager(ShoppingMallHotelActivity.this);
@@ -249,8 +250,8 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
                 try {
                     //景点栏
                     mHotelHotList = res.getData().getHot();
-                    hotelHomestaySectionAdapter.setHotelHomestaySectionList(mHotelHotList);
-                    hotelHomestaySectionAdapter.notifyDataSetChanged();
+                    hotelSectionAdapter.setHotelHomestaySectionList(mHotelHotList);
+                    hotelSectionAdapter.notifyDataSetChanged();
 
                     //景点分类
                     mCateEntityList = res.getData().getCate();
@@ -322,7 +323,7 @@ public class ShoppingMallHotelActivity extends BaseActivity<HotelPresenter, Hote
     }
 
     @Override
-    public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+    public void getHotelMchDetailResult(BackResult<HotelMchDetailsResponse> res) {
 
     }
 

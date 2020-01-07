@@ -37,7 +37,7 @@ import butterknife.BindView;
 
 /**
  * @auther：hysj created on 2019/12/23
- * description：房源
+ * description：房源评价
  */
 public class HomestayCommentFragment extends BaseFragment<HomestayPresenter, HomestayModel> implements HomestayContract.View {
     private static final String ARG_LANDLORDID = "landlordId";

@@ -31,8 +31,8 @@ public class HotelPresenter extends HotelContract.Presenter {
     }
 
     @Override
-    public void getMchDetails(int mchId) {
-        mRxManager.add(mModel.getMchDetails(mchId).subscribe(res -> mView.getMchDetailsResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getHotelMchDetail(int mchId) {
+        mRxManager.add(mModel.getHotelMchDetail(mchId).subscribe(res -> mView.getHotelMchDetailResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

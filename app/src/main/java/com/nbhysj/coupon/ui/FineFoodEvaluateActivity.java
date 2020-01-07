@@ -152,7 +152,7 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
     private float score3;
 
     //匿名评分
-    private int anonymousScore = 1;
+    private int anonymousScore = 0;
 
     //评论照片选择
     private ArrayList<String> selectedPhotosList;
@@ -396,11 +396,11 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
 
                 if (isToggle) {
 
-                    anonymousScore = 0;
+                    anonymousScore = 1;  //1:匿名
 
                 } else {
 
-                    anonymousScore = 1;
+                    anonymousScore = 0;  //0:不匿名
 
                 }
             }

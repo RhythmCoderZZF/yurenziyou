@@ -5,7 +5,6 @@ package com.nbhysj.coupon.model.request;
  * description：回答点赞
  */
 public class AnswerZanRequest {
-
     //回答id
     private int answerId;
 

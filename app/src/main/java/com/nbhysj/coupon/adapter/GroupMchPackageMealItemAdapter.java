@@ -79,7 +79,16 @@ public class GroupMchPackageMealItemAdapter extends RecyclerView.Adapter<GroupMc
 
             holder.mTvMchScore.setText(mchScore+ "分");
 
+            String mchScenicType = MchTypeEnum.MCH_SCENIC.getValue();
+
+            if(mchType.equals(mchScenicType)){
+                holder.mViewLineMchLevel.setVisibility(View.VISIBLE);
+                holder.mTvMchLevel.setVisibility(View.VISIBLE);
                 holder.mTvMchLevel.setText("国家" + mchLevel + "A级旅游景区");
+            } else {
+                holder.mViewLineMchLevel.setVisibility(View.GONE);
+                holder.mTvMchLevel.setVisibility(View.GONE);
+            }
 
             List<GroupMchDetailsResponse.SubContentEntity> subContentEntityList = contentEntity.getContent();
             if(subContentEntityList != null)
@@ -174,6 +183,9 @@ public class GroupMchPackageMealItemAdapter extends RecyclerView.Adapter<GroupMc
         TextView mTvMchName;
         @BindView(R.id.llyt_mch_item)
         LinearLayout mLLytMchItem;
+
+        @BindView(R.id.view_line_mch_level)
+        View mViewLineMchLevel;
 
         public ViewHolder(View itemView) {
             super(itemView);

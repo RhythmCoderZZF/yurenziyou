@@ -120,14 +120,13 @@ public class PurchaseInstructionsDialog extends DialogFragment {
             double marketPrice = mchHotelGoodsBean.getMarketPrice();
             double defaultPrice = mchHotelGoodsBean.getDefaultPrice();
             mTvHotelTitle.setText(title);
-            mTvDefaultPrice.setText(String.valueOf(defaultPrice));
-            mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
+            mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
+            mTvMarketPrice.setText(String.valueOf(marketPrice));
 
-            double discountAmount = marketPrice - defaultPrice;
-            mTvDefaultPrice.setText(String.valueOf(defaultPrice));
+            double discountAmount = defaultPrice - marketPrice;
             mTvAlreadyReducedPrice.setText("已减" + String.valueOf(discountAmount) + "元");
 
-            mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+            mTvDefaultPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
         }
         mRlytPurchaseInstructions.setOnClickListener(new View.OnClickListener() {
             @Override

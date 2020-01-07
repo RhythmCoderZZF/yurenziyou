@@ -21,6 +21,7 @@ import java.net.URLDecoder;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -40,7 +41,7 @@ public class MyAnswerListAdapter extends RecyclerView.Adapter<MyAnswerListAdapte
         this.questionUsefulListener = questionUsefulListener;
     }
 
-    public void setMyQuestionList(List<MyQuestionAnsweringBean> myQuestionAnsweringList) {
+    public void setMyAnswerList(List<MyQuestionAnsweringBean> myQuestionAnsweringList) {
 
         this.myQuestionAnsweringList = myQuestionAnsweringList;
     }
@@ -60,12 +61,15 @@ public class MyAnswerListAdapter extends RecyclerView.Adapter<MyAnswerListAdapte
 
             MyQuestionAnsweringBean myQuestionAnsweringBean = myQuestionAnsweringList.get(itemPosition);
             int questionId = myQuestionAnsweringBean.getQuestionId();
+            int answerId = myQuestionAnsweringBean.getAnswerId();
             String answerNickName = myQuestionAnsweringBean.getAnswerUserName();
             String answerAvatar = myQuestionAnsweringBean.getAnswerAvater();
             long answerCTime = myQuestionAnsweringBean.getAnswerCTime();
             String questionContent = myQuestionAnsweringBean.getQuestionContent();
             String answerContent = myQuestionAnsweringBean.getAnswerContent();
             String mchName = myQuestionAnsweringBean.getMchName();
+            int zanNum = myQuestionAnsweringBean.getAnswerZanNum();
+            int zanStatus = myQuestionAnsweringBean.getAnswerZanStatus();
             String question = URLDecoder.decode(questionContent, "UTF-8");
             holder.mTvQuestionContent.setText(question);
             String answerTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat,answerCTime);
@@ -82,20 +86,40 @@ public class MyAnswerListAdapter extends RecyclerView.Adapter<MyAnswerListAdapte
             }
 
             holder.mTvMchName.setText(mchName);
+            if (zanStatus == 0) {
 
-            holder.mTvQuestionUseful.setOnClickListener(new View.OnClickListener() {
+                holder.mTvAnswerUseful.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_answer_useful_praise), null, null, null);
+                holder.mTvAnswerUseful.setBackgroundResource(R.drawable.bg_stroke_light_blue_radius_thirteen_shape);
+                holder.mTvAnswerUseful.setTextColor(mContext.getResources().getColor(R.color.color_text_blue10));
+                if(zanNum > 0){
+
+                    holder.mTvAnswerUseful.setText(String.valueOf(zanNum));
+                } else {
+                    holder.mTvAnswerUseful.setText(mContext.getResources().getString(R.string.str_useful));
+                }
+            } else if (zanStatus == 1) {
+
+                holder.mTvAnswerUseful.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_answer_useful_already_praised), null, null, null);
+                holder.mTvAnswerUseful.setBackgroundResource(R.drawable.bg_stroke_radius_ten_gray_shape);
+                holder.mTvAnswerUseful.setTextColor(mContext.getResources().getColor(R.color.color_text_gray27));
+                holder.mTvAnswerUseful.setText(String.valueOf(zanNum));
+            }
+            holder.mTvAnswerUseful.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                  /*  Intent intent = new Intent();
-                    intent.setClass(mContext, AskAndAnswerDetailActivity.class);
-                    intent.putExtra("questionId",questionId);
-                    mContext.startActivity(intent);*/
-                    questionUsefulListener.setQuestionUsefulListener(itemPosition);
+                    questionUsefulListener.setQuestionUsefulListener(itemPosition,answerId);
 
                 }
             });
 
+            holder.mLlytAskQuestionItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    questionUsefulListener.setAskQuestionItemListener(itemPosition,questionId);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,7 +148,10 @@ public class MyAnswerListAdapter extends RecyclerView.Adapter<MyAnswerListAdapte
         LinearLayout mLlytAnswererInfo;
 
         //问题有用
-        TextView mTvQuestionUseful;
+        TextView mTvAnswerUseful;
+
+        LinearLayout mLlytAskQuestionItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -135,13 +162,17 @@ public class MyAnswerListAdapter extends RecyclerView.Adapter<MyAnswerListAdapte
             mTvAnswererContent = itemView.findViewById(R.id.tv_answer_content);
             mTvAnswerDate = itemView.findViewById(R.id.tv_answer_date);
             mLlytAnswererInfo = itemView.findViewById(R.id.llyt_answerer_info);
-            mTvQuestionUseful = itemView.findViewById(R.id.tv_question_useful);
+            mTvAnswerUseful = itemView.findViewById(R.id.tv_answer_useful);
+            mLlytAskQuestionItem = itemView.findViewById(R.id.llyt_ask_question_item);
+
         }
     }
 
     //问题监听
     public interface QuestionUsefulListener {
 
-        void setQuestionUsefulListener(int position);
+        void setQuestionUsefulListener(int position,int answerId);
+
+        void setAskQuestionItemListener(int position,int questionId);
     }
 }

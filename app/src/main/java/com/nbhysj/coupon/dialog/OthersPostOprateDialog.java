@@ -59,8 +59,8 @@ public class OthersPostOprateDialog {
         LinearLayout mLlytQQShare = view.findViewById(R.id.llyt_qq_share);
         LinearLayout mLlytQQZoneShare = view.findViewById(R.id.llyt_qq_zone_share);
         LinearLayout mLlytSinaWeiboShare = view.findViewById(R.id.llyt_sina_weibo_share);
-        LinearLayout mLlytPostDelete = view.findViewById(R.id.llyt_post_delete);
         LinearLayout mLlytPostRepost = view.findViewById(R.id.llyt_post_report);
+        LinearLayout mLlytGeneratePicture = view.findViewById(R.id.llyt_generate_picture);
 
         mRlytCancel.setOnClickListener(new OnClickListener() {
             @Override
@@ -122,13 +122,6 @@ public class OthersPostOprateDialog {
             }
         });
 
-        mLlytPostDelete.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onSharePlatformItemClickListener.onPostDeleteItemClick();
-            }
-        });
 
         mLlytPostRepost.setOnClickListener(new OnClickListener() {
             @Override
@@ -138,14 +131,15 @@ public class OthersPostOprateDialog {
             }
         });
 
-      /*  mLlytCopyLink.setOnClickListener(new OnClickListener() {
+
+        mLlytGeneratePicture.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                onSharePlatformItemClickListener.onSharePlatformItemClick("复制链接");
-
+                onSharePlatformItemClickListener.onGeneratePictureItemClick();
             }
-        });*/
+        });
+
 
         return this;
     }
@@ -172,8 +166,8 @@ public class OthersPostOprateDialog {
 
         void onSharePlatformItemClick(SHARE_MEDIA sharePlatform);
 
-        void onPostDeleteItemClick();
-
         void onPostReportItemClick();
+
+        void onGeneratePictureItemClick();
     }
 }

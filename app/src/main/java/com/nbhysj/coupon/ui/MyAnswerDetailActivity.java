@@ -13,15 +13,18 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.AnswerDetailSubAdapter;
+import com.nbhysj.coupon.adapter.MyAnswerDetailSubAdapter;
 import com.nbhysj.coupon.adapter.MyQuestionCorrelationListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.MchQuestionAndAnswerContract;
 import com.nbhysj.coupon.model.MchQuestionAndAnswerModel;
+import com.nbhysj.coupon.model.request.AnswerAdoptRequest;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
 import com.nbhysj.coupon.model.response.AnswerAdoptStatusResponse;
 import com.nbhysj.coupon.model.response.AnswerBean;
+import com.nbhysj.coupon.model.response.AnswerZanResponse;
 import com.nbhysj.coupon.model.response.AskTogetherResponse;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.QuestionAnsweringResponse;
@@ -93,7 +96,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
     private List<AnswerBean> correlationList;
 
-    private AnswerDetailSubAdapter answerDetailSubAdapter;
+    private MyAnswerDetailSubAdapter myAnswerDetailSubAdapter;
 
     private MyQuestionCorrelationListAdapter myQuestionCorrelationListAdapter;
 
@@ -140,7 +143,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyAnswerDetailActivity.this);
         linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
         mRvAnswer.setLayoutManager(linearLayoutManager);
-        answerDetailSubAdapter = new AnswerDetailSubAdapter(MyAnswerDetailActivity.this, new AnswerDetailSubAdapter.AnswerUsefulListener() {
+        myAnswerDetailSubAdapter = new MyAnswerDetailSubAdapter(MyAnswerDetailActivity.this, new MyAnswerDetailSubAdapter.AnswerUsefulListener() {
             @Override
             public void setAnswerUsefulListener(int position,AnswerBean answerBean) {
 
@@ -152,12 +155,13 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
             @Override
             public void setAnswerAdoptListener(int position, AnswerBean answerBean) {
-
-
+                mPosition = position;
+                int answerId = answerBean.getId();
+                answersAdopt(answerId);
             }
         });
-        answerDetailSubAdapter.setAnswerList(answerList);
-        mRvAnswer.setAdapter(answerDetailSubAdapter);
+        myAnswerDetailSubAdapter.setAnswerList(answerList);
+        mRvAnswer.setAdapter(myAnswerDetailSubAdapter);
 
         LinearLayoutManager correlationLinearLayoutManager = new LinearLayoutManager(MyAnswerDetailActivity.this);
         correlationLinearLayoutManager.setOrientation(correlationLinearLayoutManager.VERTICAL);
@@ -206,7 +210,30 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
     @Override
     public void answersAdoptResult(BackResult<AnswerAdoptStatusResponse> res) {
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
 
+                dismissProgressDialog();
+                switch (res.getCode()) {
+                    case Constants.SUCCESS_CODE:
+                        try {
+
+                            AnswerAdoptStatusResponse answerAdoptStatusResponse = res.getData();
+                            int adoptStatus = answerAdoptStatusResponse.getAdoptStatus();
+                            answerList.get(mPosition).setAdoptStatus(adoptStatus);
+                            myAnswerDetailSubAdapter.setAnswerList(answerList);
+                            myAnswerDetailSubAdapter.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                }
+                break;
+            default:
+                showToast(MyAnswerDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
 
     @Override
@@ -232,8 +259,8 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
                     if(answerList != null && answerList.size() > 0)
                     {
                         mLlytAnswer.setVisibility(View.VISIBLE);
-                        answerDetailSubAdapter.setAnswerList(answerList);
-                        answerDetailSubAdapter.notifyDataSetChanged();
+                        myAnswerDetailSubAdapter.setAnswerList(answerList);
+                        myAnswerDetailSubAdapter.notifyDataSetChanged();
                         int answerNum = answerList.size();
                         mTvAnswerNum.setText("共" + answerNum + "个回答");
 
@@ -274,7 +301,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
                     hideKeyboard(mRlytAnswerDetailMoreQuestion);
                     mEdtComment.setText("");
                     answerList.clear();
-                    answerDetailSubAdapter.notifyDataSetChanged();
+                    myAnswerDetailSubAdapter.notifyDataSetChanged();
                     getQuestionDetails();
 
                 } catch (Exception e) {
@@ -322,7 +349,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
     }
 
     @Override
-    public void answerZanResult(BackResult res) {
+    public void answerZanResult(BackResult<AnswerZanResponse> res) {
         dismissProgressDialog();
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
@@ -332,9 +359,13 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
                     case Constants.SUCCESS_CODE:
                         try {
 
-                            answerList.get(mPosition).setZanStatus(1);
-                            answerDetailSubAdapter.setAnswerList(answerList);
-                            answerDetailSubAdapter.notifyDataSetChanged();
+                            AnswerZanResponse answerZanResponse = res.getData();
+                            int zanNum = answerZanResponse.getZanNum();
+                            int zanStatus = answerZanResponse.getZanStatus();
+                            answerList.get(mPosition).setZanStatus(zanStatus);
+                            answerList.get(mPosition).setZanNum(zanNum);
+                            myAnswerDetailSubAdapter.setAnswerList(answerList);
+                            myAnswerDetailSubAdapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -398,6 +429,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
     }
 
 
+    //点赞接口
     public void answerZan(int answerId){
 
         if(validateInternet())
@@ -407,6 +439,18 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
             mPresenter.answerZanRequest(answerZanRequest);
         }
     }
+
+    //点赞接口
+    public void answersAdopt(int answerId){
+
+        if(validateInternet())
+        {
+            AnswerAdoptRequest answerAdoptRequest = new AnswerAdoptRequest();
+            answerAdoptRequest.setAnswerId(answerId);
+            answerAdoptRequest.setQuestionId(questionId);
+            mPresenter.answersAdopt(answerAdoptRequest);
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -414,7 +458,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
         if(requestCode == ANSWER_REQUEST_CODE && resultCode == RESULT_OK){
 
             answerList.clear();
-            answerDetailSubAdapter.notifyDataSetChanged();
+            myAnswerDetailSubAdapter.notifyDataSetChanged();
             getQuestionDetails();
         }
     }

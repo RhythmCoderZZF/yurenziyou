@@ -9,6 +9,7 @@ import com.nbhysj.coupon.model.request.QueryByTicketRequest;
 import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HotelMchDetailsResponse;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -47,7 +48,7 @@ public interface HotelContract {
         Observable<BackResult<MchBangDanRankingResponse>> getHotelBangDanRanking(int cityId);
 
         //酒店详情
-        Observable<BackResult<MchDetailsResponse>> getMchDetails(int mchId);
+        Observable<BackResult<HotelMchDetailsResponse>> getHotelMchDetail(int mchId);
 
         //酒店下单初始化页面
         Observable<BackResult<HotelOrderInitResponse>> getHotelHomestayOrderInit(int goodsId, String checkInAndOutTime);
@@ -83,7 +84,7 @@ public interface HotelContract {
 
         void getHotelBangDanRankingResult(BackResult<MchBangDanRankingResponse> res);
 
-        void getMchDetailsResult(BackResult<MchDetailsResponse> res);
+        void getHotelMchDetailResult(BackResult<HotelMchDetailsResponse> res);
 
         void getHotelHomestayOrderInitResult(BackResult<HotelOrderInitResponse> res);
 
@@ -115,7 +116,7 @@ public interface HotelContract {
 
         public abstract void getHotelBangDanRanking(int cityId);
 
-        public abstract void getMchDetails(int mchId);
+        public abstract void getHotelMchDetail(int mchId);
 
         public abstract void getHotelHomestayOrderInit(int goodsId, String checkInAndOutTime);
 

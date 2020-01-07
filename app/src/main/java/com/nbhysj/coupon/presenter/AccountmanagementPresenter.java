@@ -21,8 +21,8 @@ public class AccountmanagementPresenter extends AccountManagementContract.Presen
     }
 
     @Override
-    public void getRegisterVerifyCode(String mobile) {
-        mRxManager.add(mModel.getRegisterverifyCode(mobile).subscribe(res -> mView.getRegisterVerifyCodeResult(res), e -> mView.showMsg(e.getMessage())));
+    public void getThirdPartyLoginVerifyCode(String mobile) {
+        mRxManager.add(mModel.getThirdPartyLoginVerifyCode(mobile).subscribe(res -> mView.getThirdPartyLoginVerifyCodeResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

@@ -104,7 +104,7 @@ public class TravelAssisantScenicSpotAddActivity extends BaseActivity<TravelAssi
                 try {
 
                     countyList = res.getData();
-
+                    fragments.clear();
                     if (countyList != null) {
                         if (countyList.size() > 0) {
                             for (int i = 0; i < countyList.size(); i++) {
@@ -227,6 +227,7 @@ public class TravelAssisantScenicSpotAddActivity extends BaseActivity<TravelAssi
                 Intent intent = new Intent();
                 intent.setClass(TravelAssisantScenicSpotAddActivity.this, TravelAssistanSelectCountyActivity.class);
                 intent.putExtra("tripId", mTripId);
+                intent.putExtra("isTripCountyAdd",true);
                 startActivityForResult(intent, ADD_COUNTY_CODE);
 
                 break;
@@ -249,6 +250,14 @@ public class TravelAssisantScenicSpotAddActivity extends BaseActivity<TravelAssi
         if (validateInternet()) {
 
             mPresenter.getCountyList(mTripId);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_COUNTY_CODE && resultCode == RESULT_OK){
+            getCountyList();
         }
     }
 }

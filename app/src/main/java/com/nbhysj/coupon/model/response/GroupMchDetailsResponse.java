@@ -1033,7 +1033,7 @@ public class GroupMchDetailsResponse implements Serializable {
 
         private String type2;
 
-        private int score;
+        private double score;
 
         private double price;
 
@@ -1081,11 +1081,11 @@ public class GroupMchDetailsResponse implements Serializable {
             this.type2 = type2;
         }
 
-        public int getScore() {
+        public double getScore() {
             return score;
         }
 
-        public void setScore(int score) {
+        public void setScore(double score) {
             this.score = score;
         }
 

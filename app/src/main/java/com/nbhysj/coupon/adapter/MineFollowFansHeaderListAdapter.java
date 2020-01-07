@@ -16,6 +16,7 @@ import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
+import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
@@ -94,11 +95,15 @@ public class MineFollowFansHeaderListAdapter extends RecyclerView.Adapter<Recycl
                     holder1.mTvCancelFollow.setText("取消关注");
                 }*/
 
-                holder1.mLlytFollow.setOnClickListener(new View.OnClickListener() {
+                holder1.mImgUserAvatar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        followListener.setFollowListener(fansId,pos);
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, UserPersonalHomePageActivity.class);
+                        intent.putExtra("publisherAvatarUrl", avatarUrl);
+                        intent.putExtra("authorId", fansId);
+                        mContext.startActivity(intent);
 
                     }
                 });

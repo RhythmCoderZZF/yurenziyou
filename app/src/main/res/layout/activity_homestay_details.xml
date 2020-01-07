@@ -77,7 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_4"
-                        android:text="/晚"
+                        android:text="起"
                         android:textColor="@color/color_text_gray24"
                         android:textSize="@dimen/text_size_xtiny" />
                 </LinearLayout>

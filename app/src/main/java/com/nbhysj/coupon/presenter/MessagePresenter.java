@@ -51,5 +51,8 @@ public class MessagePresenter extends MessageContract.Presenter {
         mRxManager.add(mModel.getBroadcatMessageList(pageNo,pageSize).subscribe(res -> mView.getBroadcatMessageListResult(res), e -> mView.showMsg(e.getMessage())));
     }
 
-
+    @Override
+    public void getUnReadMessage() {
+        mRxManager.add(mModel.getUnReadMessage().subscribe(res -> mView.getUnReadMessage(res), e -> mView.showMsg(e.getMessage())));
+    }
 }

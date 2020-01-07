@@ -130,7 +130,6 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -139,7 +138,7 @@
                     android:textSize="@dimen/text_size_tiny" />
 
                 <TextView
-                    android:id="@+id/tv_default_price"
+                    android:id="@+id/tv_market_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -157,7 +156,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_market_price"
+                    android:id="@+id/tv_default_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="¥0"

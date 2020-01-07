@@ -8,6 +8,7 @@ import com.nbhysj.coupon.model.request.AnswerAdoptRequest;
 import com.nbhysj.coupon.model.request.AnswerPublishRequest;
 import com.nbhysj.coupon.model.request.AnswerZanRequest;
 import com.nbhysj.coupon.model.request.AskTogetherRequest;
+import com.nbhysj.coupon.model.request.ChatMessageReplyRequest;
 import com.nbhysj.coupon.model.request.CollectionBatchMchDeleteRequest;
 import com.nbhysj.coupon.model.request.CollectionBatchPostsDeleteRequest;
 import com.nbhysj.coupon.model.request.ContactsInfoRequest;
@@ -139,6 +140,10 @@ public interface ApiService {
     //获取第三方登录状态
     @GET("api/user/accountManagement")
     Observable<BackResult<ThirdPartyLoginStatusResponse>> getThirdPartyLoginStatus(@Query("userId") int userId);
+
+    //第三方绑定注验证码接口
+    @GET("api/user/mobile/thirdMessage")
+    Observable<BackResult> getThirdPartyLoginVerifyCode(@Query("mobile") String mobile);
 
     //第三方登陆
     @POST("api/thirdPartyLogin/login")
@@ -391,6 +396,10 @@ public interface ApiService {
     @GET("api/homestay")
     Observable<BackResult<LandlordDetailResonse>> getLandlordHomePage(@Query("id") int id);
 
+    //酒店+民宿列表 (筛选条件)
+    @GET("api/mchDetails/positionDistance")
+    Observable<BackResult<List<PositionDistanceSearchBean>>> getHomestayScreeningCondition();
+
     //(房源列表)房东主页
     @GET("api/homestay/property")
     Observable<BackResult<HouseResouceResponse>> getLandlordHouseResourceList(@Query("id") int id);
@@ -430,6 +439,10 @@ public interface ApiService {
     //民宿详情
     @GET("api/mchDetails")
     Observable<BackResult<MchHomestayDetailsResponse>> getMchHomestayDetail(@Query("mchId") int mchId);
+
+    //酒店详情
+    @GET("api/mchDetails")
+    Observable<BackResult<HotelMchDetailsResponse>> getMchHotelDetail(@Query("mchId") int mchId);
 
     //美食详情
     @GET("api/mchDetails")
@@ -534,7 +547,7 @@ public interface ApiService {
 
     //添加区县
     @POST("api/trip/insertCounty")
-    Observable<BackResult<CreateTripResponse>> insertCounty(@Body AddCountyRequest addCountyRequest);
+    Observable<BackResult<AddCountyResponse>> insertCounty(@Body AddCountyRequest addCountyRequest);
 
     //添加一天
     @POST("api/trip/plusADay")
@@ -840,7 +853,7 @@ public interface ApiService {
     Observable<BackResult> ignoreQuestionsAndAnswersRequest(@Body IgnoreQuestionsAndAnswersRequest ignoreQuestionsAndAnswersRequest);
 
     //问题采纳
-    @POST("api/questionAnswering/adopt")
+    @PUT("api/questionAnswering/adopt")
     Observable<BackResult<AnswerAdoptStatusResponse>> adoptAnswersRequest(@Body AnswerAdoptRequest adoptRequest);
 
     /********************   优惠券    **********************/
@@ -877,7 +890,20 @@ public interface ApiService {
     @GET("api/user/messageList")
     Observable<BackResult<MessageResponse>> getMessageList();
 
+    //用户聊天
+    @GET("api/user/chat")
+    Observable<BackResult<UserChatResponse>> getUserChatList(@Query("uid") int uid,@Query("page") int page, @Query("pageSize") int pageSize);
 
+    //聊天回复
+    @POST("api/user/chat/reply")
+    Observable<BackResult> userReplyChat(@Body ChatMessageReplyRequest chatMessageReplyRequest);
 
+    //获取未读消息（首页总数量）
+    @GET("api/getUnReadMessage")
+    Observable<BackResult<Integer>> getHomePageUnReadMsg();
+
+    //获取未读消息(新增粉丝 赞与收藏)
+    @GET("api/user/getMessage")
+    Observable<BackResult<UnReadMessageBean>> getUnReadMessage();
 }
 

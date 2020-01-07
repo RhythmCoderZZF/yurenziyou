@@ -293,6 +293,11 @@ public class HomeRecommendFragment extends BaseFragment<HomePagePresenter, HomeP
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult res) {
+
+    }
+
+    @Override
     public void getFavoritesListResult(BackResult<FavoritesListResponse> res) {
 
     }

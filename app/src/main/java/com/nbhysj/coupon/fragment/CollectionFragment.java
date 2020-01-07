@@ -178,6 +178,11 @@ public class CollectionFragment extends BaseFragment<HomePagePresenter, HomePage
     }
 
     @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
 
         dismissProgressDialog();

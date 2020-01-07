@@ -22,6 +22,7 @@ import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
+import com.nbhysj.coupon.ui.ImagePagerActivity;
 import com.nbhysj.coupon.ui.PostRecommendDetailActivity;
 import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.DateUtil;
@@ -193,7 +194,14 @@ public class MchCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 List<String> userCommentPhotoList = scenicSpotsUserCommentList.get(pos).getPhoto();
                 if (userCommentPhotoList != null)
                 {
-                    ScenicSpotDetailCommentPhotoAdapter userCommentPhotoAdapter = new ScenicSpotDetailCommentPhotoAdapter(mContext);
+                    ScenicSpotDetailCommentPhotoAdapter userCommentPhotoAdapter = new ScenicSpotDetailCommentPhotoAdapter(mContext, new ScenicSpotDetailCommentPhotoAdapter.CommentPhotoListener() {
+                        @Override
+                        public void setCommentPhotoOnlickCallback(int itemPosition) {
+
+                            ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                            ImagePagerActivity.startImagePagerActivity(mContext, userCommentPhotoList, itemPosition, imageSize);
+                        }
+                    });
                     userCommentPhotoAdapter.setUserCommentPhotoList(userCommentPhotoList);
                     holder1.mRvUserCommentPhoto.setAdapter(userCommentPhotoAdapter);
                 }
@@ -203,14 +211,18 @@ public class MchCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     public void onClick(View view) {
                         MchCommentEntity mchCommentEntity = scenicSpotsUserCommentList.get(pos);
                         CommentUserEntity commentUserEntity = mchCommentEntity.getUser();
+
                         if(commentUserEntity != null) {
                             int userId = commentUserEntity.getId();
                             String avatarUrl = commentUserEntity.getAvater();
-                            Intent intent = new Intent();
-                            intent.setClass(mContext, UserPersonalHomePageActivity.class);
-                            intent.putExtra("publisherAvatarUrl", avatarUrl);
-                            intent.putExtra("authorId", userId);
-                            mContext.startActivity(intent);
+                            int anonymousStatus = commentUserEntity.getAnonymousStatus();
+                            if(anonymousStatus == 0) {  //非匿名
+                                Intent intent = new Intent();
+                                intent.setClass(mContext, UserPersonalHomePageActivity.class);
+                                intent.putExtra("publisherAvatarUrl", avatarUrl);
+                                intent.putExtra("authorId", userId);
+                                mContext.startActivity(intent);
+                            }
                         }
                     }
                 });

@@ -35,7 +35,7 @@ public interface AccountManagementContract {
         Observable<BackResult<LoginResponse>> thirdPartyLoginCreateUserBind(ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind);
 
         //三方绑定验证码发送
-        Observable<BackResult> getRegisterverifyCode(String mobile);
+        Observable<BackResult> getThirdPartyLoginVerifyCode(String mobile);
 
         //第三方绑定判断(1.未绑定跳转到绑定页面 2.已绑定直接进入)
         Observable<BackResult<LoginResponse>> thirdPartyLogin(ThirdPartyLoginRequest thirdPartyLoginRequest);
@@ -52,7 +52,7 @@ public interface AccountManagementContract {
         //第三方绑定返回
         void getThirdPartyLoginCreateUserResult(BackResult<LoginResponse> res);
 
-        void getRegisterVerifyCodeResult(BackResult res);
+        void getThirdPartyLoginVerifyCodeResult(BackResult res);
 
         //第三方绑定
         void thirdPartyLoginResult(BackResult<LoginResponse> res);
@@ -69,7 +69,7 @@ public interface AccountManagementContract {
 
         public abstract void getThirdPartyLoginCreateUser(ThirdPartyLoginCreateUserBind thirdPartyLoginCreateUserBind);
 
-        public abstract void getRegisterVerifyCode(String mobile);
+        public abstract void getThirdPartyLoginVerifyCode(String mobile);
 
         public abstract void thirdPartyLogin(ThirdPartyLoginRequest thirdPartyLoginRequest);
     }

@@ -116,6 +116,9 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
 
     //照片选取返回code
     private int REQUEST_CODE_POST_PHOTO = 23;
+
+    //上传成功的照片
+    private String selectPhotoUrl;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -270,7 +273,7 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
         });
     }
 
-    @OnClick({R.id.rlyt_update_username, R.id.tv_gender_options, R.id.tv_date_of_birth, R.id.rlyt_personal_profile, R.id.llyt_avatar})
+    @OnClick({R.id.rlyt_update_username, R.id.tv_gender_options, R.id.tv_date_of_birth, R.id.rlyt_personal_profile, R.id.rlyt_avatar})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_update_username:
@@ -289,7 +292,7 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
             case R.id.rlyt_personal_profile:
                 toActivity(EditorPersonalProfileActivity.class);
                 break;
-            case R.id.llyt_avatar:
+            case R.id.rlyt_avatar:
                 AndPermission.with(AccountAndPersonalDataActivity.this)
                         .permission(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
                         .callback(new PermissionListener() {
@@ -378,6 +381,7 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
                         SharedPreferencesUtils.putData(SharedPreferencesUtils.USER_SEX, sex);
                         mTvGenderOptions.setText(gender);
                     } else if (oprateFlag == 6) {
+                        SharedPreferencesUtils.putData(SharedPreferencesUtils.USER_AVATAR, selectPhotoUrl);
                         showToast(AccountAndPersonalDataActivity.this, "上传成功");
                     }
 
@@ -414,12 +418,12 @@ public class AccountAndPersonalDataActivity extends BaseActivity<UserInfoPresent
                 List<String> photos = null;
                 if (data != null) {
                     photos = Matisse.obtainPathResult(data);
-                    String selectPhoto = photos.get(0);
-                    mImageUserAvatar.loadCircle(selectPhoto, R.mipmap.icon_placeholder_image);
+                    selectPhotoUrl = photos.get(0);
+                    mImageUserAvatar.loadCircle(selectPhotoUrl, R.mipmap.icon_placeholder_image);
                     showProgressDialog(AccountAndPersonalDataActivity.this);
                     mDialog.setTitle("");
-                    objectName = getFileName(selectPhoto);
-                    mService.asyncPutFile(objectName, UploadFileTypeEnum.IMAGE.getValue(), selectPhoto);
+                    objectName = getFileName(selectPhotoUrl);
+                    mService.asyncPutFile(objectName, UploadFileTypeEnum.IMAGE.getValue(), selectPhotoUrl);
                 }
             }
         } catch (Exception e) {

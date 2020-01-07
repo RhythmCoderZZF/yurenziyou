@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llyt_others_chat_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_others_avatar"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:background="@drawable/shape_round_gray" />
+
+            <TextView
+                android:id="@+id/tv_others_chat_message_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_15"
+                android:background="@drawable/bg_chat_others_radius_gray_shape"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingTop="@dimen/dp_6"
+                android:paddingRight="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_6"
+                android:text="" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlyt_mine_chat_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_own_chat_message_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:background="@drawable/bg_chat_mine_radius_blue_and_green"
+            android:text=""
+            android:layout_toLeftOf="@+id/image_own_avatar"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_6"
+            android:paddingRight="@dimen/dp_5"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_own_avatar"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_15"
+
+            android:background="@drawable/shape_round_gray" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -39,8 +39,8 @@ public class AccountManagementModel implements AccountManagementContract.Model {
     }
 
     @Override
-    public Observable<BackResult> getRegisterverifyCode(String mobile) {
-        return Api.getInstance().apiService.getRegisterVerifyCode(mobile).compose(RxSchedulers.io_main());
+    public Observable<BackResult> getThirdPartyLoginVerifyCode(String mobile) {
+        return Api.getInstance().apiService.getThirdPartyLoginVerifyCode(mobile).compose(RxSchedulers.io_main());
     }
 
     @Override

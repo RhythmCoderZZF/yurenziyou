@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
+import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 
 import java.util.List;
@@ -53,6 +55,7 @@ public class MineFansFollowAdapter extends RecyclerView.Adapter<MineFansFollowAd
 
         try {
             UserFansFollowBean userFansFollow = userFansFollowList.get(position);
+            int fansId = userFansFollow.getFansId();
             String avatarUrl = userFansFollow.getAvater();
             String fansName = userFansFollow.getFansName();
             int attentionStatus = userFansFollow.getAttentionStatus();
@@ -66,23 +69,37 @@ public class MineFansFollowAdapter extends RecyclerView.Adapter<MineFansFollowAd
             holder.mTvFansNum.setText(String.valueOf(fansNum));
 
             if (attentionStatus == 0) {
+                holder.mImgPostFollowStatus.setVisibility(View.VISIBLE);
                 holder.mImgPostFollowStatus.setImageResource(R.mipmap.icon_mine_follow_header_plus);
                 holder.mLlytFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_thirteen);
                 holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_attention));
             } else if (attentionStatus == 1) {
-                holder.mImgPostFollowStatus.setImageResource(R.mipmap.icon_already_followed_check_mark);
+                holder.mImgPostFollowStatus.setVisibility(View.GONE);
                 holder.mLlytFollow.setBackgroundResource(R.drawable.bg_gray_radius_thirteen_shape);
-                holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_already_concerned));
-           holder.mTvFollow.setText("已关注");
+                holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_mutual_concern));
             }
 
-            holder.mLlytFansFollowItem.setOnClickListener(new View.OnClickListener() {
+            holder.mLlytFollow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     mineFansFollowListener.setMineFansFollowListener(userFansFollow);
                 }
             });
+
+
+            holder.mImgUserAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, UserPersonalHomePageActivity.class);
+                    intent.putExtra("publisherAvatarUrl", avatarUrl);
+                    intent.putExtra("authorId", fansId);
+                    mContext.startActivity(intent);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }

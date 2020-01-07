@@ -27,6 +27,7 @@ import com.nbhysj.coupon.model.request.UseCouponTicketRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CouponsBean;
 import com.nbhysj.coupon.model.response.CouponsGetBean;
+import com.nbhysj.coupon.model.response.HotelMchDetailsResponse;
 import com.nbhysj.coupon.model.response.HotelOrderInitResponse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
 import com.nbhysj.coupon.model.response.MchCateListResponse;
@@ -263,7 +264,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     }
 
     @Override
-    public void getMchDetailsResult(BackResult<MchDetailsResponse> res) {
+    public void getHotelMchDetailResult(BackResult<HotelMchDetailsResponse> res) {
 
     }
 

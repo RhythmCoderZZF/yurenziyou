@@ -64,7 +64,7 @@ public class NoteSaveExitPromptDialog {
         txt_title = (TextView) view.findViewById(R.id.txt_title);
         txt_cancel = (TextView) view.findViewById(R.id.txt_cancel);
        // txt_cancel.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("取消", 0xFF0DDDF6, 0xFF1DEB96));
-        txt_cancel.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("取消", 0xFF595959, 0xFF595959));
+       // txt_cancel.setText(RadiusGradientSpanUtil.getRadiusGradientSpan("取消", 0xFF595959, 0xFF595959));
         txt_cancel.setOnClickListener(new OnClickListener() {
 
             @Override

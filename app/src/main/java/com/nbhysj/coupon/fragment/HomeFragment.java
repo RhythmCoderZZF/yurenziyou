@@ -79,6 +79,9 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     RelativeLayout mRlytMessageNum;
     @BindView(R.id.img_bar_search)
     ImageView mImgBarSearch;
+    //未读消息数量
+    @BindView(R.id.tv_msg_unread_num)
+    TextView mTvUnreadMsgNum;
     private ArrayList<Fragment> fragments;
     private FollowFragment followFragment;
     private RecommendFragment recommendFragment;
@@ -202,7 +205,29 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
 
     }
 
+    @Override
+    public void getUnReadMessageListResult(BackResult<Integer> res) {
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    int unreadMsgNum = res.getData();
+                    if(unreadMsgNum > 0){
+                        mTvUnreadMsgNum.setVisibility(View.VISIBLE);
+                        mTvUnreadMsgNum.setText(String.valueOf(unreadMsgNum));
+                    } else {
+                        mTvUnreadMsgNum.setVisibility(View.GONE);
 
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                showToast(getActivity(), Constants.getResultMsg(res.getMsg()));
+                break;
+        }
+    }
 
     @Override
     public void showMsg(String msg) {
@@ -465,6 +490,20 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     @Override
     public void lazyInitView(View view) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getHomePageUnReadMsg();
+    }
+
+    //未读消息列表
+    public void getHomePageUnReadMsg(){
+        if(validateInternet())
+        {
+            mPresenter.getHomePageUnReadMsg();
+        }
     }
 
 }

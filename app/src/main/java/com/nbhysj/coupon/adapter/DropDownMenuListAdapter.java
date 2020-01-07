@@ -68,7 +68,7 @@ public class DropDownMenuListAdapter extends RecyclerView.Adapter<DropDownMenuLi
 
                     notifyDataSetChanged();
 
-                    dropDownMenuListener.setDropDownMenuListener(positionDistanceBean);
+                    dropDownMenuListener.setDropDownMenuListener(itemPosition,positionDistanceBean);
                 }
             });
 
@@ -119,7 +119,7 @@ public class DropDownMenuListAdapter extends RecyclerView.Adapter<DropDownMenuLi
 
     public interface DropDownMenuListener {
 
-        void setDropDownMenuListener(PositionDistanceBean positionDistanceBean);
+        void setDropDownMenuListener(int position,PositionDistanceBean positionDistanceBean);
     }
 
 }

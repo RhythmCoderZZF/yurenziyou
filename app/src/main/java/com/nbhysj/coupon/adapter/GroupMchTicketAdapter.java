@@ -103,8 +103,8 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
             groupitem = new Groupitem();
             groupitem.mTvTicketTitle = view.findViewById(R.id.tv_ticket_title);
             groupitem.mImgTicketExpandable = view.findViewById(R.id.img_admission_ticket_status);
-            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_per_capita_price); //价格
-            groupitem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //默认价格
+            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_default_price); //默认价格
+            groupitem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //价格
             groupitem.mTvBookInfo = view.findViewById(R.id.tv_good_booking_info); //预定信息
 
             view.setTag(groupitem);
@@ -117,9 +117,9 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         double marketPrice = mchGoodsBean.getMarketPrice();
         String bookingInfo = mchGoodsBean.getBookingInfo();
         groupitem.mTvTicketTitle.setText(title);
-        groupitem.mTvDefaultPrice.setText(String.valueOf(defaultPrice));
-        groupitem.mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
-        groupitem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        groupitem.mTvDefaultPrice.setText("¥" +String.valueOf(defaultPrice));
+        groupitem.mTvMarketPrice.setText(String.valueOf(marketPrice));
+        groupitem.mTvDefaultPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
         if(!TextUtils.isEmpty(bookingInfo))
         {
             groupitem.mTvBookInfo.setVisibility(View.VISIBLE);
@@ -204,12 +204,12 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         chilItem.mTvTicketTitle.setText(mchGoodsBean.getTitle());
         chilItem.mTvBookTicketInfo.setText(bookingInfo);
         chilItem.mTvSellNum.setText("已售"+ sellNum + " | 购买须知 >");
-        chilItem.mTvMarketPrice.setText("¥" + String.valueOf(marketPrice));
+        chilItem.mTvMarketPrice.setText(String.valueOf(marketPrice));
         double discountAmount = marketPrice - defaultPrice;
         chilItem.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
         chilItem.mTvAlreadyReduced.setText("已减" + String.valueOf(discountAmount) + "元");
 
-        chilItem.mTvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        chilItem.mTvDefaultPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
 
         List<String> containCostsList = mchGoodsBean.getContainCosts();
 

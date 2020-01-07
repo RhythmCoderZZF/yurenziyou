@@ -100,8 +100,8 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
             groupitem = new Groupitem();
             groupitem.mTvTicketType = view.findViewById(R.id.tv_ticket_type);
             groupitem.mImgTicketExpandable = view.findViewById(R.id.img_admission_ticket_status);
-            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_per_capita_price); //价格
-            groupitem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //默认价格
+            groupitem.mTvDefaultPrice = view.findViewById(R.id.tv_default_price); //默认价格
+            groupitem.mTvMarketPrice = view.findViewById(R.id.tv_market_price); //市场价格
             groupitem.mTvDiscountTag = view.findViewById(R.id.tv_discount);
 
             view.setTag(groupitem);
@@ -114,10 +114,9 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         double marketPrice = mchGoodsBean.getMarketPrice();
         int timeLimitStatus = mchGoodsBean.getTimeLimitStatus();
         groupitem.mTvTicketType.setText(title);
-        groupitem.mTvDefaultPrice.setText(Tools.getTwoDecimalPoint(defaultPrice));
-        groupitem.mTvMarketPrice.setText("¥" + Tools.getTwoDecimalPoint(marketPrice));
-        groupitem.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-
+        groupitem.mTvDefaultPrice.setText("¥" + Tools.getTwoDecimalPoint(defaultPrice));
+        groupitem.mTvMarketPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
+        groupitem.mTvDefaultPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
         if (timeLimitStatus == 0) {
 
             groupitem.mTvDiscountTag.setVisibility(View.GONE);
@@ -213,12 +212,12 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         chilItem.mTvTicketTitle.setText(ticketEntity.getTitle());
         chilItem.mTvBookTicketInfo.setText(bookingInfo);
         chilItem.mTvSellNum.setText("已售" + sellNum + " | 购买须知 >");
-        chilItem.mTvMarketPrice.setText("¥" + Tools.getTwoDecimalPoint(marketPrice));
+        chilItem.mTvMarketPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
         double discountAmount = marketPrice - defaultPrice;
         chilItem.mTvDefaultPrice.setText("¥" + Tools.getTwoDecimalPoint(defaultPrice));
         chilItem.mTvAlreadyReduced.setText("已减" + Tools.getTwoDecimalPoint(discountAmount) + "元");
 
-        chilItem.mTvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+        chilItem.mTvDefaultPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
         chilItem.mTvBookTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

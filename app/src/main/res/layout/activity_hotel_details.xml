@@ -33,6 +33,7 @@
                     android:layout_height="362dp"></com.nbhysj.coupon.view.HotelDetailBannerView>
 
                 <LinearLayout
+                    android:id="@+id/llyt_look_user_all_comment"
                     android:layout_width="@dimen/dp_100"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"

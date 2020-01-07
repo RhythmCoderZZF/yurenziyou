@@ -58,7 +58,7 @@ public class AlbumPresenter extends AlbumContract.Presenter {
 
     @Override
     public void delFavoritesRequest(FavoritesDeleteRequest favoritesDeleteRequest) {
-        mRxManager.add(mModel.delFavoritesRequest(favoritesDeleteRequest).subscribe(res -> mView.getFavoritesListResult(res), e -> mView.showMsg(e.getMessage())));
+        mRxManager.add(mModel.delFavoritesRequest(favoritesDeleteRequest).subscribe(res -> mView.delFavoritesRequest(res), e -> mView.showMsg(e.getMessage())));
     }
 
     @Override

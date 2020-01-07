@@ -132,6 +132,7 @@ public class TripCalendarActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_TRAVEL_PLANNING && resultCode == RESULT_OK)
         {
+            setResult(RESULT_OK);
             TripCalendarActivity.this.finish();
         }
     }

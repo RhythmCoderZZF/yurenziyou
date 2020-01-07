@@ -82,4 +82,9 @@ public class HomePageModel implements HomePageContract.Model {
     public Observable<BackResult<FollowUserStatusResponse>> userFollow(int userId) {
         return Api.getInstance().apiService.userFollow(userId).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult<Integer>> getHomePageUnReadMsg() {
+        return Api.getInstance().apiService.getHomePageUnReadMsg().compose(RxSchedulers.io_main());
+    }
 }

@@ -17,6 +17,7 @@ import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
@@ -192,6 +193,11 @@ public class NewFansActivity extends BaseActivity<MessagePresenter, MessageModel
 
     @Override
     public void getPostsCommentAndAnswerResult(BackResult<CommentAndAnswerResponse> res) {
+
+    }
+
+    @Override
+    public void getUnReadMessage(BackResult<UnReadMessageBean> res) {
 
     }
 

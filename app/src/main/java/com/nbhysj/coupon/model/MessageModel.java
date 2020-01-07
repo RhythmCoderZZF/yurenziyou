@@ -10,6 +10,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BroadcastResponse;
 import com.nbhysj.coupon.model.response.CommentAndAnswerResponse;
 import com.nbhysj.coupon.model.response.MessageResponse;
+import com.nbhysj.coupon.model.response.UnReadMessageBean;
 import com.nbhysj.coupon.model.response.UserFansFollowResponse;
 import com.nbhysj.coupon.model.response.FollowUserStatusResponse;
 import com.nbhysj.coupon.model.response.UserFollowResponse;
@@ -58,9 +59,13 @@ public class MessageModel implements MessageContract.Model {
     public Observable<BackResult<CommentAndAnswerResponse>> getPostsCommentAndAnswer(int pageNo, int pageSize) {
         return Api.getInstance().apiService.getPostsCommentAndAnswer(pageNo,pageSize).compose(RxSchedulers.io_main());
     }
-
     @Override
     public Observable<BackResult<BroadcastResponse>> getBroadcatMessageList(int pageNo, int pageSize) {
         return Api.getInstance().apiService.getBroadcatMessageList(pageNo,pageSize).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<UnReadMessageBean>> getUnReadMessage() {
+        return Api.getInstance().apiService.getUnReadMessage().compose(RxSchedulers.io_main());
     }
 }

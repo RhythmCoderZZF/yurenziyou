@@ -436,6 +436,12 @@
                     android:layout_height="7dp"
                     android:background="@color/color_text_gray16"></View>
 
+                <LinearLayout
+                    android:id="@+id/llyt_view_more_tour_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                 <RelativeLayout
                     android:id="@+id/rlyt_view_more_tour_guide"
                     android:layout_width="wrap_content"
@@ -476,7 +482,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="7dp"
                     android:background="@color/color_text_gray16"></View>
-
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/llyt_ticket_info"
                     android:layout_width="match_parent"

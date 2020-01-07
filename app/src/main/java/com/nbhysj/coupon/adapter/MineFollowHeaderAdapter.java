@@ -79,10 +79,12 @@ public class MineFollowHeaderAdapter extends RecyclerView.Adapter<MineFollowHead
             if (attentionStatus == 0) {
                 holder.mImgPostFollowStatus.setImageResource(R.mipmap.icon_mine_follow_header_plus);
                 holder.mLlytFollow.setBackgroundResource(R.drawable.bg_blue_green_gradient_radius_thirteen);
+                holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_attention));
 
             } else if (attentionStatus == 1) {
                 holder.mImgPostFollowStatus.setImageResource(R.mipmap.icon_already_followed_check_mark);
                 holder.mLlytFollow.setBackgroundResource(R.drawable.bg_gray_radius_thirteen_shape);
+                holder.mTvFollow.setText(mContext.getResources().getString(R.string.str_already_concerned));
             }
 
             holder.mLlytFollow.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +144,9 @@ public class MineFollowHeaderAdapter extends RecyclerView.Adapter<MineFollowHead
 
         @BindView(R.id.llyt_follow_item)
         LinearLayout mLlytFollowItem;
+
+        @BindView(R.id.tv_follow)
+        TextView mTvFollow;
 
         public ViewHolder(View itemView) {
             super(itemView);

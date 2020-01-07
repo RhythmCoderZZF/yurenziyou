@@ -108,7 +108,7 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setLoginBar(PhoneQuickLoginActivity.this, getResources().getString(R.string.str_login), R.mipmap.nav_ico_back_black, "注册");
+        ToolbarHelper.setLoginBar(PhoneQuickLoginActivity.this, getResources().getString(R.string.str_login), R.mipmap.icon_left_arrow_black, "注册");
 
         mTvUserRegister.setOnClickListener(v -> {
 
@@ -354,6 +354,7 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
                     String collectionNum = String.valueOf(userInfoResponse.getCollectionNum()); //收藏数
                     String zanNum = String.valueOf(userInfoResponse.getZanNum()); //点赞数
                     SharedPreferencesUtils.saveUserInfoData(avatar, sex, birthday, profile, fansNum, followNum, collectionNum, zanNum);
+                    setResult(RESULT_OK);
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -595,10 +596,10 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
         super.onResume();
 
         String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
-        if (!TextUtils.isEmpty(avatar)) {
+        if (!TextUtils.isEmpty(avatar))
+        {
             GlideUtil.loadImage(PhoneQuickLoginActivity.this, avatar, mImageUserAvatar);
         }
-
     }
 
     @Override
@@ -606,8 +607,12 @@ public class PhoneQuickLoginActivity extends BaseActivity<LoginPresenter, LoginM
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LOGIN_SUCCESS_REQUEST_CODE && resultCode == RESULT_OK) {
 
+            setResult(RESULT_OK);
             PhoneQuickLoginActivity.this.finish();
         }else if(requestCode == REQUEST_CODE_USER_REGISTER_SUCCESS && resultCode == RESULT_OK){
+
+            finish();
+        }else if(requestCode == THIRD_PARTY_LOGIN_REQUEST_CODE && resultCode == RESULT_OK){
 
             finish();
         }

@@ -729,7 +729,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
-            intent.getStringExtra("");
             if (Constants.BROADCAST_ACTION_MAIN_BACK.equals(action)) {
                 String actionOprate = intent.getStringExtra(Constants.BROADCAST_ACTION_ARG_OPRATE);
 
@@ -737,10 +736,19 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 {
                     goFragment(4);
                     navigation.setSelectedItemId(TabFragment.values()[4].menuId);
-                }else if(actionOprate.equals(Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL)){
+                } else if(actionOprate.equals(Constants.BROADCAST_ACTION_BACK_SHOPPING_MALL)){
 
                     goFragment(1);
                     navigation.setSelectedItemId(TabFragment.values()[1].menuId);
+                }else if(actionOprate.equals(Constants.BROADCAST_ACTION_BACK_HOME_PAGE)){
+
+                    goFragment(0);
+                    navigation.setSelectedItemId(TabFragment.values()[0].menuId);
+                }else if(actionOprate.equals(Constants.BROADCAST_ACTION_BACK_MINE)){
+
+                    EventBus.getDefault().post("shareFragmentRefresh");
+                    EventBus.getDefault().post("collectionFragmentRefresh");
+                    EventBus.getDefault().post("minePostZanListFragmentRefresh");
                 }
             }
         }

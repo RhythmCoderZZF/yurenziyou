@@ -81,20 +81,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.nbhysj.coupon.widget.dropdownmenu.DropDownMenu
+        <com.nbhysj.coupon.view.DropDownMenu
             android:id="@+id/drop_down_menu_screening"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:ddmenuTextSize="13sp"
             app:ddtextUnselectedColor="@color/drop_down_unselected"
             app:ddtextSelectedColor="@color/drop_down_selected"
-            app:dddividerColor="@color/color_text_gray6"
-            app:ddunderlineColor="@color/white"
-            app:ddmenuMenuHeightPercent="0.7"
+            app:dddividerColor="@color/gray"
+            app:ddunderlineColor="@color/gray"
+            app:ddmenuMenuHeightPercent="0.5"
             app:ddmenuSelectedIcon="@mipmap/house_ico_triangle_pre"
             app:ddmaskColor="@color/mask_color"
             app:ddmenuBackgroundColor="@color/white"
             app:ddmenuUnselectedIcon="@mipmap/house_ico_triangle_nor" />
-
     </RelativeLayout>
 </LinearLayout>

@@ -442,7 +442,6 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         }
 
         mBannerViewHotelDetail.startLoop(false);
-        // mBannerViewHotelDetail.setViewList(HomestayDetailActivity.this, viewList, bannerList);
 
         LinearLayoutManager linearLayout = new LinearLayoutManager(HomestayDetailActivity.this);
         linearLayout.setOrientation(linearLayout.VERTICAL);
@@ -834,10 +833,12 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                         mLlytHouseInfo.setVisibility(View.GONE);
                     }
 
-                    //设备详情
-                    homestayEquipmentAdapter.setEquipmentList(facilityList);
-                    homestayEquipmentAdapter.notifyDataSetChanged();
+                    if(facilityList != null && facilityList.size() > 0) {
+                        //设备详情
+                        homestayEquipmentAdapter.setEquipmentList(facilityList);
+                        homestayEquipmentAdapter.notifyDataSetChanged();
 
+                    }
                     //综合评价
                     MchHomestayDetailsResponse.CommentEntity commentEntity = homestayDetailsResponse.getComment();
                     commentList = commentEntity.getComment();
@@ -899,8 +900,13 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                         String depositInfo = noticeEntity.getDepositInfo(); //押金
                         int invoiceStatus = noticeEntity.getInvoiceStatus();
                         String receptionInfo = noticeEntity.getReceptionInfo();
-                        mTvCheckInTime.setText("入住日" + checkinTime + "后");
-                        mTvDepartureTime.setText("离店日" + leaveTime + "之前");
+                        if(!TextUtils.isEmpty(checkinTime)) {
+                            mTvCheckInTime.setText("入住日" + checkinTime + "后");
+                        }
+                        if(!TextUtils.isEmpty(leaveTime))
+                        {
+                            mTvDepartureTime.setText("离店日" + leaveTime + "之前");
+                        }
                         mTvReceptionTime.setText(receptionInfo);
 
                         //发票状态
