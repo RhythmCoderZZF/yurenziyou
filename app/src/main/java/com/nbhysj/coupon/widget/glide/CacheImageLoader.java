@@ -19,12 +19,8 @@ public class CacheImageLoader extends ImageLoader {
     public void displayImage(Context context, Object path, ImageView imageView) {
 
         GlideApp.with(context)
-                .load((String) path)
-                .placeholder(R.mipmap.icon_placeholder_image)
-                .error(R.mipmap.icon_placeholder_image)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .override(Target.SIZE_ORIGINAL)
+                .load(path)
+                .placeholder(context.getResources().getDrawable(R.mipmap.icon_placeholder_image))
                 .into(imageView);
     }
 }

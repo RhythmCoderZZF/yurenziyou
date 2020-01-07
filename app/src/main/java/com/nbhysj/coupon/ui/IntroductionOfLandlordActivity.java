@@ -43,6 +43,7 @@ import com.nbhysj.coupon.model.response.ScenicSpotResponse;
 import com.nbhysj.coupon.presenter.HomestayPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
+import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.view.ColorFlipPagerTitleView;
 import com.nbhysj.coupon.view.JudgeNestedScrollView;
@@ -64,6 +65,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @auther：hysj created on 2019/05/09
@@ -104,6 +106,8 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
     LinearLayout mLlytMotto;
     @BindView(R.id.tv_motto)
     TextView mTvMotto;
+    @BindView(R.id.image_avatar)
+    CircleImageView mImgAvatar;
 
     //房源数量
     private int homestayRoomNum;
@@ -361,6 +365,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
                     LandlordBean landlord = landlordDetailResonse.getLandlord();
                     int bookingSuccessRate = landlord.getBookingSuccess();
                     homestayRoomNum = landlord.getHomestayRoomNum();
+                    String avatar = landlord.getAvatar();
                     mTitles[0] = "房源("+homestayRoomNum+")";
                     mTitles[1] = "评价";
                     mTitleDataList = Arrays.asList(mTitles);
@@ -380,6 +385,7 @@ public class IntroductionOfLandlordActivity extends BaseActivity<HomestayPresent
                         mLlytMotto.setVisibility(View.GONE);
                     }
 
+                    GlideUtil.loadImage(IntroductionOfLandlordActivity.this,avatar,mImgAvatar);
 
                 } catch (Exception e) {
                     e.printStackTrace();

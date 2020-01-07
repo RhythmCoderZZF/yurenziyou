@@ -96,6 +96,7 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     private int mCurrentItemFlag = 1;
     private boolean initComplete = false;
     private boolean isOnTabSelect = true;
+    private boolean isHomePageRefresh = false;
 
     /**
      * Use this factory method to create a new instance of
@@ -137,29 +138,34 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
 
                     //   mSmartRefreshLayout.finishRefresh();
                     bannerList.clear();
-                    initComplete = true;
+
+
                     HomePageResponse.ResultBean resultBean = res.getData().getResult();
                     List<HomePageResponse.ResultBean.BannersBean> bannersList = resultBean.getBanners();
+
+                        for (int i = 0; i < bannersList.size(); i++) {
+                            HomePageResponse.ResultBean.BannersBean bannersBean = bannersList.get(i);
+                            bannerList.add(bannersBean.getPhoto());
+                        }
+
+                        mBannerHome.setImages(bannerList);
+                        mBannerHome.isAutoPlay(true);//禁止轮播
+                        mBannerHome.setDelayTime(5000);
+                        mBannerHome.setIndicatorGravity(BannerConfig.LEFT);
+                        mBannerHome.setImageLoader(new CacheImageLoader());
+                        mBannerHome.start();
+
+                if(!isHomePageRefresh && !initComplete) {
                     List<HomePageResponse.ResultBean.PostsTagsBean> postsTagsList = resultBean.getPostsTags();
-                    //  List<HomePageSubTopicTagBean> list = resultBean.getList();
-
-                    for (int i = 0; i < bannersList.size(); i++) {
-                        HomePageResponse.ResultBean.BannersBean bannersBean = bannersList.get(i);
-                        bannerList.add(bannersBean.getPhoto());
-                    }
-
-                    mBannerHome.setImages(bannerList);
-                    mBannerHome.isAutoPlay(true);//禁止轮播
-                    mBannerHome.setDelayTime(5000);
-                    mBannerHome.setIndicatorGravity(BannerConfig.LEFT);
-                    mBannerHome.setImageLoader(new CacheImageLoader());
-                    mBannerHome.start();
 
                     HomePageResponse.ResultBean.PostsTagsBean recommendPostsTags = postsTagsList.get(2);
                     recommendFragment.newInstance(recommendPostsTags);
 
                     HomePageResponse.ResultBean.PostsTagsBean nearTagsBean = postsTagsList.get(1);
                     nearbyFragment.newInstance(nearTagsBean);
+                }
+                    isHomePageRefresh = false;
+                    initComplete = true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -385,7 +391,7 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
                     public void run() {
                         // MyRecommendFragment.isRefrsh = true;
                         HomeRecommendFragment.currentFragment = 0;
-                        //getHomePageData();
+                        getHomePageData();
 
                         if (!initComplete) {
 
