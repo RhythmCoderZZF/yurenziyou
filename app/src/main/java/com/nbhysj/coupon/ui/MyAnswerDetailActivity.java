@@ -221,7 +221,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
                             AnswerAdoptStatusResponse answerAdoptStatusResponse = res.getData();
                             int adoptStatus = answerAdoptStatusResponse.getAdoptStatus();
-                            answerList.get(mPosition).setAdoptStatus(adoptStatus);
+                            answerList.get(mPosition).setAdoptStatus(1);
                             myAnswerDetailSubAdapter.setAnswerList(answerList);
                             myAnswerDetailSubAdapter.notifyDataSetChanged();
 
@@ -410,6 +410,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
                 showToast(MyAnswerDetailActivity.this,"请填写你的评论");
                 return;
             }
+            showProgressDialog(MyAnswerDetailActivity.this);
             AnswerPublishRequest answerPublishRequest = new AnswerPublishRequest();
             answerPublishRequest.setQuestionId(questionId);
             answerPublishRequest.setContent(answerContent);
@@ -434,6 +435,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
         if(validateInternet())
         {
+            showProgressDialog(MyAnswerDetailActivity.this);
             AnswerZanRequest answerZanRequest = new AnswerZanRequest();
             answerZanRequest.setAnswerId(answerId);
             mPresenter.answerZanRequest(answerZanRequest);
@@ -445,6 +447,7 @@ public class MyAnswerDetailActivity extends BaseActivity<MchQuestionAndAnswerPre
 
         if(validateInternet())
         {
+            showProgressDialog(MyAnswerDetailActivity.this);
             AnswerAdoptRequest answerAdoptRequest = new AnswerAdoptRequest();
             answerAdoptRequest.setAnswerId(answerId);
             answerAdoptRequest.setQuestionId(questionId);

@@ -26,6 +26,9 @@ public class HotelHomestayOrderSubmitRequest {
     //优惠券
     private List<Integer> couponIds;
 
+    //是否用车（0:不用  1:用车）
+    private int useCarStatus;
+
     public int getGoodsId() {
         return goodsId;
     }
@@ -72,5 +75,13 @@ public class HotelHomestayOrderSubmitRequest {
 
     public void setCouponIds(List<Integer> couponIds) {
         this.couponIds = couponIds;
+    }
+
+    public int getUseCarStatus() {
+        return useCarStatus;
+    }
+
+    public void setUseCarStatus(int useCarStatus) {
+        this.useCarStatus = useCarStatus;
     }
 }

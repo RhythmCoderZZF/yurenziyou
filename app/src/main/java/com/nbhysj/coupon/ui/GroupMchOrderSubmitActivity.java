@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ import com.nbhysj.coupon.contract.OrderSubmitContract;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
 import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementTipsDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
@@ -52,6 +55,7 @@ import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.QueryByTicketResponse;
@@ -61,6 +65,7 @@ import com.nbhysj.coupon.model.response.UseCouponTicketResponse;
 import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.MyRecycleView;
 
@@ -198,6 +203,10 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     @BindView(R.id.tv_already_reduced_price)
     TextView mTvAlreadReducedPrice;
 
+    //用车协议
+    @BindView(R.id.tv_vehicle_service_agreement)
+    TextView mTvVehicleSericeAgreement;
+
     //购买数量
     private int mPurchaseNum = 1;
 
@@ -302,6 +311,11 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
     //总费用
     private double totalFee = 0;
 
+    //用车服务协议弹框
+    private VehicleServiceAgreementTipsDialog vehicleServiceAgreementTipsDialog;
+
+    //0:不用车 1:用车
+    private int useCarStatus = 0;
     @Override
     public int getLayoutId() {
 
@@ -558,6 +572,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
         vehicleUseAdapter.setVehicleUseList(carsBeanList);
         mRvTravelByCar.setAdapter(vehicleUseAdapter);
 
+       // mTvVehicleSericeAgreement.setText(Html.fromHtml("勾选即表示您同意" + "<u><font color='#4895F2'>" + "用车服务协议" + "</font></u>"));
     }
 
     @Override
@@ -572,16 +587,20 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
                 if (isCheck) {
 
+                    // useCarStatus = 1;
                     showVehicleUseAddDialog();
-
                 } else {
-                    mLlytVehicleUse.setVisibility(View.GONE);
-                    carsBeanList.clear();
+                    mCkbIsNeedUseCar.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_payment_method_check_false), null, null, null);
+                    // useCarStatus = 0;
+                    //*mLlytVehicleUse.setVisibility(View.GONE);
+                 /*   carsBeanList.clear();
+                    carEstimatePriceList.clear();
                     vehicleUseAdapter.setVehicleUseList(carsBeanList);
-                    vehicleUseAdapter.notifyDataSetChanged();
+                    vehicleUseAdapter.notifyDataSetChanged();*/
                 }
             }
         });
+
     }
 
     @Override
@@ -594,7 +613,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
             R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
             R.id.img_tourist_mobile_input_cancel,
-            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm})
+            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm,R.id.tv_vehicle_service_agreement})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -689,10 +708,10 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 double totalPrice = payFee * mPurchaseNum;
                 mTvTotalPrice.setText(Tools.getTwoDecimalPoint(totalPrice));*/
                 break;
-            case R.id.tv_add_vehicle_more:
+         /*   case R.id.tv_add_vehicle_more:
 
                 showVehicleUseAddDialog();
-                break;
+                break;*/
             case R.id.tv_tourist_edit_cancel:
 
                 mLlytEditTourists.setVisibility(View.GONE);
@@ -741,6 +760,9 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                 addTraveller();
 
                 break;
+         /*   case R.id.tv_vehicle_service_agreement:
+                showVehicleUseAddDialog();
+                break;*/
             default:
                 break;
         }
@@ -914,13 +936,13 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
                     payFee = orderSubmitInitResponse.getPayFee();
 
                     //开启用车状态
-                    if (openCarStatus == 0) {
+              /*      if (openCarStatus == 0) {
 
                         mRlytOpenCarStatus.setVisibility(View.GONE);    //用车隐藏
 
                     } else if (openCarStatus == 1) {
                         mRlytOpenCarStatus.setVisibility(View.VISIBLE); //用车显示
-                    }
+                    }*/
 
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
@@ -1130,12 +1152,13 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
             groupMchOrderSubmitRequest.setCars(carsBeanList);
 
             //是否用车 1:用 || 0:不用
-            if (mCkbIsNeedUseCar.isChecked()) {
+         /*   if (mCkbIsNeedUseCar.isChecked()) {
                 groupMchOrderSubmitRequest.setCarStatus(1);
             } else {
                 groupMchOrderSubmitRequest.setCarStatus(0);
-            }
-            System.out.print(groupMchOrderSubmitRequest);
+            }*/
+            groupMchOrderSubmitRequest.setUseCarStatus(useCarStatus);
+           // System.out.print(groupMchOrderSubmitRequest);
             showProgressDialog(GroupMchOrderSubmitActivity.this);
             mDialog.setTitle("正在提交订单...");
             mPresenter.groupMchOrderSubmit(groupMchOrderSubmitRequest);
@@ -1288,7 +1311,28 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
 
     }
 
-    public void showVehicleUseAddDialog() {
+ /*   public void showVehicleUseAddDialog() {
+        if (mVehicleServiceAgreementDialog == null)
+        {
+            mVehicleServiceAgreementDialog = new VehicleServiceAgreementDialog(new VehicleServiceAgreementDialog.PurchaseInstructionsListener() {
+                @Override
+                public void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                    if (!TextUtils.isEmpty(token)) {
+
+
+
+                    } else {
+
+                        onReLogin("");
+                    }
+                }
+            },"http://wwww.baidu.com");
+        }
+        mVehicleServiceAgreementDialog.show(getFragmentManager(), "用车服务协议");
+    }*/
+
+  /*  public void showVehicleUseAddDialog() {
         if (vehicleUseAddDialog == null) {
             vehicleUseAddDialog = new VehicleUseAddDialog();
             vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
@@ -1380,7 +1424,7 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
             });
         }
         vehicleUseAddDialog.show(getFragmentManager(), "");
-    }
+    }*/
 
     //组合商品下单初始化
     public void getGroupMchOrderSubmitInit() {
@@ -1415,5 +1459,56 @@ public class GroupMchOrderSubmitActivity extends BaseActivity<OrderSubmitPresent
         }*/
         double alreadReducedPrice = totalFee - payFee;
         return alreadReducedPrice;
+    }
+
+    public void showVehicleUseAddDialog() {
+        /*if (mVehicleServiceAgreementDialog == null)
+        {
+            mVehicleServiceAgreementDialog = new VehicleServiceAgreementDialog(new VehicleServiceAgreementDialog.PurchaseInstructionsListener() {
+                @Override
+                public void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                    if (!TextUtils.isEmpty(token)) {
+
+
+
+                    } else {
+
+                        onReLogin("");
+                    }
+                }
+            },"http://wwww.baidu.com");
+        }
+        mVehicleServiceAgreementDialog.show(getFragmentManager(), "用车服务协议");*/
+
+        if (vehicleServiceAgreementTipsDialog == null)
+        {
+            vehicleServiceAgreementTipsDialog = new VehicleServiceAgreementTipsDialog(GroupMchOrderSubmitActivity.this, new VehicleServiceAgreementTipsDialog.VehicleServiceAgreementListener() {
+                @Override
+                public void setVehicleServiceAgreementCallback() {
+                    useCarStatus = 1;
+                    vehicleServiceAgreementTipsDialog.dialogDismiss();
+
+                    mCkbIsNeedUseCar.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_payment_method_check_true), null, null, null);
+                    // mCkbIsNeedUseCar.setChecked(true);
+                    vehicleServiceAgreementTipsDialog.setContent("vevehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenerhicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListener");
+                }
+
+                @Override
+                public void setVehicleAgreementUnreadCompleteCallback() {
+
+                    showToast(GroupMchOrderSubmitActivity.this,"请浏览完用车服务协议,再确认已阅读");
+                }
+
+                @Override
+                public void setDialogDismissCallback() {
+                    useCarStatus = 0;
+                    mCkbIsNeedUseCar.setChecked(false);
+
+                }
+            }).builder().setContent("vevehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenerhicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListener");
+        }
+        vehicleServiceAgreementTipsDialog.setContent("vevehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenerhicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListenervehicleServiceAgreementListener");
+        vehicleServiceAgreementTipsDialog.show();
     }
 }

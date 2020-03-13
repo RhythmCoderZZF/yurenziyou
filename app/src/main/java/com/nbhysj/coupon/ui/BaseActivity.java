@@ -37,6 +37,7 @@ import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.dialog.LoadingDialog;
 import com.nbhysj.coupon.view.MyToastView;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -233,7 +234,14 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     protected void onResume() {
         super.onResume();
         mTopActivity = this;
+        MobclickAgent.onResume(this);
         // userId = (Integer) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID,0);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     /**

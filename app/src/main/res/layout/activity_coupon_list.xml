@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,6 +50,53 @@
         android:layout_height="0.5dp"
         android:alpha="0.11"
         android:background="@color/black"></View>
+
+    <RelativeLayout
+        android:id="@+id/layout_enter_exchange_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="7dp"
+            android:layout_toLeftOf="@+id/tv_exchange_code"
+            android:background="@drawable/bg_gray_radius_two_shape">
+
+            <EditText
+                android:id="@+id/edt_enter_exchange_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
+                android:hint="@string/str_enter_exchange_code"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/color_text_gray5"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_exchange_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_14"
+            android:text="@string/str_exchange"
+            android:padding="@dimen/dp_10"
+            android:textColor="@color/color_text_blue7" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

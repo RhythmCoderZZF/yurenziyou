@@ -192,6 +192,14 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
     @BindView(R.id.llyt_verification_code_info)
     LinearLayout mLlytVerificationCodeInfo;
 
+    //用车预订
+    @BindView(R.id.llyt_vehicle_booked)
+    LinearLayout mLlytVehicleBooked;
+
+    //用车描述
+    @BindView(R.id.tv_vehicle_des)
+    TextView mTvVehicleDes;
+
     private String tel;
 
     /**
@@ -663,18 +671,36 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                         int goodsSum = orderDetailResponse.getGoodSum();
                         tel = orderDetailResponse.getTel();
                         int canRefundAllStatus = orderDetailResponse.getCanRefundAllStatus();
-                        int commentStatus = orderDetailResponse.getCommentStatus();
+                        int commentStatus = orderDetailResponse.getCanCommentStatus();
+                        int useCarStatus = orderDetailResponse.getUseCarStatus();
                         mTvGoodsTotalNum.setText(String.valueOf(goodsSum));
 
-                        //   mTvGoodsTotalPrice.setText(moneySum);
+                        //0:不可评论 1:可评论
+                        if (commentStatus == 0) {
+                            mTvOrderEvaluate.setVisibility(View.GONE);
+                        } else if (commentStatus == 1) {
+                            mTvOrderEvaluate.setVisibility(View.VISIBLE);
+                        }
 
                         if (canRefundAllStatus == 0) {
                             mTvApplyForAllOrderRefund.setVisibility(View.GONE);
-                        }
-                        if (canRefundAllStatus == 1) {
+                        } else if (canRefundAllStatus == 1) {
                             mTvApplyForAllOrderRefund.setVisibility(View.VISIBLE);
                         }
 
+                        if(useCarStatus == 0){
+
+                            mLlytVehicleBooked.setVisibility(View.GONE);
+
+                        } else if(useCarStatus == 1)
+                        {
+                            String carDesc = orderDetailResponse.getCarDesc();
+                            if(!TextUtils.isEmpty(carDesc))
+                            {
+                                mTvVehicleDes.setText(carDesc);
+                            }
+                            mLlytVehicleBooked.setVisibility(View.VISIBLE);
+                        }
 
                         String orderStatus = orderDetailResponse.getOrderStatus();
                         OrderDetailResponse.OrderEntity orderEntity = orderDetailResponse.getOrder();
@@ -740,14 +766,6 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mTvOrderPayment.setVisibility(View.GONE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.VISIBLE);
 
-                                //0:不可评论 1:可评论
-                                if (commentStatus == 0) {
-                                    mTvOrderEvaluate.setVisibility(View.GONE);
-                                }
-                                if (commentStatus == 1) {
-                                    mTvOrderEvaluate.setVisibility(View.VISIBLE);
-                                }
-
                                 mLlytVerificationCodeInfo.setVisibility(View.VISIBLE);
 
                             } else if (orderStatus.equals(orderPendingPaymentValue)) {  //交易待支付
@@ -758,7 +776,6 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_blue);
 
                                 mTvRebookGoods.setVisibility(View.GONE);
-                                mTvOrderEvaluate.setVisibility(View.GONE);
                                 mTvOrderPayment.setVisibility(View.VISIBLE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
                                 mLlytVerificationCodeInfo.setVisibility(View.GONE);
@@ -769,7 +786,6 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_red);
 
                                 mTvRebookGoods.setVisibility(View.VISIBLE);
-                                mTvOrderEvaluate.setVisibility(View.GONE);
                                 mTvOrderPayment.setVisibility(View.GONE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
                                 mLlytVerificationCodeInfo.setVisibility(View.GONE);
@@ -781,7 +797,6 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter, Orde
                                 mImgOrderStatusTriangle.setImageResource(R.drawable.shape_inverted_triangle_yellow);
 
                                 mTvRebookGoods.setVisibility(View.VISIBLE);
-                                mTvOrderEvaluate.setVisibility(View.GONE);
                                 mTvOrderPayment.setVisibility(View.GONE);
                                 mLlytOrderRecommendBookGoods.setVisibility(View.GONE);
                                 mLlytVerificationCodeInfo.setVisibility(View.GONE);

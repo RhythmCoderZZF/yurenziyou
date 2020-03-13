@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,7 @@ public class DropDownMenuDistanceSubTwoLevelAdapter extends RecyclerView.Adapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_drop_down_menu_item, parent, false);//解决宽度不能铺满
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_drop_down_menu_sub_two_level_item, parent, false);//解决宽度不能铺满
         ViewHolder hold = new ViewHolder(view);
         return hold;
     }
@@ -67,13 +68,13 @@ public class DropDownMenuDistanceSubTwoLevelAdapter extends RecyclerView.Adapter
 
             if (positionDistanceBean.isSelect()) {
 
-                //  holder.mImgItemSelect.setBackgroundResource(R.mipmap.icon_orange_tick);
-                holder.mTvSortCondition.setTextColor(mContext.getResources().getColor(R.color.color_orange2));
-                holder.mImgItemSelect.setVisibility(View.VISIBLE);
+                holder.mTvSortCondition.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                holder.mViewSubTwoLevelItem.setVisibility(View.VISIBLE);
+                holder.mRlytDropDownMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.color_text_gray16));
             } else {
-                // holder.mImgItemSelect.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                holder.mTvSortCondition.setTextColor(mContext.getResources().getColor(R.color.color_text_black2));
-                holder.mImgItemSelect.setVisibility(View.GONE);
+                holder.mViewSubTwoLevelItem.setVisibility(View.GONE);
+                holder.mTvSortCondition.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+                holder.mRlytDropDownMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,15 +89,15 @@ public class DropDownMenuDistanceSubTwoLevelAdapter extends RecyclerView.Adapter
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView mImgItemSelect;
         TextView mTvSortCondition;
         RelativeLayout mRlytDropDownMenuItem;
+        View mViewSubTwoLevelItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mImgItemSelect = itemView.findViewById(R.id.image_item_select);
             mTvSortCondition = itemView.findViewById(R.id.tv_sort_condition);
             mRlytDropDownMenuItem = itemView.findViewById(R.id.rlyt_drop_down_menu_item);
+            mViewSubTwoLevelItem = itemView.findViewById(R.id.view_sub_two_level_item);
         }
     }
 

@@ -201,6 +201,9 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
     @BindView(R.id.rlyt_coupon)
     RelativeLayout mRlytCoupon;
+
+    @BindView(R.id.img_scenic_spot_forward)
+    ImageView mImgScenicSpotForward;
     private List<ImageView> viewList;
     private List<String> bannerList;
 
@@ -552,8 +555,13 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                 startActivity(intent);
                 break;
             case R.id.img_collection:
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
-                mchCollection();
+                if (!TextUtils.isEmpty(token)) {
+                    mchCollection();
+                } else {
+                    onReLogin("");
+                }
 
                 break;
             case R.id.rlyt_look_user_all_comment:
@@ -994,12 +1002,14 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
             if (collectionStatus == 0) {
                 mImgCollection.setImageResource(R.mipmap.icon_black_collection);
             }
+            mImgScenicSpotForward.setImageResource(R.mipmap.icon_black_share);
             mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_black_menu_more));
             if (y <= 300) {
                 mImgBtnBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_left_arrow_white));
                 if (collectionStatus == 0) {
                     mImgCollection.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_collection));
                 }
+                mImgScenicSpotForward.setImageResource(R.mipmap.icon_white_share);
                 mImageMenu.setImageDrawable(getResources().getDrawable(R.mipmap.icon_white_menu_more));
                 mRlytScenicSpostsDetail.setBackgroundColor(Color.argb(0, 0, 0, 0));
                 mToolbarSpace.setBackgroundColor(Color.argb(0, 0, 0, 0));

@@ -56,10 +56,12 @@ public class MineCollectionAlbumAdapter extends RecyclerView.Adapter<MineCollect
 
         try {
 
-            if (itemPosition == collectionAlbumResponseList.size()) {
+            if (itemPosition == collectionAlbumResponseList.size())
+            {
 
                 holder.mLlytNewAlbum.setVisibility(View.VISIBLE);
                 holder.mLlytAlbum.setVisibility(View.GONE);
+
             } else {
                 mineCollectionAlbumResponse = collectionAlbumResponseList.get(itemPosition);
 

@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ShoppingMallScreeningActivity"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.ShoppingMallScreeningActivity">
 
     <View
         android:id="@+id/toolbar_space"
@@ -24,8 +24,8 @@
             android:layout_width="@dimen/dp_40"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_10">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -59,8 +59,8 @@
                 android:layout_marginLeft="@dimen/dp_18"
                 android:background="@null"
                 android:drawablePadding="4dp"
-                android:text="宁波 . 04.02-04.03 . 人数不限"
                 android:singleLine="true"
+                android:text=""
                 android:textColor="@color/txt_font_black2"
                 android:textSize="@dimen/text_size_normal" />
 
@@ -70,30 +70,49 @@
             android:id="@+id/img_map"
             android:layout_width="@dimen/dp_24"
             android:layout_height="@dimen/dp_23"
-            android:src="@mipmap/icon_gray_map_label"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_19" />
+            android:layout_marginRight="@dimen/dp_19"
+            android:src="@mipmap/icon_gray_map_label"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <com.nbhysj.coupon.view.DropDownMenu
             android:id="@+id/drop_down_menu_screening"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:ddmenuTextSize="13sp"
-            app:ddtextUnselectedColor="@color/drop_down_unselected"
-            app:ddtextSelectedColor="@color/drop_down_selected"
             app:dddividerColor="@color/gray"
-            app:ddunderlineColor="@color/gray"
-            app:ddmenuMenuHeightPercent="0.5"
-            app:ddmenuSelectedIcon="@mipmap/house_ico_triangle_pre"
             app:ddmaskColor="@color/mask_color"
             app:ddmenuBackgroundColor="@color/white"
-            app:ddmenuUnselectedIcon="@mipmap/house_ico_triangle_nor" />
+            app:ddmenuMenuHeightPercent="0.5"
+            app:ddmenuSelectedIcon="@mipmap/house_ico_triangle_pre"
+            app:ddmenuTextSize="13sp"
+            app:ddmenuUnselectedIcon="@mipmap/house_ico_triangle_nor"
+            app:ddtextSelectedColor="@color/drop_down_selected"
+            app:ddtextUnselectedColor="@color/drop_down_unselected"
+            app:ddunderlineColor="@color/gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_12"
+            android:textColor="#ff111111"
+            android:drawableLeft="@mipmap/icon_homestay_select"
+            android:drawablePadding="@dimen/dp_5"
+            android:textSize="@dimen/text_size_normal"
+            android:text="民宿" />
+
     </RelativeLayout>
 </LinearLayout>

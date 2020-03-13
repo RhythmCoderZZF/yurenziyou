@@ -26,6 +26,7 @@
     <string name="str_login">登录</string>
     <string name="str_logining" translatable="false">正在登录...</string>
     <string name="str_onekey_login">一键登录</string>
+    <string name="str_warm_prompt">温馨提示</string>
     <string name="str_register">注册</string>
     <string name="str_find_pwd">找回密码</string>
     <string name="str_bind_phone">绑定手机</string>
@@ -47,6 +48,7 @@
     <string name="str_account_bind_and_setting">账号绑定与设置</string>
     <string name="str_edit_personal_data">编辑个人资料</string>
     <string name="str_push_setting">推送设置</string>
+    <string name="str_already_read">已阅读</string>
     <string name="str_privacy_setting">隐私设置</string>
     <string name="str_set_to_default_address">设置为默认地址</string>
     <string name="str_video_auto_play_settings">视频自动播放设置</string>
@@ -249,6 +251,8 @@
     <string name="str_service">服 务</string>
     <string name="str_order_comment_publish">发表评论</string>
     <string name="str_navigation">导航</string>
+    <string name="str_enter_exchange_code">输入兑换码</string>
+    <string name="str_exchange">兑换</string>
     <string name="str_food_recommend">推荐菜</string>
     <string name="str_already_concerned">已关注</string>
     <string name="str_delicious_food" translatable="false">美食</string>
@@ -258,7 +262,10 @@
     <string name="str_receive" translatable="false">领取</string>
     <string name="str_collect_immediately">立即领取</string>
     <string name="str_use_immediately">立即使用</string>
+    <string name="str_disagree">不同意</string>
+    <string name="str_agree_and_continue">同意并继续</string>
     <string name="str_close">关闭</string>
+    <string name="str_booked">已预订</string>
     <string name="string_privacy">点击注册即表示接受鱼人自游的《隐私政策》和《用户协议》</string>
     <string name="string_murloc_self_privacy">鱼人自游《隐私政策》和《用户协议》</string>
     <string name="str_same_question">同问</string>
@@ -268,7 +275,8 @@
     <string name="str_generate_pictures">生成图片</string>
     <string name="str_continue_editing">继续编辑</string>
     <string name="str_confirm_exit">确认退出</string>
-
+    <string name="str_vehicle_service_agreement">用车服务协议</string>
+    <string name="str_do_you_need_a_car">是否需要用车?</string>
     <string name="str_join_the_itinerary" translatable="false">加入行程</string>
     <string name="str_add_traffic" translatable="false">添加交通</string>
     <string name="str_price" translatable="false">价格</string>

@@ -64,7 +64,6 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
-
                     <TextView
                         android:id="@+id/tv_answer_time"
                         android:layout_width="wrap_content"
@@ -122,8 +121,7 @@
                     android:paddingBottom="@dimen/dp_2"
                     android:text="@string/str_adopt"
                     android:textColor="@color/color_text_gray27"
-                    android:textSize="@dimen/text_size_small"
-                    android:visibility="gone"/>
+                    android:textSize="@dimen/text_size_small" />
 
                 <TextView
                     android:id="@+id/tv_answer_useful"

@@ -14,6 +14,7 @@ import com.nbhysj.coupon.model.StrategyModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.StrategyBean;
+import com.nbhysj.coupon.model.response.StrategyCommentListResponse;
 import com.nbhysj.coupon.model.response.StrategyResponse;
 import com.nbhysj.coupon.presenter.StrategyPresenter;
 import com.nbhysj.coupon.statusbar.StatusBarCompat;
@@ -194,6 +195,16 @@ public class StrategyActivity extends BaseActivity<StrategyPresenter, StrategyMo
                 showToast(StrategyActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void addStrategyCommentResult(BackResult res) {
+
+    }
+
+    @Override
+    public void getStrategyCommentListResult(BackResult<StrategyCommentListResponse> res) {
+
     }
 
     @Override

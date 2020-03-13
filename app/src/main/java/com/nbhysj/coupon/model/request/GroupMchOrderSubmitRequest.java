@@ -28,6 +28,9 @@ public class GroupMchOrderSubmitRequest {
     //是否用车 1=用0=不用
     private int carStatus;
 
+    //是否用车（0:不用  1:用车）
+    private int useCarStatus;
+
     public int getUserTravelerId() {
         return userTravelerId;
     }
@@ -74,5 +77,13 @@ public class GroupMchOrderSubmitRequest {
 
     public void setCarStatus(int carStatus) {
         this.carStatus = carStatus;
+    }
+
+    public int getUseCarStatus() {
+        return useCarStatus;
+    }
+
+    public void setUseCarStatus(int useCarStatus) {
+        this.useCarStatus = useCarStatus;
     }
 }

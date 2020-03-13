@@ -442,9 +442,15 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_message_num:
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), MessageActivity.class);
-                startActivity(intent);
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+
+                if (!TextUtils.isEmpty(token)) {
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), MessageActivity.class);
+                    startActivity(intent);
+                } else {
+                    onReLogin("");
+                }
                 break;
             case R.id.ll_search:
                 toActivity(HomePageSearchActivity.class);

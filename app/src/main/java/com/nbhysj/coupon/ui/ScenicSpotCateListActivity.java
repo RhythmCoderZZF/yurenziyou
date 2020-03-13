@@ -267,13 +267,13 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
                     if (isOnLoadMore) {
 
                         mSmartRefreshLayout.finishLoadMore();
+
+                    } else {
                         String bannerUrl = res.getData().getBanner();
                         if (!TextUtils.isEmpty(bannerUrl)) {
                             GlideUtil.loadImage(mContext, bannerUrl, mImgFineFoodHeader);
                         }
                         scenicSpotCateListAdapter.setHeaderView(header);
-
-                    } else {
 
                         mScenicSpotList.clear();
                         scenicSpotCateListAdapter.notifyDataSetChanged();
@@ -287,7 +287,7 @@ public class ScenicSpotCateListActivity extends BaseActivity<ScenicSpotPresenter
                     BasePaginationResult paginationResult = mchCateListResponse.getPage();
                     mTotalPageCount = paginationResult.getPageCount();
 
-                    if (mTotalPageCount == 0) {
+                   if (mTotalPageCount == 0) {
                         mRlytNoData.setVisibility(View.VISIBLE);
 
                     } else {

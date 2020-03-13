@@ -84,6 +84,8 @@
         android:theme="@style/BaseAppTheme">
         <activity android:name=".ui.RecreationCateListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.HomestayCateListActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.GeneratePicturesActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.FineFoodEvaluateActivity"
@@ -95,7 +97,9 @@
         <activity android:name=".ui.ReportActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.UserChatListActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
         <activity
             android:name=".ui.ScenicSpotCateListActivity"
             android:screenOrientation="portrait" />
@@ -327,6 +331,8 @@
         <activity
             android:name=".ui.HotelDetailsActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.StrategyCommentListActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.OrderPaymentActivity"
             android:screenOrientation="portrait">
@@ -411,7 +417,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MyOrderActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.OrderDetailActivity"
             android:screenOrientation="portrait" />

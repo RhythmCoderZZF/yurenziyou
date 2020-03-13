@@ -222,7 +222,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_16"
                     android:layout_marginRight="@dimen/dp_17"
-                    android:src="@mipmap/icon_gray_right_arrow" />
+                    android:src="@mipmap/icon_gray_right_arrow"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

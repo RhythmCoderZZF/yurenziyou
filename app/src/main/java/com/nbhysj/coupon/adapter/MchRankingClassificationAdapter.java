@@ -94,9 +94,8 @@ public class MchRankingClassificationAdapter extends RecyclerView.Adapter<MchRan
 
                         mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);
                     } else if(mchType.equals(MchTypeEnum.MCH_HOMESTAY.getValue())){
+                        mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);
 
-                        intent.setClass(mContext, HomestayBangDanListActivity.class);
-                        mContext.startActivity(intent);
                     }else if(mchType.equals(MchTypeEnum.MCH_RECREATION.getValue())){
                         mchRankingClassificationListener.setMchRankingClassificationListener(cateId,photo);
                     }

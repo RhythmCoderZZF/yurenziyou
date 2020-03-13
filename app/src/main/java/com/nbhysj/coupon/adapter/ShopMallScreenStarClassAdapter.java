@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 
 import com.nbhysj.coupon.R;
+import com.nbhysj.coupon.model.response.LevelTagEntity;
 import com.nbhysj.coupon.model.response.TagBaseEntity;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  */
 public class ShopMallScreenStarClassAdapter extends RecyclerView.Adapter<ShopMallScreenStarClassAdapter.ViewHolder> {
     private Context context;
-    private List<TagBaseEntity> tagList;
+    private List<LevelTagEntity> tagList;
     private ShopMallScreenStarClassListener shopMallScreenStarClassListener;
 
 
@@ -31,7 +32,7 @@ public class ShopMallScreenStarClassAdapter extends RecyclerView.Adapter<ShopMal
         this.shopMallScreenStarClassListener = shopMallScreenStarClassListener;
     }
 
-    public void setTagList(List<TagBaseEntity> tagList) {
+    public void setTagList(List<LevelTagEntity> tagList) {
         this.tagList = tagList;
     }
 
@@ -45,13 +46,13 @@ public class ShopMallScreenStarClassAdapter extends RecyclerView.Adapter<ShopMal
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TagBaseEntity tagBaseBean = tagList.get(position);
+        LevelTagEntity tagBaseBean = tagList.get(position);
         holder.mTvStarClassSelectItem.setText(tagBaseBean.getTitle());
         holder.mTvStarClassSelectItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                for (TagBaseEntity tag : tagList) {
+                for (LevelTagEntity tag : tagList) {
                     tag.setSelect(false);
                 }
                 int tagId = tagBaseBean.getId();
@@ -105,7 +106,7 @@ public class ShopMallScreenStarClassAdapter extends RecyclerView.Adapter<ShopMal
 
     public interface ShopMallScreenStarClassListener {
 
-        void setShopMallScreenStarClassListener(TagBaseEntity tagBaseBean);
+        void setShopMallScreenStarClassListener(LevelTagEntity tagBaseBean);
 
     }
 }

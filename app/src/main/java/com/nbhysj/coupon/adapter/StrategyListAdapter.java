@@ -63,6 +63,7 @@ public class StrategyListAdapter extends RecyclerView.Adapter<StrategyListAdapte
         try {
 
             StrategyBean strategyEntity = strategyList.get(itemPosition);
+            int articleId = strategyEntity.getId();
             String photoUrl = strategyEntity.getPhoto();
             String title = strategyEntity.getTitle();
             int hits = strategyEntity.getHits();
@@ -88,6 +89,7 @@ public class StrategyListAdapter extends RecyclerView.Adapter<StrategyListAdapte
                         intent.setClass(mContext, StrategyWebActivity.class);
                         intent.putExtra("title", Constants.STRATEGY_H5_TITEL);
                         intent.putExtra("url",strategyH5Url);
+                        intent.putExtra("articleId",articleId);
                         mContext.startActivity(intent);
                     }
                 }

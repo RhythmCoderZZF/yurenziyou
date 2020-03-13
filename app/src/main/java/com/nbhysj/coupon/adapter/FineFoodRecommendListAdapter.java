@@ -93,7 +93,7 @@ public class FineFoodRecommendListAdapter extends RecyclerView.Adapter<RecyclerV
 
                 GlideUtil.loadImage(mContext, photoUrl, holder1.mImgFineFood);
 
-                holder1.mRlytFineFoodItem.setOnClickListener(new View.OnClickListener() {
+                /*holder1.mRlytFineFoodItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent();
@@ -102,7 +102,7 @@ public class FineFoodRecommendListAdapter extends RecyclerView.Adapter<RecyclerV
                         mContext.startActivity(intent);
 
                     }
-                });
+                });*/
             }
         } catch (Exception e) {
             e.printStackTrace();

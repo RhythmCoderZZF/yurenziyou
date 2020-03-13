@@ -197,5 +197,5 @@ dependencies {
 
     api 'org.greenrobot:eventbus:3.0.0'
     api project(':universalvideoview')
-
+    api  'com.umeng.umsdk:analytics:8.0.0'
 }

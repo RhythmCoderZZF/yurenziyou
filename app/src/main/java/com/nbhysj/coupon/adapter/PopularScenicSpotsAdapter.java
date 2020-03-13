@@ -66,12 +66,12 @@ public class PopularScenicSpotsAdapter extends RecyclerView.Adapter<PopularSceni
             String mchName = popularScenicSpots.getMchName();
             int consumePrice = popularScenicSpots.getConsumePrice();
             double commentScore = popularScenicSpots.getCommentScore();
-            String address = popularScenicSpots.getAddress();
+            String county = popularScenicSpots.getCounty();
             String scenicSpotsPhoto = popularScenicSpots.getPhoto();
             String mchType = popularScenicSpots.getMchType();
             holder.mTvPopularScenicSpotPrice.setText(String.valueOf(consumePrice));
             holder.mTvPopularScenicSpotScore.setText(String.valueOf(commentScore) + "分");
-            holder.mTvPopularScenicSpotLocation.setText(address);
+            holder.mTvPopularScenicSpotLocation.setText(county);
             holder.mTvPopularScenicSpotName.setText(mchName);
 
             GlideUtil.loadImage(mContext, scenicSpotsPhoto,  holder.mImgScenicSpots);

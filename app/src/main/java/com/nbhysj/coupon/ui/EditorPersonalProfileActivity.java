@@ -111,7 +111,7 @@ public class EditorPersonalProfileActivity extends BaseActivity<UserInfoPresente
         switch (res.getCode()) {
             case Constants.SUCCESS_CODE:
                 try {
-                    SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_PROFILE, personalProfile);
+                    SharedPreferencesUtils.putData(SharedPreferencesUtils.USER_PROFILE, personalProfile);
                     showToast(EditorPersonalProfileActivity.this, getResources().getString(R.string.str_save_success));
 
                 } catch (Exception e) {

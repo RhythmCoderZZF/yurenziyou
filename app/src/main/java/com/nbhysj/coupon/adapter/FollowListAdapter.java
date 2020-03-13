@@ -28,6 +28,7 @@ import com.nbhysj.coupon.model.response.TopicsBean;
 import com.nbhysj.coupon.model.response.ZanAvatersBean;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
@@ -69,7 +70,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
     private boolean isFollowRefresh = true;
 
-    public FollowListAdapter(Context mContext, FollowListener followListener,boolean isFollowRefresh) {
+    public FollowListAdapter(Context mContext, FollowListener followListener, boolean isFollowRefresh) {
         this.mContext = mContext;
         this.followListener = followListener;
         this.isFollowRefresh = isFollowRefresh;
@@ -108,18 +109,27 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             String avaterUrl = followDetailBean.getAvater();
             List<PostCommentBean> postsCommentsList = followDetailBean.getPostsComments();
 
-                GlideUtil.loadImage(mContext, avaterUrl, holder.mImgRecommendUserAvatar);
+            GlideUtil.loadImage(mContext, avaterUrl, holder.mImgRecommendUserAvatar);
 
             List<String> bannerUrlList = followDetailBean.getResources();
             String resourceUrl = followDetailBean.getResourceUrl();  //mp4
             int postsType = followDetailBean.getPostsType();  //1图片，2语音，3视频
 
-            if (bannerUrlList != null)
-            {
+            if (bannerUrlList != null) {
                 holder.mSlideViewFriendDetailPictrue.initUI(bannerUrlList);
 
                 isFollowRefresh = false;
             }
+
+            int photoHeight = followDetailBean.getPhotoHeight();
+            int photoWidth = followDetailBean.getPhotoWidth();
+            int screenWidth = ScreenUtil.getScreenWidth(mContext);
+
+            float ratio = (float) photoWidth / (float) photoHeight;
+            int height = (int) (screenWidth / ratio);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, height);
+            holder.mRlytPostDetailPicture.setLayoutParams(params);
 
             if (postsType == 1) { //图片
 
@@ -216,10 +226,9 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
             }
 
             //用户头像
-            String commentatorAvater = (String)SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR,"");
+            String commentatorAvater = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
 
-            if(!TextUtils.isEmpty(commentatorAvater))
-            {
+            if (!TextUtils.isEmpty(commentatorAvater)) {
                 GlideUtil.loadImage(mContext, commentatorAvater, holder.mCircleImageViewCommentUserAvatar);
             }
             //帖子时间

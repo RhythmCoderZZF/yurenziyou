@@ -10,6 +10,7 @@ import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HouseResouceResponse;
 import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -70,5 +71,10 @@ public class HomestayModel implements HomestayContract.Model {
     @Override
     public Observable<BackResult<HouseResouceResponse>> getLandlordHouseResourceList(int landlordId) {
         return Api.getInstance().apiService.getLandlordHouseResourceList(landlordId).compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<MchCateListResponse>> getHomestayListByCateId(HashMap<String, String> map) {
+        return Api.getInstance().apiService.findHomestayByCateId(map).compose(RxSchedulers.io_main());
     }
 }

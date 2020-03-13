@@ -8,6 +8,8 @@ public class SortTypeBean {
 
     private boolean isSelect;
 
+    private String sortValue;
+
     private String sortType;
 
     public boolean isSelect() {
@@ -16,6 +18,14 @@ public class SortTypeBean {
 
     public void setSelect(boolean select) {
         isSelect = select;
+    }
+
+    public String getSortValue() {
+        return sortValue;
+    }
+
+    public void setSortValue(String sortValue) {
+        this.sortValue = sortValue;
     }
 
     public String getSortType() {

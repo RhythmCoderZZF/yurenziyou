@@ -964,13 +964,13 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
             R.id.tv_question_num, R.id.tv_look_all_scenic_spot_info, R.id.tv_scenic_spot_nearby, R.id.tv_look_user_all_comment, R.id.img_collection, R.id.tv_coupon_receive, R.id.llyt_user_comment})
     public void onClick(View v) {
         Intent intent = new Intent();
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+
         switch (v.getId()) {
             case R.id.ibtn_back:
                 ScenicSpotDetailActivity.this.finish();
                 break;
             case R.id.rlyt_scenic_spots_ranking_list:
-
-                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
                 if (!TextUtils.isEmpty(token))
                 {
@@ -1087,7 +1087,11 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
 
             case R.id.img_collection:
 
-                mchCollection();
+                if (!TextUtils.isEmpty(token)) {
+                    mchCollection();
+                } else {
+                    onReLogin("");
+                }
 
                 break;
 
@@ -1098,6 +1102,7 @@ public class ScenicSpotDetailActivity extends BaseActivity<ScenicSpotPresenter, 
                 break;
 
             case R.id.llyt_user_comment:
+
                 intent.setClass(ScenicSpotDetailActivity.this, MchCommentActivity.class);
                 String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
                 intent.putExtra("mchType", mchScenic);

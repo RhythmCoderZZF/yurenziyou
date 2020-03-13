@@ -29,6 +29,7 @@ import com.nbhysj.coupon.model.response.HouseResouceResponse;
 import com.nbhysj.coupon.model.response.LandlordBean;
 import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -260,6 +261,11 @@ public class HouseResourceFragment extends BaseFragment<HomestayPresenter, Homes
 
     @Override
     public void getLandlordHomePageResult(BackResult<LandlordDetailResonse> res) {
+
+    }
+
+    @Override
+    public void getHomestayListByCateIdResult(BackResult<MchCateListResponse> res) {
 
     }
 

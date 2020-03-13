@@ -205,7 +205,7 @@ public class GroupMchTicketAdapter extends BaseExpandableListAdapter {
         chilItem.mTvBookTicketInfo.setText(bookingInfo);
         chilItem.mTvSellNum.setText("已售"+ sellNum + " | 购买须知 >");
         chilItem.mTvMarketPrice.setText(String.valueOf(marketPrice));
-        double discountAmount = marketPrice - defaultPrice;
+        double discountAmount = defaultPrice - marketPrice;
         chilItem.mTvDefaultPrice.setText("¥" + String.valueOf(defaultPrice));
         chilItem.mTvAlreadyReduced.setText("已减" + String.valueOf(discountAmount) + "元");
 

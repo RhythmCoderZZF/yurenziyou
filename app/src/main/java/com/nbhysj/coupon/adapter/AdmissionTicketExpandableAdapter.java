@@ -213,7 +213,7 @@ public class AdmissionTicketExpandableAdapter extends BaseExpandableListAdapter 
         chilItem.mTvBookTicketInfo.setText(bookingInfo);
         chilItem.mTvSellNum.setText("已售" + sellNum + " | 购买须知 >");
         chilItem.mTvMarketPrice.setText(Tools.getTwoDecimalPoint(marketPrice));
-        double discountAmount = marketPrice - defaultPrice;
+        double discountAmount = defaultPrice - marketPrice;
         chilItem.mTvDefaultPrice.setText("¥" + Tools.getTwoDecimalPoint(defaultPrice));
         chilItem.mTvAlreadyReduced.setText("已减" + Tools.getTwoDecimalPoint(discountAmount) + "元");
 

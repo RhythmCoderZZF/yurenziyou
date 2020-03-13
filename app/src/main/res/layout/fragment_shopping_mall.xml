@@ -115,7 +115,7 @@
                 android:id="@+id/tv_message_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_21"
-                android:background="@mipmap/icon_order_message_bells" />
+                android:background="@mipmap/icon_home_small_bell_message" />
 
             <TextView
                 android:layout_width="8dp"
@@ -221,253 +221,151 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
-                <View
-                    style="@style/line"
-                    android:layout_height="@dimen/dp_10"
-                    android:background="@color/line_bg" />
 
+                    <View
+                        style="@style/line"
+                        android:layout_height="@dimen/dp_10"
+                        android:background="@color/line_bg" />
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_17"
-                    android:layout_marginTop="@dimen/dp_14">
-
-                    <TextView
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:alpha="0.4"
-                        android:background="@drawable/shape_round_gradient" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_6"
-                        android:layout_marginTop="@dimen/dp_3"
-                        android:text="限时特卖"
-                        android:textColor="@color/color_text_black4"
-                        android:textSize="@dimen/text_size_nineteen_large"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/dp_15"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="还剩"
-                            android:textColor="@color/color_text_gray20"
-                            android:textSize="@dimen/text_size_xsmall" />
-
-                        <TextView
-                            android:id="@+id/tv_limited_sale_hour"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_5"
-                            android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
-                            android:gravity="center"
-                            android:paddingLeft="@dimen/dp_5"
-                            android:paddingRight="@dimen/dp_5"
-                            android:text="00"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_3"
-                            android:gravity="center"
-                            android:text=":"
-                            android:textColor="@color/color_text_gray17"
-                            android:textSize="@dimen/text_size_large"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_limited_sale_minute"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_3"
-                            android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
-                            android:gravity="center"
-                            android:paddingLeft="@dimen/dp_5"
-                            android:paddingRight="@dimen/dp_5"
-                            android:text="00"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_3"
-                            android:gravity="center"
-                            android:text=":"
-                            android:textColor="@color/color_text_gray17"
-                            android:textSize="@dimen/text_size_large"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_limited_sale_second"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_3"
-                            android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
-                            android:gravity="center"
-                            android:paddingLeft="@dimen/dp_5"
-                            android:paddingRight="@dimen/dp_5"
-                            android:text="00"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/rlyt_flash_sale"
-                    android:layout_width="match_parent"
-                    android:layout_height="217dp"
-                    android:layout_marginLeft="@dimen/dp_15"
-                    android:layout_marginTop="@dimen/dp_18"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
 
                     <RelativeLayout
-                        android:layout_width="167dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/dp_5"
-                        android:background="@color/background_l_grey">
-
-                        <com.nbhysj.coupon.view.RoundedImageView
-                            android:id="@+id/image_limited_sale_one"
-                            android:layout_width="167dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:scaleType="fitXY"
-                            app:riv_corner_radius="@dimen/dp_5"></com.nbhysj.coupon.view.RoundedImageView>
+                        android:layout_marginLeft="@dimen/dp_17"
+                        android:layout_marginTop="@dimen/dp_14">
 
                         <TextView
-                            android:id="@+id/tv_limited_sale_one_discount"
+                            android:layout_width="@dimen/dp_20"
+                            android:layout_height="@dimen/dp_20"
+                            android:alpha="0.4"
+                            android:background="@drawable/shape_round_gradient" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_6"
+                            android:layout_marginTop="@dimen/dp_3"
+                            android:text="限时特卖"
+                            android:textColor="@color/color_text_black4"
+                            android:textSize="@dimen/text_size_nineteen_large"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginTop="@dimen/dp_18"
-                            android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
-                            android:gravity="center"
-                            android:paddingLeft="@dimen/dp_6"
-                            android:paddingRight="@dimen/dp_6"
-                            android:text=""
-                            android:textColor="@color/white" />
-
-                        <TextView
-                            android:id="@+id/tv_limited_sale_one_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_20"
-                            android:layout_above="@+id/rlyt_flash_sale_one_price"
-                            android:layout_marginLeft="@dimen/dp_4"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:paddingRight="@dimen/dp_10"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textStyle="bold" />
-
-                        <RelativeLayout
-                            android:id="@+id/rlyt_flash_sale_one_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginTop="@dimen/dp_3"
-                            android:layout_marginBottom="@dimen/dp_4">
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/dp_15"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="@dimen/dp_3"
-                                android:gravity="center"
-                                android:text="[限时特卖]"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text_size_small"
-                                android:textStyle="bold" />
+                                android:layout_gravity="center_vertical"
+                                android:text="还剩"
+                                android:textColor="@color/color_text_gray20"
+                                android:textSize="@dimen/text_size_xsmall" />
 
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tv_limited_sale_hour"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="@dimen/dp_7"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_5"
+                                android:text="00"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_medium"
+                                android:textStyle="bold" />
 
-                                <TextView
-                                    android:id="@+id/tv_flash_sale_one_rmb_symbol"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="¥"
-                                    android:textColor="@color/color_text_orange2"
-                                    android:textSize="@dimen/text_size_xsmall"
-                                    android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dp_3"
+                                android:gravity="center"
+                                android:text=":"
+                                android:textColor="@color/color_text_gray17"
+                                android:textSize="@dimen/text_size_large"
+                                android:textStyle="bold" />
 
-                                <TextView
-                                    android:id="@+id/tv_limited_sale_one_price"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textColor="@color/color_text_orange2"
-                                    android:textSize="@dimen/text_size_medium"
-                                    android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/tv_limited_sale_minute"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dp_3"
+                                android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_5"
+                                android:text="00"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_medium"
+                                android:textStyle="bold" />
 
-                                <TextView
-                                    android:id="@+id/tv_flash_sale_one_rise"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="起"
-                                    android:textColor="@color/color_text_orange2"
-                                    android:textSize="@dimen/text_size_nine"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dp_3"
+                                android:gravity="center"
+                                android:text=":"
+                                android:textColor="@color/color_text_gray17"
+                                android:textSize="@dimen/text_size_large"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_limited_sale_second"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dp_3"
+                                android:background="@drawable/bg_rect_dark_gray_shape_radius_two"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_5"
+                                android:text="00"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_medium"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
                     </RelativeLayout>
 
+
                     <LinearLayout
+                        android:id="@+id/rlyt_flash_sale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp_5"
-                        android:layout_marginRight="@dimen/dp_16"
-                        android:orientation="vertical"
+                        android:layout_height="217dp"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:layout_marginTop="@dimen/dp_18"
+                        android:orientation="horizontal"
                         android:weightSum="2">
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="103dp"
-                            android:layout_weight="1"
+                            android:layout_width="167dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/dp_5"
                             android:background="@color/background_l_grey">
 
                             <com.nbhysj.coupon.view.RoundedImageView
-                                android:id="@+id/image_limited_sale_two"
-                                android:layout_width="match_parent"
-                                android:layout_height="103dp"
+                                android:id="@+id/image_limited_sale_one"
+                                android:layout_width="167dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:scaleType="fitXY"
-                                app:riv_corner_radius="@dimen/dp_5" />
+                                app:riv_corner_radius="@dimen/dp_5"></com.nbhysj.coupon.view.RoundedImageView>
 
                             <TextView
-                                android:id="@+id/tv_limited_sale_two_discount"
+                                android:id="@+id/tv_limited_sale_one_discount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginTop="@dimen/dp_9"
+                                android:layout_marginTop="@dimen/dp_18"
                                 android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
                                 android:gravity="center"
                                 android:paddingLeft="@dimen/dp_6"
@@ -476,118 +374,20 @@
                                 android:textColor="@color/white" />
 
                             <TextView
-                                android:id="@+id/tv_limited_sale_two_title"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/rlyt_flash_sale_two_price"
-                                android:layout_marginLeft="@dimen/dp_4"
-                                android:ellipsize="end"
-                                android:lines="1"
-                                android:paddingRight="@dimen/dp_10"
-                                android:text=""
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text_size_xsmall"
-                                android:textStyle="bold" />
-
-                            <RelativeLayout
-                                android:id="@+id/rlyt_flash_sale_two_price"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_marginTop="@dimen/dp_3"
-                                android:layout_marginBottom="@dimen/dp_4">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginLeft="@dimen/dp_3"
-                                    android:gravity="center"
-                                    android:text="[限时特卖]"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_size_small"
-                                    android:textStyle="bold" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_marginRight="@dimen/dp_7"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tv_flash_sale_two_rmb_symbol"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="¥"
-                                        android:textColor="@color/color_text_orange2"
-                                        android:textSize="@dimen/text_size_xsmall"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/tv_limited_sale_two_price"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="0"
-                                        android:textColor="@color/color_text_orange2"
-                                        android:textSize="@dimen/text_size_medium"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/tv_flash_sale_two_rise"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="起"
-                                        android:textColor="@color/color_text_orange2"
-                                        android:textSize="@dimen/text_size_nine"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-                            </RelativeLayout>
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_104"
-                            android:layout_marginTop="@dimen/dp_10"
-                            android:layout_weight="1"
-                            android:background="@color/background_l_grey">
-
-                            <com.nbhysj.coupon.view.RoundedImageView
-                                android:id="@+id/image_limited_sale_three"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/dp_104"
-                                android:scaleType="fitXY"
-                                app:riv_corner_radius="@dimen/dp_5" />
-
-                            <TextView
-                                android:id="@+id/tv_limited_sale_three_discount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginTop="@dimen/dp_9"
-                                android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
-                                android:gravity="center"
-                                android:paddingLeft="@dimen/dp_6"
-                                android:paddingRight="@dimen/dp_6"
-                                android:text=""
-                                android:textColor="@color/white" />
-
-                            <TextView
-                                android:id="@+id/tv_limited_sale_three_title"
+                                android:id="@+id/tv_limited_sale_one_title"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp_20"
-                                android:layout_above="@+id/rlyt_flash_sale_three_price"
+                                android:layout_above="@+id/rlyt_flash_sale_one_price"
                                 android:layout_marginLeft="@dimen/dp_4"
                                 android:ellipsize="end"
                                 android:lines="1"
                                 android:paddingRight="@dimen/dp_10"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_size_xsmall"
+                                android:textSize="@dimen/text_size_medium"
                                 android:textStyle="bold" />
 
                             <RelativeLayout
-                                android:id="@+id/rlyt_flash_sale_three_price"
+                                android:id="@+id/rlyt_flash_sale_one_price"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
@@ -613,7 +413,7 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:id="@+id/tv_flash_sale_three_rmb_symbol"
+                                        android:id="@+id/tv_flash_sale_one_rmb_symbol"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="¥"
@@ -622,7 +422,7 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/tv_limited_sale_three_price"
+                                        android:id="@+id/tv_limited_sale_one_price"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="0"
@@ -631,7 +431,7 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/tv_flash_sale_three_rise"
+                                        android:id="@+id/tv_flash_sale_one_rise"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="起"
@@ -641,10 +441,212 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_16"
+                            android:orientation="vertical"
+                            android:weightSum="2">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="103dp"
+                                android:layout_weight="1"
+                                android:background="@color/background_l_grey">
+
+                                <com.nbhysj.coupon.view.RoundedImageView
+                                    android:id="@+id/image_limited_sale_two"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="103dp"
+                                    android:scaleType="fitXY"
+                                    app:riv_corner_radius="@dimen/dp_5" />
+
+                                <TextView
+                                    android:id="@+id/tv_limited_sale_two_discount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginTop="@dimen/dp_9"
+                                    android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
+                                    android:gravity="center"
+                                    android:paddingLeft="@dimen/dp_6"
+                                    android:paddingRight="@dimen/dp_6"
+                                    android:text=""
+                                    android:textColor="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/tv_limited_sale_two_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_above="@+id/rlyt_flash_sale_two_price"
+                                    android:layout_marginLeft="@dimen/dp_4"
+                                    android:ellipsize="end"
+                                    android:lines="1"
+                                    android:paddingRight="@dimen/dp_10"
+                                    android:text=""
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xsmall"
+                                    android:textStyle="bold" />
+
+                                <RelativeLayout
+                                    android:id="@+id/rlyt_flash_sale_two_price"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginTop="@dimen/dp_3"
+                                    android:layout_marginBottom="@dimen/dp_4">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginLeft="@dimen/dp_3"
+                                        android:gravity="center"
+                                        android:text="[限时特卖]"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_size_small"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="@dimen/dp_7"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/tv_flash_sale_two_rmb_symbol"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="¥"
+                                            android:textColor="@color/color_text_orange2"
+                                            android:textSize="@dimen/text_size_xsmall"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_limited_sale_two_price"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="0"
+                                            android:textColor="@color/color_text_orange2"
+                                            android:textSize="@dimen/text_size_medium"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_flash_sale_two_rise"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="起"
+                                            android:textColor="@color/color_text_orange2"
+                                            android:textSize="@dimen/text_size_nine"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp_104"
+                                android:layout_marginTop="@dimen/dp_10"
+                                android:layout_weight="1"
+                                android:background="@color/background_l_grey">
+
+                                <com.nbhysj.coupon.view.RoundedImageView
+                                    android:id="@+id/image_limited_sale_three"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/dp_104"
+                                    android:scaleType="fitXY"
+                                    app:riv_corner_radius="@dimen/dp_5" />
+
+                                <TextView
+                                    android:id="@+id/tv_limited_sale_three_discount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginTop="@dimen/dp_9"
+                                    android:background="@drawable/bg_tag_purplish_red_yellow_gradient"
+                                    android:gravity="center"
+                                    android:paddingLeft="@dimen/dp_6"
+                                    android:paddingRight="@dimen/dp_6"
+                                    android:text=""
+                                    android:textColor="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/tv_limited_sale_three_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/dp_20"
+                                    android:layout_above="@+id/rlyt_flash_sale_three_price"
+                                    android:layout_marginLeft="@dimen/dp_4"
+                                    android:ellipsize="end"
+                                    android:lines="1"
+                                    android:paddingRight="@dimen/dp_10"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_xsmall"
+                                    android:textStyle="bold" />
+
+                                <RelativeLayout
+                                    android:id="@+id/rlyt_flash_sale_three_price"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginTop="@dimen/dp_3"
+                                    android:layout_marginBottom="@dimen/dp_4">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginLeft="@dimen/dp_3"
+                                        android:gravity="center"
+                                        android:text="[限时特卖]"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_size_small"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="@dimen/dp_7"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/tv_flash_sale_three_rmb_symbol"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="¥"
+                                            android:textColor="@color/color_text_orange2"
+                                            android:textSize="@dimen/text_size_xsmall"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_limited_sale_three_price"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="0"
+                                            android:textColor="@color/color_text_orange2"
+                                            android:textSize="@dimen/text_size_medium"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_flash_sale_three_rise"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="起"
+                                            android:textColor="@color/color_text_orange2"
+                                            android:textSize="@dimen/text_size_nine"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
                 </LinearLayout>
+
                 <View
                     style="@style/line"
                     android:layout_height="@dimen/dp_10"
@@ -775,7 +777,7 @@
                         android:text="@string/str_view_more"
                         android:textColor="@color/text_grey"
                         android:textSize="@dimen/text_size_normal"
-                        android:visibility="gone" />
+                       />
                 </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView

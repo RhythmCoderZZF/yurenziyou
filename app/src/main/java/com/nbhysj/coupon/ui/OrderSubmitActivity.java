@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +38,15 @@ import com.nbhysj.coupon.adapter.VehicleUseAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.MchTypeEnum;
 import com.nbhysj.coupon.contract.OrderSubmitContract;
+import com.nbhysj.coupon.dialog.CouponDescriptionDialog;
 import com.nbhysj.coupon.dialog.CouponSelectDialog;
 import com.nbhysj.coupon.dialog.MchCouponReceiveDialog;
 import com.nbhysj.coupon.dialog.OrderSubmitDatePickerDialog;
 import com.nbhysj.coupon.dialog.PurchaseInstructionsBrowseDialog;
+import com.nbhysj.coupon.dialog.PurchaseInstructionsDialog;
 import com.nbhysj.coupon.dialog.VehicleSelectionModelAddDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementTipsDialog;
 import com.nbhysj.coupon.dialog.VehicleUseAddDialog;
 import com.nbhysj.coupon.dialog.VehicleUseTimeSelectDialog;
 import com.nbhysj.coupon.model.OrderSubmitModel;
@@ -59,6 +64,7 @@ import com.nbhysj.coupon.model.response.CarTypeBean;
 import com.nbhysj.coupon.model.response.CouponsBean;
 import com.nbhysj.coupon.model.response.EstimatedPriceResponse;
 import com.nbhysj.coupon.model.response.GoodsPriceDatesResponse;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.QueryByTicketResponse;
@@ -69,6 +75,7 @@ import com.nbhysj.coupon.presenter.OrderSubmitPresenter;
 import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
@@ -203,8 +210,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     @BindView(R.id.tv_delete_frequently_used_tourists)
     TextView mTvTouristDelete;
     //开启用车
-    @BindView(R.id.rlyt_open_car_status)
-    RelativeLayout mRlytOpenCarStatus;
+    @BindView(R.id.llyt_open_car_status)
+    LinearLayout mLlytOpenCarStatus;
 
     //优惠券
     @BindView(R.id.tv_coupon)
@@ -227,6 +234,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     @BindView(R.id.img_coupon_right_arrow)
     ImageView mImgCouponRightArrow;
+
+    //用车协议
+    @BindView(R.id.tv_vehicle_service_agreement)
+    TextView mTvVehicleSericeAgreement;
 
     //购买数量
     private int mPurchaseNum = 1;
@@ -335,11 +346,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     List<GoodsPriceDatesResponse> goodsPriceDatesList;
 
-    //城市ID
-    private int cityCode;
-
-    private int lineType;
-
     //购买须知h5
     private String mchByNotesH5Url;
 
@@ -347,6 +353,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     private double mTotalPrice;
 
     private PurchaseInstructionsBrowseDialog mPurchaseInstructionsDialog;
+
+    //用车服务协议弹框
+    private VehicleServiceAgreementTipsDialog vehicleServiceAgreementTipsDialog;
 
     private CouponSelectDialog couponSelectDialog;
 
@@ -362,6 +371,11 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
     //优惠券标题
     private String mCouponTitle;
 
+    //0:不用车 1:用车
+    private int useCarStatus = 0;
+
+    //用车服务协议
+    private String vehicle;
     @Override
     public int getLayoutId() {
 
@@ -694,12 +708,15 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
         mLlytAddAndUpdateTourists.setEnabled(false);
 
         //车辆 路径信息
-        LinearLayoutManager travelByCarLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
+     /*   LinearLayoutManager travelByCarLayoutManager = new LinearLayoutManager(OrderSubmitActivity.this);
         travelByCarLayoutManager.setOrientation(travelByCarLayoutManager.VERTICAL);
         mRvTravelByCar.setLayoutManager(travelByCarLayoutManager);
         vehicleUseAdapter = new VehicleUseAdapter();
         vehicleUseAdapter.setVehicleUseList(carsBeanList);
-        mRvTravelByCar.setAdapter(vehicleUseAdapter);
+        mRvTravelByCar.setAdapter(vehicleUseAdapter);*/
+
+
+     //   mTvVehicleSericeAgreement.setText(Html.fromHtml("勾选即表示您同意" + "<u><font color='#4895F2'>" + "用车服务协议" + "</font></u>"));
 
     }
 
@@ -714,14 +731,16 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                 if (isCheck) {
 
+                   // useCarStatus = 1;
                     showVehicleUseAddDialog();
-
                 } else {
-                    mLlytVehicleUse.setVisibility(View.GONE);
-                    carsBeanList.clear();
+                    mCkbIsNeedUseCar.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_payment_method_check_false), null, null, null);
+                   // useCarStatus = 0;
+                    //*mLlytVehicleUse.setVisibility(View.GONE);
+                 /*   carsBeanList.clear();
                     carEstimatePriceList.clear();
                     vehicleUseAdapter.setVehicleUseList(carsBeanList);
-                    vehicleUseAdapter.notifyDataSetChanged();
+                    vehicleUseAdapter.notifyDataSetChanged();*/
                 }
             }
         });
@@ -738,7 +757,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             R.id.rlyt_ticket, R.id.tv_confirm, R.id.llyt_edit_tourists, R.id.ibtn_back, R.id.tv_purchase_notes, R.id.img_reduce_purchase_num,
             R.id.img_add_purchase_num, R.id.tv_add_vehicle_more, R.id.tv_tourist_edit_cancel, R.id.img_tourist_username_input_cancel,
             R.id.img_tourist_mobile_input_cancel,
-            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm, R.id.tv_add_tourists_cancel, R.id.rlyt_coupon})
+            R.id.tv_tourist_edit_confirm, R.id.tv_tourists_info_edit, R.id.tv_delete_frequently_used_tourists, R.id.img_tourist_add_username_input_cancel, R.id.img_tourist_add_mobile_input_cancel, R.id.tv_add_tourists_confirm, R.id.tv_add_tourists_cancel, R.id.rlyt_coupon,R.id.tv_vehicle_service_agreement})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_order_submit:
@@ -813,10 +832,10 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                 }
 
                 break;
-            case R.id.tv_add_vehicle_more:
+          /*  case R.id.tv_add_vehicle_more:
 
                 showVehicleUseAddDialog();
-                break;
+                break;*/
             case R.id.tv_tourist_edit_cancel:
 
                 mLlytEditTourists.setVisibility(View.GONE);
@@ -901,6 +920,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     couponSelectDialog.show();
                 }
                 break;
+         /*   case R.id.tv_vehicle_service_agreement:
+                showVehicleUseAddDialog();
+                break;*/
             default:
                 break;
         }
@@ -1147,7 +1169,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
                     OrderSubmitInitResponse orderSubmitInitResponse = res.getData();
                     travellersList = orderSubmitInitResponse.getTravellers();
-
+                    vehicle = orderSubmitInitResponse.getVehicle();
                     goodsPriceList = orderSubmitInitResponse.getGoodsPrice();
 
                     OrderSubmitInitResponse.GoodsPriceEntity goodsPriceEntity = goodsPriceList.get(0);
@@ -1234,9 +1256,9 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     int openCarStatus = orderSubmitInitResponse.getOpenCarStatus();
 
                     if (openCarStatus == 0) {
-                        mRlytOpenCarStatus.setVisibility(View.GONE);
+                        mLlytOpenCarStatus.setVisibility(View.GONE);
                     } else if (openCarStatus == 1) {
-                        mRlytOpenCarStatus.setVisibility(View.VISIBLE);
+                        mLlytOpenCarStatus.setVisibility(View.VISIBLE);
                     }
 
                 } catch (Exception e) {
@@ -1258,8 +1280,8 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             case Constants.SUCCESS_CODE:
                 try {
                     EstimatedPriceResponse estimatedPrice = res.getData();
-                    cityCode = estimatedPrice.getCityCode();
-                    lineType = estimatedPrice.getLineType();
+                  //  cityCode = estimatedPrice.getCityCode();
+                    //lineType = estimatedPrice.getLineType();
                     vehicleUseAddDialog.setTotalVehicleExpenses(estimatedPrice);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1328,10 +1350,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
             String mchRecreation = MchTypeEnum.MCH_RECREATION.getValue();
 
-            if (mchType.equals(mchScenic)) {
-                mPresenter.getOrderSubmitInit(goodsId);
-            } else if (mchType.equals(mchRecreation)) {
-                mPresenter.getRecreationDatePriceInit(goodsId);
+            if(!TextUtils.isEmpty(mchType)) {
+                if (mchType.equals(mchScenic)) {
+                    mPresenter.getOrderSubmitInit(goodsId);
+                } else if (mchType.equals(mchRecreation)) {
+                    mPresenter.getRecreationDatePriceInit(goodsId);
+                }
             }
         }
     }
@@ -1455,11 +1479,12 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             ticketOrderSubmitRequest.setGoods(goodsList);
             ticketOrderSubmitRequest.setCars(carsBeanList);
             //是否用车 1:用 || 0:不用
-            if (mCkbIsNeedUseCar.isChecked()) {
+           /* if (mCkbIsNeedUseCar.isChecked()) {
                 ticketOrderSubmitRequest.setCarStatus(1);
             } else {
                 ticketOrderSubmitRequest.setCarStatus(0);
-            }
+            }*/
+            ticketOrderSubmitRequest.setUseCarStatus(useCarStatus);
             showProgressDialog(OrderSubmitActivity.this);
             mDialog.setTitle("正在提交订单...");
             String mchScenic = MchTypeEnum.MCH_SCENIC.getValue();
@@ -1469,7 +1494,6 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             } else if (mchType.equals(mchRecreation)) {
                 mPresenter.recreationOrderSubmit(ticketOrderSubmitRequest);
             }
-
         }
     }
 
@@ -1610,7 +1634,57 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
 
     }
 
+
     public void showVehicleUseAddDialog() {
+        /*if (mVehicleServiceAgreementDialog == null)
+        {
+            mVehicleServiceAgreementDialog = new VehicleServiceAgreementDialog(new VehicleServiceAgreementDialog.PurchaseInstructionsListener() {
+                @Override
+                public void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                    if (!TextUtils.isEmpty(token)) {
+
+
+
+                    } else {
+
+                        onReLogin("");
+                    }
+                }
+            },"http://wwww.baidu.com");
+        }
+        mVehicleServiceAgreementDialog.show(getFragmentManager(), "用车服务协议");*/
+
+        if (vehicleServiceAgreementTipsDialog == null)
+        {
+            vehicleServiceAgreementTipsDialog = new VehicleServiceAgreementTipsDialog(OrderSubmitActivity.this, new VehicleServiceAgreementTipsDialog.VehicleServiceAgreementListener() {
+                @Override
+                public void setVehicleServiceAgreementCallback() {
+                    useCarStatus = 1;
+                    vehicleServiceAgreementTipsDialog.dialogDismiss();
+
+                    mCkbIsNeedUseCar.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_payment_method_check_true), null, null, null);
+                   // mCkbIsNeedUseCar.setChecked(true);
+                    vehicleServiceAgreementTipsDialog.setContent(vehicle);
+                }
+
+                @Override
+                public void setVehicleAgreementUnreadCompleteCallback() {
+
+                    showToast(OrderSubmitActivity.this,"请浏览完用车服务协议,再确认已阅读");
+                }
+
+                @Override
+                public void setDialogDismissCallback() {
+                    useCarStatus = 0;
+                    mCkbIsNeedUseCar.setChecked(false);
+
+                }
+            }).builder().setContent(vehicle);
+        }
+        vehicleServiceAgreementTipsDialog.show();
+    }
+   /* public void showVehicleUseAddDialog() {
         if (vehicleUseAddDialog == null) {
             vehicleUseAddDialog = new VehicleUseAddDialog();
             vehicleUseAddDialog.setVehicleUseSelectListener(new VehicleUseAddDialog.VehicleUseSelectListener() {
@@ -1706,7 +1780,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
             });
         }
         vehicleUseAddDialog.show(getFragmentManager(), "");
-    }
+    }*/
 
     public void setTouristInfoDialog() {
         int addTouristsVisibility1 = mLlytAddTourists.getVisibility();
@@ -1814,7 +1888,7 @@ public class OrderSubmitActivity extends BaseActivity<OrderSubmitPresenter, Orde
                     if(selectCouponId == couponId)
                     {
                         chooseIds.remove(i);
-                        newUseId = couponId;
+                        newUseId = 0;
                     }
                 }
             }

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.nbhysj.coupon.view.RoundedImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/image_shopping_mall_layout_item"
     android:layout_width="280dp"
     android:layout_height="76dp"
     android:layout_marginRight="@dimen/dp_16"
-    app:riv_mutate_background="true"
     android:background="@color/color_text_gray8"
-    android:scaleType="center"
-    app:riv_corner_radius="38dip"
-    app:riv_oval="false">
+    android:scaleType="fitXY"
+>
 
 
-</com.nbhysj.coupon.view.RoundedImageView>
+</ImageView>

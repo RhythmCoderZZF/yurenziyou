@@ -25,6 +25,9 @@ public class TicketOrderSubmitRequest {
     //用车参数
     private List<CarsBean> cars;
 
+    //是否用车（0:不用  1:用车）
+    private int useCarStatus;
+
     public int getUserTravelerId() {
         return userTravelerId;
     }
@@ -63,5 +66,13 @@ public class TicketOrderSubmitRequest {
 
     public void setCouponIds(List<Integer> couponIds) {
         this.couponIds = couponIds;
+    }
+
+    public int getUseCarStatus() {
+        return useCarStatus;
+    }
+
+    public void setUseCarStatus(int useCarStatus) {
+        this.useCarStatus = useCarStatus;
     }
 }

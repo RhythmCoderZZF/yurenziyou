@@ -46,7 +46,13 @@ public class OrderDetailResponse implements Serializable{
     private int canRefundAllStatus;
 
     //commentStatus 1可评论 0不可评论
-    private int commentStatus;
+    private int canCommentStatus;
+
+    //使用车的状态
+    private int useCarStatus;
+
+    //用车描述
+    private String carDesc;
 
     public String getTitle() {
         return title;
@@ -176,12 +182,12 @@ public class OrderDetailResponse implements Serializable{
         this.canRefundAllStatus = canRefundAllStatus;
     }
 
-    public int getCommentStatus() {
-        return commentStatus;
+    public int getCanCommentStatus() {
+        return canCommentStatus;
     }
 
-    public void setCommentStatus(int commentStatus) {
-        this.commentStatus = commentStatus;
+    public void setCanCommentStatus(int canCommentStatus) {
+        this.canCommentStatus = canCommentStatus;
     }
 
     public class AnswerEntity implements Serializable{
@@ -854,5 +860,19 @@ public class OrderDetailResponse implements Serializable{
         }
     }
 
+    public int getUseCarStatus() {
+        return useCarStatus;
+    }
 
+    public void setUseCarStatus(int useCarStatus) {
+        this.useCarStatus = useCarStatus;
+    }
+
+    public String getCarDesc() {
+        return carDesc;
+    }
+
+    public void setCarDesc(String carDesc) {
+        this.carDesc = carDesc;
+    }
 }

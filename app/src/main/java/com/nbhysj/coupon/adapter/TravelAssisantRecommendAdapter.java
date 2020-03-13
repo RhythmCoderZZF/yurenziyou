@@ -19,6 +19,8 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
 import com.nbhysj.coupon.model.response.StrategyBean;
 import com.nbhysj.coupon.model.response.TripHomePageResponse;
+import com.nbhysj.coupon.ui.StrategyCommentListActivity;
+import com.nbhysj.coupon.ui.StrategyWebActivity;
 import com.nbhysj.coupon.ui.WebActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
@@ -58,6 +60,7 @@ public class TravelAssisantRecommendAdapter extends RecyclerView.Adapter<TravelA
         try {
 
             StrategyBean strategyEntity = strategyList.get(itemPosition);
+            int articleId = strategyEntity.getId();
             String photoUrl = strategyEntity.getPhoto();
             String title = strategyEntity.getTitle();
             String intro = strategyEntity.getIntro();
@@ -78,9 +81,10 @@ public class TravelAssisantRecommendAdapter extends RecyclerView.Adapter<TravelA
                     if(!TextUtils.isEmpty(strategyH5Url))
                     {
                         Intent intent = new Intent();
-                        intent.setClass(mContext, WebActivity.class);
+                        intent.setClass(mContext, StrategyWebActivity.class);
                         intent.putExtra("title", Constants.STRATEGY_H5_TITEL);
                         intent.putExtra("url",strategyH5Url);
+                        intent.putExtra("articleId",articleId);
                         mContext.startActivity(intent);
                     }
                 }

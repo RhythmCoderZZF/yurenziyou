@@ -57,6 +57,12 @@ public class HomestayPresenter extends HomestayContract.Presenter {
     }
 
     @Override
+    public void getHomestayListByCateId(HashMap<String, String> map)
+    {
+      mRxManager.add(mModel.getHomestayListByCateId(map).subscribe(res -> mView.getHomestayListByCateIdResult(res), e -> mView.showMsg(e.getMessage())));
+}
+
+    @Override
     public void onStart() {
 
     }

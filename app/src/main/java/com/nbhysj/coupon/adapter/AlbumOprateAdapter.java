@@ -15,15 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.FavoritesBean;
-import com.nbhysj.coupon.model.response.FavoritesResponse;
-import com.nbhysj.coupon.model.response.HomePageSubTopicTagBean;
-import com.nbhysj.coupon.ui.AlbumDetailsActivity;
 import com.nbhysj.coupon.util.GlideUtil;
-import com.nbhysj.coupon.util.ImageLoaderUtil;
-import com.nbhysj.coupon.view.GlideImageView;
-import com.nbhysj.coupon.widget.glide.GlideApp;
-import com.nbhysj.coupon.widget.glide.GlideRoundCornersTransUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 

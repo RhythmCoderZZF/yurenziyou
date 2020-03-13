@@ -53,6 +53,7 @@ import com.nbhysj.coupon.model.response.HotelBean;
 import com.nbhysj.coupon.model.response.HouseResouceResponse;
 import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCommentEntity;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
@@ -587,8 +588,13 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
 
                 break;
             case R.id.img_collection:
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
-                mchCollection();
+                if (!TextUtils.isEmpty(token)) {
+                    mchCollection();
+                } else {
+                    onReLogin("");
+                }
 
                 break;
             case R.id.img_static_map:
@@ -723,6 +729,11 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                 showToast(HomestayDetailActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getHomestayListByCateIdResult(BackResult<MchCateListResponse> res) {
+
     }
 
     @Override

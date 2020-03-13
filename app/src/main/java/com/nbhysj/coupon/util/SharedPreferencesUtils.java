@@ -51,7 +51,7 @@ public class SharedPreferencesUtils {
 
     public static final String VERSION_NAME = "version_name";  //版本名
     public static final String VERSION_CODE = "version_code";  //版本code
-
+    public static final String IS_INIT_FIRST = "isInitFirst";  //是否是第一次初始化
 
     private SharedPreferencesUtils(Context context, String name) {
         sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
@@ -121,6 +121,31 @@ public class SharedPreferencesUtils {
         editor.putString(VERSION_NAME, versionName);
         editor.commit();
     }
+
+    /**
+     * 设置当前版本
+     *
+     * @param context
+     * @param isInitFirst
+     */
+    public static void setInitFirst(Context context, boolean isInitFirst) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(IS_INIT_FIRST, isInitFirst);
+        editor.commit();
+    }
+
+    /**
+     * 设置当前版本
+     *
+     * @param context
+     */
+    public static Boolean getInitFirst(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        boolean isInitFirst = sp.getBoolean(IS_INIT_FIRST, true);
+         return isInitFirst ;
+    }
+
 
     /**
      * 保存登录数据

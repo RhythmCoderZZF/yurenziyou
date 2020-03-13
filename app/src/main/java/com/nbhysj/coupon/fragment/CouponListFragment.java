@@ -352,6 +352,11 @@ public class CouponListFragment extends BaseFragment<CouponListPresenter, Coupon
         }
     }
 
+    @Override
+    public void couponExchangeResult(BackResult res) {
+
+    }
+
     /**
      * 获取优惠券列表
      */
@@ -363,18 +368,6 @@ public class CouponListFragment extends BaseFragment<CouponListPresenter, Coupon
         }
     }
 
-    /**
-     * 获取优惠券列表
-     */
-    public void receiveCoupon() {
-
-        if (validateInternet()) {
-
-            showProgressDialog(getActivity());
-            mDialog.setTitle("正在领取...");
-            mPresenter.getCoupon(couponId);
-        }
-    }
 
 
     @Override
@@ -384,12 +377,14 @@ public class CouponListFragment extends BaseFragment<CouponListPresenter, Coupon
     }
 
     @Subscribe
-    public void onEvent(String commentOprate) {
+    public void onEvent(String couponOprate)
+    {
+        if(couponOprate.equals("couponOprate"))
+        {
+            getCouponList();
+        }
 
-            if(visibleToUser) {
-                getCouponList();
-            }
+
     }
-
 
 }

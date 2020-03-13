@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:background="@drawable/bg_oprate_confirm"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/str_warm_prompt"
+            android:textColor="@color/txt_font_black2"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_35"
+            android:textSize="@dimen/text_size_xlarge" />
+
+        <com.nbhysj.coupon.view.JudgeNestedScrollView
+            android:id="@+id/scroll_view_user_privacy_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_23"
+            android:layout_marginRight="@dimen/dp_23"
+            android:layout_marginTop="@dimen/dp_22"
+            android:layout_below="@+id/tv_title"
+            android:layout_above="@+id/tv_next_step"
+            android:scrollbars="none">
+
+        <TextView
+            android:id="@+id/tv_user_privacy_intro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_normal" />
+
+        </com.nbhysj.coupon.view.JudgeNestedScrollView>
+
+            <TextView
+                android:id="@+id/tv_next_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_15"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/app_nextstep"
+                android:paddingLeft="@dimen/dp_35"
+                android:paddingRight="@dimen/dp_35"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_below="@+id/llyt_login_input"
+                android:textColor="@color/txt_font_black2"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/text_size_large" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

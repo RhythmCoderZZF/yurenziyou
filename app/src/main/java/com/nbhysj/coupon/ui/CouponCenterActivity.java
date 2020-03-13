@@ -253,6 +253,11 @@ public class CouponCenterActivity extends BaseActivity<CouponListPresenter, Coup
     }
 
     @Override
+    public void couponExchangeResult(BackResult res) {
+
+    }
+
+    @Override
     public void showMsg(String msg) {
         if (mSmartRefreshLayout != null)
         {

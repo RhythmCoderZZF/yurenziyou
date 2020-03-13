@@ -67,7 +67,7 @@ public class ShopMallIndexSmallBannerAdapter extends RecyclerView.Adapter<ShopMa
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        RoundedImageView mImageShoppingMallBannerLayout;
+        ImageView mImageShoppingMallBannerLayout;
 
         ViewHolder(View itemView) {
             super(itemView);

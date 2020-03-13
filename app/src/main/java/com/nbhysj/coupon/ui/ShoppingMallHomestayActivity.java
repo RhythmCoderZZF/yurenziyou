@@ -1,5 +1,6 @@
 package com.nbhysj.coupon.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -27,6 +28,7 @@ import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HouseResouceResponse;
 import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
@@ -152,7 +154,12 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
         mchRankingClassificationAdapter = new MchRankingClassificationAdapter(ShoppingMallHomestayActivity.this, MchTypeEnum.MCH_HOMESTAY.getValue(), new MchRankingClassificationAdapter.MchRankingClassificationListener() {
             @Override
             public void setMchRankingClassificationListener(int cateId, String photoUrl) {
-
+                Intent intent = new Intent();
+                intent.setClass(mContext, HomestayCateListActivity.class);
+                intent.putExtra("cateId",cateId);
+                intent.putExtra("photoUrl",photoUrl);
+                intent.putExtra("sortStr",mSorting);
+                startActivity(intent);
             }
         });
         mchRankingClassificationAdapter.setMchRankingClassificationList(mCateEntityList);
@@ -277,6 +284,11 @@ public class ShoppingMallHomestayActivity extends BaseActivity<HomestayPresenter
                 showToast(ShoppingMallHomestayActivity.this, Constants.getResultMsg(res.getMsg()));
                 break;
         }
+    }
+
+    @Override
+    public void getHomestayListByCateIdResult(BackResult<MchCateListResponse> res) {
+
     }
 
     @Override

@@ -49,6 +49,7 @@ import com.nbhysj.coupon.model.request.QueryByTopicRequest;
 import com.nbhysj.coupon.model.request.QuestionPublishRequest;
 import com.nbhysj.coupon.model.request.RecipientsInfoRequest;
 import com.nbhysj.coupon.model.request.RegisterUserRequest;
+import com.nbhysj.coupon.model.request.StrategyCommentRequest;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginCreateUserBind;
 import com.nbhysj.coupon.model.request.ThirdPartyLoginRequest;
 import com.nbhysj.coupon.model.request.TicketOrderSubmitRequest;
@@ -387,6 +388,11 @@ public interface ApiService {
     //民宿栏目筛选
     @GET("api/store/findHomeStayByCate")
     Observable<BackResult<ScenicSpotResponse>> findHomestayByCate(@QueryMap HashMap<String, String> map);
+
+    //获取民宿栏目列表通过id
+    @GET("api/store/findHomeStayByCate")
+    Observable<BackResult<MchCateListResponse>> findHomestayByCateId(@QueryMap HashMap<String, String> map);
+
 
     //民宿榜单（仅民宿)
     @GET("api/mchRank/homestayRank")
@@ -733,13 +739,21 @@ public interface ApiService {
     @POST("api/userCollection/batchDelete")
     Observable<BackResult> collectionPostsBatchDeleteRequest(@Body CollectionBatchPostsDeleteRequest collectionBatchPostsDeleteRequest);
 
-
-
-    /***************   组合模块    ***************/
+    /***************   攻略    ***************/
 
     //攻略列表
     @GET("api/strategyArticle/findAllStrategy")
     Observable<BackResult<StrategyResponse>> findAllStrategy(@Query("page") int page, @Query("pageSize") int pageSize);
+
+    //攻略评论列表
+    @GET("app/strategyArticleComment/findAllByAuthorId")
+    Observable<BackResult<StrategyCommentListResponse>> getStrategyCommentList(@Query("articleId") int articleId, @Query("page") int page, @Query("pageSize") int pageSize);
+
+    //攻略评论
+    @POST("api/postsComment/addStrategyComment")
+    Observable<BackResult<StrategyCommentListResponse>> addStrategyCommentRequest(@Body StrategyCommentRequest strategyCommentRequest);
+
+    /***************   组合模块    ***************/
 
     //组合首页
     @GET("api/group")
@@ -905,5 +919,13 @@ public interface ApiService {
     //获取未读消息(新增粉丝 赞与收藏)
     @GET("api/user/getMessage")
     Observable<BackResult<UnReadMessageBean>> getUnReadMessage();
+
+    //兑换优惠券接口
+    @GET("api/coupon/exchange")
+    Observable<BackResult> couponExchange(@Query("code") String code);
+
+    @GET("api/mchDetails/mchHotelList")
+    Observable<BackResult<HotelSearchResponse>> getMchHotelList(@QueryMap HashMap<String, String> map);
+
 }
 

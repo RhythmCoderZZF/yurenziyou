@@ -26,7 +26,7 @@
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        <com.scwang.smartrefresh.header.WaterDropHeader
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

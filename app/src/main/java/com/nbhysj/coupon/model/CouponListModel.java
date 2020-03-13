@@ -40,4 +40,9 @@ public class CouponListModel implements CouponListContract.Model {
     public Observable<BackResult<UseCouponTicketResponse>> useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest) {
         return Api.getInstance().apiService.useCouponTicketRequest(useCouponTicketRequest).compose(RxSchedulers.io_main());
     }
+
+    @Override
+    public Observable<BackResult> couponExchange(String code) {
+        return Api.getInstance().apiService.couponExchange(code).compose(RxSchedulers.io_main());
+    }
 }

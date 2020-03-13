@@ -98,13 +98,13 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
                 holder.mTvBuyStatus.setVisibility(View.VISIBLE);
             }
 
-            if(adoptStatus == 0)
+        /*    if(adoptStatus == 0)
             {
                 holder.mImgAnswerAdopted.setVisibility(View.GONE);
             } else if(adoptStatus == 1)
             {
                 holder.mImgAnswerAdopted.setVisibility(View.VISIBLE);
-            }
+            }*/
 
             holder.mTvAnswerUseful.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,8 +151,8 @@ public class AnswerDetailSubAdapter extends RecyclerView.Adapter<AnswerDetailSub
         TextView mTvBuyStatus;
 
         //回答采纳
-        @BindView(R.id.img_answer_adopted)
-        ImageView mImgAnswerAdopted;
+     /*   @BindView(R.id.img_answer_adopted)
+        ImageView mImgAnswerAdopted;*/
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -648,7 +648,6 @@
                     android:textColor="@color/color_text_gray20"
                     android:textSize="@dimen/text_size_small" />
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -659,10 +658,71 @@
                     android:text=""
                     android:textColor="@color/txt_font_black2" />
 
-
             </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llyt_open_car_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+           >
 
+            <RelativeLayout
+                android:id="@+id/rlyt_open_car_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
+                android:background="@drawable/bg_order_date_select_top_shape">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:text="@string/str_do_you_need_a_car"
+                    android:textColor="@color/txt_font_black2"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/ckb_is_need_use_car"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:button="@null"
+                    android:checked="false"
+                    android:drawableLeft="@mipmap/icon_payment_method_check_false"
+                    android:padding="15dp"
+                    android:textColor="@color/color_text_blue5"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_14"
+                android:alpha="0.25"
+                android:background="@color/color_text_gray25"></View>
+
+            <TextView
+                android:id="@+id/tv_vehicle_service_agreement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/dp_16"
+                android:text="勾选即表示您同意用车服务协议"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_14"
+                android:background="@drawable/bg_white_radius_five_bottom_shape"
+                android:textSize="@dimen/text_size_xsmall" />
+
+        </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

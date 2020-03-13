@@ -153,7 +153,7 @@ public class OrderEvaluateActivity extends BaseActivity<OrderCommentPresenter, O
     private float score3;
 
     //匿名评分
-    private int anonymousScore = 1;
+    private int anonymousScore = 0;
 
     //评论照片选择
     private ArrayList<String> selectedPhotosList;
@@ -389,11 +389,11 @@ public class OrderEvaluateActivity extends BaseActivity<OrderCommentPresenter, O
 
                 if (isToggle) {
 
-                    anonymousScore = 0;
+                    anonymousScore = 1;
 
                 } else {
 
-                    anonymousScore = 1;
+                    anonymousScore = 0;
 
                 }
             }

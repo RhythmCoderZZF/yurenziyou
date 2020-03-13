@@ -238,7 +238,7 @@ public class MessageFragment extends BaseFragment<MessagePresenter, MessageModel
                 }
                 break;
             case Constants.USER_NOT_LOGIN_CODE:
-                toActivity(PhoneQuickLoginActivity.class);
+               // toActivity(PhoneQuickLoginActivity.class);
                 break;
             default:
                 showToast(getActivity(), Constants.getResultMsg(res.getMsg()));

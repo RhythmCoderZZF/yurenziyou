@@ -5,8 +5,10 @@ import com.nbhysj.coupon.contract.HotelAndHomestaySearchContract;
 import com.nbhysj.coupon.framework.Api;
 import com.nbhysj.coupon.framework.helper.RxSchedulers;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.HotelSearchResponse;
 import com.nbhysj.coupon.model.response.PositionDistanceSearchBean;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -21,5 +23,10 @@ public class HotelAndHomestaySearchModel implements HotelAndHomestaySearchContra
     @Override
     public Observable<BackResult<List<PositionDistanceSearchBean>>> getHomestayScreeningCondition() {
         return Api.getInstance().apiService.getHomestayScreeningCondition().compose(RxSchedulers.io_main());
+    }
+
+    @Override
+    public Observable<BackResult<HotelSearchResponse>> getMchHotelList(HashMap<String, String> map) {
+        return Api.getInstance().apiService.getMchHotelList(map).compose(RxSchedulers.io_main());
     }
 }

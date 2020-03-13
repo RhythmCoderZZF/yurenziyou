@@ -125,6 +125,7 @@ public class UserChatListActivity extends BaseActivity<UserChatPresenter, UserCh
         }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserChatListActivity.this);
+        linearLayoutManager.setStackFromEnd(true);
         mRvCommentList.setLayoutManager(linearLayoutManager);
         chatMessageListAdapter = new ChatMessageListAdapter(UserChatListActivity.this);
         chatMessageListAdapter.setChatMessageList(userChatList);
@@ -168,12 +169,20 @@ public class UserChatListActivity extends BaseActivity<UserChatPresenter, UserCh
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        isOnLoadMore = false;
-                        mPageNo = 1;
-                        userChatList.clear();
-                        chatMessageListAdapter.notifyDataSetChanged();
-                        showProgressDialog(UserChatListActivity.this);
-                        getUserChatMessageList();
+
+                        isOnLoadMore = true;
+                        try {
+                            if (mTotalPageCount == userChatList.size()) {
+                                mSmartRefreshLayout.finishRefresh();
+                                mSmartRefreshLayout.setNoMoreData(false);
+                                refreshLayout.finishLoadMoreWithNoMoreData();
+                            } else {
+                                mPageNo++;
+                                getUserChatMessageList();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }, 100);
@@ -187,17 +196,12 @@ public class UserChatListActivity extends BaseActivity<UserChatPresenter, UserCh
 
                     @Override
                     public void run() {
-                        isOnLoadMore = true;
-                        try {
-                            if (mTotalPageCount == userChatList.size()) {
-                                refreshLayout.finishLoadMoreWithNoMoreData();
-                            } else {
-                                mPageNo++;
-                                getUserChatMessageList();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        isOnLoadMore = false;
+                        mPageNo = 1;
+                        userChatList.clear();
+                        chatMessageListAdapter.notifyDataSetChanged();
+                        showProgressDialog(UserChatListActivity.this);
+                        getUserChatMessageList();
                     }
                 }, 200);
             }
@@ -303,6 +307,8 @@ public class UserChatListActivity extends BaseActivity<UserChatPresenter, UserCh
                     userChatList.add(userChatBean);
                     chatMessageListAdapter.setChatMessageList(userChatList);
                     chatMessageListAdapter.notifyDataSetChanged();
+                    mRvCommentList.smoothScrollToPosition(userChatList.size());
+                    mEdtComment.setText("");
                     hideSoftInputFromWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -336,14 +342,15 @@ public class UserChatListActivity extends BaseActivity<UserChatPresenter, UserCh
 
                     if (isOnLoadMore) {
 
-                        mSmartRefreshLayout.finishLoadMore();
+
+                       // userChatList.clear();
+                       // chatMessageListAdapter.notifyDataSetChanged();
+                        mSmartRefreshLayout.finishRefresh();
+                        mSmartRefreshLayout.setNoMoreData(false);
 
                     } else {
 
-                        userChatList.clear();
-                        chatMessageListAdapter.notifyDataSetChanged();
-                        mSmartRefreshLayout.finishRefresh();
-                        mSmartRefreshLayout.setNoMoreData(false);
+                        mSmartRefreshLayout.finishLoadMore();
                     }
 
                     BasePaginationResult paginationResult = res.getData().getPage();

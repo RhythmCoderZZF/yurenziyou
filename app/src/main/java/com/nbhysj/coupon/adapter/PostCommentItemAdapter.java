@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.CommentSubBean;
 import com.nbhysj.coupon.model.response.CommentUserEntity;
 import com.nbhysj.coupon.model.response.PostsCommentResponse;
+import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
@@ -31,7 +33,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * description: 帖子评论适配器
  */
 public class PostCommentItemAdapter extends RecyclerView.Adapter<PostCommentItemAdapter.ViewHolder> {
-
 
     private List<PostsCommentResponse.PostsCommentEntity> postsCommentList;
 
@@ -66,6 +67,7 @@ public class PostCommentItemAdapter extends RecyclerView.Adapter<PostCommentItem
 
             PostsCommentResponse.PostsCommentEntity postsCommentEntity = postsCommentList.get(position);
             CommentUserEntity commentUserEntity = postsCommentEntity.getUser();
+            int userId = commentUserEntity.getId();
             int zanCount = postsCommentEntity.getZanCount();
             int zanStatus = postsCommentEntity.getZanStatus();
             String avatarUrl = commentUserEntity.getAvater();
@@ -126,6 +128,20 @@ public class PostCommentItemAdapter extends RecyclerView.Adapter<PostCommentItem
                 public void onClick(View view) {
 
                     postCommentPraiseListener.setPostCommentListener(position,postsCommentEntity);
+                }
+            });
+
+
+            holder.mImgUserAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, UserPersonalHomePageActivity.class);
+                    intent.putExtra("publisherAvatarUrl", avatarUrl);
+                    intent.putExtra("authorId", userId);
+                    mContext.startActivity(intent);
+
                 }
             });
         } catch (Exception e) {

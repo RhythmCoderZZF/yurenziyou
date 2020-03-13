@@ -204,7 +204,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
             }
         });
 
- /*       mStickyScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+       mStickyScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
@@ -213,7 +213,7 @@ public class ShoppingMallScenicSpotActivity extends BaseActivity<ScenicSpotPrese
                     loadData();
                 }
             }
-        });*/
+        });
 
       /*  mStickyScrollView.setScrolListener(new StickyScrollView.OnScrollListener() {
             @Override

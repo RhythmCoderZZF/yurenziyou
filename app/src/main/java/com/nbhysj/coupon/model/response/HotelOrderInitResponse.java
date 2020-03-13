@@ -19,6 +19,7 @@ public class HotelOrderInitResponse {
     //金额
     private double price;
 
+    //是否开启用车
     private int openCarStatus;
 
     //商户名
@@ -33,6 +34,8 @@ public class HotelOrderInitResponse {
     private String invoice;
 
     private String intoAndLeaveDesc;
+
+    private String vehicle;
 
     public GoodsEntity getGoods() {
         return goods;
@@ -229,5 +232,13 @@ public class HotelOrderInitResponse {
         public void setRoomType(String roomType) {
             this.roomType = roomType;
         }
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
     }
 }

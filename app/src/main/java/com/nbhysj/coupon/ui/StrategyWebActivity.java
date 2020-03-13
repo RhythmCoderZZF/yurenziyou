@@ -52,9 +52,12 @@ public class StrategyWebActivity extends BaseActivity<LoginPresenter, LoginModel
 
     String strategyAlertFailed = "apps://page/alert";
 
-
+    String strategyCommentUrl = "apps://strategy/commentList";
 
     String strategyUrl;
+
+    //攻略id
+    private int articleId;
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -66,9 +69,10 @@ public class StrategyWebActivity extends BaseActivity<LoginPresenter, LoginModel
         try {
 
             strategyUrl = getIntent().getStringExtra("url");
-           // String encodedURL = URLEncoder.encode("https://sandbox-mobile.caocaokeji.cn/pay-travel/home", "UTF-8");
+            articleId = getIntent().getIntExtra("articleId",0);
+            // String encodedURL = URLEncoder.encode("https://sandbox-mobile.caocaokeji.cn/pay-travel/home", "UTF-8");
             setWebView(strategyUrl);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -100,12 +104,12 @@ public class StrategyWebActivity extends BaseActivity<LoginPresenter, LoginModel
         String appCachePath = getApplicationContext().getCacheDir()
                 .getAbsolutePath();
         webview.getSettings().setAppCachePath(appCachePath);
-       // webview.getSettings().setAllowFileAccess(true);
+        // webview.getSettings().setAllowFileAccess(true);
         webview.getSettings().setAppCacheEnabled(true);
         // Android 调用 Js 第一种方法：使用下边方式来写
         // 给 WebView 添加 JavaScript接口  参数1：   ；参数2：JS中的变量名
-        webview.addJavascriptInterface(new JsInterface() , "obj");
-      //  webview.getSettings().setDefaultTextEncodingName("UTF-8");
+        webview.addJavascriptInterface(new JsInterface(), "obj");
+        //  webview.getSettings().setDefaultTextEncodingName("UTF-8");
         /*if (Build.VERSION.SDK_INT >= 21) {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW );
       // }
@@ -113,15 +117,15 @@ public class StrategyWebActivity extends BaseActivity<LoginPresenter, LoginModel
 
 		/*if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN)
 		{*/
-      //  webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN,"");
+        //  webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
         webview.loadUrl(url + "&token=" + token);
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 try {
-                    if(!TextUtils.isEmpty(url)) {
+                    if (!TextUtils.isEmpty(url)) {
                         String decodeUrl = URLDecoder.decode(url, "UTF-8");
                         if (backPage.equals(url)) {
 
@@ -136,8 +140,15 @@ public class StrategyWebActivity extends BaseActivity<LoginPresenter, LoginModel
                             url = url.substring(17, url.length());
                         } else if (url.contains(strategyAlertFailed)) {
 
-                            String alert = decodeUrl.substring(18, decodeUrl.length());
+                            String alert = decodeUrl.substring(25, decodeUrl.length());
                             showToast(StrategyWebActivity.this, alert);
+                        } else if (url.contains(strategyCommentUrl))
+                        {
+                            Intent intent = new Intent();
+                            intent.putExtra("articleId",articleId);
+                            intent.setClass(StrategyWebActivity.this, StrategyCommentListActivity.class);
+                            startActivity(intent);
+                            return true;
                         }
 
                         Uri uri = Uri.parse(url);
@@ -147,7 +158,7 @@ public class StrategyWebActivity extends BaseActivity<LoginPresenter, LoginModel
                             return true;
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return true;

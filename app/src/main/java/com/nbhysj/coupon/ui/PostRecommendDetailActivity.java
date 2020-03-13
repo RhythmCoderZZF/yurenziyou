@@ -68,6 +68,7 @@ import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.DensityUtils;
 import com.nbhysj.coupon.util.DonwloadSaveImgUtil;
 import com.nbhysj.coupon.util.GlideUtil;
+import com.nbhysj.coupon.util.ScreenUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
@@ -500,11 +501,16 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         int photoWidth = postInfoEntity.getPhotoWidth();
                         String postPublishTime = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat, postInfoEntity.getCtime());
                         String userName = postInfoEntity.getNickname(); //用户名
+
+                        int screenWidth = ScreenUtil.getScreenWidth(mContext);
+
                         int postsType = postInfoEntity.getPostsType();  //1图片，2语音，3视频
 
-                     /*   LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(PostRecommendDetailActivity.this, photoHeight) / 4);
-                        mRlytPostDetailPicture.setLayoutParams(params);*/
+                        float ratio=(float) photoWidth/(float) photoHeight;
+                        int height=(int)(screenWidth/ratio);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, height);
+                        mRlytPostDetailPicture.setLayoutParams(params);
 
                         //推荐用户
                         List<RecommendInterestUsersBean> recommendUsersList = postInfoEntity.getRecommendUsers();

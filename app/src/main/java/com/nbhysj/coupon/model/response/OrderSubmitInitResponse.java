@@ -23,6 +23,9 @@ public class OrderSubmitInitResponse {
     //组合标题
     private String title;
 
+    //用车服务协议描述
+    private String vehicle;
+
     public double getPayFee() {
         return payFee;
     }
@@ -577,5 +580,13 @@ public class OrderSubmitInitResponse {
         public void setGoodsPriceSelectList(List<GoodsPriceDatesResponse> goodsPriceSelectList) {
             this.goodsPriceSelectList = goodsPriceSelectList;
         }
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
     }
 }

@@ -26,6 +26,7 @@ import com.nbhysj.coupon.adapter.ShoppingMallGuessYouLikeAdapter;
 import com.nbhysj.coupon.adapter.ShoppingMallMenuAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.ShopMallHomePageContract;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementTipsDialog;
 import com.nbhysj.coupon.model.ShopMallHomePageModel;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.CarH5UrlResponse;
@@ -42,7 +43,10 @@ import com.nbhysj.coupon.presenter.ShopMallHomePagePresenter;
 import com.nbhysj.coupon.ui.DestinationSearchActivity;
 import com.nbhysj.coupon.ui.FineFoodBangDanListActivity;
 import com.nbhysj.coupon.ui.GroupMchListActivity;
+import com.nbhysj.coupon.ui.HotelDetailsActivity;
+import com.nbhysj.coupon.ui.HotelOrderActivity;
 import com.nbhysj.coupon.ui.MessageActivity;
+import com.nbhysj.coupon.ui.OrderSubmitActivity;
 import com.nbhysj.coupon.ui.ScenicSpotBangDanListActivity;
 import com.nbhysj.coupon.ui.ShoppingMallFineFoodActivity;
 import com.nbhysj.coupon.ui.ShoppingMallHomestayActivity;
@@ -266,6 +270,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
     private boolean timerIsInit=false;//判断数据是否初始化
 
+    private VehicleServiceAgreementTipsDialog vehicleServiceAgreementTipsDialog;
     private long endTime;
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
@@ -333,7 +338,7 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         getShopMallHomePageData();
 
         //  mBannerview = (BannerView) v.findViewById(R.id.banner);
-        // mBannerview.startLoop(true);
+        mBannerview.startLoop(true);
         mBannerview.setViewList(getActivity(), bannerList);
 
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -490,9 +495,10 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
                 } else if (position == 6) {
                     toActivity(GroupMchListActivity.class);          //组合
                 } else if (position == 7) {                              //用车
-
+                   // toActivity(OrderSubmitActivity.class);
                     // toActivity(IntroductionOfLandlordActivity.class);
                     getCarH5Url();
+                   // showVehicleUseAddDialog();
                 }
             }
         });
@@ -550,6 +556,8 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
         mRvGuessYouLike.setAdapter(mallGuessYouLikeAdapter);
         mRvGuessYouLike.addItemDecoration(new RecyclerItemDecoration(11, 2));
     }
+
+
 
     public class RecyclerItemDecoration extends RecyclerView.ItemDecoration {
         private int itemSpace;
@@ -781,8 +789,14 @@ public class ShoppingMallFragment extends BaseFragment<ShopMallHomePagePresenter
 
                 break;
             case R.id.tv_view_more_delicious_food:
+                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
-                toActivity(FineFoodBangDanListActivity.class);
+                if (!TextUtils.isEmpty(token))
+                {
+                    toActivity(FineFoodBangDanListActivity.class);
+                } else {
+                    onReLogin("");
+                }
 
                 break;
             case R.id.rlyt_flash_sale:

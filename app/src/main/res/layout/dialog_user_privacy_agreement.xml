@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:background="@drawable/bg_oprate_confirm"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/str_warm_prompt"
+            android:textColor="@color/txt_font_black2"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_35"
+            android:textSize="@dimen/text_size_xlarge" />
+
+        <com.nbhysj.coupon.view.JudgeNestedScrollView
+            android:id="@+id/scroll_view_user_privacy_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_23"
+            android:layout_marginRight="@dimen/dp_23"
+            android:layout_marginTop="@dimen/dp_22"
+            android:layout_below="@+id/tv_title"
+            android:layout_above="@+id/llyt_user_privacy_agreement"
+            android:scrollbars="none">
+
+        <TextView
+            android:id="@+id/tv_user_privacy_intro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/txt_font_black2"
+            android:textSize="@dimen/text_size_normal" />
+
+        </com.nbhysj.coupon.view.JudgeNestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/llyt_user_privacy_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/llyt_login_input"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_disagree_user_privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_15"
+                android:background="@drawable/bg_stroke_radius_five_gray_shape"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/str_disagree"
+                android:paddingLeft="@dimen/dp_25"
+                android:paddingRight="@dimen/dp_25"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                android:textColor="@color/txt_font_black2"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/text_size_medium" />
+
+            <TextView
+                android:id="@+id/tv_agreement_and_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_blue_green_gradient_radius_five"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/str_agree_and_continue"
+                android:paddingLeft="@dimen/dp_25"
+                android:paddingRight="@dimen/dp_25"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/text_size_medium" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

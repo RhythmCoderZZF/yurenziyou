@@ -23,6 +23,7 @@ import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HouseResouceResponse;
 import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
 import com.nbhysj.coupon.model.response.MchTypeBean;
@@ -196,6 +197,11 @@ public class HomestayBangDanListActivity extends BaseActivity<HomestayPresenter,
     public void initPresenter() {
 
         mPresenter.setVM(this, mModel);
+    }
+
+    @Override
+    public void getHomestayListByCateIdResult(BackResult<MchCateListResponse> res) {
+
     }
 
     @Override

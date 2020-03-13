@@ -1,6 +1,7 @@
 package com.nbhysj.coupon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.NewFansBean;
 import com.nbhysj.coupon.model.response.SupportedUserBean;
 import com.nbhysj.coupon.model.response.UserFansFollowBean;
+import com.nbhysj.coupon.ui.UserPersonalHomePageActivity;
 import com.nbhysj.coupon.util.DateUtil;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.GlideImageView;
@@ -66,6 +68,7 @@ public class NewFansListAdapter extends RecyclerView.Adapter<NewFansListAdapter.
             UserFansFollowBean newFansBean = newFansList.get(position);
             String fansName = newFansBean.getFansName();
             long followTime = newFansBean.getCtime();   //关注时间
+            int userId = newFansBean.getFansId();
             String followTimeStr = DateUtil.transferLongToDate(DateUtil.sDateYMDFormat,followTime);
             holder.mTvUsername.setText(fansName);
             holder.mTvFollowTime.setText(followTimeStr);
@@ -88,6 +91,18 @@ public class NewFansListAdapter extends RecyclerView.Adapter<NewFansListAdapter.
 
                     newFansFollowListener.setNewFansFollowListener(newFansBean);
 
+                }
+            });
+
+            holder.mImgUserAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, UserPersonalHomePageActivity.class);
+                    intent.putExtra("publisherAvatarUrl", avatarUrl);
+                    intent.putExtra("authorId", userId);
+                    mContext.startActivity(intent);
                 }
             });
 

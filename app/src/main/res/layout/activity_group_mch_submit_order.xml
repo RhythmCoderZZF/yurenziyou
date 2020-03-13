@@ -379,10 +379,10 @@
                         android:layout_centerVertical="true"
                         android:button="@null"
                         android:checked="false"
-                        android:drawableLeft="@drawable/selector_vehicle_use_check"
+                        android:drawableLeft="@mipmap/icon_payment_method_check_false"
                         android:padding="15dp"
                         android:textColor="@color/color_text_blue5"
-                        android:textSize="@dimen/text_size_small" />
+                        />
 
                 </RelativeLayout>
 
@@ -393,6 +393,17 @@
                     android:layout_marginRight="@dimen/dp_14"
                     android:alpha="0.25"
                     android:background="@color/color_text_gray25"></View>
+
+                <TextView
+                    android:id="@+id/tv_vehicle_service_agreement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/dp_16"
+                    android:text="勾选即表示您同意用车服务协议"
+                    android:background="@drawable/bg_white_radius_five_bottom_shape"
+                    android:textSize="@dimen/text_size_xsmall" />
+
 
                 <LinearLayout
                     android:id="@+id/llyt_vehicle_use"

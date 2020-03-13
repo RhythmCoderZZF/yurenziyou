@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.model.response.MchTypeBean;
+import com.nbhysj.coupon.ui.HomestayDetailActivity;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.Tools;
@@ -71,7 +72,7 @@ public class HomestayBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
             if (holder instanceof ViewHolder) {
                 ViewHolder holder1 = (ViewHolder) holder;
                 try {
-                    MchTypeBean hotelResponse = homestayList.get(position -1);
+                    MchTypeBean hotelResponse = homestayList.get(pos);
                     int consumePrice = hotelResponse.getConsumePrice();
                     String photo = hotelResponse.getPhoto();
                     String mchName = hotelResponse.getDataName();
@@ -107,6 +108,17 @@ public class HomestayBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
                         holder1.mImgHomestayCollection.setImageResource(R.mipmap.icon_homestay_collection);
                     }
 
+                    holder1.mLlytHomestayItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent mIntent = new Intent();
+                            mIntent.setClass(mContext, HomestayDetailActivity.class);
+                            mIntent.putExtra("mchId", dataId);
+                            mContext.startActivity(mIntent);
+                        }
+                    });
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,7 +136,7 @@ public class HomestayBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        return mHeaderView != null ? homestayList.size() : 0;
+        return mHeaderView != null ? homestayList.size() + 1: homestayList.size();
     }
 
     @Override
@@ -154,6 +166,7 @@ public class HomestayBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
         //酒店类型
         ImageView mImgHouseOwnerAuthentication;
 
+        LinearLayout mLlytHomestayItem;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -164,6 +177,7 @@ public class HomestayBangDanListAdapter extends RecyclerView.Adapter<RecyclerVie
             mTvHomestayPrice = itemView.findViewById(R.id.tv_homestay_price);
             mImgHouseOwnerAvatar = itemView.findViewById(R.id.img_the_owner_of_the_house_avatar);
             mImgHouseOwnerAuthentication = itemView.findViewById(R.id.img_house_owner_name_authentication);
+            mLlytHomestayItem = itemView.findViewById(R.id.llyt_homestay_item);
         }
     }
 }

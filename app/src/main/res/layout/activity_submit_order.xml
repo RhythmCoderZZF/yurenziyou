@@ -81,11 +81,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/dp_16"
                             android:layout_marginTop="@dimen/dp_20"
                             android:layout_marginBottom="@dimen/dp_20"
-                            android:layout_marginLeft="@dimen/dp_16"
-                            android:text=""
                             android:layout_toLeftOf="@+id/tv_purchase_notes"
+                            android:text=""
                             android:textColor="@color/txt_font_black2"
                             android:textSize="@dimen/text_size_xlarge"
                             android:textStyle="bold" />
@@ -144,8 +144,7 @@
                                 android:id="@+id/rv_use_ticket_date"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginLeft="@dimen/dp_7"
-                           ></android.support.v7.widget.RecyclerView>
+                                android:layout_marginLeft="@dimen/dp_7"></android.support.v7.widget.RecyclerView>
 
                         </RelativeLayout>
                     </LinearLayout>
@@ -372,7 +371,6 @@
                         android:textSize="@dimen/text_size_small" />
                 </RelativeLayout>
 
-
                 <LinearLayout
                     android:id="@+id/llyt_increase_ticket"
                     android:layout_width="match_parent"
@@ -398,45 +396,63 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/rlyt_open_car_status"
+                <LinearLayout
+                    android:id="@+id/llyt_open_car_status"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_56"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@drawable/bg_order_date_select_top_shape">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:id="@+id/rlyt_open_car_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_56"
+                        android:layout_marginTop="@dimen/dp_8"
+                        android:background="@drawable/bg_order_date_select_top_shape">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/dp_16"
+                            android:text="是否需要用车？"
+                            android:textColor="@color/txt_font_black2"
+                            android:textSize="@dimen/text_size_xmedium"
+                            android:textStyle="bold" />
+
+                        <CheckBox
+                            android:id="@+id/ckb_is_need_use_car"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:button="@null"
+                            android:checked="false"
+                            android:drawableLeft="@mipmap/icon_payment_method_check_false"
+                            android:padding="15dp"
+                            android:textColor="@color/color_text_blue5" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_1"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:layout_marginRight="@dimen/dp_14"
+                        android:alpha="0.25"
+                        android:background="@color/color_text_gray25"></View>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_vehicle_service_agreement"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:text="是否需要用车？"
-                        android:textColor="@color/txt_font_black2"
-                        android:textSize="@dimen/text_size_xmedium"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/bg_white_radius_five_bottom_shape"
+                        android:padding="@dimen/dp_16"
+                        android:text="勾选即表示您同意用车服务协议"
+                        android:textSize="@dimen/text_size_xsmall" />
 
-                    <CheckBox
-                        android:id="@+id/ckb_is_need_use_car"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:button="@null"
-                        android:checked="false"
-                        android:drawableLeft="@drawable/selector_vehicle_use_check"
-                        android:padding="15dp"
-                        android:textColor="@color/color_text_blue5"
-                        android:textSize="@dimen/text_size_small" />
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_1"
-                    android:layout_marginLeft="@dimen/dp_15"
-                    android:layout_marginRight="@dimen/dp_14"
-                    android:alpha="0.25"
-                    android:background="@color/color_text_gray25"></View>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/llyt_vehicle_use"
@@ -517,26 +533,25 @@
                             android:layout_marginRight="@dimen/dp_17"
                             android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tv_coupon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/dp_15"
-                            android:drawablePadding="@dimen/dp_8"
-                            android:text="无优惠券"
-                            android:textColor="@color/color_text_gray35"
-                            android:textSize="@dimen/text_size_small" />
+                            <TextView
+                                android:id="@+id/tv_coupon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/dp_15"
+                                android:drawablePadding="@dimen/dp_8"
+                                android:text="无优惠券"
+                                android:textColor="@color/color_text_gray35"
+                                android:textSize="@dimen/text_size_small" />
 
                             <ImageView
                                 android:id="@+id/img_coupon_right_arrow"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@mipmap/icon_orange_arrow_right"
-                                android:layout_marginLeft="@dimen/dp_5"
                                 android:layout_gravity="center_vertical"
-                              />
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:src="@mipmap/icon_orange_arrow_right" />
 
                         </LinearLayout>
 
@@ -600,8 +615,7 @@
             android:id="@+id/rlyt_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_14"
-          >
+            android:layout_marginBottom="@dimen/dp_14">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -668,52 +682,52 @@
                     android:layout_marginLeft="@dimen/dp_5"
                     android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/dp_2"
-                        android:text="¥"
-                        android:textColor="@color/color_text_orange2"
-                        android:textSize="@dimen/text_size_tiny" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_market_ticket_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/color_text_orange2"
-                        android:textSize="@dimen/text_size_xlarge"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/dp_2"
+                            android:text="¥"
+                            android:textColor="@color/color_text_orange2"
+                            android:textSize="@dimen/text_size_tiny" />
 
-                    <TextView
-                        android:id="@+id/tv_default_ticket_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/dp_2"
-                        android:text="¥0.00"
-                        android:layout_marginLeft="@dimen/dp_3"
-                        android:textColor="@color/color_text_gray17"
-                        android:textSize="@dimen/text_size_tiny"
-                        android:visibility="gone"/>
+                        <TextView
+                            android:id="@+id/tv_market_ticket_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/color_text_orange2"
+                            android:textSize="@dimen/text_size_xlarge"
+                            android:textStyle="bold" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_default_ticket_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_3"
+                            android:layout_marginRight="@dimen/dp_2"
+                            android:text="¥0.00"
+                            android:textColor="@color/color_text_gray17"
+                            android:textSize="@dimen/text_size_tiny"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_already_reduced_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="已减0元"
                         android:layout_gravity="center_horizontal"
+                        android:text="已减0元"
                         android:textColor="@color/color_orange3"
                         android:textSize="@dimen/text_size_tiny"
                         android:textStyle="bold"
-                        android:visibility="gone"/>
-            </LinearLayout>
+                        android:visibility="gone" />
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
@@ -927,11 +941,11 @@
                 android:layout_toRightOf="@+id/tv_username_tag"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:hint="@string/str_enter_the_name_on_the_certificate"
                 android:text=""
                 android:textColor="@color/txt_font_black2"
                 android:textColorHint="@color/color_text_gray35"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="@dimen/text_size_xnormal" />
 
             <ImageView
@@ -975,12 +989,12 @@
                 android:layout_toLeftOf="@+id/img_tourist_mobile_input_cancel"
                 android:layout_toRightOf="@+id/tv_mobile_tag"
                 android:background="@null"
-                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:hint="@string/str_fill_in_contact_phone_number"
-                android:text=""
                 android:inputType="number"
+                android:text=""
                 android:textColor="@color/txt_font_black2"
                 android:textColorHint="@color/color_text_gray35"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="@dimen/text_size_xnormal" />
 
             <ImageView
@@ -1132,11 +1146,11 @@
                 android:layout_toRightOf="@+id/tv_tv_tourists_phone_tag"
                 android:background="@null"
                 android:hint="@string/str_fill_in_contact_phone_number"
-                android:text=""
                 android:inputType="number"
-                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
+                android:text=""
                 android:textColor="@color/txt_font_black2"
                 android:textColorHint="@color/color_text_gray35"
+                android:textCursorDrawable="@drawable/bg_editext_custom_cursor"
                 android:textSize="@dimen/text_size_xnormal" />
 
             <ImageView

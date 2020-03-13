@@ -3,24 +3,25 @@
 
     <item
         android:id="@+id/navigation_main"
-        android:icon="@drawable/bg_bottom_navigation_main_selector"
-        android:title="首页" />
+        android:icon="@drawable/bg_bottom_navigation_new_year_share_selector"
+        android:title="分享" />
 
     <item
         android:id="@+id/navigation_house"
-        android:icon="@drawable/bg_bottom_navigation_store_selector"
-        android:title="商城" />
+        android:icon="@drawable/bg_bottom_navigation_new_year_outing_selector"
+        android:title="出游" />
+
     <item
         android:id="@+id/navigation_camera"
         android:title="" />
 
     <item
         android:id="@+id/navigation_travel_assistant"
-        android:icon="@drawable/bg_bottom_navigation_assistant_selector"
+        android:icon="@drawable/bg_bottom_navigation_new_year_assistant_selector"
         android:title="助手" />
 
     <item
         android:id="@+id/navigation_mine"
-        android:icon="@drawable/bg_bottom_navigation_mine_selector"
+        android:icon="@drawable/bg_bottom_navigation_new_year_mine_selector"
         android:title="我的" />
 </menu>

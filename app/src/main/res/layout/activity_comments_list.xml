@@ -21,7 +21,7 @@
         android:background="@color/white"
         app:srlAccentColor="#00000000"
         app:srlEnableHeaderTranslationContent="true"
-        app:srlEnableLoadMore="false"
+        app:srlEnableLoadMore="true"
         app:srlEnableNestedScrolling="true"
         app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="#00000000">

@@ -9,6 +9,7 @@ import com.nbhysj.coupon.model.response.CouponsGetBean;
 import com.nbhysj.coupon.model.response.HouseResouceResponse;
 import com.nbhysj.coupon.model.response.LandlordDetailResonse;
 import com.nbhysj.coupon.model.response.MchBangDanRankingResponse;
+import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchHomestayDetailsResponse;
@@ -56,6 +57,9 @@ public interface HomestayContract {
 
         //房源列表信息
         Observable<BackResult<HouseResouceResponse>> getLandlordHouseResourceList(int landlordId);
+
+        //民宿类目列表
+        Observable<BackResult<MchCateListResponse>> getHomestayListByCateId(HashMap<String, String> map);
     }
 
     interface View extends BaseView {
@@ -80,6 +84,9 @@ public interface HomestayContract {
 
         //房源列表信息
         void getLandlordHouseResourceListResult(BackResult<HouseResouceResponse> res);
+
+        //获取民宿列表根据类目id
+        void getHomestayListByCateIdResult(BackResult<MchCateListResponse> res);
 
         void showMsg(String msg);
     }
@@ -106,5 +113,7 @@ public interface HomestayContract {
         public abstract void getLandlordHomePage(int landlordId);
 
         public abstract void getLandlordHouseResourceList(int landlordId);
+
+        public abstract void getHomestayListByCateId(HashMap<String, String> map);
     }
 }

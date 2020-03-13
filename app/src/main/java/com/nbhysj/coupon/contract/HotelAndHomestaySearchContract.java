@@ -4,7 +4,11 @@ import com.nbhysj.coupon.framework.BaseModel;
 import com.nbhysj.coupon.framework.BasePresenter;
 import com.nbhysj.coupon.framework.BaseView;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.HotelSearchResponse;
 import com.nbhysj.coupon.model.response.PositionDistanceSearchBean;
+import com.nbhysj.coupon.model.response.StrategyResponse;
+
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -23,11 +27,14 @@ public interface HotelAndHomestaySearchContract {
         //酒店民宿筛选条件
         Observable<BackResult<List<PositionDistanceSearchBean>>> getHomestayScreeningCondition();
 
+        Observable<BackResult<HotelSearchResponse>> getMchHotelList(HashMap<String, String> map);
     }
 
     interface View extends BaseView {
 
         void getHomestayScreeningConditionResult(BackResult<List<PositionDistanceSearchBean>> res);
+
+        void getMchHotelListResult(BackResult<HotelSearchResponse> res);
 
         void showMsg(String msg);
     }
@@ -36,6 +43,8 @@ public interface HotelAndHomestaySearchContract {
     {
         //酒店民宿筛选条件
         public abstract void getHomestayScreeningCondition();
+
+        public abstract void getMchHotelList(HashMap<String, String> map);
 
     }
 }

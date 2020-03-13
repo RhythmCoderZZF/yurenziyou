@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +21,8 @@ import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.contract.HotelContract;
 import com.nbhysj.coupon.dialog.CouponSelectDialog;
 import com.nbhysj.coupon.dialog.RoomNumberSelectDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementTipsDialog;
 import com.nbhysj.coupon.model.HotelModel;
 import com.nbhysj.coupon.model.request.GoodsBeanRequest;
 import com.nbhysj.coupon.model.request.HotelHomestayOrderSubmitRequest;
@@ -34,6 +38,7 @@ import com.nbhysj.coupon.model.response.MchCateListResponse;
 import com.nbhysj.coupon.model.response.MchCollectionResponse;
 import com.nbhysj.coupon.model.response.MchCouponResponse;
 import com.nbhysj.coupon.model.response.MchDetailsResponse;
+import com.nbhysj.coupon.model.response.MchGoodsBean;
 import com.nbhysj.coupon.model.response.OrderSubmitInitResponse;
 import com.nbhysj.coupon.model.response.OrderSubmitResponse;
 import com.nbhysj.coupon.model.response.QueryByTicketResponse;
@@ -45,6 +50,7 @@ import com.nbhysj.coupon.systembar.StatusBarCompat;
 import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.CalendarUtil;
 import com.nbhysj.coupon.util.DateUtil;
+import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.util.Tools;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -131,6 +137,17 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     @BindView(R.id.img_coupon)
     ImageView mImgCoupon;
 
+    //是否需要用车
+    @BindView(R.id.ckb_is_need_use_car)
+    CheckBox mCkbIsNeedUseCar;
+
+    //用车协议
+    @BindView(R.id.tv_vehicle_service_agreement)
+    TextView mTvVehicleSericeAgreement;
+
+    //开启用车
+    @BindView(R.id.llyt_open_car_status)
+    LinearLayout mLlytOpenCarStatus;
     //房间数量
     private int mRoomsReservedNum = 1;
     //商品id
@@ -165,6 +182,9 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
 
     private CouponSelectDialog couponSelectDialog;
 
+    //用车服务协议弹框
+    private VehicleServiceAgreementTipsDialog vehicleServiceAgreementTipsDialog;
+
     //选择的优惠券id
     private List<Integer> chooseIds;
 
@@ -177,6 +197,12 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     private String mCouponTitle;
 
     private long differDays = 1l;
+
+    //0:不用车 1:用车
+    private int useCarStatus = 0;
+
+    //用车描述
+    private String vehicle;
     @Override
     public int getLayoutId() {
 
@@ -221,6 +247,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
 
     @Override
     public void initData() {
+       // mTvVehicleSericeAgreement.setText(Html.fromHtml("勾选即表示您同意" + "<u><font color='#4895F2'>" + "用车服务协议" + "</font></u>"));
 
         try {
 
@@ -240,6 +267,26 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        mCkbIsNeedUseCar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
+
+                if (isCheck) {
+
+                    // useCarStatus = 1;
+                    showVehicleUseAddDialog();
+                } else {
+                    mCkbIsNeedUseCar.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_payment_method_check_false), null, null, null);
+                    // useCarStatus = 0;
+                    //*mLlytVehicleUse.setVisibility(View.GONE);
+                 /*   carsBeanList.clear();
+                    carEstimatePriceList.clear();
+                    vehicleUseAdapter.setVehicleUseList(carsBeanList);
+                    vehicleUseAdapter.notifyDataSetChanged();*/
+                }
+            }
+        });
     }
 
     @Override
@@ -284,6 +331,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     HotelOrderInitResponse.GoodsEntity goodsEntity = hotelOrderInitResponse.getGoods();
                     String title = goodsEntity.getTitle();
                     String intoAndLeaveDesc = hotelOrderInitResponse.getIntoAndLeaveDesc();
+                    vehicle = hotelOrderInitResponse.getVehicle();
                     String invoice = hotelOrderInitResponse.getInvoice();
                     HotelOrderInitResponse.RefundRulesEntity refundRulesEntity = hotelOrderInitResponse.getRefundRules();
                     String refundTime = refundRulesEntity.getRefundTime();
@@ -306,6 +354,15 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     mTvHotelGoodsType.setText(title);
 
                     mTvArrivalHotelTime.setText(intoTime + "点后办理入住");
+
+                    //用车是否开启状态
+                    int openCarStatus = hotelOrderInitResponse.getOpenCarStatus();
+
+                   if (openCarStatus == 0) {
+                        mLlytOpenCarStatus.setVisibility(View.GONE);
+                    } else if (openCarStatus == 1) {
+                        mLlytOpenCarStatus.setVisibility(View.VISIBLE);
+                    }
 
                     if(!TextUtils.isEmpty(intoAndLeaveDesc))
                     {
@@ -457,7 +514,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
         showToast(HotelOrderActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.tv_room_num,R.id.llyt_check_in_time,R.id.llyt_leave_time,R.id.tv_order_submit,R.id.rlyt_coupon})
+    @OnClick({R.id.tv_room_num,R.id.llyt_check_in_time,R.id.llyt_leave_time,R.id.tv_order_submit,R.id.rlyt_coupon,R.id.tv_vehicle_service_agreement})
     public void onClick(View v){
         Intent intent = new Intent();
         switch (v.getId()){
@@ -540,6 +597,9 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
                     }
                 }
                 break;
+        /*    case R.id.tv_vehicle_service_agreement:
+                showVehicleUseAddDialog();
+                break;*/
             default:break;
         }
     }
@@ -579,13 +639,16 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
             String checkInUsername = mEdtCheckInPeopleName.getText().toString();
 
             String checkInUserPhone = mEdtCheckInPeoplePhone.getText().toString();
-            if(TextUtils.isEmpty(checkInUsername)) {
+
+            if(TextUtils.isEmpty(checkInUsername))
+            {
                 dismissProgressDialog();
                 showToast(HotelOrderActivity.this,getResources().getString(R.string.str_checkin_username));
                 return;
             }
 
-            if(TextUtils.isEmpty(checkInUserPhone)) {
+            if(TextUtils.isEmpty(checkInUserPhone))
+            {
                 dismissProgressDialog();
                 showToast(HotelOrderActivity.this,getResources().getString(R.string.str_checkin_user_phone));
                 return;
@@ -597,6 +660,7 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
             homestayOrderSubmitRequest.setMobile(checkInUserPhone);
             homestayOrderSubmitRequest.setNum(mRoomsReservedNum);
             homestayOrderSubmitRequest.setCouponIds(chooseIds);
+            homestayOrderSubmitRequest.setUseCarStatus(useCarStatus);
             mPresenter.hotelHomestayOrderSubmit(homestayOrderSubmitRequest);
         }
     }
@@ -722,6 +786,60 @@ public class HotelOrderActivity extends BaseActivity<HotelPresenter, HotelModel>
     public void getPriceSettlement()
     {
         mTotalPrice = price * mRoomsReservedNum * differDays - discountPrice;
+        if(mTotalPrice < 0)
+        {
+            mTotalPrice = 0.00;
+        }
         mTvMarketTicketPrice.setText(Tools.getTwoDecimalPoint(mTotalPrice));
+    }
+
+    public void showVehicleUseAddDialog() {
+        /*if (mVehicleServiceAgreementDialog == null)
+        {
+            mVehicleServiceAgreementDialog = new VehicleServiceAgreementDialog(new VehicleServiceAgreementDialog.PurchaseInstructionsListener() {
+                @Override
+                public void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                    if (!TextUtils.isEmpty(token)) {
+
+
+
+                    } else {
+
+                        onReLogin("");
+                    }
+                }
+            },"http://wwww.baidu.com");
+        }
+        mVehicleServiceAgreementDialog.show(getFragmentManager(), "用车服务协议");*/
+
+        if (vehicleServiceAgreementTipsDialog == null)
+        {
+            vehicleServiceAgreementTipsDialog = new VehicleServiceAgreementTipsDialog(HotelOrderActivity.this, new VehicleServiceAgreementTipsDialog.VehicleServiceAgreementListener() {
+                @Override
+                public void setVehicleServiceAgreementCallback() {
+                    useCarStatus = 1;
+                    vehicleServiceAgreementTipsDialog.dialogDismiss();
+
+                    mCkbIsNeedUseCar.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_payment_method_check_true), null, null, null);
+                    // mCkbIsNeedUseCar.setChecked(true);
+                    vehicleServiceAgreementTipsDialog.setContent(vehicle);
+                }
+
+                @Override
+                public void setVehicleAgreementUnreadCompleteCallback() {
+
+                    showToast(HotelOrderActivity.this,"请浏览完用车服务协议,再确认已阅读");
+                }
+
+                @Override
+                public void setDialogDismissCallback() {
+                    useCarStatus = 0;
+                    mCkbIsNeedUseCar.setChecked(false);
+
+                }
+            }).builder().setContent(vehicle);
+        }
+        vehicleServiceAgreementTipsDialog.show();
     }
 }

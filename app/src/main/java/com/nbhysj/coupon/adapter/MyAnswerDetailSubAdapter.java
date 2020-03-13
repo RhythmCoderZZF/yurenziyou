@@ -98,7 +98,7 @@ public class MyAnswerDetailSubAdapter extends RecyclerView.Adapter<MyAnswerDetai
                 holder.mTvBuyStatus.setVisibility(View.VISIBLE);
             }
 
-          /*  if(adoptStatus == 0)
+            if(adoptStatus == 0)
             {
                 holder.mImgAnswerAdopted.setVisibility(View.GONE);
                 holder.mTvAnswerAdopt.setText("采纳");
@@ -107,7 +107,7 @@ public class MyAnswerDetailSubAdapter extends RecyclerView.Adapter<MyAnswerDetai
             {
                 holder.mTvAnswerAdopt.setText("已采纳");
                 holder.mImgAnswerAdopted.setVisibility(View.VISIBLE);
-            }*/
+            }
 
             holder.mTvAnswerUseful.setOnClickListener(new View.OnClickListener() {
                 @Override

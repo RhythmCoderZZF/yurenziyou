@@ -32,6 +32,12 @@ public class CouponListPresenter extends CouponListContract.Presenter {
     }
 
     @Override
+    public void couponExchange(String code) {
+        mRxManager.add(mModel.couponExchange(code).subscribe(res -> mView.couponExchangeResult(res), e -> mView.showMsg(e.getMessage())));
+    }
+
+
+    @Override
     public void onStart() {
 
     }

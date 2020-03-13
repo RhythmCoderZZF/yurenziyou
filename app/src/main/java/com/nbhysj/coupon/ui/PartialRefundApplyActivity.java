@@ -30,7 +30,6 @@ public class PartialRefundApplyActivity extends BaseActivity<OrderRefundPresente
     @BindView(R.id.rv_order_all_refund)
     RecyclerView mRvOrderAllRefund;
 
-
     private List<OrderRefundInitResponse> orderRefundIniteList;
     @Override
     public int getLayoutId() {

@@ -30,6 +30,9 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.contract.LoginContract;
 import com.nbhysj.coupon.dialog.AuthorityAllProhibitDialog;
 import com.nbhysj.coupon.dialog.AuthorityVerificationDialog;
+import com.nbhysj.coupon.dialog.UserPrivacyAgreementDialog;
+import com.nbhysj.coupon.dialog.UserPrivacyNoAgreementDialog;
+import com.nbhysj.coupon.dialog.VehicleServiceAgreementTipsDialog;
 import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.LoginModel;
 import com.nbhysj.coupon.model.response.AuthorityVerificationBean;
@@ -91,6 +94,11 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
      */
     protected static final int ENTER_HOME = 101;
 
+    private UserPrivacyAgreementDialog userPrivacyNoAgreementDialog;
+
+    //是否是第一次进入APP
+    private boolean initFirst = true;
+
     @Override
     public void getLoginVerifyCodeResult(BackResult res) {
 
@@ -135,7 +143,7 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
     @Override
     public void initView(Bundle savedInstanceState) {
 
-
+        initFirst = SharedPreferencesUtils.getInitFirst(LoadingActivity.this);
     }
 
     @Override
@@ -144,7 +152,7 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
         mLocalVersionCode = getLocalVersionCode();
         //检查wifi网络下载app
         if (validateInternet()) {
-             checkVersion(Net.APP_UPDATE_URL);
+            checkVersion(Net.APP_UPDATE_URL);
         } else {
             setNetwork();
         }
@@ -171,7 +179,7 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
                         mVersionDesc = jsonObjectData.getString("updateNote");
                         mDownloadUrl = jsonObjectData.getString("downloadApkUrl");
                         mVersionForce = jsonObjectData.getInt("updateStatus");
-                       if (mLocalVersionCode < mVersionCode && SharedPreferencesUtils.getSkippedVersionCode(LoadingActivity.this) < mVersionCode) {
+                        if (mLocalVersionCode < mVersionCode && SharedPreferencesUtils.getSkippedVersionCode(LoadingActivity.this) < mVersionCode) {
                             msg.what = UPDATE_VERSION;
                             SharedPreferencesUtils.setVersionName(getApplicationContext(), mVersionName);
                         } else {
@@ -217,20 +225,20 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
 //                        }
 //                    },1000);
                     showUpdateDialog();
-                    requestPermission();
+                    showUserPrivacyDialog();
 
                     break;
                 case ENTER_HOME:
-                    requestPermission();
+                    showUserPrivacyDialog();
                     break;
                 case URL_ERROR:
-                    requestPermission();
+                    showUserPrivacyDialog();
                     break;
                 case IO_ERROR:
-                    requestPermission();
+                    showUserPrivacyDialog();
                     break;
                 case JSON_ERROR:
-                    requestPermission();
+                    showUserPrivacyDialog();
                     break;
             }
         }
@@ -399,14 +407,15 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
             }).setCancelable(false).show();
         } else {
 
-            if(versionUpdateAlertDialog != null){
+
+            if (versionUpdateAlertDialog != null) {
                 versionUpdateAlertDialog.show();
             } else {
 
-             toActivity(MainActivity.class);
+
+                toActivity(MainActivity.class);
 
             }
-
            /* if (alertDialog == null) {
                 lastScopeNum = 0;
                 getModelAllVersions();
@@ -455,7 +464,7 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
             @Override
             public void onFinished(boolean isFinished) {
                 pb.dismiss();
-             //   installApk(new File(path));
+                //   installApk(new File(path));
                 getInstallIntent(path);
 
                 //installApk(new File(path));
@@ -484,7 +493,7 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
                         if (versionUpdateAlertDialog == null) {
                             new Handler().postDelayed(new Runnable() {
                                 public void run() {
-
+                                    //showUserPrivacyDialog();
                                     toActivity(MainActivity.class);
                                 }
                             }, 800);
@@ -571,7 +580,7 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
 
     private Intent getInstallIntent(String fileName) {
 
-       // String fileName = savePath + appName + ".apk";
+        // String fileName = savePath + appName + ".apk";
        /* String fileName = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + "yurenziyou.apk";*/
         Uri uri = null;
@@ -593,19 +602,20 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
             return intent;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }catch (ActivityNotFoundException e){
+        } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return intent;
     }
 
-  /**
-   * 安装 apk 文件
- * @param apkFile apk 文件
- */
-    private void installApk(File apkFile){
+    /**
+     * 安装 apk 文件
+     *
+     * @param apkFile apk 文件
+     */
+    private void installApk(File apkFile) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //放在此处
         //由于没有在Activity环境下启动Activity,所以设置下面的标签
@@ -624,5 +634,48 @@ public class LoadingActivity extends BaseActivity<LoginPresenter, LoginModel> im
         intent.setDataAndType(apkUri,
                 "application/vnd.android.package-archive");
         startActivity(intent);
+    }
+
+
+    public void showUserPrivacyDialog() {
+        /*if (mVehicleServiceAgreementDialog == null)
+        {
+            mVehicleServiceAgreementDialog = new VehicleServiceAgreementDialog(new VehicleServiceAgreementDialog.PurchaseInstructionsListener() {
+                @Override
+                public void setPurchaseInstructionsCallback(MchGoodsBean mchGoodsBean) {
+                    String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+                    if (!TextUtils.isEmpty(token)) {
+
+
+
+                    } else {
+
+                        onReLogin("");
+                    }
+                }
+            },"http://wwww.baidu.com");
+        }
+        mVehicleServiceAgreementDialog.show(getFragmentManager(), "用车服务协议");*/
+        if (initFirst) {
+            if (userPrivacyNoAgreementDialog == null) {
+                userPrivacyNoAgreementDialog = new UserPrivacyAgreementDialog(LoadingActivity.this, new UserPrivacyAgreementDialog.UserPrivacyAgreementListener() {
+                    @Override
+                    public void setUserPrivacyAgreementCallback() {
+                        SharedPreferencesUtils.setInitFirst(LoadingActivity.this, false);
+                        userPrivacyNoAgreementDialog.dialogDismiss();
+                        requestPermission();
+                    }
+
+                    @Override
+                    public void setUserPrivacyNoAgreementCallback() {
+
+                        showToast(LoadingActivity.this, "请同意并接受《用户协议》和《隐私政策》全部条款后再使用鱼人自游APP");
+                    }
+                }).builder().setCancelable(false).setContent("<p>欢迎使用鱼人自游APP。我们非常重视您</p><p>的用户权益与个人信息的保护，在您使用</p><p>鱼人自游APP服务前,请认真阅读" + "<font color='#4895F2'>《“鱼人</font></p><font color='#4895F2'>自游”用户协议》</font>和<font color='#4895F2'>《“鱼人</font><font color='#4895F2'>自游”隐私政<p>策》</font>全部条款。我们将通过上述协议向您</p>说明我们如何为您提供服务并保障您的用<p>户权益，如何收集、使用、保存、共享和</p><p>保护您的相关信息，以及我们为您提供的</p><p>访问、更正、删除和申诉您信息相关问题</p><p>的方式。我们会严格按照您的授权，在上</p><p>述协议约定的范围内收集、存储和使用您</p><p>的注册信息、设备信息、位置信息、日志</p><p>信息、语音信息或其他经您授权的信息。</p><p>您点击“同意并继续”视为您已同意上述协</p><p>议的全部内容。</p>");
+            }
+            userPrivacyNoAgreementDialog.show();
+        } else {
+            requestPermission();
+        }
     }
 }

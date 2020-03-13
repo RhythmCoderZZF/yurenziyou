@@ -37,6 +37,8 @@ public interface CouponListContract {
         //选择使用优惠券
         Observable<BackResult<UseCouponTicketResponse>> useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest);
 
+        //优惠券兑换
+        Observable<BackResult> couponExchange(String code);
     }
 
     interface View extends BaseView {
@@ -48,6 +50,8 @@ public interface CouponListContract {
         void getCouponResult(BackResult<CouponsGetBean> res);
 
         void useCouponTicketResult(BackResult<UseCouponTicketResponse> res);
+
+        void couponExchangeResult(BackResult res);
 
         void showMsg(String msg);
     }
@@ -61,5 +65,7 @@ public interface CouponListContract {
         public abstract void getCoupon(int couponId);
 
         public abstract void useCouponTicketRequest(UseCouponTicketRequest useCouponTicketRequest);
+
+        public abstract void couponExchange(String code);
     }
 }
