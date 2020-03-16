@@ -18,8 +18,14 @@ import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.RoundedImageView;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * @author hysj created at 2019/4/21.
@@ -34,6 +40,7 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
     public static final int TYPE_NORMAL = 1;
     private static final int TYPE_FOOTER = 2;
     LayoutInflater mInflater;
+    private List<MchTypeBean.TagsEntity> tagsList = new ArrayList<>();
 
     public void setHeaderView(View headerView) {
         mHeaderView = headerView;
@@ -76,7 +83,7 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
                 holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
                 holder1.mTvScenicSpotsDes.setText(popularScenicSpots.getIntro());
                 int level = popularScenicSpots.getLevel();
-                if (level == 0) {
+             /*   if (level == 0) {
                     holder1.mTvScenicSpotsLevel.setVisibility(View.GONE);
                 } else {
                     holder1.mTvScenicSpotsLevel.setText(level + "A级景区");
@@ -98,6 +105,50 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
                 } else {
 
                     holder1.mTvScenicSpotsType.setVisibility(View.GONE);
+                }
+*/
+
+
+                List<MchTypeBean.TagsEntity> scenicSpotTagsList = popularScenicSpots.getTags();
+                if (scenicSpotTagsList != null) {
+
+                    if(tagsList.size() > 0)
+                    {
+                        MchTypeBean.TagsEntity tagBean = scenicSpotTagsList.get(0);
+                        tagsList.add(tagBean);
+                    } else {
+
+                        if (scenicSpotTagsList.size() >= 2) {
+                            for (int i = 0; i < 2; i++) {
+                                MchTypeBean.TagsEntity tagsBean = scenicSpotTagsList.get(i);
+                                tagsList.add(tagsBean);
+                            }
+                        }
+                    }
+                }
+
+                if (tagsList != null) {
+                    TagAdapter tagAdapter = new TagAdapter<MchTypeBean.TagsEntity>(tagsList) {
+                        @Override
+                        public View getView(FlowLayout parent, int position, MchTypeBean.TagsEntity tagsEntity) {
+                            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag,
+                                    holder1.mTagFlowlayoutHotLabel, false);
+                            TextView mTvFlowlayout = view.findViewById(R.id.tv_flowlayout);
+                            String title = tagsEntity.getTitle();
+                            mTvFlowlayout.setText(title);
+                            if (position == 0) {
+                                view.setBackgroundResource(R.drawable.bg_tag_radius_purplish_red_yellow_gradient);
+
+                                mTvFlowlayout.setTextColor(mContext.getResources().getColor(R.color.white));
+                            } else {
+                                view.setBackgroundResource(R.drawable.bg_stroke_radius_hotel_reputation);
+                                mTvFlowlayout.setTextColor(mContext.getResources().getColor(R.color.color_text_gray20));
+                            }
+                            return view;
+                        }
+                    };
+
+                    holder1.mTagFlowlayoutHotLabel.setAdapter(tagAdapter);
                 }
 
                 GlideUtil.loadImage(mContext, photoUrl, holder1.mImgScenicSpots);
@@ -161,6 +212,7 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
         //景点类型
         TextView mTvScenicSpotsType;
         RelativeLayout mRlytScenicSpotItem;
+        TagFlowLayout mTagFlowlayoutHotLabel;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -172,10 +224,10 @@ public class ScenicSpotCateListAdapter extends RecyclerView.Adapter<RecyclerView
             mTvScenicSpotCommentNum = itemView.findViewById(R.id.tv_comment_num);
             mImgScenicSpots = itemView.findViewById(R.id.image_scenic_spots);
             mTvScenicSpotsDes = itemView.findViewById(R.id.tv_scenic_spots_des);
-            mTvScenicSpotsLevel = itemView.findViewById(R.id.tv_scenic_spots_level);
-            mTvScenicSpotsType = itemView.findViewById(R.id.tv_scenic_spot_type);
+          /*  mTvScenicSpotsLevel = itemView.findViewById(R.id.tv_scenic_spots_level);
+            mTvScenicSpotsType = itemView.findViewById(R.id.tv_scenic_spot_type);*/
             mRlytScenicSpotItem = itemView.findViewById(R.id.rlyt_scenic_spot_item);
-
+            mTagFlowlayoutHotLabel = itemView.findViewById(R.id.flowlayout_hot_label);
         }
     }
 }

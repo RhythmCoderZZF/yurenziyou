@@ -16,6 +16,7 @@ import com.nbhysj.coupon.util.ToolbarHelper;
 import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
 import com.nbhysj.coupon.widget.calendar.CalendarList;
+import com.nbhysj.coupon.widget.calendar.TripCalendarList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,7 +42,7 @@ public class CalendarActivity extends BaseActivity {
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
-        return R.layout.activity_calendar;
+        return R.layout.activity_trip_calendar;
     }
 
     @Override
@@ -49,8 +50,8 @@ public class CalendarActivity extends BaseActivity {
 
         ToolbarHelper.setBar(CalendarActivity.this, getResources().getString(R.string.str_calendar_select), R.mipmap.icon_left_arrow_black);
         selectType = getIntent().getIntExtra("selectType", 0);  //0:创建行程 || 1:编辑行程选择日期 || 酒店民宿下单日期选择
-        CalendarList calendarList = findViewById(R.id.calendar_list);
-        calendarList.setOnDateSelected(new CalendarList.OnDateSelected() {
+        TripCalendarList calendarList = findViewById(R.id.calendar_list);
+        calendarList.setOnDateSelected(new TripCalendarList.OnDateSelected() {
             @Override
             public void selected(String startDate, String endDate) {
                 try {

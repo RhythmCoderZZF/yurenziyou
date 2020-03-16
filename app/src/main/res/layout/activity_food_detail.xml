@@ -452,7 +452,10 @@
                     android:layout_height="7dp"
                     android:background="@color/color_text_gray16"></View>
 
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/white"></View>
             </LinearLayout>
         </LinearLayout>
 

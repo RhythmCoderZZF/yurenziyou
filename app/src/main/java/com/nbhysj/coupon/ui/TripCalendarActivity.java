@@ -38,7 +38,7 @@ public class TripCalendarActivity extends BaseActivity {
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
-        return R.layout.activity_calendar;
+        return R.layout.activity_trip_calendar;
     }
 
     @Override

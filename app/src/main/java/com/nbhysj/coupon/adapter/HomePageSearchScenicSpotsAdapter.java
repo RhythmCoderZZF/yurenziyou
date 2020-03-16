@@ -18,7 +18,11 @@ import com.nbhysj.coupon.model.response.MchTypeBean;
 import com.nbhysj.coupon.ui.ScenicSpotDetailActivity;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,6 +36,7 @@ public class HomePageSearchScenicSpotsAdapter extends RecyclerView.Adapter<HomeP
 
     List<HomeSearchMchTypeBean> popularScenicSpotsList;
     private Context mContext;
+    private List<String> tagsList = new ArrayList<>();
 
     public HomePageSearchScenicSpotsAdapter(Context mContext) {
 
@@ -72,7 +77,8 @@ public class HomePageSearchScenicSpotsAdapter extends RecyclerView.Adapter<HomeP
                 holder.mTvScenicSpotsDes.setText("");
             }
             String level = popularScenicSpots.getLevel();
-            if(TextUtils.isEmpty(level)){
+            tagsList.clear();
+       /*     if(TextUtils.isEmpty(level)){
                 holder.mTvScenicSpotsLevel.setVisibility(View.GONE);
             } else {
                 holder.mTvScenicSpotsLevel.setText(level + "A级景区");
@@ -95,7 +101,46 @@ public class HomePageSearchScenicSpotsAdapter extends RecyclerView.Adapter<HomeP
 
                 holder.mTvScenicSpotsType.setVisibility(View.GONE);
             }
+*/
 
+            List<String> scenicSpotTagsList = popularScenicSpots.getTags();
+            if (scenicSpotTagsList != null) {
+
+                if (tagsList.size() > 0) {
+                    String tagBean = scenicSpotTagsList.get(0);
+                    tagsList.add(tagBean);
+                } else {
+
+                    if (scenicSpotTagsList.size() >= 2) {
+                        for (int i = 0; i < 2; i++) {
+                            String tagsBean = scenicSpotTagsList.get(i);
+                            tagsList.add(tagsBean);
+                        }
+                    }
+                }
+            }
+            if (tagsList != null) {
+                TagAdapter tagAdapter = new TagAdapter<String>(tagsList) {
+                    @Override
+                    public View getView(FlowLayout parent, int position, String title) {
+                        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_flowlayout_tag,
+                                holder.mTagFlowlayoutHotLabel, false);
+                        TextView mTvFlowlayout = view.findViewById(R.id.tv_flowlayout);
+                        mTvFlowlayout.setText(title);
+                        if (position == 0) {
+                            view.setBackgroundResource(R.drawable.bg_tag_radius_purplish_red_yellow_gradient);
+
+                            mTvFlowlayout.setTextColor(mContext.getResources().getColor(R.color.white));
+                        } else {
+                            view.setBackgroundResource(R.drawable.bg_stroke_radius_hotel_reputation);
+                            mTvFlowlayout.setTextColor(mContext.getResources().getColor(R.color.color_text_gray20));
+                        }
+                        return view;
+                    }
+                };
+
+                holder.mTagFlowlayoutHotLabel.setAdapter(tagAdapter);
+            }
             GlideUtil.loadImage(mContext, photoUrl, holder.mImgScenicSpots);
 
             holder.mRlytScenicSpotItem.setOnClickListener(new View.OnClickListener() {
@@ -141,14 +186,18 @@ public class HomePageSearchScenicSpotsAdapter extends RecyclerView.Adapter<HomeP
         //景点描述
         @BindView(R.id.tv_scenic_spots_des)
         TextView mTvScenicSpotsDes;
-        //星级
-        @BindView(R.id.tv_scenic_spots_level)
-        TextView mTvScenicSpotsLevel;
-        //景点类型
-        @BindView(R.id.tv_scenic_spot_type)
-        TextView mTvScenicSpotsType;
+        /*    //星级
+            @BindView(R.id.tv_scenic_spots_level)
+            TextView mTvScenicSpotsLevel;
+            //景点类型
+            @BindView(R.id.tv_scenic_spot_type)
+            TextView mTvScenicSpotsType;*/
+        @BindView(R.id.flowlayout_hot_label)
+        TagFlowLayout mTagFlowlayoutHotLabel;
+
         @BindView(R.id.rlyt_scenic_spot_item)
         RelativeLayout mRlytScenicSpotItem;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

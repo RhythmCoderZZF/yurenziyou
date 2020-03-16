@@ -60,6 +60,8 @@ public class PurchaseInstructionsDialog extends DialogFragment {
     //已减
     private TextView mTvAlreadyReducedPrice;
 
+    String contactCallH5Page = "apps://contact/Call/";
+
     private PurchaseInstructionsListener purchaseInstructionsListener;
 
     public PurchaseInstructionsDialog() {
@@ -187,14 +189,22 @@ public class PurchaseInstructionsDialog extends DialogFragment {
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
                 Uri uri = Uri.parse(url);
-                LogUtil.e("打印Scheme", uri.getScheme() + "==" + url);
-                if (!"http".equals(uri.getScheme()) || !"https".equals(uri.getScheme())) {
-                    return false;
-                } else {
-                    view.loadUrl(url);
-                    return false;
+//apps://contact/Call/0574-56101999
+
+                    LogUtil.e("打印Scheme", uri.getScheme() + "==" + url);
+                    if (!"http".equals(uri.getScheme()) || !"https".equals(uri.getScheme())) {
+                        if(url.contains(contactCallH5Page)){
+
+                            String phoneNumber = url.replace(contactCallH5Page,"");
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
+                            startActivity(intent);
+                            return false;
+                        }
+                        return false;
+                    } else {
+                        view.loadUrl(url);
+                        return false;
                 }
             }
 

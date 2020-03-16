@@ -5,8 +5,9 @@
     xmlns:zhy="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llyt_follow_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
+    android:clickable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
@@ -113,6 +114,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:layout_marginBottom="@dimen/dp_10" />
+
                 </RelativeLayout>
 
                 <com.nbhysj.coupon.view.ExpandableTextView
@@ -124,6 +126,7 @@
                     android:layout_marginRight="@dimen/dp_17"
                     android:layout_marginBottom="@dimen/dp_10"
                     android:background="@color/white"
+                    android:clickable="false"
                     android:textColor="@color/txt_font_black2"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold" />
@@ -174,7 +177,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/rlyt_praise_people_num"
-                        android:layout_toRightOf="@+id/rlyt_praise" />
+                        android:layout_toRightOf="@+id/rlyt_praise"
+                        android:clickable="false" />
 
                     <RelativeLayout
                         android:id="@+id/rlyt_praise_people_num"
@@ -217,7 +221,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_16"
-                    android:layout_marginTop="@dimen/dp_8">
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:clickable="false">
 
                     <com.zhy.view.flowlayout.TagFlowLayout
                         android:id="@+id/flowlayout_tag"
@@ -227,6 +232,7 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
                         android:layout_toLeftOf="@+id/tv_post_comment_num"
+                        android:clickable="false"
                         zhy:max_select="-1" />
 
                     <TextView
@@ -277,13 +283,15 @@
                     android:layout_marginTop="@dimen/dp_18"
                     android:layout_marginRight="@dimen/dp_15"
                     android:background="@drawable/bg_radius_light_gray_shape"
+                    android:clickable="false"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_user_comment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_3" />
+                        android:layout_marginTop="@dimen/dp_3"
+                        android:clickable="false" />
 
                     <TextView
                         android:id="@+id/tv_total_comment_num"
@@ -303,6 +311,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_9"
+                    android:clickable="false"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -311,10 +320,11 @@
                         android:layout_height="@dimen/dp_22"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/dp_16" />
+                        android:layout_marginLeft="@dimen/dp_16"
+                        android:clickable="false" />
 
-                    <TextView
-                        android:id="@+id/tv_post_comment"
+                    <EditText
+                        android:id="@+id/edt_post_comment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -347,7 +357,8 @@
                     android:id="@+id/rlyt_interest_user"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/background_l_grey">
+                    android:background="@color/background_l_grey"
+                    android:clickable="false">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -394,7 +405,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dp_16"
                         android:layout_marginTop="@dimen/dp_21"
-                        android:layout_marginBottom="@dimen/dp_12"></android.support.v7.widget.RecyclerView>
+                        android:layout_marginBottom="@dimen/dp_12"
+                        android:clickable="false"></android.support.v7.widget.RecyclerView>
                 </RelativeLayout>
 
 

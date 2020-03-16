@@ -52,7 +52,7 @@ public class ChooseTheDateOfBirthActivity extends BaseActivity<UserInfoPresenter
 
     WheelView wv_year, wv_month, wv_day;
     private static final int DEFAULT_START_YEAR = 1900;
-    private static final int DEFAULT_END_YEAR = 2100;
+    private static final int DEFAULT_END_YEAR = Calendar.getInstance().get(Calendar.YEAR);
     private static final int DEFAULT_START_MONTH = 1;
     private static final int DEFAULT_END_MONTH = 12;
     private static final int DEFAULT_START_DAY = 1;
@@ -467,8 +467,15 @@ public class ChooseTheDateOfBirthActivity extends BaseActivity<UserInfoPresenter
         mTvSaveBirthDay.setOnClickListener(v -> {
 
             String birthDay = mTvTheDateOfBirth.getText().toString().trim();
-            updateBirthDay(birthDay);
 
+            boolean isDate2Bigger = DateUtil.isDate2Bigger(birthDay);
+            if(!isDate2Bigger)
+            {
+                updateBirthDay(birthDay);
+            } else {
+
+                showToast(ChooseTheDateOfBirthActivity.this,"出生年月不能选择未来日期");
+            }
         });
     }
 
@@ -502,7 +509,6 @@ public class ChooseTheDateOfBirthActivity extends BaseActivity<UserInfoPresenter
      * 设置选中时间,默认选中当前时间
      */
     private void setTime() {
-
 
         Calendar calendar = Calendar.getInstance();
         if (date == null) {

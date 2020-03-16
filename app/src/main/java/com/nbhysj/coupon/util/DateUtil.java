@@ -752,4 +752,29 @@ public class DateUtil {
 
         return map;
     }
+
+    /**
+     * 比较两个日期的大小，日期格式为yyyy-MM-dd
+     *
+     * @param str1 the first date
+     * @param str2 the second date
+     * @return true <br/>false
+     */
+    public static boolean isDate2Bigger(String str2) {
+        boolean isBigger = false;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dt1 = new Date();
+        Date dt2 = null;
+        try {
+            dt2 = sdf.parse(str2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (dt1.getTime() > dt2.getTime()) {
+            isBigger = false;
+        } else if (dt1.getTime() <= dt2.getTime()) {
+            isBigger = true;
+        }
+        return isBigger;
+    }
 }

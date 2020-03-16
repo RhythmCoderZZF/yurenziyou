@@ -580,11 +580,11 @@
                     android:layout_marginBottom="@dimen/dp_16"
                     zhy:max_select="-1" />
 
-                <android.support.v7.widget.RecyclerView
+                <com.nbhysj.coupon.view.MyRecycleView
                     android:id="@+id/rv_user_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"></android.support.v7.widget.RecyclerView>
+                    android:layout_marginTop="@dimen/dp_5"/>
 
                 <RelativeLayout
                     android:id="@+id/rlyt_question_num"

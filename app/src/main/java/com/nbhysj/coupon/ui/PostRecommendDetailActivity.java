@@ -1,11 +1,14 @@
 package com.nbhysj.coupon.ui;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,7 +17,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -45,6 +50,7 @@ import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.HomePageModel;
 import com.nbhysj.coupon.model.request.PostOprateRequest;
 import com.nbhysj.coupon.model.request.PostsCollectionRequest;
+import com.nbhysj.coupon.model.request.PostsCommentRequest;
 import com.nbhysj.coupon.model.response.BackResult;
 import com.nbhysj.coupon.model.response.BasePaginationResult;
 import com.nbhysj.coupon.model.response.FavoritesBean;
@@ -100,6 +106,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -224,6 +232,15 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @BindView(R.id.tv_post_collection_num)
     TextView mTvPostCollectionNum;
 
+    @BindView(R.id.edt_post_comment)
+    EditText mEdtPostCommentContent;
+
+    @BindView(R.id.llyt_follow_item)
+    LinearLayout mLlytFollowItem;
+
+    //(0:评论帖子 1:评论) 帖子的评论
+    private int mPid = 0;
+
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     private String mLatitude = "";
@@ -286,6 +303,13 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     //标题
     private String content;
 
+    private int keyBoardState = 0;//0为键盘收缩，1为弹出
+
+    private List<PostCommentBean> postsAllCommentsList;
+
+    private Activity activity;
+
+    private InputMethodManager imm;
     @Override
     public int getLayoutId() {
 
@@ -329,6 +353,12 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             resourcesPictureList.clear();
         }
 
+        if(postsAllCommentsList == null){
+
+            postsAllCommentsList = new ArrayList<>();
+        } else {
+            postsAllCommentsList.clear();
+        }
 
         //点赞用户列表
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -355,6 +385,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                     public void run() {
                         //  showProgressDialog(PostRecommendDetailActivity.this);
                        // isPostReFresh = true;
+                        postsAllCommentsList.clear();
                         getPostInfo();
 
                     }
@@ -362,7 +393,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             }
         });
 
-       /* mEdtPostCommentContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+       mEdtPostCommentContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -371,8 +402,17 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 }
                 return false;
             }
-        });*/
+        });
+        activity = this;
+        imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
+        mLlytFollowItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showToast(PostRecommendDetailActivity.this,"123");
+            }
+        });
     }
 
     @Override
@@ -591,7 +631,6 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         //点赞用户数量
                         mTvPraisePeopleNum.setText(String.valueOf(zanCount));
 
-
                         int zanStatus = postInfoEntity.getZanStatus(); //是否点赞过
                         if (zanStatus == 0) {
 
@@ -631,12 +670,13 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         List<PostCommentBean> postsCommentsList = postInfoEntity.getPostsComments();
 
                         if (postsCommentsList != null) {
+                            postsAllCommentsList.addAll(postsCommentsList);
                             mLlytUserComment.setVisibility(View.VISIBLE);
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
                             linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
                             mRvUserComment.setLayoutManager(linearLayoutManager);
                             hpFollowPostCommentAdapter = new HPFollowPostCommentAdapter(mContext);
-                            hpFollowPostCommentAdapter.setLabelList(postsCommentsList);
+                            hpFollowPostCommentAdapter.setLabelList(postsAllCommentsList);
                             mRvUserComment.setAdapter(hpFollowPostCommentAdapter);
                             mTvTotalCommentNum.setText("查看" + commentCount + "条评论");
                         } else {
@@ -809,7 +849,35 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
     @Override
     public void postsCommentResult(BackResult res) {
 
+        dismissProgressDialog();
+        switch (res.getCode()) {
+            case Constants.SUCCESS_CODE:
+                try {
+                    hideSoftInputFromWindow();
+                    mEdtPostCommentContent.setText("");
+                    showToast(PostRecommendDetailActivity.this,"评论成功～");
+                    String commentContent = mEdtPostCommentContent.getText().toString().trim();
+                    PostCommentBean postCommentBean = new PostCommentBean();
+                    postCommentBean.setContent(commentContent);
+                    postsAllCommentsList.add(postCommentBean);
+                    hpFollowPostCommentAdapter.setLabelList(postsAllCommentsList);
+                    hpFollowPostCommentAdapter.notifyDataSetChanged();
+                    if(postsAllCommentsList != null) {
+                        mTvTotalCommentNum.setText("查看" + postsAllCommentsList.size() + "条评论");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constants.USER_NOT_LOGIN_CODE:
+                toActivity(PhoneQuickLoginActivity.class);
+                break;
+            default:
+                showToast(PostRecommendDetailActivity.this, Constants.getResultMsg(res.getMsg()));
+                break;
+        }
     }
+
 
     @Override
     public void onBackPressed() {
@@ -872,7 +940,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         });
     }
 
-    @OnClick({R.id.img_post_share, R.id.tv_post_comment_num, R.id.rlyt_praise, R.id.tv_post_comment, R.id.tv_total_comment_num, R.id.llyt_post_collection, R.id.image_user_avatar})
+    @OnClick({R.id.img_post_share, R.id.tv_post_comment_num, R.id.rlyt_praise, R.id.tv_total_comment_num, R.id.llyt_post_collection, R.id.image_user_avatar,R.id.llyt_follow_item,R.id.refresh_layout})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -964,12 +1032,12 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 startActivity(intent);
 
                 break;
-            case R.id.tv_post_comment:
-                intent.setClass(PostRecommendDetailActivity.this, CommentsListActivity.class);
+           /* case R.id.edt_post_comment:
+               *//* intent.setClass(PostRecommendDetailActivity.this, CommentsListActivity.class);
                 intent.putExtra("mPostId", mPostId);
-                startActivity(intent);
+                startActivity(intent);*//*
 
-                break;
+                break;*/
             case R.id.rlyt_praise:
                 postOprate();
                 break;
@@ -988,11 +1056,60 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 intent.putExtra("authorId", authorId);
                 startActivity(intent);
                 break;
+            case R.id.llyt_follow_item:
+
+                hideSoftInputFromWindow();
+
+                break;
+            case R.id.refresh_layout:
+                hideSoftInputFromWindow();
+                break;
             default:
                 break;
         }
     }
 
+    public void hideSoftInputFromWindow(){
+
+        keyBoardState = 0;
+        imm.hideSoftInputFromWindow(mEdtPostCommentContent.getWindowToken(), 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               // main_emoji_layout.setVisibility(View.GONE);
+            }
+        }, 50);
+
+        mPid = 0;
+    }
+
+    public void softInputFromWindowOprate(){
+
+        if (keyBoardState == 0) {//弹出键盘
+            showSoftInputFromWindow();
+
+        } else {//关闭键盘
+            hideSoftInputFromWindow();
+        }
+    }
+    public void showSoftInputFromWindow(){
+
+        keyBoardState = 1;
+      /*  mEdtComment.setFocusable(true);
+        mEdtComment.setFocusableInTouchMode(true);
+        mEdtComment.requestFocus();
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        //  showSoftInputFromWindow(CommentsListActivity.this, mEdtComment);
+    *//*    new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imm.showSoftInput(mEdtComment, 0);
+            }
+        }, 50);
+*//*
+
+        imm.showSoftInput(mEdtComment, 0);*/
+    }
     private static Runnable saveFileRunnable = new Runnable() {
         @Override
         public void run() {
@@ -1372,5 +1489,24 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
         }
     }
 
+    //帖子评论
+    public void postCommentRequest() {
 
+        if (validateInternet()) {
+
+            String postCommentContent = mEdtPostCommentContent.getText().toString().trim();
+
+            if (TextUtils.isEmpty(postCommentContent)) {
+                dismissProgressDialog();
+                showToast(PostRecommendDetailActivity.this, "请填写评论");
+                return;
+            }
+            PostsCommentRequest postsCommentRequest = new PostsCommentRequest();
+            postsCommentRequest.setArticleId(mPostId);
+            postsCommentRequest.setContent(postCommentContent);
+            postsCommentRequest.setPid(mPid);
+            mPresenter.postsCommentRequest(postsCommentRequest);
+
+        }
+    }
 }

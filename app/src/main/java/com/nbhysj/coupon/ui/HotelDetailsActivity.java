@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HotelDetailRoomAdapter;
+import com.nbhysj.coupon.adapter.HotelDetailUserCommentAdapter;
 import com.nbhysj.coupon.adapter.HotelNearbyAdapter;
 import com.nbhysj.coupon.adapter.MchDetailCouponListAdapter;
 import com.nbhysj.coupon.adapter.NearbyHotSellHotelsAdapter;
@@ -68,6 +69,7 @@ import com.nbhysj.coupon.util.PopupWindowUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
 import com.nbhysj.coupon.view.HotelDetailBannerView;
+import com.nbhysj.coupon.view.MyRecycleView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.StarBarView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -112,7 +114,7 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     @BindView(R.id.flowlayout_hotel_comment_label)
     TagFlowLayout mTagFlowHotelCommentLabel;
     @BindView(R.id.rv_user_comment)
-    RecyclerView mRvUserComment;
+    MyRecycleView mRvUserComment;
     @BindView(R.id.rv_hotel_periphery_recommendation)
     RecyclerView mRvHotelPeriphery;
     @BindView(R.id.tv_delicious_food)
@@ -230,8 +232,6 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
     //酒店商品列表
     private List<MchGoodsBean> mchHotelGoodsList;
 
-    //private HotelDetailUserCommentAdapter hotelDetailUserCommentAdapter;
-
     //酒店附近
     private HotelNearbyAdapter hotelNearbyAdapter;
 
@@ -289,6 +289,8 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
 
     //地址
     private String address;
+
+    private HotelDetailUserCommentAdapter hotelDetailUserCommentAdapter;
 
     @Override
     public int getLayoutId() {
@@ -369,6 +371,15 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
         } else {
             mchCouponResponseList.clear();
         }
+
+        //用户评论
+        LinearLayoutManager userCommentlinearLayout = new LinearLayoutManager(HotelDetailsActivity.this);
+        userCommentlinearLayout.setOrientation(userCommentlinearLayout.VERTICAL);
+        mRvUserComment.setLayoutManager(userCommentlinearLayout);
+        hotelDetailUserCommentAdapter = new HotelDetailUserCommentAdapter(HotelDetailsActivity.this);
+        hotelDetailUserCommentAdapter.setHotelList(commentList);
+        mRvUserComment.setAdapter(hotelDetailUserCommentAdapter);
+
         LinearLayoutManager linearLayout = new LinearLayoutManager(HotelDetailsActivity.this);
         linearLayout.setOrientation(linearLayout.VERTICAL);
         mRvHotelRoom.setLayoutManager(linearLayout);
@@ -782,11 +793,10 @@ public class HotelDetailsActivity extends BaseActivity<HotelPresenter, HotelMode
                     mTvServiceScore.setText("服务" + Tools.getFormatDecimalPoint(serviceCommentScore));
                     mTvFacilitiesScore.setText("设施" + Tools.getFormatDecimalPoint(facilitiesCommentScore));
                     mTvHygieneScore.setText("卫生" + Tools.getFormatDecimalPoint(hygieneScoreCommentScore));
-
-                  /*  if (commentList != null) {
-                        hotelDetailUserCommentAdapter.setHotelDetailUserCommentList(commentList);
+                    if (commentList != null) {
+                        hotelDetailUserCommentAdapter.setHotelList(commentList);
                         hotelDetailUserCommentAdapter.notifyDataSetChanged();
-                    }*/
+                    }
 
                     mStarBarViewOccupantScore.setIntegerMark(false);
                     mStarBarViewOccupantScore.setStarMark(commentScore);

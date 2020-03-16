@@ -37,6 +37,7 @@ import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.adapter.HomestayEquipmentAdapter;
 import com.nbhysj.coupon.adapter.HomestayReservationAdapter;
 import com.nbhysj.coupon.adapter.HomestayResourcesAdapter;
+import com.nbhysj.coupon.adapter.MchDetailCouponListAdapter;
 import com.nbhysj.coupon.common.Constants;
 import com.nbhysj.coupon.common.Enum.SharePlatformEnum;
 import com.nbhysj.coupon.contract.HomestayContract;
@@ -290,11 +291,19 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     //接待贵宾
     @BindView(R.id.tv_receive_foreign_guests_rule)
     TextView mTvReceiveForeignGuestsRule;
+
+    @BindView(R.id.rlyt_coupon)
+    RelativeLayout mRlytCoupon;
+
+    //优惠券领取
+    @BindView(R.id.rv_coupon_receive_tag)
+    RecyclerView mRvCouponReceiveTag;
     private PopupWindow mPopupWindow;
 
     private int height;
     private List<ImageView> viewList;
     private List<String> bannerList;
+    private List<CouponsBean> couponsList;
     //设备列表
     List<MchHomestayDetailsResponse.ServiceEntity> facilityList;
 
@@ -359,6 +368,8 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
     static Bitmap bitmap = null;
 
     private int landlordId;
+
+    private MchDetailCouponListAdapter mchDetailCouponListAdapter;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -410,6 +421,15 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         } else {
             commentList.clear();
         }
+
+        if (couponsList == null) {
+
+            couponsList = new ArrayList<>();
+        } else {
+
+            couponsList.clear();
+        }
+
         //沉浸式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -522,6 +542,19 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
         homestayEquipmentAdapter.setEquipmentList(facilityList);
         mRvHomestayEquipment.setAdapter(homestayEquipmentAdapter);
 
+
+        LinearLayoutManager couponReceiveLinearLayoutManager = new LinearLayoutManager(HomestayDetailActivity.this);
+        couponReceiveLinearLayoutManager.setOrientation(couponReceiveLinearLayoutManager.HORIZONTAL);
+        mRvCouponReceiveTag.setLayoutManager(couponReceiveLinearLayoutManager);
+        mchDetailCouponListAdapter = new MchDetailCouponListAdapter(HomestayDetailActivity.this, new MchDetailCouponListAdapter.CouponReceiveListener() {
+            @Override
+            public void setCouponReceiveCallback(int position) {
+
+                //  showToast(ScenicSpotDetailActivity.this," " + position);
+            }
+        });
+        mchDetailCouponListAdapter.setCouponList(couponsList);
+        mRvCouponReceiveTag.setAdapter(mchDetailCouponListAdapter);
     }
 
     /**
@@ -869,6 +902,15 @@ public class HomestayDetailActivity extends BaseActivity<HomestayPresenter, Home
                     mProgressBarfacilityScore.setProgress((int) commentScore2);
                     mTvHygieneScore.setText(String.valueOf(commentScore3));
                     mProgressBarHygieneScore.setProgress((int) commentScore3);
+
+                    if (couponsList.size() > 0) {
+                        mRlytCoupon.setVisibility(View.VISIBLE);
+                        mchDetailCouponListAdapter.setCouponList(couponsList);
+                        mchDetailCouponListAdapter.notifyDataSetChanged();
+                    } else {
+                        mRlytCoupon.setVisibility(View.GONE);
+                    }
+
 
                     if (commentList != null) {
 
