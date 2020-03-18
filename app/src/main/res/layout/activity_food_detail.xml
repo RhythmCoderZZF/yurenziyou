@@ -376,10 +376,10 @@
                     android:layout_marginBottom="@dimen/dp_10"
                     zhy:max_select="-1" />
 
-                <android.support.v7.widget.RecyclerView
+                <com.nbhysj.coupon.view.MyRecycleView
                     android:id="@+id/rv_user_comment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"></com.nbhysj.coupon.view.MyRecycleView>
 
                 <TextView
                     android:id="@+id/tv_look_user_all_comment"

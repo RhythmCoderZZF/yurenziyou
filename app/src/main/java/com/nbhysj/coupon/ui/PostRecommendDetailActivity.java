@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,7 @@ import com.nbhysj.coupon.util.blurbehind.BlurBehind;
 import com.nbhysj.coupon.util.blurbehind.OnBlurCompleteListener;
 import com.nbhysj.coupon.view.BannerSlideShowView;
 import com.nbhysj.coupon.view.ExpandableTextView;
+import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.widget.customjzvd.MyJzvdStd;
 import com.nbhysj.coupon.widget.wavelineview.ExpandButtonLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -237,6 +239,9 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     @BindView(R.id.llyt_follow_item)
     LinearLayout mLlytFollowItem;
+
+    @BindView(R.id.sroll_view_post_recommend)
+    RecyclerScrollView mRvPostRecommend;
 
     //(0:评论帖子 1:评论) 帖子的评论
     private int mPid = 0;
@@ -413,6 +418,15 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                 showToast(PostRecommendDetailActivity.this,"123");
             }
         });
+
+        mRvPostRecommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showToast(PostRecommendDetailActivity.this,"123");
+            }
+        });
+
     }
 
     @Override

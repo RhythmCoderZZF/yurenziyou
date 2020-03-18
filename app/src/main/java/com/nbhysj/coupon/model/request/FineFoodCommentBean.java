@@ -1,12 +1,13 @@
 package com.nbhysj.coupon.model.request;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @auther：hysj created on 2019/12/25
  * description：
  */
-public class FineFoodCommentBean {
+public class FineFoodCommentBean implements Serializable {
 
     //商户id
     private int mchId;

@@ -181,6 +181,10 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
 
     private List<FineFoodCommentBean> fineFoodCommentList;
 
+    private FineFoodCommentBean fineFoodCommentBean;
+
+    private List<String> filePathList;
+
     @Override
     public int getLayoutId() {
         StatusBarCompat.setStatusBarColor(this, -131077);
@@ -524,8 +528,13 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
 
                     showToast(FineFoodEvaluateActivity.this, "评论成功");
                     EventBus.getDefault().post("commentOprate");
+                    Bundle bundle = new Bundle();
+                    fineFoodCommentBean.setPhoto(filePathList);
+                    bundle.putSerializable("fineFoodComment",fineFoodCommentBean);
+                    Intent intent = new Intent();
+                    intent.putExtras(bundle);
+                    setResult(RESULT_OK,intent);
                     FineFoodEvaluateActivity.this.finish();
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -610,7 +619,7 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
         String consumePrice = mEdtConsumePrice.getText().toString();
         String orderCommentDes = mEdtOrderCommentDes.getText().toString();
         FineFoodCommentRequest fineFoodCommentRequest = new FineFoodCommentRequest();
-        FineFoodCommentBean fineFoodCommentBean = new FineFoodCommentBean();
+        fineFoodCommentBean = new FineFoodCommentBean();
         fineFoodCommentBean.setMchId(mchId);
         if (!TextUtils.isEmpty(consumePrice)) {
             fineFoodCommentBean.setConsumePrice(Double.parseDouble(consumePrice));
@@ -747,7 +756,7 @@ public class FineFoodEvaluateActivity extends BaseActivity<FineFoodPresenter, Fi
 
             if (resultCode == RESULT_OK &&
                     requestCode == REQUEST_CODE_POST_PHOTO) {   //从相册中选取图片
-                List<String> filePathList = null;
+
                 if (data != null) {
 
                     filePathList = Matisse.obtainPathResult(data);

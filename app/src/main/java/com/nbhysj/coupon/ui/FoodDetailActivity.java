@@ -38,8 +38,10 @@ import com.nbhysj.coupon.contract.FineFoodContract;
 import com.nbhysj.coupon.dialog.ShareOprateDialog;
 import com.nbhysj.coupon.framework.Net;
 import com.nbhysj.coupon.model.FineFoodModel;
+import com.nbhysj.coupon.model.request.FineFoodCommentBean;
 import com.nbhysj.coupon.model.request.MchCollectionRequest;
 import com.nbhysj.coupon.model.response.BackResult;
+import com.nbhysj.coupon.model.response.CommentUserEntity;
 import com.nbhysj.coupon.model.response.FineFoodCommentInitResponse;
 import com.nbhysj.coupon.model.response.FoodRecommendListResponse;
 import com.nbhysj.coupon.model.response.LabelEntity;
@@ -58,6 +60,7 @@ import com.nbhysj.coupon.systembar.StatusBarUtil;
 import com.nbhysj.coupon.util.PopupWindowUtil;
 import com.nbhysj.coupon.util.SharedPreferencesUtils;
 import com.nbhysj.coupon.util.Tools;
+import com.nbhysj.coupon.view.MyRecycleView;
 import com.nbhysj.coupon.view.RecyclerScrollView;
 import com.nbhysj.coupon.view.ScenicSpotDetailBannerView;
 import com.nbhysj.coupon.view.StarBarView;
@@ -114,7 +117,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     TextView mTvMchFoodCommentScoreTag;
 
     @BindView(R.id.rv_user_comment)
-    RecyclerView mRvUserComment;
+    MyRecycleView mRvUserComment;
     //商户附近
     @BindView(R.id.rv_delicious_food_more_recommendation)
     RecyclerView mRvDeliciousFoodMoreRecommendation;
@@ -166,6 +169,8 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     //用户评论标签
     List<LabelEntity> labelEntityList;
     //用户评论列表
+    List<MchCommentEntity> userAllCommentList;
+    //用户评论列表
     List<MchCommentEntity> userCommentList;
     //景点列表
     List<MchFoodDetailResponse.NearbyFoodEntity> nearbyFoodsList;
@@ -196,6 +201,12 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
     private static String photoUrl;
 
     private ShareOprateDialog shareOprateDialog;
+
+    //美食评论
+    private int REQUEST_CODE_FOOD_EVALUATE = 0;
+
+    //用户评论条数
+    private int mUserCommentNum;
     @Override
     public int getLayoutId() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -240,6 +251,13 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         } else {
 
             userCommentList.clear();
+        }
+
+        if(userAllCommentList == null){
+
+            userAllCommentList = new ArrayList<>();
+        } else {
+            userAllCommentList.clear();
         }
 
         if (nearbyFoodsList == null) {
@@ -406,7 +424,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
 
                     MchFoodDetailResponse.ScoreEntity scoreEntity = commentEntity.getScore();
                     labelEntityList = commentEntity.getLabel();
-                    int mUserCommentNum = scoreEntity.getCommentNum();
+                    mUserCommentNum = scoreEntity.getCommentNum();
                     mTvUserCommentNum.setText("更多评论" + "(" + String.valueOf(mUserCommentNum) + "条)");
 
                     //排行榜
@@ -430,9 +448,13 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                     }
 
                     //用户评论
-                    userCommentList = commentEntity.getComment();
-                    if (userCommentList != null) {
-                        if (userCommentList.size() > 0) {
+                   List<MchCommentEntity> commentList = commentEntity.getComment();
+                    if (commentList != null) {
+                        if (commentList.size() > 0) {
+                            for (int i = 0;i < 1;i++){
+                                MchCommentEntity mchCommentEntity = commentList.get(i);
+                                userCommentList.add(mchCommentEntity);
+                            }
                             userCommentAdapter.setScenicSpotsUserCommentList(userCommentList);
                             userCommentAdapter.notifyDataSetChanged();
                         } else {
@@ -647,7 +669,7 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
                 {
                     intent.setClass(FoodDetailActivity.this,FineFoodEvaluateActivity.class);
                     intent.putExtra("mchId",mchId);
-                    startActivity(intent);
+                    startActivityForResult(intent,REQUEST_CODE_FOOD_EVALUATE);
 
                 } else {
                     onReLogin("");
@@ -924,4 +946,35 @@ public class FoodDetailActivity extends BaseActivity<FineFoodPresenter, FineFood
         return baos.toByteArray();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_FOOD_EVALUATE && resultCode == RESULT_OK){
+            if(userCommentList != null)
+            {
+                userCommentList.clear();
+            }
+            FineFoodCommentBean fineFoodCommentBean = (FineFoodCommentBean)data.getSerializableExtra("fineFoodComment");
+            String content = fineFoodCommentBean.getContent();
+            float score = fineFoodCommentBean.getScore();
+            List<String> fineFoodPhotoList = fineFoodCommentBean.getPhoto();
+            MchCommentEntity mchCommentEntity = new MchCommentEntity();
+            mchCommentEntity.setPhoto(fineFoodPhotoList);
+            mchCommentEntity.setContent(content);
+            mchCommentEntity.setScore(score);
+            CommentUserEntity commentUserEntity = new CommentUserEntity();
+            String nickname = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.NICKNAME,"");
+            String avatar = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR,"");
+            commentUserEntity.setNickname(nickname);
+            commentUserEntity.setAvater(avatar);
+            mchCommentEntity.setUser(commentUserEntity);
+
+            userCommentList.add(mchCommentEntity);
+            userCommentAdapter.setScenicSpotsUserCommentList(userCommentList);
+            mRvUserComment.setAdapter(userCommentAdapter);
+            mTvUserCommentNum.setText("更多评论" + "(" + mUserCommentNum++ + "条)");
+        }
+
+    }
 }
