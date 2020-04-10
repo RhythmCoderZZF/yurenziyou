@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nbhysj.coupon.R;
 import com.nbhysj.coupon.common.Constants;
@@ -46,6 +47,11 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
     //缓存
     @BindView(R.id.tv_cache_size)
     TextView mTvCacheSize;
+
+    //版本号
+    @BindView(R.id.tv_version)
+    TextView mTvVersion;
+
     //缓存大小
     String mTotalCacheSize;
 
@@ -73,6 +79,9 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        String versionName = getCurrentVersionName();
+        mTvVersion.setText("版本" + versionName);
     }
 
     @Override
@@ -140,7 +149,7 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
         showToast(PersonalSettingsActivity.this, Constants.getResultMsg(msg));
     }
 
-    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache, R.id.rlyt_evaluate_murloc_travel, R.id.rlyt_video_auto_play_settings})
+    @OnClick({R.id.rlyt_edit_personal_data, R.id.rlyt_bind_account_and_setting, R.id.rlyt_frequently_used_information, R.id.tv_logout, R.id.rlyt_clear_cache,R.id.rlyt_video_auto_play_settings,R.id.rlyt_about,R.id.rlyt_evaluate_murloc_travel})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_bind_account_and_setting:
@@ -173,6 +182,20 @@ public class PersonalSettingsActivity extends BaseActivity<UserInfoPresenter, Us
             case R.id.rlyt_video_auto_play_settings:
 
                 toActivity(VideoAutoPlaySettingsActivity.class);
+                break;
+           case R.id.rlyt_evaluate_murloc_travel:
+                try{
+                    Uri uri = Uri.parse("market://details?id="+getPackageName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }catch(Exception e){
+                   showToast(PersonalSettingsActivity.this,"您的手机没有安装Android应用市场");
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.rlyt_about:
+                toActivity(AboutActivity.class);
                 break;
             default:
                 break;

@@ -89,6 +89,12 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
                 holder1.mTvPopularScenicSpotName.setText(popularScenicSpots.getMchName());
                 holder1.mTvScenicSpotsDes.setText(popularScenicSpots.getIntro());
                 int level = popularScenicSpots.getLevel();
+                tagsList.clear();
+                MchTypeBean.TagsEntity tagsEntity = new MchTypeBean().new TagsEntity();
+                if (level > 0) {
+                    tagsEntity.setTitle(level + "A级景区");
+                    tagsList.add(tagsEntity);
+                }
                /* if (level == 0) {
                     holder1.mTvScenicSpotsLevel.setVisibility(View.GONE);
                 } else {
@@ -115,13 +121,20 @@ public class ScenicSpotBangDanListAdapter extends RecyclerView.Adapter<RecyclerV
 */
 
                 List<MchTypeBean.TagsEntity> scenicSpotTagsList = popularScenicSpots.getTags();
-                if (scenicSpotTagsList != null) {
 
-                    if(tagsList.size() > 0)
+                if (scenicSpotTagsList != null)
+                {
+                    if(tagsList.size() > 0 && scenicSpotTagsList.size() > 0)
                     {
                         MchTypeBean.TagsEntity tagBean = scenicSpotTagsList.get(0);
                         tagsList.add(tagBean);
-                    } else {
+                    } if(tagsList.size() == 0 && scenicSpotTagsList.size() < 2)
+                    {
+                    for (int i = 0; i < scenicSpotTagsList.size(); i++) {
+                        MchTypeBean.TagsEntity tagsBean = scenicSpotTagsList.get(i);
+                        tagsList.add(tagsBean);
+                    }
+                  }else {
 
                         if (scenicSpotTagsList.size() >= 2) {
                             for (int i = 0; i < 2; i++) {

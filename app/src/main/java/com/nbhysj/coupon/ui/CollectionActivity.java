@@ -65,7 +65,7 @@ public class CollectionActivity extends BaseActivity<MinePresenter, MineModel> i
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        ToolbarHelper.setBar(CollectionActivity.this, getResources().getString(R.string.str_collection), R.mipmap.nav_ico_back_black);
+        ToolbarHelper.setBar(CollectionActivity.this, getResources().getString(R.string.str_collection), R.mipmap.icon_left_arrow_black);
         if (mZanAndCollectionList == null) {
             mZanAndCollectionList = new ArrayList<>();
 

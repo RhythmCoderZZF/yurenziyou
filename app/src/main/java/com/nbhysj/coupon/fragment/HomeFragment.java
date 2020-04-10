@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -50,10 +51,14 @@ import com.youth.banner.BannerConfig;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 
 
 /**
@@ -442,7 +447,7 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlyt_message_num:
-                String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
+             String token = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.TOKEN, "");
 
                 if (!TextUtils.isEmpty(token)) {
                     Intent intent = new Intent();
@@ -451,6 +456,31 @@ public class HomeFragment extends BaseFragment<HomePagePresenter, HomePageModel>
                 } else {
                     onReLogin("");
                 }
+               /* RongIM.connect("ps1gvnXXFhRgbHVIVup2/zPX9G2LWToGCmD7jSQMUQKMutc6eczJA+l+YqyPXQzqAtlJ2TvL+AtH0j+S/Xr/7Q==", new RongIMClient.ConnectCallback() {
+                    @Override
+                    public void onTokenIncorrect() {
+                        Log.d("TAG", "--onTokenIncorrect" );
+                    }
+                    @Override
+                    public void onSuccess(String userid) {
+                        Log.d("TAG", "--onSuccess" + userid);
+                      RongIM.getInstance().startPrivateChat(getActivity(),"170","1111");
+
+                        *//**
+                         * 启动会话列表界面。
+                         *//*
+                      *//*  HashMap<String, Boolean> hashMap = new HashMap<>();
+                        //会话类型 以及是否聚合显示
+                        hashMap.put(Conversation.ConversationType.PRIVATE.getName(),true);
+                        hashMap.put(Conversation.ConversationType.PUSH_SERVICE.getName(),true);
+                        hashMap.put(Conversation.ConversationType.SYSTEM.getName(),true);
+                        RongIM.getInstance().startConversationList(getActivity() , hashMap);*//*
+                    }
+                    @Override
+                    public void onError(RongIMClient.ErrorCode errorCode) {
+                        Log.d("TAG", "--onSuccess" + errorCode);
+                    }
+                });*/
                 break;
             case R.id.ll_search:
                 toActivity(HomePageSearchActivity.class);

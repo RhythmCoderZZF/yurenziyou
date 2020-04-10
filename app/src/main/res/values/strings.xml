@@ -56,6 +56,7 @@
     <string name="str_common_questions_and_feedback">常用问题及意见反馈</string>
     <string name="str_evaluate_murloc_travel">评价鱼人自游</string>
     <string name="str_clear_cache">清除缓存</string>
+    <string name="str_about">关于</string>
     <string name="str_personal_setting">个人设置</string>
     <string name="str_bind_immediately">立即绑定</string>
     <string name="str_account_management">账号管理</string>

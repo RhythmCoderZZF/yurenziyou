@@ -5,19 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.nbhysj.coupon.R;
-import com.nbhysj.coupon.model.response.NearbyScenicSpotsResponse;
-import com.nbhysj.coupon.model.response.ScenicSpotsUserCommentResponse;
 import com.nbhysj.coupon.util.GlideUtil;
 import com.nbhysj.coupon.view.RoundedImageView;
-import com.nbhysj.coupon.view.StarBarView;
-import com.nbhysj.coupon.widget.glide.GlideRoundTransform;
-
 import java.util.List;
 
 /**

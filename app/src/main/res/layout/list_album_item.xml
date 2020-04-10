@@ -47,6 +47,8 @@
             android:layout_marginTop="@dimen/dp_6"
             android:text=""
             android:textColor="@color/black"
+            android:lines="2"
+            android:ellipsize="end"
             android:textSize="13sp"
             android:textStyle="bold" />
 

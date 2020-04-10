@@ -82,24 +82,32 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
-        <activity android:name=".ui.RecreationCateListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.HomestayCateListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.GeneratePicturesActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.FineFoodEvaluateActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.StrategyWebActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.ReportOtherActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.ReportActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.UserChatListActivity"
+        <activity android:name=".ui.AboutActivity"></activity>
+        <activity
+            android:name=".ui.RecreationCateListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HomestayCateListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.GeneratePicturesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FineFoodEvaluateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.StrategyWebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ReportOtherActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.UserChatListActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.ScenicSpotCateListActivity"
             android:screenOrientation="portrait" />
@@ -142,8 +150,9 @@
         <activity
             android:name=".ui.OthersCollectionDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.OthersAlbumDetailsActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.OthersAlbumDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.FoodDetailActivity"
             android:screenOrientation="portrait" />
@@ -174,7 +183,6 @@
         <activity
             android:name=".ui.PostCollectionActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.UserPersonalHomePageActivity"
             android:screenOrientation="portrait" />
@@ -206,8 +214,9 @@
         <activity
             android:name=".ui.CalendarActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.TripCalendarActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.TripCalendarActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.IntroductionOfLandlordActivity"
             android:screenOrientation="portrait" />
@@ -331,8 +340,9 @@
         <activity
             android:name=".ui.HotelDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.StrategyCommentListActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.StrategyCommentListActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.OrderPaymentActivity"
             android:screenOrientation="portrait">
@@ -400,7 +410,6 @@
             android:name=".ui.MoreQuestionsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".ui.AskQuestionsActivity"
             android:screenOrientation="portrait" />
@@ -417,8 +426,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MyOrderActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.OrderDetailActivity"
             android:screenOrientation="portrait" />
@@ -451,6 +460,7 @@
             android:name=".ui.VideoPlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+
         <meta-data
             android:name="android.vendor.full_screen"
             android:value="true" />
@@ -526,8 +536,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.OneKeyLoginActivity"
-            android:screenOrientation="portrait"
-          />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.NearbyCardDetailActivity"
             android:screenOrientation="portrait" />
@@ -536,23 +545,23 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.FindPasswordActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.CountryCodeSelectActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.OneClickLoginActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.UserRegistrationActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.PhoneQuickLoginActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.LoginActivity"
             android:launchMode="singleTask"
@@ -651,18 +660,12 @@
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="${JPUSH_CHANNEL}" />
-
+        <!--
+  <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="sfci50a7sxmni" />
+        -->
         <service android:name=".service.RecordingService" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.nbhysj.coupon.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_provider_paths" />
-        </provider>
         <!--
  <activity
              android:name=".wxapi.WXEntryActivity"
@@ -710,6 +713,36 @@
                             <data android:scheme="wx85e2b0cb3272fcd7"/>
                         </intent-filter>
             -->
+        </activity> <!-- 会话界面 -->
+        <activity
+            android:name=".ui.ConversationListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.nbhysj.coupon"
+                    android:pathPrefix="/conversationlist/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity> <!-- 会话界面 -->
+        <activity
+            android:name=".ui.ConversationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.nbhysj.coupon"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
         </activity>
 
         <receiver android:name=".pay.wechat.AppRegister">
@@ -717,6 +750,25 @@
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.nbhysj.coupon.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+        <provider
+            android:name=".provider.MyFileProvider"
+            android:authorities="com.nbhysj.coupon.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
     </application>
 
 </manifest>

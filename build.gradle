@@ -12,10 +12,12 @@ buildscript {
         maven { url 'https://dl.bintray.com/sfsheng0322/maven' }
         maven { url "https://dl.bintray.com/thelasterstar/maven/" } //第三方登录
         maven { url 'https://dl.bintray.com/umsdk/release' }
+        maven {url  "https://dl.bintray.com/rongcloud/maven"}
         maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.1'
@@ -42,7 +44,7 @@ allprojects {
         maven { url 'https://dl.bintray.com/sfsheng0322/maven' }
         maven { url "https://dl.bintray.com/thelasterstar/maven/" } //第三方登录
         maven { url 'https://dl.bintray.com/umsdk/release' }  //友盟统计
-
+        maven {url  "https://dl.bintray.com/rongcloud/maven"}
         // 支付宝 SDK AAR 包所需的配置
         flatDir {
             dirs 'libs'

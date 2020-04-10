@@ -777,6 +777,7 @@
                         android:text="@string/str_view_more"
                         android:textColor="@color/text_grey"
                         android:textSize="@dimen/text_size_normal"
+                        android:visibility="gone"
                        />
                 </RelativeLayout>
 

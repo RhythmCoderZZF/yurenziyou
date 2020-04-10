@@ -310,6 +310,8 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
     private int keyBoardState = 0;//0为键盘收缩，1为弹出
 
+    private List<PostCommentBean> postsCommentsList;
+
     private List<PostCommentBean> postsAllCommentsList;
 
     private Activity activity;
@@ -331,7 +333,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
 
         api = WXAPIFactory.createWXAPI(this, PayConstants.APP_ID, false);
 
-        nickname = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USERNAME, "");
+        nickname = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.NICKNAME, "");
         userAvatarUrl = (String) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_AVATAR, "");
         userId = (int) SharedPreferencesUtils.getData(SharedPreferencesUtils.USER_ID, 0);
         if (zanAvatersList == null) {
@@ -628,7 +630,7 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                                 @Override
                                 public void onClick(View view) {
 
-                                    System.out.print("111");
+                                 //   System.out.print("111");
                                 }
                             });
                         }
@@ -681,16 +683,16 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
                         }
 
                         //帖子评论
-                        List<PostCommentBean> postsCommentsList = postInfoEntity.getPostsComments();
+                        postsCommentsList = postInfoEntity.getPostsComments();
 
                         if (postsCommentsList != null) {
-                            postsAllCommentsList.addAll(postsCommentsList);
+                          //  postsAllCommentsList.addAll(postsCommentsList);
                             mLlytUserComment.setVisibility(View.VISIBLE);
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
                             linearLayoutManager.setOrientation(linearLayoutManager.VERTICAL);
                             mRvUserComment.setLayoutManager(linearLayoutManager);
                             hpFollowPostCommentAdapter = new HPFollowPostCommentAdapter(mContext);
-                            hpFollowPostCommentAdapter.setLabelList(postsAllCommentsList);
+                            hpFollowPostCommentAdapter.setLabelList(postsCommentsList);
                             mRvUserComment.setAdapter(hpFollowPostCommentAdapter);
                             mTvTotalCommentNum.setText("查看" + commentCount + "条评论");
                         } else {
@@ -868,17 +870,25 @@ public class PostRecommendDetailActivity extends BaseActivity<HomePagePresenter,
             case Constants.SUCCESS_CODE:
                 try {
                     hideSoftInputFromWindow();
-                    mEdtPostCommentContent.setText("");
+
                     showToast(PostRecommendDetailActivity.this,"评论成功～");
                     String commentContent = mEdtPostCommentContent.getText().toString().trim();
                     PostCommentBean postCommentBean = new PostCommentBean();
                     postCommentBean.setContent(commentContent);
+                    if(!TextUtils.isEmpty(nickname))
+                    {
+                        postCommentBean.setNickname(nickname);
+                    }
                     postsAllCommentsList.add(postCommentBean);
                     hpFollowPostCommentAdapter.setLabelList(postsAllCommentsList);
                     hpFollowPostCommentAdapter.notifyDataSetChanged();
-                    if(postsAllCommentsList != null) {
-                        mTvTotalCommentNum.setText("查看" + postsAllCommentsList.size() + "条评论");
+                    if(postsAllCommentsList != null)
+                    {
+                        int postsCommentNum = postsAllCommentsList.size();
+                        mTvTotalCommentNum.setText("查看" + postsCommentNum + "条评论");
+                        mTvPostCommentNum.setText(String.valueOf(postsCommentNum));
                     }
+                    mEdtPostCommentContent.setText("");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

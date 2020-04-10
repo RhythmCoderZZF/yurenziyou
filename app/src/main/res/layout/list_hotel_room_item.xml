@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rlyt_scenic_spots_name"
             android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginTop="@dimen/dp_10"
             android:text="不含早餐 18-20m² 双床 无窗"
             android:textColor="@color/color_text_gray20"
             android:textSize="@dimen/text_size_small" />
@@ -49,7 +49,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_3">
+          >
 
             <TextView
                 android:id="@+id/tv_hotel_book_cancel_time_limits"
@@ -59,7 +59,8 @@
                 android:singleLine="true"
                 android:text="当天18点前可免费取消"
                 android:textColor="@color/color_orange2"
-                android:textSize="@dimen/text_size_tiny" />
+                android:textSize="@dimen/text_size_tiny"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
